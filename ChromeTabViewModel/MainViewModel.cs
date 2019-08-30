@@ -15,7 +15,6 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H10_WEB.CompanyWeb;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
@@ -395,22 +394,6 @@ namespace His_Pos.ChromeTabViewModel
                                 continue;
                             }
                             break;
-                        case nameof(FeatureItem.商品查詢):
-                            if (InventoryManagementView.Instance is null) break;
-
-                            if (InventoryManagementView.DataChanged)
-                            {
-                                //InventoryManagementView.Instance.MergingData();
-                                InventoryManagementView.Instance.SearchData();
-                            }
-                            break;
-
-                        case nameof(FeatureItem.進退貨紀錄):
-                            break;
-
-                        case nameof(FeatureItem.新增盤點): 
-                            break;
-
                         case nameof(FeatureItem.審核管理):
                             if (AuthenticationManageView.Instance is null) break;
 

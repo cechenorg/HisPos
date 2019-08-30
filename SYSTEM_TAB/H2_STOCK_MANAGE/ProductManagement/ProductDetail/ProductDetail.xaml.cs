@@ -4,7 +4,7 @@ using His_Pos.AbstractClass;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
 {
     /// <summary>
     /// ProductDetail.xaml 的互動邏輯

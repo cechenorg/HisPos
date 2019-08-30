@@ -30,7 +30,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>13</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>2.0.11.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -782,18 +782,6 @@
       <DependentUpon>PrescriptionSearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml.cs">
-      <DependentUpon>AddNewProductWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml.cs">
-      <DependentUpon>DemolitionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineHistoryPriceWindow.xaml.cs">
-      <DependentUpon>MedicineHistoryPriceWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
-      <DependentUpon>MergeStockWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagView.xaml.cs">
       <DependentUpon>MedBagView.xaml</DependentUpon>
     </Compile>
@@ -1144,19 +1132,7 @@
     <Compile Include="Interface\ISelection.cs" />
     <Compile Include="Interface\IStockTakingRecord.cs" />
     <Compile Include="Interface\ITrade.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\InventoryManagement.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml.cs">
-      <DependentUpon>InventoryManagementView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetail.xaml.cs">
-      <DependentUpon>MedicineDetail.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetailView.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetail.xaml.cs">
-      <DependentUpon>OtcDetail.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetailView.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetail.xaml.cs">
       <DependentUpon>ProductDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManage.cs" />
@@ -1433,22 +1409,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineHistoryPriceWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1820,19 +1780,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetail.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetail.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
