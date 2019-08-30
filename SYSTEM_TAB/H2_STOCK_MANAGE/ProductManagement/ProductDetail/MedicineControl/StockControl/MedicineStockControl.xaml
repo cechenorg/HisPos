@@ -168,7 +168,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
             <Label Content="藥袋" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,10" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding StockDetail.MedBagOnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="{Binding StockDetail.MedBagOnTheWayAmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" Width="80" ToolTipService.ShowDuration="600000" Foreground="{StaticResource ForeGround}" Margin="0,0,0,10" FontFamily="Segoe UI Semi" FontSize="20" TextAlignment="Center" VerticalAlignment="Center">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <EventSetter Event="MouseEnter" Handler="GetMedBagDetail"/>

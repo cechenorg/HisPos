@@ -114,6 +114,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 Set(() => Customer, ref customer, value);
                 if (Customer is null) return;
                 CustomerDetailPrescriptionCollection.GetDataByID(Customer.ID);
+                CustomerDetailPrescriptionMedicines.Clear();
                 if (CustomerDetailPrescriptionCollection.Count > 0)
                 {
                     CustomerDetailPrescriptionSelectedItem = CustomerDetailPrescriptionCollection[0];

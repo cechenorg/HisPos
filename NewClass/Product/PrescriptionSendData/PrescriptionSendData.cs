@@ -11,7 +11,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             MedId = m.ID;
             MedName = m.FullName; 
             TreatAmount = m.Amount; 
-            SendAmount = m.Amount;
+            SendAmount = 0;
             InvID = m.InventoryID;
             CanUseAmount = 0; 
         }
