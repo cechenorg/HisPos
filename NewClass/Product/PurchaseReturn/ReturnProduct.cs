@@ -132,6 +132,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             double returnAmountTemp = ReturnAmount;
 
+            if (returnAmountTemp > Inventory)
+                returnAmountTemp = Inventory;
+
             InventoryDetailCollection.ClearReturnValue();
 
             foreach (var detail in InventoryDetailCollection)

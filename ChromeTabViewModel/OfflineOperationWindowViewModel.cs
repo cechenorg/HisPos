@@ -6,7 +6,7 @@ using System.Windows.Data;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.ChromeTabViewModel
 {
