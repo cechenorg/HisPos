@@ -42,6 +42,18 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
+            <CheckBox IsChecked="{Binding Customer.IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="啟用" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="20,0,0,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}" CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}" CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
             <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>

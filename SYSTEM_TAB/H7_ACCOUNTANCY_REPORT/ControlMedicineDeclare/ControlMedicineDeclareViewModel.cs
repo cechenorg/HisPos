@@ -11,6 +11,7 @@ using System.IO;
 using System.Text;
 using His_Pos.FunctionWindow;
 using His_Pos.Class;
+using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
 {
@@ -233,6 +234,74 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                 e.Accepted = false;
             NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare controlMedicineDeclare = ((NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare)e.Item);
             e.Accepted = controlMedicineDeclare.WareHouse.ID == SelectedWareHouse.ID; 
+        }
+        private void ExportControlMedDeclareFileAction() {
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "管制藥品批次申報檔";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Txt檔案|*.txt";
+            fdlg.FileName = SDateTime.ToString("yyyy") + ViewModelMainWindow.CurrentPharmacy.Name + "管制藥品批次申報檔";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        ControlMedicineDetails temp = new ControlMedicineDetails();
+                        ControlMedicineDetails target = new ControlMedicineDetails();
+                        foreach (var c in ControlMedicineDeclares)
+                        { 
+                            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime, SelectItem.InitStock, SelectedWareHouse.ID); 
+                            foreach (ControlMedicineDetail t in temp)
+                            {
+                                if(t.TypeName == "調劑(未過卡)")
+                                    target.Add(t); 
+                            }
+                        }
+                        int index = 1;
+                        foreach (ControlMedicineDetail t in target) {
+                            string isgetpay = target.Count(ta => ta.MedID == t.MedID) > 1 ? "Y" : "N";
+                            switch (t.TypeName) { 
+                                case "上次結存":
+                                    file.WriteLine($"" +
+                                        $"{index}," +
+                                        $"P," +
+                                        $"{t.MedID.Substring(0,7)}," +
+                                        $"{t.BatchNumber}," +
+                                        $"{isgetpay}," +
+                                        $"1粒(tab)," +
+                                        $"{t.Date.AddYears(-1911).ToString("yyyMMdd")},299," +
+                                        $"{t.FinalStock},{t.FinalStock},,{t.ManufactoryControlMedicinesID},{t.ManufactoryName},,,,,,,,,,,,,,," );
+                                    break;
+                                case "進貨":
+                                    file.WriteLine($"" +
+                                       $"{index}," +
+                                       $"P," +
+                                       $"{t.MedID.Substring(0, 7)}," +
+                                       $"{t.BatchNumber}," +
+                                       $"{isgetpay}," +
+                                       $"1粒(tab)," +
+                                       $"{t.Date.AddYears(-1911).ToString("yyyMMdd")},202," +
+                                       $"{t.FinalStock},{t.FinalStock},,{t.ManufactoryControlMedicinesID},{t.ManufactoryName},,,,,,,,,,,,,,,");
+                                    break;
+
+                            } 
+                        }
+
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
         }
     }
 }

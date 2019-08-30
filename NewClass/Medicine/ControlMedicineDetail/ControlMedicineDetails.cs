@@ -18,11 +18,12 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             rowOne.Date = sDate;
             rowOne.FinalStock = tempstock;
             rowOne.TypeName = "上次結存";
+            rowOne.MedID = medId;
             Add(rowOne);
             DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate, eDate,  warID);
             foreach (DataRow r in table.Rows)
             {
-                ControlMedicineDetail controlMedicineDetail = new ControlMedicineDetail(r, tempstock);
+                ControlMedicineDetail controlMedicineDetail = new ControlMedicineDetail(r, tempstock,medId);
                 tempstock = controlMedicineDetail.FinalStock;
                 Add(controlMedicineDetail);
             }
