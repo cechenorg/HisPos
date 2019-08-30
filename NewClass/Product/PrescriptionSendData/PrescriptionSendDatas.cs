@@ -24,7 +24,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 preoriginMeds.GetDataByReserveId(int.Parse(prescription.SourceId));
 
             foreach (var m in preoriginMeds) {
-                if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC)) {
+                if (!string.IsNullOrEmpty(m.ID)  ) {
                   
                    double selfPrepareAmount;
                    if (prescription.PrescriptionStatus.OrderStatus.Contains("訂單狀態:已收貨") || prescription.PrescriptionStatus.OrderStatus.Contains("備藥狀態:已備藥")) {
@@ -48,7 +48,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             }
             foreach (var m in prescription.Medicines)
             {
-                if (!string.IsNullOrEmpty(m.ID) && !(m is MedicineOTC))
+                if (!string.IsNullOrEmpty(m.ID))
                 {
                     Add(new PrescriptionSendData(m));
                     meds.Add(m.ID);
