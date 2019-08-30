@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Windows.Data;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
@@ -27,7 +28,15 @@ namespace His_Pos.NewClass.Person.Customer
             Birthday = card.Birthday;
             Gender = card.Gender;
         }
-
+        private bool isEnable = true;
+        public bool IsEnable
+        {
+            get => isEnable;
+            set
+            {
+                Set(() => IsEnable, ref isEnable, value); 
+            }
+        } 
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間
         public CustomerHistories Histories { get; set; }//處方.自費調劑紀錄
@@ -187,6 +196,7 @@ namespace His_Pos.NewClass.Person.Customer
             c.Name = Name;
             c.Note = Note;
             c.Tel = Tel;
+            c.IsEnable = IsEnable;
             c.Histories = new CustomerHistories();
             if (Histories != null)
             {

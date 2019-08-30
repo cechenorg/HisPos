@@ -119,6 +119,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 {
                     CustomerDetailPrescriptionSelectedItem = CustomerDetailPrescriptionCollection[0];
                 }
+                else {
+                    CustomerDetailPrescriptionMedicines.Clear();
+                }
                 PrescriptionDetailViewSource = new CollectionViewSource { Source = CustomerDetailPrescriptionCollection };
                 PrescriptionDetailView = PrescriptionDetailViewSource.View;
                 PrescriptionDetailViewSource.Filter += AdjustTypeFilter;
@@ -225,7 +228,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             InitDataChanged(); 
         }
         public void SubmitAction()
-        { 
+        {
+          
             for (int i = 0; i < CustomerCollection.Count;i ++)
             {  
                 if (CustomerCollection[i].ID == Customer.ID) { 
@@ -234,9 +238,17 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                     break;
                 }
             }
-            MainWindow.ServerConnection.OpenConnection();
-            Customer.Save();
-            MainWindow.ServerConnection.CloseConnection();
+            if (!Customer.IsEnable)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow("關閉後會刪除此位客人病患所有預約慢箋 是否關閉?", "關閉病患視窗確認");
+                if ((bool)confirmWindow.DialogResult)
+                {
+                    Customer.Save();
+                    MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
+                }
+            } 
+            else
+                Customer.Save(); 
             InitDataChanged();
             MessageWindow.ShowMessage("更新成功!",Class.MessageType.SUCCESS);
         }

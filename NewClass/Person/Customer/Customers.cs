@@ -33,9 +33,10 @@ namespace His_Pos.NewClass.Person.Customer
             var table = CustomerDb.GetDataByNameOrBirth(name, date, idNumber);
             foreach (DataRow r in table.Rows)
             {
-                Add(new Customer(r));
-            }
-            
+                Customer customer = new Customer(r);
+                customer.IsEnable = r.Field<bool>("Cus_IsEnable");
+                Add(customer); 
+            } 
         }
         public Customers SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> ddatas) {
             DataTable table = CustomerDb.SetCustomersByPrescriptions(ddatas);
