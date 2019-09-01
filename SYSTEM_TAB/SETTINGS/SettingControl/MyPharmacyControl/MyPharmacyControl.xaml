@@ -70,8 +70,8 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </ComboBox>
-                    <Button Content="醫事卡認證" FontSize="16" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="20,0,0,0" BorderBrush="RoyalBlue" Command="{Binding DataContext.VerifyHPCPinCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                     <Button Content="安全模組認證" FontSize="16" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="10,0,0,0" BorderBrush="RoyalBlue" Command="{Binding DataContext.VerifySAMDCCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    <CheckBox Content="新特約關閉每日上傳" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" IsChecked="{Binding DataContext.MyPharmacy.NewInstitution,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" Command="{Binding DataContext.NewInstitutionOnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                     <TextBlock Text="健保局IP" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>

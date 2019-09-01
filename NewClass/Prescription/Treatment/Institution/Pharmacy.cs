@@ -22,7 +22,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             Tel = r.Field<string>("CurPha_Telephone");
             ReaderCom = (Properties.Settings.Default.ReaderComPort == "")? 0 : int.Parse(Properties.Settings.Default.ReaderComPort);
             VpnIp = r.Field<string>("CurPha_VPN");
-            NewReader = r.Field<bool>("CurPha_ReaderIsNew");
+            NewInstitution = r.Field<bool>("CurPha_NewInstitution");
             GroupServerName = r.Field<string>("GroupServerName");
         }
         private string id;
@@ -41,8 +41,16 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         public virtual int ReaderCom { get; set; }
         [Index(5)]
         public virtual string VpnIp { get; set; }
+        private bool newInstitution;
         [Index(6)]
-        public virtual bool NewReader { get; set; }
+        public virtual bool NewInstitution 
+        { 
+            get => newInstitution;
+            set
+            {
+                Set(() => NewInstitution,ref newInstitution,value);
+            }
+        }
         [IgnoreFormat]
         public Employee MedicalPersonnel { get; set; }
         [IgnoreFormat]
@@ -55,6 +63,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]);
             pharmacy.MedicalPersonnels = new Employees(); 
+            pharmacy.MedicalPersonnels.InitPharmacists();
             return pharmacy;
         }
         public Employee GetPharmacist()

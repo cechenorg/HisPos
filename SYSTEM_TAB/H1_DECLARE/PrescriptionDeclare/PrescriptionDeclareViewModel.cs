@@ -814,7 +814,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!CheckMedicinesNegativeStock()) return;
             CheckChronicCopayment();
             if (!CheckPrescription(false,false)) return;
-            CheckIsReadCard();
+            if (VM.CurrentPharmacy.NewInstitution)
+            {
+                SetNewInstitutionUploadData();
+                StartNormalAdjust();
+            }
+            else
+                CheckIsReadCard();
         }
 
         private void CheckChronicCopayment()
@@ -1003,7 +1009,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
             return true;
         }
-
+        private void SetNewInstitutionUploadData()
+        {
+            ErrorCode = new ErrorUploadWindowViewModel.IcErrorCode("G000", "新特約使用");
+            currentService.SetCard(currentCard);
+            currentService.SetCreateSign();
+        }
         private void WriteCard()
         {
             if (!CheckIsGetMedicalNumber()) return;

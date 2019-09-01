@@ -179,11 +179,12 @@ namespace His_Pos.NewClass.Prescription.Service
             return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber,Current.AdjustCase.ID,Current.ChronicSeq);
         }
 
-        protected bool CheckAdjustAndTreatDate(bool notCheckPast10Days)
+        protected bool CheckAdjustAndTreatDate()
         {
-            if (notCheckPast10Days)
-                return CheckTreatDate() && CheckAdjustDate();
-            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
+            //if (notCheckPast10Days)
+            //    return CheckTreatDate() && CheckAdjustDate();
+            //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
+            return CheckTreatDate() && CheckAdjustDate();
         }
 
         private bool CheckTreatDate()
@@ -210,6 +211,11 @@ namespace His_Pos.NewClass.Prescription.Service
             if (Current.AdjustDate is null)
             {
                 MessageWindow.ShowMessage(Resources.AdjustDateError, MessageType.WARNING);
+                return false;
+            }
+            if (Current.AdjustDate < DateTime.Today)
+            {
+                MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
                 return false;
             }
             if (Current.AdjustCase.IsChronic()) return true;
@@ -739,6 +745,11 @@ namespace His_Pos.NewClass.Prescription.Service
                 return false;
             }
             return true;
+        }
+
+        public void SetCreateSign()
+        {
+            Current.PrescriptionStatus.IsCreateSign = false;
         }
     }
 }

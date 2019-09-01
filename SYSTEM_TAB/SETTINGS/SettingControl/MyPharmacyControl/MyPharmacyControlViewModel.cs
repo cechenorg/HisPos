@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
@@ -24,6 +25,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand VerifyHPCPinCommand { get; set; }
         public RelayCommand VerifySAMDCCommand { get; set; }
+        public RelayCommand NewInstitutionOnCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -75,6 +77,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             }
             MainWindow.ServerConnection.OpenConnection();
             myPharmacy.SetPharmacy();
+            ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
+            ViewModelMainWindow.CurrentPharmacy.GetPharmacists(DateTime.Today);
             MainWindow.ServerConnection.CloseConnection();
             WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
             Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
@@ -130,6 +134,28 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             IsBusy = true;
             bw.RunWorkerAsync();
         }
+        private void NewInstitutionOnAction()
+        {
+            switch (MyPharmacy.NewInstitution)
+            {
+                case true:
+                    var openConfirm =
+                        new ConfirmWindow("此功能為新特約使用，若開啟會關閉每日健保資料上傳功能且過卡自動選擇異常上傳G000，確認開啟?", "新特約開啟確認");
+                    if ((bool) openConfirm.DialogResult)
+                        IsDataChanged = true;
+                    else
+                        MyPharmacy.NewInstitution = false;
+                    break;
+                case false:
+                    var closeConfirm =
+                        new ConfirmWindow("目前為新特約，若開啟會自動執行每日上傳且正常過卡，確定關閉?", "新特約關閉確認");
+                    if ((bool) closeConfirm.DialogResult)
+                        IsDataChanged = true;
+                    else
+                        MyPharmacy.NewInstitution = true;
+                    break;
+            }
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -140,7 +166,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             DataChangedCommand = new RelayCommand(DataChangedAction);
             VerifyHPCPinCommand = new RelayCommand(VerifyHPCPinAction);
             VerifySAMDCCommand = new RelayCommand(VerifySAMDCAction);
+            NewInstitutionOnCommand = new RelayCommand(NewInstitutionOnAction);
         }
+
         private bool IsPharmacyDataChanged()
         {
             return IsDataChanged;
