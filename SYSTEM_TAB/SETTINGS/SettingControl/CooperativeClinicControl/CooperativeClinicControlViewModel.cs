@@ -106,7 +106,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
                 default:
                     Messenger.Default.Register<Institution>(this,"GetSelectedInstitution", GetSelectedInstitution);
                     var institutionSelectionWindow = new InstitutionSelectionWindow(search);
-                    institutionSelectionWindow.ShowDialog();
                     break;
             }
         }
