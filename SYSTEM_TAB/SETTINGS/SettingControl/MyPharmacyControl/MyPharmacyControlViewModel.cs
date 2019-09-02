@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
@@ -26,6 +22,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         public RelayCommand VerifyHPCPinCommand { get; set; }
         public RelayCommand VerifySAMDCCommand { get; set; }
         public RelayCommand NewInstitutionOnCommand { get; set; }
+        public RelayCommand PharmacyIDChangedCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -33,7 +30,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         private string busyContent;
         public Pharmacy myPharmacy;
         private bool isDataChanged;
-
+        private bool pharmacyIDChanged;
         public bool IsBusy
         {
             get => isBusy;
@@ -51,12 +48,20 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         }
         public bool IsDataChanged
         {
-            get { return isDataChanged; }
+            get => isDataChanged;
             set
             {
                 Set(() => IsDataChanged, ref isDataChanged, value);
                 CancelChangeCommand.RaiseCanExecuteChanged();
                 ConfirmChangeCommand.RaiseCanExecuteChanged();
+            }
+        }
+        public bool PharmacyIDChanged
+        {
+            get => pharmacyIDChanged;
+            set
+            {
+                Set(() => PharmacyIDChanged, ref pharmacyIDChanged, value);
             }
         }
         #endregion
@@ -75,10 +80,19 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
                 MessageWindow.ShowMessage("VPN 格式錯誤!", MessageType.ERROR);
                 return;
             }
+            if (!IsPharmacyIDValid())
+            {
+                MessageWindow.ShowMessage("機構代碼格式錯誤!", MessageType.ERROR);
+                return;
+            }
             MainWindow.ServerConnection.OpenConnection();
             myPharmacy.SetPharmacy();
             ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             ViewModelMainWindow.CurrentPharmacy.GetPharmacists(DateTime.Today);
+            if (PharmacyIDChanged)
+            {
+
+            }
             MainWindow.ServerConnection.CloseConnection();
             WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
             Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
@@ -104,6 +118,14 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
 
             IsDataChanged = false;
         }
+
+        private bool IsPharmacyIDValid()
+        {
+            if (string.IsNullOrEmpty(MyPharmacy.ID))
+                return false;
+            return MyPharmacy.ID.Length == 10;
+        }
+
         private void CancelChangeAction()
         {
             InitMyPharmacy();
@@ -156,6 +178,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
                     break;
             }
         }
+
+        private void PharmacyIDChangedAction()
+        {
+            PharmacyIDChanged = true;
+            IsDataChanged = true;
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -167,6 +195,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             VerifyHPCPinCommand = new RelayCommand(VerifyHPCPinAction);
             VerifySAMDCCommand = new RelayCommand(VerifySAMDCAction);
             NewInstitutionOnCommand = new RelayCommand(NewInstitutionOnAction);
+            PharmacyIDChangedCommand = new RelayCommand(PharmacyIDChangedAction);
         }
 
         private bool IsPharmacyDataChanged()

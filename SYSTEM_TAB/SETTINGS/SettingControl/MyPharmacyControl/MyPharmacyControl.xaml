@@ -37,7 +37,7 @@
                 <TextBox Text="{Binding ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
-                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <command:EventToCommand Command="{Binding DataContext.PharmacyIDChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
