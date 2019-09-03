@@ -114,6 +114,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         public RelayCommand WareHouseSelectionChangedCommand { get; set; }
         public RelayCommand PrintMaserCommand { get; set; }
         public RelayCommand PrintDetailCommand { get; set; }
+        public RelayCommand ExportControlMedDeclareFileCommand { get; set; }
+        
         public ControlMedicineDeclareViewModel()
         {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
@@ -122,6 +124,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
             WareHouseSelectionChangedCommand = new RelayCommand(WareHouseSelectionChangedAction);
             PrintMaserCommand = new RelayCommand(PrintMaserAction);
             PrintDetailCommand = new RelayCommand(PrintDetailAction);
+            ExportControlMedDeclareFileCommand = new RelayCommand(ExportControlMedDeclareFileAction); 
             SelectedWareHouse = WareHouseCollection[0];
             SearchAction();
         }
@@ -253,16 +256,35 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                     {
                         ControlMedicineDetails temp = new ControlMedicineDetails();
                         ControlMedicineDetails target = new ControlMedicineDetails();
+                        int index = 1;
                         foreach (var c in ControlMedicineDeclares)
                         { 
-                            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime, SelectItem.InitStock, SelectedWareHouse.ID); 
+                            temp.GetDataById(SelectItem.ID, SDateTime, EDateTime, SelectItem.InitStock, SelectedWareHouse.ID);
+                            int adjustAmount = 0; 
+                            
                             foreach (ControlMedicineDetail t in temp)
                             {
-                                if(t.TypeName == "調劑(未過卡)")
-                                    target.Add(t); 
+                                if(t.TypeName != "調劑(未過卡)")
+                                    target.Add(t);
+                                if (t.TypeName == "調劑(已過卡)") {
+                                    adjustAmount += Convert.ToInt32(t.OutputAmount);
+                                }
                             }
+                            if (adjustAmount > 0) {
+                                string isgetpay = target.Count(ta => ta.MedID == SelectItem.ID) > 1 ? "Y" : "N";
+                                file.WriteLine($"" +
+                                     $"{index}," +
+                                     $"P," +
+                                     $"{SelectItem.ID.Substring(0, 7)}," +
+                                     $"," +
+                                     $"{isgetpay}," +
+                                     $"1粒(tab)," +
+                                     $"{SDateTime.AddYears(-1911).ToString("yyyMMdd")},109," +
+                                     $"{adjustAmount},{adjustAmount},,,,,,,,,,,,,,,,,,");
+                                index++; 
+                            } 
                         }
-                        int index = 1;
+
                         foreach (ControlMedicineDetail t in target) {
                             string isgetpay = target.Count(ta => ta.MedID == t.MedID) > 1 ? "Y" : "N";
                             switch (t.TypeName) { 
@@ -288,10 +310,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                                        $"{t.Date.AddYears(-1911).ToString("yyyMMdd")},202," +
                                        $"{t.FinalStock},{t.FinalStock},,{t.ManufactoryControlMedicinesID},{t.ManufactoryName},,,,,,,,,,,,,,,");
                                     break;
-
+                                case "退貨":
+                                    file.WriteLine($"" +
+                                       $"{index}," +
+                                       $"P," +
+                                       $"{t.MedID.Substring(0, 7)}," +
+                                       $"{t.BatchNumber}," +
+                                       $"{isgetpay}," +
+                                       $"1粒(tab)," +
+                                       $"{t.Date.AddYears(-1911).ToString("yyyMMdd")},203," +
+                                       $"{t.FinalStock},{t.FinalStock},,{t.ManufactoryControlMedicinesID},{t.ManufactoryName},,,,,,,,,,,,,,,");
+                                    break; 
                             } 
-                        }
-
+                        } 
                         file.Close();
                         file.Dispose();
                     }
