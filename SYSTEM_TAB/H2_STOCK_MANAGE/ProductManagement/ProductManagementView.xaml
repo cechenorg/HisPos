@@ -113,7 +113,9 @@
                 <Label Content="共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Content="{Binding ProductCollectionView.Count, FallbackValue=0}" Width="80" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="筆" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Label Content="查詢範圍淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="950,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Label Content="查詢範圍架上量淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="407,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <TextBlock Text="{Binding CurrentShelfStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
+                <Label Content="查詢範圍淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="220,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <TextBlock Text="{Binding CurrentStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource GridBackGround}">

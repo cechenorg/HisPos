@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.Service;
 
 namespace His_Pos.NewClass.Product.ProductManagement
@@ -38,9 +40,24 @@ namespace His_Pos.NewClass.Product.ProductManagement
         {
             return this.DeepCloneViaJson() as ProductManageMedicine;
         }
-        public void Save()
+        public bool Save()
         {
-            ProductDetailDB.UpdateMedicineDetailData(this);
+            DataTable dataTable = ProductDetailDB.UpdateMedicineDetailData(this);
+
+            if (dataTable != null && dataTable.Rows.Count > 0)
+            {
+                switch (dataTable.Rows[0].Field<string>("RESULT"))
+                {
+                    case "FAIL-SET":
+                        MessageWindow.ShowMessage("藥品組合中包含此品項，請先刪除藥品組合後再停用", MessageType.ERROR);
+                        return false;
+                    case "FAIL-INV":
+                        MessageWindow.ShowMessage("藥品尚有庫存，請歸零後再停用", MessageType.ERROR);
+                        return false;
+                }
+            }
+
+            return true;
         }
         #endregion
     }

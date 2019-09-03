@@ -76,10 +76,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             if(!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            Medicine.Save();
+            bool isSuccess = Medicine.Save();
             MainWindow.ServerConnection.CloseConnection();
             
-            IsDataChanged = false;
+            if(isSuccess)
+                IsDataChanged = false;
         }
         private void CancelChangeAction()
         {

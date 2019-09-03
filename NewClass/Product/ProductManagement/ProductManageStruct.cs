@@ -22,6 +22,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             IsFrozen = row.Field<bool>("Med_IsFrozen");
             ControlLevel = row.Field<byte?>("Med_Control");
             StockValue = row.Field<double>("STOCK_VALUE");
+            ShelfStockValue = row.Field<double>("SHELF_STOCK_VALUE");
             IsEnable = row.Field<bool>("Pro_IsEnable");
             InventoryError = row.Field<bool>("ERROR_FLAG");
         }
@@ -48,6 +49,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public double OnTheWayAmount { get; set; }
         public double MedBagOnTheWayAmount { get; set; }
         public double StockValue { get; set; }
+        public double ShelfStockValue { get; set; }
         public int? ControlLevel { get; set; }
         public bool IsCommon { get; set; }
         public bool IsFrozen { get; set; }
