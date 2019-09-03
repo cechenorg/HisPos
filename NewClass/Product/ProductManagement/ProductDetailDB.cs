@@ -74,7 +74,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageMedicineByID]", parameters);
         }
 
-        internal static void UpdateMedicineDetailData(ProductManageMedicine productManageMedicine)
+        internal static DataTable UpdateMedicineDetailData(ProductManageMedicine productManageMedicine)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", productManageMedicine.ID));
@@ -91,7 +91,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             DataBaseFunction.AddSqlParameter(parameters, "PRO_WARNING", productManageMedicine.Warnings);
             DataBaseFunction.AddSqlParameter(parameters, "PRO_NOTE", productManageMedicine.Note);
 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
         }
 
         internal static DataTable GetTotalStockValue(string wareID)
