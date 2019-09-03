@@ -242,6 +242,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region Commands
         public RelayCommand ScanPrescriptionQRCode { get; set; }
         public RelayCommand<TextBox> GetCustomers { get; set; }
+        public RelayCommand CustomerDataEdited { get; set; }
         public RelayCommand ShowCustomerEditWindow { get; set; }
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
@@ -257,6 +258,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand CopaymentSelectionChanged { get; set; }
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
+        public RelayCommand ChangeMedicineIDToMostPriced { get; set; }
         public RelayCommand<string> ShowMedicineDetail { get; set; }
         public RelayCommand CountPrescriptionPoint { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
@@ -339,6 +341,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
             ShowCustomerDetail = new RelayCommand(ShowCustomerDetailAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
+            CustomerDataEdited = new RelayCommand(CustomerDataEditedAction);
             ShowCustomerEditWindow = new RelayCommand(ShowCustomerEditWindowAction);
             GetInstitution = new RelayCommand<string>(GetInstitutionAction);
             GetCommonInstitution = new RelayCommand(GetCommonInstitutionAction);
@@ -351,6 +354,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CopaymentSelectionChanged = new RelayCommand(CopaymentSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
+            ChangeMedicineIDToMostPriced = new RelayCommand(ChangeMedicineIDToMostPricedAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
@@ -429,6 +433,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 ShowCustomerSearchEditedToday(condition.Name);
             else
                 ShowCustomerSearch(condition.Name);
+        }
+
+        private void CustomerDataEditedAction()
+        {
+            if (CurrentPrescription.Patient is null) return;
+            if (CurrentPrescription.Patient.ID > 0)
+                CustomerEdited = true;
         }
 
         [SuppressMessage("ReSharper", "NotAccessedVariable")]
@@ -666,6 +677,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.CountPrescriptionPoint();
             CurrentPrescription.CountSelfPay();
             CurrentPrescription.PrescriptionPoint.CountAmountsPay();
+        }
+
+        private void ChangeMedicineIDToMostPricedAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            //CurrentPrescription.AddMedicine();
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void ShowMedicineDetailAction(string medicineID)

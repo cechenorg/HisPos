@@ -113,7 +113,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 Set(() => CanEdit, ref canEdit, value);
             }
         }
-
+        
         private string usageName;
         public string UsageName
         {

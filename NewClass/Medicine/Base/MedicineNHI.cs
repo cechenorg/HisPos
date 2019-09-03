@@ -21,6 +21,7 @@ namespace His_Pos.NewClass.Medicine.Base
             Warning = r.Field<string>("Med_Warning");
             IsBuckle = true;
             CanEdit = true;
+            MostPricedID = r.Field<string>("MostPricedID");
         }
 
         public MedicineNHI()
@@ -82,6 +83,17 @@ namespace His_Pos.NewClass.Medicine.Base
             set
             {
                 Set(() => Warning, ref warning, value);
+            }
+        }
+
+        public bool MostPriced => !string.IsNullOrEmpty(MostPricedID);
+        private string mostPricedID;
+        public string MostPricedID
+        {
+            get => mostPricedID;
+            set
+            {
+                Set(() => MostPricedID, ref mostPricedID, value);
             }
         }
 
