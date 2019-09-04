@@ -968,6 +968,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 isCardReading = false;
                 if (CheckReadCardResult())
                     WriteCard();
+                else
+                {
+                    IsBusy = false;
+                }
             };
             IsBusy = true;
             worker.RunWorkerAsync();

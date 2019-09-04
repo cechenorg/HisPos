@@ -392,11 +392,6 @@
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                     </TextBox.InputBindings>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="TextChanged">
-                            <command:EventToCommand Command="{Binding CustomerDataEdited}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
                 </TextBox>
                 <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0"/>
                 <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}"
@@ -404,11 +399,6 @@
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding DataContext.GetCustomers,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Key="Enter" CommandParameter="{Binding ElementName=PatientName}"/>
                     </TextBox.InputBindings>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="TextChanged">
-                            <command:EventToCommand Command="{Binding DataContext.CustomerDataEdited,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
                 </TextBox>
                 <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
                 <xctk:MaskedTextBox x:Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InsertKeyMode="Overwrite" 
@@ -422,11 +412,6 @@
                             <service:DateValidationRule/>
                         </Binding.ValidationRules>
                     </Binding>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="TextChanged">
-                            <command:EventToCommand Command="{Binding CustomerDataEdited}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
                 </xctk:MaskedTextBox>
                 <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
                 <TextBox Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
