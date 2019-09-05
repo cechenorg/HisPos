@@ -500,6 +500,11 @@
                                 <service:DateValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=TreatDateTextBox}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </xctk:MaskedTextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,0,8,0" Orientation="Horizontal">
@@ -514,6 +519,9 @@
                             </Binding.ValidationRules>
                         </Binding>
                         <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=AdjustDateTextBox}"/>
+                            </i:EventTrigger>
                             <i:EventTrigger EventName="LostFocus">
                                 <command:EventToCommand Command="{Binding AdjustDateChanged}"/>
                             </i:EventTrigger>
@@ -706,12 +714,7 @@
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
                                     <Border Height="23" SnapsToDevicePixels="true" CornerRadius="5" Background="DimGray" Padding="0" Margin="0,2,5,0"
                                                 Visibility="{Binding MostPriced,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                <i:InvokeCommandAction Command="{Binding DataContext.ChangeMedicineIDToMostPriced,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <Label Content="G" Foreground="White" FontSize="12" FontWeight="Bold" Margin="5,0,5,0" Padding="0,3,0,3"/>
+                                        <TextBlock Text="G" Foreground="White" FontSize="12" FontWeight="Bold" Margin="5,0,5,0" Padding="0,3,0,3" PreviewMouseLeftButtonDown="ChangeMedicineIDToMostPriced"/>
                                     </Border>
                                     <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding Frozen}" IsInventoryError="{Binding InventoryError}"/>
                                     <Label Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>

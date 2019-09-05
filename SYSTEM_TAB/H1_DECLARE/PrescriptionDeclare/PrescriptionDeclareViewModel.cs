@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -43,6 +44,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineS
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 using Application = System.Windows.Application;
+using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
 using TextBox = System.Windows.Controls.TextBox;
@@ -250,6 +252,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand PharmacistChanged { get; set; }
+        public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
         public RelayCommand AdjustDateChanged { get; set; }
         public RelayCommand<object> GetDiseaseCode { get; set; }
         public RelayCommand<object> CheckClearDisease { get; set; }
@@ -346,6 +349,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             GetInstitution = new RelayCommand<string>(GetInstitutionAction);
             GetCommonInstitution = new RelayCommand(GetCommonInstitutionAction);
             PharmacistChanged = new RelayCommand(PharmacistChangedAction);
+            DateMouseDoubleClick = new RelayCommand<MaskedTextBox>(DateMouseDoubleClickAction);
             AdjustDateChanged = new RelayCommand(AdjustDateChangedAction);
             GetDiseaseCode = new RelayCommand<object>(GetDiseaseCodeAction);
             CheckClearDisease = new RelayCommand<object>(CheckClearDiseaseAction);
@@ -568,6 +572,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Messenger.Default.Send(new NotificationMessage(this, "FocusMedicalNumber"));
         }
 
+        private void DateMouseDoubleClickAction(MaskedTextBox sender)
+        {
+            switch (sender.Name)
+            {
+                case "AdjustDateTextBox":
+                    CurrentPrescription.AdjustDate = DateTime.Today;
+                    break;
+                case "TreatDateTextBox":
+                    CurrentPrescription.TreatDate = DateTime.Today;
+                    break;
+            }
+        }
+
         private void AdjustDateChangedAction()
         {
             MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(CurrentPrescription.AdjustDate??DateTime.Today);
@@ -682,7 +699,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ChangeMedicineIDToMostPricedAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            //CurrentPrescription.AddMedicine();
+            CurrentPrescription.AddMedicine(((MedicineNHI)CurrentPrescription.SelectedMedicine).MostPricedID);
             MainWindow.ServerConnection.CloseConnection();
         }
 
@@ -904,7 +921,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                patientFromCard.InsertData();
+                var insertResult = patientFromCard.InsertData();
+                if (!insertResult)
+                {
+                    MessageWindow.ShowMessage("請重新讀取卡片。",MessageType.WARNING);
+                    return;
+                }
                 checkedPatient = patientFromCard;
             }
             GetSelectedCustomer(new NotificationMessage<Customer>(checkedPatient, "GetSelectedCustomer"));
@@ -1401,10 +1423,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
                 return false;
             }
-            var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認", null);
+            var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認");
             if (!(bool) insertCustomerConfirm.DialogResult) return false;
-            CurrentPrescription.Patient.InsertData();
-            return true;
+            return CurrentPrescription.Patient.InsertData();
 
         }
 
