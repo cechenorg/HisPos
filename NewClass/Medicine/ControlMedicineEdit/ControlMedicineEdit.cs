@@ -54,13 +54,22 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineEdit
              }
          }
          private DateTime date = DateTime.Today;
-             public DateTime Date
+         public DateTime Date
+         {
+             get { return date; }
+             set
              {
-                 get { return date; }
-                 set
-                 {
-                     Set(() => Date, ref date, value);
-                 }
+                 Set(() => Date, ref date, value);
              }
          }
+        private bool isNew;
+        public bool IsNew
+        {
+            get { return isNew; }
+            set
+            {
+                Set(() => IsNew, ref isNew, value);
+            }
+        }
+    }
 }

@@ -48,17 +48,28 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
                 Set(() => ManufactoryCollection, ref manufactoryCollection, value);
             }
         }
+        #region Command
         public RelayCommand DeleteCommand { get; set; }
+        public RelayCommand AddRowCommand { get; set; }
+        #endregion
         public ControlMedicineEditViewModel(string medID,string warID) {
             ControlMedicineEditCollection = ControlMedicineEdits.GetData(medID,warID);
             ManufactoryCollection = Manufactories.GetManufactories();
             TypeList = new List<string>() { "進貨","退貨"};
             for (int i = 0; i < ControlMedicineEditCollection.Count; i++) {
                 ControlMedicineEditCollection[i].Manufactory = ManufactoryCollection.Single(m => m.ID == ControlMedicineEditCollection[i].ManufactoryID.ToString()); 
-            } 
+            }
+            AddRowAction();
             DeleteCommand = new RelayCommand(DeleteAction);
+            AddRowCommand = new RelayCommand(AddRowAction);
         }
         #region Action
+        private void AddRowAction()
+        {
+            if (!(ControlMedicineEditSelectedItem is null)) ControlMedicineEditSelectedItem.IsNew = false;
+            ControlMedicineEditCollection.Add(new ControlMedicineEdit() { IsNew = true});
+            ControlMedicineEditSelectedItem = ControlMedicineEditCollection[ControlMedicineEditCollection.Count-1];
+        }
         private void DeleteAction() {
             if (ControlMedicineEditSelectedItem is null) return;
             ControlMedicineEditCollection.Remove(ControlMedicineEditSelectedItem); 

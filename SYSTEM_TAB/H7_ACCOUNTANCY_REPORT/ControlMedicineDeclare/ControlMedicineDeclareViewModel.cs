@@ -213,9 +213,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         private void SearchAction()
         {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
+            SelectItem = ControlMedicineDeclares[0];
+            SelectionChangedAction();
             ControlCollectionViewSource = new CollectionViewSource { Source = ControlMedicineDeclares };
             ControlCollectionView = ControlCollectionViewSource.View;
             ControlCollectionViewSource.Filter += Filter;
+           
         }
         private void SelectionChangedAction()
         {

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.ControlMedicineEditWindow"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:service="clr-namespace:His_Pos.Service"
+         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="管制藥品編輯" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -19,7 +20,7 @@
         <DataGrid ItemsSource="{Binding ControlMedicineEditCollection,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                   SelectedItem="{Binding ControlMedicineEditSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
-                   Grid.Row="0" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="True" AutoGenerateColumns="False" Margin="10,10,10,0"  >
+                   Grid.Row="0" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,10,10,0"  >
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -55,7 +56,7 @@
                 <DataGridTemplateColumn Width="50" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsInstitutionEdit, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" >
                                 <Image.InputBindings>
                                     <MouseBinding Command="{Binding DataContext.DeleteCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                 </Image.InputBindings>
@@ -73,7 +74,7 @@
                                     <Binding.ValidationRules>
                                         <service:DateValidationRule/>
                                     </Binding.ValidationRules>
-                                </Binding>
+                                </Binding> 
                             </xctk:MaskedTextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -103,13 +104,24 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <ComboBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding Manufactory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                ItemsSource="{Binding DataContext.ManufactoryCollection,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
-                                </ComboBox>
+                                <ComboBox Width="160"  FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding Manufactory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                             ItemsSource="{Binding DataContext.ManufactoryCollection,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                                  </ComboBox>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn> 
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="100" Header=" "  >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Width="100"  FontFamily="Segoe UI Semi" FontSize="18" Content="新增" HorizontalContentAlignment="Center" 
+                                        Command="{Binding DataContext.AddRowCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}} }"
+                                        Visibility="{Binding IsNew, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"  />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
