@@ -17,6 +17,14 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ControlMedicineDetailByMedId]", parameterList);
         }
+        public static DataTable GetDeclareData( DateTime sDate, DateTime eDate, string warID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>(); 
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ControlMedicineDeclareFileByDate]", parameterList); 
+    }
     }
 
 }

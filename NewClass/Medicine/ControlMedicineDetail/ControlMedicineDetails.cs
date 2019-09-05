@@ -28,5 +28,16 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
                 Add(controlMedicineDetail);
             }
         }
+        public static ControlMedicineDetails GetDeclareData( DateTime sDate, DateTime eDate,  string warID)
+        {
+            ControlMedicineDetails controlMedicineDetails = new ControlMedicineDetails();
+            DataTable table = ControlMedicineDetailDb.GetDeclareData(sDate, eDate, warID);
+            foreach (DataRow r in table.Rows)
+            {
+                controlMedicineDetails.Add(new ControlMedicineDetail(r));
+            }
+            return controlMedicineDetails;
+        }
+        
     }
 }

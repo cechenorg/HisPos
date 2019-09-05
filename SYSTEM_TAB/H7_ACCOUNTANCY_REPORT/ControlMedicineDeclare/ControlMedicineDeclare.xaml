@@ -40,8 +40,9 @@
             <Label Content="~"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
             <Label Content="{Binding EDateTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
 
-            <Rectangle Width="920"/>
+            <Rectangle Width="800"/>
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
+            <Button Command="{Binding ExportControlMedDeclareFileCommand}" Background="DarkCyan"  Content="匯出申報檔" Margin="10,0,0,0" Width="130"   BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label Content="庫別" Margin="10,0,0,0" FontSize="25" Foreground="Black"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center"/>
@@ -171,8 +172,9 @@
                     <RowDefinition Height="325"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal">
-                    <Label  Content="已調劑處方" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" />
+                    <Label  Content="藥品紀錄" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" />
                     <Button Content="列印明細" Command="{Binding PrintDetailCommand}" FontFamily="Segoe UI Semibold" FontSize="20" Background="DarkCyan" VerticalAlignment="Center"  />
+                    <Button Content="編輯" Command="{Binding ControlMedEditCommand}" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" Background="DarkCyan" VerticalAlignment="Center"  />
                 </StackPanel>
                 <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding ControlMedicineDetailsCollection, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" >

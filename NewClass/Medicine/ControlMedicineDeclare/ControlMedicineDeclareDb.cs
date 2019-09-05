@@ -10,7 +10,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDeclare {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[ControlMedDeclareByDate]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ControlMedicineDeclareByDate]", parameterList);
         }
     }
 }
