@@ -321,7 +321,7 @@ namespace His_Pos.NewClass.Medicine.Base
             medicine.UsableAmount = medicine.OnTheFrameAmount;
             if (selectedMedicinesIndex != null)
             {
-                if (selectedMedicinesIndex > 0)
+                if (selectedMedicinesIndex >= 0)
                     medicine.CopyPrevious(this[(int)selectedMedicinesIndex]);
                 medicine.BuckleAmount = medicine.IsBuckle ? medicine.Amount : 0;
                 medicine.Order = (int)selectedMedicinesIndex + 1;

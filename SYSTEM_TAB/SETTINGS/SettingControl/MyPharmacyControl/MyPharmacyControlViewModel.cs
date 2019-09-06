@@ -89,10 +89,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             myPharmacy.SetPharmacy();
             ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             ViewModelMainWindow.CurrentPharmacy.GetPharmacists(DateTime.Today);
-            if (PharmacyIDChanged)
-            {
-
-            }
             MainWindow.ServerConnection.CloseConnection();
             WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
             Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();

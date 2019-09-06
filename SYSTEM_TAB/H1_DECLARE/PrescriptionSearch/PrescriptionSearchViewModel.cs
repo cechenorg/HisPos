@@ -60,6 +60,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => SelectedTimeIntervalType, ref selectedTimeIntervalType, value);
+                RaisePropertyChanged("NoBuckleFilterEnable");
             }
         }
         private string selectedPatientCondition;
@@ -272,6 +273,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => ApplyPoint, ref applyPoint, value);
             }
         }
+
+        public bool NoBuckleFilterEnable => SelectedTimeIntervalType.Equals("調劑日");
+
         private bool filterNoBuckle;
         public bool FilterNoBuckle
         {
@@ -289,7 +293,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand FilterAdjustedInstitution { get; set; }
         public RelayCommand Search { get; set; }
         public RelayCommand Clear { get; set; }
-        public RelayCommand GetNoBucklePrescriptions { get; set; }
         public RelayCommand ShowPrescriptionEdit { get; set; }
         public RelayCommand ExportPrescriptionCsv { get; set; }
         public RelayCommand ExportMedicineCsv { get; set; }
@@ -347,7 +350,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             Search = new RelayCommand(SearchAction);
             Clear = new RelayCommand(ClearAction);
             FilterAdjustedInstitution = new RelayCommand(FilterAdjustedInstitutionAction);
-            GetNoBucklePrescriptions = new RelayCommand(GetNoBucklePrescriptionsAction);
             ShowPrescriptionEdit = new RelayCommand(ShowPrescriptionEditAction);
             ExportPrescriptionCsv = new RelayCommand(ExportPrescriptionCsvAction);
             ExportMedicineCsv = new RelayCommand(ExportMedicineCsvAction);
@@ -413,30 +415,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
             PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Type);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
-        }
-
-        private void GetNoBucklePrescriptionsAction()
-        {
-            worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) => { SearchNoBucklePrescriptions(); };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                EndSearch();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-        }
-
-        private void SearchNoBucklePrescriptions()
-        {
-            BusyContent = "處方查詢中...";
-            SelectedTimeIntervalType = TimeIntervalTypes[0];
-            SearchPrescriptions = new PrescriptionSearchPreviews();
-            MainWindow.ServerConnection.OpenConnection();
-            SearchPrescriptions.GetNoBucklePrescriptions(StartDate, EndDate);
-            SetPrescriptionsSummary();
-            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void ExportPrescriptionCsvAction()
@@ -626,14 +604,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     if (src.NoBuckleStatus != null && src.NoBuckleStatus.Equals(1))
                         e.Accepted = true;
                     else
-                    {
                         e.Accepted = false;
-                    }
                 }
                 else
-                {
                     e.Accepted = true;
-                }
             }
         }
     }

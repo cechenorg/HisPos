@@ -85,13 +85,13 @@
                         </i:Interaction.Triggers>
                     </Image>
                     <Rectangle Width="85"/>
-                    <Image Source="/Images/Delete.png" IsEnabled="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="30" Name="ButtonDelete" >
+                    <!--<Image Source="/Images/Delete.png" IsEnabled="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="30" Name="ButtonDelete" >
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonDown">
                                 <i:InvokeCommandAction Command="{Binding DeleteCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                    </Image>
+                    </Image>-->
                 </StackPanel>
             </Grid>
             <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding }">

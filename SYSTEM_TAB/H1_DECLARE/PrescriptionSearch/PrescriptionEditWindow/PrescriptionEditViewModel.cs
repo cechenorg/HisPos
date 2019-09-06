@@ -249,8 +249,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (EditedPrescription.Division != null)
                 EditedPrescription.Division = VM.GetDivision(OriginalPrescription.Division?.ID);
+            if (MedicalPersonnels.Count(m => m.IDNumber.Equals(EditedPrescription.Pharmacist.IDNumber)) == 0)
+                MedicalPersonnels.Add(EditedPrescription.Pharmacist);
             EditedPrescription.Pharmacist =
-                VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
+                MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
             EditedPrescription.AdjustCase = VM.GetAdjustCase(OriginalPrescription.AdjustCase.ID);
             EditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
             if (OriginalPrescription.PrescriptionCase != null)

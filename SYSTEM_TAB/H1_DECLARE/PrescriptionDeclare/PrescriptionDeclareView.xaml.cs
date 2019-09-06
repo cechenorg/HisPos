@@ -409,14 +409,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             PrescriptionMedicines.SelectedIndex = prevRowIndex;
 
-            if (!(PrescriptionMedicines.Items[prevRowIndex] is Medicine selectedEmp))
+            if (!(PrescriptionMedicines.Items[prevRowIndex] is Medicine selectedMed))
                 return;
 
             var dragDropEffects = DragDropEffects.Move;
 
-            if (DragDrop.DoDragDrop(PrescriptionMedicines, selectedEmp, dragDropEffects) != DragDropEffects.None)
+            if (DragDrop.DoDragDrop(PrescriptionMedicines, selectedMed, dragDropEffects) != DragDropEffects.None)
             {
-                PrescriptionMedicines.SelectedItem = selectedEmp;
+                PrescriptionMedicines.SelectedItem = selectedMed;
             }
         }
 
@@ -447,6 +447,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
             return curIndex;
+        }
+
+        private void TreatDateTextBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void ChangeMedicineIDToMostPriced(object sender, MouseButtonEventArgs e)
+        {
+            PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
+            ((PrescriptionDeclareViewModel) DataContext).ChangeMedicineIDToMostPriced.Execute(null);
         }
     }
 }
