@@ -13,6 +13,7 @@ namespace His_Pos.NewClass.Manufactory
             Name = row.Field<string>("Man_Name");
             NickName = row.Field<string>("Man_NickName");
             Telephone = row.Field<string>("Man_Telephone");
+            ControlmedicineID = row.Field<string>("Man_ControlMedicineID"); 
         }
 
         #region ----- Define Variables -----
@@ -20,6 +21,7 @@ namespace His_Pos.NewClass.Manufactory
         private string name;
         private string nickName;
         private string telephone;
+        private string controlmedicineID;
 
         public string ID
         {
@@ -48,6 +50,11 @@ namespace His_Pos.NewClass.Manufactory
         {
             get { return telephone; }
             set { Set(() => Telephone, ref telephone, value); }
+        }
+        public string ControlmedicineID
+        {
+            get { return controlmedicineID; }
+            set { Set(() => ControlmedicineID, ref controlmedicineID, value); }
         }
         public string GetName
         {
