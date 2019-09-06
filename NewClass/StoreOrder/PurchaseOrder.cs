@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PrescriptionSendData;
@@ -83,7 +84,8 @@ namespace His_Pos.NewClass.StoreOrder
         }
         protected override bool CheckNormalProcessingOrder()
         {
-            bool IsLowerThenOrderAmount = false;
+            bool isLowerThenOrderAmount = false;
+            bool hasControlMed = false;
 
             var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
 
@@ -92,6 +94,22 @@ namespace His_Pos.NewClass.StoreOrder
                 if (product.OrderAmount < 0 || product.FreeAmount < 0)
                 {
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    return false;
+                }
+
+                if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null)
+                {
+                    hasControlMed = true;
+                }
+            }
+
+            if (hasControlMed)
+            {
+                DataTable dataTable = ManufactoryDB.ManufactoryHasControlMedicineID(OrderManufactory.ID);
+
+                if (dataTable.Rows.Count > 0 && !dataTable.Rows[0].Field<bool>("RESULT"))
+                {
+                    MessageWindow.ShowMessage("有管制藥品時，供應商必須有管藥證號!", MessageType.ERROR);
                     return false;
                 }
             }
@@ -106,12 +124,12 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 if (product.RealAmount < product.OrderAmount)
                 {
-                    IsLowerThenOrderAmount = true;
+                    isLowerThenOrderAmount = true;
                     break;
                 }
             }
 
-            if (IsLowerThenOrderAmount)
+            if (isLowerThenOrderAmount)
             {
                 ConfirmWindow confirmWindow = new ConfirmWindow($"收貨單中有商品的收貨量低於訂購量\r\n是否將不足的部分轉成新的收貨單?", "", false);
 

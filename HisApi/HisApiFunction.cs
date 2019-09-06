@@ -229,6 +229,7 @@ namespace His_Pos.HisApi
 
         public static void CheckDailyUpload()
         {
+            if(ViewModelMainWindow.CurrentPharmacy.NewInstitution) return;
             var uploadTable = UploadFunctions.CheckUpload();
             if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
             {
@@ -241,6 +242,7 @@ namespace His_Pos.HisApi
 
         public static void CheckDailyUpload100()
         {
+            if(ViewModelMainWindow.CurrentPharmacy.NewInstitution) return;
             var uploadTable = UploadFunctions.CheckUpload();
             if (uploadTable.Rows.Count >= 100 && ViewModelMainWindow.IsVerifySamDc)
             {

@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                             IsSend = "已收貨";
                             break;
                         case "S":
-                            IsSend = "訂單做廢";
+                            IsSend = "訂單作廢";
                             break;
                         default:
                             IsSend = "無訂單";

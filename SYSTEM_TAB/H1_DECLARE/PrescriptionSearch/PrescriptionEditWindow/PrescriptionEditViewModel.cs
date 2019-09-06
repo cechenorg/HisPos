@@ -11,6 +11,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription;
@@ -206,6 +207,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand MakeUp { get; set; }
         public RelayCommand PrintDepositSheet { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
+        public RelayCommand ChangeMedicineIDToMostPriced { get; set; }
         public RelayCommand PrintReceipt { get; set; }
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
@@ -249,8 +251,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (EditedPrescription.Division != null)
                 EditedPrescription.Division = VM.GetDivision(OriginalPrescription.Division?.ID);
+            if (MedicalPersonnels.Count(m => m.IDNumber.Equals(EditedPrescription.Pharmacist.IDNumber)) == 0)
+                MedicalPersonnels.Add(EditedPrescription.Pharmacist);
             EditedPrescription.Pharmacist =
-                VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
+                MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
             EditedPrescription.AdjustCase = VM.GetAdjustCase(OriginalPrescription.AdjustCase.ID);
             EditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
             if (OriginalPrescription.PrescriptionCase != null)
@@ -309,6 +313,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             CopaymentSelectionChanged = new RelayCommand(CopaymentSelectionChangedAction);
             AddMedicine = new RelayCommand<string>(AddMedicineAction);
             DeleteMedicine = new RelayCommand(DeleteMedicineAction);
+            ChangeMedicineIDToMostPriced = new RelayCommand(ChangeMedicineIDToMostPricedAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
@@ -511,6 +516,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             EditedPrescription.CountSelfPay();
             EditedPrescription.PrescriptionPoint.CountAmountsPay();
             DataChangedAction();
+        }
+
+        private void ChangeMedicineIDToMostPricedAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            EditedPrescription.AddMedicine(((MedicineNHI)EditedPrescription.SelectedMedicine).MostPricedID);
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void ShowMedicineDetailAction(string medicineID)

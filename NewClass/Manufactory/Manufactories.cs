@@ -6,17 +6,30 @@ namespace His_Pos.NewClass.Manufactory
 {
     public class Manufactories : Collection<Manufactory>
     {
-        private Manufactories(DataTable dataTable)
+        private Manufactories(DataTable dataTable,bool isControl)
         {
             foreach (DataRow row in dataTable.Rows)
             {
-                Add(new Manufactory(row));
+                Manufactory manufactory = new Manufactory(row);
+                switch (isControl) {
+                    case true:
+                        if(!string.IsNullOrEmpty(manufactory.ControlmedicineID))
+                            Add(manufactory);
+                        break;
+                    case false:
+                        Add(manufactory);
+                        break;
+
+                } 
             }
         }
 
         internal static Manufactories GetManufactories()
         {
-            return new Manufactories(ManufactoryDB.GetAllManufactories());
+            return new Manufactories(ManufactoryDB.GetAllManufactories(), false);
+        }
+        internal static Manufactories GetControlMedicineManufactories() {
+            return new Manufactories(ManufactoryDB.GetAllManufactories(), true);
         }
     }
 }

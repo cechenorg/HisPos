@@ -52,14 +52,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
             CheckIdNumberCommand = new RelayCommand(CheckIdNumberAction); 
         }
         private void CheckIdNumberAction() {
-            if (!Employee.CheckIdNumber())
-                MessageWindow.ShowMessage("此身分證已經存在!",Class.MessageType.ERROR);
-            else
+            if (Employee.CheckIdNumber())
                 MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
         }
         private void SubbmitAction() {
             if (!Employee.CheckIdNumber()) {
-                MessageWindow.ShowMessage("此身分證已經存在!", Class.MessageType.ERROR);
                 return;
             } 
             if(!Employee.CheckEmployeeAccountSame())

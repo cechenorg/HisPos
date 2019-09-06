@@ -139,7 +139,7 @@ namespace His_Pos.NewClass.Prescription.Service
             if (!Current.IsPrescribe) return;
             if (!Current.Patient.CheckData())
             {
-                var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
+                var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                 if ((bool)confirm.DialogResult)
                     Current.Patient = Customer.GetCustomerByCusId(0);
@@ -152,10 +152,11 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             if (Current.Patient.CheckData())
             {
-                if (Current.Patient.ID != 0 || Current.Patient.Name.Equals("匿名")) return true;
-                Current.Patient.InsertData();
-                return true;
+                if (Current.Patient.ID != 0) return true;
+                var insertResult = Current.Patient.InsertData();
+                return insertResult;
             }
+            if (Current.Patient.Name.Equals("匿名")) return true;
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return false;
         }
@@ -179,11 +180,17 @@ namespace His_Pos.NewClass.Prescription.Service
             return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber,Current.AdjustCase.ID,Current.ChronicSeq);
         }
 
-        protected bool CheckAdjustAndTreatDate(bool notCheckPast10Days)
+        protected bool CheckAdjustAndTreatDate()
         {
-            if (notCheckPast10Days)
-                return CheckTreatDate() && CheckAdjustDate();
-            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
+            //if (notCheckPast10Days)
+            //    return CheckTreatDate() && CheckAdjustDate();
+            //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
+            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast();
+        }
+
+        protected bool CheckAdjustAndTreatDateFromEdit()
+        {
+            return CheckTreatDate() && CheckAdjustDate();
         }
 
         private bool CheckTreatDate()
@@ -223,6 +230,13 @@ namespace His_Pos.NewClass.Prescription.Service
                 return (bool)adjustDateOutOfRange.DialogResult;
             }
             return true;
+        }
+
+        private bool CheckAdjustDatePast()
+        {
+            if (Current.AdjustDate >= DateTime.Today) return true;
+            MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
+            return false;
         }
 
         private bool CheckAdjustDatePast10Days()
@@ -278,7 +292,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p)
+        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p,string orderNumber)
         {
             var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var year = treatmentDate.Split('/')[0];
@@ -298,6 +312,7 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             return new List<ReportParameter>
                     {
+                        new ReportParameter("OrderNumber",orderNumber),
                         new ReportParameter("PharmacyName_Id",$"{VM.CurrentPharmacy.Name}({VM.CurrentPharmacy.ID})"),
                         new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                         new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
@@ -325,7 +340,9 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("MedicineDay", m.MedicineDays),
                         new ReportParameter("Amount", m.Total),
                         new ReportParameter("Form", m.Form),
-                        new ReportParameter("PatientTel", patientTel)
+                        new ReportParameter("PatientTel", patientTel),
+                        new ReportParameter("ChronicTotal", p.ChronicTotal is null ? string.Empty : ((int)p.ChronicTotal).ToString()),
+                        new ReportParameter("ChronicSeq", p.ChronicSeq is null ? string.Empty : ((int)p.ChronicSeq).ToString())
                     };
         }
         public static IEnumerable<ReportParameter> CreateMultiMedBagParameter(Prescription p)
@@ -665,7 +682,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private static void CheckAdminLogin(Prescription selected)
         {
-            if (VM.CurrentUser.ID == 1)
+            if (VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Equals("負責藥師"))
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
                 var edit = new PrescriptionEditWindow(selected, title);
@@ -739,6 +756,11 @@ namespace His_Pos.NewClass.Prescription.Service
                 return false;
             }
             return true;
+        }
+
+        public void SetCreateSign()
+        {
+            Current.PrescriptionStatus.IsCreateSign = false;
         }
     }
 }

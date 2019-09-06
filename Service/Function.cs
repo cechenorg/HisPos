@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using ZipFile = System.IO.Compression.ZipFile;
+using System.Collections.Generic;
 
 namespace His_Pos.Service
 {
@@ -116,7 +117,9 @@ namespace His_Pos.Service
             var output =  (string.IsNullOrEmpty(fileName) ? path_file : path_ymd + "\\" + fileName) + ".zip";
             //壓縮XML
             if (File.Exists(output)) File.Delete(output);
-            ZipFiles(new[] {input}, output);
+            List<string> inputList = new List<string>();
+            inputList.Add(input);
+            ZipFiles(inputList, output);
             if (FileTypeName.Equals("每月申報檔"))
                 File.Delete(input);
             return path_file;
@@ -276,12 +279,12 @@ namespace His_Pos.Service
             }
         }
 
-        private static void ZipFiles(string[] SourceFiles, string TargetFile)
+        public static void ZipFiles(List<string> SourceFiles, string TargetFile)
         {
             var zs = new ZipOutputStream(File.Create(TargetFile));
             zs.SetLevel(9); //壓縮比
 
-            for (int i = 0; i < SourceFiles.Length; i++)
+            for (int i = 0; i < SourceFiles.Count; i++)
             {
                 FileStream s = File.OpenRead(SourceFiles[i]);
                 byte[] buffer = new byte[s.Length];

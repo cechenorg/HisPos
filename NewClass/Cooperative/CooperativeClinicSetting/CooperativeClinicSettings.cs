@@ -1,8 +1,10 @@
 ﻿using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +38,28 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                 default:
                     return temp.NormalIsBuckle ? temp.NormalWareHouse : null; 
             } 
-        } 
+        }
+        public void FilePurge() {
+            foreach (var c in this) {
+                if (string.IsNullOrEmpty(c.FilePath)) continue;
+                try {
+                    if (!Directory.Exists($"{c.FilePath}\\PurgeFile"))
+                        Directory.CreateDirectory($"{c.FilePath}\\PurgeFile");
+                    List<string> fileList = new List<string>();
+                    DirectoryInfo di = new DirectoryInfo(c.FilePath);
+                    foreach (FileInfo f in di.GetFiles("*.xml", SearchOption.AllDirectories))
+                    {
+                        fileList.Add(f.FullName);
+                    }
+                    Function.ZipFiles(fileList, $"{c.FilePath}\\PurgeFile\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip");
+                    foreach (string fs in fileList) {
+                        File.Delete(fs);
+                    }
+                }
+                catch (Exception ex) {
+
+                } 
+            }
+        }
     }
 }

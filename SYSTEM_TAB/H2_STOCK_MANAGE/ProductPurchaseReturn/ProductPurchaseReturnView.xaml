@@ -78,9 +78,9 @@
                     <Image Source="/Images/GreenDot.png" Width="15"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}">
-                    <RadioButton Content="採購單" Tag="0" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterOrderCommand}" CommandParameter="1"/>
+                    <RadioButton Content="採購待退" Tag="0" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterOrderCommand}" CommandParameter="1"/>
                     <Image Source="/Images/OrangeDot.png" Width="15"/>
-                    <RadioButton Content="進退貨單" Tag="1" GroupName="OrderType" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterOrderCommand}" CommandParameter="3"/>
+                    <RadioButton Content="進退貨單" Tag="1" GroupName="OrderType" Margin="7,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterOrderCommand}" CommandParameter="3"/>
                     <Image Source="/Images/BlueDot.png" Width="15"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}" Margin="0,2,0,0">

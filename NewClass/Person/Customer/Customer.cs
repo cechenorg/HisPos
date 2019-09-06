@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Windows.Data;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
@@ -152,32 +153,9 @@ namespace His_Pos.NewClass.Person.Customer
             return 100;
         }
 
-        private string CheckBirthday()
-        {
-            if (Birthday is null) return "請填寫病患出生年月日\r\n";
-            return DateTime.Compare((DateTime) Birthday, DateTime.Today) > 0 ? "出生年月日不可大於今天\r\n" : string.Empty;
-        }
-
-        private string CheckIDNumber()
-        {
-            return string.IsNullOrEmpty(IDNumber) ? "請填寫病患身分證字號\r\n" : string.Empty;
-        }
-        private string CheckName()
-        {
-            return string.IsNullOrEmpty(Name) ? "請填寫病患姓名\r\n" : string.Empty;
-        }
-
-        public string CheckBasicData()
-        {
-            return
-            CheckBirthday()+
-            CheckIDNumber()+
-            CheckName();
-        }
-
         public bool CheckData()
         {
-            return (!string.IsNullOrEmpty(IDNumber) && IDNumber.Trim().Length == 10) && Birthday != null && !string.IsNullOrEmpty(Name);
+            return !string.IsNullOrEmpty(IDNumber) && VerifyService.VerifyIDNumber(IDNumber.Trim()) && Birthday != null && !string.IsNullOrEmpty(Name);
         }
 
         public object Clone()
@@ -208,23 +186,29 @@ namespace His_Pos.NewClass.Person.Customer
             return c;
         }
 
-        public void InsertData()
+        public bool InsertData()
         {
             var table = CustomerDb.InsertCustomerData(this);
-            var c = new Customer(table.Rows[0]);
-            ID = c.ID;
-            Name = c.Name;
-            IDNumber = c.IDNumber;
-            Birthday = c.Birthday;
-            Tel = c.Tel;
-            ContactNote = c.ContactNote;
-            LastEdit = c.LastEdit;
-            Address = c.Address;
-            CellPhone = c.CellPhone;
-            Email = c.Email;
-            Gender = c.Gender;
-            Line = c.Line;
-            Note = c.Note;
+            if (table.Rows.Count > 0)
+            {
+                var c = new Customer(table.Rows[0]);
+                ID = c.ID;
+                Name = c.Name;
+                IDNumber = c.IDNumber;
+                Birthday = c.Birthday;
+                Tel = c.Tel;
+                ContactNote = c.ContactNote;
+                LastEdit = c.LastEdit;
+                Address = c.Address;
+                CellPhone = c.CellPhone;
+                Email = c.Email;
+                Gender = c.Gender;
+                Line = c.Line;
+                Note = c.Note;
+                return true;
+            }
+            MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
+            return false;
         }
 
         public void GetHistories()

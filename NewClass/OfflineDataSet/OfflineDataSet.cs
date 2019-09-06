@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.OfflineDataSet
         [Index(12)]
         public virtual int ReaderCom { get; set; }
         [Index(13)]
-        public virtual bool IsNewReader { get; set; }
+        public virtual bool NewInstitution { get; set; }
         public OfflineDataSet()
         {
 
@@ -97,7 +97,7 @@ namespace His_Pos.NewClass.OfflineDataSet
             //    Products.Add(new Product(p));
             //}
             ReaderCom = ViewModelMainWindow.CurrentPharmacy.ReaderCom;
-            IsNewReader = ViewModelMainWindow.CurrentPharmacy.NewReader;
+            NewInstitution = ViewModelMainWindow.CurrentPharmacy.NewInstitution;
         }
     }
 }

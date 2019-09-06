@@ -298,6 +298,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
+    <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdits.cs" />
     <Compile Include="NewClass\Medicine\InventoryMedicineStruct\BuckleMedicineStruct.cs" />
     <Compile Include="NewClass\Medicine\Base\Medicine.cs" />
     <Compile Include="NewClass\Medicine\InventoryMedicineStruct\MedicineInventoryStruct.cs" />
@@ -646,6 +649,7 @@
     <Compile Include="Service\ExportService\ExportExcelTemplate.cs" />
     <Compile Include="Service\ExportService\ExportSpecialExcelSetting.cs" />
     <Compile Include="Service\FtpMethod.cs" />
+    <Compile Include="Service\VerifyService.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
       <DependentUpon>AdminFunctionView.xaml</DependentUpon>
@@ -1070,6 +1074,14 @@
       <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclareViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\ControlMedicineEditViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\ControlMedicineEditWindow.xaml.cs">
+      <DependentUpon>ControlMedicineEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\WareHouseSelectWindow\WareHouseSelectViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\WareHouseSelectWindow\WareHouseSelectWindow.xaml.cs">
+      <DependentUpon>WareHouseSelectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntryReport\CooperativeEntryReport.xaml.cs">
       <DependentUpon>CooperativeEntryReport.xaml</DependentUpon>
     </Compile>
@@ -1749,6 +1761,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\ControlMedicineEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\WareHouseSelectWindow\WareHouseSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

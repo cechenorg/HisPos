@@ -106,6 +106,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         public WareHouses WareHouseCollection { get; set; }
         public bool HasError => ((int) ErrorStockValue).Equals(0);
         public double CurrentStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.StockValue);
+        public double CurrentShelfStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.ShelfStockValue);
         #endregion
 
         public ProductManagementViewModel()
@@ -135,6 +136,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 ProductCollectionView = CollectionViewSource.GetDefaultView(SearchProductCollection);
                 ProductCollectionView.Filter += ProductFilter;
                 RaisePropertyChanged(nameof(CurrentStockValue));
+                RaisePropertyChanged(nameof(CurrentShelfStockValue));
 
                 TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
                 ShelfStockValue = dataTable.Rows[0].Field<double>("SHELF_STOCK");
@@ -177,6 +179,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
             ProductCollectionView.Filter += ProductFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
+            RaisePropertyChanged(nameof(CurrentShelfStockValue));
         }
         #endregion
 

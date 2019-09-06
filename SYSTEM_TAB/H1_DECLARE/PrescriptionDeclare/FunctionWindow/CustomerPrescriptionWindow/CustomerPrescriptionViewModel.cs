@@ -351,14 +351,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 currentService = PrescriptionService.CreateService(pre);
                 WriteCard();
                 currentService.MakeUpComplete();
-                Application.Current.Dispatcher.Invoke((Action)delegate {
+                Application.Current.Dispatcher.Invoke(delegate {
                     NoCardPres.GetNoCardByCusId(Patient.ID);
                 });
                 IsBusy = false;
             }
             else
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate {
+                Application.Current.Dispatcher.Invoke(delegate {
                     MessageWindow.ShowMessage("補卡失敗，如卡片異常請選擇異常代碼。", MessageType.ERROR);
                 });
                 IsBusy = false;
