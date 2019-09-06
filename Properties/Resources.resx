@@ -504,7 +504,7 @@
     <value>身分證/居留證號長度須為10</value>
   </data>
   <data name="顧客資料不足" xml:space="preserve">
-    <value>查無此病患且病患資料不足，請至少填寫身分證(10碼).姓名及生日</value>
+    <value>查無此病患且病患資料不足，請至少填寫身分證(長度為10並且符合身分證或居留證號檢查規則).姓名及生日</value>
   </data>
   <data name="匿名自費" xml:space="preserve">
     <value>未填寫顧客資料，是否以匿名取代?</value>

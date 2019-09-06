@@ -19,7 +19,7 @@ namespace His_Pos.Properties {
     // 類別透過 ResGen 或 Visual Studio 這類工具。
     // 若要加入或移除成員，請編輯您的 .ResX 檔，然後重新執行 ResGen
     // (利用 /str 選項)，或重建您的 VS 專案。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -1482,7 +1482,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 查無此病患且病患資料不足，請至少填寫身分證(10碼).姓名及生日 的當地語系化字串。
+        ///   查詢類似 查無此病患且病患資料不足，請至少填寫身分證(長度為10並且符合身分證或居留證號檢查規則).姓名及生日 的當地語系化字串。
         /// </summary>
         internal static string 顧客資料不足 {
             get {

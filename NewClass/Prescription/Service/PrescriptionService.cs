@@ -139,7 +139,7 @@ namespace His_Pos.NewClass.Prescription.Service
             if (!Current.IsPrescribe) return;
             if (!Current.Patient.CheckData())
             {
-                var confirm = new ConfirmWindow("尚未選擇客戶或資料不全，是否以匿名取代?", "");
+                var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                 if ((bool)confirm.DialogResult)
                     Current.Patient = Customer.GetCustomerByCusId(0);
