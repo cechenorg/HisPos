@@ -318,6 +318,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
            
         }
         private void PrintPackageAction() {
+            if (IndexReserveSelectedItem is null) return;
+
             ConfirmWindow confirmWindow = new ConfirmWindow("是否列印封包明細?","封包明細列印");
             if ((bool)confirmWindow.DialogResult) {
                 ReportViewer rptViewer = new ReportViewer();

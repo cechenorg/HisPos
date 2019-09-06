@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 
@@ -28,5 +29,16 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
                 Add(controlMedicineDetail);
             }
         }
+        public static ControlMedicineDetails GetDeclareData( DateTime sDate, DateTime eDate,  List<string> warIDs)
+        {
+            ControlMedicineDetails controlMedicineDetails = new ControlMedicineDetails();
+            DataTable table = ControlMedicineDetailDb.GetDeclareData(sDate, eDate, warIDs);
+            foreach (DataRow r in table.Rows)
+            {
+                controlMedicineDetails.Add(new ControlMedicineDetail(r));
+            }
+            return controlMedicineDetails;
+        }
+        
     }
 }
