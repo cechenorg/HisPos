@@ -6,6 +6,7 @@ using System.Security.Policy;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Product.PurchaseReturn;
 
 namespace His_Pos.NewClass.StoreOrder
@@ -91,6 +92,27 @@ namespace His_Pos.NewClass.StoreOrder
         }
         protected override bool CheckNormalProcessingOrder()
         {
+            bool hasControlMed = false;
+
+            foreach (var product in ReturnProducts)
+            {
+                if (product is ReturnMedicine && (product as ReturnMedicine).IsControl != null)
+                {
+                    hasControlMed = true;
+                }
+            }
+
+            if (hasControlMed)
+            {
+                DataTable dataTable = ManufactoryDB.ManufactoryHasControlMedicineID(OrderManufactory.ID);
+
+                if (dataTable.Rows.Count > 0 && !dataTable.Rows[0].Field<bool>("RESULT"))
+                {
+                    MessageWindow.ShowMessage("有管制藥品時，供應商必須有管藥證號!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
 
             return (bool)confirmWindow.DialogResult;

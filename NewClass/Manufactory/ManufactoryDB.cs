@@ -87,6 +87,14 @@ namespace His_Pos.NewClass.Manufactory
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateManufactoryDetailByManufactoryID]", parameters);
         }
 
+        internal static DataTable ManufactoryHasControlMedicineID(string manufactoryID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ManufactoryHasControlMedicineID]", parameters);
+        }
+
         internal static DataTable GetManufactoryTradeRecords(string manufactoryID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
