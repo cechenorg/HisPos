@@ -13,6 +13,9 @@ using His_Pos.FunctionWindow;
 using His_Pos.Class;
 using System.Linq;
 using System.Data;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.ControlMedicineEditWindow.WareHouseSelectWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
 {
@@ -115,9 +118,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         public RelayCommand WareHouseSelectionChangedCommand { get; set; }
         public RelayCommand PrintMaserCommand { get; set; }
         public RelayCommand PrintDetailCommand { get; set; }
-        public RelayCommand ExportControlMedDeclareFileCommand { get; set; }
         public RelayCommand ControlMedEditCommand { get; set; }
-
+        public RelayCommand WareHouseSelectedWindowCommand { get; set; }
+        public RelayCommand ShowMedicineDetailCommand { get; set; }
+        
         public ControlMedicineDeclareViewModel()
         {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
@@ -126,10 +130,20 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
             WareHouseSelectionChangedCommand = new RelayCommand(WareHouseSelectionChangedAction);
             PrintMaserCommand = new RelayCommand(PrintMaserAction);
             PrintDetailCommand = new RelayCommand(PrintDetailAction);
-            ExportControlMedDeclareFileCommand = new RelayCommand(ExportControlMedDeclareFileAction);
             ControlMedEditCommand = new RelayCommand(ControlMedEditAction);
+            WareHouseSelectedWindowCommand = new RelayCommand(WareHouseSelectedWindowAction);
+            ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction); 
             SelectedWareHouse = WareHouseCollection[0];
             SearchAction();
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification == "ControlMedicineDeclareSearch")
+                    SearchAction();
+            });
+        }
+        private void WareHouseSelectedWindowAction()
+        {
+            WareHouseSelectWindow wareHouseSelectWindow = new WareHouseSelectWindow(SDateTime,EDateTime);
         }
         private void ControlMedEditAction() {
             ControlMedicineEditWindow.ControlMedicineEditWindow controlMedicineEditWindow = new ControlMedicineEditWindow.ControlMedicineEditWindow(SelectItem.ID,SelectedWareHouse.ID);    
@@ -247,50 +261,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
             NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare controlMedicineDeclare = ((NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare)e.Item);
             e.Accepted = controlMedicineDeclare.WareHouse.ID == SelectedWareHouse.ID; 
         }
-        private void ExportControlMedDeclareFileAction() {
-            SaveFileDialog fdlg = new SaveFileDialog();
-            fdlg.Title = "管制藥品批次申報檔";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
-            fdlg.Filter = "Txt檔案|*.txt";
-            fdlg.FileName = SDateTime.ToString("yyyy") + ViewModelMainWindow.CurrentPharmacy.Name + "管制藥品批次申報檔";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
-                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
-                Properties.Settings.Default.Save();
-                try
-                {
-                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
-                    {
-                        ControlMedicineDetails controlMedicineDetails = ControlMedicineDetails.GetDeclareData(SDateTime,EDateTime,SelectedWareHouse.ID);
-                      
-                        int index = 1;
-                        foreach (var c in controlMedicineDetails)
-                        {   
-                                string isgetpay = controlMedicineDetails.Count(ta => ta.MedID == c.MedID) > 1 ? "Y" : "N";
-                                file.WriteLine($"" +
-                                     $"{index}," +
-                                     $"P," +
-                                     $"{c.MedID}," +
-                                     $"," +
-                                     $"{isgetpay}," +
-                                     $"{c.PackageName}," +
-                                     $"{c.Date.AddYears(-1911).ToString("yyyMMdd")},{c.TypeName}," +
-                                     $"{c.InputAmount},{c.InputAmount},,,,,,,,,,,,,,,,,,");
-                                index++;  
-                        }
-                           
-                        file.Close();
-                        file.Dispose();
-                    }
-                    MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
-                }
-                catch (Exception ex)
-                {
-                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                }
-            }
+        private void ShowMedicineDetailAction()
+        {
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { SelectItem.ID, SelectedWareHouse.ID}, "ShowProductDetail"));
         }
     }
 }

@@ -8,7 +8,7 @@
         xmlns:service="clr-namespace:His_Pos.Service"
          xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="管制藥品編輯" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="管制藥品編輯" Height="450" Width="820" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
@@ -17,7 +17,7 @@
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding ControlMedicineEditCollection,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+        <DataGrid x:Name="ControlMedicineGrid"  ItemsSource="{Binding ControlMedicineEditCollection,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                   SelectedItem="{Binding ControlMedicineEditSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                    Grid.Row="0" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,10,10,0"  >
@@ -56,7 +56,7 @@
                 <DataGridTemplateColumn Width="50" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" >
+                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsSelect,Mode=TwoWay, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Image.InputBindings>
                                     <MouseBinding Command="{Binding DataContext.DeleteCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                 </Image.InputBindings>
@@ -90,16 +90,28 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn> 
-                <DataGridTemplateColumn Width="100" Header="數量"  >
+                <DataGridTemplateColumn Width="80" Header="數量"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" >
                                 <TextBox Width="80"  FontFamily="Segoe UI Semi" FontSize="18"  Text="{Binding Amount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                         GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                  HorizontalContentAlignment="Center" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn> 
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="120" Header="批號"  >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBox Width="120"  FontFamily="Segoe UI Semi" FontSize="18" Margin="5,0,0,0" Text="{Binding BatchNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                         GotFocus="InputTextbox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
+                                 HorizontalContentAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="160" Header="供應商"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -111,11 +123,11 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="100" Header=" "  >
+                <DataGridTemplateColumn Width="120" Header=" "  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Width="100"  FontFamily="Segoe UI Semi" FontSize="18" Content="新增" HorizontalContentAlignment="Center" 
+                                <Button Width="80"  FontFamily="Segoe UI Semi" FontSize="18" Content="新增" HorizontalContentAlignment="Center"  Margin="30,0,0,0" 
                                         Command="{Binding DataContext.AddRowCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}} }"
                                         Visibility="{Binding IsNew, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"  />
                             </StackPanel>
@@ -124,6 +136,8 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-
+        <StackPanel Grid.Row="1">
+            <Button Width="80" Command="{Binding UpdateCommand}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="690,5,0,0" Content="更新" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
+        </StackPanel>
     </Grid>
 </Window>

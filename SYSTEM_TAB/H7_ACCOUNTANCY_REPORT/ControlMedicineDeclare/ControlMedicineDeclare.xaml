@@ -14,10 +14,7 @@
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
-    </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:ControlMedicineDeclareViewModel/>
-    </UserControl.DataContext>
+    </UserControl.Resources> 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -42,7 +39,7 @@
 
             <Rectangle Width="800"/>
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
-            <Button Command="{Binding ExportControlMedDeclareFileCommand}" Background="DarkCyan"  Content="匯出申報檔" Margin="10,0,0,0" Width="130"   BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
+            <Button Command="{Binding WareHouseSelectedWindowCommand}" Background="DarkCyan"  Content="匯出申報檔" Margin="10,0,0,0" Width="130"   BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label Content="庫別" Margin="10,0,0,0" FontSize="25" Foreground="Black"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center"/>
@@ -67,7 +64,11 @@
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"/>
                     </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding DataContext.ShowMedicineDetailCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                    </i:EventTrigger>
                 </i:Interaction.Triggers>
+               
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>

@@ -11,20 +11,22 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineEdit
 {
    public class ControlMedicineEdit : ObservableObject
     {
-        public ControlMedicineEdit() {
-
+        public ControlMedicineEdit(string medID,string warID) {
+            MedicineID = medID;
+            WarID = warID;
         }
         public ControlMedicineEdit(DataRow r)
         {
             MedicineID = r.Field<string>("MedicineID");
-            WarID = r.Field<int>("WareHouseID"); 
+            WarID = r.Field<int>("WareHouseID").ToString(); 
             Date = r.Field<DateTime>("Date");
              Amount = r.Field<int>("Amount");
             ManufactoryID = r.Field<int>("ManufactoryID");
-            Type = r.Field<string>("Type"); 
+            Type = r.Field<string>("Type");
+            BatchNumber = r.Field<string>("BatchNumber");
         }
         public string MedicineID { get; set; } 
-        public int WarID { get; set; }
+        public string WarID { get; set; }
         public int ManufactoryID { get; set; }
         private string type ;
         public string Type
@@ -71,5 +73,24 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineEdit
                 Set(() => IsNew, ref isNew, value);
             }
         }
+        private bool isSelect;
+        public bool IsSelect
+        {
+            get { return isSelect; }
+            set
+            {
+                Set(() => IsSelect, ref isSelect, value);
+            }
+        }
+        private string batchNumber;
+        public string BatchNumber
+        {
+            get { return batchNumber; }
+            set
+            {
+                Set(() => BatchNumber, ref batchNumber, value);
+            }
+        }
+        
     }
 }

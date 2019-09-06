@@ -1077,6 +1077,10 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\ControlMedicineEditWindow.xaml.cs">
       <DependentUpon>ControlMedicineEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\WareHouseSelectWindow\WareHouseSelectViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\WareHouseSelectWindow\WareHouseSelectWindow.xaml.cs">
+      <DependentUpon>WareHouseSelectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntryReport\CooperativeEntryReport.xaml.cs">
       <DependentUpon>CooperativeEntryReport.xaml</DependentUpon>
     </Compile>
@@ -1760,6 +1764,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\ControlMedicineEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\WareHouseSelectWindow\WareHouseSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

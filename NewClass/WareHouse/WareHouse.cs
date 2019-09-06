@@ -10,6 +10,15 @@ namespace His_Pos.NewClass.WareHouse
         #region ----- Define Variables -----
         public string ID { get; set; }
         public string Name { get; set; }
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                Set(() => IsSelected, ref isSelected, value);
+            }
+        }
         #endregion
 
         private WareHouse() { }

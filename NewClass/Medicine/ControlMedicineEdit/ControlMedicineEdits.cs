@@ -19,5 +19,10 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineEdit
         public static ControlMedicineEdits GetData(string medID,string warID) { 
             return new ControlMedicineEdits(ControlMedicineEditDb.GetData(medID, warID));
         }
+        public void Update(string medID,string warID )
+        {
+             ControlMedicineEditDb.Update(medID,warID,this);
+        }
+        
     }
 }
