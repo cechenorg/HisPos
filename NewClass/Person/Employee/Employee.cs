@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
+using His_Pos.FunctionWindow;
+using His_Pos.Service;
 using JetBrains.Annotations;
 using ZeroFormatter;
 
@@ -135,8 +137,21 @@ namespace His_Pos.NewClass.Person.Employee
         }
         public bool CheckIdNumber() {
             if (string.IsNullOrEmpty(IDNumber)) return false;
+
+            if (!VerifyService.VerifyIDNumber(IDNumber))
+            {
+                MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
+                return false;
+            }
+
             var table = EmployeeDb.CheckIdNumber(IDNumber);
-            return table.Rows[0].Field<int>("Count") == 0 ? true : false;
+            if (table.Rows[0].Field<int>("Count") > 0)
+            {
+                MessageWindow.ShowMessage("此身分證已經存在!", Class.MessageType.ERROR);
+                return false;
+            }
+
+            return true;
         }
         public bool CheckEmployeeAccountSame()
         {

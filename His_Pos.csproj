@@ -646,6 +646,7 @@
     <Compile Include="Service\ExportService\ExportExcelTemplate.cs" />
     <Compile Include="Service\ExportService\ExportSpecialExcelSetting.cs" />
     <Compile Include="Service\FtpMethod.cs" />
+    <Compile Include="Service\VerifyService.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
       <DependentUpon>AdminFunctionView.xaml</DependentUpon>
