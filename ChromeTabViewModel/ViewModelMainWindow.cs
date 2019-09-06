@@ -173,6 +173,7 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = "取得合作院所設定";
                 CooperativeClinicSettings = new CooperativeClinicSettings();
                 CooperativeClinicSettings.Init();
+                CooperativeClinicSettings.FilePurge();
                 BusyContent = StringRes.取得科別;
                 Divisions = new Divisions();
                 BusyContent = StringRes.GetAdjustCases;

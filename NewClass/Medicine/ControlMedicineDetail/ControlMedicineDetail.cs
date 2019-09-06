@@ -7,6 +7,18 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
     public class ControlMedicineDetail : ObservableObject
     {
         public ControlMedicineDetail() { }
+        public ControlMedicineDetail(DataRow r)
+        {
+            MedID = r.Field<string>("Pro_ID");
+            BatchNumber = r.Field<string>("batch");
+            PackageName = r.Field<string>("PackageName");
+            Date = r.Field<DateTime>("Date");
+            TypeName = r.Field<string>("Type");
+            InputAmount = r.Field<double>("Amount");
+            OutputAmount = r.Field<double>("Amount");
+            ManufactoryName = r.Field<string>("ManName");
+            ManufactoryControlMedicinesID = r.Field<string>("ManID");
+        }
         public ControlMedicineDetail(DataRow r, double stock,string medID)
         {
             MedID = medID;
@@ -29,6 +41,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
         public double InputAmount { get; set; }
         public double OutputAmount { get; set; }
         public string BatchNumber { get; set; }
+        public string PackageName { get; set; }
         public double FinalStock { get; set; }
         public string Description { get; set; }
         public string ManufactoryName { get; set; }
