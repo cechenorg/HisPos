@@ -714,7 +714,7 @@
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
                                     <Border Height="23" SnapsToDevicePixels="true" CornerRadius="5" Background="DimGray" Padding="0" Margin="0,2,5,0"
                                                 Visibility="{Binding MostPriced,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter},FallbackValue=Collapsed}">
-                                        <TextBlock Text="G" Foreground="White" FontSize="12" FontWeight="Bold" Margin="5,0,5,0" Padding="0,3,0,3" PreviewMouseLeftButtonDown="ChangeMedicineIDToMostPriced"/>
+                                        <TextBlock Text="G" Foreground="White" FontSize="14" FontWeight="Bold" Margin="5,0,5,0" Padding="0,1,0,3" PreviewMouseLeftButtonDown="ChangeMedicineIDToMostPriced"/>
                                     </Border>
                                     <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding Frozen}" IsInventoryError="{Binding InventoryError}"/>
                                     <Label Content="{Binding FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
