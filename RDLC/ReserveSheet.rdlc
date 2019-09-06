@@ -66,8 +66,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>2.54973cm</Top>
-            <Left>4.00048cm</Left>
+            <Top>2.4439cm</Top>
+            <Left>0.22224cm</Left>
             <Height>0.70583cm</Height>
             <Width>1.65cm</Width>
             <Style>
@@ -96,8 +96,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>1.66751cm</Top>
-            <Left>3.99715cm</Left>
+            <Top>1.56168cm</Top>
+            <Left>0.21891cm</Left>
             <Height>0.70583cm</Height>
             <Width>1.65333cm</Width>
             <ZIndex>1</ZIndex>
@@ -129,8 +129,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox11</rd:DefaultName>
-            <Top>2.54972cm</Top>
-            <Left>16.25308cm</Left>
+            <Top>2.44389cm</Top>
+            <Left>12.47484cm</Left>
             <Height>0.70583cm</Height>
             <Width>1.60514cm</Width>
             <ZIndex>2</ZIndex>
@@ -156,8 +156,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>2.54973cm</Top>
-            <Left>5.65048cm</Left>
+            <Top>2.4439cm</Top>
+            <Left>1.87224cm</Left>
             <Height>0.70583cm</Height>
             <Width>10.56732cm</Width>
             <ZIndex>3</ZIndex>
@@ -188,8 +188,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>2.54972cm</Top>
-            <Left>17.83176cm</Left>
+            <Top>2.44389cm</Top>
+            <Left>14.11526cm</Left>
             <Height>0.70583cm</Height>
             <Width>3.1664cm</Width>
             <ZIndex>4</ZIndex>
@@ -220,8 +220,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>1.66751cm</Top>
-            <Left>5.64715cm</Left>
+            <Top>1.56168cm</Top>
+            <Left>1.86891cm</Left>
             <Height>0.70583cm</Height>
             <Width>2.94237cm</Width>
             <ZIndex>5</ZIndex>
@@ -253,8 +253,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>1.66751cm</Top>
-            <Left>8.58953cm</Left>
+            <Top>1.56168cm</Top>
+            <Left>4.81129cm</Left>
             <Height>0.70583cm</Height>
             <Width>1.65333cm</Width>
             <ZIndex>6</ZIndex>
@@ -285,8 +285,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>1.66751cm</Top>
-            <Left>10.24286cm</Left>
+            <Top>1.56168cm</Top>
+            <Left>6.46462cm</Left>
             <Height>0.70583cm</Height>
             <Width>4.63932cm</Width>
             <ZIndex>7</ZIndex>
@@ -704,8 +704,8 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>ReserveMedicinesDataSet</DataSetName>
-            <Top>3.43195cm</Top>
-            <Left>4.00048cm</Left>
+            <Top>3.32612cm</Top>
+            <Left>0.22224cm</Left>
             <Height>1.2cm</Height>
             <Width>16.99768cm</Width>
             <ZIndex>8</ZIndex>
@@ -733,8 +733,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>0.21166cm</Top>
-            <Left>3.99715cm</Left>
+            <Top>0.10583cm</Top>
+            <Left>0.21891cm</Left>
             <Height>0.97041cm</Height>
             <Width>3.22828cm</Width>
             <ZIndex>9</ZIndex>
@@ -763,8 +763,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>0.17639cm</Top>
-            <Left>7.22543cm</Left>
+            <Top>0.07056cm</Top>
+            <Left>3.44719cm</Left>
             <Height>1.31473cm</Height>
             <Width>9.74203cm</Width>
             <ZIndex>10</ZIndex>
@@ -795,8 +795,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Type</rd:DefaultName>
-            <Top>0.17639cm</Top>
-            <Left>17.00274cm</Left>
+            <Top>0.07056cm</Top>
+            <Left>13.2245cm</Left>
             <Height>1.31473cm</Height>
             <Width>3.98661cm</Width>
             <ZIndex>11</ZIndex>
@@ -827,15 +827,15 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>1.34055cm</Top>
-            <Left>0.26188cm</Left>
+            <Top>1.18207cm</Top>
+            <Left>17.45805cm</Left>
             <Height>5.63738cm</Height>
             <Width>3.7cm</Width>
             <ZIndex>12</ZIndex>
             <Style>
               <Border />
               <VerticalAlign>Bottom</VerticalAlign>
-              <WritingMode>Rotate270</WritingMode>
+              <WritingMode>Vertical</WritingMode>
             </Style>
           </Textbox>
           <Textbox Name="Textbox3">
@@ -855,8 +855,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>0.21166cm</Top>
-            <Left>0.22661cm</Left>
+            <Top>0.05318cm</Top>
+            <Left>17.42278cm</Left>
             <Height>1.12889cm</Height>
             <Width>3.73527cm</Width>
             <ZIndex>13</ZIndex>
@@ -869,7 +869,7 @@
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
               <PaddingBottom>2pt</PaddingBottom>
-              <WritingMode>Rotate270</WritingMode>
+              <WritingMode>Vertical</WritingMode>
             </Style>
           </Textbox>
         </ReportItems>
@@ -883,7 +883,7 @@
       <Width>22cm</Width>
       <Page>
         <PageHeader>
-          <Height>0.5cm</Height>
+          <Height>0.94979cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <Style>
