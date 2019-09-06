@@ -360,5 +360,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             return curIndex;
         }
+
+        private void ChangeMedicineIDToMostPriced(object sender, MouseButtonEventArgs e)
+        {
+            PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
+            ((PrescriptionEditViewModel) DataContext).ChangeMedicineIDToMostPriced.Execute(null);
+        }
     }
 }

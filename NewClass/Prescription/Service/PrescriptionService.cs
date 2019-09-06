@@ -152,10 +152,11 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             if (Current.Patient.CheckData())
             {
-                if (Current.Patient.ID != 0 || Current.Patient.Name.Equals("匿名")) return true;
+                if (Current.Patient.ID != 0) return true;
                 var insertResult = Current.Patient.InsertData();
                 return insertResult;
             }
+            if (Current.Patient.Name.Equals("匿名")) return true;
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return false;
         }
