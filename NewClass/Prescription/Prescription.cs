@@ -879,9 +879,9 @@ namespace His_Pos.NewClass.Prescription
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
             var medBagMedicines = new MedBagMedicines(Medicines, true);
-            foreach (var m in medBagMedicines)
+            for (int i = 1;i <= medBagMedicines.Count;i++ )
             {
-                SetSingleModeReportViewer(rptViewer, m);
+                SetSingleModeReportViewer(rptViewer, medBagMedicines[i-1], $"{i}/{medBagMedicines.Count}");
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
@@ -929,11 +929,11 @@ namespace His_Pos.NewClass.Prescription
             });
         }
         #region ReportViewerSettingFunctions
-        private void SetSingleModeReportViewer(ReportViewer rptViewer, MedBagMedicine m)
+        private void SetSingleModeReportViewer(ReportViewer rptViewer, MedBagMedicine m,string orderNumber)
         {
             rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingle.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
-            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this);
+            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this, orderNumber);
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();

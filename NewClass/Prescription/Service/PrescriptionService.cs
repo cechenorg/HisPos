@@ -184,6 +184,11 @@ namespace His_Pos.NewClass.Prescription.Service
             //if (notCheckPast10Days)
             //    return CheckTreatDate() && CheckAdjustDate();
             //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
+            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast();
+        }
+
+        protected bool CheckAdjustAndTreatDateFromEdit()
+        {
             return CheckTreatDate() && CheckAdjustDate();
         }
 
@@ -213,11 +218,6 @@ namespace His_Pos.NewClass.Prescription.Service
                 MessageWindow.ShowMessage(Resources.AdjustDateError, MessageType.WARNING);
                 return false;
             }
-            if (Current.AdjustDate < DateTime.Today)
-            {
-                MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
-                return false;
-            }
             if (Current.AdjustCase.IsChronic()) return true;
             Debug.Assert(Current.TreatDate != null, "Current.TreatDate != null");
             var startDate = (DateTime)Current.TreatDate;
@@ -229,6 +229,13 @@ namespace His_Pos.NewClass.Prescription.Service
                 return (bool)adjustDateOutOfRange.DialogResult;
             }
             return true;
+        }
+
+        private bool CheckAdjustDatePast()
+        {
+            if (Current.AdjustDate >= DateTime.Today) return true;
+            MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
+            return false;
         }
 
         private bool CheckAdjustDatePast10Days()
@@ -284,7 +291,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p)
+        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p,string orderNumber)
         {
             var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var year = treatmentDate.Split('/')[0];
@@ -304,6 +311,7 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             return new List<ReportParameter>
                     {
+                        new ReportParameter("OrderNumber",orderNumber),
                         new ReportParameter("PharmacyName_Id",$"{VM.CurrentPharmacy.Name}({VM.CurrentPharmacy.ID})"),
                         new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                         new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
@@ -331,7 +339,9 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("MedicineDay", m.MedicineDays),
                         new ReportParameter("Amount", m.Total),
                         new ReportParameter("Form", m.Form),
-                        new ReportParameter("PatientTel", patientTel)
+                        new ReportParameter("PatientTel", patientTel),
+                        new ReportParameter("ChronicTotal", p.ChronicTotal is null ? string.Empty : ((int)p.ChronicTotal).ToString()),
+                        new ReportParameter("ChronicSeq", p.ChronicSeq is null ? string.Empty : ((int)p.ChronicSeq).ToString())
                     };
         }
         public static IEnumerable<ReportParameter> CreateMultiMedBagParameter(Prescription p)

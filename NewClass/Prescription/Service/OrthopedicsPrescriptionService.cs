@@ -39,7 +39,7 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             CheckAnonymousPatient();
             if (!CheckValidCustomer()) return false;
-            if (!CheckAdjustAndTreatDate()) return false;
+            if (!CheckAdjustAndTreatDateFromEdit()) return false;
             if (Current.IsPrescribe)
             {
                 if (!CheckPrescribeRules()) return false;
