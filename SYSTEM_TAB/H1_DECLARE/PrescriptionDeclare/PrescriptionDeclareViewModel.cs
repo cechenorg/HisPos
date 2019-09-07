@@ -203,7 +203,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if(value is null) return;
                 if (!string.IsNullOrEmpty(value) && value.Equals("Option2"))
                 {
-                    if (CurrentPrescription.Patient is null || !CurrentPrescription.Patient.CheckData())
+                    if (CurrentPrescription.Patient is null || CurrentPrescription.Patient.ID <= 0)
                     {
                         MessageWindow.ShowMessage("尚未選擇客戶", MessageType.WARNING);
                         value = "Option1";
