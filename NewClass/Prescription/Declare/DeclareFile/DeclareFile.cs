@@ -45,7 +45,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             T12 = (normalApplyPoints + chronicApplyPoints).ToString().PadLeft(10, '0');
             var declareDate = selectedFile.DeclarePres[0].AdjustDate;
             var firstDay = new DateTime(declareDate.Year, declareDate.Month, 1);
-            var lastDay = new DateTime(declareDate.AddMonths(1).Year, declareDate.AddMonths(1).Month, 1).AddDays(-1);
+            var lastDay = selectedFile.DeclarePres.Max(p => p.AdjustDate);
             T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay);
             T14 = DateTimeExtensions.ConvertToTaiwanCalender(lastDay);
         }

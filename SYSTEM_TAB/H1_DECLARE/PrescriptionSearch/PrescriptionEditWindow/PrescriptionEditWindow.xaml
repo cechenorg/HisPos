@@ -512,7 +512,7 @@
                         </xctk:MaskedTextBox>
                         <Label Content="調劑日期" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
                         <xctk:MaskedTextBox Width="170" Height="35" Margin="0,0,0,0" HorizontalContentAlignment="Center" FontSize="17" Style="{StaticResource MaterialDesignTextBox}" BorderBrush="DimGray" InsertKeyMode="Overwrite"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" BorderThickness="0,0,0,1" IsReadOnly="{Binding EditedPrescription.PrescriptionStatus.IsGetCard}" IsReadOnlyCaretVisible="False">
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" BorderThickness="0,0,0,1" IsReadOnly="{Binding EditedPrescription.PrescriptionStatus.IsDeclare}" IsReadOnlyCaretVisible="False">
                             <Binding Path="EditedPrescription.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                 <Binding.ValidationRules>

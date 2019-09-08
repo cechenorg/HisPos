@@ -45,14 +45,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => DeclareFile, ref declareFile, value);
             }
         }
-        private DateTime? declareDate;
-        public DateTime? DeclareDate
+        private DateTime? declareDateStart;
+        public DateTime? DeclareDateStart
         {
-            get => declareDate;
+            get => declareDateStart;
             set
             {
                 if(value != null)
-                    Set(() => DeclareDate, ref declareDate, value);
+                    Set(() => DeclareDateStart, ref declareDateStart, value);
+            }
+        }
+        private DateTime? declareDateEnd;
+        public DateTime? DeclareDateEnd
+        {
+            get => declareDateEnd;
+            set
+            {
+                if(value != null)
+                    Set(() => DeclareDateEnd, ref declareDateEnd, value);
             }
         }
         private bool isBusy;
@@ -71,16 +81,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             set
             {
                 Set(() => BusyContent, ref busyContent, value);
-            }
-        }
-        private int startDay => 1;
-        private int endDay;
-        public int EndDay
-        {
-            get => endDay;
-            set
-            {
-                Set(() => EndDay, ref endDay, value);
             }
         }
 
@@ -159,13 +159,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             DeclarePharmacies = new DeclarePharmacies();
             SelectedPharmacy = DeclarePharmacies.SingleOrDefault(p => p.ID.Equals(ViewModelMainWindow.CurrentPharmacy.ID));
             DeclareFile = new DeclarePreviewOfMonth();
-            DeclareDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
-            var decDate = (DateTime)DeclareDate;
-            EndDay = DateTime.DaysInMonth(decDate.Year, decDate.Month);
-            var endDate = new DateTime(decDate.Year, decDate.Month, EndDay);
+            DeclareDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
+            var decDate = (DateTime)DeclareDateStart;
+            DeclareDateEnd = new DateTime(decDate.Year, decDate.Month, DateTime.DaysInMonth(decDate.Year, decDate.Month));
             GetPharmacistSchedule();
-            DeclareFile.GetNotAdjustPrescriptionCount(DeclareDate, endDate, SelectedPharmacy.ID);
-            var duplicatePrescriptionWindow = new DuplicatePrescriptionWindow.DuplicatePrescriptionWindow(decDate, endDate);
+            DeclareFile.GetNotAdjustPrescriptionCount(DeclareDateStart, DeclareDateEnd, SelectedPharmacy.ID);
+            var duplicatePrescriptionWindow = new DuplicatePrescriptionWindow.DuplicatePrescriptionWindow(decDate, (DateTime)DeclareDateEnd);
             if (duplicatePrescriptionWindow.ShowDialog)
                 duplicatePrescriptionWindow.Show();
             EditedList = new DeclarePrescriptions();
@@ -202,6 +201,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void GetDeclarePrescriptions()
         {
+            if(!CheckStartOrEndDayNull()) return;
             MainWindow.ServerConnection.OpenConnection();
             GetPrescriptions();
             MainWindow.ServerConnection.CloseConnection();
@@ -209,9 +209,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private bool CheckStartOrEndDayNull()
         {
-            if (DeclareDate is null)
+            if (DeclareDateStart is null || DeclareDateEnd is null)
             {
-                MessageWindow.ShowMessage("請填寫申報年月", MessageType.ERROR);
+                MessageWindow.ShowMessage("請填寫申報日期區間", MessageType.ERROR);
                 return false;
             }
             return true;
@@ -220,12 +220,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         [SuppressMessage("ReSharper", "UnusedVariable")]
         private void AdjustPharmacistSettingAction()
         {
-            if (DeclareDate is null)
-            {
-                MessageWindow.ShowMessage("尚未填寫申報年月。",MessageType.WARNING);
-                return;
-            }
-            var decDate = (DateTime)DeclareDate;
+            if (!CheckStartOrEndDayNull()) return;
+            var decDate = (DateTime)DeclareDateStart;
             var adjustPharmacistWindow = new AdjustPharmacistWindow(new DateTime(decDate.Year, decDate.Month, 1));
             MainWindow.ServerConnection.OpenConnection();
             GetPharmacistSchedule();
@@ -338,9 +334,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void CreateDeclareFileAction()
         {
-            if (DeclareDate is null)
+            if (DeclareDateStart is null || DeclareDateEnd is null)
             {
-                MessageWindow.ShowMessage("尚未填寫申報年月。", MessageType.WARNING);
+                MessageWindow.ShowMessage("尚未填寫申報日期區間。", MessageType.WARNING);
                 return;
             }
             worker = new BackgroundWorker();
@@ -355,8 +351,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void CreateDeclareFile()
         {
-            Debug.Assert(DeclareDate != null, nameof(DeclareDate) + " != null");
-            var decDate = (DateTime)DeclareDate;
+            Debug.Assert(DeclareDateStart != null, nameof(DeclareDateStart) + " != null");
+            var decDate = (DateTime)DeclareDateStart;
             MainWindow.ServerConnection.OpenConnection();
             BusyContent = "處方排序中...";
             DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
@@ -374,15 +370,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         #endregion
         private void GetPrescriptions()
         {
-            Debug.Assert(DeclareDate != null, nameof(DeclareDate) + " != null");
-            var decDate = (DateTime) DeclareDate;
-            var end = DateTime.DaysInMonth(decDate.Year, decDate.Month - 1);
-            if (EndDay > end) EndDay = end;
-            var sDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, startDay);
-            var eDate = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, EndDay);
+            Debug.Assert(DeclareDateStart != null, nameof(DeclareDateStart) + " != null");
+            Debug.Assert(DeclareDateEnd != null, nameof(DeclareDateEnd) + " != null");
+            var sDate = (DateTime) DeclareDateStart;
+            var eDate = (DateTime) DeclareDateEnd;
             DeclareFile.GetSearchPrescriptions(sDate, eDate, SelectedPharmacy.ID);
             DeclareFile.SetSummary();
-            DeclareFile.DeclareDate = (DateTime)DeclareDate;
+            DeclareFile.DeclareDate = (DateTime)DeclareDateStart;
         }
         private void PrescriptionEditedRefresh(NotificationMessage msg)
         {
@@ -392,13 +386,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void GetPharmacistSchedule()
         {
-            var start = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, startDay);
-            var last = DateTimeExtensions.GetDateTimeWithDay(DeclareDate, EndDay);
+            Debug.Assert(DeclareDateStart != null, nameof(DeclareDateStart) + " != null");
+            Debug.Assert(DeclareDateEnd != null, nameof(DeclareDateEnd) + " != null");
+            var sDate = (DateTime) DeclareDateStart;
+            var eDate = (DateTime) DeclareDateEnd;
             MainWindow.ServerConnection.OpenConnection();
             PharmacistSchedule = new PharmacistSchedule();
-            PharmacistSchedule.GetPharmacistSchedule(start, last);
+            PharmacistSchedule.GetPharmacistSchedule(sDate, eDate);
             PharmacistScheduleWithPrescriptionCount = new PharmacistSchedule();
-            PharmacistScheduleWithPrescriptionCount.GetPharmacistScheduleWithCount(start, last);
+            PharmacistScheduleWithPrescriptionCount.GetPharmacistScheduleWithCount(sDate, eDate);
             MainWindow.ServerConnection.CloseConnection();
         }
 
