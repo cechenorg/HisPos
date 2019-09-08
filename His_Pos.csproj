@@ -30,7 +30,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>16</ApplicationRevision>
+    <ApplicationRevision>17</ApplicationRevision>
     <ApplicationVersion>2.0.11.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -298,6 +298,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="NewClass\Manufactory\ControlManufactory.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdits.cs" />
