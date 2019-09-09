@@ -46,8 +46,8 @@
             <Label Content="{Binding MyPharmacy.Tel}" FontSize="22" FontFamily="Segoe UI Semibold" Height="35"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="10">
-            <Button Content="取消" Background="DimGray" FontSize="22" FontFamily="Segoe UI Semibold" Height="35" Command="{Binding }"/>
-            <Button Content="確認" Background="IndianRed" FontSize="22" FontFamily="Segoe UI Semibold" Height="35" Command="{Binding }"/>
+            <Button Content="取消" Background="DimGray" FontSize="22" FontFamily="Segoe UI Semibold" Height="35" Command="{Binding }" BorderBrush="DimGray"/>
+            <Button Content="確認" Background="IndianRed" FontSize="22" FontFamily="Segoe UI Semibold" Height="35" Command="{Binding }" BorderBrush="IndianRed"/>
         </StackPanel>
     </Grid>
 </Window>
