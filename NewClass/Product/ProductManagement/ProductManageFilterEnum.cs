@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         COMMON = 2,
         CONTROL = 3,
         FROZE = 4,
-        INV_ERROR = 5
+        DISABLE = 5,
+        INV_ERROR = 6
     }
 }

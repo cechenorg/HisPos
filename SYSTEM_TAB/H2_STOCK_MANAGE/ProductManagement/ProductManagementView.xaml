@@ -92,7 +92,8 @@
                 <RadioButton Content="常備" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="2"/>
                 <RadioButton Content="管制" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="3"/>
                 <RadioButton Content="冰品" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="4"/>
-                <RadioButton Content="不足需求" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="5"/>
+                <RadioButton Content="已停用" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="5"/>
+                <RadioButton Content="不足需求" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterCommand}" CommandParameter="6"/>
             </StackPanel>
             <ContentControl Grid.Row="3" Content="{Binding}">
                 <ContentControl.Style>

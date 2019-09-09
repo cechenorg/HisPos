@@ -226,6 +226,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     return tempProduct.ControlLevel != null;
                 case ProductManageFilterEnum.FROZE:
                     return tempProduct.IsFrozen;
+                case ProductManageFilterEnum.DISABLE:
+                    return !tempProduct.IsEnable; 
                 case ProductManageFilterEnum.INV_ERROR:
                     return tempProduct.InventoryError;
             }

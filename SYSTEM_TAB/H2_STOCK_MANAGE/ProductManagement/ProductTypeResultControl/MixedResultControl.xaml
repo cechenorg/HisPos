@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+             xmlns:service="clr-namespace:His_Pos.Service"
              mc:Ignorable="d">
     <UserControl.Resources>
+        <service:InvertBoolConverter x:Key="InvertBoolConverter"/>
         <DataTemplate x:Key="MedicineIcon" DataType="UserControl">
             <Image Source="/Images/BlueDot.png" Width="15"/>
         </DataTemplate>
@@ -83,7 +85,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding IsFrozen}" IsInventoryError="{Binding InventoryError}"/>
+                                <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding IsFrozen}" IsInventoryError="{Binding InventoryError}" IsDisable="{Binding IsEnable, Converter={StaticResource InvertBoolConverter}}"/>
                                 <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" FontSize="18" Margin="-5,0,0,0"/>
                             </StackPanel>
                         </DataTemplate>
