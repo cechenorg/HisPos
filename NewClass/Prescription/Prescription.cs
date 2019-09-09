@@ -1683,11 +1683,6 @@ namespace His_Pos.NewClass.Prescription
             return usableInventoryStructs;
         }
 
-        public string CheckChronicMedicinesNegativeStock()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Reset()
         {
             PrescriptionStatus.ReserveSend = false;

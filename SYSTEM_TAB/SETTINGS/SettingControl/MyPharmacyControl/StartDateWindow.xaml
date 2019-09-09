@@ -9,7 +9,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
-        Title="特約日期設定" Height="450" Width="450">
+        Title="特約日期設定" Height="310" Width="450" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
@@ -45,9 +45,6 @@
             <Label Content="電話:" FontSize="22" FontFamily="Segoe UI Semibold" Height="35"/>
             <Label Content="{Binding MyPharmacy.Tel}" FontSize="22" FontFamily="Segoe UI Semibold" Height="35"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="10">
-            <Button Content="取消" Background="DimGray" FontSize="22" FontFamily="Segoe UI Semibold" Height="35" Command="{Binding }" BorderBrush="DimGray"/>
-            <Button Content="確認" Background="IndianRed" FontSize="22" FontFamily="Segoe UI Semibold" Height="35" Command="{Binding }" BorderBrush="IndianRed"/>
-        </StackPanel>
+        <Button Content="確認" Background="IndianRed" FontSize="22" FontFamily="Segoe UI Semibold" Height="35" Command="{Binding ConfirmCommand}" BorderBrush="IndianRed" Grid.Row="4" Width="85" HorizontalAlignment="Right" Margin="10"/>
     </Grid>
 </Window>

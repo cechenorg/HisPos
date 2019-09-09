@@ -86,10 +86,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
                 return;
             MainWindow.ServerConnection.OpenConnection();
             myPharmacy.SetPharmacy();
+            WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
             ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             ViewModelMainWindow.CurrentPharmacy.GetPharmacists(DateTime.Today);
             MainWindow.ServerConnection.CloseConnection();
-            WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
             Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
             Properties.Settings.Default.Save();
 

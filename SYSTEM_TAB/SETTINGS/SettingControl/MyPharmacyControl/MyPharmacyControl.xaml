@@ -42,8 +42,24 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <TextBox Grid.Row="2" Text="{Binding Address}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
-            <TextBox Grid.Row="3" Text="{Binding Tel}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
+                <TextBox Text="{Binding Tel}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0" HorizontalContentAlignment="Center">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
+                <TextBox Text="{Binding Address}" FontSize="25" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0" HorizontalContentAlignment="Center">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
             <Grid Grid.Row="5" Margin="10" Background="{StaticResource Shadow}">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
