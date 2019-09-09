@@ -18,6 +18,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             DataBaseFunction.AddSqlParameter(parameterList, "CurPha_ReaderCom", p.ReaderCom);
             DataBaseFunction.AddSqlParameter(parameterList, "CurPha_VPN", p.VpnIp);
             DataBaseFunction.AddSqlParameter(parameterList, "CurPha_NewInstitution", p.NewInstitution);
+            DataBaseFunction.AddSqlParameter(parameterList, "newStartDate", p.StartDate);
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCurrentPharmacy]", parameterList);
               
         }

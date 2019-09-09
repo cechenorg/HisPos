@@ -42,8 +42,8 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <TextBlock Grid.Row="2" Text="{Binding Address}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
-            <TextBlock Grid.Row="3" Text="{Binding Tel}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBox Grid.Row="2" Text="{Binding Address}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBox Grid.Row="3" Text="{Binding Tel}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
             <Grid Grid.Row="5" Margin="10" Background="{StaticResource Shadow}">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
