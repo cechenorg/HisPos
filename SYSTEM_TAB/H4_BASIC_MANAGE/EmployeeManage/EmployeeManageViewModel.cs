@@ -65,7 +65,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => Employee, ref employee, value);
-                IsEnable = Employee.ID == ViewModelMainWindow.CurrentUser.ID; 
+                ControlType = EmployeeControlEnum.NoEditControl;
+                if (Employee.ID == ViewModelMainWindow.CurrentUser.ID)
+                    ControlType = EmployeeControlEnum.SelfEditControl;
+                if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
+                    ControlType = EmployeeControlEnum.AllEditableControl;
+
             }
         }
         public Employees employeeCollection;
@@ -106,15 +111,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 EmployeeCollectionViewSource.Filter += Filter;
             }
         }
-        private bool isEnable = true;
-        public bool IsEnable
-        {
-            get { return isEnable; }
-            set
-            {
-                Set(() => IsEnable, ref isEnable, value); 
-            }
-        }
+        
         #endregion
 
         public EmployeeManageViewModel() {
