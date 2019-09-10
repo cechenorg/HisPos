@@ -83,8 +83,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             var medicalPersonnels = MedicalPersonnels.GetLocalPharmacist();
                 return medicalPersonnels[0];
         }
-        public void SetPharmacy() {
-            PharmacyDb.SetPharmacy(this);
+        public bool SetPharmacy() {
+           return PharmacyDb.SetPharmacy(this).Rows[0].Field<string>("result") == "Success" ? true : false;   
         }
         public void InsertPharmacy() {
             PharmacyDb.InsertPharmacy(this);

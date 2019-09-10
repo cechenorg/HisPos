@@ -85,12 +85,15 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             if (!CheckPharmacyIDChanged())
                 return;
             MainWindow.ServerConnection.OpenConnection();
-            myPharmacy.SetPharmacy();
-            WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
+            if (!MyPharmacy.SetPharmacy()) {
+                MessageWindow.ShowMessage("更新機構代碼失敗，已有相同機構代碼", MessageType.ERROR);
+                PharmacyIDChanged = false;
+            } 
             ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             ViewModelMainWindow.CurrentPharmacy.GetPharmacists(DateTime.Today);
+            MyPharmacy = Pharmacy.GetCurrentPharmacy();
             MainWindow.ServerConnection.CloseConnection();
-            Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
+            Properties.Settings.Default.ReaderComPort = MyPharmacy.ReaderCom.ToString();
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -122,7 +125,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
                 {
                     MessageWindow.ShowMessage("機構代碼格式錯誤!", MessageType.ERROR);
                     return false;
-                }
+                } 
                 var startDateSetWindow = new StartDateWindow(MyPharmacy);
                 startDateSetWindow.ShowDialog();
                 MyPharmacy.StartDate = ((StartDateViewModel) startDateSetWindow.DataContext).StartDate;
@@ -199,7 +202,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
 
         private void PharmacyIDChangedAction()
         {
-            PharmacyIDChanged = true;
+            PharmacyIDChanged = ViewModelMainWindow.CurrentPharmacy.ID != MyPharmacy.ID;
             IsDataChanged = true;
         }
         #endregion
