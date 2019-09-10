@@ -9,7 +9,7 @@
              d:DesignHeight="350" d:DesignWidth="450">
     <UserControl.Resources>
         <DataTemplate x:Key="EnableProduct" DataType="{x:Type TextBox}">
-            <TextBox x:Name="ProductSearchTextBox" Width="450" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
+            <TextBox x:Name="ProductSearchTextBox" Width="450" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Black"
                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" >
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding DataContext.AddProductByInputCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text,ElementName=ProductSearchTextBox}" Key="Enter" />

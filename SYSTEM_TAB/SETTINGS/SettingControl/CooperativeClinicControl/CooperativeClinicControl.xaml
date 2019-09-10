@@ -8,7 +8,7 @@
               d:DesignHeight="500" d:DesignWidth="920">
     <UserControl.Resources>
         <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
-            <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Red"
+            <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Black"
                                         Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" >
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding DataContext.ShowInstitutionSelectionWindow,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />

@@ -58,7 +58,7 @@
                         </Binding>
                     </xctk:MaskedTextBox>
                     <ComboBox Name="PatientCondition" Margin="10" Height="35" Width="100" ItemsSource="{Binding PatientConditions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatientCondition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" BorderThickness="0" SelectionChanged="PatientCondition_OnSelectionChanged" PreviewKeyDown="PatientCondition_OnPreviewKeyDown"/>
-                    <TextBox Name="SearchPatientText" Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Text="{Binding PatientCondition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" PreviewKeyDown="SearchPatientText_OnPreviewKeyDown"/>
+                    <TextBox Name="SearchPatientText" Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Black" Text="{Binding PatientCondition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" PreviewKeyDown="SearchPatientText_OnPreviewKeyDown"/>
                     <Label Content="生日" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
                     <xctk:MaskedTextBox x:Name="Birthday" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" PreviewKeyDown="Birthday_OnPreviewKeyDown">
@@ -92,7 +92,7 @@
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                     <ComboBox Name="MedicineCondition" Height="35" Width="100" ItemsSource="{Binding MedicineConditions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedMedicineCondition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10" FontSize="18" HorizontalContentAlignment="Center" BorderThickness="0"
                               ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" SelectionChanged="MedicineCondition_OnSelectionChanged" PreviewKeyDown="MedicineCondition_OnPreviewKeyDown"/>
-                    <TextBox Name="SearchMedicineText" Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Red" Text="{Binding MedicineCondition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper"/>
+                    <TextBox Name="SearchMedicineText" Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Black" Text="{Binding MedicineCondition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper"/>
                     <Button Background="RoyalBlue" BorderBrush="RoyalBlue" Content="篩選院所" Command="{Binding FilterAdjustedInstitution}" Height="35" FontSize="16" Margin="10"/>
                     <Label Content="{Binding SelectedInstitutionCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35" />
                 </StackPanel>
