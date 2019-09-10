@@ -19,10 +19,7 @@
             <Label x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldLabelContent16}"   
                    Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="16" FontStretch="ExtraExpanded" Content="{Binding CooperavieClinic.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
         </DataTemplate>
-    </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:CooperativeClinicControlViewModel/>
-    </UserControl.DataContext>
+    </UserControl.Resources> 
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
             <RowDefinition/>

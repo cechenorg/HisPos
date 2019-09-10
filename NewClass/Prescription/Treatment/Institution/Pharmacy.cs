@@ -10,7 +10,7 @@ using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution {
     [ZeroFormattable]
-    public class Pharmacy : ObservableObject
+    public class Pharmacy : ObservableObject,ICloneable
     {
         public Pharmacy() {
         }
@@ -51,6 +51,16 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
                 Set(() => NewInstitution,ref newInstitution,value);
             }
         }
+        private DateTime? startDate;
+        [Index(7)]
+        public virtual DateTime? StartDate
+        {
+            get => startDate;
+            set
+            {
+                Set(() => StartDate, ref startDate, value);
+            }
+        }
         [IgnoreFormat]
         public Employee MedicalPersonnel { get; set; }
         [IgnoreFormat]
@@ -73,8 +83,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
             var medicalPersonnels = MedicalPersonnels.GetLocalPharmacist();
                 return medicalPersonnels[0];
         }
-        public void SetPharmacy() {
-            PharmacyDb.SetPharmacy(this);
+        public bool SetPharmacy() {
+           return PharmacyDb.SetPharmacy(this).Rows[0].Field<string>("result") == "Success" ? true : false;   
         }
         public void InsertPharmacy() {
             PharmacyDb.InsertPharmacy(this);
@@ -95,6 +105,22 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
                 }
             }
             return pharmacists;
+        }
+
+        public object Clone()
+        {
+            var clone = new Pharmacy
+            {
+                ID = ID,
+                Name = Name,
+                Address = Address,
+                Tel = Tel,
+                ReaderCom = ReaderCom,
+                VpnIp = VpnIp,
+                NewInstitution = NewInstitution,
+                GroupServerName = GroupServerName
+            };
+            return clone;
         }
     }
 }

@@ -1289,6 +1289,10 @@
       <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\MyPharmacyControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\StartDateViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\StartDateWindow.xaml.cs">
+      <DependentUpon>StartDateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl\PrinterControl.xaml.cs">
       <DependentUpon>PrinterControl.xaml</DependentUpon>
     </Compile>
@@ -1959,6 +1963,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\MyPharmacyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\StartDateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

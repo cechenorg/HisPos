@@ -4,12 +4,14 @@ using System.IO;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using MaterialDesignThemes.Wpf;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
 {
@@ -80,18 +82,18 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
                 MessageWindow.ShowMessage("VPN 格式錯誤!", MessageType.ERROR);
                 return;
             }
-            if (!IsPharmacyIDValid())
-            {
-                MessageWindow.ShowMessage("機構代碼格式錯誤!", MessageType.ERROR);
+            if (!CheckPharmacyIDChanged())
                 return;
-            }
             MainWindow.ServerConnection.OpenConnection();
-            myPharmacy.SetPharmacy();
+            if (!MyPharmacy.SetPharmacy()) {
+                MessageWindow.ShowMessage("更新機構代碼失敗，已有相同機構代碼", MessageType.ERROR);
+                PharmacyIDChanged = false;
+            } 
             ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             ViewModelMainWindow.CurrentPharmacy.GetPharmacists(DateTime.Today);
+            MyPharmacy = Pharmacy.GetCurrentPharmacy();
             MainWindow.ServerConnection.CloseConnection();
-            WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
-            Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
+            Properties.Settings.Default.ReaderComPort = MyPharmacy.ReaderCom.ToString();
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -115,6 +117,28 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             IsDataChanged = false;
         }
 
+        private bool CheckPharmacyIDChanged()
+        {
+            if (PharmacyIDChanged)
+            {
+                if (!IsPharmacyIDValid())
+                {
+                    MessageWindow.ShowMessage("機構代碼格式錯誤!", MessageType.ERROR);
+                    return false;
+                } 
+                var startDateSetWindow = new StartDateWindow(MyPharmacy);
+                startDateSetWindow.ShowDialog();
+                MyPharmacy.StartDate = ((StartDateViewModel) startDateSetWindow.DataContext).StartDate;
+                if (MyPharmacy.StartDate is null)
+                {
+                    MessageWindow.ShowMessage("日期未填寫，資料尚未變更!", MessageType.ERROR);
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+
         private bool IsPharmacyIDValid()
         {
             if (string.IsNullOrEmpty(MyPharmacy.ID))
@@ -125,6 +149,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         private void CancelChangeAction()
         {
             InitMyPharmacy();
+            pharmacyIDChanged = false;
             IsDataChanged = false;
         }
         private void DataChangedAction()
@@ -177,7 +202,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
 
         private void PharmacyIDChangedAction()
         {
-            PharmacyIDChanged = true;
+            PharmacyIDChanged = ViewModelMainWindow.CurrentPharmacy.ID != MyPharmacy.ID;
             IsDataChanged = true;
         }
         #endregion
