@@ -6,9 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <local:WareHouseControlViewModel/>
-    </UserControl.DataContext>
+ 
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
             <RowDefinition/>

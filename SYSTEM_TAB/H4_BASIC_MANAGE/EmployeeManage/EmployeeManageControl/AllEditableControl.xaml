@@ -124,12 +124,13 @@
         </StackPanel>
         <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="3" Grid.Row="2" Grid.Column="2" Margin="8">
             <Label  Content="住址" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBox Width="600" Text="{Binding Employee.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0">
+            <TextBox Width="600" CaretIndex="500" Text="{Binding Employee.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                 
             </TextBox>
         </StackPanel>
         <Rectangle Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6" Fill="{StaticResource Shadow}"/>
