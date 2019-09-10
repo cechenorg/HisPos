@@ -30,6 +30,11 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             MedicalNumber = r.Field<string>("MedicalNumber");
+            TotalPoint = r.Field<int>("TotalPoint");
+            MedicalServicePoint = r.Field<int>("MedicalServicePoint");
+            MedicinePoint = r.Field<int>("MedicinePoint");
+            CopaymentPoint = r.Field<int>("CopaymentPoint");
+            SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint"); 
             if (NewFunction.CheckDataRowContainsColumn(r, "NoBuckleStatus"))
             {
                 NoBuckleStatus = r.Field<int?>("NoBuckleStatus");
@@ -194,6 +199,51 @@ namespace His_Pos.NewClass.Prescription.Search
             set
             {
                 Set(() => RegisterDate, ref registerDate, value);
+            }
+        } 
+        private int totalPoint;
+        public int TotalPoint
+        {
+            get => totalPoint;
+            set
+            {
+                Set(() => TotalPoint, ref totalPoint, value);
+            }
+        }
+        private int medicalServicePoint;
+        public int MedicalServicePoint
+        {
+            get => medicalServicePoint;
+            set
+            {
+                Set(() => MedicalServicePoint, ref medicalServicePoint, value);
+            }
+        }
+        private int medicinePoint;
+        public int MedicinePoint
+        {
+            get => medicinePoint;
+            set
+            {
+                Set(() => MedicinePoint, ref medicinePoint, value);
+            }
+        }
+        private int copaymentPoint;
+        public int CopaymentPoint
+        {
+            get => copaymentPoint;
+            set
+            {
+                Set(() => CopaymentPoint, ref copaymentPoint, value);
+            }
+        }
+        private int specialMaterialPoint;
+        public int SpecialMaterialPoint
+        {
+            get => specialMaterialPoint;
+            set
+            {
+                Set(() => SpecialMaterialPoint, ref specialMaterialPoint, value);
             }
         }
         public PrescriptionType Type { get; set; }

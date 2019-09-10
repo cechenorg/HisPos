@@ -433,7 +433,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             using (var file = new StreamWriter(fileDialog.FileName, false, Encoding.UTF8))
             {
-                file.WriteLine("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日,登錄日");
+                file.WriteLine("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日,登錄日,藥品費,特殊材料費,藥事服務費,部分負擔,總點數");
                 foreach (var s in SearchPrescriptions)
                 {
                     var insName = s.Institution is null ? "" : s.Institution.Name;
@@ -445,7 +445,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     file.WriteLine($"{sAdjust},{s.StoStatus},{insName}," +
                             $"{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber}," +
                             $"{((DateTime)s.Patient.Birthday).AddYears(-1911):yyy/MM/dd}," +
-                            $"{treatDate}," + $"{adjDate},{s.InsertDate},{s.RegisterDate}");
+                            $"{treatDate}," + $"{adjDate},{s.InsertDate},{s.RegisterDate},{s.MedicinePoint},{s.SpecialMaterialPoint},{s.MedicalServicePoint},{s.CopaymentPoint},{s.TotalPoint}")  ;
                 }
                 file.Close();
                 file.Dispose();
