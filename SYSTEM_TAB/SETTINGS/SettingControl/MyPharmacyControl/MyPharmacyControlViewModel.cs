@@ -4,14 +4,11 @@ using System.IO;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
-using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using MaterialDesignThemes.Wpf;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
 {

@@ -137,7 +137,7 @@ namespace His_Pos.NewClass.Prescription.Service
         protected void CheckAnonymousPatient()
         {
             if (!Current.IsPrescribe) return;
-            if (!Current.Patient.CheckData())
+            if (!Current.Patient.CheckData() && Current.Patient.ID == 0 && !Current.Patient.Name.Equals("匿名"))
             {
                 var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
@@ -156,7 +156,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 var insertResult = Current.Patient.InsertData();
                 return insertResult;
             }
-            if (Current.Patient.Name.Equals("匿名")) return true;
+            if (Current.Patient.Name.Equals("匿名") || Current.Patient.ID > 0) return true;
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return false;
         }

@@ -1509,7 +1509,7 @@ namespace His_Pos.NewClass.Prescription
 
         private void CheckPrescribeInstitution()
         {
-            if (string.IsNullOrEmpty(Institution.FullName))
+            if (string.IsNullOrEmpty(Institution?.FullName))
             {
                 Institution =
                     new Institution
