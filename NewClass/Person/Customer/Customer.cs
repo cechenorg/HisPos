@@ -8,6 +8,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 
 namespace His_Pos.NewClass.Person.Customer
@@ -257,6 +258,13 @@ namespace His_Pos.NewClass.Person.Customer
         public bool CheckCellPhoneEmpty()
         {
             return string.IsNullOrEmpty(CellPhone);
+        }
+
+        public bool IsAnonymous()
+        {
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(IDNumber) || Birthday is null)
+                return false;
+            return Name.Equals("匿名") && IDNumber.Equals("A111111111");
         }
     }
 }
