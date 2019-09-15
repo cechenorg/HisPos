@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
              mc:Ignorable="d" 
               d:DesignHeight="500" d:DesignWidth="920">
+    <UserControl.DataContext>
+        <local:CooperativeClinicControlViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
             <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource BoldTextBoxContent16}"  CaretBrush="Black"
