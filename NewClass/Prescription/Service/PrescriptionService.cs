@@ -547,8 +547,8 @@ namespace His_Pos.NewClass.Prescription.Service
                 } //更新傳送藥健康  
             }
 
-            var selfPrepareCount = printsendData.Count(p => p.PrepareAmount > 0);
-            if (selfPrepareCount > 0 && selfPrepareCount < printsendData.Count) {
+            var selfSendCount = printsendData.Count(p => p.SendAmount > 0);
+            if (selfSendCount > 0 && selfSendCount < printsendData.Count) {
                 ReportViewer rptViewer = new ReportViewer();
                 SetReserveMedicinesSheetReportViewer(rptViewer, printsendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
