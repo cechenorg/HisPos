@@ -64,7 +64,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
                                  $"{isgetpay}," +
                                  $"{c.PackageName}," +
                                  $"{c.Date.AddYears(-1911).ToString("yyyMMdd")},{c.TypeName}," +
-                                 $"{c.InputAmount},{c.InputAmount},,,,,,,,,,,,,,,,,,");
+                                 $"{c.InputAmount},{c.InputAmount},,{c.ManufactoryControlMedicinesID},{c.ManufactoryName},,,,,,,,,,,,,,,");
                             index++;
                         } 
                         file.Close();

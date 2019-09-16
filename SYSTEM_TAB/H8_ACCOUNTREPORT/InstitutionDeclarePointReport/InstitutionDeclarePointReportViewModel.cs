@@ -44,13 +44,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport
         #endregion
         public InstitutionDeclarePointReportViewModel() {
             SearchDate = DateTime.Today.AddMonths(-1);
-            InstitutionDeclarePointCollection.GetDataByDate(SearchDate);
+            //InstitutionDeclarePointCollection.GetDataByDate(SearchDate);
             SearchCommand = new RelayCommand(SearchAction);
             ExportExcelCommand = new RelayCommand(ExportExcelAction);
         }
         #region Function
         private void SearchAction() { 
-            InstitutionDeclarePointCollection.GetDataByDate(SearchDate);
+            //InstitutionDeclarePointCollection.GetDataByDate(SearchDate);
         }
         private void ExportExcelAction() {  
                 SaveFileDialog fdlg = new SaveFileDialog();
