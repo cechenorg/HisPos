@@ -67,8 +67,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
             WarID = warID;
             ControlMedicineEditCollection = ControlMedicineEdits.GetData(MedicineID, WarID);
             ManufactoryCollection = Manufactories.GetControlMedicineManufactories();
-            TypeList = new List<string>() { "進貨"};
+            TypeList = new List<string>() { "進貨","報廢"};
             for (int i = 0; i < ControlMedicineEditCollection.Count; i++) {
+                if(ManufactoryCollection.Count(m => m.ID == ControlMedicineEditCollection[i].ManufactoryID.ToString()) == 1)
                 ControlMedicineEditCollection[i].Manufactory = ManufactoryCollection.Single(m => m.ID == ControlMedicineEditCollection[i].ManufactoryID.ToString()); 
             }
             AddRowAction(); 
@@ -108,7 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
                 MessageWindow.ShowMessage("數量不可小於等於0", Class.MessageType.ERROR);
                 return false;
             }
-            if (ControlMedicineEditSelectedItem.Manufactory is null)
+            if (ControlMedicineEditSelectedItem.Manufactory is null && ControlMedicineEditSelectedItem.Type == "進貨")
             {
                 MessageWindow.ShowMessage("請選擇供應商", Class.MessageType.ERROR);
                 return false;

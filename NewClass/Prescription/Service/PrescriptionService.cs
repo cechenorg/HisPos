@@ -547,8 +547,10 @@ namespace His_Pos.NewClass.Prescription.Service
                 } //更新傳送藥健康  
             }
 
-            var selfSendCount = printsendData.Count(p => p.SendAmount > 0);
-            if (selfSendCount > 0 && selfSendCount < printsendData.Count) {
+            var selfcoSendCount = printsendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
+            var selfallSendCount = printsendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
+            //部分傳送的品項 > 0 或是 全傳送的品項 > 0 且 < 處方總量
+            if (selfcoSendCount > 0 ||  (selfallSendCount < printsendData.Count && selfallSendCount > 0)) {
                 ReportViewer rptViewer = new ReportViewer();
                 SetReserveMedicinesSheetReportViewer(rptViewer, printsendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
