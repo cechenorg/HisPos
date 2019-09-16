@@ -715,6 +715,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 case "R002":
                 case "R003":
                 case "R004":
+                case "R005":
                     EditedPrescription.Medicines.Add(new MedicineVirtual(medicineID));
                     break;
                 default:

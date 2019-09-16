@@ -116,6 +116,11 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
+        public static DataTable GetSearchPrescriptionsDataG000()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchPrescriptionsG000]");
+        }
+
         private static void AddMedicineParameters(List<SqlParameter> parameterList, string conditionType, string medicineCondition)
         {
             switch (conditionType)

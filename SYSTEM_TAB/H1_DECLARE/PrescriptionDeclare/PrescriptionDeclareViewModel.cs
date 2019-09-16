@@ -1170,6 +1170,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case "R002":
                 case "R003":
                 case "R004":
+                case "R005":
                     CurrentPrescription.Medicines.Add(new MedicineVirtual(medicineID));
                     break;
                 default:

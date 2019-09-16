@@ -33,6 +33,9 @@ namespace His_Pos.NewClass.Product.CustomerHistoryProduct
                 case "R004":
                     ChineseName = "其他提前回診或慢箋提前領藥";
                     return;
+                case "R005":
+                    ChineseName = "新特約無法使用雲端藥歷";
+                    break;
             }
         }
         public string ID { get; set; }
