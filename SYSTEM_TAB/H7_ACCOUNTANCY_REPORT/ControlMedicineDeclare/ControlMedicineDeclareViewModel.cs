@@ -121,7 +121,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         public RelayCommand ControlMedEditCommand { get; set; }
         public RelayCommand WareHouseSelectedWindowCommand { get; set; }
         public RelayCommand ShowMedicineDetailCommand { get; set; }
+        public RelayCommand ShowControlMedicineEditInputWindowCommand { get; set; }
         
+
         public ControlMedicineDeclareViewModel()
         {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
@@ -132,7 +134,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
             PrintDetailCommand = new RelayCommand(PrintDetailAction);
             ControlMedEditCommand = new RelayCommand(ControlMedEditAction);
             WareHouseSelectedWindowCommand = new RelayCommand(WareHouseSelectedWindowAction);
-            ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction); 
+            ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
+            ShowControlMedicineEditInputWindowCommand = new RelayCommand(ShowControlMedicineEditInputWindowAction); 
             SelectedWareHouse = WareHouseCollection[0];
             SearchAction();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -141,6 +144,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                     SearchAction();
             });
         }
+        private void ShowControlMedicineEditInputWindowAction()
+        {
+            ControlMedicineEditInputWindow.ControlMedicineEditInputWindow controlMedicineEditInputWindow = new ControlMedicineEditInputWindow.ControlMedicineEditInputWindow();
+        }
+        
         private void WareHouseSelectedWindowAction()
         {
             WareHouseSelectWindow wareHouseSelectWindow = new WareHouseSelectWindow(SDateTime,EDateTime);
