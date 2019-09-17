@@ -358,7 +358,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
             MainWindow.ServerConnection.CloseConnection();
             BusyContent = StringRes.產生申報資料;
-            var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
+            var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID, (DateTime)DeclareDateStart, (DateTime)DeclareDateEnd);
             DeclareFile.CreateDeclareFile(decFile, (DateTime)DeclareDateStart, (DateTime)DeclareDateEnd);
         }
 
