@@ -21,10 +21,13 @@ namespace His_Pos.NewClass.Medicine.Base
                 case "R004":
                     ChineseName = "其他提前回診或慢箋提前領藥";
                     break;
+                case "R005":
+                    ChineseName = "新特約無法使用雲端藥歷";
+                    break;
             }
             ID = id;
             Dosage = 0.00;
-            Days = 0;
+            Days = null;
             BuckleAmount = 0;
             Amount = 0.00;
             Price = 0.00;
@@ -48,6 +51,9 @@ namespace His_Pos.NewClass.Medicine.Base
                     break;
                 case "R004":
                     ChineseName = "其他提前回診或慢箋提前領藥";
+                    break;
+                case "R005":
+                    ChineseName = "新特約無法使用雲端藥歷";
                     break;
             }
             Dosage = 0.00;
