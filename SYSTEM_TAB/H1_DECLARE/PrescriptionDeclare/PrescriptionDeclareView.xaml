@@ -387,14 +387,14 @@
             </Grid.RowDefinitions>
             <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
                 <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
-                <TextBox Name="PatientIDNumber" Width="130" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
+                <TextBox Name="PatientIDNumber" Width="130" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" CaretBrush="Black"
                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                     </TextBox.InputBindings>
                 </TextBox>
                 <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0"/>
-                <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}"
+                <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" CaretBrush="Black"
                              Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding DataContext.GetCustomers,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Key="Enter" CommandParameter="{Binding ElementName=PatientName}"/>
@@ -402,7 +402,7 @@
                 </TextBox>
                 <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
                 <xctk:MaskedTextBox x:Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InsertKeyMode="Overwrite" 
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" GotFocus="DateControl_GotFocus">
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" GotFocus="DateControl_GotFocus" CaretBrush="Black">
                     <xctk:MaskedTextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientBirthday}"/>
                     </xctk:MaskedTextBox.InputBindings>
@@ -415,14 +415,14 @@
                 </xctk:MaskedTextBox>
                 <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
                 <TextBox Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                         Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientCellPhone}"/>
                     </TextBox.InputBindings>
                 </TextBox>
                 <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
                 <TextBox Name="PatientTel" Width="120" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                             Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientTel}"/>
                     </TextBox.InputBindings>

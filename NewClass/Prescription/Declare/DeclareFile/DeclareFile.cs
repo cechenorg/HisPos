@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     {
         public Tdata() { }
         
-        public Tdata(DeclarePreviewOfMonth selectedFile, string pharmacyID)
+        public Tdata(DeclarePreviewOfMonth selectedFile, string pharmacyID,DateTime startDate,DateTime endDate)
         {
             T1 = "30";
             T2 = pharmacyID;
@@ -43,11 +43,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             T10 = chronicApplyPoints.ToString().PadLeft(10, '0');
             T11 = (normalCount + chronicCount).ToString().PadLeft(8, '0');
             T12 = (normalApplyPoints + chronicApplyPoints).ToString().PadLeft(10, '0');
-            var declareDate = selectedFile.DeclarePres[0].AdjustDate;
-            var firstDay = new DateTime(declareDate.Year, declareDate.Month, 1);
-            var lastDay = selectedFile.DeclarePres.Max(p => p.AdjustDate);
-            T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay);
-            T14 = DateTimeExtensions.ConvertToTaiwanCalender(lastDay);
+            T13 = DateTimeExtensions.ConvertToTaiwanCalender(startDate);
+            T14 = DateTimeExtensions.ConvertToTaiwanCalender(endDate);
         }
 
         [XmlElement(ElementName = "t1")]
@@ -87,9 +84,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
         }
         
-        public DeclareFile(DeclarePreviewOfMonth selectedFile, string pharmacyID)
+        public DeclareFile(DeclarePreviewOfMonth selectedFile, string pharmacyID, DateTime startDate, DateTime endDate)
         {
-            Tdata = new Tdata(selectedFile, pharmacyID);
+            Tdata = new Tdata(selectedFile, pharmacyID, startDate, endDate);
             var tempList = new List<Ddata>();
             Ddata = new List<Ddata>();
             var dd = new List<Ddata>();

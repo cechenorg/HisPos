@@ -134,19 +134,23 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.Card = c;
         }
 
-        protected void CheckAnonymousPatient()
+        protected bool CheckAnonymousPatient()
         {
-            if (!Current.IsPrescribe) return;
-            if (Current.Patient.ID > 0) return;
+            if (!Current.IsPrescribe) return true;
+            if (Current.Patient.ID > 0) return true;
+            //Current.SetPrescribeAdjustCase();
             if (!Current.Patient.CheckData() && !Current.Patient.IsAnonymous())
             {
                 var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
-                if ((bool)confirm.DialogResult)
+                if ((bool) confirm.DialogResult)
+                {
                     Current.Patient = Customer.GetCustomerByCusId(0);
-                Current.SetPrescribeAdjustCase();
+                    return true;
+                }
+                return false;
             }
-            Current.SetPrescribeAdjustCase();
+            return true;
         }
 
         protected bool CheckValidCustomer()

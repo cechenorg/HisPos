@@ -744,6 +744,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private bool CheckMedicinesNegativeStock()
         {
             if (EditedPrescription.InsertTime is null) return true;
+            if (EditedPrescription.WareHouse is null) return true;
             var negativeStock = GetNegativeStockMessage(GetMedicinesInventories());
             if (string.IsNullOrEmpty(negativeStock)) return true;
             negativeStock += "扣庫量變化造成負庫，請修改扣庫量。";

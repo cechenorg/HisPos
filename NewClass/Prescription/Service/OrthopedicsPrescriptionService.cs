@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "FlagArgument")]
         public override bool CheckPrescription(bool noCard,bool errorAdjust)
         {
-            CheckAnonymousPatient();
+            if (!CheckAnonymousPatient()) return false;
             if (!CheckRemarkEmpty()) return false;
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
@@ -37,7 +37,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public override bool CheckEditPrescription(bool noCard)
         {
-            CheckAnonymousPatient();
+            if (!CheckAnonymousPatient()) return false;
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDateFromEdit()) return false;
             if (Current.IsPrescribe)

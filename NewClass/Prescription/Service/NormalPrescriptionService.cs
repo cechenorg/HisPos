@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public override bool CheckPrescription(bool noCard,bool errorAdjust)
         {
-            CheckAnonymousPatient();
+            if (!CheckAnonymousPatient()) return false;
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDate()) return false;
             if (Current.IsPrescribe)
@@ -47,7 +47,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public override bool CheckEditPrescription(bool noCard)
         {
-            CheckAnonymousPatient();
+            if (!CheckAnonymousPatient()) return false;
             if (!CheckValidCustomer()) return false;
             if (!CheckAdjustAndTreatDateFromEdit()) return false;
             if (Current.IsPrescribe)
