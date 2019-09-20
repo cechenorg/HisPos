@@ -402,7 +402,7 @@
                 </TextBox>
                 <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
                 <xctk:MaskedTextBox x:Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InsertKeyMode="Overwrite" 
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" GotFocus="DateControl_GotFocus" CaretBrush="Black">
+                                    Foreground="{StaticResource ForeGround}" Mask="CCC/CC/CC" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" GotFocus="DateControl_GotFocus" CaretBrush="Black">
                     <xctk:MaskedTextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientBirthday}"/>
                     </xctk:MaskedTextBox.InputBindings>
@@ -693,7 +693,7 @@
                     <DataGridTemplateColumn x:Name="MedicineId" Width="150" Header="健保代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Name="MedicineID" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Height="35" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Black" KeyDown="MedicineID_OnKeyDown" MouseLeftButtonUp="MedicineID_OnGotFocus"
+                                <TextBox Name="MedicineID" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Height="35" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Black" KeyDown="MedicineID_OnKeyDown" PreviewKeyDown="MedicineID_OnPreviewKeyDown" MouseLeftButtonUp="MedicineID_OnGotFocus"
                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="17" InputScope="AlphanumericHalfWidth" CharacterCasing="Upper" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
