@@ -459,5 +459,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
             ((PrescriptionDeclareViewModel) DataContext).ChangeMedicineIDToMostPriced.Execute(null);
         }
+
+        private void TextBox_SelectAll(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectAll();
+        }
     }
 }

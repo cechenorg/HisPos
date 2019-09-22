@@ -147,7 +147,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => SelectedDetail, ref selectedDetail, value);
             }
         }
-        public bool CanDelete => !EditedPrescription.PrescriptionStatus.IsAdjust || (EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today) || VM.CurrentUser.WorkPosition.WorkPositionId == 3;
+        public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust || EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1;
+        public bool PriceReadOnly => !CanEdit;
         #endregion
         private IcCard currentCard;
         private PrescriptionService currentService;
@@ -321,7 +322,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
             CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
             SavePatientData = new RelayCommand(SavePatientDataAction);
-            Delete = new RelayCommand(DeleteAction,CanDelete);
+            Delete = new RelayCommand(DeleteAction,CanEdit);
             RedoEdit = new RelayCommand(RedoEditAction);
             EditComplete = new RelayCommand(EditCompleteAction);
         }

@@ -173,7 +173,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         #endregion
         public RelayCommand MakeUp { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
-        
+        public RelayCommand DeleteRegisterPrescription { get; set; }
         public CustomerPrescriptionViewModel(Customer customer, IcCard card)
         {
             Patient = customer;
@@ -187,6 +187,44 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         {
             PrescriptionSelected = new RelayCommand(PrescriptionSelectedAction);
             MakeUp = new RelayCommand(MakeUpAction);
+            DeleteRegisterPrescription = new RelayCommand(DeleteRegisterPrescriptionAction);
+        }
+
+        private void DeleteRegisterPrescriptionAction()
+        {
+            switch (SelectedPrescription)
+            {
+                case null:
+                    MessageWindow.ShowMessage("請選擇欲刪除之處方。",MessageType.WARNING);
+                    return;
+                case ChronicPreview pre:
+                {
+                    if (pre.Type.Equals(PrescriptionType.ChronicRegister))
+                    {
+                        ConfirmWindow deleteConfirm = new ConfirmWindow("確定刪除此處方?", "刪除確認");
+                        var delete = deleteConfirm.DialogResult;
+                        if ((bool)delete)
+                        {
+                            MainWindow.ServerConnection.OpenConnection();
+                            SelectedPrescription.CreatePrescription().Delete();
+                            MainWindow.ServerConnection.CloseConnection();
+                            InitVariable();
+                            SelectedRadioButton = "Option2";
+                            RaisePropertyChanged("CooperativeRadioBtnEnable");
+                            RaisePropertyChanged("RegisterRadioBtnEnable");
+                            RaisePropertyChanged("ReserveRadioBtnEnable");
+                        }
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("非登錄處方不能刪除。",MessageType.WARNING);
+                    }
+                    break;
+                }
+                default:
+                    MessageWindow.ShowMessage("非登錄處方不能刪除。",MessageType.WARNING);
+                    return;
+            }
         }
 
         private void InitVariable()

@@ -161,7 +161,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 var insertResult = Current.Patient.InsertData();
                 return insertResult;
             }
-            if (Current.Patient.Name.Equals("匿名") || Current.Patient.ID > 0) return true;
+            if (!string.IsNullOrEmpty(Current.Patient.Name) && Current.Patient.Name.Equals("匿名") || Current.Patient.ID > 0) return true;
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return false;
         }
@@ -539,7 +539,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
-            PrescriptionSendDatas printsendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
+            PrescriptionSendDatas printSendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
             var sendData = vm.PrescriptionSendData;
             if (sendData.Count(s => s.SendAmount == 0) != sendData.Count) {
                 if (!Current.PrescriptionStatus.IsSendToSingde)
@@ -551,12 +551,12 @@ namespace His_Pos.NewClass.Prescription.Service
                 } //更新傳送藥健康  
             }
 
-            var selfcoSendCount = printsendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
-            var selfallSendCount = printsendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
+            var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
+            var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
             //部分傳送的品項 > 0 或是 全傳送的品項 > 0 且 < 處方總量
-            if (selfcoSendCount > 0 ||  (selfallSendCount < printsendData.Count && selfallSendCount > 0)) {
+            if (selfcoSendCount > 0 ||  (selfallSendCount < printSendData.Count && selfallSendCount > 0)) {
                 ReportViewer rptViewer = new ReportViewer();
-                SetReserveMedicinesSheetReportViewer(rptViewer, printsendData);
+                SetReserveMedicinesSheetReportViewer(rptViewer, printSendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
@@ -691,7 +691,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private static void CheckAdminLogin(Prescription selected)
         {
-            if (VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Equals("負責藥師"))
+            if (VM.CurrentUser.ID == 1)
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
                 var edit = new PrescriptionEditWindow(selected, title);
