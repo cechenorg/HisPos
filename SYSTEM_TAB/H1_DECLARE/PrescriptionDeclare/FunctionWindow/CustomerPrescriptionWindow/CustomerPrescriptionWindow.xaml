@@ -7,6 +7,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow"
+        xmlns:newClass="clr-namespace:His_Pos.NewClass"
         mc:Ignorable="d" Height="630" Width="1000" WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI Semibold" Title="{Binding WindowTitle,UpdateSourceTrigger=PropertyChanged}">
     <Window.Background>
@@ -74,6 +75,9 @@
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                <DataGrid.Resources>
+                    <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
+                </DataGrid.Resources>
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -134,6 +138,11 @@
                                     </DataTemplate>
                                 </DataTemplate.Resources>
                                 <Grid>
+                                    <Grid.ContextMenu>
+                                        <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                            <MenuItem Header="刪除" Command="{Binding Source={StaticResource proxy}, Path=Data.DeleteRegisterPrescription}" />
+                                        </ContextMenu>
+                                    </Grid.ContextMenu>
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                         <RowDefinition />

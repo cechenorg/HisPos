@@ -295,15 +295,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
-            if (e.Key != Key.Enter) return;
             e.Handled = true;
-            if(PrescriptionMedicines.CurrentCell.Item is null) return;
-            if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
+            if (PrescriptionMedicines.CurrentCell.Item is null) return;
+            if (PrescriptionMedicinesCurrentCellIsPlaceholder(textBox))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;
                 (DataContext as PrescriptionDeclareViewModel)?.AddMedicine.Execute(textBox.Text);
                 textBox.Text = string.Empty;
-
                 if (PrescriptionMedicines.Items.Count != itemsCount)
                     PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[PrescriptionMedicines.Items.Count - 2], PrescriptionMedicines.Columns[4]);
             }
@@ -320,6 +318,56 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
                 PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[4]);
             }
+            PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
+
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            if (focusedCell is null) return;
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            if (firstChild is TextBox)
+                firstChild.Focus();
+        }
+
+        private bool PrescriptionMedicinesCurrentCellIsPlaceholder(TextBox textBox)
+        {
+            return PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") &&
+                   !textBox.Text.Equals(string.Empty);
+        }
+
+        private void MedicineIdPressDown(object sender, KeyEventArgs e, TextBox textBox)
+        {
+            e.Handled = true;
+            switch (PrescriptionMedicines.CurrentCell.Item)
+            {
+                case Medicine _:
+                {
+                    var textBoxList = new List<TextBox>();
+                    NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID", ref textBoxList);
+                    var index = textBoxList.IndexOf((TextBox)sender) + 1;
+                    PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[2]);
+                    break;
+                }
+                default:
+                    return;
+            }
+
+            PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
+
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            if (focusedCell is null) return;
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            if (firstChild is TextBox)
+                firstChild.Focus();
+        }
+
+        private void MedicineIdPressUp(object sender, KeyEventArgs e, TextBox textBox)
+        {
+            e.Handled = true;
+            if (PrescriptionMedicines.CurrentCell.Item is null) return;
+            var textBoxList = new List<TextBox>();
+            NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID", ref textBoxList);
+            var index = textBoxList.IndexOf((TextBox)sender) - 1;
+            if (index >= 0)
+                PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[2]);
             PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
 
             var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
@@ -458,6 +506,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
             ((PrescriptionDeclareViewModel) DataContext).ChangeMedicineIDToMostPriced.Execute(null);
+        }
+
+        private void MedicineID_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            //if (!(sender is TextBox textBox)) return;
+            //switch (e.Key)
+            //{
+            //    case Key.Down:
+            //        MedicineIdPressDown(sender, e, textBox);
+            //        break;
+            //    case Key.Up:
+            //        MedicineIdPressUp(sender, e, textBox);
+            //        break;
+            //    default:
+            //        return;
+            //}
+        }
+
+        private void TextBox_SelectAll(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectAll();
         }
     }
 }
