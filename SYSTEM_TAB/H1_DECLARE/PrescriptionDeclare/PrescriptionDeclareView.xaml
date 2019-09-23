@@ -52,7 +52,7 @@
         <service:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <Image x:Key="QrCode" Source="/Images/qr-code.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
-        <Image x:Key="AddUser" Source="/Images/add-user.png"/>
+        <Image x:Key="AddCustomer" Source="/Images/add-user.png"/>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
             <Button Content="調劑" Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="135" Height="35" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
@@ -394,7 +394,7 @@
                         <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                     </TextBox.InputBindings>
                 </TextBox>
-                <Button x:Name="AddUser" Command="{Binding AddUser}" Content="{StaticResource AddUser}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="26" Width="26" Padding="0"/>
+                <Button x:Name="AddCustomer" Command="{Binding AddCustomer}" Content="{StaticResource AddCustomer}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="26" Width="26" Padding="0"/>
                 <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" CaretBrush="Black"
                              Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
@@ -798,7 +798,7 @@
                     <DataGridTemplateColumn MinWidth="60" Header="自費價" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="MedicinePrice" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown" CaretBrush="Black"
+                                <TextBox x:Name="MedicinePrice" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown" CaretBrush="Black" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                          FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}"
                                          Text="{Binding Price, Mode=TwoWay,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding PaySelf, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBooleanConverter}}"/>
                             </DataTemplate>
@@ -842,7 +842,7 @@
                                     <DataTemplate x:Key="AdjustBuckle">
                                         <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
                                                      FontSize="16" FontWeight="Bold" CaretBrush="Black" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}"
-                                                     Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                     Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </DataTemplate>
                                     <DataTemplate x:Key="AdjustNoBuckle">
                                         <Image Source="../../../../Images/ban.png" Width="20"/>

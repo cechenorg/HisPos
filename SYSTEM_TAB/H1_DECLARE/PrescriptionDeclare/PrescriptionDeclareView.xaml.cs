@@ -180,19 +180,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //按 Enter 下一欄
-            if (e.Key != Key.Enter) return;
+            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up) return;
             e.Handled = true;
             if(sender is null) return;
-            MoveFocusNext(sender);
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    MoveFocusNext(sender,FocusNavigationDirection.Next);
+                    break;
+                case Key.Up:
+                    MoveFocusNext(sender,FocusNavigationDirection.Up);
+                    break;
+                case Key.Down:
+                    MoveFocusNext(sender,FocusNavigationDirection.Down);
+                    break;
+            }
         }
-        private void MoveFocusNext(object sender)
+        private void MoveFocusNext(object sender,FocusNavigationDirection direction)
         {
             switch (sender)
             {
                 case null:
                     return;
                 case TextBox box:
-                    box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    if(direction.Equals(FocusNavigationDirection.Next))
+                        box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    else if(direction.Equals(FocusNavigationDirection.Up))
+                        box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Up));
+                    else
+                        box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
                     break;
             }
             var focusedCell = PrescriptionMedicines.CurrentCell.Column?.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
@@ -236,6 +252,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 var focusIndex = GetCurrentRowIndex(sender) + 1;
                 FocusDataGridCell("MedicineID", PrescriptionMedicines, focusIndex);
             }
+            else if (e.Key == Key.Up)
+                MoveFocusNext(sender,FocusNavigationDirection.Up);
+            else if (e.Key == Key.Down)
+                MoveFocusNext(sender,FocusNavigationDirection.Down);
         }
         private int GetCurrentRowIndex(object sender)
         {

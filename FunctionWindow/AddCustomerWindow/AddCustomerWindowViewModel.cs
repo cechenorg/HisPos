@@ -25,9 +25,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             }
         }
 
-        private bool CanInsertCustomer => !string.IsNullOrEmpty(NewCustomer?.Name) &&
-                                          !string.IsNullOrEmpty(NewCustomer?.IDNumber) &&
-                                          NewCustomer?.Birthday != null;
+        private bool CanInsertCustomer => NewCustomer.CheckData();
 
         #endregion
 
@@ -37,13 +35,16 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         #endregion
         public AddCustomerWindowViewModel()
         {
+            NewCustomer = new Customer();
             Submit = new RelayCommand(SubmitAction, CheckCanInsertCustomer);
             Cancel = new RelayCommand(CancelAction);
         }
 
         private void SubmitAction()
         {
-            NewCustomer.InsertData();
+            var insertResult = NewCustomer.InsertData();
+            if (insertResult)
+                NewCustomerInsertSuccess();
         }
 
         private void CancelAction()
@@ -54,6 +55,12 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         private bool CheckCanInsertCustomer()
         {
             return CanInsertCustomer;
+        }
+
+        private void NewCustomerInsertSuccess()
+        {
+            Messenger.Default.Send(new NotificationMessage<Customer>(NewCustomer, "GetSelectedCustomer"));
+            Messenger.Default.Send(new NotificationMessage("CloseAddCustomerWindow"));
         }
     }
 }

@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
@@ -43,6 +44,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using Application = System.Windows.Application;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -422,7 +424,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void AddCustomerAction()
         {
-            
+            Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
+            var newCustomerWindow = new AddCustomerWindow();
+            Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
         }
 
         //顧客查詢
