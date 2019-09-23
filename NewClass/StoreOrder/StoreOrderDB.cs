@@ -746,11 +746,11 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID)); 
            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnReserve]", parameters);
         }
-        internal static void StoreOrderCommonMedicine()
+        internal static DataTable StoreOrderCommonMedicine()
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderCommonMedicine]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderCommonMedicine]", parameters);
         }
         internal static DataTable DeleteDoneOrder(string orderID)
         {
