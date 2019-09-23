@@ -718,32 +718,8 @@ namespace His_Pos.NewClass.Prescription.Service
             var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
             var selected = new Prescription(r, type);
             selected.InsertTime = r.Field<DateTime?>("InsertTime");
-            SetOrder(preID,selected);
             MainWindow.ServerConnection.CloseConnection();
             return !CheckPrescriptionEnable(r) ? null : selected;
-        }
-
-        private static void SetOrder(int preID,Prescription selected)
-        {
-            var orderTable = PrescriptionDb.GetOrderByPrescriptionID(preID);
-            if (orderTable.Rows.Count > 0)
-            {
-                var order = orderTable.Rows[0];
-                selected.PrescriptionStatus.OrderStatus = "備藥狀態:";
-                switch (order.Field<string>("StoOrd_Status"))
-                {
-                    case "W":
-                        selected.PrescriptionStatus.OrderStatus += "等待確認";
-                        break;
-                    case "P":
-                        selected.PrescriptionStatus.OrderStatus += "待收貨";
-                        break;
-                    default:
-                        selected.PrescriptionStatus.OrderStatus += "已收貨";
-                        break;
-                }
-                selected.OrderContent = selected.PrescriptionStatus.OrderStatus + " 單號:" + order.Field<string>("OrderID");
-            }
         }
 
         private static Prescription GetReserveByID(int reserveID)

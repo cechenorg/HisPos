@@ -298,6 +298,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="FunctionWindow\AddCustomerWindow\AddCustomerWindow.xaml.cs">
+      <DependentUpon>AddCustomerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FunctionWindow\AddCustomerWindow\AddCustomerWindowViewModel.cs" />
     <Compile Include="NewClass\Manufactory\ControlManufactory.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
@@ -1321,6 +1325,10 @@
       <DependentUpon>SettingWindowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingWindowViewModel.cs" />
+    <Page Include="FunctionWindow\AddCustomerWindow\AddCustomerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2021,6 +2029,7 @@
     <Resource Include="Images\Warning.png" />
     <Resource Include="Images\MergeSplit.png" />
     <Resource Include="Images\ban.png" />
+    <Resource Include="Images\add-user.png" />
     <Content Include="RDLC\DepositSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

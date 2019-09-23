@@ -52,6 +52,7 @@
         <service:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <Image x:Key="QrCode" Source="/Images/qr-code.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
+        <Image x:Key="AddUser" Source="/Images/add-user.png"/>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
             <Button Content="調劑" Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="135" Height="35" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
@@ -393,7 +394,7 @@
                         <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                     </TextBox.InputBindings>
                 </TextBox>
-                <Image Width="30" Height="30"  Source="/Images/User_48px.png" Margin="10,0,10,0"/>
+                <Button x:Name="AddUser" Command="{Binding AddUser}" Content="{StaticResource AddUser}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="26" Width="26" Padding="0"/>
                 <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" CaretBrush="Black"
                              Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
@@ -455,7 +456,7 @@
                             <KeyBinding Command="{Binding GetInstitution}" CommandParameter="{Binding Text, ElementName=ReleaseHospital}" Key="Enter" />
                         </TextBox.InputBindings>
                     </TextBox>
-                    <Button x:Name="CommonHospitalList" Command="{Binding GetCommonInstitution}" Content="{StaticResource CommonHospital}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button x:Name="CommonHospitalList" Command="{Binding GetCommonInstitution}" Content="{StaticResource CommonHospital}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2" Margin="8,0,8,0" Orientation="Horizontal">
                     <Label Content="就醫科別" Style="{StaticResource BoldLabelContent18}"/>
@@ -694,7 +695,7 @@
                     <DataGridTemplateColumn x:Name="MedicineId" Width="150" Header="健保代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Name="MedicineID" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Height="35" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Black" KeyDown="MedicineID_OnKeyDown" PreviewKeyDown="MedicineID_OnPreviewKeyDown" MouseLeftButtonUp="MedicineID_OnGotFocus"
+                                <TextBox Name="MedicineID" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Height="35" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Black" KeyDown="MedicineID_OnKeyDown" MouseLeftButtonUp="MedicineID_OnGotFocus"
                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="17" InputScope="AlphanumericHalfWidth" CharacterCasing="Upper" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
