@@ -1420,10 +1420,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private bool CheckInsertCustomerData()
         {
             if (!CurrentPrescription.Patient.CheckData())
-            {
-                MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
                 return false;
-            }
             var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認");
             if (!(bool) insertCustomerConfirm.DialogResult) return false;
             return CurrentPrescription.Patient.InsertData();

@@ -237,12 +237,12 @@ namespace His_Pos.NewClass.Person.Customer
 
         public bool CheckIDNumberEmpty()
         {
-            return string.IsNullOrEmpty(IDNumber);
+            return string.IsNullOrEmpty(IDNumber != null ? IDNumber.Trim() : IDNumber);
         }
 
         public bool CheckNameEmpty()
         {
-            return string.IsNullOrEmpty(Name);
+            return string.IsNullOrEmpty(Name != null ? Name.Trim() : Name);
         }
 
         public bool CheckBirthdayNull()
@@ -252,12 +252,12 @@ namespace His_Pos.NewClass.Person.Customer
 
         public bool CheckTelEmpty()
         {
-            return string.IsNullOrEmpty(Tel);
+            return string.IsNullOrEmpty(Tel != null ? Tel.Trim() : Tel);
         }
 
         public bool CheckCellPhoneEmpty()
         {
-            return string.IsNullOrEmpty(CellPhone);
+            return string.IsNullOrEmpty(CellPhone != null ? CellPhone.Trim() : CellPhone);
         }
 
         public bool IsAnonymous()
