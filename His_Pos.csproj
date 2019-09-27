@@ -2030,6 +2030,7 @@
     <Resource Include="Images\MergeSplit.png" />
     <Resource Include="Images\ban.png" />
     <Resource Include="Images\add-user.png" />
+    <Resource Include="Images\ClearButton.png" />
     <Content Include="RDLC\DepositSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
