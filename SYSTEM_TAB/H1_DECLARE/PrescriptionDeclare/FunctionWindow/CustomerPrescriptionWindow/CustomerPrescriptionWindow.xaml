@@ -320,13 +320,13 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <RadioButton Grid.Column="0" Content="{Binding CooperativeContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" 
+                    <RadioButton Grid.Column="0" Content="{Binding CooperativeContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" 
                                  Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" 
                                  Background="#4878CD" Foreground="#FF424040" IsEnabled="{Binding CooperativeRadioBtnEnable}"/>
-                    <RadioButton Grid.Column="1" Content="{Binding RegisterContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" 
+                    <RadioButton Grid.Column="1" Content="{Binding RegisterContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" 
                                  Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}" 
                                  Background="#4878CD" Foreground="#FF424040" IsEnabled="{Binding RegisterRadioBtnEnable}"/>
-                    <RadioButton Grid.Column="2" Content="{Binding ReserveContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" 
+                    <RadioButton Grid.Column="2" Content="{Binding ReserveContent,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" 
                                  Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}" 
                                  Background="#4878CD" Foreground="#FF424040" IsEnabled="{Binding ReserveRadioBtnEnable}"/>
                 </Grid>
