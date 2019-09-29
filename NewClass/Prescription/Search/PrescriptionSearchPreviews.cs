@@ -58,38 +58,5 @@ namespace His_Pos.NewClass.Prescription.Search
                 Add(new PrescriptionSearchPreview(r, PrescriptionType.ChronicReserve));
             }
         }
-
-        public List<int> GetSummary()
-        {
-            var presID = new List<int>();
-            var summary = new List<int>();
-            foreach (var p in this)
-            {
-                presID.Add(p.ID);
-            }
-
-            var table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
-            foreach (DataColumn c in table.Rows[0].Table.Columns)
-            {
-                summary.Add(table.Rows[0].Field<int>(c.ColumnName));
-            }
-            return summary;
-        }
-
-        public List<int> GetReserveSummary()
-        {
-            var presID = new List<int>();
-            var summary = new List<int>();
-            foreach (var p in this)
-            {
-                presID.Add(p.ID);
-            }
-            var table = PrescriptionDb.GetSearchReservesSummary(presID);
-            foreach (DataColumn c in table.Rows[0].Table.Columns)
-            {
-                summary.Add(table.Rows[0].Field<int>(c.ColumnName));
-            }
-            return summary;
-        }
     }
 }
