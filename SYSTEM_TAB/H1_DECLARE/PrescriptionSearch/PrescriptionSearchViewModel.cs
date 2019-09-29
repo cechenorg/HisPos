@@ -15,6 +15,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -35,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public Collection<string> TimeIntervalTypes => new Collection<string> {"調劑日","登錄日","預約日"};
         public Collection<string> PatientConditions => new Collection<string> { "姓名", "身分證"};
         public Collection<string> MedicineConditions => new Collection<string> { "藥品代碼", "藥品名稱" };
+        private PrescriptionType searchType { get; set; }
         private bool isBusy;
         public bool IsBusy
         {
@@ -290,7 +292,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 Set(() => FilterNoBuckle, ref filterNoBuckle, value);
                 if (PrescriptionCollectionVS != null)
+                {
                     PrescriptionCollectionVS.Filter += NoBuckleFilter;
+                    SetPrescriptionsSummary();
+                }
             }
         }
         private bool filterNotAdjust;
@@ -301,7 +306,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 Set(() => FilterNotAdjust, ref filterNotAdjust, value);
                 if (PrescriptionCollectionVS != null)
+                {
                     PrescriptionCollectionVS.Filter += NotAdjustFilter;
+                    SetPrescriptionsSummary();
+                }
             }
         }
         private bool filterNoGetCard;
@@ -312,7 +320,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 Set(() => FilterNoGetCard, ref filterNoGetCard, value);
                 if (PrescriptionCollectionVS != null)
+                {
                     PrescriptionCollectionVS.Filter += NoGetCardFilter;
+                    SetPrescriptionsSummary();
+                }
             }
         }
         #endregion
@@ -585,8 +596,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SearchPrescriptions = new PrescriptionSearchPreviews();
             MainWindow.ServerConnection.OpenConnection();
             SearchPrescriptions.GetSearchPrescriptionsRe(conditionTypes, conditions, dates, SelectedAdjustCase, insIDList, SelectedDivision);
-            SetPrescriptionsSummary();
             MainWindow.ServerConnection.CloseConnection();
+            searchType = SelectedTimeIntervalType.Equals("預約日") ? PrescriptionType.ChronicReserve : PrescriptionType.Normal;
         }
 
         private void EndSearch()
@@ -595,7 +606,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
             TotalCount = SearchPrescriptions.Count;
             ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
-            if (PrescriptionCollectionVS != null)
+            if (PrescriptionCollectionVS != null && searchType.Equals(PrescriptionType.Normal))
             {
                 PrescriptionCollectionVS.Filter += NoBuckleFilter;
                 PrescriptionCollectionVS.Filter += NotAdjustFilter;
@@ -604,6 +615,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 PrescriptionCollectionView.MoveCurrentTo(SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)));
             }
+            SetPrescriptionsSummary();
         }
 
         private void Refresh(NotificationMessage msg)
@@ -614,9 +626,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void SetPrescriptionsSummary()
         {
-            var summary = SearchPrescriptions.GetSummary();
-            TotalCount = SearchPrescriptions.Count;
-            ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
+            var summary = searchType.Equals(PrescriptionType.ChronicReserve) ? GetReserveSummary() : GetSummary();
+            TotalCount = PrescriptionCollectionView.Cast<object>().Count();
+            ChronicCount = PrescriptionCollectionView.Cast<object>()
+                .Count(p => ((PrescriptionSearchPreview) p).AdjustCase.ID.Equals("2"));
             MedicinePoint = summary[0];
             CopaymentPoint = summary[1];
             MedicalServicePoint = summary[2];
@@ -660,6 +673,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 e.Accepted = !FilterNoGetCard || src.IsDeposit;
             }
+        }
+
+        public List<int> GetSummary()
+        {
+            var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview) p).ID).ToList();
+            var table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
+            return (from DataColumn c in table.Rows[0].Table.Columns select table.Rows[0].Field<int>(c.ColumnName)).ToList();
+        }
+
+        public List<int> GetReserveSummary()
+        {
+            var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview) p).ID).ToList();
+            var table = PrescriptionDb.GetSearchReservesSummary(presID);
+            return (from DataColumn c in table.Rows[0].Table.Columns select table.Rows[0].Field<int>(c.ColumnName)).ToList();
         }
     }
 }

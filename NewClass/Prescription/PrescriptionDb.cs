@@ -511,7 +511,7 @@ namespace His_Pos.NewClass.Prescription
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetIDTable(presId));
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchReservesSummary]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReservePrescriptionSearchSummary]", parameterList);
         }
         public static DataTable GetXmlOfPrescriptionsByDate(DateTime sDate, DateTime eDate) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
