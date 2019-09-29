@@ -15,7 +15,10 @@ namespace His_Pos.NewClass.Person.Customer
 {
     public class Customer:Person,ICloneable
     {
-        public Customer() {}
+        public Customer()
+        {
+            ID = -1;
+        }
 
         public Customer(DataRow r) : base(r)
         {

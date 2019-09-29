@@ -51,6 +51,7 @@ namespace His_Pos.NewClass.Prescription.Search
             if (s == PrescriptionType.Normal)
             {
                 IsAdjust = r.Field<bool>("IsAdjust");
+                IsDeposit = r.Field<bool>("IsDeposit");
                 var tc = new TaiwanCalendar();
                 if (r.Field<DateTime?>("InsertTime") != null)
                 {
@@ -154,6 +155,15 @@ namespace His_Pos.NewClass.Prescription.Search
             set
             {
                 Set(() => IsAdjust, ref isAdjust, value);
+            }
+        }
+        private bool isDeposit;
+        public bool IsDeposit
+        {
+            get => isDeposit;
+            set
+            {
+                Set(() => IsDeposit, ref isDeposit, value);
             }
         }
         private int? noBuckleStatus;

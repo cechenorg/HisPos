@@ -156,7 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                     MessageWindow.ShowMessage("查無顧客", MessageType.WARNING);
                     AskAddCustomerData();
                     return;
-                case 1:
+                case 1 when SearchCondition.Equals(CustomerSearchCondition.IDNumber):
                     ShowDialog = false;
                     SelectedCustomer = Customers[0];
                     ExecuteCustomerSelected();
@@ -198,11 +198,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                     ShowDialog = false;
                     MessageWindow.ShowMessage("查無顧客", MessageType.WARNING);
                     AskAddCustomerData();
-                    break;
-                case 1:
-                    ShowDialog = false;
-                    SelectedCustomer = Customers[0];
-                    ExecuteCustomerSelected();
                     break;
                 default:
                     ShowDialog = true;

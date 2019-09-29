@@ -40,6 +40,20 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             Cancel = new RelayCommand(CancelAction);
         }
 
+        public AddCustomerWindowViewModel(Customer customer = null)
+        {
+            NewCustomer = new Customer();
+            if (customer != null)
+            {
+                NewCustomer.IDNumber = customer.IDNumber;
+                NewCustomer.Name = customer.Name;
+                NewCustomer.Birthday = customer.Birthday;
+                NewCustomer.CellPhone = customer.CellPhone;
+                NewCustomer.Tel = customer.Tel;
+            }
+            Submit = new RelayCommand(SubmitAction, CheckCanInsertCustomer);
+            Cancel = new RelayCommand(CancelAction);
+        }
         private void SubmitAction()
         {
             var insertResult = NewCustomer.InsertData();

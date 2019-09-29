@@ -11,15 +11,9 @@
              xmlns:newClass="clr-namespace:His_Pos.NewClass"
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+             xmlns:patientData="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData"
              mc:Ignorable="d" FontFamily="Segoe UI Semibold" d:DesignHeight="870" d:DesignWidth="1365" >
     <UserControl.Resources>
-        <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="5,10,5,10"/>
-        </Style>
         <Style  x:Key="MyLabelStyle" TargetType="Label">
             <Setter Property="Template">
                 <Setter.Value>
@@ -53,7 +47,7 @@
         <Image x:Key="QrCode" Source="/Images/qr-code.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
         <Image x:Key="AddCustomer" Source="/Images/add-user.png"/>
-        <Image x:Key="ClearCustomer" Source="/Images/ClearButton.png"/>
+        <Image x:Key="ClearPatient" Source="/Images/ClearButton.png"/>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
             <Button Content="調劑" Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="135" Height="35" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
@@ -388,49 +382,8 @@
                 <RowDefinition Height="300"/>
             </Grid.RowDefinitions>
             <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
-                <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
-                <TextBox Name="PatientIDNumber" Width="130" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" CaretBrush="Black"
-                         InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
-                    </TextBox.InputBindings>
-                </TextBox>
-                <Button x:Name="AddCustomer" Command="{Binding AddCustomer}" Content="{StaticResource AddCustomer}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="26" Width="26" Padding="0"/>
-                <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" CaretBrush="Black"
-                             Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}">
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding DataContext.GetCustomers,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Key="Enter" CommandParameter="{Binding ElementName=PatientName}"/>
-                    </TextBox.InputBindings>
-                </TextBox>
-                <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
-                <xctk:MaskedTextBox x:Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0"  HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Default" GotFocus="DateControl_GotFocus"
-                                    CaretBrush="Black">
-                    <xctk:MaskedTextBox.InputBindings>
-                        <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientBirthday}"/>
-                    </xctk:MaskedTextBox.InputBindings>
-                    <Binding Path="CurrentPrescription.Patient.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                        <Binding.ValidationRules>
-                            <service:DateValidationRule/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </xctk:MaskedTextBox>
-                <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
-                <TextBox Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                         Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientCellPhone}"/>
-                    </TextBox.InputBindings>
-                </TextBox>
-                <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
-                <TextBox Name="PatientTel" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                             Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientTel}"/>
-                    </TextBox.InputBindings>
-                </TextBox>
-                <Button x:Name="ClearCustomer" Command="{Binding GetCommonInstitution}" Content="{StaticResource ClearCustomer}" Margin="0,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <patientData:PatientDataControl GetCustomers="{Binding GetCustomers}" Patient="{Binding CurrentPrescription.Patient,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CanSearch="{Binding CanSearchPatient,UpdateSourceTrigger=PropertyChanged}"/>
+                <Button x:Name="ClearPatient" Command="{Binding ClearPatient}" Content="{StaticResource ClearPatient}" Margin="0,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="處方數" Style="{StaticResource BoldLabelContent18}"/>
                 <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
                 <Button Background="#378AE5" Content="{StaticResource QrCode}" Margin="10,0,0,0" BorderBrush="Transparent" Height="35" Width="40" Padding="8" Visibility="Visible" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Click="ButtonBase_OnClick"/>
@@ -847,7 +800,7 @@
                                                      Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                     </DataTemplate>
                                     <DataTemplate x:Key="AdjustNoBuckle">
-                                        <Image Source="../../../../Images/ban.png" Width="20"/>
+                                        <Image Source="/Images/ban.png"  Width="20"/>
                                     </DataTemplate>
                                 </DataTemplate.Resources>
                                 <ContentControl Content="{Binding}" >

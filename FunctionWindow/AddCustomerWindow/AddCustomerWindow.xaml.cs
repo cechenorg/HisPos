@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.NewClass.Person.Customer;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
 {
@@ -34,6 +35,23 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 }
             });
             this.DataContext = new AddCustomerWindowViewModel();
+            this.Closing += (sender, e) => Messenger.Default.Unregister(this);
+            this.ShowDialog();
+        }
+
+        public AddCustomerWindow(Customer customer)
+        {
+            InitializeComponent();
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                switch (notificationMessage.Notification)
+                {
+                    case "CloseAddCustomerWindow":
+                        Close();
+                        break;
+                }
+            });
+            this.DataContext = new AddCustomerWindowViewModel(customer);
             this.Closing += (sender, e) => Messenger.Default.Unregister(this);
             this.ShowDialog();
         }

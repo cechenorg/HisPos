@@ -16,7 +16,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
     /// <summary>
     /// PrescriptionDeclareView.xaml 的互動邏輯
     /// </summary>
-    public partial class PrescriptionDeclareView : UserControl
+    public partial class PrescriptionDeclareView : System.Windows.Controls.UserControl
     {
         int prevRowIndex = -1;
         public delegate Point GetDragDropPosition(IInputElement theElement);
