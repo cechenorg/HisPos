@@ -25,7 +25,7 @@ namespace His_Pos.NewClass.Medicine.Base
             InventoryID = r.Field<int>("Inv_ID");
             if (NewFunction.CheckDataRowContainsColumn(r, "MedbagAmountLack"))
                 InventoryError = r.Field<int>("MedbagAmountLack") == 1;
-            if (NewFunction.CheckDataRowContainsColumn(r, "AdjustNoBuckle"))
+            if (NewFunction.CheckDataRowContainsColumn(r, "AdjustNoBuckle") && r.Field<bool?>("AdjustNoBuckle") != null)
                 AdjustNoBuckle = r.Field<bool>("AdjustNoBuckle");
             else
                 AdjustNoBuckle = false;

@@ -11,10 +11,9 @@ namespace His_Pos.NewClass.AccountReport.InstitutionDeclarePoint
 {
   public static  class InstitutionDeclarePointDb
     {
-        public static DataTable GetDataByMonth(DateTime dateTime)
+        public static DataTable GetDataByMonth(DateTime FirstDay,DateTime LastDay)
         {
-            DateTime FirstDay = new DateTime(dateTime.Year, dateTime.Month, 1);
-            DateTime LastDay = new DateTime(dateTime.AddMonths(1).Year, dateTime.AddMonths(1).Month, 1).AddDays(-1);
+            
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", FirstDay);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", LastDay);

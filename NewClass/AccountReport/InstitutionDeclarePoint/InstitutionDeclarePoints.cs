@@ -12,9 +12,9 @@ namespace His_Pos.NewClass.AccountReport.InstitutionDeclarePoint
     {
         public InstitutionDeclarePoints() {
         }
-        public void GetDataByDate(DateTime dateTime) {
+        public void GetDataByDate(DateTime FirstDay, DateTime LastDay) {
             Clear();
-            DataTable table = InstitutionDeclarePointDb.GetDataByMonth(dateTime);
+            DataTable table = InstitutionDeclarePointDb.GetDataByMonth(FirstDay, LastDay);
             foreach (DataRow r in table.Rows) {
                 Add(new InstitutionDeclarePoint(r));
             }

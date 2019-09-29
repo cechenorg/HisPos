@@ -32,11 +32,11 @@
         <StackPanel Grid.Row="1"   Orientation="Horizontal">
             <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
             <TextBox Width="120" Text="{Binding Employee.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
-            <Button Content="檢查" Grid.Row="0" FontSize="20" Margin="20,0,0,0"  Width="80" BorderThickness="0" HorizontalAlignment="Right" Background="DarkCyan"  FontFamily="Segoe UI Semi" Command="{Binding CheckIdNumberCommand}"/>
+            <Button Content="檢查" Grid.Row="0" FontSize="20" Margin="20,0,0,0"  Width="80" BorderThickness="0" HorizontalAlignment="Right" Background="DarkCyan"  FontFamily="Segoe UI Semibold" Command="{Binding CheckIdNumberCommand}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label  Content="帳號" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBox Width="120" Text="{Binding Employee.Account,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox Width="120" Text="{Binding Employee.Account,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Label  Content="密碼" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
@@ -63,7 +63,7 @@
             </xctk:MaskedTextBox>
         </StackPanel>
         <StackPanel Grid.Row="6" Orientation="Horizontal">
-            <Button Content="新增" Grid.Row="0" FontSize="20"  Margin="200,0,0,0" Width="100" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue"  FontFamily="Segoe UI Semi" Command="{Binding SubbmitCommand}"/>
+            <Button Content="新增" Grid.Row="0" FontSize="20"  Margin="200,0,0,0" Width="100" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue"  FontFamily="Segoe UI Semibold" Command="{Binding SubbmitCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -37,8 +37,9 @@
             <Label Content="~"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
             <Label Content="{Binding EDateTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
 
-            <Rectangle Width="800"/>
+            <Rectangle Width="680"/>
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
+            <Button Command="{Binding ShowControlMedicineEditInputWindowCommand}" Content="編輯歷程" Width="100" Background="RoyalBlue"  Margin="10,0,0,0" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
             <Button Command="{Binding WareHouseSelectedWindowCommand}" Background="DarkCyan"  Content="匯出申報檔" Margin="10,0,0,0" Width="130"   BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">

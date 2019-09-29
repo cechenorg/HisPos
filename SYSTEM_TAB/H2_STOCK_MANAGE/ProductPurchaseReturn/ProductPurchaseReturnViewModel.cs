@@ -363,16 +363,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void RegisterMessengers()
         {
             Messenger.Default.Register<NotificationMessage<string>>(this, ShowOrderDetailByOrderID);
+            Messenger.Default.Register<NotificationMessage>(this, ReloadProducts);
         }
-        private void ShowOrderDetailByOrderID(NotificationMessage<string> notificationMessage)
-        {
-            if (notificationMessage.Target == this)
-            {
-                MainWindow.Instance.AddNewTab(TabName);
-
-                InitVariables(notificationMessage.Content);
-            }
-        }
+        
         #region ///// Messenger Functions /////
         private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
         {
@@ -389,6 +382,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MainWindow.ServerConnection.OpenConnection();
                 CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID, true);
+                MainWindow.ServerConnection.CloseConnection();
+            }
+        }
+        private void ShowOrderDetailByOrderID(NotificationMessage<string> notificationMessage)
+        {
+            if (notificationMessage.Target == this)
+            {
+                MainWindow.Instance.AddNewTab(TabName);
+
+                InitVariables(notificationMessage.Content);
+            }
+        }
+        private void ReloadProducts(NotificationMessage notificationMessage)
+        {
+            if (notificationMessage.Notification == "UpdateUsableAmountMessage")
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentStoreOrder.SaveOrder();
+                CurrentStoreOrder.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
             }
         }

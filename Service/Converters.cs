@@ -92,21 +92,12 @@ namespace His_Pos.Service
         {
             DateTime? result = null;
             if (value == null) return result;
-            var dateStr = value.ToString().Replace("/", "").Replace("-", "");
+            var dateStr = value.ToString().Replace("/", "").Replace("-", "").Trim();
             int year, month, date;
             switch (dateStr.Length)
             {
-                case 5:
-                    year = int.Parse(dateStr.Substring(0, 1)) + 1911;
-                    month = int.Parse(dateStr.Substring(1, 2));
-                    date = int.Parse(dateStr.Substring(3, 2));
-                    result = new DateTime(year, month, date);
-                    break;
-                case 6:
-                    year = int.Parse(dateStr.Substring(0, 2)) + 1911;
-                    month = int.Parse(dateStr.Substring(2, 2));
-                    date = int.Parse(dateStr.Substring(4, 2));
-                    result = new DateTime(year, month, date);
+                case 0:
+                    result = null;
                     break;
                 case 7:
                     year = int.Parse(dateStr.Substring(0, 3)) + 1911;
@@ -176,27 +167,15 @@ namespace His_Pos.Service
         // Implementing the abstract method in the Validation Rule class
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
+            var valueStr = value.ToString().Replace("/", "").Replace("-", "").Trim();
+            if (string.IsNullOrEmpty(valueStr))
+                value = "---/--/--";
             if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
             if(((string)value).Equals("---/--/--")) return new ValidationResult(true, null);
-            var valueStr = value.ToString().Replace("/", "").Replace("-", "");
-            bool validDate = false;
             int year = 0, month = 0, date = 0;
             string checkStr = string.Empty;
-            DateTime result;
             switch (valueStr.Length)
             {
-                case 5:
-                    year = int.Parse(valueStr.Substring(0, 1)) + 1911;
-                    month = int.Parse(valueStr.Substring(1, 2));
-                    date = int.Parse(valueStr.Substring(3, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
-                case 6:
-                    year = int.Parse(valueStr.Substring(0, 2)) + 1911;
-                    month = int.Parse(valueStr.Substring(2, 2));
-                    date = int.Parse(valueStr.Substring(4, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
                 case 7:
                     year = int.Parse(valueStr.Substring(0, 3)) + 1911;
                     month = int.Parse(valueStr.Substring(3, 2));
@@ -204,8 +183,7 @@ namespace His_Pos.Service
                     checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
                     break;
             }
-
-            validDate = DateTimeExtensions.ValidateDateTime(checkStr, "yyyyMMdd");
+            var validDate = DateTimeExtensions.ValidateDateTime(checkStr, "yyyyMMdd");
             if (validDate)
             {
                 var dateStr = year + "/" + month + "/" + date;

@@ -60,6 +60,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             set
             {
                 Set(() => SelectedTimeIntervalType, ref selectedTimeIntervalType, value);
+                if (!selectedTimeIntervalType.Equals("調劑日"))
+                {
+                    FilterNoBuckle = false;
+                    FilterNotAdjust = false;
+                    FilterNoGetCard = false;
+                }
                 RaisePropertyChanged("NoBuckleFilterEnable");
             }
         }
@@ -285,6 +291,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => FilterNoBuckle, ref filterNoBuckle, value);
                 if (PrescriptionCollectionVS != null)
                     PrescriptionCollectionVS.Filter += NoBuckleFilter;
+            }
+        }
+        private bool filterNotAdjust;
+        public bool FilterNotAdjust
+        {
+            get => filterNotAdjust;
+            set
+            {
+                Set(() => FilterNotAdjust, ref filterNotAdjust, value);
+                if (PrescriptionCollectionVS != null)
+                    PrescriptionCollectionVS.Filter += NotAdjustFilter;
+            }
+        }
+        private bool filterNoGetCard;
+        public bool FilterNoGetCard
+        {
+            get => filterNoGetCard;
+            set
+            {
+                Set(() => FilterNoGetCard, ref filterNoGetCard, value);
+                if (PrescriptionCollectionVS != null)
+                    PrescriptionCollectionVS.Filter += NoGetCardFilter;
             }
         }
         #endregion
@@ -568,7 +596,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             TotalCount = SearchPrescriptions.Count;
             ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
             if (PrescriptionCollectionVS != null)
+            {
                 PrescriptionCollectionVS.Filter += NoBuckleFilter;
+                PrescriptionCollectionVS.Filter += NotAdjustFilter;
+            }
             if (EditedPrescription != null && SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)) != null)
             {
                 PrescriptionCollectionView.MoveCurrentTo(SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)));
@@ -608,6 +639,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 }
                 else
                     e.Accepted = true;
+            }
+        }
+
+        private void NotAdjustFilter(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is PrescriptionSearchPreview src))
+                e.Accepted = false;
+            else
+            {
+                e.Accepted = FilterNotAdjust || src.IsAdjust;
+            }
+        }
+
+        private void NoGetCardFilter(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is PrescriptionSearchPreview src))
+                e.Accepted = false;
+            else
+            {
+                e.Accepted = !FilterNoGetCard || src.IsDeposit;
             }
         }
     }

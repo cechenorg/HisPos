@@ -147,9 +147,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         protected override bool CheckSingdeProcessingOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "");
-
-            return (bool)confirmWindow.DialogResult;
+            return true;
         }
         #endregion
 

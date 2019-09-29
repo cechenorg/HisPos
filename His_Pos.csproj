@@ -298,6 +298,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="FunctionWindow\AddCustomerWindow\AddCustomerWindow.xaml.cs">
+      <DependentUpon>AddCustomerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FunctionWindow\AddCustomerWindow\AddCustomerWindowViewModel.cs" />
     <Compile Include="NewClass\Manufactory\ControlManufactory.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
@@ -769,6 +773,9 @@
       <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientDataControl.xaml.cs">
+      <DependentUpon>PatientDataControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionWindow.xaml.cs">
       <DependentUpon>AdjustedInstitutionSelectionWindow.xaml</DependentUpon>
@@ -1075,6 +1082,10 @@
       <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclareViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditInputWindow\ControlMedicineEditInputViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditInputWindow\ControlMedicineEditInputWindow.xaml.cs">
+      <DependentUpon>ControlMedicineEditInputWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\ControlMedicineEditViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\ControlMedicineEditWindow.xaml.cs">
       <DependentUpon>ControlMedicineEditWindow.xaml</DependentUpon>
@@ -1317,6 +1328,10 @@
       <DependentUpon>SettingWindowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingWindowViewModel.cs" />
+    <Page Include="FunctionWindow\AddCustomerWindow\AddCustomerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1406,6 +1421,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1769,6 +1788,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditInputWindow\ControlMedicineEditInputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineEditWindow\ControlMedicineEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2013,6 +2036,8 @@
     <Resource Include="Images\Warning.png" />
     <Resource Include="Images\MergeSplit.png" />
     <Resource Include="Images\ban.png" />
+    <Resource Include="Images\add-user.png" />
+    <Resource Include="Images\ClearButton.png" />
     <Content Include="RDLC\DepositSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

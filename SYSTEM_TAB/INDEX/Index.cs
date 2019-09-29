@@ -370,8 +370,10 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將已設定為常備藥且低於安全量之藥品產生採購製表至基準量?","常備藥轉採購");
             if ((bool)confirmWindow.DialogResult)
             {
-                StoreOrderDB.StoreOrderCommonMedicine();
+                DataTable table = StoreOrderDB.StoreOrderCommonMedicine();
                 MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認", MessageType.SUCCESS);
+                ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
+                Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, table.Rows[0].Field<string>("StoOrdID"), ""));
             }
         }
       

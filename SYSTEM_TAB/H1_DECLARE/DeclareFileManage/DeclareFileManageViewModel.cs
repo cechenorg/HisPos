@@ -352,14 +352,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void CreateDeclareFile()
         {
             Debug.Assert(DeclareDateStart != null, nameof(DeclareDateStart) + " != null");
-            var decDate = (DateTime)DeclareDateStart;
+            var decDate = (DateTime)DeclareDateStart; 
             MainWindow.ServerConnection.OpenConnection();
             BusyContent = "處方排序中...";
             DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
             MainWindow.ServerConnection.CloseConnection();
             BusyContent = StringRes.產生申報資料;
-            var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID);
-            DeclareFile.CreateDeclareFile(decFile, decDate);
+            var decFile = new DeclareFile(DeclareFile, SelectedPharmacy.ID, (DateTime)DeclareDateStart, (DateTime)DeclareDateEnd);
+            DeclareFile.CreateDeclareFile(decFile, (DateTime)DeclareDateStart, (DateTime)DeclareDateEnd);
         }
 
         private void AddToEditListAction()

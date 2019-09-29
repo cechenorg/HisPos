@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
@@ -43,6 +44,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using Application = System.Windows.Application;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
@@ -108,6 +110,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+
+        public bool CanSearchPatient => CurrentPrescription != null &&
+                                        (CurrentPrescription.Patient is null || CurrentPrescription.Patient.ID < 0);
         private bool customerEdited;
         public bool CustomerEdited
         {
@@ -244,11 +249,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region Commands
         public RelayCommand ScanPrescriptionQRCode { get; set; }
         public RelayCommand<TextBox> GetCustomers { get; set; }
+        public RelayCommand ClearPatient { get; set; }
         public RelayCommand CustomerDataEdited { get; set; }
         public RelayCommand ShowCustomerEditWindow { get; set; }
         public RelayCommand GetCooperativePres { get; set; }
         public RelayCommand GetPatientData { get; set; }
-        public RelayCommand ShowCustomerDetail { get; set; }
+        public RelayCommand AddCustomer { get; set; }
         public RelayCommand<string> GetInstitution { get; set; }
         public RelayCommand GetCommonInstitution { get; set; }
         public RelayCommand PharmacistChanged { get; set; }
@@ -334,6 +340,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             currentCard = new IcCard();
             setBuckleAmount = true;
             isNotInit = true;
+            RaisePropertyChanged("CanSearchPatient");
         }
 
         [SuppressMessage("ReSharper", "MethodTooLong")]
@@ -342,8 +349,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ScanPrescriptionQRCode = new RelayCommand(ScanPrescriptionQRCodeAction);
             GetCooperativePres = new RelayCommand(GetCooperativePresAction);
             GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
-            ShowCustomerDetail = new RelayCommand(ShowCustomerDetailAction);
+            AddCustomer = new RelayCommand(AddCustomerAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
+            ClearPatient = new RelayCommand(ClearPatientAction);
             CustomerDataEdited = new RelayCommand(CustomerDataEditedAction);
             ShowCustomerEditWindow = new RelayCommand(ShowCustomerEditWindowAction);
             GetInstitution = new RelayCommand<string>(GetInstitutionAction);
@@ -420,13 +428,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerAsync();
         }
 
-        private void ShowCustomerDetailAction()
+        private void AddCustomerAction()
         {
-            if (CurrentPrescription.Patient.ID <= 0) return;
-            var customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
-            MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
-            MainWindow.ServerConnection.CloseConnection();
+            Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
+            var newCustomerWindow = new AddCustomerWindow(CurrentPrescription.Patient);
+            Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
         }
 
         //顧客查詢
@@ -437,6 +443,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 ShowCustomerSearchEditedToday(condition.Name);
             else
                 ShowCustomerSearch(condition.Name);
+        }
+
+        private void ClearPatientAction()
+        {
+            CurrentPrescription.Patient = new Customer();
+            RaisePropertyChanged("CanSearchPatient");
         }
 
         private void CustomerDataEditedAction()
@@ -942,6 +954,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
+            RaisePropertyChanged("CanSearchPatient");
             CurrentPrescription.Patient.UpdateEditTime();
             CurrentPrescription.Patient.GetHistories();
             MainWindow.ServerConnection.CloseConnection();
@@ -1170,6 +1183,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case "R002":
                 case "R003":
                 case "R004":
+                case "R005":
                     CurrentPrescription.Medicines.Add(new MedicineVirtual(medicineID));
                     break;
                 default:
@@ -1413,20 +1427,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.Patient.GetHistories();
                     break;
             }
+            RaisePropertyChanged("CanSearchPatient");
             MainWindow.ServerConnection.CloseConnection();
         }
 
         private bool CheckInsertCustomerData()
         {
             if (!CurrentPrescription.Patient.CheckData())
-            {
-                MessageWindow.ShowMessage(Resources.顧客資料不足, MessageType.WARNING);
                 return false;
-            }
             var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認");
             if (!(bool) insertCustomerConfirm.DialogResult) return false;
             return CurrentPrescription.Patient.InsertData();
-
         }
 
         private bool CheckFocusDivision(string insID)

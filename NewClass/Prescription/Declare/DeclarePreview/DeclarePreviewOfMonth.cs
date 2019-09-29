@@ -153,7 +153,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             }
             
         }
-        public void CreateDeclareFile(DeclareFile.DeclareFile doc,DateTime declareStart)
+        public void CreateDeclareFile(DeclareFile.DeclareFile doc,DateTime declareStart, DateTime declareEnd)
         {
             XDocument result;
             var xmlSerializer = new XmlSerializer(doc.GetType());
@@ -174,7 +174,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             //匯出xml檔案
             var fileName = ViewModelMainWindow.CurrentPharmacy.Name + declareStart.Date.Month + "月申報檔";
             var filePath = Function.ExportXml(result, "每月申報檔", declareStart,fileName);
-            ExportExcelAction(declareStart, filePath.Replace("\\DRUGT",""));
+            ExportExcelAction(declareStart, declareEnd, filePath.Replace("\\DRUGT",""));
         }
 
         public void GetNotAdjustPrescriptionCount(DateTime? start, DateTime? end,string pharmacyID)
@@ -193,12 +193,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             }
         }
 
-        private void ExportExcelAction(DateTime declare,string filePath) {
+        private void ExportExcelAction( DateTime declareStart, DateTime declareEnd, string filePath) {
             var institutionDeclarePoints = new InstitutionDeclarePoints();
-            institutionDeclarePoints.GetDataByDate(declare);
+            institutionDeclarePoints.GetDataByDate(declareStart, declareEnd);
             try
             {
-                CreateInstitutionSummaryFile(institutionDeclarePoints, declare,filePath);
+                CreateInstitutionSummaryFile(institutionDeclarePoints, declareStart, filePath);
             }
             catch (Exception ex)
             {

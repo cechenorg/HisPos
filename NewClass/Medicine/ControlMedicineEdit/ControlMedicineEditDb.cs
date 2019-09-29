@@ -41,7 +41,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineEdit
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_WareHouseID", c.WarID);
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_Date", c.Date);
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_Type", c.Type);
-                DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_ManufactoryID", c.Manufactory.ID);
+                DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_ManufactoryID", c.Manufactory is null ? null : c.Manufactory.ID);
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_Amount", c.Amount);
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_BatchNumber", c.BatchNumber);
                 

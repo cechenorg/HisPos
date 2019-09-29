@@ -1693,6 +1693,7 @@ namespace His_Pos.NewClass.Prescription
                 m.BuckleAmount = m.Amount;
                 m.SendAmount = -1;
             }
+            UpdateMedicines();
         }
     }
 }

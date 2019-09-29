@@ -134,19 +134,23 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.Card = c;
         }
 
-        protected void CheckAnonymousPatient()
+        protected bool CheckAnonymousPatient()
         {
-            if (!Current.IsPrescribe) return;
-            if (Current.Patient.ID > 0) return;
+            if (!Current.IsPrescribe) return true;
+            if (Current.Patient.ID > 0) return true;
+            //Current.SetPrescribeAdjustCase();
             if (!Current.Patient.CheckData() && !Current.Patient.IsAnonymous())
             {
                 var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
-                if ((bool)confirm.DialogResult)
+                if ((bool) confirm.DialogResult)
+                {
                     Current.Patient = Customer.GetCustomerByCusId(0);
-                Current.SetPrescribeAdjustCase();
+                    return true;
+                }
+                return false;
             }
-            Current.SetPrescribeAdjustCase();
+            return true;
         }
 
         protected bool CheckValidCustomer()
@@ -157,7 +161,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 var insertResult = Current.Patient.InsertData();
                 return insertResult;
             }
-            if (Current.Patient.Name.Equals("匿名") || Current.Patient.ID > 0) return true;
+            if (!string.IsNullOrEmpty(Current.Patient.Name) && Current.Patient.Name.Equals("匿名") || Current.Patient.ID > 0) return true;
             MessageWindow.ShowMessage("尚未選擇客戶", MessageType.ERROR);
             return false;
         }
@@ -186,7 +190,7 @@ namespace His_Pos.NewClass.Prescription.Service
             //if (notCheckPast10Days)
             //    return CheckTreatDate() && CheckAdjustDate();
             //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
-            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast();
+            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast() /*&& CheckAdjustDateFutureOutOfRange()*/;
         }
 
         protected bool CheckAdjustAndTreatDateFromEdit()
@@ -237,6 +241,18 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             if (Current.AdjustDate >= DateTime.Today) return true;
             MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
+            return false;
+        }
+
+        private bool CheckAdjustDateFutureOutOfRange()
+        {
+            var startDate = (DateTime)Current.TreatDate;
+            var endDate = (DateTime)Current.AdjustDate;
+            var ts1 = new TimeSpan(endDate.Ticks);
+            var ts2 = new TimeSpan(startDate.Ticks);
+            var ts = ts1.Subtract(ts2).Duration();
+            if (ts.Days < 180) return true;
+            MessageWindow.ShowMessage("調劑日超出合理範圍", MessageType.WARNING);
             return false;
         }
 
@@ -535,7 +551,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
-            PrescriptionSendDatas printsendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
+            PrescriptionSendDatas printSendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
             var sendData = vm.PrescriptionSendData;
             if (sendData.Count(s => s.SendAmount == 0) != sendData.Count) {
                 if (!Current.PrescriptionStatus.IsSendToSingde)
@@ -547,10 +563,12 @@ namespace His_Pos.NewClass.Prescription.Service
                 } //更新傳送藥健康  
             }
 
-            var selfSendCount = printsendData.Count(p => p.SendAmount > 0);
-            if (selfSendCount > 0 && selfSendCount < printsendData.Count) {
+            var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
+            var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
+            //部分傳送的品項 > 0 或是 全傳送的品項 > 0 且 < 處方總量
+            if (selfcoSendCount > 0 ||  (selfallSendCount < printSendData.Count && selfallSendCount > 0)) {
                 ReportViewer rptViewer = new ReportViewer();
-                SetReserveMedicinesSheetReportViewer(rptViewer, printsendData);
+                SetReserveMedicinesSheetReportViewer(rptViewer, printSendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
@@ -685,7 +703,8 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private static void CheckAdminLogin(Prescription selected)
         {
-            if (VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Equals("負責藥師"))
+            if(selected is null) return;
+            if (VM.CurrentUser.ID == 1)
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
                 var edit = new PrescriptionEditWindow(selected, title);
@@ -711,32 +730,8 @@ namespace His_Pos.NewClass.Prescription.Service
             var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
             var selected = new Prescription(r, type);
             selected.InsertTime = r.Field<DateTime?>("InsertTime");
-            SetOrder(preID,selected);
             MainWindow.ServerConnection.CloseConnection();
             return !CheckPrescriptionEnable(r) ? null : selected;
-        }
-
-        private static void SetOrder(int preID,Prescription selected)
-        {
-            var orderTable = PrescriptionDb.GetOrderByPrescriptionID(preID);
-            if (orderTable.Rows.Count > 0)
-            {
-                var order = orderTable.Rows[0];
-                selected.PrescriptionStatus.OrderStatus = "備藥狀態:";
-                switch (order.Field<string>("StoOrd_Status"))
-                {
-                    case "W":
-                        selected.PrescriptionStatus.OrderStatus += "等待確認";
-                        break;
-                    case "P":
-                        selected.PrescriptionStatus.OrderStatus += "待收貨";
-                        break;
-                    default:
-                        selected.PrescriptionStatus.OrderStatus += "已收貨";
-                        break;
-                }
-                selected.OrderContent = selected.PrescriptionStatus.OrderStatus + " 單號:" + order.Field<string>("OrderID");
-            }
         }
 
         private static Prescription GetReserveByID(int reserveID)
