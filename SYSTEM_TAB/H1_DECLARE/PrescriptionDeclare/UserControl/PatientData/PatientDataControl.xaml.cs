@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.Service;
 using JetBrains.Annotations;
 using Xceed.Wpf.Toolkit;
 
@@ -78,6 +79,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
         private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
+        }
+
+        private void PatientBirthday_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
         }
     }
 }

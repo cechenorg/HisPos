@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription.Search;
+using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
@@ -81,8 +83,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
             {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
                 EndDate.Focus();
                 EndDate.SelectionStart = 0;
             }
@@ -90,8 +93,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void EndDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
                 PatientCondition.Focus();
+            }
         }
 
         private void PatientCondition_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -125,8 +131,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void Birthday_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
                 AdjustCase.Focus();
+            }
         }
 
         private void AdjustCase_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

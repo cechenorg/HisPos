@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.ControlMedicineEditWindow
 {
@@ -51,6 +53,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
 
             e.Handled = true;
             textBox.Focus();
+        }
+
+        private void DateMaskedTextBoxOnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
         }
     }
 }

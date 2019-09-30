@@ -32,7 +32,7 @@
             <TextBox Text="{Binding TextCusName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="10,0,0,8" Width="120" FontSize="18" FontFamily="Segoe UI Semi"/>
             <Label Content="生日" Margin="10,0,0,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <xctk:MaskedTextBox Width="120" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite"  >
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite"  PreviewKeyDown="DateMaskedTextBoxOnPreviewKeyDown">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="TextCusBirthDay" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">

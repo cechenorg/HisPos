@@ -492,7 +492,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal">
                     <Label  Content="就醫日期" Style="{StaticResource BoldLabelContent18}"/>
-                    <xctk:MaskedTextBox x:Name="TreatDate" Width="160" Height="34" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
+                    <xctk:MaskedTextBox x:Name="TreatDate" Width="160" Height="34" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="DateMaskedTextBox_OnPreviewKeyDown"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                         <Binding Path="EditedPrescription.TreatDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">

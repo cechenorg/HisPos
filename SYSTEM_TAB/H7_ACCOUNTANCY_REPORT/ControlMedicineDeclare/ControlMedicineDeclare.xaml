@@ -24,7 +24,7 @@
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10">
             <Label Content="處方調劑日"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
             <xctk:MaskedTextBox Name="start" Width="100"  HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" PreviewKeyDown="DateMaskedTextBoxOnPreviewKeyDown">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="SDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -52,7 +52,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
-            <Button Content="列印明細" Margin="10,0,0,0" Command="{Binding PrintMaserCommand}" FontSize="20" Background="DarkCyan"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center"/>
+            <Button Content="列印明細" Margin="10,0,0,0" Command="{Binding PrintMaserCommand}" FontSize="20" Background="DarkCyan"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center" BorderBrush="Transparent"/>
         </StackPanel>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -175,8 +175,8 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal">
                     <Label  Content="藥品紀錄" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" />
-                    <Button Content="列印明細" Command="{Binding PrintDetailCommand}" FontFamily="Segoe UI Semibold" FontSize="20" Background="DarkCyan" VerticalAlignment="Center"  />
-                    <Button Content="編輯" Command="{Binding ControlMedEditCommand}" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" Background="DarkCyan" VerticalAlignment="Center"  />
+                    <Button Content="列印明細" Command="{Binding PrintDetailCommand}" FontFamily="Segoe UI Semibold" FontSize="20" Background="DarkCyan" VerticalAlignment="Center" BorderBrush="Transparent"/>
+                    <Button Content="編輯" Command="{Binding ControlMedEditCommand}" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" Background="DarkCyan" VerticalAlignment="Center" BorderBrush="Transparent"/>
                 </StackPanel>
                 <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding ControlMedicineDetailsCollection, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" >

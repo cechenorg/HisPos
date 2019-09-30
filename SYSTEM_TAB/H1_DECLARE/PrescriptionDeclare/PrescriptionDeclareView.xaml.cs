@@ -81,8 +81,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void TreatDate_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
             {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
                 AdjustDateTextBox.Focus();
                 AdjustDateTextBox.SelectionStart = 0;
             }
@@ -90,8 +91,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void AdjustDate_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
             {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
                 MainDiagnosis.Focus();
                 MainDiagnosis.SelectionStart = 0;
                 e.Handled = true;

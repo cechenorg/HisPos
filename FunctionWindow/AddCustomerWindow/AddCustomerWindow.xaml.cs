@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
 {
@@ -65,9 +67,12 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
 
         private void CusBirthday_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter) return;
-            CusIdNumber.Focus();
-            CusIdNumber.SelectionStart = 0;
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+                CusIdNumber.Focus();
+                CusIdNumber.SelectionStart = 0;
+            }
         }
 
         private void CusIdNumber_OnPreviewKeyDown(object sender, KeyEventArgs e)

@@ -190,5 +190,15 @@ namespace His_Pos.Service
             }
             return holiday;
         }
+
+        public static string ConvertDateStringToTaiwanCalendar(string text)
+        {
+            var dateStr = text.Replace("-", "").Replace("/", "").Trim();
+            var dateLength = dateStr.Length;
+            var day = int.Parse(dateStr.Substring(dateLength-2,2));
+            var month = int.Parse(dateStr.Substring(dateLength-4,2));
+            var year = int.Parse(dateStr.Substring(0, dateLength - 4));
+            return year.ToString().PadLeft(3, '0') + "/" + month.ToString().PadLeft(2,'0') + "/" + day.ToString().PadLeft(2,'0');
+        }
     }
 }

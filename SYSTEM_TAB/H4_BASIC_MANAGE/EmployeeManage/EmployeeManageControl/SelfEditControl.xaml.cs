@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeManageControl
 {
@@ -23,6 +25,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeManageContro
         public SelfEditControl()
         {
             InitializeComponent();
+        }
+
+        private void DateMaskedTextBoxOnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
         }
     }
 }

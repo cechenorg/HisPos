@@ -148,5 +148,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             return curIndex;
         }
+
+        private void DateMaskedTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+        }
     }
 }
