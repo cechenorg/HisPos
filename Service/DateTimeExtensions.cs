@@ -195,6 +195,7 @@ namespace His_Pos.Service
         {
             var dateStr = text.Replace("-", "").Replace("/", "").Trim();
             var dateLength = dateStr.Length;
+            if (dateLength < 5) return text;
             var day = int.Parse(dateStr.Substring(dateLength-2,2));
             var month = int.Parse(dateStr.Substring(dateLength-4,2));
             var year = int.Parse(dateStr.Substring(0, dateLength - 4));

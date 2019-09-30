@@ -197,56 +197,6 @@ namespace His_Pos.Service
         }
     }
 
-    public class NullDateValidationRule : ValidationRule
-    {
-        private const string InvalidInput = "日期格式錯誤";
-
-        // Implementing the abstract method in the Validation Rule class
-        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
-        {
-            if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
-            if (((string) value).Equals("---/--/--")) return new ValidationResult(true, null);
-            var valueStr = value.ToString().Replace("/", "").Replace("-", "");
-            bool validDate = false;
-            int year = 0, month = 0, date = 0;
-            string checkStr = string.Empty;
-            DateTime result;
-            switch (valueStr.Length)
-            {
-                case 5:
-                    year = int.Parse(valueStr.Substring(0, 1)) + 1911;
-                    month = int.Parse(valueStr.Substring(1, 2));
-                    date = int.Parse(valueStr.Substring(3, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
-                case 6:
-                    year = int.Parse(valueStr.Substring(0, 2)) + 1911;
-                    month = int.Parse(valueStr.Substring(2, 2));
-                    date = int.Parse(valueStr.Substring(4, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
-                case 7:
-                    year = int.Parse(valueStr.Substring(0, 3)) + 1911;
-                    month = int.Parse(valueStr.Substring(3, 2));
-                    date = int.Parse(valueStr.Substring(5, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
-            }
-
-            validDate = DateTimeExtensions.ValidateDateTime(checkStr, "yyyyMMdd");
-            if (validDate)
-            {
-                var dateStr = year + "/" + month + "/" + date;
-                if (!DateTime.TryParse(dateStr, out _))
-                    return new ValidationResult(false, InvalidInput);
-            }
-            else
-                return new ValidationResult(false, InvalidInput);
-
-            return new ValidationResult(true, null);
-        }
-    }
-
     public class EnumBooleanConverter : IValueConverter
     {
         enum RadioOptions

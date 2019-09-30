@@ -8,6 +8,7 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365"
              FontFamily="Segoe UI Semibold"
@@ -46,6 +47,11 @@
                                 <service:DateValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=StartDate}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </xctk:MaskedTextBox>
                     <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}"/>
                     <xctk:MaskedTextBox x:Name="EndDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
@@ -56,6 +62,11 @@
                                 <service:DateValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=EndDate}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </xctk:MaskedTextBox>
                     <ComboBox Name="PatientCondition" Margin="10" Height="35" Width="100" ItemsSource="{Binding PatientConditions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatientCondition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" BorderThickness="0" SelectionChanged="PatientCondition_OnSelectionChanged" PreviewKeyDown="PatientCondition_OnPreviewKeyDown"/>
                     <TextBox Name="SearchPatientText" Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Black" Text="{Binding PatientCondition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" PreviewKeyDown="SearchPatientText_OnPreviewKeyDown"/>

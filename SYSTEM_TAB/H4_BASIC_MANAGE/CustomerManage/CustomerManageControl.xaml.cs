@@ -32,5 +32,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             if (sender is MaskedTextBox t && e.Key == Key.Enter)
                 t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
         }
+
+        private void DateControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is MaskedTextBox t) t.SelectionStart = 0;
+        }
     }
 }

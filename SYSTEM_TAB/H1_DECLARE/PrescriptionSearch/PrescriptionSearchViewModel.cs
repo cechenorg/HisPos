@@ -24,6 +24,8 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Properties;
 using His_Pos.Service;
+using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -328,7 +330,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
         #endregion
         #region Commands
-
+        public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
         public RelayCommand FilterAdjustedInstitution { get; set; }
         public RelayCommand Search { get; set; }
         public RelayCommand Clear { get; set; }
@@ -386,6 +388,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void InitCommand()
         {
+            DateMouseDoubleClick = new RelayCommand<MaskedTextBox>(DateMouseDoubleClickAction);
             Search = new RelayCommand(SearchAction);
             Clear = new RelayCommand(ClearAction);
             FilterAdjustedInstitution = new RelayCommand(FilterAdjustedInstitutionAction);
@@ -396,6 +399,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         #endregion
 
         #region CommandAction
+        private void DateMouseDoubleClickAction(MaskedTextBox sender)
+        {
+            switch (sender.Name)
+            {
+                case "StartDate":
+                    StartDate = DateTime.Today;
+                    break;
+                case "EndDate":
+                    EndDate = DateTime.Today;
+                    break;
+            }
+        }
 
         private void SearchAction()
         {

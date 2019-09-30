@@ -515,11 +515,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return curIndex;
         }
 
-        private void TreatDateTextBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
-
         private void ChangeMedicineIDToMostPriced(object sender, MouseButtonEventArgs e)
         {
             PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
