@@ -27,10 +27,13 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return stockDetail; }
             set { Set(() => StockDetail, ref stockDetail, value); }
         }
-        public MedBagDetailStructs MedBagDetails
+        public IEnumerable<MedBagDetailStruct> MedBagStockDetails
         {
-            get { return medBagDetails; }
-            set { Set(() => MedBagDetails, ref medBagDetails, value); }
+            get { return medBagDetails.Where(d => d.SelfAmount != 0); }
+        }
+        public IEnumerable<MedBagDetailStruct> MedBagSendDetails
+        {
+            get { return medBagDetails.Where(d => d.SendAmount != 0); }
         }
         public bool IsInventoryError => MedBagInventory > TotalInventory;
         #endregion
@@ -67,7 +70,9 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         }
         internal void GetMedBagDetailByID(string proID, string wareID)
         {
-            MedBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID);
+            medBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID);
+            RaisePropertyChanged(nameof(MedBagStockDetails));
+            RaisePropertyChanged(nameof(MedBagSendDetails));
         }
         #endregion
     }

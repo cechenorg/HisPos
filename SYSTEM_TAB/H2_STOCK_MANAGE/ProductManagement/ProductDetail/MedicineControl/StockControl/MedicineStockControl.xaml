@@ -32,7 +32,7 @@
                                 <EventSetter Event="MouseEnter" Handler="GetMedBagDetail"/>
                                 <Setter Property="ToolTip">
                                     <Setter.Value>
-                                        <DataGrid Background="Transparent" ItemsSource="{Binding StockDetail.MedBagDetails, UpdateSourceTrigger=PropertyChanged}" Width="545" Height="Auto" GridLinesVisibility="None"
+                                        <DataGrid Background="Transparent" ItemsSource="{Binding StockDetail.MedBagStockDetails, UpdateSourceTrigger=PropertyChanged}" Width="420" Height="Auto" GridLinesVisibility="None"
                                                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
                                                   CanUserResizeRows="False" FontFamily="Courier New" FontSize="18" Foreground="WhiteSmoke" HeadersVisibility="None" RowHeight="25">
                                             <DataGrid.CellStyle>
@@ -48,15 +48,6 @@
                                                 <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}"/>
                                                 <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}"/>
                                                 <DataGridTextColumn Width="70" Binding="{Binding SelfAmount, StringFormat=N1}">
-                                                    <DataGridTextColumn.ElementStyle>
-                                                        <Style TargetType="{x:Type TextBlock}">
-                                                            <Setter Property="HorizontalAlignment"  Value="Right"/>
-                                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                                        </Style>
-                                                    </DataGridTextColumn.ElementStyle>
-                                                </DataGridTextColumn>
-                                                <DataGridTextColumn Width="60" Binding="{Binding SendAmountHeader}"/>
-                                                <DataGridTextColumn Width="70" Binding="{Binding SendAmount, StringFormat=N1}">
                                                     <DataGridTextColumn.ElementStyle>
                                                         <Style TargetType="{x:Type TextBlock}">
                                                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -97,7 +88,7 @@
                                 <EventSetter Event="MouseEnter" Handler="GetMedBagDetail"/>
                                 <Setter Property="ToolTip">
                                     <Setter.Value>
-                                        <DataGrid Background="Transparent" ItemsSource="{Binding StockDetail.MedBagDetails, UpdateSourceTrigger=PropertyChanged}" Width="545" Height="Auto" GridLinesVisibility="None"
+                                        <DataGrid Background="Transparent" ItemsSource="{Binding StockDetail.MedBagStockDetails, UpdateSourceTrigger=PropertyChanged}" Width="420" Height="Auto" GridLinesVisibility="None"
                                                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
                                                   CanUserResizeRows="False" FontFamily="Courier New" FontSize="18" Foreground="WhiteSmoke" HeadersVisibility="None" RowHeight="25">
                                             <DataGrid.CellStyle>
@@ -113,15 +104,6 @@
                                                 <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}"/>
                                                 <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}"/>
                                                 <DataGridTextColumn Width="70" Binding="{Binding SelfAmount, StringFormat=N1}">
-                                                    <DataGridTextColumn.ElementStyle>
-                                                        <Style TargetType="{x:Type TextBlock}">
-                                                            <Setter Property="HorizontalAlignment"  Value="Right"/>
-                                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                                        </Style>
-                                                    </DataGridTextColumn.ElementStyle>
-                                                </DataGridTextColumn>
-                                                <DataGridTextColumn Width="60" Binding="{Binding SendAmountHeader}"/>
-                                                <DataGridTextColumn Width="70" Binding="{Binding SendAmount, StringFormat=N1}">
                                                     <DataGridTextColumn.ElementStyle>
                                                         <Style TargetType="{x:Type TextBlock}">
                                                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -207,7 +189,7 @@
                         <EventSetter Event="MouseEnter" Handler="GetMedBagDetail"/>
                         <Setter Property="ToolTip">
                             <Setter.Value>
-                                <DataGrid Background="Transparent" ItemsSource="{Binding StockDetail.MedBagDetails, UpdateSourceTrigger=PropertyChanged}" Width="545" Height="Auto" GridLinesVisibility="None"
+                                <DataGrid Background="Transparent" ItemsSource="{Binding StockDetail.MedBagSendDetails, UpdateSourceTrigger=PropertyChanged}" Width="420" Height="Auto" GridLinesVisibility="None"
                                                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
                                                   CanUserResizeRows="False" FontFamily="Courier New" FontSize="18" Foreground="WhiteSmoke" HeadersVisibility="None" RowHeight="25">
                                     <DataGrid.CellStyle>
@@ -221,15 +203,6 @@
                                         <DataGridTextColumn Width="50" Binding="{Binding Type}"/>
                                         <DataGridTextColumn Width="100" Binding="{Binding Name}"/>
                                         <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}"/>
-                                        <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}"/>
-                                        <DataGridTextColumn Width="70" Binding="{Binding SelfAmount, StringFormat=N1}">
-                                            <DataGridTextColumn.ElementStyle>
-                                                <Style TargetType="{x:Type TextBlock}">
-                                                    <Setter Property="HorizontalAlignment"  Value="Right"/>
-                                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                                </Style>
-                                            </DataGridTextColumn.ElementStyle>
-                                        </DataGridTextColumn>
                                         <DataGridTextColumn Width="60" Binding="{Binding SendAmountHeader}"/>
                                         <DataGridTextColumn Width="70" Binding="{Binding SendAmount, StringFormat=N1}">
                                             <DataGridTextColumn.ElementStyle>
