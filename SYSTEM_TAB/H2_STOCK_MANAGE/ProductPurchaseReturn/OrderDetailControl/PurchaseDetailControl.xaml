@@ -89,6 +89,9 @@
                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
                             <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeProcessingControl}" />
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ContentControl.Style>
