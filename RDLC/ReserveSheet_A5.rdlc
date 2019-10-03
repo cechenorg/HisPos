@@ -33,10 +33,14 @@
           <DataField>PrepareAmount</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="IsControlCommonFrozen">
+          <DataField>IsControlCommonFrozen</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ReserveMedicinesDataSet</rd:DataSetName>
-        <rd:SchemaPath>C:\His_Pos\RDLC\ReserveMedicinesDataSet.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\HisPos\RDLC\ReserveMedicinesDataSet.xsd</rd:SchemaPath>
         <rd:TableName>ReserveMedicinesDataSet</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -67,7 +71,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
             <Top>2.75861cm</Top>
-            <Left>2.1468cm</Left>
+            <Left>1.69326cm</Left>
             <Height>0.8cm</Height>
             <Width>1.70215cm</Width>
             <Style>
@@ -97,7 +101,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
             <Top>1.78222cm</Top>
-            <Left>2.1468cm</Left>
+            <Left>1.69326cm</Left>
             <Height>0.8cm</Height>
             <Width>1.70215cm</Width>
             <ZIndex>1</ZIndex>
@@ -130,7 +134,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox11</rd:DefaultName>
             <Top>2.75861cm</Top>
-            <Left>13.52097cm</Left>
+            <Left>13.06743cm</Left>
             <Height>0.8cm</Height>
             <Width>1.73862cm</Width>
             <ZIndex>2</ZIndex>
@@ -160,7 +164,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
             <Top>2.75861cm</Top>
-            <Left>3.91951cm</Left>
+            <Left>3.46597cm</Left>
             <Height>0.8cm</Height>
             <Width>9.60146cm</Width>
             <ZIndex>3</ZIndex>
@@ -191,7 +195,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
             <Top>2.75861cm</Top>
-            <Left>15.25959cm</Left>
+            <Left>14.80605cm</Left>
             <Height>0.8cm</Height>
             <Width>3.7602cm</Width>
             <ZIndex>4</ZIndex>
@@ -222,7 +226,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
             <Top>1.78222cm</Top>
-            <Left>3.91951cm</Left>
+            <Left>3.46597cm</Left>
             <Height>0.8cm</Height>
             <Width>5.10722cm</Width>
             <ZIndex>5</ZIndex>
@@ -255,7 +259,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
             <Top>1.78222cm</Top>
-            <Left>9.02673cm</Left>
+            <Left>8.57319cm</Left>
             <Height>0.8cm</Height>
             <Width>1.865cm</Width>
             <ZIndex>6</ZIndex>
@@ -287,7 +291,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
             <Top>1.78222cm</Top>
-            <Left>10.89172cm</Left>
+            <Left>10.43818cm</Left>
             <Height>0.8cm</Height>
             <Width>8.12807cm</Width>
             <ZIndex>7</ZIndex>
@@ -301,25 +305,236 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Type">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!Type.Value</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>34pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Type</rd:DefaultName>
+            <Top>0.14111cm</Top>
+            <Left>16.34371cm</Left>
+            <Height>1.5cm</Height>
+            <Width>2.57289cm</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox17">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!AdjustRange.Value</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>26pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox10</rd:DefaultName>
+            <Top>0.14111cm</Top>
+            <Left>5.46592cm</Left>
+            <Height>1.5cm</Height>
+            <Width>10.80723cm</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border />
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>領藥日：</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>24pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0.10583cm</Top>
+            <Left>2.04361cm</Left>
+            <Height>1.5cm</Height>
+            <Width>3.42231cm</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border />
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="AdjustDay">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!AdjustDay.Value</Value>
+                    <Style>
+                      <FontSize>34pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>AdjustDay</rd:DefaultName>
+            <Top>0.07056cm</Top>
+            <Left>19.2cm</Left>
+            <Height>1.71303cm</Height>
+            <Width>1.5cm</Width>
+            <ZIndex>11</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+              <WritingMode>Vertical</WritingMode>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!PatientName.Value</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>36pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox2</rd:DefaultName>
+            <Top>1.81886cm</Top>
+            <Left>19.38403cm</Left>
+            <Height>6.12458cm</Height>
+            <Width>1.61597cm</Width>
+            <ZIndex>12</ZIndex>
+            <Style>
+              <Border />
+              <VerticalAlign>Middle</VerticalAlign>
+              <WritingMode>Vertical</WritingMode>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!PatientName.Value</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>36pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox2</rd:DefaultName>
+            <Top>1.78358cm</Top>
+            <Left>0.0377cm</Left>
+            <Height>6.12458cm</Height>
+            <Width>1.61597cm</Width>
+            <ZIndex>13</ZIndex>
+            <Style>
+              <Border />
+              <WritingMode>Rotate270</WritingMode>
+            </Style>
+          </Textbox>
+          <Textbox Name="AdjustDay2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!AdjustDay.Value</Value>
+                    <Style>
+                      <FontSize>34pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>AdjustDay</rd:DefaultName>
+            <Top>0.07055cm</Top>
+            <Left>0.25124cm</Left>
+            <Height>1.71303cm</Height>
+            <Width>1.61597cm</Width>
+            <ZIndex>14</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+              <WritingMode>Rotate270</WritingMode>
+            </Style>
+          </Textbox>
           <Tablix Name="Tablix5">
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>4.1384cm</Width>
+                  <Width>4.0187cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>9.87397cm</Width>
+                  <Width>10.09663cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.42868cm</Width>
+                  <Width>1.78483cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.53701cm</Width>
+                  <Width>1.76889cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.67938cm</Height>
+                  <Height>0.6cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -333,7 +548,7 @@
                                   <Value>藥品代碼</Value>
                                   <Style>
                                     <FontFamily>微軟正黑體</FontFamily>
-                                    <FontSize>12pt</FontSize>
+                                    <FontSize>11pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -380,7 +595,7 @@
                                   <Value>藥品名稱</Value>
                                   <Style>
                                     <FontFamily>微軟正黑體</FontFamily>
-                                    <FontSize>12pt</FontSize>
+                                    <FontSize>11pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -427,7 +642,7 @@
                                   <Value>調劑量</Value>
                                   <Style>
                                     <FontFamily>微軟正黑體</FontFamily>
-                                    <FontSize>12pt</FontSize>
+                                    <FontSize>11pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -474,7 +689,7 @@
                                   <Value>自備量</Value>
                                   <Style>
                                     <FontFamily>微軟正黑體</FontFamily>
-                                    <FontSize>12pt</FontSize>
+                                    <FontSize>11pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -491,15 +706,18 @@
                             </Border>
                             <TopBorder>
                               <Color>Black</Color>
+                              <Width>1pt</Width>
                             </TopBorder>
                             <BottomBorder>
                               <Color>Black</Color>
+                              <Width>1pt</Width>
                             </BottomBorder>
                             <LeftBorder>
                               <Style>None</Style>
                             </LeftBorder>
                             <RightBorder>
                               <Color>Black</Color>
+                              <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -512,7 +730,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.67938cm</Height>
+                  <Height>0.67288cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -524,7 +742,7 @@
                                 <TextRun>
                                   <Value>=Fields!ID.Value</Value>
                                   <Style>
-                                    <FontSize>13pt</FontSize>
+                                    <FontSize>12pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -558,6 +776,7 @@
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Name">
+                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -565,8 +784,7 @@
                                 <TextRun>
                                   <Value>=Fields!Name.Value</Value>
                                   <Style>
-                                    <FontFamily>微軟正黑體</FontFamily>
-                                    <FontSize>13pt</FontSize>
+                                    <FontSize>11pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -604,6 +822,7 @@
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Amount">
+                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -611,7 +830,7 @@
                                 <TextRun>
                                   <Value>=Fields!Amount.Value</Value>
                                   <Style>
-                                    <FontSize>13pt</FontSize>
+                                    <FontSize>11pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -623,14 +842,13 @@
                           <rd:DefaultName>Amount</rd:DefaultName>
                           <Style>
                             <Border>
-                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Color>Black</Color>
+                              <Width>=IIF(Fields!IsControlCommonFrozen.Value, 3, 1)</Width>
                             </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
+                              <Width>=IIF(Fields!IsControlCommonFrozen.Value, 3, 1)</Width>
                             </BottomBorder>
                             <LeftBorder>
                               <Style>None</Style>
@@ -648,47 +866,72 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="PrepareAmount">
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!PrepareAmount.Value</Value>
+                        <Rectangle Name="Rectangle2">
+                          <ReportItems>
+                            <Textbox Name="PrepareAmount">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!PrepareAmount.Value</Value>
+                                      <Style />
+                                    </TextRun>
+                                  </TextRuns>
                                   <Style>
-                                    <FontSize>13pt</FontSize>
+                                    <TextAlign>Center</TextAlign>
                                   </Style>
-                                </TextRun>
-                              </TextRuns>
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>PrepareAmount</rd:DefaultName>
+                              <Top>0.07cm</Top>
+                              <Left>0.18499cm</Left>
+                              <Height>0.52cm</Height>
+                              <Width>1.49979cm</Width>
                               <Style>
-                                <TextAlign>Left</TextAlign>
+                                <Border>
+                                  <Style>Solid</Style>
+                                </Border>
+                                <TopBorder>
+                                  <Color>=IIF(Fields!IsControlCommonFrozen.Value = true, "Black", "White")</Color>
+                                </TopBorder>
+                                <BottomBorder>
+                                  <Color>=IIF(Fields!IsControlCommonFrozen.Value = true, "Black", "White")</Color>
+                                </BottomBorder>
+                                <LeftBorder>
+                                  <Color>=IIF(Fields!IsControlCommonFrozen.Value = true, "Black", "White")</Color>
+                                </LeftBorder>
+                                <RightBorder>
+                                  <Color>=IIF(Fields!IsControlCommonFrozen.Value = true, "Black", "White")</Color>
+                                </RightBorder>
+                                <VerticalAlign>Middle</VerticalAlign>
                               </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>PrepareAmount</rd:DefaultName>
+                            </Textbox>
+                          </ReportItems>
+                          <KeepTogether>true</KeepTogether>
                           <Style>
                             <Border>
-                              <Color>LightGrey</Color>
+                              <Color>Red</Color>
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
                               <Color>Black</Color>
+                              <Width>1pt</Width>
                             </TopBorder>
                             <BottomBorder>
                               <Color>Black</Color>
+                              <Width>1pt</Width>
                             </BottomBorder>
                             <LeftBorder>
                               <Style>None</Style>
                             </LeftBorder>
                             <RightBorder>
                               <Color>Black</Color>
+                              <Width>1pt</Width>
                             </RightBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
-                        </Textbox>
+                        </Rectangle>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -712,229 +955,17 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>ReserveMedicinesDataSet</DataSetName>
-            <Top>3.66444cm</Top>
-            <Left>2.04173cm</Left>
-            <Height>1.35876cm</Height>
-            <Width>16.97806cm</Width>
-            <ZIndex>8</ZIndex>
+            <Top>3.735cm</Top>
+            <Left>1.69326cm</Left>
+            <Height>1.27288cm</Height>
+            <Width>17.66904cm</Width>
+            <ZIndex>15</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
             </Style>
           </Tablix>
-          <Textbox Name="Type">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!Type.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>34pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Type</rd:DefaultName>
-            <Top>0.14111cm</Top>
-            <Left>16.4469cm</Left>
-            <Height>1.5cm</Height>
-            <Width>2.57289cm</Width>
-            <ZIndex>9</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox17">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!AdjustRange.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>26pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>0.14111cm</Top>
-            <Left>5.56911cm</Left>
-            <Height>1.5cm</Height>
-            <Width>10.80723cm</Width>
-            <ZIndex>10</ZIndex>
-            <Style>
-              <Border />
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox1">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>領藥日：</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>24pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>0.10583cm</Top>
-            <Left>2.1468cm</Left>
-            <Height>1.5cm</Height>
-            <Width>3.42231cm</Width>
-            <ZIndex>11</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Middle</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="AdjustDay">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!AdjustDay.Value</Value>
-                    <Style>
-                      <FontSize>34pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>AdjustDay</rd:DefaultName>
-            <Top>0.10583cm</Top>
-            <Left>19.12562cm</Left>
-            <Height>1.71303cm</Height>
-            <Width>1.87438cm</Width>
-            <ZIndex>12</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <WritingMode>Vertical</WritingMode>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox2">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!PatientName.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>36pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>1.81886cm</Top>
-            <Left>19.12562cm</Left>
-            <Height>6.12458cm</Height>
-            <Width>1.82764cm</Width>
-            <ZIndex>13</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Middle</VerticalAlign>
-              <WritingMode>Vertical</WritingMode>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox3">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!PatientName.Value</Value>
-                    <Style>
-                      <FontFamily>微軟正黑體</FontFamily>
-                      <FontSize>36pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>1.78358cm</Top>
-            <Left>0.0377cm</Left>
-            <Height>6.12458cm</Height>
-            <Width>1.82764cm</Width>
-            <ZIndex>14</ZIndex>
-            <Style>
-              <Border />
-              <VerticalAlign>Middle</VerticalAlign>
-              <WritingMode>Rotate270</WritingMode>
-            </Style>
-          </Textbox>
-          <Textbox Name="AdjustDay2">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!AdjustDay.Value</Value>
-                    <Style>
-                      <FontSize>34pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>AdjustDay</rd:DefaultName>
-            <Top>0.07055cm</Top>
-            <Left>0.0377cm</Left>
-            <Height>1.71303cm</Height>
-            <Width>1.87438cm</Width>
-            <ZIndex>15</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <WritingMode>Rotate270</WritingMode>
-            </Style>
-          </Textbox>
         </ReportItems>
         <Height>7.97872cm</Height>
         <Style>

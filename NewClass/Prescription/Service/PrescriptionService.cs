@@ -553,7 +553,8 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             PrescriptionSendDatas printSendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
             var sendData = vm.PrescriptionSendData;
-            if (sendData.Count(s => s.SendAmount == 0) != sendData.Count) {
+            if (sendData.Count(s => s.SendAmount == 0) != sendData.Count)
+            {
                 if (!Current.PrescriptionStatus.IsSendToSingde)
                     Current.PrescriptionStatus.IsSendToSingde = PurchaseOrder.InsertPrescriptionOrder(Current, sendData);
                 //紀錄訂單and送單

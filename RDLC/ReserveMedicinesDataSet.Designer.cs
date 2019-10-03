@@ -287,6 +287,8 @@ namespace His_Pos.RDLC {
             
             private global::System.Data.DataColumn columnPrepareAmount;
             
+            private global::System.Data.DataColumn columnIsControlCommonFrozen;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public ReserveMedicinesDataSetDataTable() {
@@ -354,6 +356,14 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public global::System.Data.DataColumn IsControlCommonFrozenColumn {
+                get {
+                    return this.columnIsControlCommonFrozen;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -389,13 +399,14 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
-            public ReserveMedicinesDataSetRow AddReserveMedicinesDataSetRow(string ID, string Name, double Amount, string PrepareAmount) {
+            public ReserveMedicinesDataSetRow AddReserveMedicinesDataSetRow(string ID, string Name, double Amount, string PrepareAmount, bool IsControlCommonFrozen) {
                 ReserveMedicinesDataSetRow rowReserveMedicinesDataSetRow = ((ReserveMedicinesDataSetRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ID,
                         Name,
                         Amount,
-                        PrepareAmount};
+                        PrepareAmount,
+                        IsControlCommonFrozen};
                 rowReserveMedicinesDataSetRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowReserveMedicinesDataSetRow);
                 return rowReserveMedicinesDataSetRow;
@@ -422,6 +433,7 @@ namespace His_Pos.RDLC {
                 this.columnName = base.Columns["Name"];
                 this.columnAmount = base.Columns["Amount"];
                 this.columnPrepareAmount = base.Columns["PrepareAmount"];
+                this.columnIsControlCommonFrozen = base.Columns["IsControlCommonFrozen"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -435,6 +447,8 @@ namespace His_Pos.RDLC {
                 base.Columns.Add(this.columnAmount);
                 this.columnPrepareAmount = new global::System.Data.DataColumn("PrepareAmount", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPrepareAmount);
+                this.columnIsControlCommonFrozen = new global::System.Data.DataColumn("IsControlCommonFrozen", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIsControlCommonFrozen);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_ReserveMedicinesDataSet");
                 this.ExtendedProperties.Add("Generator_UserTableName", "ReserveMedicinesDataSet");
             }
@@ -643,6 +657,22 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsControlCommonFrozen {
+                get {
+                    try {
+                        return ((bool)(this[this.tableReserveMedicinesDataSet.IsControlCommonFrozenColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'ReserveMedicinesDataSet\' 中資料行 \'IsControlCommonFrozen\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableReserveMedicinesDataSet.IsControlCommonFrozenColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public bool IsIDNull() {
                 return this.IsNull(this.tableReserveMedicinesDataSet.IDColumn);
             }
@@ -687,6 +717,18 @@ namespace His_Pos.RDLC {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
             public void SetPrepareAmountNull() {
                 this[this.tableReserveMedicinesDataSet.PrepareAmountColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public bool IsIsControlCommonFrozenNull() {
+                return this.IsNull(this.tableReserveMedicinesDataSet.IsControlCommonFrozenColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")]
+            public void SetIsControlCommonFrozenNull() {
+                this[this.tableReserveMedicinesDataSet.IsControlCommonFrozenColumn] = global::System.Convert.DBNull;
             }
         }
         
