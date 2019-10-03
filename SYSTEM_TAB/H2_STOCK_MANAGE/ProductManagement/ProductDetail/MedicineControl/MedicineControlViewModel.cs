@@ -163,6 +163,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 }
             }
 
+            if (Medicine.SelfPayType == SelfPayTypeEnum.Customize)
+            {
+                if (Medicine.SelfPayPrice is null)
+                {
+                    MessageWindow.ShowMessage("自訂自費金額不可為空", MessageType.ERROR);
+                    return false;
+                }
+            }
+
             return true;
         }
         #endregion

@@ -18,6 +18,18 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int? SafeAmount { get; set; }
         public int? BasicAmount { get; set; }
         public int MinOrderAmount { get; set; }
+        public SelfPayTypeEnum SelfPayType { get; set; }
+        public double? SelfPayPrice { get; set; }
+
+        public bool IsSelfPayTypeDefault
+        {
+            get { return SelfPayType == SelfPayTypeEnum.Default; }
+            set
+            {
+                SelfPayType = value ? SelfPayTypeEnum.Default : SelfPayTypeEnum.Customize;
+                RaisePropertyChanged(nameof(IsSelfPayTypeDefault));
+            }
+        }
         #endregion
 
         public ProductManageMedicine() { }
@@ -33,6 +45,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SafeAmount = row.Field<int?>("Inv_SafeAmount");
             BasicAmount = row.Field<int?>("Inv_BasicAmount");
             MinOrderAmount = row.Field<int>("Pro_MinOrder");
+            SelfPayType = row.Field<string>("Pro_SelfPayType").Equals("D")? SelfPayTypeEnum.Default : SelfPayTypeEnum.Customize;
+            SelfPayPrice = row.Field<double?>("Pro_SelfPayPrice");
         }
 
         #region ----- Define Functions -----
