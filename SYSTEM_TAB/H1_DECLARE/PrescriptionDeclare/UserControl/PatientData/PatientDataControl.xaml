@@ -16,14 +16,14 @@
             <StackPanel Margin="0,0,10,0" Orientation="Horizontal">
                 <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
                 <TextBox Name="PatientIDNumber" Width="130" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" CaretBrush="Black"
-                         InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding Patient.IDNumber,ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                         InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers,ElementName=Root}" Key="Enter" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
                     </TextBox.InputBindings>
                 </TextBox>
                 <Button x:Name="AddCustomer" Command="{Binding AddCustomer}" Content="{StaticResource AddCustomer}" Margin="10,0,15,0" Background="Transparent" BorderBrush="Transparent" Height="25" Width="25" Padding="0"/>
                 <TextBox Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" CaretBrush="Black"
-                         CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding Patient.Name,ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                         CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Patient.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers,ElementName=Root}" Key="Enter" CommandParameter="{Binding ElementName=PatientName}"/>
                     </TextBox.InputBindings>
@@ -35,7 +35,7 @@
                     <xctk:MaskedTextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers,ElementName=Root}" Key="Enter" CommandParameter="{Binding ElementName=PatientBirthday}"/>
                     </xctk:MaskedTextBox.InputBindings>
-                    <Binding Path="Patient.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ElementName="Root"
+                    <Binding Path="CurrentPrescription.Patient.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                         <Binding.ValidationRules>
                             <service:DateValidationRule/>
@@ -44,14 +44,14 @@
                 </xctk:MaskedTextBox>
                 <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
                 <TextBox Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                         Text="{Binding Patient.CellPhone,ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
+                         Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers,ElementName=Root}" Key="Enter" CommandParameter="{Binding ElementName=PatientCellPhone}"/>
                     </TextBox.InputBindings>
                 </TextBox>
                 <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
                 <TextBox Name="PatientTel" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                             Text="{Binding Patient.Tel,ElementName=Root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
+                             Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding GetCustomers,ElementName=Root}" Key="Enter" CommandParameter="{Binding ElementName=PatientTel}"/>
                     </TextBox.InputBindings>
@@ -62,19 +62,19 @@
             <StackPanel Margin="0,0,10,0" Orientation="Horizontal">
                 <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
                 <Label Name="PatientIDNumber" Width="130" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"
-                       Content="{Binding Patient.IDNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                       Content="{Binding CurrentPrescription.Patient.IDNumber, UpdateSourceTrigger=PropertyChanged}"/>
                 <Image x:Name="AddCustomer" Source="../../../../../Images/User_48px.png" Margin="10,0,10,0" Height="30" Width="30"/>
                 <Label Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"
-                       Content="{Binding Patient.Name,ElementName=Root, UpdateSourceTrigger=PropertyChanged}" />
+                       Content="{Binding CurrentPrescription.Patient.Name, UpdateSourceTrigger=PropertyChanged}" />
                 <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
                 <Label x:Name="PatientBirthday" Width="95" Height="35" Margin="0,0,10,0"  HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"
-                       Content="{Binding Patient.Birthday,ElementName=Root,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"/>
+                       Content="{Binding CurrentPrescription.Patient.Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"/>
                 <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
                 <Label Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"
-                         Content="{Binding Patient.CellPhone,ElementName=Root,UpdateSourceTrigger=PropertyChanged}"/>
+                         Content="{Binding CurrentPrescription.Patient.CellPhone,UpdateSourceTrigger=PropertyChanged}"/>
                 <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
                 <Label Name="PatientTel" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}" 
-                       Content="{Binding Patient.Tel,ElementName=Root,UpdateSourceTrigger=PropertyChanged}"/>
+                       Content="{Binding CurrentPrescription.Patient.Tel,UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>

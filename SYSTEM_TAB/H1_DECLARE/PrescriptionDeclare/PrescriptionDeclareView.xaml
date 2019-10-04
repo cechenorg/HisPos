@@ -115,7 +115,7 @@
                 <RowDefinition Height="300"/>
             </Grid.RowDefinitions>
             <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
-                <patientData:PatientDataControl GetCustomers="{Binding GetCustomers}" CanSearch="{Binding CanSearchPatient,UpdateSourceTrigger=PropertyChanged}"/>
+                <patientData:PatientDataControl GetCustomers="{Binding GetCustomers}" CanSearch="{Binding CanSearchPatient,UpdateSourceTrigger=PropertyChanged}" />
                 <Button x:Name="ClearPatient" Command="{Binding ClearPatient}" Content="{StaticResource ClearPatient}" Margin="0,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="處方數" Style="{StaticResource BoldLabelContent18}"/>
                 <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
@@ -577,8 +577,8 @@
                         <Button Content="設定" BorderBrush="Transparent" Background="DimGray" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Edit"/>
                         <Button Content="新增" BorderBrush="Transparent" Background="RoyalBlue" VerticalAlignment="Center" Margin="10,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Add"/>
                     </StackPanel>
-                    <patientData:PatientInfoControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Prescription="{Binding DataContext.CurrentPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CheckDeclareStatus="{Binding CheckDeclareStatusCmd}" SelectedPatientDetail="{Binding SelectedPatientDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                                    PatientEdited="{Binding CustomerEdited,UpdateSourceTrigger=PropertyChanged}"/>
+                    <!--<patientData:PatientInfoControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Prescription="{Binding DataContext.CurrentPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CheckDeclareStatus="{Binding CheckDeclareStatusCmd}" SelectedPatientDetail="{Binding SelectedPatientDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                    PatientEdited="{Binding CustomerEdited,UpdateSourceTrigger=PropertyChanged}"/>-->
                     <!--<ContentControl Content="{Binding}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
                         <ContentControl.Style>
                             <Style TargetType="{x:Type ContentControl}">
