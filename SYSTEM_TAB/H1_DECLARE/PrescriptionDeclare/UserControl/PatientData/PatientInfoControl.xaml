@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData.PatientInfoControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData"
+             xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:newClass="clr-namespace:His_Pos.NewClass"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="980">
+    <UserControl.Resources>
+        <DataTemplate x:Key="PatientHistories" DataType="{x:Type local:PatientHistoriesControl}">
+            <local:PatientHistoriesControl  CopyComplete="{Binding CheckDeclareStatus, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="PatientBasicData" DataType="{x:Type local:PatientHistoriesControl}">
+            <local:PatientBasicDataControl Patient="{Binding Prescription.Patient,UpdateSourceTrigger=PropertyChanged}" Edited="{Binding PatientEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <ContentControl Content="{Binding}" >
+        <ContentControl.Style>
+            <Style TargetType="{x:Type ContentControl}">
+                <Setter Property="ContentTemplate" Value="{StaticResource PatientHistories}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding SelectedPatientDetail, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Option1">
+                        <Setter Property="ContentTemplate" Value="{StaticResource PatientHistories}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding SelectedPatientDetail, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Option2">
+                        <Setter Property="ContentTemplate" Value="{StaticResource PatientBasicData}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ContentControl.Style>
+    </ContentControl>
+</UserControl>

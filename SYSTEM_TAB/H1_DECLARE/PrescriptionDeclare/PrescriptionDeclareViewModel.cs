@@ -273,6 +273,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
         public RelayCommand CopyPrescription { get; set; }
+        public RelayCommand CheckDeclareStatusCmd { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand<string> EditMedicineSet { get; set; }
         public RelayCommand CustomerDetailEdited { get; set; }
@@ -372,6 +373,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
+            CheckDeclareStatusCmd = new RelayCommand(CheckDeclareStatus);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
             CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
@@ -761,17 +763,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void CopyPrescriptionAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            var prescription = SelectedHistory.GetPrescriptionRefactoringByID();
-            MainWindow.ServerConnection.CloseConnection();
-            prescription.TreatDate = null;
-            prescription.AdjustDate = null;
-            prescription.TempMedicalNumber = null;
-            prescription.Patient = CurrentPrescription.Patient;
-            prescription.PrescriptionStatus.Init();
-            prescription.Reset();
-            CurrentPrescription = prescription;
-            CurrentPrescription.ID = 0;
             CheckDeclareStatus();
             CountMedicinePointAction();
         }

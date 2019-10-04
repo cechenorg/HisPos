@@ -89,275 +89,8 @@
         <DataTemplate x:Key="LabelObsolete" DataType="{x:Type local:PrescriptionDeclareView}">
             <Label Content="訂單狀態 : 訂單作廢" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
         </DataTemplate>
-        <DataTemplate x:Key="CustomerHistories" DataType="{x:Type local:PrescriptionDeclareView}">
-            <DataTemplate.Resources>
-                <Style x:Key="CusHistoryColumnHeaderStyle" TargetType="DataGridColumnHeader">
-                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-                    <Setter Property="FontSize" Value="16" />
-                    <Setter Property="Margin" Value="8,5,5,5" />
-                </Style>
-            </DataTemplate.Resources>
-            <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                <DataGrid x:Name="CusHistoryMaster" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DataContext.CurrentPrescription.Patient.HistoryCollectionView,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
-                              ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" Height="250" VerticalAlignment="Bottom" Width="450">
-                    <DataGrid.Resources>
-                        <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
-                    </DataGrid.Resources>
-                    <DataGrid.ContextMenu>
-                        <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                            <MenuItem Header="複製" Command="{Binding Source={StaticResource proxy}, Path=Data.CopyPrescription}"/>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <EventSetter Event="MouseDoubleClick" Handler="ShowPrescriptionEditWindow"/>
-                            <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="Height" Value="35"/>
-                        </Style>
-                    </DataGrid.RowStyle>
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="過卡" Width="45" MaxWidth="45" IsReadOnly="True" CanUserResize="False">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image Source="/Images/Declared.png" Width="15" Visibility="{Binding Status,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn MinWidth="70" Header="就醫日" MaxWidth="70" IsReadOnly="True" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Text" Value="{Binding TreatDate, Converter={StaticResource NullableDateConverter}}" />
-                                    <Setter Property="Margin" Value="5,0,0,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="調劑日" IsReadOnly="True" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Text" Value="{Binding AdjustDate, Converter={StaticResource DateConverter}}" />
-                                    <Setter Property="Margin" Value="5,0,0,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="45" MaxWidth="45" Header="案件" IsReadOnly="True" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Text" Value="{Binding Case}" />
-                                    <Setter Property="Margin" Value="5,0,0,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="110" MaxWidth="110" Header="院所" IsReadOnly="True" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Left" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Text" Value="{Binding InsName}" />
-                                    <Setter Property="Margin" Value="5,0,0,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="90" MaxWidth="90" Header="科別" IsReadOnly="True" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Text" Value="{Binding DivName}" />
-                                    <Setter Property="Margin" Value="5,0,0,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <DataGrid Height="250" Width="550" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
-                          ColumnHeaderStyle="{StaticResource CusHistoryColumnHeaderStyle}" DataContext="{Binding DataContext.SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto" Visibility="Visible"
-                          CanUserReorderColumns="False">
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="Height" Value="40"/>
-                        </Style>
-                    </DataGrid.RowStyle>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="120" MaxWidth="120" Binding="{Binding ID, Mode=OneWay}" Header="代碼" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="310" MaxWidth="310" Binding="{Binding FullName, Mode=OneWay}" Header="名稱" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Left" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn MinWidth="50" MaxWidth="50"  Binding="{Binding Days, Mode=OneWay}" Header="天數" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn MinWidth="50" MaxWidth="50"  Binding="{Binding Amount, Mode=OneWay}" Header="總量" CanUserResize="False">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </StackPanel>
-        </DataTemplate>
         <DataTemplate x:Key="CustomerDetail" DataType="{x:Type local:PrescriptionDeclareView}">
-            <DataTemplate.Resources>
-                <DataTemplate x:Key="Edited" DataType="{x:Type local:PrescriptionDeclareView}">
-                    <Label  Content="已修改" Style="{StaticResource BoldLabelContent16}" Foreground="Red" Margin="40,0,0,10"/>
-                </DataTemplate>
-                <DataTemplate x:Key="NonEdited" DataType="{x:Type local:PrescriptionDeclareView}">
-                    <Label  Content="未修改" Style="{StaticResource BoldLabelContent16}" Foreground="DimGray" Margin="40,0,0,10"/>
-                </DataTemplate>
-            </DataTemplate.Resources>
-            <Grid Width="1010" Background="#a3a3a3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="420"/>
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Margin="0,5,0,5">
-                    <Image Width="25" Height="25" Source="/Images/Phone.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientCellPhone" Width="130" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="16" Foreground="{StaticResource ForeGround}"
-                             Text="{Binding DataContext.CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CaretBrush="Black">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="PreviewKeyDown">
-                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <Image Width="20" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientTel" Width="130" Height="35" Margin="5,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電" FontSize="16" Foreground="{StaticResource ForeGround}" 
-                             Text="{Binding DataContext.CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CaretBrush="Black">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="PreviewKeyDown">
-                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,5">
-                    <Image Width="25" Height="25" Source="/Images/home-address.png" Margin="10,0,10,0"/>
-                    <TextBox Name="PatientAddress" Width="325" Height="35" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="地址" FontSize="16" Foreground="{StaticResource ForeGround}" 
-                             Text="{Binding DataContext.CurrentPrescription.Patient.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CaretBrush="Black">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="PreviewKeyDown">
-                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,5">
-                    <Image Width="21" Height="25" Source="/Images/email.png" Margin="12,0,10,0"/>
-                    <TextBox Name="PatientEmail" Width="325" Height="35" Margin="1,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="電子信箱" FontSize="16" Foreground="{StaticResource ForeGround}" 
-                             Text="{Binding DataContext.CurrentPrescription.Patient.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CaretBrush="Black">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="PreviewKeyDown">
-                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Margin="0,5,0,5">
-                    <Image Width="21" Height="25" Source="/Images/line.png" Margin="12,0,10,0"/>
-                    <TextBox Name="PatientLine" Width="325" Height="35" Margin="1,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="Line ID" FontSize="16" Foreground="{StaticResource ForeGround}" 
-                             Text="{Binding DataContext.CurrentPrescription.Patient.Line, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CaretBrush="Black">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="PreviewKeyDown">
-                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </StackPanel>
-                <StackPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel  Orientation="Vertical" Margin="10,10,0,10">
-                            <Label Content="聯絡備註" FontSize="16" Foreground="{StaticResource ForeGround}"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <TextBox Height="160" Width="280" VerticalContentAlignment="Top" Text="{Binding DataContext.CurrentPrescription.Patient.ContactNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Background="{StaticResource LightForeGround}" TextWrapping="Wrap" 
-                                         AcceptsReturn="True" VerticalScrollBarVisibility="Visible"  Foreground="{StaticResource ForeGround}" FontSize="16" FontWeight="Bold" BorderThickness="0" CaretBrush="Black">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="PreviewKeyDown">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel  Orientation="Vertical" Margin="10,10,0,10">
-                            <Label Content="備註" FontSize="16" Foreground="{StaticResource ForeGround}"/>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox Height="160" Width="280" VerticalContentAlignment="Top"  Text="{Binding DataContext.CurrentPrescription.Patient.Note,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Background="{StaticResource LightForeGround}" TextWrapping="Wrap"  
-                                         AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Foreground="{StaticResource ForeGround}" FontSize="16" FontWeight="Bold" BorderThickness="0" CaretBrush="Black">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="PreviewKeyDown">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <ContentControl Content="{Binding}" Margin="303,0,0,0">
-                            <ContentControl.Style>
-                                <Style TargetType="{x:Type ContentControl}">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="true">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="false">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ContentControl.Style>
-                        </ContentControl>
-                        <Button Width="80" Height="30" Margin="10,0,0,10" Content="取消" Background="DimGray" BorderBrush="DimGray" Command="{Binding DataContext.CustomerRedoEdited,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" IsEnabled="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                        <Button Width="80" Height="30" Margin="10,0,0,10" Content="存檔" Background="IndianRed" BorderBrush="IndianRed" Command="{Binding DataContext.SavePatientData,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" IsEnabled="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
+            
         </DataTemplate>
         <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}"/>
         <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
@@ -382,7 +115,7 @@
                 <RowDefinition Height="300"/>
             </Grid.RowDefinitions>
             <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
-                <patientData:PatientDataControl GetCustomers="{Binding GetCustomers}" Patient="{Binding CurrentPrescription.Patient,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CanSearch="{Binding CanSearchPatient,UpdateSourceTrigger=PropertyChanged}"/>
+                <patientData:PatientDataControl GetCustomers="{Binding GetCustomers}" CanSearch="{Binding CanSearchPatient,UpdateSourceTrigger=PropertyChanged}"/>
                 <Button x:Name="ClearPatient" Command="{Binding ClearPatient}" Content="{StaticResource ClearPatient}" Margin="0,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="處方數" Style="{StaticResource BoldLabelContent18}"/>
                 <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
@@ -830,21 +563,23 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="391"/>
+                        <ColumnDefinition Width="430"/>
+                        <ColumnDefinition Width="550"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.Column="0" Background="{StaticResource GridBackGround}">
                         <RadioButton GroupName="CusHistoryGroup" Content="處方紀錄" IsChecked="{Binding Path=SelectedPatientDetail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" FontSize="14"/>
                         <RadioButton GroupName="CusHistoryGroup" Content="顧客資料" IsChecked="{Binding Path=SelectedPatientDetail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}" FontSize="14"/>
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                        <Label Content="藥品組合" Style="{StaticResource BoldLabelContent16}" Margin="150,0,10,0"/>
+                        <Label Content="藥品組合" Style="{StaticResource BoldLabelContent16}" Margin="100,0,10,0"/>
                         <ComboBox Height="35" Width="150" ItemsSource="{Binding MedicineSets,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" FontSize="18" FontFamily="Segoe UI SemiBold" HorizontalContentAlignment="Center"/>
                         <Button Content="代入" BorderBrush="Transparent" Background="DarkCyan" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Get"/>
                         <Button Content="設定" BorderBrush="Transparent" Background="DimGray" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Edit"/>
                         <Button Content="新增" BorderBrush="Transparent" Background="RoyalBlue" VerticalAlignment="Center" Margin="10,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Add"/>
                     </StackPanel>
-                    <ContentControl Content="{Binding}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                    <patientData:PatientInfoControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Prescription="{Binding DataContext.CurrentPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CheckDeclareStatus="{Binding CheckDeclareStatusCmd}" SelectedPatientDetail="{Binding SelectedPatientDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                    PatientEdited="{Binding CustomerEdited,UpdateSourceTrigger=PropertyChanged}"/>
+                    <!--<ContentControl Content="{Binding}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
                         <ContentControl.Style>
                             <Style TargetType="{x:Type ContentControl}">
                                 <Setter Property="ContentTemplate" Value="{StaticResource CustomerHistories}" />
@@ -858,7 +593,7 @@
                                 </Style.Triggers>
                             </Style>
                         </ContentControl.Style>
-                    </ContentControl>
+                    </ContentControl>-->
                 </Grid>
                 <Grid Background="{StaticResource GridBackGround}" Margin="10,0,0,0">
                     <Grid.RowDefinitions>

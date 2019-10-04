@@ -39,23 +39,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
             set { SetValue(GetCustomersProperty, value); }
         }
         #endregion         
-        #region Patient
-        public static readonly DependencyProperty PatientProperty =
-            DependencyProperty.Register(
-                "Patient",
-                typeof(Customer),
-                typeof(PatientDataControl),
-                new PropertyMetadata(null));
-        public Customer Patient
-        {
-            get { return (Customer)GetValue(PatientProperty); }
-            set
-            {
-                SetValue(PatientProperty, value);
-            }
-        }
-        #endregion
-        #region Patient
+        
+        #region CanSearch
         public static readonly DependencyProperty CanSearchProperty =
             DependencyProperty.Register(
                 "CanSearch",
@@ -86,5 +71,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
             if (sender is MaskedTextBox t && e.Key == Key.Enter)
                 t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
         }
+
     }
 }
