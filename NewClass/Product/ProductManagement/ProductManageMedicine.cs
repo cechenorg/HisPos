@@ -9,6 +9,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
     public class ProductManageMedicine : Product, ICloneable
     {
         #region ----- Define Variables -----
+        private double selfPayMultiplier;
+
         public bool Status { get; set; }
         public string Note { get; set; }
         public string Indication { get; set; }
@@ -20,6 +22,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int MinOrderAmount { get; set; }
         public SelfPayTypeEnum SelfPayType { get; set; }
         public double? SelfPayPrice { get; set; }
+        public double SelfPayMultiplier
+        {
+            get { return selfPayMultiplier; }
+            set
+            {
+                selfPayMultiplier = value;
+                RaisePropertyChanged(nameof(SelfPayMultiplier));
+            }
+        }
 
         public bool IsSelfPayTypeDefault
         {
@@ -46,13 +57,14 @@ namespace His_Pos.NewClass.Product.ProductManagement
             BasicAmount = row.Field<int?>("Inv_BasicAmount");
             MinOrderAmount = row.Field<int>("Pro_MinOrder");
             SelfPayType = row.Field<string>("Pro_SelfPayType").Equals("D")? SelfPayTypeEnum.Default : SelfPayTypeEnum.Customize;
-            SelfPayPrice = row.Field<double?>("Pro_SelfPayPrice");
+            SelfPayPrice = (double?)row.Field<decimal?>("Pro_SelfPayPrice");
+            SelfPayMultiplier = row.Field<double>("SysPar_Value");
         }
 
         #region ----- Define Functions -----
         public object Clone()
         {
-            return this.DeepCloneViaJson() as ProductManageMedicine;
+            return this.DeepCloneViaJson();
         }
         public bool Save()
         {

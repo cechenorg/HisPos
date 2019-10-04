@@ -19,8 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             InitializeComponent();
         }
-
-
+        
         private void IsCommon_OnClick(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = sender as CheckBox;

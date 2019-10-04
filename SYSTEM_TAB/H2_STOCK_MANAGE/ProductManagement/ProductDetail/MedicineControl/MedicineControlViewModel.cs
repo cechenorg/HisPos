@@ -4,6 +4,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetSelfPayMultiplierWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -23,6 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand CancelChangeCommand { get; set; }
         public RelayCommand SyncDataCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
+        public RelayCommand SetSelfPayMultiplierCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -94,6 +96,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             IsDataChanged = true;
         }
+        private void SetSelfPayMultiplierAction()
+        {
+            SetSelfPayMultiplierWindow selfPayMultiplierWindow = new SetSelfPayMultiplierWindow(Medicine.SelfPayMultiplier);
+            selfPayMultiplierWindow.ShowDialog();
+
+            if ((bool) selfPayMultiplierWindow.DialogResult)
+            {
+                Medicine.SelfPayMultiplier = selfPayMultiplierWindow.SelfPayMultiplier;
+            }
+        }
         //private void ShowConsumeRecordAction()
         //{
         //    ProductConsumeRecordWindow productConsumeRecordWindow = new ProductConsumeRecordWindow(Medicine.ID, SelectedWareHouse);
@@ -108,6 +120,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             CancelChangeCommand = new RelayCommand(CancelChangeAction, IsMedicineDataChanged);
             SyncDataCommand = new RelayCommand(SyncDataAction);
             DataChangedCommand = new RelayCommand(DataChangedAction);
+            SetSelfPayMultiplierCommand = new RelayCommand(SetSelfPayMultiplierAction);
         }
         private void InitMedicineData(string proID, string wareHouseID = "")
         {
