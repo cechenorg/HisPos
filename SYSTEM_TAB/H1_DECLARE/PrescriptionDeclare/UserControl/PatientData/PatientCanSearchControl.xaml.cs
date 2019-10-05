@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,51 +14,45 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
-using JetBrains.Annotations;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData
 {
     /// <summary>
-    /// PatientDataControl.xaml 的互動邏輯
+    /// PatientCanSearchControl.xaml 的互動邏輯
     /// </summary>
-    public partial class PatientDataControl
+    public partial class PatientCanSearchControl : System.Windows.Controls.UserControl
     {
         #region GetCustomers
         public static readonly DependencyProperty GetCustomersProperty =
             DependencyProperty.Register(
                 "GetCustomers",
                 typeof(ICommand),
-                typeof(PatientDataControl),
+                typeof(PatientCanSearchControl),
                 new PropertyMetadata(null));
         public ICommand GetCustomers
         {
             get { return (ICommand)GetValue(GetCustomersProperty); }
             set { SetValue(GetCustomersProperty, value); }
         }
-        #endregion         
-        
-        #region CanSearch
-        public static readonly DependencyProperty CanSearchProperty =
+        #endregion
+        #region Patient
+        public static readonly DependencyProperty PatientProperty =
             DependencyProperty.Register(
-                "CanSearch",
-                typeof(bool),
-                typeof(PatientDataControl),
+                "Patient",
+                typeof(Customer),
+                typeof(PatientCanSearchControl),
                 new PropertyMetadata(null));
-        public bool CanSearch
+        public Customer Patient
         {
-            get { return (bool)GetValue(CanSearchProperty); }
-            set
-            {
-                SetValue(CanSearchProperty, value);
-            }
+            get { return (Customer)GetValue(PatientProperty); }
+            set { SetValue(PatientProperty, value); }
         }
         #endregion
-        public PatientDataControl()
+        public PatientCanSearchControl()
         {
             InitializeComponent();
         }
-
         private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
@@ -71,6 +63,5 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
             if (sender is MaskedTextBox t && e.Key == Key.Enter)
                 t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
         }
-
     }
 }

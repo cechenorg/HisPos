@@ -20,8 +20,9 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             OnTheFrameAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
-            CostPrice = (double)(r.Field<decimal?>("Pro_LastPrice") is null ? 0 : r.Field<decimal>("Pro_LastPrice"));
+            CostPrice = (double)(r.Field<decimal?>("Inv_LastPrice") is null ? 0 : r.Field<decimal>("Inv_LastPrice"));
             AveragePrice = r.Field<double?>("AveragePrice") is null ? 0 : r.Field<double>("AveragePrice");
+            Price = r.Field<double>("Pro_SelfPayPrice");
             InventoryID = r.Field<int>("Inv_ID");
             if (NewFunction.CheckDataRowContainsColumn(r, "MedbagAmountLack"))
                 InventoryError = r.Field<int>("MedbagAmountLack") == 1;

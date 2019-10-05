@@ -46,8 +46,13 @@
         <service:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <Image x:Key="QrCode" Source="/Images/qr-code.png"/>
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
-        <Image x:Key="AddCustomer" Source="/Images/add-user.png"/>
         <Image x:Key="ClearPatient" Source="/Images/ClearButton.png"/>
+        <DataTemplate x:Key="PatientCanSearch" DataType="{x:Type patientData:PatientCanSearchControl}">
+            <patientData:PatientCanSearchControl DataContext="{Binding DataContext.CurrentPrescription,RelativeSource={RelativeSource AncestorType=UserControl}}" GetCustomers="{Binding DataContext.GetCustomers, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="PatientReadOnly" DataType="{x:Type patientData:PatientCanSearchControl}">
+            <patientData:PatientReadOnlyControl Patient="{Binding DataContext.CurrentPrescription.Patient, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        </DataTemplate>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
             <Button Content="調劑" Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="135" Height="35" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </DataTemplate>
@@ -115,7 +120,21 @@
                 <RowDefinition Height="300"/>
             </Grid.RowDefinitions>
             <StackPanel Width="1345" Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
-                <patientData:PatientDataControl GetCustomers="{Binding GetCustomers}" CanSearch="{Binding CanSearchPatient,UpdateSourceTrigger=PropertyChanged}"/>
+                <ContentControl Content="{Binding}">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PatientCanSearch}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CanSearchPatient,ElementName=Root, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource PatientCanSearch}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding CanSearchPatient,ElementName=Root, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource PatientReadOnly}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
                 <Button x:Name="ClearPatient" Command="{Binding ClearPatient}" Content="{StaticResource ClearPatient}" Margin="0,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="處方數" Style="{StaticResource BoldLabelContent18}"/>
                 <Label Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="40" Style="{StaticResource BoldLabelContent18}"/>
