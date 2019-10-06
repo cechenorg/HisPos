@@ -763,6 +763,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void CopyPrescriptionAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
+            var prescription = SelectedHistory.GetPrescriptionRefactoringByID();
+            MainWindow.ServerConnection.CloseConnection();
+            prescription.TreatDate = null;
+            prescription.AdjustDate = null;
+            prescription.TempMedicalNumber = null;
+            prescription.Patient = CurrentPrescription.Patient;
+            prescription.PrescriptionStatus.Init();
+            prescription.Reset();
+            CurrentPrescription = prescription;
+            CurrentPrescription.ID = 0;
             CheckDeclareStatus();
             CountMedicinePointAction();
         }

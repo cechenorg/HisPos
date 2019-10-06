@@ -783,11 +783,11 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientHistoriesControl.xaml.cs">
       <DependentUpon>PatientHistoriesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientInfoControl.xaml.cs">
-      <DependentUpon>PatientInfoControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientReadOnlyControl.xaml.cs">
       <DependentUpon>PatientReadOnlyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PrescriptionPrepareStatusLabel.xaml.cs">
+      <DependentUpon>PrescriptionPrepareStatusLabel.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\AdjustedInstitutionSelectionWindow\AdjustedInstitutionSelectionWindow.xaml.cs">
@@ -1452,11 +1452,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientInfoControl.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientReadOnlyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientReadOnlyControl.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PrescriptionPrepareStatusLabel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

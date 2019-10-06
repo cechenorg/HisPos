@@ -7,6 +7,7 @@
              xmlns:newClass="clr-namespace:His_Pos.NewClass"
              xmlns:service="clr-namespace:His_Pos.Service"
              mc:Ignorable="d" 
+             x:Name="Root"
              d:DesignHeight="250" d:DesignWidth="980">
     <UserControl.Resources>
         <Style x:Key="CusHistoryColumnHeaderStyle" TargetType="DataGridColumnHeader">
@@ -19,14 +20,11 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-        <DataGrid AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding Prescription.Patient.HistoryCollectionView,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
-                  ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" SelectedItem="{Binding SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" Height="250" >
-            <DataGrid.Resources>
-                <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
-            </DataGrid.Resources>
+        <DataGrid AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding Patient.HistoryCollectionView,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
+                  ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" SelectedItem="{Binding SelectedHistory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="250" >
             <DataGrid.ContextMenu>
                 <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                    <MenuItem Header="複製" Click="CopyPrescription"/>
+                    <MenuItem Header="複製" Command="{Binding CopyPrescription}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.RowStyle>
@@ -103,7 +101,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid Height="250" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
-                  ColumnHeaderStyle="{StaticResource CusHistoryColumnHeaderStyle}" DataContext="{Binding SelectedHistory,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalScrollBarVisibility="Auto"
+                  ColumnHeaderStyle="{StaticResource CusHistoryColumnHeaderStyle}" VerticalScrollBarVisibility="Auto" DataContext="{Binding SelectedHistory,UpdateSourceTrigger=PropertyChanged}"
                   CanUserReorderColumns="False">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
@@ -118,7 +116,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="120" MaxWidth="120" Binding="{Binding ID, Mode=OneWay}" Header="代碼" CanUserResize="False">
+                <DataGridTextColumn Width="130" MaxWidth="130" Binding="{Binding ID, Mode=OneWay}" Header="代碼" CanUserResize="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -126,7 +124,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="310" MaxWidth="310" Binding="{Binding FullName, Mode=OneWay}" Header="名稱" CanUserResize="False">
+                <DataGridTextColumn Width="320" MaxWidth="320" Binding="{Binding FullName, Mode=OneWay}" Header="名稱" CanUserResize="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Left" />

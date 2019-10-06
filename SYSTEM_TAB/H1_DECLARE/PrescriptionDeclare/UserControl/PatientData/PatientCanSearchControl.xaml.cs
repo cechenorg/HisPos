@@ -23,32 +23,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
     /// </summary>
     public partial class PatientCanSearchControl : System.Windows.Controls.UserControl
     {
-        #region GetCustomers
-        public static readonly DependencyProperty GetCustomersProperty =
-            DependencyProperty.Register(
-                "GetCustomers",
-                typeof(ICommand),
-                typeof(PatientCanSearchControl),
-                new PropertyMetadata(null));
-        public ICommand GetCustomers
-        {
-            get { return (ICommand)GetValue(GetCustomersProperty); }
-            set { SetValue(GetCustomersProperty, value); }
-        }
-        #endregion
-        #region Patient
-        public static readonly DependencyProperty PatientProperty =
-            DependencyProperty.Register(
-                "Patient",
-                typeof(Customer),
-                typeof(PatientCanSearchControl),
-                new PropertyMetadata(null));
-        public Customer Patient
-        {
-            get { return (Customer)GetValue(PatientProperty); }
-            set { SetValue(PatientProperty, value); }
-        }
-        #endregion
         public PatientCanSearchControl()
         {
             InitializeComponent();

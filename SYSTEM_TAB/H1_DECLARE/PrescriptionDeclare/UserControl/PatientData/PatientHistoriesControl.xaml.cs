@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Service;
@@ -29,57 +30,47 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
     public partial class PatientHistoriesControl : System.Windows.Controls.UserControl, INotifyPropertyChanged
     {
         #region Prescription
-        public static readonly DependencyProperty PrescriptionProperty =
+        public static readonly DependencyProperty PatientProperty =
             DependencyProperty.Register(
-                "Prescription",
-                typeof(Prescription),
+                "Patient",
+                typeof(Customer),
                 typeof(PatientHistoriesControl),
                 new PropertyMetadata(null));
-        public Prescription Prescription
+        public Customer Patient
         {
-            get { return (Prescription)GetValue(PrescriptionProperty); }
+            get { return (Customer)GetValue(PatientProperty); }
             set
             {
-                SetValue(PrescriptionProperty, value);
-                OnPropertyChanged(nameof(Prescription));
+                SetValue(PatientProperty, value);
+                OnPropertyChanged(nameof(Patient));
             }
         }
         #endregion
-        #region CopyComplete
-        public static readonly DependencyProperty CopyCompleteProperty =
+
+        #region SelectedHistory
+        public static readonly DependencyProperty SelectedHistoryProperty =
             DependencyProperty.Register(
-                "CopyComplete",
-                typeof(ICommand),
+                "SelectedHistory",
+                typeof(CustomerHistory),
                 typeof(PatientHistoriesControl),
                 new PropertyMetadata(null));
-        public ICommand CopyComplete
-        {
-            get { return (ICommand)GetValue(CopyCompleteProperty); }
-            set { SetValue(CopyCompleteProperty, value); }
-        }
-        #endregion
-        private CustomerHistory selectedHistory;
         public CustomerHistory SelectedHistory
         {
-            get => selectedHistory;
+            get { return (CustomerHistory)GetValue(SelectedHistoryProperty); }
             set
             {
-                if (value != null)
-                {
-                    MainWindow.ServerConnection.OpenConnection();
-                    value.Products = new CustomerHistoryProducts();
-                    value.Products.GetCustomerHistoryProducts(value.SourceId, value.Type);
-                    MainWindow.ServerConnection.CloseConnection();
-                }
-                selectedHistory = value;
+                SetValue(SelectedHistoryProperty, value);
                 OnPropertyChanged(nameof(SelectedHistory));
             }
         }
+        #endregion
+        
 
         public PatientHistoriesControl()
         {
             InitializeComponent();
         }
+
         private void ShowPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
@@ -95,32 +86,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
             PrescriptionService.ShowPrescriptionEditWindow(SelectedHistory.SourceId);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
         }
+
         private void Refresh(NotificationMessage msg)
         {
             if (!msg.Notification.Equals("PrescriptionEdited")) return;
             MainWindow.ServerConnection.OpenConnection();
-            Prescription.Patient.GetHistories();
+            Patient.GetHistories();
             MainWindow.ServerConnection.CloseConnection();
         }
-
-        private void CopyPrescription(object sender, RoutedEventArgs e)
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            var prescription = SelectedHistory.GetPrescriptionRefactoringByID();
-            MainWindow.ServerConnection.CloseConnection();
-            prescription.TreatDate = null;
-            prescription.AdjustDate = null;
-            prescription.TempMedicalNumber = null;
-            prescription.Patient = Prescription.Patient;
-            prescription.PrescriptionStatus.Init();
-            prescription.Reset();
-            Prescription = prescription;
-            Prescription.ID = 0;
-            CopyComplete.Execute(null);
-        }
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

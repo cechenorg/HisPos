@@ -12,6 +12,7 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              xmlns:patientData="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData"
+             xmlns:userControl="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl"
              mc:Ignorable="d" FontFamily="Segoe UI Semibold" d:DesignHeight="870" d:DesignWidth="1365" >
     <UserControl.Resources>
         <Style  x:Key="MyLabelStyle" TargetType="Label">
@@ -36,8 +37,6 @@
             </Setter>
         </Style>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
-        <service:DateConverter x:Key="DateConverter" />
-        <service:DoubleConverter x:Key="DoubleConverter"/>
         <service:NullableIntConverter x:Key="NullableIntConverter" />
         <service:IntegerStringConverter x:Key="IntegerStringConverter"/>
         <service:SentinelConverter x:Key="SentinelConverter"/>
@@ -48,10 +47,10 @@
         <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
         <Image x:Key="ClearPatient" Source="/Images/ClearButton.png"/>
         <DataTemplate x:Key="PatientCanSearch" DataType="{x:Type patientData:PatientCanSearchControl}">
-            <patientData:PatientCanSearchControl DataContext="{Binding DataContext.CurrentPrescription,RelativeSource={RelativeSource AncestorType=UserControl}}" GetCustomers="{Binding DataContext.GetCustomers, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+            <patientData:PatientCanSearchControl/>
         </DataTemplate>
         <DataTemplate x:Key="PatientReadOnly" DataType="{x:Type patientData:PatientCanSearchControl}">
-            <patientData:PatientReadOnlyControl Patient="{Binding DataContext.CurrentPrescription.Patient, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+            <patientData:PatientReadOnlyControl/>
         </DataTemplate>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
             <Button Content="調劑" Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="135" Height="35" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" FontSize="16" IsEnabled="{Binding DataContext.CanAdjust,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
@@ -94,8 +93,11 @@
         <DataTemplate x:Key="LabelObsolete" DataType="{x:Type local:PrescriptionDeclareView}">
             <Label Content="訂單狀態 : 訂單作廢" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
         </DataTemplate>
+        <DataTemplate x:Key="CustomerHistories" DataType="{x:Type local:PrescriptionDeclareView}">
+            <patientData:PatientHistoriesControl SelectedHistory="{Binding SelectedHistory,UpdateSourceTrigger=PropertyChanged}" Patient="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}"/>
+        </DataTemplate>
         <DataTemplate x:Key="CustomerDetail" DataType="{x:Type local:PrescriptionDeclareView}">
-            
+            <patientData:PatientBasicDataControl Patient="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}"/>
         </DataTemplate>
         <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}"/>
         <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
@@ -125,10 +127,10 @@
                         <Style TargetType="{x:Type ContentControl}">
                             <Setter Property="ContentTemplate" Value="{StaticResource PatientCanSearch}" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding CanSearchPatient,ElementName=Root, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                                <DataTrigger Binding="{Binding CanSearchPatient,UpdateSourceTrigger=PropertyChanged}" Value="true">
                                     <Setter Property="ContentTemplate" Value="{StaticResource PatientCanSearch}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding CanSearchPatient,ElementName=Root, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                <DataTrigger Binding="{Binding CanSearchPatient,UpdateSourceTrigger=PropertyChanged}" Value="false">
                                     <Setter Property="ContentTemplate" Value="{StaticResource PatientReadOnly}" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -582,7 +584,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="430"/>
+                        <ColumnDefinition Width="450"/>
                         <ColumnDefinition Width="550"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.Column="0" Background="{StaticResource GridBackGround}">
@@ -596,9 +598,7 @@
                         <Button Content="設定" BorderBrush="Transparent" Background="DimGray" VerticalAlignment="Center" Margin="10,0,0,0" Command="{Binding EditMedicineSet}" CommandParameter="Edit"/>
                         <Button Content="新增" BorderBrush="Transparent" Background="RoyalBlue" VerticalAlignment="Center" Margin="10,0,10,0" Command="{Binding EditMedicineSet}" CommandParameter="Add"/>
                     </StackPanel>
-                    <!--<patientData:PatientInfoControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Prescription="{Binding DataContext.CurrentPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CheckDeclareStatus="{Binding CheckDeclareStatusCmd}" SelectedPatientDetail="{Binding SelectedPatientDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                                    PatientEdited="{Binding CustomerEdited,UpdateSourceTrigger=PropertyChanged}"/>-->
-                    <!--<ContentControl Content="{Binding}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                    <ContentControl Content="{Binding}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
                         <ContentControl.Style>
                             <Style TargetType="{x:Type ContentControl}">
                                 <Setter Property="ContentTemplate" Value="{StaticResource CustomerHistories}" />
@@ -612,7 +612,7 @@
                                 </Style.Triggers>
                             </Style>
                         </ContentControl.Style>
-                    </ContentControl>-->
+                    </ContentControl>
                 </Grid>
                 <Grid Background="{StaticResource GridBackGround}" Margin="10,0,0,0">
                     <Grid.RowDefinitions>
@@ -666,18 +666,6 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="4">
-                        <!--<ContentControl>
-                                <ContentControl.Style>
-                                    <Style TargetType="{x:Type ContentControl}">
-                                        <Setter Property="ContentTemplate" Value="{StaticResource SendToSingde}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding CurrentPrescription.PrescriptionStatus.IsSendToSingde}" Value="true">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource UpdateSendToSingde}"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ContentControl.Style>
-                            </ContentControl>-->
                         <ContentControl Width="173" Margin="10,0,0,0">
                             <ContentControl.Style>
                                 <Style TargetType="{x:Type ContentControl}">
@@ -710,6 +698,9 @@
                                 </Style>
                             </ContentControl.Style>
                         </ContentControl>
+                        <!--<StackPanel Width="173" Margin="10,0,0,0">
+                            <userControl:PrescriptionPrepareStatusLabel OrderStatus="{Binding CurrentPrescription.PrescriptionStatus.OrderStatus,UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>-->
                         <Button Width="135" Height="35" Background="DimGray" BorderThickness="0" Content="清除" FontSize="16" Command="{Binding Clear}" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Margin="8,0,0,0" Orientation="Horizontal">
