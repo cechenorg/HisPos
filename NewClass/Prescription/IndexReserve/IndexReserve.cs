@@ -83,29 +83,25 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             get => isNoSend;
             set
             {
-                Set(() => IsNoSend, ref isNoSend, value);
-                if (IsNoSend)
+                if (value)
                 {
                     if (PrepareMedStatus == IndexPrepareMedType.Prepare)
                     {
-                        ConfirmWindow confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (已備藥訂單不會取消)", "預約處方通知");
+                        var confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (已備藥訂單不會取消)", "預約處方通知");
                         if ((bool)confirmWindow.DialogResult)
-                        {
                             PrepareMedStatus = IndexPrepareMedType.UnPrepare;
-                            this.SaveStatus();
-                        }
                         else
-                            IsNoSend = false;
+                            value = false;
                     }
                     else
                         PrepareMedStatus = IndexPrepareMedType.UnPrepare;
-                    this.SaveStatus();
                 }
-                else {
+                else
+                {
                     PrepareMedStatus = IndexPrepareMedType.Unprocess;
-                    this.SaveStatus();
                 }
-                   
+                SaveStatus();
+                Set(() => IsNoSend, ref isNoSend, value);
             }
         }
 

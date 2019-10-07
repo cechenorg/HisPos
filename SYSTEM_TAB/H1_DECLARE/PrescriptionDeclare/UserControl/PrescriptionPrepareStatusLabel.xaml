@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl"
+             x:Name="Root"
              mc:Ignorable="d">
     <UserControl.Resources>
         <Style  x:Key="MyLabelStyle" TargetType="Label">
@@ -28,8 +29,6 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid x:Name="Root">
-        <Label Height="35" FontSize="16" FontFamily="Segoe UI Semibold" Style="{StaticResource MyLabelStyle}" BorderThickness="2" Content="{Binding CurrentPrescription.PrescriptionStatus.OrderStatus,UpdateSourceTrigger=PropertyChanged}" BorderBrush="{Binding MyBrush,UpdateSourceTrigger=PropertyChanged,ElementName=Root}"
+    <Label Height="35" FontSize="16" FontFamily="Segoe UI Semibold" Style="{StaticResource MyLabelStyle}" BorderThickness="2" Content="{Binding CurrentPrescription.PrescriptionStatus.OrderStatus,UpdateSourceTrigger=PropertyChanged}" BorderBrush="{Binding MyBrush,UpdateSourceTrigger=PropertyChanged,ElementName=Root}"
                Foreground="{Binding MyBrush,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="{Binding LabelWidth,UpdateSourceTrigger=PropertyChanged,ElementName=Root}"/>
-    </Grid>
 </UserControl>
