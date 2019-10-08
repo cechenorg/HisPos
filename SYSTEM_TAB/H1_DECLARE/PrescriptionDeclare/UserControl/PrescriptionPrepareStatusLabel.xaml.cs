@@ -16,42 +16,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl
         public static readonly DependencyProperty OrderStatusProperty =
             DependencyProperty.Register(
                 "OrderStatus",
-                typeof(String),
+                typeof(string),
                 typeof(PrescriptionPrepareStatusLabel),
                 new PropertyMetadata(null));
-        public String OrderStatus
+        public string OrderStatus
         {
-            get { return (String)GetValue(OrderStatusProperty); }
+            get { return (string)GetValue(OrderStatusProperty); }
             set
             {
-                switch (value)
-                {
-                    case "備藥狀態 : 未處理":
-                    case "訂單狀態 : 無訂單":
-                        MyBrush = new SolidColorBrush(Colors.Red);
-                        LabelWidth = 173;
-                        break;
-                    case "備藥狀態 : 已備藥":
-                    case "訂單狀態 : 已收貨":
-                        MyBrush = new SolidColorBrush(Colors.Green);
-                        LabelWidth = 173;
-                        break;  
-                    case "備藥狀態 : 不備藥":
-                    case "訂單狀態 : 訂單作廢":
-                        MyBrush = new SolidColorBrush(Colors.DimGray);
-                        LabelWidth = 173;
-                        break; 
-                    case "訂單狀態 : 等待確認":
-                        MyBrush = new SolidColorBrush(Colors.OrangeRed);
-                        LabelWidth = 173;
-                        break; 
-                    case "訂單狀態 : 等待收貨":
-                        MyBrush = new SolidColorBrush(Colors.RoyalBlue);
-                        LabelWidth = 173;
-                        break; 
-                }
                 SetValue(OrderStatusProperty, value);
-                OnPropertyChanged(nameof(OrderStatus));
             }
         }
         #endregion
@@ -82,7 +55,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl
         public PrescriptionPrepareStatusLabel()
         {
             InitializeComponent();
-            Root.DataContext = this;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
