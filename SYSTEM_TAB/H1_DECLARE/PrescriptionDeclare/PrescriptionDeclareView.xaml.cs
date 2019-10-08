@@ -118,13 +118,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+
+        private void MainDiagnosis_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left)
+            {
+                AdjustDateTextBox.Focus();
+            }
+        }
+
+        private void SecondDiagnosis_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left)
+            {
+                MainDiagnosis.Focus();
+            }
+        }
+
         private void ChronicTotal_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 ChronicSequence.Focus();
                 ChronicSequence.SelectionStart = 0;
-
+            }
+            else if (e.Key == Key.Left)
+            {
+                SecondDiagnosis.Focus();
             }
         }
 
@@ -134,6 +154,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 AdjustCombo.Focus();
             }
+            else if (e.Key == Key.Left)
+            {
+                ChronicTotal.Focus();
+            }
         }
 
         private void AdjustCombo_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -142,12 +166,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 PrescriptionCaseCombo.Focus();
             }
+            else if (e.Key == Key.Left)
+            {
+                ChronicSequence.Focus();
+            }
         }
         private void PrescriptionCaseCombo_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 CopaymentCombo.Focus();
+            }
+            else if (e.Key == Key.Left)
+            {
+                AdjustCombo.Focus();
             }
         }
 
@@ -157,6 +189,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 PaymentCategoryCombo.Focus();
             }
+            else if (e.Key == Key.Left)
+            {
+                PrescriptionCaseCombo.Focus();
+            }
         }
 
         private void PaymentCategoryCombo_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -164,6 +200,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (e.Key == Key.Enter)
             {
                 SpecialTreatCombo.Focus();
+            }
+            else if (e.Key == Key.Left)
+            {
+                CopaymentCombo.Focus();
             }
         }
 
@@ -177,6 +217,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 dataGridTextBox[0].Focus();
                 dataGridTextBox[0].SelectionStart = 0;
                 PrescriptionMedicines.SelectedItem = PrescriptionMedicines.Items[0];
+            }
+            else if (e.Key == Key.Left)
+            {
+                PaymentCategoryCombo.Focus();
             }
         }
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -526,5 +570,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!(sender is TextBox textBox)) return;
             textBox.SelectAll();
         }
+
     }
 }

@@ -181,7 +181,7 @@
                     <Label Content="主要診斷" Style="{StaticResource BoldLabelContent18}"/>
                     <TextBox x:Name="MainDiagnosis" Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Black" InputScope="AlphanumericHalfWidth"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding CurrentPrescription.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+                             Text="{Binding CurrentPrescription.MainDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="MainDiagnosis_OnPreviewKeyDown">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
                                 <KeyBinding.CommandParameter>
@@ -210,7 +210,7 @@
                     <Label Content="次要診斷" Style="{StaticResource BoldLabelContent18}"/>
                     <TextBox x:Name="SecondDiagnosis" Width="170" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Black" InputScope="AlphanumericHalfWidth"
                              InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             Text="{Binding CurrentPrescription.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding CurrentPrescription.SubDisease.FullName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="SecondDiagnosis_OnPreviewKeyDown">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding GetDiseaseCode}" Key="Enter" >
                                 <KeyBinding.CommandParameter>
