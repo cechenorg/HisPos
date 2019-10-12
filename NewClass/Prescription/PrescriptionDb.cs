@@ -440,7 +440,7 @@ namespace His_Pos.NewClass.Prescription
         {
             //第四行
             var i = 1;
-            foreach (var declareMedicine in p.Medicines)
+            foreach (var declareMedicine in p.Medicines.Where(m => !m.AdjustNoBuckle))
             {
                 if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                 {

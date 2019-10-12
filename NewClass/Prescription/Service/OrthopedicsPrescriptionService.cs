@@ -116,7 +116,7 @@ namespace His_Pos.NewClass.Prescription.Service
             {
                 var e = new CooperativeRemarkInsertWindow();
                 Current.Remark = ((CooperativeRemarkInsertViesModel)e.DataContext).Remark;
-                if (string.IsNullOrEmpty(Current.Remark) || Current.Remark.Length != 16)
+                if (string.IsNullOrEmpty(Current.Remark) || Current.Remark.Trim().Length != 16)
                     return false;
                 CheckIsCooperativeVIP();
                 return true;
