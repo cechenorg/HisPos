@@ -249,6 +249,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region Commands
         public RelayCommand ScanPrescriptionQRCode { get; set; }
         public RelayCommand<TextBox> GetCustomers { get; set; }
+        public RelayCommand<TextBox> GetCustomersEditedToday { get; set; }
         public RelayCommand ClearPatient { get; set; }
         public RelayCommand CustomerDataEdited { get; set; }
         public RelayCommand ShowCustomerEditWindow { get; set; }
@@ -352,6 +353,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
             AddCustomer = new RelayCommand(AddCustomerAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
+            GetCustomersEditedToday = new RelayCommand<TextBox>(GetCustomersEditedTodayAction);
             ClearPatient = new RelayCommand(ClearPatientAction);
             CustomerDataEdited = new RelayCommand(CustomerDataEditedAction);
             ShowCustomerEditWindow = new RelayCommand(ShowCustomerEditWindowAction);
@@ -445,6 +447,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 ShowCustomerSearchEditedToday(condition.Name);
             else
                 ShowCustomerSearch(condition.Name);
+        }
+
+        //顧客查詢
+        private void GetCustomersEditedTodayAction(TextBox condition)
+        {
+            Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
+            ShowCustomerSearchEditedToday(condition.Name);
         }
 
         private void ClearPatientAction()

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
@@ -19,6 +20,12 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             DataContext = new AddProductViewModel(search, addView, wareHouseID);
             SearchStringTextBox.Focus();
             this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;  // cancels the window close    
+            this.Hide();      // Programmatically hides the window
         }
     }
 }
