@@ -46,6 +46,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using Application = System.Windows.Application;
+using Label = System.Windows.Controls.Label;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
@@ -249,7 +250,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region Commands
         public RelayCommand ScanPrescriptionQRCode { get; set; }
         public RelayCommand<TextBox> GetCustomers { get; set; }
-        public RelayCommand<TextBox> GetCustomersEditedToday { get; set; }
+        public RelayCommand<Label> GetCustomersEditedToday { get; set; }
         public RelayCommand ClearPatient { get; set; }
         public RelayCommand CustomerDataEdited { get; set; }
         public RelayCommand ShowCustomerEditWindow { get; set; }
@@ -353,7 +354,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
             AddCustomer = new RelayCommand(AddCustomerAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
-            GetCustomersEditedToday = new RelayCommand<TextBox>(GetCustomersEditedTodayAction);
+            GetCustomersEditedToday = new RelayCommand<Label>(GetCustomersEditedTodayAction);
             ClearPatient = new RelayCommand(ClearPatientAction);
             CustomerDataEdited = new RelayCommand(CustomerDataEditedAction);
             ShowCustomerEditWindow = new RelayCommand(ShowCustomerEditWindowAction);
@@ -449,8 +450,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 ShowCustomerSearch(condition.Name);
         }
 
-        //顧客查詢
-        private void GetCustomersEditedTodayAction(TextBox condition)
+        private void GetCustomersEditedTodayAction(Label condition)
         {
             Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
             ShowCustomerSearchEditedToday(condition.Name);

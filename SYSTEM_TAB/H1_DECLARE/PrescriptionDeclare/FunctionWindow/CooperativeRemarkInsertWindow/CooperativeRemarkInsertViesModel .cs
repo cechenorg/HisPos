@@ -7,14 +7,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
     public class CooperativeRemarkInsertViesModel :ViewModelBase{
         private string remark;
         public string Remark {
-            get { return remark; }
+            get => remark;
             set { Set(() => Remark, ref remark, value);  }
         }
         public RelayCommand SubmitCommand { get; set; }
         public CooperativeRemarkInsertViesModel() {
             SubmitCommand = new RelayCommand(SubmitAction);
         }
-        public void SubmitAction() {
+
+        private void SubmitAction() {
             if (Remark.Trim().Length != 16)
                 MessageWindow.ShowMessage("單號須為16碼 請重新確認 ^皿^", Class.MessageType.ERROR);
             else {
