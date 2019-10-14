@@ -493,6 +493,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             e.Handled = true;
             if (t != null) t.CaretIndex++;
         }
+
         private void ShowPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
