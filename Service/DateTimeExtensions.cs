@@ -148,6 +148,7 @@ namespace His_Pos.Service
             var dateSplit = date.Split('/');
             return dateSplit[0] + "年" + dateSplit[1] + "月" + dateSplit[2] + "日";
         }
+
         public static bool ValidateDateTime(string datetime, string format)
         {
             if (string.IsNullOrEmpty(datetime)) return false;
@@ -200,6 +201,11 @@ namespace His_Pos.Service
             var month = int.Parse(dateStr.Substring(dateLength-4,2));
             var year = int.Parse(dateStr.Substring(0, dateLength - 4));
             return year.ToString().PadLeft(3, '0') + "/" + month.ToString().PadLeft(2,'0') + "/" + day.ToString().PadLeft(2,'0');
+        }
+
+        public static string ConvertToTaiwanCalendarChineseFormat(DateTime? d, bool needSplit)
+        {
+            return ConvertDateStringSplitToChinese(NullableDateToTWCalender(d, needSplit));
         }
     }
 }

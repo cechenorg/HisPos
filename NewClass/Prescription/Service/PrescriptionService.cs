@@ -311,11 +311,19 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p,string orderNumber)
         {
-            var treatmentDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
-            var year = treatmentDate.Split('/')[0];
-            var month = treatmentDate.Split('/')[1];
-            var day = treatmentDate.Split('/')[2];
-            var treatmentDateChi = $"{year}年{month}月{day}日";
+            var adjustDate = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(p.AdjustDate, true);
+            var adjustDateNext = string.Empty;
+            var treatReturn = string.Empty;
+            if (p.CheckChronicSeqValid() && p.CheckChronicTotalValid())
+            {
+                if (p.ChronicTotal != p.ChronicSeq)
+                {
+                    var nextAdjust = ((DateTime)p.AdjustDate).AddDays(p.MedicineDays);
+                    adjustDateNext = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(nextAdjust, true);
+                }
+                DateTime? treatReturnDate = ((DateTime)p.TreatDate).AddDays((p.MedicineDays * (int)p.ChronicTotal));
+                treatReturn = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(treatReturnDate, true);
+            }
             var cusGender = p.Patient.CheckGender();
             string patientTel;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
@@ -336,7 +344,9 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("MedicalPerson",VM.CurrentPharmacy.GetPharmacist().Name),
                         new ReportParameter("PatientName", p.Patient.Name),
                         new ReportParameter("PatientGender_Birthday",$"{cusGender}/{DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)}"),
-                        new ReportParameter("TreatmentDate", treatmentDateChi),
+                        new ReportParameter("AdjustDate", adjustDate),
+                        new ReportParameter("AdjustDateNext", adjustDateNext),
+                        new ReportParameter("TreatmentDateReturn", treatReturn),
                         new ReportParameter("RecId", " "), //病歷號
                         new ReportParameter("Division",p.Division is null ?string.Empty:p.Division.Name),
                         new ReportParameter("Hospital", p.Institution.Name),

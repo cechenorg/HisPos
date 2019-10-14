@@ -1556,6 +1556,11 @@ namespace His_Pos.NewClass.Prescription
             return ChronicSeq != null && ChronicSeq > 0;
         }
 
+        public bool CheckChronicTotalValid()
+        {
+            return ChronicTotal != null && ChronicTotal > 0;
+        }
+
         public string GetWareHouseID()
         {
             return WareHouse.ID;
