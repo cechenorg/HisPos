@@ -260,6 +260,35 @@ namespace His_Pos.NewClass.StoreOrder
             }
             return storeOrderDetailTable;
         }
+
+        public static DataTable SetPrescriptionNotEnoughOrderDetail(IndexReserve indexReserves)
+        {
+            DataTable storeOrderDetailTable = StoreOrderDetailTable();
+            int detailId = 1;
+            foreach (var pro in indexReserves.IndexReserveDetailCollection)
+            {
+                if (pro.SendAmount == 0) continue;
+                DataRow newRow = storeOrderDetailTable.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", pro.StoOrdID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.SendAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "顆");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
+                storeOrderDetailTable.Rows.Add(newRow);
+                detailId++;
+            }
+            return storeOrderDetailTable;
+        }
+
         private static DataTable SetReturnInventoryDetail(ReturnProducts returnProducts)
         {
             DataTable inventoryDetailTable = InventoryDetailTable();

@@ -19,8 +19,8 @@
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type customerSearchWindow:CustomerSearchViewModel}">
             <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="720" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCollectionView}"
-                      AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" EnableRowVirtualization="True" 
-                      SelectedItem="{Binding SelectedCustomer,Mode=TwoWay}">
+                      AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" EnableRowVirtualization="True" CanUserAddRows="False" CanUserDeleteRows="False"
+                      SelectedItem="{Binding SelectedCustomer,Mode=TwoWay}" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding CustomerSelected}"/>

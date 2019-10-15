@@ -669,17 +669,25 @@ namespace His_Pos.NewClass.Medicine.Base
             foreach (var inv in inventoryList)
             {
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
-                if(buckle.BuckleAmount == 0) continue;
+                if (buckle.BuckleAmount == 0) continue;
                 if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
-                negativeStock = this.Where(med => !(med is MedicineVirtual))
-                    .Where(med => med.InventoryID.Equals(inv.ID))
-                    .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
+                var negativeIDList = this.Where(med => !(med is MedicineVirtual)).Where(med => med.InventoryID.Equals(inv.ID)).Select(m => m.ID).ToList();
+                negativeStock = string.Join(",",negativeIDList);
             }
-            if (!string.IsNullOrEmpty(negativeStock))
-            {
-                negativeStock += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
-                MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
-            }
+            //foreach (var inv in inventoryList)
+            //{
+            //    var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
+            //    if(buckle.BuckleAmount == 0) continue;
+            //    if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
+            //    negativeStock = this.Where(med => !(med is MedicineVirtual))
+            //        .Where(med => med.InventoryID.Equals(inv.ID))
+            //        .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
+            //}
+            //if (!string.IsNullOrEmpty(negativeStock))
+            //{
+            //    negativeStock += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
+            //    MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
+            //}
             return negativeStock;
         }
 

@@ -157,7 +157,7 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             if (Current.Patient.CheckData())
             {
-                if (Current.Patient.ID != 0) return true;
+                if (Current.Patient.ID > 0) return true;
                 var insertResult = Current.Patient.InsertData();
                 return insertResult;
             }
@@ -190,7 +190,7 @@ namespace His_Pos.NewClass.Prescription.Service
             //if (notCheckPast10Days)
             //    return CheckTreatDate() && CheckAdjustDate();
             //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
-            return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast() /*&& CheckAdjustDateFutureOutOfRange()*/;
+            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate() && CheckAdjustDatePast() /*&& CheckAdjustDateFutureOutOfRange()*/;
         }
 
         protected bool CheckAdjustAndTreatDateFromEdit()
@@ -207,7 +207,13 @@ namespace His_Pos.NewClass.Prescription.Service
                 case null:
                     MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
                     return false;
+                default:
+                    return true;
             }
+        }
+
+        private bool CheckTreatDateValid()
+        {
             if (DateTime.Compare((DateTime)Current.TreatDate, DateTime.Today) >= 0) return true;
             var ts1 = new TimeSpan(DateTime.Today.Ticks);
             var ts2 = new TimeSpan(((DateTime)Current.TreatDate).Ticks);
