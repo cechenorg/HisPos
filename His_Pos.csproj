@@ -306,7 +306,6 @@
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdits.cs" />
-    <Compile Include="NewClass\Medicine\InventoryMedicineStruct\BuckleMedicineStruct.cs" />
     <Compile Include="NewClass\Medicine\Base\Medicine.cs" />
     <Compile Include="NewClass\Medicine\InventoryMedicineStruct\MedicineInventoryStruct.cs" />
     <Compile Include="NewClass\Medicine\Base\MedicineNHI.cs" />
@@ -318,6 +317,8 @@
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePointDb.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoints.cs" />
     <Compile Include="NewClass\Medicine\InventoryMedicineStruct\MedicineInventoryStructs.cs" />
+    <Compile Include="NewClass\Medicine\InventoryMedicineStruct\NotEnoughMedicineStruct.cs" />
+    <Compile Include="NewClass\Medicine\InventoryMedicineStruct\NotEnoughMedicineStructs.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicine.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicines.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerGroupTag.cs" />
@@ -704,6 +705,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomerSearchWindow\CustomerSearchViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomerSearchWindow\CustomerSearchWindow.xaml.cs">
       <DependentUpon>CustomerSearchWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\NotEnoughMedicinePurchaseWindow\NotEnoughMedicinePurchaseViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\NotEnoughMedicinePurchaseWindow\NotEnoughMedicinePurchaseWindow.xaml.cs">
+      <DependentUpon>NotEnoughMedicinePurchaseWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\QRCodeReceiveWindow.xaml.cs">
       <DependentUpon>QRCodeReceiveWindow.xaml</DependentUpon>
@@ -1405,6 +1410,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CustomerSearchWindow\CustomerSearchWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\NotEnoughMedicinePurchaseWindow\NotEnoughMedicinePurchaseWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

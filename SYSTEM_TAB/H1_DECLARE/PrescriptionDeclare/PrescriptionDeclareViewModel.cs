@@ -1467,7 +1467,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckMedicinesNegativeStock()
         {
-            string result = string.Empty;
+            var result = string.Empty;
             result = CurrentPrescription.CheckMedicinesNegativeStock();
             if (!string.IsNullOrEmpty(result))
                 isAdjusting = false;

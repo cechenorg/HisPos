@@ -12,6 +12,7 @@ using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Properties;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEnoughMedicinePurchaseWindow;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
 // ReSharper disable TooManyDeclarations
@@ -632,7 +633,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList)
+        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList,string note = null)
         {
             var inventoryIDList = new List<int>();
             foreach (var med in this)
@@ -646,7 +647,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 (from inv in inventoryIDList 
                     let editMed = this.Where(m => m.InventoryID.Equals(inv))
                     let buckleAmount = editMed.Sum(m => m.BuckleAmount) 
-                    select new BuckleMedicineStruct(inv, buckleAmount)).ToList();
+                    select new MedicineInventoryStruct(inv, buckleAmount)).ToList();
 
             var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.InventoryID).ToList();
             MainWindow.ServerConnection.OpenConnection();
@@ -666,22 +667,36 @@ namespace His_Pos.NewClass.Medicine.Base
                 }
             }
             var negativeStock = string.Empty;
+            var notEnoughMedicines = new NotEnoughMedicineStructs();
             foreach (var inv in inventoryList)
             {
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
-                if (buckle.BuckleAmount == 0) continue;
-                if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
-                var negativeIDList = this.Where(med => !(med is MedicineVirtual)).Where(med => med.InventoryID.Equals(inv.ID)).Select(m => m.ID).ToList();
-                negativeStock = string.Join(",",negativeIDList);
+                if (buckle.Amount == 0) continue;
+                if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).Amount >= 0) continue;
+                foreach (var m in this)
+                {
+                    if (m.InventoryID.Equals(inv.ID) && !(m is MedicineVirtual))
+                    {
+                        var controlLevel = m is MedicineNHI nhiMed ? nhiMed.ControlLevel : null;
+                        notEnoughMedicines.Add(new NotEnoughMedicineStruct(m.ID,m.FullName,m.Amount-m.UsableAmount,m.IsCommon,m.Frozen,controlLevel));
+                    }
+                }
+                negativeStock = this.Where(med => !(med is MedicineVirtual))
+                    .Where(med => med.InventoryID.Equals(inv.ID))
+                    .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
+            }
+            if (notEnoughMedicines.Count > 0)
+            {
+                var purchaseWindow = new NotEnoughMedicinePurchaseWindow(warID,note,notEnoughMedicines);
             }
             //foreach (var inv in inventoryList)
             //{
             //    var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
             //    if(buckle.BuckleAmount == 0) continue;
             //    if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
-            //    negativeStock = this.Where(med => !(med is MedicineVirtual))
-            //        .Where(med => med.InventoryID.Equals(inv.ID))
-            //        .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
+            //negativeStock = this.Where(med => !(med is MedicineVirtual))
+            //    .Where(med => med.InventoryID.Equals(inv.ID))
+            //    .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
             //}
             //if (!string.IsNullOrEmpty(negativeStock))
             //{

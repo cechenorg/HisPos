@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
+using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PrescriptionSendData;
@@ -261,18 +262,17 @@ namespace His_Pos.NewClass.StoreOrder
             return storeOrderDetailTable;
         }
 
-        public static DataTable SetPrescriptionNotEnoughOrderDetail(IndexReserve indexReserves)
+        public static DataTable SetPrescriptionNotEnoughOrderDetail(NotEnoughMedicineStructs purchaseList)
         {
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
             int detailId = 1;
-            foreach (var pro in indexReserves.IndexReserveDetailCollection)
+            foreach (var pro in purchaseList)
             {
-                if (pro.SendAmount == 0) continue;
                 DataRow newRow = storeOrderDetailTable.NewRow();
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", pro.StoOrdID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", purchaseList.StoreOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.SendAmount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.Amount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "顆");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
@@ -796,6 +796,14 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetPrescriptionOrderDetail(prescriptionSendDatas));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
         }
-         
+        
+        public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicineStructs purchaseList,string note)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionNotEnoughOrderDetail(purchaseList));
+            DataBaseFunction.AddSqlParameter(parameterList, "EMP_ID", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "NOTE", note);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
+        }
     }
 }

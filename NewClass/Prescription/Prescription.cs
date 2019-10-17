@@ -1614,7 +1614,7 @@ namespace His_Pos.NewClass.Prescription
             var usableAmountList = CheckUsableMedicinesByType();
             MainWindow.ServerConnection.CloseConnection();
             Medicines.CheckUsableAmount(usableAmountList);
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList);
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList, $"{Patient.Name} {DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(AdjustDate,true)} 欠藥採購");
         }
 
         public void CountSelfPay()

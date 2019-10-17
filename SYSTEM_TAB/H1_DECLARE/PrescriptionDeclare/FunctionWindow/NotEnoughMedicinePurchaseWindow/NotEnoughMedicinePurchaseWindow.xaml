@@ -1,0 +1,92 @@
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEnoughMedicinePurchaseWindow.NotEnoughMedicinePurchaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEnoughMedicinePurchaseWindow"
+        xmlns:newClass="clr-namespace:His_Pos.NewClass"
+        xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+        xmlns:service="clr-namespace:His_Pos.Service"
+        mc:Ignorable="d" FontFamily="Segoe UI Semibold"
+        Title="缺藥採購確認" Height="450" Width="800">
+    <Window.Resources>
+        <service:NullableIntConverter x:Key="NullableIntConverter" />
+        <service:SentinelConverter x:Key="SentinelConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="55"/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="0" x:Name="PurchaseMedicinesGrid" Margin="10" ItemsSource="{Binding PurchaseList, UpdateSourceTrigger=PropertyChanged}"
+                  HorizontalGridLinesBrush="Transparent" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" 
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
+                  FrozenColumnCount="3" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" >
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="OverridesDefaultStyle" Value="False" />
+                    <Setter Property="Width" Value="100" />
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15" />
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="17" />
+                    <Setter Property="Height" Value="40" />
+                    <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn x:Name="MedicineId" Width="150" Header="代碼" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Name="MedicineID"  Width="150" Height="35" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Center" CaretBrush="Black" KeyDown="MedicineID_OnKeyDown"
+                                         Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontSize="17" InputScope="AlphanumericHalfWidth" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="400" MaxWidth="400" Header="名稱" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" ControlLevel="{Binding ControlLevel}" IsFrozen="{Binding Frozen}"/>
+                                <Label Content="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="-5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn MinWidth="60" Header="採購量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Amount,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="取消" Background="DimGray" BorderThickness="0" FontSize="18" Command="{Binding Cancel}"/>
+            <Button Content="確認採購" Background="IndianRed" BorderThickness="0" Margin="10,0,10,0" FontSize="18" Command="{Binding CreateStoreOrder}"/>
+        </StackPanel>
+    </Grid>
+</Window>
