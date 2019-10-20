@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
+using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
@@ -15,8 +16,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
     public class NotEnoughMedicinePurchaseViewModel : ViewModelBase
     {
         #region Variables
-        private NotEnoughMedicineStructs purchaseList;
-        public NotEnoughMedicineStructs PurchaseList
+        private NotEnoughMedicines purchaseList;
+        public NotEnoughMedicines PurchaseList
         {
             get => purchaseList;
             private set
@@ -34,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         public RelayCommand Cancel { get; set; }
         #endregion
 
-        public NotEnoughMedicinePurchaseViewModel(string wareID,string note,NotEnoughMedicineStructs purchaseList)
+        public NotEnoughMedicinePurchaseViewModel(string wareID,string note,NotEnoughMedicines purchaseList)
         {
             wareHouseID = wareID;
             PurchaseList = purchaseList;
@@ -52,7 +53,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
 
         private void CreateStoreOrderAction()
         {
-            StoreOrderDB.InsertNotEnoughPurchaseOrder(purchaseList,Note);
+            MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
+            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(purchaseList,Note);
+            if (result.Rows.Count > 0)
+            {
+                purchaseList.ToWaitingStatus(Note);
+            }
+            MainWindow.ServerConnection.CloseConnection();
+            MainWindow.SingdeConnection.CloseConnection();
+            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindow"));
         }
 
         private void CancelAction()

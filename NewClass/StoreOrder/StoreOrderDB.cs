@@ -6,6 +6,7 @@ using System.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
+using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PrescriptionSendData;
@@ -262,7 +263,7 @@ namespace His_Pos.NewClass.StoreOrder
             return storeOrderDetailTable;
         }
 
-        public static DataTable SetPrescriptionNotEnoughOrderDetail(NotEnoughMedicineStructs purchaseList)
+        public static DataTable SetPrescriptionNotEnoughOrderDetail(NotEnoughMedicines purchaseList)
         {
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
             int detailId = 1;
@@ -736,6 +737,30 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
         }
 
+        internal static DataTable SendStoreOrderToSingde(NotEnoughMedicines purchaseList,string note)
+        {
+            string orderMedicines = "";
+            string cusName = "";
+            string planDate = "";
+
+            foreach (var product in purchaseList)
+            {
+                if (product.ID.Length > 12)
+                    orderMedicines += product.ID.Substring(0, 12);
+                else
+                    orderMedicines += product.ID.PadRight(12, ' ');
+
+                orderMedicines += product.Amount.ToString().PadLeft(10, ' ');
+
+                if (product.ID.Length > 12)
+                    orderMedicines += product.ID.Substring(13);
+
+                orderMedicines += "\r\n";
+            }
+
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{purchaseList.StoreOrderID}','','','{note}', '{orderMedicines}')");
+        }
+
         internal static DataTable GetNewSingdeOrders()
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
@@ -797,7 +822,7 @@ namespace His_Pos.NewClass.StoreOrder
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
         }
         
-        public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicineStructs purchaseList,string note)
+        public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicines purchaseList,string note)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionNotEnoughOrderDetail(purchaseList));

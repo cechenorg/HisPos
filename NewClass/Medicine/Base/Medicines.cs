@@ -10,6 +10,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
+using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Properties;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEnoughMedicinePurchaseWindow;
@@ -667,7 +668,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 }
             }
             var negativeStock = string.Empty;
-            var notEnoughMedicines = new NotEnoughMedicineStructs();
+            var notEnoughMedicines = new NotEnoughMedicines();
             foreach (var inv in inventoryList)
             {
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
@@ -675,11 +676,9 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).Amount >= 0) continue;
                 foreach (var m in this)
                 {
-                    if (m.InventoryID.Equals(inv.ID) && !(m is MedicineVirtual))
-                    {
-                        var controlLevel = m is MedicineNHI nhiMed ? nhiMed.ControlLevel : null;
-                        notEnoughMedicines.Add(new NotEnoughMedicineStruct(m.ID,m.FullName,m.Amount-m.UsableAmount,m.IsCommon,m.Frozen,controlLevel));
-                    }
+                    if (!m.InventoryID.Equals(inv.ID) || m is MedicineVirtual) continue;
+                    var controlLevel = m is MedicineNHI nhiMed ? nhiMed.ControlLevel : null;
+                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID,m.FullName,m.Amount-m.UsableAmount,m.IsCommon,m.Frozen,controlLevel,m.AveragePrice));
                 }
                 negativeStock = this.Where(med => !(med is MedicineVirtual))
                     .Where(med => med.InventoryID.Equals(inv.ID))
@@ -689,20 +688,9 @@ namespace His_Pos.NewClass.Medicine.Base
             {
                 var purchaseWindow = new NotEnoughMedicinePurchaseWindow(warID,note,notEnoughMedicines);
             }
-            //foreach (var inv in inventoryList)
-            //{
-            //    var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
-            //    if(buckle.BuckleAmount == 0) continue;
-            //    if (inv.Amount - buckleMedicines.Single(m => m.ID.Equals(inv.ID)).BuckleAmount >= 0) continue;
-            //negativeStock = this.Where(med => !(med is MedicineVirtual))
-            //    .Where(med => med.InventoryID.Equals(inv.ID))
-            //    .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
-            //}
-            //if (!string.IsNullOrEmpty(negativeStock))
-            //{
-            //    negativeStock += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
-            //    MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
-            //}
+            if (string.IsNullOrEmpty(negativeStock)) return negativeStock;
+            negativeStock += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
+            MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
             return negativeStock;
         }
 

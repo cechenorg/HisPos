@@ -317,8 +317,8 @@
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePointDb.cs" />
     <Compile Include="NewClass\AccountReport\InstitutionDeclarePoint\InstitutionDeclarePoints.cs" />
     <Compile Include="NewClass\Medicine\InventoryMedicineStruct\MedicineInventoryStructs.cs" />
-    <Compile Include="NewClass\Medicine\InventoryMedicineStruct\NotEnoughMedicineStruct.cs" />
-    <Compile Include="NewClass\Medicine\InventoryMedicineStruct\NotEnoughMedicineStructs.cs" />
+    <Compile Include="NewClass\Medicine\NotEnoughMedicine\NotEnoughMedicine.cs" />
+    <Compile Include="NewClass\Medicine\NotEnoughMedicine\NotEnoughMedicines.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicine.cs" />
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicines.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerGroupTag.cs" />
