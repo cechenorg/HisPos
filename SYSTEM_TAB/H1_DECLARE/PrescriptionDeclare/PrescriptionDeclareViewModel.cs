@@ -847,6 +847,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ErrorAdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
@@ -858,6 +859,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void DepositAdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -867,6 +869,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void AdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -879,6 +882,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
                 CheckIsReadCard();
+        }
+
+        private void CheckCustomerValid()
+        {
+            if (CanSearchPatient)
+                CheckNewCustomer();
         }
 
         private void CheckChronicCopayment()
@@ -902,6 +911,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
@@ -915,6 +925,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrescribeAdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -1444,11 +1455,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckInsertCustomerData()
         {
-            if (!CurrentPrescription.Patient.CheckData())
-                return false;
-            var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認");
-            if (!(bool) insertCustomerConfirm.DialogResult) return false;
-            return CurrentPrescription.Patient.InsertData();
+            return CurrentPrescription.Patient.CheckData() && CurrentPrescription.Patient.InsertData();
         }
 
         private bool CheckFocusDivision(string insID)

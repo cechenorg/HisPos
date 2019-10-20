@@ -313,13 +313,14 @@
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
                     <Label Content="自費" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="30"/>
-                    <TextBox Text="{Binding DataContext.EditedPrescription.PrescriptionPoint.AmountSelfPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Width="70" Height="35" HorizontalContentAlignment="Right" FontSize="16" CaretBrush="Black" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center">
+                    <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.AmountSelfPay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Width="70" Height="35" HorizontalContentAlignment="Right" FontSize="16" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center"/>
+                        <!--<TextBox Text="{Binding DataContext.EditedPrescription.PrescriptionPoint.AmountSelfPay,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Width="70" Height="35" HorizontalContentAlignment="Right" FontSize="16" CaretBrush="Black" Foreground="{StaticResource ForeGround}"  VerticalAlignment="Center">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <command:EventToCommand Command="{Binding DataChanged}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                    </TextBox>
+                    </TextBox>-->
                     <Label Content="押金" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
                     <Label Content="{Binding DataContext.EditedPrescription.PrescriptionPoint.Deposit,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" Width="40" Height="35" HorizontalContentAlignment="Right"/>
                     <Label Content="實收" Style="{StaticResource BoldLabelContent17}" Margin="10,0,0,0" Height="35"/>
