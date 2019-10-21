@@ -12,8 +12,9 @@ namespace His_Pos.NewClass.Person.Customer
         {
 
         }
-        public void GetDataByCondition(Customer customer) { 
-            DataTable table = CustomerDb.GetDataByCondition(customer);
+
+        public void SearchCustomers(string idNumber, string name, string cellPhone, string tel, DateTime? birth) { 
+            var table = CustomerDb.SearchCustomers(idNumber, name, cellPhone, tel, birth);
             foreach (DataRow r in table.Rows) {
                 Add(new Customer(r));
             }
@@ -27,14 +28,15 @@ namespace His_Pos.NewClass.Person.Customer
                 Add(new Customer(r));
             }
         }
-        public void GetDataByNameOrBirth(string name,DateTime? date) {
+        public void GetDataByNameOrBirth(string name,DateTime? date,string idNumber) {
             Clear();
-            var table = CustomerDb.GetDataByNameOrBirth(name, date);
+            var table = CustomerDb.GetDataByNameOrBirth(name, date, idNumber);
             foreach (DataRow r in table.Rows)
             {
-                Add(new Customer(r));
-            }
-            
+                Customer customer = new Customer(r);
+                customer.IsEnable = r.Field<bool>("Cus_IsEnable");
+                Add(customer); 
+            } 
         }
         public Customers SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> ddatas) {
             DataTable table = CustomerDb.SetCustomersByPrescriptions(ddatas);
@@ -43,6 +45,14 @@ namespace His_Pos.NewClass.Person.Customer
                 customers.Add(new Customer(r));
             }
             return customers;
+        }
+
+        public void GetTodayEdited()
+        {
+            var table = CustomerDb.GetTodayEdited();
+            foreach (DataRow r in table.Rows) {
+                Add(new Customer(r));
+            }
         }
     }
 }

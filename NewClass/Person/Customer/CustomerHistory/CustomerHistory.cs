@@ -62,9 +62,9 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
         public bool Status { get; }//已調劑處方:是否未過卡
         public CustomerHistoryProducts Products { get; set; }
 
-        public Prescription.Prescription GetPrescriptionByID()
+        public Prescription.Prescription GetPrescriptionRefactoringByID()
         {
-            return new Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(SourceId).Rows[0], PrescriptionSource.Normal);
+            return new Prescription.Prescription(PrescriptionDb.GetPrescriptionByID(SourceId).Rows[0], PrescriptionType.Normal);
         }
     }
 }

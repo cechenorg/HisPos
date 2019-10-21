@@ -1,24 +1,41 @@
-﻿using GalaSoft.MvvmLight;
-using System.Data;
+﻿using System.Data;
+using GalaSoft.MvvmLight;
 
-namespace His_Pos.NewClass.Prescription {
-    public class PrescriptionStatus : ObservableObject {
-        public PrescriptionStatus() { }
-        public PrescriptionStatus(DataRow r, PrescriptionSource type) {
-            switch (type) {
-                case PrescriptionSource.Normal:
+namespace His_Pos.NewClass.Prescription
+{
+    public class PrescriptionStatus : ObservableObject
+    {
+        public PrescriptionStatus()
+        {
+        }
+
+        public PrescriptionStatus(DataRow r,PrescriptionType type)
+        {
+            switch (type)
+            {
+                default:
                     IsGetCard = r.Field<bool>("IsGetCard");
                     IsDeclare = r.Field<bool>("IsDeclare");
                     IsSendToSingde = r.Field<bool>("IsSendToServer");
                     IsDeposit = r.Field<bool>("IsDeposit");
                     IsAdjust = r.Field<bool>("IsAdjust");
                     break;
-                case PrescriptionSource.ChronicReserve:
+                case PrescriptionType.ChronicReserve:
                     IsSendToSingde = r.Field<bool>("IsSendToServer");
                     break;
-            } 
+            }
         }
-        private bool isGetCard;//是否讀卡
+
+        #region Properties
+        public bool IsSendToSingde
+        {
+            get;
+            set;
+        }
+        public bool IsAdjust { get; set; }
+        public bool IsRead { get; set; }
+        public bool IsVIP { get; set; }
+        private bool isGetCard;
         public bool IsGetCard
         {
             get => isGetCard;
@@ -26,51 +43,56 @@ namespace His_Pos.NewClass.Prescription {
             {
                 Set(() => IsGetCard, ref isGetCard, value);
             }
-        } 
-        public bool IsDeclare { get; set; } //是否申報
-        public bool IsRead { get; set; }//是否已讀
-        public bool IsSendToSingde { get; set; }//是否傳送過藥健康
-        public bool IsAdjust { get; set; }//是否調劑.扣庫
-        public bool IsRegister { get; set; } //是否登錄 
-        private bool isSendOrder;
-        public bool IsSendOrder  //判斷是否傳送要健康
-        {
-            get => isSendOrder;
-            set
-            {
-                Set(() => IsSendOrder, ref isSendOrder, value);
-            }
         }
-        public bool IsDeposit { get; set; } //是否押金
+        public bool IsDeclare { get; set; }
+        public bool IsDeposit { get; set; }
+        public bool IsRegister { get; set; }
         public bool? IsCreateSign { get; set; }
-        private bool isCooperativeVIP;
-        public bool IsCooperativeVIP
+        public bool IsSendOrder { get; set; }
+        private bool? reserveSend;
+        public bool? ReserveSend
         {
-            get => isCooperativeVIP;
+            get => reserveSend;
             set
             {
-                Set(() => IsCooperativeVIP, ref isCooperativeVIP, value);
+                Set(() => ReserveSend, ref reserveSend, value);
             }
         }
-        private bool isCooperative;
-        public bool IsCooperative
+        private string orderStatus;
+        public string OrderStatus
         {
-            get => isCooperative;
+            get => orderStatus;
             set
             {
-                Set(() => IsCooperative, ref isCooperative, value);
+                Set(() => OrderStatus, ref orderStatus, value);
             }
         }
-        public bool IsPrescribe { get; set; }
-        private bool isBuckle;
-        public bool IsBuckle
+        #endregion
+
+        public void SetPrescribeStatus()
         {
-            get => isBuckle;
-            set
-            {
-                Set(() => IsBuckle, ref isBuckle, value);
-            }
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = false;
+            IsDeposit = false;
         }
+
+        public void SetErrorAdjustStatus()
+        {
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = false;
+            IsDeposit = false;
+        }
+
+        public void SetNormalAdjustStatus()
+        {
+            IsGetCard = true;
+            IsAdjust = true;
+            IsDeclare = true;
+            IsDeposit = false;
+        }
+
         public void Init()
         {
             IsGetCard = false;
@@ -80,44 +102,23 @@ namespace His_Pos.NewClass.Prescription {
             IsSendToSingde = false;
             IsRegister = false;
             IsDeclare = true;
-            IsCooperativeVIP = false;
+            IsVIP = false;
             IsCreateSign = null;
-            IsPrescribe = false;
             IsDeposit = false;
-            IsCooperative = false;
-            IsBuckle = true;
         }
 
-        public void UpdateStatus(int id)
-        {
-            PrescriptionDb.UpdatePrescriptionStatus(this,id);
-        }
-        
-        //未過卡 已調劑 不申報 押金
-        public void SetNoCardSatus()
+        public void SetDepositAdjustStatus()
         {
             IsGetCard = false;
-            IsAdjust = true;
-            IsDeclare = false;
             IsDeposit = true;
-        }
-        //已過卡 已調劑 正常申報 不押金
-        public void SetNormalAdjustStatus()
-        {
-            IsGetCard = true;
-            IsAdjust = true;
-            IsDeclare = true;
-            IsDeposit = false;
-        }
-        //已過卡 已調劑 不申報 不押金
-        public void SetCooperativePrescribeStatus()
-        {
-            IsGetCard = true;
-            IsAdjust = true;
             IsDeclare = false;
-            IsDeposit = false;
+            IsAdjust = true;
+            IsSendOrder = false;
+            IsSendToSingde = false;
+            IsRegister = false;
+            IsCreateSign = null;
         }
-        // 未過卡 未調劑 不申報 不押金
+
         public void SetRegisterStatus()
         {
             IsGetCard = false;
@@ -125,21 +126,10 @@ namespace His_Pos.NewClass.Prescription {
             IsDeclare = false;
             IsDeposit = false;
         }
-        // 未過卡 已調劑 不申報 不押金
-        public void SetPrescribeStatus()
+
+        public void UpdateStatus(int currentID)
         {
-            IsGetCard = false;
-            IsAdjust = true;
-            IsDeclare = false;
-            IsDeposit = false;
-        }
-        //已過卡 已調劑 預設不申報 不押金
-        public void SetErrorAdjustStatus()
-        {
-            IsGetCard = true;
-            IsAdjust = true;
-            IsDeclare = false;
-            IsDeposit = false;
+            PrescriptionDb.UpdatePrescriptionStatus(this, currentID);
         }
     }
 }

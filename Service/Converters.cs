@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.Medicine;
 
 namespace His_Pos.Service
 {
     public class SentinelConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;
         }
@@ -36,7 +36,7 @@ namespace His_Pos.Service
             if (string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true)
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>())
                 : string.Empty;
             return result;
         }
@@ -59,7 +59,7 @@ namespace His_Pos.Service
             if (value is null || string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true) + " " +
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>()) + " " +
                   value.ConvertTo<DateTime>().ToLongTimeString()
                 : string.Empty;
             return result;
@@ -83,7 +83,7 @@ namespace His_Pos.Service
             if (value is null || string.IsNullOrEmpty(value.ToString()))
                 return "---/--/--";
             var result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true)
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>())
                 : "---/--/--";
             return result;
         }
@@ -92,21 +92,12 @@ namespace His_Pos.Service
         {
             DateTime? result = null;
             if (value == null) return result;
-            var dateStr = value.ToString().Replace("/", "").Replace("-", "");
+            var dateStr = value.ToString().Replace("/", "").Replace("-", "").Trim();
             int year, month, date;
             switch (dateStr.Length)
             {
-                case 5:
-                    year = int.Parse(dateStr.Substring(0, 1)) + 1911;
-                    month = int.Parse(dateStr.Substring(1, 2));
-                    date = int.Parse(dateStr.Substring(3, 2));
-                    result = new DateTime(year, month, date);
-                    break;
-                case 6:
-                    year = int.Parse(dateStr.Substring(0, 2)) + 1911;
-                    month = int.Parse(dateStr.Substring(2, 2));
-                    date = int.Parse(dateStr.Substring(4, 2));
-                    result = new DateTime(year, month, date);
+                case 0:
+                    result = null;
                     break;
                 case 7:
                     year = int.Parse(dateStr.Substring(0, 3)) + 1911;
@@ -156,6 +147,19 @@ namespace His_Pos.Service
         }
     }
 
+    public class InvertBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !(bool) value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !(bool) value;
+        }
+    }
+
     public class DateValidationRule : ValidationRule
     {
         private const string InvalidInput = "日期格式錯誤";
@@ -163,26 +167,15 @@ namespace His_Pos.Service
         // Implementing the abstract method in the Validation Rule class
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
+            var valueStr = value.ToString().Replace("/", "").Replace("-", "").Trim();
+            if (string.IsNullOrEmpty(valueStr))
+                value = "---/--/--";
             if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
-            var valueStr = value.ToString().Replace("/", "").Replace("-", "");
-            bool validDate = false;
+            if(((string)value).Equals("---/--/--")) return new ValidationResult(true, null);
             int year = 0, month = 0, date = 0;
             string checkStr = string.Empty;
-            DateTime result;
             switch (valueStr.Length)
             {
-                case 5:
-                    year = int.Parse(valueStr.Substring(0, 1)) + 1911;
-                    month = int.Parse(valueStr.Substring(1, 2));
-                    date = int.Parse(valueStr.Substring(3, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
-                case 6:
-                    year = int.Parse(valueStr.Substring(0, 2)) + 1911;
-                    month = int.Parse(valueStr.Substring(2, 2));
-                    date = int.Parse(valueStr.Substring(4, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
                 case 7:
                     year = int.Parse(valueStr.Substring(0, 3)) + 1911;
                     month = int.Parse(valueStr.Substring(3, 2));
@@ -190,58 +183,7 @@ namespace His_Pos.Service
                     checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
                     break;
             }
-
-            validDate = DateTimeExtensions.ValidateDateTime(checkStr, "yyyyMMdd");
-            if (validDate)
-            {
-                var dateStr = year + "/" + month + "/" + date;
-                if (!DateTime.TryParse(dateStr, out _))
-                    return new ValidationResult(false, InvalidInput);
-            }
-            else
-                return new ValidationResult(false, InvalidInput);
-
-            return new ValidationResult(true, null);
-        }
-    }
-
-    public class NullDateValidationRule : ValidationRule
-    {
-        private const string InvalidInput = "日期格式錯誤";
-
-        // Implementing the abstract method in the Validation Rule class
-        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
-        {
-            if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
-            if (((string) value).Equals("---/--/--")) return new ValidationResult(true, null);
-            var valueStr = value.ToString().Replace("/", "").Replace("-", "");
-            bool validDate = false;
-            int year = 0, month = 0, date = 0;
-            string checkStr = string.Empty;
-            DateTime result;
-            switch (valueStr.Length)
-            {
-                case 5:
-                    year = int.Parse(valueStr.Substring(0, 1)) + 1911;
-                    month = int.Parse(valueStr.Substring(1, 2));
-                    date = int.Parse(valueStr.Substring(3, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
-                case 6:
-                    year = int.Parse(valueStr.Substring(0, 2)) + 1911;
-                    month = int.Parse(valueStr.Substring(2, 2));
-                    date = int.Parse(valueStr.Substring(4, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
-                case 7:
-                    year = int.Parse(valueStr.Substring(0, 3)) + 1911;
-                    month = int.Parse(valueStr.Substring(3, 2));
-                    date = int.Parse(valueStr.Substring(5, 2));
-                    checkStr = year + month.ToString().PadLeft(2, '0') + date.ToString().PadLeft(2, '0');
-                    break;
-            }
-
-            validDate = DateTimeExtensions.ValidateDateTime(checkStr, "yyyyMMdd");
+            var validDate = DateTimeExtensions.ValidateDateTime(checkStr, "yyyyMMdd");
             if (validDate)
             {
                 var dateStr = year + "/" + month + "/" + date;
@@ -262,7 +204,8 @@ namespace His_Pos.Service
             Option1 = 0,
             Option2 = 1,
             Option3 = 2,
-            Option4 = 3
+            Option4 = 3,
+            Option5 = 4
         }
 
         public object Convert(object value, Type targetType,
@@ -305,24 +248,6 @@ namespace His_Pos.Service
         {
             var strValue = value as string;
             return double.TryParse(strValue, out var resultDouble) ? resultDouble : 0;
-        }
-    }
-
-    public class IsMedicineEditable : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is MedicineNHI || value is MedicineOTC || value is MedicineSpecialMaterial)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 
@@ -385,7 +310,7 @@ namespace His_Pos.Service
             if (value is null || string.IsNullOrEmpty(value.ToString()))
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true).Substring(0, 6)
+                ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>()).Substring(0, 6)
                 : string.Empty;
             return result;
         }
@@ -504,6 +429,57 @@ namespace His_Pos.Service
                 return new SolidColorBrush(Color.FromRgb(251,60,78));
             }
             return new SolidColorBrush(Color.FromArgb(255,66,64,64));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class MultiCommandParametersConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            return values.Select(value => value.ToString()).ToList();
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [ValueConversion(typeof(bool), typeof(bool))]
+    public class InverseBooleanConverter : IValueConverter
+    {
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            if (targetType != typeof(bool))
+                throw new InvalidOperationException("The target must be a boolean");
+
+            return !(bool)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+
+        #endregion
+    }
+
+    [ValueConversion(typeof(bool), typeof(string))]
+    public class PharmacistIsLocalConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null) return string.Empty;
+            return (bool)value ? "本店藥師" : "非本店藥師";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

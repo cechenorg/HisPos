@@ -99,15 +99,18 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 }
                 else
                 {
-                    MessageWindow.ShowMessage(g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續",MessageType.WARNING);
+                    System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        MessageWindow.ShowMessage(g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續", MessageType.WARNING);
+                    });
                 }
             }
         }
 
-        public IEnumerable<List<T>> Partition<T>(IList<T> source,int pharmacistCount)
+        private IEnumerable<List<T>> Partition<T>(IList<T> source,int pharmacistCount)
         {
             var size = source.Count / pharmacistCount;
-            for (int i = 0; i < Math.Ceiling(source.Count / (Double)size); i++)
+            for (var i = 0; i < Math.Ceiling(source.Count / (double)size); i++)
                 yield return new List<T>(source.Skip(size * i).Take(size));
         }
 
@@ -116,7 +119,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             AdjustMedicalService();
             AdjustSerialNumber();
             SerializeFileContent();
-            PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this);
+            PrescriptionDb.UpdatePrescriptionFromDeclareAdjust(this.Where(p => p.IsDeclare).ToList());
         }
 
         private void AdjustMedicalService()
@@ -179,10 +182,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                                     pre.MedicalServiceID = "05206B";
                                 else
                                     pre.MedicalServiceID = "05202B";
-                                pre.MedicalServicePoint = (int)Math.Round(Convert.ToDouble((servicePoint * double.Parse(medicalService.P6) / 100).ToString()), MidpointRounding.AwayFromZero);
-                                pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
-                                pre.FileContent.Dbody.D37 = pre.MedicalServiceID;
                             }
+                            pre.MedicalServicePoint = (int)Math.Round(Convert.ToDouble((servicePoint * double.Parse(medicalService.P6) / 100).ToString()), MidpointRounding.AwayFromZero);
+                            pre.FileContent.Dbody.D38 = pre.MedicalServicePoint.ToString().PadLeft(8, '0');
+                            pre.FileContent.Dbody.D37 = pre.MedicalServiceID;
                             medicalService.P2 = pre.FileContent.Dbody.D37;
                             medicalService.P8 = $"{servicePoint:0000000.00}";
                             medicalService.P9 = pre.FileContent.Dbody.D38;

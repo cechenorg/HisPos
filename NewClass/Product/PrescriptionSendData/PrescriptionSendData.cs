@@ -1,23 +1,34 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace His_Pos.NewClass.Product
+namespace His_Pos.NewClass.Product.PrescriptionSendData
 {
     public class PrescriptionSendData : ObservableObject
     {
         public PrescriptionSendData()
         {
         }
-        public PrescriptionSendData(Medicine.Medicine m) {
+        public PrescriptionSendData(Medicine.Base.Medicine m) {
             MedId = m.ID;
-            MedName = m.FullName;
-            Stock = m.Inventory;
-            TreatAmount = m.Amount;
-            SendAmount = TreatAmount;
+            MedName = m.FullName; 
+            TreatAmount = m.Amount; 
+            SendAmount = 0;
+            InvID = m.InventoryID;
+            CanUseAmount = 0; 
         }
         public string MedId { get; set; }
         public string MedName { get; set; }
-        public double Stock { get; set; }
-        public double TreatAmount { get; set; }
+        public int InvID { get; set; }
+        private double canUseAmount;
+        public double CanUseAmount
+        {
+            get => canUseAmount;
+            set
+            {
+                Set(() => CanUseAmount, ref canUseAmount, value);
+            }
+        }
+      
+        public double TreatAmount { get; set; } 
         private double sendAmount;
         public double SendAmount 
         {
@@ -27,6 +38,14 @@ namespace His_Pos.NewClass.Product
                 Set(() => SendAmount, ref sendAmount, value);
             }
         }
-
+        private double prepareAmount;
+        public double PrepareAmount
+        {
+            get => prepareAmount;
+            set
+            {
+                Set(() => PrepareAmount, ref prepareAmount, value);
+            }
+        }
     }
 }

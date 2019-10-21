@@ -13,6 +13,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private double subTotal;
         private double price;
         private bool isProcessing = false;
+        private string onTheWayDetail = "";
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
 
         public bool IsSingde { get; set; } = false;
@@ -36,6 +37,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             set { Set(() => StartInputVariable, ref startInputVariable, value); }
         }
         public double Inventory { get; private set; }
+        public int WareHouseID { get; set; }
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
         public int SafeAmount { get; private set; }
@@ -43,6 +45,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double OnTheWayAmount { get; private set; }
         public double MedBagOnTheWayAmount { get; private set; }
         public double LastPrice { get; private set; }
+        public string OnTheWayDetail
+        {
+            get { return onTheWayDetail; }
+            set { Set(() => OnTheWayDetail, ref onTheWayDetail, value); }
+        }
         public double OrderAmount
         {
             get { return orderAmount; }
@@ -113,12 +120,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public PurchaseProduct() : base() {}
         public PurchaseProduct(DataRow dataRow) : base(dataRow)
         {
+            WareHouseID = dataRow.Field<int>("ProInv_WareHouseID");
             Inventory = dataRow.Field<double>("Inv_Inventory");
             SafeAmount = dataRow.Field<int>("Inv_SafeAmount");
             BasicAmount = dataRow.Field<int>("Inv_BasicAmount");
             OnTheWayAmount = dataRow.Field<double>("Inv_OnTheWay");
             MedBagOnTheWayAmount = dataRow.Field<double>("Inv_MedBagOnTheWay");
-            LastPrice = (double)dataRow.Field<decimal>("Pro_LastPrice");
+            LastPrice = (double)dataRow.Field<decimal>("Inv_LastPrice");
             UnitName = dataRow.Field<string>("StoOrdDet_UnitName");
             UnitAmount = dataRow.Field<double>("StoOrdDet_UnitAmount");
             OrderAmount = dataRow.Field<double> ("StoOrdDet_OrderAmount");
@@ -142,8 +150,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
             if (IsSingde)
             {
-                if (OrderAmount >= SingdePackageAmount)
-                    price = SingdePackagePrice;
+                if (OrderAmount >= SingdePackageAmount && SingdePackageAmount > 0)
+                {
+                    double tempTotal = (OrderAmount % SingdePackageAmount) * SingdePrice + (OrderAmount - (OrderAmount % SingdePackageAmount)) * SingdePackagePrice;
+
+                    price = tempTotal / OrderAmount;
+                }
                 else
                     price = SingdePrice;
 
@@ -208,6 +220,27 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             IsSingde = purchaseProduct.IsSingde;
             StartInputVariable = purchaseProduct.StartInputVariable;
+        }
+        public void GetOnTheWayDetail()
+        {
+            if(OnTheWayAmount == 0.0) return;
+
+            DataTable dataTable = PurchaseReturnProductDB.GetProductOnTheWayDetailByID(ID, WareHouseID);
+
+            if(dataTable?.Rows.Count == 0) return;
+
+            string tempDetail = "";
+
+            for (int x = 0; x < dataTable.Rows.Count; x++)
+            {
+                tempDetail += dataTable.Rows[x].Field<string>("STO_ID").PadLeft(12) + "  數量: " + dataTable.Rows[x].Field<double>("AMOUNT").ToString("####");
+
+                if (x < dataTable.Rows.Count - 1)
+                    tempDetail += "\n";
+            }
+                
+
+            OnTheWayDetail = tempDetail;
         }
 
         public abstract object Clone();

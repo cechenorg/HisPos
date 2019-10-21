@@ -20,5 +20,25 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             DataBaseFunction.AddSqlParameter(parameterList, "InsId", insId);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InstitutionUsedTime]", parameterList); 
         }
+
+        public static DataTable CheckDivisionValid(string institutionID, string divisionId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "InsId", institutionID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivId", divisionId);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckDivisionIsValid]", parameterList);
+        }
+
+        public static DataTable GetEnableDivisions(string institutionID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "InsId", institutionID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[EnableDivisions]", parameterList);
+        }
+
+        public static DataTable GetAdjustedInstitutions()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[AdjustedInstitutions]");
+        }
     }
 }

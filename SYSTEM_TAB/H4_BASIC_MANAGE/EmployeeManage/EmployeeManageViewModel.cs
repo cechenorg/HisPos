@@ -8,6 +8,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using His_Pos.NewClass.Person.MedicalPerson;
+using His_Pos.FunctionWindow;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
@@ -16,7 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public override TabBase getTab() { 
         return this;
         }
-        #region -----Define Command----- 
+        #region -----Define Command-----  
         public RelayCommand SelectionChangedCommand { get; set; }
         public RelayCommand DataChangeCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
@@ -26,40 +29,35 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public RelayCommand ChangePassWordCommand { get; set; }
         #endregion
         #region ----- Define Variables -----
-        public bool btnCancelEnable;
-        public bool BtnCancelEnable
+        
+        private EmployeeControlEnum controlType;
+        public EmployeeControlEnum ControlType
         {
-            get { return btnCancelEnable; }
-            set { Set(() => BtnCancelEnable, ref btnCancelEnable, value); }
-        }
-        public bool btnSubmitEnable;
-        public bool BtnSubmitEnable
-        {
-            get { return btnSubmitEnable; }
-            set { Set(() => BtnSubmitEnable, ref btnSubmitEnable, value); }
-        }
-        public string changeText;
-        public string ChangeText
-        {
-            get { return changeText; }
-            set { Set(() => ChangeText, ref changeText, value); }
-        }
-        public string changeForeground;
-        public string ChangeForeground
-        {
-            get { return changeForeground; }
-            set { Set(() => ChangeForeground, ref changeForeground, value); }
-        }
-        public Collection<string> positionCollection;
-        public Collection<string> PositionCollection
-        {
-            get { return positionCollection; }
+            get => controlType;
             set
             {
-                Set(() => PositionCollection, ref positionCollection, value);
+                Set(() => ControlType, ref controlType, value);
             }
         }
-         
+        private CollectionViewSource employeeCollectionViewSource;
+        private CollectionViewSource EmployeeCollectionViewSource
+        {
+            get => employeeCollectionViewSource;
+            set
+            {
+                Set(() => EmployeeCollectionViewSource, ref employeeCollectionViewSource, value); 
+            }
+        }
+
+        private ICollectionView employeeCollectionView;
+        public ICollectionView EmployeeCollectionView
+        {
+            get => employeeCollectionView;
+            private set
+            {
+                Set(() => EmployeeCollectionView, ref employeeCollectionView, value);
+            }
+        }
         public Employee employee;
         public Employee Employee
         {
@@ -67,6 +65,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => Employee, ref employee, value);
+                ControlType = EmployeeControlEnum.NoEditControl;
+                if (Employee.ID == ViewModelMainWindow.CurrentUser.ID)
+                    ControlType = EmployeeControlEnum.SelfEditControl;
+                if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
+                    ControlType = EmployeeControlEnum.AllEditableControl;
+
             }
         }
         public Employees employeeCollection;
@@ -78,7 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => EmployeeCollection, ref employeeCollection, value);
             }
         }
-        public WorkPositions workPositions;
+        public WorkPositions workPositions = new WorkPositions();
         public WorkPositions WorkPositions
         {
             get { return workPositions; }
@@ -87,99 +91,66 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => WorkPositions, ref workPositions, value);
             }
         }
-        public Genders genders = new Genders();
-        public Genders Genders
+        private bool localCheck = true;
+        public bool LocalCheck
         {
-            get { return genders; }
+            get { return localCheck; }
             set
             {
-                Set(() => Genders, ref genders, value);
+                Set(() => LocalCheck, ref localCheck, value);
+                EmployeeCollectionViewSource.Filter += Filter;
             }
         }
-        private bool isIdNumEnable = false;
-        public bool IsIdNumEnable {
-            get { return isIdNumEnable; }
-            set { Set(()=> IsIdNumEnable,ref isIdNumEnable,value); }
+        private bool globalCheck = false;
+        public bool GlobalCheck
+        {
+            get { return globalCheck; }
+            set
+            {
+                Set(() => GlobalCheck, ref globalCheck, value);
+                EmployeeCollectionViewSource.Filter += Filter;
+            }
         }
+        
         #endregion
 
         public EmployeeManageViewModel() {
 
             Init();
-            DataChangeCommand = new RelayCommand(DataChangeAction);
             CancelCommand = new RelayCommand(CancelAction);
-            SubmitCommand = new RelayCommand(SubmitAction);
-            SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
+            SubmitCommand = new RelayCommand(SubmitAction); 
             DeleteCommand = new RelayCommand(DeleteAction);
             NewEmployeeCommand = new RelayCommand(NewEmployeeAction);
             ChangePassWordCommand = new RelayCommand(ChangePassWordAction);
         }
         #region Action
+  
+        private void CancelAction() {
+            Employee = Employee.GetDataByID(Employee.ID);
+        }
+        private void SubmitAction() {
+            Employee.Update();
+            MessageWindow.ShowMessage("修改成功",Class.MessageType.SUCCESS);
+        }
+        private void DeleteAction() {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除員工? 刪除後無法恢復 請慎重確認","員工刪除");
+            if ((bool)confirmWindow.DialogResult) {
+                Employee.Delete();
+                MessageWindow.ShowMessage("刪除成功!",Class.MessageType.SUCCESS);
+                Init();
+            }
+               
+        }
         public void ChangePassWordAction() {
-            ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow(Employee);
+            EmployeeChangePasswordWindow.EmployeeChangePasswordWindow employeeChangePasswordWindow = new EmployeeChangePasswordWindow.EmployeeChangePasswordWindow(Employee); 
         }
         public void NewEmployeeAction() {
-            IsIdNumEnable = true;
-            Employee newEmployee = new Employee();
-            newEmployee.Name = "新人";
-            newEmployee.Gender = "男";
-            newEmployee.WorkPositionID = 2;
-            newEmployee.WorkPositionName = "藥師";
-            newEmployee.StartDate = DateTime.Today;
-            newEmployee.Birthday = DateTime.Today;
-            newEmployee.IDNumber = DateTime.Now.ToString("yyyyMMddhhss");
-            MainWindow.ServerConnection.OpenConnection();
-            newEmployee = newEmployee.Save();
-            MainWindow.ServerConnection.CloseConnection();
-            EmployeeCollection.Add(newEmployee);
-            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection[EmployeeCollection.Count - 1]);
+            EmployeeInsertWindow.EmployeeInsertWindow employeeInsertWindow = new EmployeeInsertWindow.EmployeeInsertWindow();
+            Init();
         }
-        public void DeleteAction()
-        {
-            MainWindow.ServerConnection.OpenConnection(); 
-            Employee.Delete();
-            EmployeeCollection.Remove( EmployeeCollection.Single(emp => emp.ID == Employee.ID) );
-            Employee = NewFunction.DeepCloneViaJson( EmployeeCollection[EmployeeCollection.Count - 1]);
-            MainWindow.ServerConnection.CloseConnection(); 
-        }
-        public void SelectionChangedAction()
-        {
-            if (Employee is null) return;
-            IsIdNumEnable = false;
-            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.ID == Employee.ID));
-            InitDataChanged();
-        }
-        public void DataChangeAction()
-        {
-            DataChanged();
-        }
-        public void SubmitAction() {
-            IsIdNumEnable = false;
-            for (int i = 0; i < EmployeeCollection.Count; i++)
-            {
-                if (EmployeeCollection[i].ID == Employee.ID)
-                {
-                    EmployeeCollection[i] = Employee;
-                    Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(cus => cus.ID == EmployeeCollection[i].ID));
-                    break;
-                }
-            }
-            MainWindow.ServerConnection.OpenConnection();
-            Employee.WorkPositionID = WorkPositions.Single(w => w.WorkPositionName == Employee.WorkPositionName).WorkPositionId;
-            Employee = Employee.Save();
-            ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Clear();
-            ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels(true);
-            MainWindow.ServerConnection.CloseConnection();
-            InitDataChanged(); 
-        }
-        public void CancelAction()
-        {
-            Employee = NewFunction.DeepCloneViaJson(EmployeeCollection.Single(emp => emp.ID == Employee.ID));
-            InitDataChanged();
-        }
+         
         #endregion
-        #region Function
-
+        #region Function 
         private void Init() {
             MainWindow.ServerConnection.OpenConnection();
             WorkPositions = new WorkPositions();
@@ -187,25 +158,26 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             EmployeeCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
 
-            if (EmployeeCollection.Count > 0)
-                Employee = NewFunction.DeepCloneViaJson(EmployeeCollection[0]);
-            InitDataChanged();
+            EmployeeCollectionViewSource = new CollectionViewSource { Source = EmployeeCollection };
+            EmployeeCollectionView = EmployeeCollectionViewSource.View;
+            EmployeeCollectionViewSource.Filter += Filter;
+
+            if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
+                ControlType = EmployeeControlEnum.AllEditableControl;
         }
-        private void DataChanged()
-        { 
-            ChangeText = "已修改";
-            ChangeForeground = "Red";
-            BtnCancelEnable = true;
-            BtnSubmitEnable = true;
-        } 
-        private void InitDataChanged()
+        private void Filter(object sender, FilterEventArgs e)
         {
-            ChangeText = "未修改";
-            ChangeForeground = "Black";
-            BtnCancelEnable = false;
-            BtnSubmitEnable = false;
+            if (e.Item is null) return;
+            if (!(e.Item is Employee))
+                e.Accepted = false;
+
+            e.Accepted = false;
+
+            if (GlobalCheck)
+                e.Accepted = true;
+            else if(LocalCheck && ((Employee)e.Item).IsLocal)
+                e.Accepted = true; 
         }
-         
         #endregion
 
     }

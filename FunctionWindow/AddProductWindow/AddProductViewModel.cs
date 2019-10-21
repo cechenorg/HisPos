@@ -9,6 +9,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
@@ -26,77 +27,63 @@ namespace His_Pos.FunctionWindow.AddProductWindow
 
         #region ----- Define Variables -----
         private CollectionViewSource proStructCollectionViewSource;
+        private ICollectionView proStructCollectionView;
+        private ProductStruct selectedProductStruct;
+        private string searchString;
+        private bool isEditing = true;
+        private AddProductEnum addProEnum;
+        private string wareID;
 
         private CollectionViewSource ProStructCollectionViewSource
         {
             get => proStructCollectionViewSource;
-            set
-            {
-                Set(() => ProStructCollectionViewSource, ref proStructCollectionViewSource, value);
-            }
+            set { Set(() => ProStructCollectionViewSource, ref proStructCollectionViewSource, value); }
         }
 
-        private ICollectionView proStructCollectionView;
         public ICollectionView ProStructCollectionView
         {
             get => proStructCollectionView;
-            private set
-            {
-                Set(() => ProStructCollectionView, ref proStructCollectionView, value);
-            }
+            private set { Set(() => ProStructCollectionView, ref proStructCollectionView, value); }
         }
-
-        private bool isEditing = true;
         public bool IsEditing
         {
             get => isEditing;
-            private set
-            {
-                Set(() => IsEditing, ref isEditing, value);
-            }
+            private set { Set(() => IsEditing, ref isEditing, value); }
         }
         public bool IsProductSelected { get; set; } = false;
         public bool HideDisableProduct { get; set; }
         public bool ShowOnlyThisManufactory { get; set; }
-        private string searchString;
         public string SearchString
         {
             get => searchString;
-            set
-            {
-                Set(() => SearchString, ref searchString, value);
-            }
+            set { Set(() => SearchString, ref searchString, value); }
         }
-        private ProductStruct selectedProductStruct;
         public ProductStruct SelectedProductStruct
         {
             get => selectedProductStruct;
-            set
-            {
-                Set(() => SelectedProductStruct, ref selectedProductStruct, value);
-            }
+            set { Set(() => SelectedProductStruct, ref selectedProductStruct, value); }
         }
-
         public ProductStructs ProductStructCollection { get; set; }
-        private AddProductEnum addProEnum { get; set; }
         #endregion
 
-        public AddProductViewModel(AddProductEnum addProductEnum)
+        public AddProductViewModel(AddProductEnum addProductEnum, string wareHouseID)
         {
             addProEnum = addProductEnum;
             RegisterCommand();
             RegisterFilter();
             
             SearchString = "";
+            wareID = wareHouseID;
         }
 
-        public AddProductViewModel(string searchString, AddProductEnum addProductEnum)
+        public AddProductViewModel(string searchString, AddProductEnum addProductEnum, string wareHouseID)
         {
             addProEnum = addProductEnum;
             RegisterCommand();
             RegisterFilter();
 
             SearchString = searchString;
+            wareID = wareHouseID;
             GetRelatedDataAction();
         }
         
@@ -116,7 +103,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     IsEditing = false;
                     HideDisableProduct = false;
                     MainWindow.ServerConnection.OpenConnection();
-                    ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString);
+                    ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString, wareID);
                     MainWindow.ServerConnection.CloseConnection();
                     if (addProEnum == AddProductEnum.PrescriptionDeclare || addProEnum == AddProductEnum.PrescriptionEdit)
                         ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection.OrderByDescending(p => p.NHIPrice) };
@@ -199,6 +186,9 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     break;
                 case AddProductEnum.MedicineSetWindow:
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(MedicineSetViewModel)));
+                    break;
+                case AddProductEnum.ProductGroupSetting:
+                    Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductGroupSettingWindowViewModel)));
                     break;
             }
             Messenger.Default.Send(new NotificationMessage("CloseAddProductView"));

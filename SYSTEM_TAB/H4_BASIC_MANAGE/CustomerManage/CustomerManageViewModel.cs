@@ -3,9 +3,14 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Prescription.CustomerDetailPrescription;
+using His_Pos.NewClass.Prescription.CustomerDetailPrescription.CustomerDetailPrescriptionMedicine;
 using His_Pos.Service;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
     public class CustomerManageViewModel : TabBase
@@ -21,19 +26,53 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
+        public RelayCommand ShowMedicinesDetailCommand { get; set; }
+        
         #endregion
         #region ----- Define Variables -----
+        private List<string> prescriptionCaseString;
+        public List<string> PrescriptionCaseString
+        {
+            get => prescriptionCaseString;
+            set
+            {
+                Set(() => PrescriptionCaseString, ref prescriptionCaseString, value);
+            }
+        }
+        private string prescriptionCaseSelectItem;
+        public string PrescriptionCaseSelectItem
+        {
+            get => prescriptionCaseSelectItem;
+            set
+            {
+                Set(() => PrescriptionCaseSelectItem, ref prescriptionCaseSelectItem, value);
+                if (PrescriptionDetailViewSource is null) return;
+                PrescriptionDetailViewSource.Filter += AdjustTypeFilter;
+            }
+        }
         private string textCusName;
         public string TextCusName
         {
             get { return textCusName; }
             set { Set(() => TextCusName, ref textCusName, value); }
         }
+        private string idNumber;
+        public string IdNumber
+        {
+            get { return idNumber; }
+            set { Set(() => IdNumber, ref idNumber, value); }
+        }
         private DateTime? textCusBirthDay;
         public DateTime? TextCusBirthDay
         {
             get { return textCusBirthDay; }
             set { Set(() => TextCusBirthDay, ref textCusBirthDay, value); }
+        }
+        public bool isDataChanged;
+        public bool IsDataChanged
+        {
+            get { return isDataChanged; }
+            set { Set(() => IsDataChanged, ref isDataChanged, value); }
         }
         public bool btnCancelEnable;
         public bool BtnCancelEnable
@@ -64,7 +103,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         public Customers CustomerCollection
         {
             get { return customerCollection; }
-            set { Set(() => CustomerCollection, ref customerCollection, value); }
+            set { Set(() => CustomerCollection, ref customerCollection, value); 
+            }
         }
         public Customer customer;
         public Customer Customer
@@ -72,6 +112,19 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             get { return customer; }
             set { 
                 Set(() => Customer, ref customer, value);
+                if (Customer is null) return;
+                CustomerDetailPrescriptionCollection.GetDataByID(Customer.ID);
+                CustomerDetailPrescriptionMedicines.Clear();
+                if (CustomerDetailPrescriptionCollection.Count > 0)
+                {
+                    CustomerDetailPrescriptionSelectedItem = CustomerDetailPrescriptionCollection[0];
+                }
+                else {
+                    CustomerDetailPrescriptionMedicines.Clear();
+                }
+                PrescriptionDetailViewSource = new CollectionViewSource { Source = CustomerDetailPrescriptionCollection };
+                PrescriptionDetailView = PrescriptionDetailViewSource.View;
+                PrescriptionDetailViewSource.Filter += AdjustTypeFilter;
             }
         }
         public Genders genders = new Genders();
@@ -82,6 +135,52 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 Set(() => Genders, ref genders, value);
             }
         }
+        private CollectionViewSource prescriptionDetailViewSource;
+        private CollectionViewSource PrescriptionDetailViewSource
+        {
+            get => prescriptionDetailViewSource;
+            set
+            {
+                Set(() => PrescriptionDetailViewSource, ref prescriptionDetailViewSource, value);
+            }
+        }
+
+        private ICollectionView prescriptionDetailView;
+        public ICollectionView PrescriptionDetailView
+        {
+            get => prescriptionDetailView;
+            private set
+            {
+                Set(() => PrescriptionDetailView, ref prescriptionDetailView, value);
+            }
+        }
+        private CustomerDetailPrescriptions customerDetailPrescriptionCollection = new CustomerDetailPrescriptions();
+        public CustomerDetailPrescriptions CustomerDetailPrescriptionCollection
+        {
+            get => customerDetailPrescriptionCollection;
+            set
+            {
+                Set(() => CustomerDetailPrescriptionCollection, ref customerDetailPrescriptionCollection, value);
+            }
+        }
+        private CustomerDetailPrescription customerDetailPrescriptionSelectedItem = new CustomerDetailPrescription();
+        public CustomerDetailPrescription CustomerDetailPrescriptionSelectedItem
+        {
+            get => customerDetailPrescriptionSelectedItem;
+            set
+            {
+                Set(() => CustomerDetailPrescriptionSelectedItem, ref customerDetailPrescriptionSelectedItem, value);
+            }
+        }
+        private CustomerDetailPrescriptionMedicines customerDetailPrescriptionMedicines = new CustomerDetailPrescriptionMedicines();
+        public CustomerDetailPrescriptionMedicines CustomerDetailPrescriptionMedicines
+        {
+            get => customerDetailPrescriptionMedicines;
+            set
+            {
+                Set(() => CustomerDetailPrescriptionMedicines, ref customerDetailPrescriptionMedicines, value);
+            }
+        }
         #endregion
         public CustomerManageViewModel() { 
             DataChangeCommand = new RelayCommand(DataChangeAction);
@@ -90,20 +189,26 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
             SearchCommand = new RelayCommand(SearchAction);
             ClearCommand = new RelayCommand(ClearAction);
+            ShowMedicinesDetailCommand = new RelayCommand(ShowMedicinesDetailAction);
+
+            PrescriptionCaseString = new List<string>() { "全部", "調劑", "登錄", "預約" };
+            PrescriptionCaseSelectItem = PrescriptionCaseString[0];
+            
         }
         #region Action
         private void ClearAction() {
             TextCusName = string.Empty;
             TextCusBirthDay = null;
+            IdNumber = string.Empty;
         }
         private void SearchAction() {
-            if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null) {
-                MessageWindow.ShowMessage("姓名與生日其一不可為空",Class.MessageType.WARNING);
+            if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null && string.IsNullOrEmpty(IdNumber)) {
+                MessageWindow.ShowMessage("查詢欄位不可全空",Class.MessageType.WARNING);
                 return;
             }
 
             MainWindow.ServerConnection.OpenConnection(); 
-            CustomerCollection.GetDataByNameOrBirth(TextCusName,TextCusBirthDay);
+            CustomerCollection.GetDataByNameOrBirth(TextCusName,TextCusBirthDay,IdNumber);
             MainWindow.ServerConnection.CloseConnection();
             if (CustomerCollection.Count > 0)
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
@@ -123,7 +228,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             InitDataChanged(); 
         }
         public void SubmitAction()
-        { 
+        {
+          
             for (int i = 0; i < CustomerCollection.Count;i ++)
             {  
                 if (CustomerCollection[i].ID == Customer.ID) { 
@@ -132,29 +238,54 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                     break;
                 }
             }
-            MainWindow.ServerConnection.OpenConnection();
-            Customer.Save();
-            MainWindow.ServerConnection.CloseConnection();
+            if (!Customer.IsEnable)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow("關閉後會刪除此位客人病患所有預約慢箋 是否關閉?", "關閉病患視窗確認");
+                if ((bool)confirmWindow.DialogResult)
+                {
+                    Customer.Save();
+                    MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
+                }
+            } 
+            else
+                Customer.Save(); 
             InitDataChanged();
+            MessageWindow.ShowMessage("更新成功!",Class.MessageType.SUCCESS);
+        }
+        private void ShowMedicinesDetailAction()
+        {
+            if (CustomerDetailPrescriptionSelectedItem is null) return;
+            CustomerDetailPrescriptionMedicines.GetDataByID(CustomerDetailPrescriptionSelectedItem.ID, CustomerDetailPrescriptionSelectedItem.TypeName);
         }
         #endregion
 
         #region Function 
         private void DataChanged()
         {
-              
-            ChangeText = "已修改";
-            ChangeForeground = "Red"; 
+
+            IsDataChanged = true; 
             BtnCancelEnable = true;
             BtnSubmitEnable = true;
         }
 
         private void InitDataChanged()
         {
-            ChangeText = "未修改";
-            ChangeForeground = "Black";
+            IsDataChanged = false;
             BtnCancelEnable = false;
             BtnSubmitEnable = false;
+        }
+        private void AdjustTypeFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is CustomerDetailPrescription src))
+                e.Accepted = false;
+
+            e.Accepted = false;
+            CustomerDetailPrescription customerDetailPrescription = (CustomerDetailPrescription)e.Item;
+            if (customerDetailPrescription.TypeName == PrescriptionCaseSelectItem)
+                e.Accepted = true;
+            else if (PrescriptionCaseSelectItem == "全部")
+                e.Accepted = true;
         }
         #endregion
     }

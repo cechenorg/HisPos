@@ -10,6 +10,7 @@
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:newClass="clr-namespace:His_Pos.NewClass"
              DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn}"
              mc:Ignorable="d">
     <i:Interaction.Triggers >
@@ -55,6 +56,7 @@
         <DataTemplate x:Key="ProcessingID" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
             <Label Content="{Binding ReceiveID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
         </DataTemplate>
+        <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1365" Height="870">
@@ -76,13 +78,13 @@
                     <Image Source="/Images/GreenDot.png" Width="15"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}">
-                    <RadioButton Content="採購單" Tag="0" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterOrderCommand}" CommandParameter="1"/>
+                    <RadioButton Content="採購待退" Tag="0" GroupName="OrderType" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterOrderCommand}" CommandParameter="1"/>
                     <Image Source="/Images/OrangeDot.png" Width="15"/>
-                    <RadioButton Content="進退貨單" Tag="1" GroupName="OrderType" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterOrderCommand}" CommandParameter="3"/>
+                    <RadioButton Content="進退貨單" Tag="1" GroupName="OrderType" Margin="7,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterOrderCommand}" CommandParameter="3"/>
                     <Image Source="/Images/BlueDot.png" Width="15"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}" Margin="0,2,0,0">
-                    <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="260" Margin="5" materialDesign:HintAssist.Hint="篩選條件 (單號 處方 藥品 備註)">
+                    <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="260" Margin="5" materialDesign:HintAssist.Hint="篩選條件 (單號 處方 備註)">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding FilterOrderCommand}"/>
@@ -91,7 +93,7 @@
                     </TextBox>
                 </StackPanel>
                 <DataGrid Grid.Row="3" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}"
+                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}" CanUserDeleteRows="False"
                       SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="StoreOrders_OnSelectionChanged">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
@@ -118,6 +120,11 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid Height="70">
+                                        <Grid.ContextMenu>
+                                            <ContextMenu TextBlock.TextAlignment="Center">
+                                                <MenuItem Header="匯出選取訂單資料" Command="{Binding Data.ExportOrderDataCommand, Source={StaticResource proxy}}" CommandParameter="S"/>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
                                             <RowDefinition/>
@@ -177,7 +184,8 @@
                                             </ContentControl>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                                            <Label Content="{Binding OrderManufactory.GetName}" Foreground="{StaticResource ForeGround}" Width="110" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding OrderWarehouse.Name}" Foreground="RoyalBlue" Width="45" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding OrderManufactory.GetName}" Foreground="{StaticResource ForeGround}" Width="60" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center"/>
                                             <Label Content="{Binding ProductCount, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
                                             <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>

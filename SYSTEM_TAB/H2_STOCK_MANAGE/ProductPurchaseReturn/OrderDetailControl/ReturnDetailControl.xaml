@@ -15,20 +15,17 @@
         <DataTemplate x:Key="ReturnSingdeProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <returnDataGridControl:ReturnSingdeProcessingControl/>
         </DataTemplate>
-        <DataTemplate x:Key="ReturnNormalUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <returnDataGridControl:ReturnNormalUnProcessingControl/>
-        </DataTemplate>
-        <DataTemplate x:Key="ReturnSingdeUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <returnDataGridControl:ReturnSingdeUnProcessingControl/>
+        <DataTemplate x:Key="ReturnUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <returnDataGridControl:ReturnUnProcessingControl/>
         </DataTemplate>
         <DataTemplate x:Key="ReturnWaitingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <returnDataGridControl:ReturnWaitingControl/>
         </DataTemplate>
         <DataTemplate x:Key="UnProcessingID" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <Label Content="{Binding ID}" Width="360" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <Label Content="{Binding ID}" Width="320" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
         </DataTemplate>
         <DataTemplate x:Key="ProcessingID" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <Label Content="{Binding ReceiveID}" Width="360" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <Label Content="{Binding ReceiveID}" Width="320" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
@@ -54,8 +51,10 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
+            <Label Content="庫別 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding Path=OrderWarehouse.Name}" Width="120" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
             <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding Path=OrderManufactory.GetName}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+            <Label Content="{Binding Path=OrderManufactory.GetName}" Width="200" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
             <Label Content="{Binding Path=OrderManufactory.Telephone}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
@@ -70,10 +69,10 @@
         <ContentControl Grid.Row="3">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource ReturnNormalUnProcessingControl}" />
+                    <Setter Property="ContentTemplate" Value="{StaticResource ReturnUnProcessingControl}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
-                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnSingdeUnProcessingControl}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnUnProcessingControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="WAITING">
                             <Setter Property="ContentTemplate" Value="{StaticResource ReturnWaitingControl}" />

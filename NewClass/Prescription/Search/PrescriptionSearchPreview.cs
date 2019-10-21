@@ -8,16 +8,17 @@ using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
-    public class PrescriptionSearchPreview:ObservableObject
+    public class PrescriptionSearchPreview : ObservableObject
     {
         public PrescriptionSearchPreview() { }
 
-        public PrescriptionSearchPreview(DataRow r,PrescriptionSource s)
+        public PrescriptionSearchPreview(DataRow r, PrescriptionType s)
         {
-            Source = s;
+            Type = s;
             ID = r.Field<int>("ID");
             Patient = new Customer();
             Patient.Name = r.Field<string>("Cus_Name");
@@ -29,17 +30,37 @@ namespace His_Pos.NewClass.Prescription.Search
             AdjustDate = r.Field<DateTime>("AdjustDate");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             MedicalNumber = r.Field<string>("MedicalNumber");
-            if (s == PrescriptionSource.Normal)
+            TotalPoint = r.Field<int>("TotalPoint");
+            MedicalServicePoint = r.Field<int>("MedicalServicePoint");
+            MedicinePoint = r.Field<int>("MedicinePoint");
+            CopaymentPoint = r.Field<int>("CopaymentPoint");
+            SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint"); 
+            if (NewFunction.CheckDataRowContainsColumn(r, "NoBuckleStatus"))
+            {
+                NoBuckleStatus = r.Field<int?>("NoBuckleStatus");
+            }
+            if (NewFunction.CheckDataRowContainsColumn(r, "RegisterTime"))
+            {
+                TaiwanCalendar tc = new TaiwanCalendar();
+                if (r.Field<DateTime?>("RegisterTime") != null)
+                {
+                    var istime = r.Field<DateTime>("RegisterTime");
+                    RegisterDate = $"{tc.GetYear(istime)}/{istime:MM/dd HH:mm}";
+                }
+            }
+            if (s == PrescriptionType.Normal)
             {
                 IsAdjust = r.Field<bool>("IsAdjust");
-                TaiwanCalendar tc = new TaiwanCalendar();
-                if (r.Field<DateTime?>("InsertTime") != null) {
-                    DateTime istime = r.Field<DateTime>("InsertTime");
-                    InsertDate = string.Format("{0}-{1}", tc.GetYear(istime),istime.ToString("MM-dd HH點mm分"));
-                         
-                } 
-                
-                switch (r.Field<string>("StoOrd_Status")) {
+                IsDeposit = r.Field<bool>("IsDeposit");
+                var tc = new TaiwanCalendar();
+                if (r.Field<DateTime?>("InsertTime") != null)
+                {
+                    var istime = r.Field<DateTime>("InsertTime");
+                    InsertDate = $"{tc.GetYear(istime)}/{istime:MM/dd HH:mm}";
+                }
+
+                switch (r.Field<string>("StoOrd_Status"))
+                {
                     case "W":
                         StoStatus = "等待確認";
                         break;
@@ -56,6 +77,11 @@ namespace His_Pos.NewClass.Prescription.Search
                         StoStatus = "無訂單";
                         break;
                 }
+            }
+
+            if (string.IsNullOrEmpty(InsertDate) && !string.IsNullOrEmpty(RegisterDate))
+            {
+                Type = PrescriptionType.ChronicRegister;
             }
         }
 
@@ -131,6 +157,24 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => IsAdjust, ref isAdjust, value);
             }
         }
+        private bool isDeposit;
+        public bool IsDeposit
+        {
+            get => isDeposit;
+            set
+            {
+                Set(() => IsDeposit, ref isDeposit, value);
+            }
+        }
+        private int? noBuckleStatus;
+        public int? NoBuckleStatus
+        {
+            get => noBuckleStatus;
+            set
+            {
+                Set(() => NoBuckleStatus, ref noBuckleStatus, value);
+            }
+        }
         private string stoStatus;
         public string StoStatus
         {
@@ -158,15 +202,60 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => InsertDate, ref insertDate, value);
             }
         }
-        public PrescriptionSource Source { get; set; }
-        public Prescription GetPrescriptionByID()
+        private string registerDate;
+        public string RegisterDate
         {
-            return new Prescription(PrescriptionDb.GetPrescriptionByID(ID).Rows[0],PrescriptionSource.Normal);
-        }
-
-        public Prescription GetReservePrescriptionByID()
+            get => registerDate;
+            set
+            {
+                Set(() => RegisterDate, ref registerDate, value);
+            }
+        } 
+        private int totalPoint;
+        public int TotalPoint
         {
-            return new Prescription(PrescriptionDb.GetReservePrescriptionByID(ID).Rows[0], PrescriptionSource.ChronicReserve);
+            get => totalPoint;
+            set
+            {
+                Set(() => TotalPoint, ref totalPoint, value);
+            }
         }
+        private int medicalServicePoint;
+        public int MedicalServicePoint
+        {
+            get => medicalServicePoint;
+            set
+            {
+                Set(() => MedicalServicePoint, ref medicalServicePoint, value);
+            }
+        }
+        private int medicinePoint;
+        public int MedicinePoint
+        {
+            get => medicinePoint;
+            set
+            {
+                Set(() => MedicinePoint, ref medicinePoint, value);
+            }
+        }
+        private int copaymentPoint;
+        public int CopaymentPoint
+        {
+            get => copaymentPoint;
+            set
+            {
+                Set(() => CopaymentPoint, ref copaymentPoint, value);
+            }
+        }
+        private int specialMaterialPoint;
+        public int SpecialMaterialPoint
+        {
+            get => specialMaterialPoint;
+            set
+            {
+                Set(() => SpecialMaterialPoint, ref specialMaterialPoint, value);
+            }
+        }
+        public PrescriptionType Type { get; set; }
     }
 }

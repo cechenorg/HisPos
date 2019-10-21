@@ -6,10 +6,10 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.Medicine.MedicineSet;
 using StringRes = His_Pos.Properties.Resources;
 using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
 using System.Data;
+using His_Pos.NewClass.Medicine.MedicineSet;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow
 {
@@ -66,14 +66,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare);
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare,"0");
             MainWindow.ServerConnection.CloseConnection();
             if (productCount == 0)
                 MessageWindow.ShowMessage(StringRes.查無藥品, MessageType.WARNING);
             else
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                var MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.MedicineSetWindow);
+                var MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.MedicineSetWindow,"0");
                 if (productCount > 1)
                     MedicineWindow.ShowDialog();
             }

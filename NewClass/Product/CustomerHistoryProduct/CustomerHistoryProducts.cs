@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
 using His_Pos.Class;
-using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.Medicine;
 
 namespace His_Pos.NewClass.Product.CustomerHistoryProduct
 {
@@ -20,29 +20,11 @@ namespace His_Pos.NewClass.Product.CustomerHistoryProduct
         }
         internal void GetCustomerHistoryProducts(int id,HistoryType type)
         {
-            switch (type)
-            {
-                case HistoryType.AdjustRecord:
-                case HistoryType.RegisterRecord:
-                    GetDataByPrescriptionId(id);
-                    break;
-                case HistoryType.ReservedPrescription:
-                    GetDataByReserveId(id.ToString());
-                    break;
-            }
+            GetDataByPrescriptionId(id);
         }
         public void GetDataByPrescriptionId(int preId)
         {
             DataTable table = MedicineDb.GetDataByPrescriptionId(preId);
-            foreach (DataRow r in table.Rows)
-            {
-                var pro = new CustomerHistoryProduct(r);
-                Add(pro);
-            }
-        }
-        public void GetDataByReserveId(string resId)
-        {
-            DataTable table = MedicineDb.GetDataByReserveId(resId);
             foreach (DataRow r in table.Rows)
             {
                 var pro = new CustomerHistoryProduct(r);

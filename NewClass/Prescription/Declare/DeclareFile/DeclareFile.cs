@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
-using His_Pos.NewClass.Product.Medicine;
 using His_Pos.Service;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
 {
@@ -19,7 +20,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     {
         public Tdata() { }
         
-        public Tdata(DeclarePreviewOfMonth selectedFile, string pharmacyID)
+        public Tdata(DeclarePreviewOfMonth selectedFile, string pharmacyID,DateTime startDate,DateTime endDate)
         {
             T1 = "30";
             T2 = pharmacyID;
@@ -27,7 +28,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                  selectedFile.DeclareDate.Month.ToString().PadLeft(2, '0');
             T4 = "2";
             T5 = "1";
-            T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today, false);
+            T6 = DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Today);
             var normalPres = selectedFile.DeclarePres.Where(p => p.IsDeclare &&
                                                                           (p.AdjustCase.ID.Equals("1") || p.AdjustCase.ID.Equals("3") || p.AdjustCase.ID.Equals("4")
                                                                            || p.AdjustCase.ID.Equals("5") || p.AdjustCase.ID.Equals("D"))).ToList();
@@ -42,11 +43,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             T10 = chronicApplyPoints.ToString().PadLeft(10, '0');
             T11 = (normalCount + chronicCount).ToString().PadLeft(8, '0');
             T12 = (normalApplyPoints + chronicApplyPoints).ToString().PadLeft(10, '0');
-            var declareDate = selectedFile.DeclarePres[0].AdjustDate;
-            var firstDay = new DateTime(declareDate.Year, declareDate.Month, 1);
-            var lastDay = new DateTime(declareDate.AddMonths(1).Year, declareDate.AddMonths(1).Month, 1).AddDays(-1);
-            T13 = DateTimeExtensions.ConvertToTaiwanCalender(firstDay, false);
-            T14 = DateTimeExtensions.ConvertToTaiwanCalender(lastDay, false);
+            T13 = DateTimeExtensions.ConvertToTaiwanCalender(startDate);
+            T14 = DateTimeExtensions.ConvertToTaiwanCalender(endDate);
         }
 
         [XmlElement(ElementName = "t1")]
@@ -86,9 +84,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         {
         }
         
-        public DeclareFile(DeclarePreviewOfMonth selectedFile, string pharmacyID)
+        public DeclareFile(DeclarePreviewOfMonth selectedFile, string pharmacyID, DateTime startDate, DateTime endDate)
         {
-            Tdata = new Tdata(selectedFile, pharmacyID);
+            Tdata = new Tdata(selectedFile, pharmacyID, startDate, endDate);
             var tempList = new List<Ddata>();
             Ddata = new List<Ddata>();
             var dd = new List<Ddata>();
@@ -148,35 +146,30 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public Dhead() { }
         public Dhead(Prescription p)
         {
-            var t = p.Treatment;
             var point = p.PrescriptionPoint;
-            D1 = t.AdjustCase.ID;
+            D1 = p.AdjustCase.ID;
             D2 = string.Empty;
             D3 = p.Patient.IDNumber;
             D4 = string.Empty;
-            if(!D1.Equals("2") && !D1.Equals("D"))
-                D5 = t.PaymentCategory?.ID;
+            if (!D1.Equals("2") && !D1.Equals("D"))
+                D5 = p.PaymentCategory?.ID;
             D6 = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, false);
-            D7 = t.MedicalNumber;
-            D8 = t.MainDisease.ID;
-            D9 = t.SubDisease?.ID;
-            D13 = t.Division?.ID;
-            D14 = t.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)t.TreatDate, false);
-            D15 = t.Copayment.Id;
+            D7 = p.MedicalNumber;
+            D8 = p.MainDisease.ID;
+            D9 = p.SubDisease?.ID;
+            D13 = p.Division?.ID;
+            D14 = p.TreatDate is null ? string.Empty : DateTimeExtensions.ConvertToTaiwanCalender((DateTime)p.TreatDate);
+            D15 = p.Copayment.Id;
             D17 = $"{point.CopaymentPoint:0000}";
             D20 = p.Patient.Name;
-            D21 = t.Institution.ID;
-            D22 = t.PrescriptionCase?.ID;
-            D23 = DateTimeExtensions.NullableDateToTWCalender(t.AdjustDate, false);
-            if (!t.CheckIsQuitSmoking() && !t.CheckIsHomeCare())
-            {
+            D21 = p.Institution.ID;
+            D22 = p.PrescriptionCase?.ID;
+            D23 = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, false);
+            if (!p.AdjustCase.CheckIsQuitSmoking() && !p.AdjustCase.CheckIsHomeCare())
                 D24 = D21;
-            }
             else
-            {
                 D24 = string.Empty;
-            }
-            D25 = t.Pharmacist.IDNumber;
+            D25 = p.Pharmacist.IDNumber;
         }
         [XmlElement(ElementName = "d1")]
         public string D1 { get; set; }
@@ -228,23 +221,22 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public Dbody() { }
         public Dbody(Prescription p, List<Pdata> details)
         {
-            var t = p.Treatment;
             var point = p.PrescriptionPoint;
-            D26 = t.SpecialTreat?.ID;
-            D30 = p.Treatment.AdjustCase.ID.Equals("D") ? "00" : p.MedicineDays.ToString().PadLeft(2,'0');
+            D26 = p.SpecialTreat?.ID;
+            D30 = p.AdjustCase.ID.Equals("D") ? "00" : p.MedicineDays.ToString().PadLeft(2, '0');
             D31 = $"{details.Where(d => d.P1.Equals("3")).Sum(d => int.Parse(d.P9)):0000000}";
             D32 = "00000000";
             D33 = details.Where(d => d.P1.Equals("1")).Sum(d => int.Parse(d.P9)).ToString().PadLeft(8, '0');
-            D35 = t.ChronicSeq is null ? string.Empty : t.ChronicSeq.ToString();
-            D36 = t.ChronicTotal is null ? string.Empty : t.ChronicTotal.ToString();
+            D35 = p.ChronicSeq is null ? string.Empty : p.ChronicSeq.ToString();
+            D36 = p.ChronicTotal is null ? string.Empty : p.ChronicTotal.ToString();
             var medicalService = details.SingleOrDefault(pd => pd.P1.Equals("9"));
             if (medicalService != null)
             {
-                D37 = p.MedicalServiceID;
+                D37 = p.MedicalServiceCode;
                 D38 = medicalService.P9.PadLeft(8, '0');
             }
-            D43 = t.OriginalMedicalNumber;
-            if(p.Treatment.Copayment != null && p.Treatment.Copayment.Id.Equals("903"))
+            D43 = p.OriginalMedicalNumber;
+            if (p.Copayment != null && p.Copayment.Id.Equals("903"))
                 D44 = p.Card.NewBornBirthday;
             Pdata = new List<Pdata>();
             foreach (var d in details)
@@ -285,8 +277,11 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     [XmlRoot(ElementName = "pdata")]
     public class Pdata
     {
-        public Pdata() { }
-        public Pdata(Medicine m,string serial)
+        public Pdata()
+        {
+        }
+
+        public Pdata(Medicine.Base.Medicine m, string serial, DateTime adjustDate)
         {
             if (m is MedicineNHI && !m.PaySelf)
             {
@@ -294,16 +289,20 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P2 = m.ID;
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
-                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 =
+                    $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P3 = $"{m.Dosage:0000.00}";
                 P4 = m.UsageName;
                 P5 = m.PositionID;
                 P10 = serial;
                 P11 = $"{m.Days:00}";
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                 P13 = P12;
                 PaySelf = false;
                 IsBuckle = m.IsBuckle;
+                Order = m.Order;
+                SendAmount = m.SendAmount;
+                AdjustNoBuckle = m.AdjustNoBuckle;
             }
             else if (m is MedicineSpecialMaterial && !m.PaySelf)
             {
@@ -314,16 +313,20 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P5 = m.PositionID;
                 P7 = $"{m.Amount:00000.0}";
                 P8 = $"{m.NHIPrice:0000000.00}";
-                P9 = $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount * 1.05).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 =
+                    $"{Math.Round(Convert.ToDouble((m.NHIPrice * m.Amount * 1.05).ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P6 = "105";
                 P10 = serial;
                 P11 = $"{m.Days:00}";
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                 P13 = P12;
                 PaySelf = false;
                 IsBuckle = m.IsBuckle;
+                Order = m.Order;
+                SendAmount = m.SendAmount;
+                AdjustNoBuckle = m.AdjustNoBuckle;
             }
-            else if(m is MedicineVirtual)
+            else if (m is MedicineVirtual)
             {
                 P1 = "G";
                 P2 = m.ID;
@@ -331,11 +334,14 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P8 = $"{0.00:0000000.00}";
                 P9 = $"{0.00:0000000}";
                 P10 = serial;
-                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+                P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                 P13 = P12;
                 PaySelf = false;
                 IsBuckle = false;
                 BuckleAmount = 0;
+                Order = m.Order;
+                SendAmount = m.SendAmount;
+                AdjustNoBuckle = true;
             }
             else
             {
@@ -347,20 +353,24 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 P4 = m.UsageName;
                 P5 = m.PositionID;
                 P8 = string.Empty;
-                P9 = $"{Math.Round(Convert.ToDouble(m.TotalPrice.ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
+                P9 =
+                    $"{Math.Round(Convert.ToDouble(m.TotalPrice.ToString()), 0, MidpointRounding.AwayFromZero):0000000}";
                 P10 = string.Empty;
-                var days = m.Days is null ? string.Empty : $"{m.Days:00}"; ;
+                var days = m.Days is null ? string.Empty : $"{m.Days:00}";
                 P11 = days;
                 P12 = string.Empty;
                 P13 = P12;
                 PaySelf = m.PaySelf;
                 IsBuckle = m.IsBuckle;
+                Order = m.Order;
+                SendAmount = m.SendAmount;
+                AdjustNoBuckle = m.AdjustNoBuckle;
             }
             PaySelfValue = m.Price;
             BuckleAmount = m.BuckleAmount;
         }
 
-        public Pdata(PDataType type,string code,int percentage,int amount)
+        public Pdata(PDataType type, string code, int percentage, int amount, DateTime adjustDate)
         {
             switch (type)
             {
@@ -388,10 +398,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                             P9 = $"{59 * percentage * 0.01:00000000}";
                             break;
                     }
-                    P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today);
+
+                    P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
                     P13 = P12;
                     PaySelf = false;
                     IsBuckle = true;
+                    AdjustNoBuckle = true;
                     break;
                 case PDataType.SimpleForm:
                     P1 = "1";
@@ -410,6 +422,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                             P2 = "MA4";
                             break;
                     }
+
                     P3 = $"{1.0:0000.00}";
                     P4 = string.Empty;
                     P5 = string.Empty;
@@ -417,51 +430,37 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                     P7 = $"{amount:00000.0}";
                     P8 = $"{int.Parse(code):00000.0}";
                     P9 = $"{int.Parse(code) * amount:00000000}";
-                    P11 = amount.ToString().PadLeft(2,'0');
-                    P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today);
-                    P13 = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Today.AddDays(amount-1));
+                    P11 = amount.ToString().PadLeft(2, '0');
+                    P12 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate);
+                    P13 = DateTimeExtensions.ConvertToTaiwanCalenderWithTimeZero(adjustDate.AddDays(amount - 1));
                     PaySelf = false;
                     IsBuckle = true;
+                    AdjustNoBuckle = true;
                     break;
             }
         }
 
-        [XmlElement(ElementName = "p1")]
-        public string P1 { get; set; }
-        [XmlElement(ElementName = "p2")]
-        public string P2 { get; set; }
-        [XmlElement(ElementName = "p3")]
-        public string P3 { get; set; }
-        [XmlElement(ElementName = "p4")]
-        public string P4 { get; set; }
-        [XmlElement(ElementName = "p5")]
-        public string P5 { get; set; }
-        [XmlElement(ElementName = "p6")]
-        public string P6 { get; set; }
-        [XmlElement(ElementName = "p7")]
-        public string P7 { get; set; }
-        [XmlElement(ElementName = "p8")]
-        public string P8 { get; set; }
-        [XmlElement(ElementName = "p9")]
-        public string P9 { get; set; }
+        [XmlElement(ElementName = "p1")] public string P1 { get; set; }
+        [XmlElement(ElementName = "p2")] public string P2 { get; set; }
+        [XmlElement(ElementName = "p3")] public string P3 { get; set; }
+        [XmlElement(ElementName = "p4")] public string P4 { get; set; }
+        [XmlElement(ElementName = "p5")] public string P5 { get; set; }
+        [XmlElement(ElementName = "p6")] public string P6 { get; set; }
+        [XmlElement(ElementName = "p7")] public string P7 { get; set; }
+        [XmlElement(ElementName = "p8")] public string P8 { get; set; }
+        [XmlElement(ElementName = "p9")] public string P9 { get; set; }
         private string _p10;
-        [XmlElement(ElementName = "p10")]
-        public string P10 { get; set; }
-        [XmlElement(ElementName = "p11")]
-        public string P11 { get; set; }
-        [XmlElement(ElementName = "p12")]
-        public string P12 { get; set; }
-        [XmlElement(ElementName = "p13")]
-        public string P13 { get; set; }
-        [XmlElement(ElementName = "p15")]
-        public string P15 { get; set; }
-        [XmlIgnore]
-        public bool PaySelf { get; set; }
-        [XmlIgnore]
-        public bool IsBuckle { get; set; }
-        [XmlIgnore]
-        public double? BuckleAmount { get; set; }
-        [XmlIgnore]
-        public double? PaySelfValue { get; set; }
+        [XmlElement(ElementName = "p10")] public string P10 { get; set; }
+        [XmlElement(ElementName = "p11")] public string P11 { get; set; }
+        [XmlElement(ElementName = "p12")] public string P12 { get; set; }
+        [XmlElement(ElementName = "p13")] public string P13 { get; set; }
+        [XmlElement(ElementName = "p15")] public string P15 { get; set; }
+        [XmlIgnore] public bool PaySelf { get; set; }
+        [XmlIgnore] public bool IsBuckle { get; set; }
+        [XmlIgnore] public double? BuckleAmount { get; set; }
+        [XmlIgnore] public double? PaySelfValue { get; set; }
+        [XmlIgnore] public int Order { get; set; }
+        [XmlIgnore] public double SendAmount { get; set; }
+        [XmlIgnore] public bool AdjustNoBuckle { get; set; }
     }
 }

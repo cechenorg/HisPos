@@ -1,0 +1,45 @@
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow.InsertProductWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow"
+        mc:Ignorable="d"
+        Title="新增商品" Height="280" Width="300" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <local:InsertProductWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="商品類別" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Width="150"  FontFamily="Segoe UI Semi" FontSize="18" Text="{Binding ProTypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                 SelectedValuePath="content"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                    <ComboBoxItem>OTC藥品</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label Content="商品代碼" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <Label Width="150" Content="{Binding ProID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Label Content="中文名稱" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox Width="150"  Text="{Binding ProChineseName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="3">
+            <Label Content="英文名稱" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox Width="150"  Text="{Binding ProEnglishName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+        </StackPanel> 
+        <StackPanel Orientation="Horizontal" Grid.Row="4">
+            <Button Width="100"  Content="新增" Background="RoyalBlue" Margin="150,0,0,0" Height="30" FontSize="18" FontWeight="Bold"   BorderThickness="0" Command="{Binding InsertProductCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>

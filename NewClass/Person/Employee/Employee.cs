@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
+using His_Pos.FunctionWindow;
+using His_Pos.Service;
 using JetBrains.Annotations;
 using ZeroFormatter;
 
@@ -11,20 +13,32 @@ namespace His_Pos.NewClass.Person.Employee
     [ZeroFormattable]
     public class Employee:Person
     {
-        public Employee(){}
+        public Employee(){
+            
+            Gender = "男";
+            WorkPosition = new WorkPosition.WorkPosition();
+            WorkPosition.WorkPositionId = 2;
+            StartDate = DateTime.Today;
+            Birthday = DateTime.Today;
+            IsEnable = true;
+            AuthorityValue = 4;
+
+        }
         public Employee(DataRow r):base(r)
         {
+            Account = r.Field<string>("Emp_Account");
             Password = r.Field<string>("Aut_Password");
-            NickName = r.Field<string>("Emp_NickName");
-            WorkPositionName = r.Field<string>("Emp_WorkPositionName");
+            NickName = r.Field<string>("Emp_NickName"); 
             StartDate = r.Field<DateTime?>("Emp_StartDate");
             LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
             PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
             IsEnable = r.Field<bool>("Emp_IsEnable");
             AuthorityValue = r.Field<byte>("Aut_LevelID");
+            IsLocal = r.Field<bool>("Emp_IsLocal");
+            WorkPosition = new WorkPosition.WorkPosition(r);
         }
         private string password;//密碼
-        [Index(4)]
+        [Index(7)]
         public virtual string Password
         {
             get => password;
@@ -35,7 +49,7 @@ namespace His_Pos.NewClass.Person.Employee
         }
 
         private string nickName;//暱稱
-        [Index(5)]
+        [IgnoreFormat]
         public virtual string NickName
         {
             get => nickName;
@@ -43,29 +57,19 @@ namespace His_Pos.NewClass.Person.Employee
             {
                 Set(() => NickName, ref nickName, value);
             }
-        }  
-        private int workPositionID;//職位ID
-        [Index(6)]
-        public virtual int WorkPositionID
+        }
+        private WorkPosition.WorkPosition workPosition;
+        [IgnoreFormat]
+        public virtual WorkPosition.WorkPosition WorkPosition
         {
-            get => workPositionID;
+            get => workPosition;
             set
             {
-                Set(() => WorkPositionID, ref workPositionID, value);
+                Set(() => WorkPosition, ref workPosition, value);
             }
-        }
-        private string workPositionName;//職位名稱
-        [Index(7)]
-        public virtual string WorkPositionName
-        {
-            get => workPositionName;
-            set
-            {
-                Set(() => WorkPositionName, ref workPositionName, value);
-            }
-        }
+        } 
         private DateTime? startDate;//到職日
-        [Index(8)]
+        [IgnoreFormat]
         public virtual DateTime? StartDate
         {
             get => startDate;
@@ -75,7 +79,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
         private DateTime? leaveDate;//離職日
-        [Index(9)]
+        [IgnoreFormat]
         public virtual DateTime? LeaveDate
         {
             get => leaveDate;
@@ -85,7 +89,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
         private int purchaseLimit;//員購上限
-        [Index(10)]
+        [IgnoreFormat]
         public virtual int PurchaseLimit
         {
             get => purchaseLimit;
@@ -95,7 +99,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
         private bool isEnable;//備註
-        [Index(11)]
+        [IgnoreFormat]
         public virtual bool IsEnable
         {
             get => isEnable;
@@ -106,16 +110,71 @@ namespace His_Pos.NewClass.Person.Employee
         }
         [IgnoreFormat]
         public int AuthorityValue { get; set; }
-        #region Function
-        public Employee Save()
+        private string account;//帳號
+        [IgnoreFormat]
+        public virtual string Account
         {
-            DataTable table = EmployeeDb.Save(this);
-            return new Employee(table.Rows[0]);
+            get => account;
+            set
+            {
+                Set(() => Account, ref account, value);
+            }
         }
+        private bool isLocal;//是否為本店新增
+        [IgnoreFormat]
+        public virtual bool IsLocal
+        {
+            get => isLocal;
+            set
+            {
+                Set(() => IsLocal, ref isLocal, value);
+            }
+        }
+        #region Function
+        public Employee GetDataByID(int id) {
+            DataTable table = EmployeeDb.GetDataByID(id);
+            return new Employee(table.Rows[0]); 
+        }
+        public bool CheckIdNumber() {
+            if (string.IsNullOrEmpty(IDNumber)) return false;
+
+            if (!VerifyService.VerifyIDNumber(IDNumber))
+            {
+                MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
+                return false;
+            }
+
+            var table = EmployeeDb.CheckIdNumber(IDNumber);
+            if (table.Rows[0].Field<int>("Count") > 0)
+            {
+                MessageWindow.ShowMessage("此身分證已經存在!", Class.MessageType.ERROR);
+                return false;
+            }
+
+            return true;
+        }
+        public bool CheckEmployeeAccountSame()
+        {
+            var table = EmployeeDb.CheckEmployeeAccountSame(Account);
+            return table.Rows[0].Field<int>("Count") == 0 ? true : false;
+        }
+        
+        public void Insert() {
+            EmployeeDb.Insert(this);
+        }
+        public void Update() {
+            EmployeeDb.Update(this);
+        } 
         public void Delete()
         {
             EmployeeDb.Delete(ID); 
         }
+        public string GetEmployeeNewAccount()
+        {
+           DataTable table = EmployeeDb.GetEmployeeNewAccount();
+            return table.Rows[0].Field<string>("Account");
+        }
+        
         public static Employee Login(string Account,string Password) {
             MainWindow.ServerConnection.OpenConnection();
             DataTable table = EmployeeDb.EmployeeLogin(Account, Password);
@@ -130,11 +189,12 @@ namespace His_Pos.NewClass.Person.Employee
             }
             return tabAuths;
         }
-        public string GetPassword() {
-          DataTable table =  EmployeeDb.GetPassword(ID);
-            return table.Rows[0]["Aut_Password"].ToString();
-        }
-      
+       
         #endregion
+
+        public bool CheckLeave(DateTime date)
+        {
+            return StartDate <= date && (LeaveDate is null || LeaveDate >= date);
+        }
     }
 }

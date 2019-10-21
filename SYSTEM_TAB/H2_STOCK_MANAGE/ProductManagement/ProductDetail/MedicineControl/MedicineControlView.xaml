@@ -8,55 +8,61 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:sharedControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
-             xmlns:priceControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PriceControl"
+             xmlns:priceControl1="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl"
+             xmlns:groupControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl"
+             xmlns:recordControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl"
+             xmlns:presControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl"
+             xmlns:stockControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl"
              mc:Ignorable="d">
     <UserControl.Resources>
+        <service:InvertBoolConverter x:Key="InvertBoolConverter"/>
         <DataTemplate x:Key="DataNotChanged" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <Label Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+            <Label Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18"/>
         </DataTemplate>
         <DataTemplate x:Key="DataChanged" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
+            <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="18"/>
         </DataTemplate>
         <DataTemplate x:Key="NHIMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <priceControl:NHIMedicinePriceControl/>
+            <priceControl1:NHIMedicinePriceControl/>
         </DataTemplate>
         <DataTemplate x:Key="NHISpecialMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <priceControl:NHISpecialMedicinePriceControl/>
+            <priceControl1:NHISpecialMedicinePriceControl/>
         </DataTemplate>
         <DataTemplate x:Key="OTCMedicinePriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <StackPanel Background="{StaticResource GridBackGround}">
-                <sharedControl:SingdePriceControl/>
+                <priceControl1:SingdePriceControl/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="NHIMedicineFlag" DataType="{x:Type medicineControl:MedicineControlViewModel}">
-            <Grid>
+            <Grid DataContext="{Binding PriceViewModel}">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Visibility="{Binding MedicineDetail.IsControl, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock Text="管制藥 " Foreground="IndianRed" FontSize="30" FontFamily="Segoe UI Semibold"/>
-                    <TextBlock Text="{Binding MedicineDetail.ControlLevel}" Foreground="IndianRed" FontSize="30" FontFamily="Segoe UI Semibold"/>
+                    <TextBlock Text="管制藥 " Foreground="IndianRed" FontSize="26" FontFamily="Segoe UI Semibold"/>
+                    <TextBlock Text="{Binding MedicineDetail.ControlLevel}" Foreground="IndianRed" FontSize="26" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
-                <TextBlock Text="冷藏藥" Grid.Row="1" Foreground="RoyalBlue" FontSize="30" FontFamily="Segoe UI Semibold" Visibility="{Binding MedicineDetail.IsFrozen, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBlock Text="冷藏藥" Grid.Row="1" Foreground="RoyalBlue" FontSize="26" FontFamily="Segoe UI Semibold" Visibility="{Binding MedicineDetail.IsFrozen, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="NoMedicineFlag" DataType="{x:Type medicineControl:MedicineControlViewModel}"/>
     </UserControl.Resources>
     <Grid Width="1580" Height="880" Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="120"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="60"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="500"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="450"/>
+            <ColumnDefinition Width="600"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="310"/>
@@ -64,14 +70,14 @@
             </Grid.ColumnDefinitions>
             <TextBox Text="{Binding Medicine.ID}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Foreground="DimGray" BorderThickness="0"  FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" VerticalAlignment="Center" Padding="0" IsReadOnly="True"/>
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                <TextBox Text="{Binding Medicine.ChineseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="1110" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="20,10,20,0" Padding="0" BorderBrush="Transparent">
+                <TextBox Text="{Binding Medicine.ChineseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="1110" Foreground="Black" FontSize="35" FontFamily="Segoe UI Semibold" Margin="20,0,20,0" Padding="0" BorderBrush="Transparent">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataChangedCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
-                <ContentControl Content="{Binding}">
+                <ContentControl Content="{Binding ManageViewModel}">
                     <ContentControl.Style>
                         <Style TargetType="{x:Type ContentControl}">
                             <Setter Property="ContentTemplate" Value="{StaticResource NoMedicineFlag}" />
@@ -86,7 +92,7 @@
                 
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                <TextBox Text="{Binding Medicine.EnglishName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="950" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semi" Margin="20,0,20,0" Padding="0" BorderBrush="Transparent">
+                <TextBox Text="{Binding Medicine.EnglishName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="950" Foreground="Black" FontSize="24" FontFamily="Segoe UI Semi" Margin="20,0,0,0" Padding="0" BorderBrush="Transparent">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataChangedCommand}"/>
@@ -95,164 +101,63 @@
                 </TextBox>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
+        <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="0,10,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="200"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="170"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="0,0,10,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <CheckBox Content="啟用" Command="{Binding DataChangedCommand}" IsChecked="{Binding Medicine.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
-                    <Label Content="條碼" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Text="{Binding Medicine.BarCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="0,0,10,0">
+                <CheckBox Content="停用" Command="{Binding DataChangedCommand}" IsChecked="{Binding Medicine.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}" Margin="10,0,0,0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                <!--<Label Content="條碼" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBox Text="{Binding Medicine.BarCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding DataChangedCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>-->
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="0,10,10,0" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
+                <CheckBox Content="常備" Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}" IsChecked="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" Click="IsCommon_OnClick"/>
+                <StackPanel Orientation="Horizontal" IsEnabled="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <Label Content="架上安全" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBox Text="{Binding SafeAmount, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" Width="55" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown" GotFocus="TextBox_OnGotFocus">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding DataChangedCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Label Content="架上基準" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    <TextBox Text="{Binding BasicAmount, Mode=TwoWay, FallbackValue=0, TargetNullValue=0}" Width="55" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown" GotFocus="TextBox_OnGotFocus">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Label Content="包裝量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    <TextBox Text="{Binding MinOrderAmount, Mode=TwoWay}" Width="55" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" PreviewMouseLeftButtonDown="TextBox_OnPreviewMouseLeftButtonDown" GotFocus="TextBox_OnGotFocus">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
-            </Grid>
-            <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,10,10" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
+            </StackPanel>
+            <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,10,10" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <CheckBox Content="常備藥" Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}" IsChecked="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" IsEnabled="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Text="{Binding SafeAmount, Mode=TwoWay}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="2" IsEnabled="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Text="{Binding BasicAmount, Mode=TwoWay}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="3" IsEnabled="{Binding IsCommon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="最小訂貨" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Text="{Binding MinOrderAmount, Mode=TwoWay}" Width="61" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </StackPanel>
-            </Grid>
-            <DataGrid Name="UnitDataGrid" Grid.Row="1" Grid.Column="1" Margin="0,10,10,10" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          Background="{StaticResource GridBackGround}" ItemsSource="{Binding}"
-                          CanUserAddRows="True" HorizontalScrollBarVisibility="Disabled">
-                <DataGrid.Resources>
-                    <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
-                        <Style.Triggers>
-                            <Trigger Property="Orientation" Value="Horizontal">
-                                <Setter Property="Width" Value="Auto" />
-                                <Setter Property="Height" Value="15" />
-                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                            </Trigger>
-                            <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
-                                <Setter Property="Height" Value="Auto" />
-                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.Resources>
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="Height" Value="40"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="30" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="90" Header="單位名稱" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="Unit" Text="{Binding Unit, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="80" FontSize="18" FontFamily="Segoe UI Semibold" Margin="0,0,0,2"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn x:Name="Amount" MinWidth="50" Header="數量" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="40" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="80" Header="售價" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="Price" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="80" Header="會員價" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="VIPPrice" Text="{Binding VIPPrice, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="80" Header="員工價" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="EmpPrice" Text="{Binding EmpPrice, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,10,10" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="90"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Label Content="副作用" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Foreground="Black"/>
-                    <TextBox Text="{Binding SideEffect, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
+                    <Label Content="副作用" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding SideEffect, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="400" Margin="0,10,0,0" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -261,8 +166,8 @@
                     </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Label Content="適應症" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Foreground="Black"/>
-                    <TextBox Text="{Binding Indication, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
+                    <Label Content="適應症" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding Indication, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="400" Margin="0,10,0,0" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -271,8 +176,8 @@
                     </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <TextBlock Text="注意事項" Width="52" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Margin="25,0,25,0" Foreground="Black"/>
-                    <TextBox Text="{Binding Warnings, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
+                    <TextBlock Text="注意事項" Width="47" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="17,0,17,0" Foreground="Black"/>
+                    <TextBox Text="{Binding Warnings, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="400" Margin="0,10,0,0" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -281,8 +186,8 @@
                     </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal">
-                    <Label Content="備註" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Foreground="Black"/>
-                    <TextBox Text="{Binding Note, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="470" Margin="10" FontFamily="Segoe UI Semi" FontSize="20" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
+                    <Label Content="備註" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <TextBox Text="{Binding Note, Mode=TwoWay}" VerticalScrollBarVisibility="Auto" Width="400" Margin="0,10,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
@@ -291,9 +196,9 @@
                     </TextBox>
                 </StackPanel>
             </Grid>
-            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,10,0" Background="{StaticResource GridBackGround}">
-                <Button Width="120" Content="同步資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding SyncDataCommand}"/>
-                <Rectangle Width="90"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Margin="0,0,10,0" Background="{StaticResource GridBackGround}">
+                <Button Width="100" Content="同步資料" FontFamily="Segoe UI Semibold" FontSize="16" Visibility="Hidden" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding SyncDataCommand}"/>
+                <Rectangle Width="70"/>
                 <ContentControl>
                     <ContentControl.Style>
                         <Style TargetType="{x:Type ContentControl}">
@@ -306,16 +211,27 @@
                         </Style>
                     </ContentControl.Style>
                 </ContentControl>
-                <Button Width="120" Content="取消" Name="CancelBtn" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="Gray" Command="{Binding CancelChangeCommand}"/>
-                <Button Width="150" Content="確認" Name="ConfirmBtn" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ConfirmChangeCommand}"/>
+                <Button Width="100" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="Gray" Command="{Binding CancelChangeCommand}"/>
+                <Button Width="120" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding ConfirmChangeCommand}"/>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="1">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Background="{StaticResource GridBackGround}" DataContext="{Binding ManageViewModel}">
+            <Label Content="商品相關資料" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0"/>
+            <Label Content="庫別" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0"/>
+            <ComboBox Width="120" HorizontalContentAlignment="Center" DisplayMemberPath="Name" FontSize="18" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" ItemsSource="{Binding WareHouseCollection}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="庫存管理" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="363,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Button Content="盤點" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="ForestGreen" Margin="10,0,0,0" Command="{Binding StockTakingCommand}" IsEnabled="{Binding DataContext.ManageViewModel.PriceViewModel.MedicineDetail.IsControl, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Converter={StaticResource InvertBoolConverter}}"/>
+            <Button Content="回收" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="RoyalBlue" Margin="10,0,0,0" Command="{Binding RecycleCommand}" IsEnabled="{Binding DataContext.ManageViewModel.PriceViewModel.MedicineDetail.IsControl, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Converter={StaticResource InvertBoolConverter}}"/>
+            <Button Content="報廢" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="IndianRed" Margin="10,0,0,0" Command="{Binding ScrapCommand}"/>
+            <!--<Button Content="轉移庫別" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="35" Background="DimGray" Margin="10,0,0,0" Command="{Binding ScrapCommand}"/>-->
+        </StackPanel>
+        <Grid Grid.Row="2" Grid.Column="1" DataContext="{Binding ManageViewModel}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="290"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <ContentControl Margin="0,10,10,0" Content="{Binding}">
+            <ContentControl Margin="0,10,10,0" Content="{Binding PriceViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource NHIMedicinePriceControl}" />
@@ -330,14 +246,22 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <groupControl:GroupInventoryControl Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding GroupViewModel}"/>
+                <presControl:PrescriptionControl Grid.Column="1" Margin="0,10,10,0" DataContext="{Binding PrescriptionViewModel}"/>
+            </Grid>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="2" Margin="0,10,0,0">
+        <Grid Grid.Row="2" Grid.Column="2" Margin="0,10,0,0" DataContext="{Binding ManageViewModel}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="200"/>
+                <RowDefinition Height="220"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <sharedControl:StockControl Grid.Row="0"/>
-            <sharedControl:ProductRecordDetailControl Grid.Row="1" Margin="0,10,0,0"/>
+            <stockControl:MedicineStockControl Grid.Row="0" DataContext="{Binding StockViewModel}"/>
+            <recordControl:ProductRecordDetailControl Grid.Row="1" Margin="0,10,0,0" DataContext="{Binding RecordViewModel}"/>
         </Grid>
     </Grid>
 </UserControl>

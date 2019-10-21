@@ -42,7 +42,7 @@
             <TextBox Text="{Binding SearchPrincipalName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
             <Button Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="835,0,0,0" Command="{Binding SearchCommand}"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
+        <DataGrid Grid.Row="1" Grid.Column="0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridBackGround}" Margin="10,0,0,0"
                       ItemsSource="{Binding ManufactoryManageCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Behaviors>
@@ -90,6 +90,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Rectangle Grid.Row="2" Grid.Column="0" Fill="{StaticResource GridBackGround}" Margin="10,0,0,0"/>
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" Height="50" Margin="10,0,0,0">
             <Image Source="/Images/Plus.png" Width="35" Margin="5,0,0,0" HorizontalAlignment="Left">
                 <Image.InputBindings>

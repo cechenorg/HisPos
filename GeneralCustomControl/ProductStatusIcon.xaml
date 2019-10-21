@@ -6,10 +6,16 @@
              xmlns:local="clr-namespace:His_Pos.GeneralCustomControl"
              mc:Ignorable="d">
     <StackPanel Name="StatusStack" Orientation="Horizontal" Height="38">
+        <Border Background="Black" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsDisable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="已停用" Margin="5,0,5,0"/>
+        </Border>
+        <Border Background="Red" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsInventoryError, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="不足需求" Margin="5,0,5,0"/>
+        </Border>
         <Border Background="DarkOrange" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="常" Margin="2,0,2,0"/>
-                <TextBlock FontFamily="Segoe UI Semi" Foreground="White" Text="{Binding CommonSafeAmount}" FontSize="11" Margin="0,0,2,0" Visibility="{Binding ShowSafeAmount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="常" Margin="2,0,2,0" FontSize="15"/>
+                <!--<TextBlock FontFamily="Segoe UI Semi" Foreground="White" Text="{Binding CommonSafeAmount}" FontSize="11" Margin="0,3,2,0" Visibility="{Binding ShowSafeAmount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>-->
             </StackPanel>
         </Border>
         <Border Background="Red"  BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsControl, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">

@@ -1,19 +1,30 @@
 ﻿using System;
-using System.Globalization;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.Service
 {
     public static class DateTimeExtensions
     {
 
-        public static string ConvertToTaiwanCalender(DateTime d,bool needSplit)
+        public static string ConvertToTaiwanCalender(DateTime d)
+        {
+            var dateStringArr = CreateDateStringFromDateTime(d);
+            return dateStringArr[0] + dateStringArr[1] + dateStringArr[2];
+        }
+
+        public static string ConvertToTaiwanCalenderWithSplit(DateTime d)
+        {
+            var dateStringArr = CreateDateStringFromDateTime(d);
+            return dateStringArr[0] + "/" + dateStringArr[1] + "/" + dateStringArr[2];
+        }
+
+        private static string[] CreateDateStringFromDateTime(DateTime d)
         {
             var year = (d.Year - 1911).ToString().PadLeft(3, '0');
             var month = (d.Month).ToString().PadLeft(2, '0');
             var day = (d.Day).ToString().PadLeft(2, '0');
-            if (needSplit)
-                return year + "/" + month + "/" + day;
-            return year + month + day;
+            return new[] {year, month, day};
         }
 
         public static string ConvertToTaiwanCalenderWithTime(DateTime d)
@@ -24,6 +35,14 @@ namespace His_Pos.Service
             var hour = (d.Hour).ToString().PadLeft(2, '0');
             var minute = (d.Minute).ToString().PadLeft(2, '0');
             return year + month + day + hour + minute;
+        }
+
+        public static string ConvertToTaiwanCalenderWithTimeZero(DateTime d)
+        {
+            var year = (d.Year - 1911).ToString().PadLeft(3, '0');
+            var month = (d.Month).ToString().PadLeft(2, '0');
+            var day = (d.Day).ToString().PadLeft(2, '0');
+            return year + month + day + "0000";
         }
 
         public struct Age
@@ -84,11 +103,22 @@ namespace His_Pos.Service
             return year + month + day;
         }
 
-        public static DateTime TWDateStringToDateOnly(string date)
+        public static DateTime? TWDateStringToDateOnly(string date)
         {
-            var year = int.Parse(date.Substring(0, 3)) + 1911;
-            var month = int.Parse(date.Substring(3, 2));
-            var day = int.Parse(date.Substring(5, 2));
+            var dateStr = date.Replace("/","");
+            if (dateStr.Length < 6 || dateStr.Length > 7)
+            {
+                MessageWindow.ShowMessage("日期格式錯誤，請確認資料",MessageType.ERROR);
+                return null;
+            }
+
+            if (dateStr.Length == 6)
+            {
+                dateStr = "0" + dateStr;
+            }
+            var year = int.Parse(dateStr.Substring(0, 3)) + 1911;
+            var month = int.Parse(dateStr.Substring(3, 2));
+            var day = int.Parse(dateStr.Substring(5, 2));
             return new DateTime(year,month,day);
         }
 
@@ -120,15 +150,11 @@ namespace His_Pos.Service
         }
         public static bool ValidateDateTime(string datetime, string format)
         {
-            if (datetime == null || datetime.Length == 0)
-            {
-                return false;
-            }
+            if (string.IsNullOrEmpty(datetime)) return false;
             try
             {
-                System.Globalization.DateTimeFormatInfo dtfi = new System.Globalization.DateTimeFormatInfo();
-                dtfi.FullDateTimePattern = format;
-                DateTime dt = DateTime.ParseExact(datetime, "F", dtfi);
+                var dateTimeFormatInfo = new System.Globalization.DateTimeFormatInfo {FullDateTimePattern = format};
+                var dt = DateTime.ParseExact(datetime, "F", dateTimeFormatInfo);
                 return true;
             }
             catch (Exception)
@@ -140,6 +166,40 @@ namespace His_Pos.Service
         {
             var date = (DateTime)declareDate;
             return new DateTime(date.Year, date.Month, day);
+        }
+
+        public static bool CheckIsWeekend(DateTime start)
+        {
+            return (int)start.DayOfWeek == 0;
+        }
+
+        public static int CountTimeDifferenceWithoutHoliday(DateTime startDate, DateTime endDate)
+        {
+            return new TimeSpan(endDate.Ticks - startDate.Ticks).Days - CountHoliday(startDate, endDate);
+        }
+
+        private static int CountHoliday(DateTime start, DateTime end)
+        {
+            var tmpStartDate = start.DeepCloneViaJson();
+            var holiday = 0;
+            while (tmpStartDate < end)
+            {
+                if (CheckIsWeekend(tmpStartDate))
+                    holiday += 1;
+                tmpStartDate = tmpStartDate.AddDays(1);
+            }
+            return holiday;
+        }
+
+        public static string ConvertDateStringToTaiwanCalendar(string text)
+        {
+            var dateStr = text.Replace("-", "").Replace("/", "").Trim();
+            var dateLength = dateStr.Length;
+            if (dateLength < 5) return text;
+            var day = int.Parse(dateStr.Substring(dateLength-2,2));
+            var month = int.Parse(dateStr.Substring(dateLength-4,2));
+            var year = int.Parse(dateStr.Substring(0, dateLength - 4));
+            return year.ToString().PadLeft(3, '0') + "/" + month.ToString().PadLeft(2,'0') + "/" + day.ToString().PadLeft(2,'0');
         }
     }
 }

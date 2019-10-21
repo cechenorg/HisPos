@@ -4,8 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Product.Medicine;
-using His_Pos.NewClass.Product.Medicine.MedicineSet;
+using His_Pos.NewClass.Medicine.Base;
+using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
@@ -42,7 +42,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-
+            if(MedicineSetGrid.CurrentCell.Item is null) return;
             if (MedicineSetGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = MedicineSetGrid.Items.Count;

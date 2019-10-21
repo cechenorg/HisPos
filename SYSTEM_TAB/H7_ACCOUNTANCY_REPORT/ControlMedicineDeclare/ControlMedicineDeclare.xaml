@@ -14,19 +14,17 @@
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
-    </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:ControlMedicineDeclareViewModel/>
-    </UserControl.DataContext>
+    </UserControl.Resources> 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition  />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10">
             <Label Content="處方調劑日"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
             <xctk:MaskedTextBox Name="start" Width="100"  HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" PreviewKeyDown="DateMaskedTextBoxOnPreviewKeyDown">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="SDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -39,21 +37,39 @@
             <Label Content="~"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
             <Label Content="{Binding EDateTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
 
-            <Rectangle Width="870"/>
+            <Rectangle Width="680"/>
             <Button Command="{Binding SearchCommand}" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
+            <Button Command="{Binding ShowControlMedicineEditInputWindowCommand}" Content="編輯歷程" Width="100" Background="RoyalBlue"  Margin="10,0,0,0" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
+            <Button Command="{Binding WareHouseSelectedWindowCommand}" Background="DarkCyan"  Content="匯出申報檔" Margin="10,0,0,0" Width="130"   BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
-        <Grid Grid.Row="1">
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label Content="庫別" Margin="10,0,0,0" FontSize="25" Foreground="Black"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center"/>
+            <ComboBox Width="100" Grid.Row="1" FontFamily="Segoe UI Semi" FontSize="18"  SelectedItem="{Binding SelectedWareHouse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding WareHouseCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding WareHouseSelectionChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Button Content="列印明細" Margin="10,0,0,0" Command="{Binding PrintMaserCommand}" FontSize="20" Background="DarkCyan"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center" BorderBrush="Transparent"/>
+        </StackPanel>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="610"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <DataGrid Name="ProductDataGrid" ItemsSource="{Binding ControlMedicineDeclares, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
+            <DataGrid Name="ProductDataGrid" ItemsSource="{Binding ControlCollectionView, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                    SelectedItem="{Binding SelectItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,0,10">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"/>
                     </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding DataContext.ShowMedicineDetailCommand,RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                    </i:EventTrigger>
                 </i:Interaction.Triggers>
+               
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -106,7 +122,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Width="250" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="250" Header="商品名稱" IsReadOnly="True" SortMemberPath="EnglishName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -157,7 +173,11 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="325"/>
                 </Grid.RowDefinitions>
-                <Label  Content="已調劑處方" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal">
+                    <Label  Content="藥品紀錄" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" />
+                    <Button Content="列印明細" Command="{Binding PrintDetailCommand}" FontFamily="Segoe UI Semibold" FontSize="20" Background="DarkCyan" VerticalAlignment="Center" BorderBrush="Transparent"/>
+                    <Button Content="編輯" Command="{Binding ControlMedEditCommand}" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" Background="DarkCyan" VerticalAlignment="Center" BorderBrush="Transparent"/>
+                </StackPanel>
                 <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding ControlMedicineDetailsCollection, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" >
                     <DataGrid.Resources>

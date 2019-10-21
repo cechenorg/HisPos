@@ -15,6 +15,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode {
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[OffLineDiseaseCode]");
             return table;
         }
+
         public static DataTable GetICD9DiseaseCodes()
         {
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[OffLineDiseaseCodeMapping]");

@@ -61,6 +61,24 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 會計報表系統 的當地語系化字串。
+        /// </summary>
+        internal static string AccountReportSystem {
+            get {
+                return ResourceManager.GetString("AccountReportSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 促銷管理 的當地語系化字串。
+        /// </summary>
+        internal static string Activity {
+            get {
+                return ResourceManager.GetString("Activity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 額外收入登錄 的當地語系化字串。
         /// </summary>
         internal static string AdditionalCashFlowManage {
@@ -183,29 +201,20 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 藥健康網頁 的當地語系化字串。
+        /// </summary>
+        internal static string CompanyWeb {
+            get {
+                return ResourceManager.GetString("CompanyWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 管制藥品簿冊申報 的當地語系化字串。
         /// </summary>
         internal static string ControlMedicineDeclare {
             get {
                 return ResourceManager.GetString("ControlMedicineDeclare", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 合作診所藥品耗用 的當地語系化字串。
-        /// </summary>
-        internal static string CooperativeAdjustReport {
-            get {
-                return ResourceManager.GetString("CooperativeAdjustReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 部分負擔自費報表 的當地語系化字串。
-        /// </summary>
-        internal static string CooperativeEntry {
-            get {
-                return ResourceManager.GetString("CooperativeEntry", resourceCulture);
             }
         }
         
@@ -225,6 +234,24 @@ namespace His_Pos.Properties {
         internal static string CopaymentError {
             get {
                 return ResourceManager.GetString("CopaymentError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Csv檔案|*.csv 的當地語系化字串。
+        /// </summary>
+        internal static string CSVFileType {
+            get {
+                return ResourceManager.GetString("CSVFileType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Csv檔案|*.csv 的當地語系化字串。
+        /// </summary>
+        internal static string CSV檔案 {
+            get {
+                return ResourceManager.GetString("CSV檔案", resourceCulture);
             }
         }
         
@@ -330,7 +357,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 庫存現值查詢 的當地語系化字串。
+        ///   查詢類似 庫存現值報表 的當地語系化字串。
         /// </summary>
         internal static string EntrySearch {
             get {
@@ -402,6 +429,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 申報院所點數總表 的當地語系化字串。
+        /// </summary>
+        internal static string InstitutionDeclarePointReport {
+            get {
+                return ResourceManager.GetString("InstitutionDeclarePointReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 請填寫釋出院所
         /// 的當地語系化字串。
         /// </summary>
@@ -448,7 +484,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 藥袋管理 的當地語系化字串。
+        ///   查詢類似 藥袋查詢 的當地語系化字串。
         /// </summary>
         internal static string MedBagManage {
             get {
@@ -542,15 +578,6 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 未選擇調劑藥師或調劑藥師身分證未填寫\n 的當地語系化字串。
-        /// </summary>
-        internal static string PharmacistIDError {
-            get {
-                return ResourceManager.GetString("PharmacistIDError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 藥局管理 的當地語系化字串。
         /// </summary>
         internal static string PharmacyManage {
@@ -570,39 +597,21 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 我是處方請存我|*.csv 的當地語系化字串。
+        /// </summary>
+        internal static string PrescriptionFileType {
+            get {
+                return ResourceManager.GetString("PrescriptionFileType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 處方已超過可領取時限，如繼續調劑申報會產生錯誤，是否繼續調劑?
         /// 的當地語系化字串。
         /// </summary>
         internal static string PrescriptoinOutOfDate {
             get {
                 return ResourceManager.GetString("PrescriptoinOutOfDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 列印確認 的當地語系化字串。
-        /// </summary>
-        internal static string PrintConfirm {
-            get {
-                return ResourceManager.GetString("PrintConfirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 是否列印藥袋 的當地語系化字串。
-        /// </summary>
-        internal static string PrintMedBag {
-            get {
-                return ResourceManager.GetString("PrintMedBag", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 是否列印收據 的當地語系化字串。
-        /// </summary>
-        internal static string PrintReceipt {
-            get {
-                return ResourceManager.GetString("PrintReceipt", resourceCulture);
             }
         }
         
@@ -625,6 +634,24 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 結帳作業 的當地語系化字串。
+        /// </summary>
+        internal static string ProductTransaction {
+            get {
+                return ResourceManager.GetString("ProductTransaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 銷售紀錄 的當地語系化字串。
+        /// </summary>
+        internal static string ProductTransactionRecord {
+            get {
+                return ResourceManager.GetString("ProductTransactionRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 商品類別管理 的當地語系化字串。
         /// </summary>
         internal static string ProductTypeManage {
@@ -634,7 +661,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 進退貨報表查詢 的當地語系化字串。
+        ///   查詢類似 進退貨報表 的當地語系化字串。
         /// </summary>
         internal static string PurchaseReturnReport {
             get {
@@ -643,7 +670,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 報表系統 的當地語系化字串。
+        ///   查詢類似 報表 的當地語系化字串。
         /// </summary>
         internal static string ReportSystem {
             get {
@@ -679,7 +706,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 商品管理 的當地語系化字串。
+        ///   查詢類似 庫存管理 的當地語系化字串。
         /// </summary>
         internal static string StockManage {
             get {
@@ -706,6 +733,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 盤點計畫 的當地語系化字串。
+        /// </summary>
+        internal static string StockTakingPlan {
+            get {
+                return ResourceManager.GetString("StockTakingPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 庫存盤點紀錄 的當地語系化字串。
         /// </summary>
         internal static string StockTakingRecord {
@@ -715,11 +751,38 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 系統教學文件 的當地語系化字串。
+        /// </summary>
+        internal static string SystemTutorial {
+            get {
+                return ResourceManager.GetString("SystemTutorial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 銷售作業 的當地語系化字串。
+        /// </summary>
+        internal static string Transaction {
+            get {
+                return ResourceManager.GetString("Transaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 請填寫就醫日期\n 的當地語系化字串。
         /// </summary>
         internal static string TreatDateError {
             get {
                 return ResourceManager.GetString("TreatDateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 網頁連結 的當地語系化字串。
+        /// </summary>
+        internal static string Web {
+            get {
+                return ResourceManager.GetString("Web", resourceCulture);
             }
         }
         
@@ -742,6 +805,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。 的當地語系化字串。
+        /// </summary>
+        internal static string 代入處方錯誤 {
+            get {
+                return ResourceManager.GetString("代入處方錯誤", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 與健保局連線認證中，請稍後... 的當地語系化字串。
         /// </summary>
         internal static string 健保局連線中 {
@@ -756,6 +828,24 @@ namespace His_Pos.Properties {
         internal static string 免收確認 {
             get {
                 return ResourceManager.GetString("免收確認", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 列印確認 的當地語系化字串。
+        /// </summary>
+        internal static string 列印確認 {
+            get {
+                return ResourceManager.GetString("列印確認", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 列印報表發生問題，請重試 的當地語系化字串。
+        /// </summary>
+        internal static string 列印錯誤 {
+            get {
+                return ResourceManager.GetString("列印錯誤", resourceCulture);
             }
         }
         
@@ -887,6 +977,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 查詢姓名不可為空 的當地語系化字串。
+        /// </summary>
+        internal static string 姓名空值 {
+            get {
+                return ResourceManager.GetString("姓名空值", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 卡片資料寫入中... 的當地語系化字串。
         /// </summary>
         internal static string 寫卡 {
@@ -901,6 +1000,24 @@ namespace His_Pos.Properties {
         internal static string 寫卡異常 {
             get {
                 return ResourceManager.GetString("寫卡異常", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 尚未選擇異常代碼，請重新過卡後再次按下調劑按鈕 的當地語系化字串。
+        /// </summary>
+        internal static string 尚未選擇異常代碼 {
+            get {
+                return ResourceManager.GetString("尚未選擇異常代碼", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 未選擇調劑藥師或調劑藥師身分證未填寫\n 的當地語系化字串。
+        /// </summary>
+        internal static string 尚未選擇藥師 {
+            get {
+                return ResourceManager.GetString("尚未選擇藥師", resourceCulture);
             }
         }
         
@@ -955,6 +1072,15 @@ namespace His_Pos.Properties {
         internal static string 收據列印 {
             get {
                 return ResourceManager.GetString("收據列印", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 是否列印收據 的當地語系化字串。
+        /// </summary>
+        internal static string 收據列印確認 {
+            get {
+                return ResourceManager.GetString("收據列印確認", resourceCulture);
             }
         }
         
@@ -1085,6 +1211,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 查詢生日不可為空 的當地語系化字串。
+        /// </summary>
+        internal static string 生日空值 {
+            get {
+                return ResourceManager.GetString("生日空值", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 產生每日上傳資料中... 的當地語系化字串。
         /// </summary>
         internal static string 產生每日上傳資料 {
@@ -1122,11 +1257,38 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 藥品統計存檔 的當地語系化字串。
+        /// </summary>
+        internal static string 藥品統計存檔 {
+            get {
+                return ResourceManager.GetString("藥品統計存檔", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 藥袋列印中... 的當地語系化字串。
         /// </summary>
         internal static string 藥袋列印 {
             get {
                 return ResourceManager.GetString("藥袋列印", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 是否列印藥袋 的當地語系化字串。
+        /// </summary>
+        internal static string 藥袋列印確認 {
+            get {
+                return ResourceManager.GetString("藥袋列印確認", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 處方存檔 的當地語系化字串。
+        /// </summary>
+        internal static string 處方存檔 {
+            get {
+                return ResourceManager.GetString("處方存檔", resourceCulture);
             }
         }
         
@@ -1257,6 +1419,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 查詢身分證不可為空 的當地語系化字串。
+        /// </summary>
+        internal static string 身分證空值 {
+            get {
+                return ResourceManager.GetString("身分證空值", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 讀卡機連接開啟失敗 的當地語系化字串。
         /// </summary>
         internal static string 連接失敗 {
@@ -1271,15 +1442,6 @@ namespace His_Pos.Properties {
         internal static string 連接成功 {
             get {
                 return ResourceManager.GetString("連接成功", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 尚未選擇異常代碼，請以欠卡調劑或重新過卡後再次按下調劑按鈕 的當地語系化字串。
-        /// </summary>
-        internal static string 重新過卡或押金 {
-            get {
-                return ResourceManager.GetString("重新過卡或押金", resourceCulture);
             }
         }
         
@@ -1302,7 +1464,25 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 此顧客為新客人，若要新增請填寫姓名.身分證與生日 的當地語系化字串。
+        ///   查詢類似 院所申報點數統計表 的當地語系化字串。
+        /// </summary>
+        internal static string 院所統計表 {
+            get {
+                return ResourceManager.GetString("院所統計表", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 查詢電話不可為空 的當地語系化字串。
+        /// </summary>
+        internal static string 電話空值 {
+            get {
+                return ResourceManager.GetString("電話空值", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 查無此病患且病患資料不足，請至少填寫身分證(長度為10並且符合身分證或居留證號檢查規則).姓名及生日 的當地語系化字串。
         /// </summary>
         internal static string 顧客資料不足 {
             get {

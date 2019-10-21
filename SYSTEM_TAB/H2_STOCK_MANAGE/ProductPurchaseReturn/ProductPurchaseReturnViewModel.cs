@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -14,8 +15,9 @@ using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
+using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.ChooseBatchWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -39,8 +41,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand<string> SplitBatchCommand { get; set; }
         public RelayCommand<PurchaseProduct> MergeBatchCommand { get; set; }
         public RelayCommand CloseTabCommand { get; set; }
-        public RelayCommand ChooseBatchCommand { get; set; }
-        public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
+        public RelayCommand ReturnOrderCalculateReturnAmountCommand { get; set; }
+        public RelayCommand ReturnOrderRePurchaseCommand { get; set; }
+        public RelayCommand ExportOrderDataCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -49,7 +52,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private string busyContent;
         private StoreOrders storeOrderCollection;
         private ICollectionView storeOrderCollectionView;
+        private string searchString;
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
+        private BackgroundWorker initBackgroundWorker;
 
         public bool IsBusy
         {
@@ -81,17 +86,39 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
         }
-        public string SearchString { get; set; }
+        public string SearchString
+        {
+            get => searchString;
+            set { Set(() => SearchString, ref searchString, value); }
+        }
         #endregion
 
         public ProductPurchaseReturnViewModel()
         {
-            TabName = MainWindow.HisFeatures[1].Functions[1];
-            Icon = MainWindow.HisFeatures[1].Icon;
+            TabName = MainWindow.HisFeatures[2].Functions[2];
+            Icon = MainWindow.HisFeatures[2].Icon;
+            InitBackgroundWorker();
             RegisterCommand();
+            RegisterMessengers();
         }
 
         #region ----- Define Actions -----
+        private void ReturnOrderRePurchaseAction()
+        {
+            if (CurrentStoreOrder.CheckOrder())
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
+                (CurrentStoreOrder as ReturnOrder).ReturnOrderRePurchase();
+                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
+                storeOrderCollection.ReloadCollection();
+            }
+        }
+        private void ReturnOrderCalculateReturnAmountAction()
+        {
+            (CurrentStoreOrder as ReturnOrder).CalculateReturnAmount();
+        }
         private void CalculateTotalPriceAction()
         {
             CurrentStoreOrder.CalculateTotalPrice();
@@ -153,19 +180,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
 
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, addProductEnum);
+            var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, addProductEnum, CurrentStoreOrder.OrderWarehouse.ID);
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum);
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum, CurrentStoreOrder.OrderWarehouse.ID);
                 productPurchaseReturnAddProductWindow.ShowDialog();
                 Messenger.Default.Unregister(this);
             }
             else if (productCount == 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum);
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum, CurrentStoreOrder.OrderWarehouse.ID);
                 Messenger.Default.Unregister(this);
             }
             else
@@ -178,7 +205,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
 
             Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProductFromAddButton);
-            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("", addProductEnum);
+            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("", addProductEnum, CurrentStoreOrder.OrderWarehouse.ID);
             productPurchaseReturnAddProductWindow.ShowDialog();
             Messenger.Default.Unregister(this);
         }
@@ -205,26 +232,52 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if(CurrentStoreOrder != null)
                 CurrentStoreOrder.SaveOrder();
         }
-        private void ChooseBatchAction()
+        private void ExportOrderDataAction()
         {
-            ChooseBatchWindow.ChooseBatchWindow chooseBatchWindow = new ChooseBatchWindow.ChooseBatchWindow(CurrentStoreOrder.SelectedItem.ID);
-            
-            ChooseBatchWindowViewModel dataContext = (ChooseBatchWindowViewModel) chooseBatchWindow.DataContext;
+            if (CurrentStoreOrder.OrderStatus == OrderStatusEnum.WAITING)
+            {
+                MessageWindow.ShowMessage("等待處理訂單資料不齊全 無法匯出!", MessageType.ERROR);
+                return;
+            }
 
-            if (dataContext.IsSelected)
-                ((ReturnProduct)CurrentStoreOrder.SelectedItem).BatchNumber = dataContext.ChoosedBatchNumber;
+            IsBusy = true;
+            BusyContent = "匯出資料";
+
+            bool isSuccess = false;
+
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                Collection<object> tempCollection = new Collection<object>() { CurrentStoreOrder };
+                
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentStoreOrder.SaveOrder();
+                ExportExcelService service = new ExportExcelService(tempCollection, new ExportOrderRecordTemplate());
+                isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\進退貨資料{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
+                MainWindow.ServerConnection.CloseConnection();
+            };
+
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (isSuccess)
+                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+                else
+                    MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
+
+                IsBusy = false;
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
         #endregion
 
         #region ----- Define Functions -----
-        private void InitVariables()
+        private void InitBackgroundWorker()
         {
-            IsBusy = true;
-            SearchString = "";
-            
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            initBackgroundWorker = new BackgroundWorker();
 
-            backgroundWorker.DoWork += (sender, args) =>
+            initBackgroundWorker.DoWork += (sender, args) =>
             {
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
@@ -262,12 +315,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
                     }
                 }
-                
+
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
             };
 
-            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
                 StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrderCollection);
                 StoreOrderCollectionView.Filter += OrderFilter;
@@ -280,8 +333,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 IsBusy = false;
             };
+        }
+        private void InitVariables(string searchStr = "")
+        {
+            IsBusy = true;
+            SearchString = searchStr;
 
-            backgroundWorker.RunWorkerAsync();
+            if(!initBackgroundWorker.IsBusy)
+                initBackgroundWorker.RunWorkerAsync();
         }
         private void RegisterCommand()
         {
@@ -296,8 +355,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             FilterOrderCommand = new RelayCommand<string>(FilterOrderAction);
             SplitBatchCommand = new RelayCommand<string>(SplitBatchAction);
             MergeBatchCommand = new RelayCommand<PurchaseProduct>(MergeBatchAction);
-            ChooseBatchCommand = new RelayCommand(ChooseBatchAction);
             CloseTabCommand = new RelayCommand(CloseTabAction);
+            ReturnOrderCalculateReturnAmountCommand = new RelayCommand(ReturnOrderCalculateReturnAmountAction);
+            ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
+            ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
+        }
+        private void RegisterMessengers()
+        {
+            Messenger.Default.Register<NotificationMessage<string>>(this, ShowOrderDetailByOrderID);
+            Messenger.Default.Register<NotificationMessage>(this, ReloadProducts);
         }
         
         #region ///// Messenger Functions /////
@@ -316,6 +382,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MainWindow.ServerConnection.OpenConnection();
                 CurrentStoreOrder.AddProductByID(notificationMessage.Content.ID, true);
+                MainWindow.ServerConnection.CloseConnection();
+            }
+        }
+        private void ShowOrderDetailByOrderID(NotificationMessage<string> notificationMessage)
+        {
+            if (notificationMessage.Target == this)
+            {
+                MainWindow.Instance.AddNewTab(TabName);
+
+                InitVariables(notificationMessage.Content);
+            }
+        }
+        private void ReloadProducts(NotificationMessage notificationMessage)
+        {
+            if (notificationMessage.Notification == "UpdateUsableAmountMessage")
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CurrentStoreOrder.SaveOrder();
+                CurrentStoreOrder.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
             }
         }
@@ -347,34 +432,34 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     returnValue = true;
 
                 //Order Product ID Name Note Filter
-                if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )
-                {
-                    foreach (var product in (tempOrder as PurchaseOrder).OrderProducts)
-                        if (product.Note != null && product.Note.Contains(SearchString))
-                        {
-                            returnValue = true;
-                            break;
-                        }
-                        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
-                        {
-                            returnValue = true;
-                            break;
-                        }
-                }
-                else if (tempOrder is ReturnOrder && (tempOrder as ReturnOrder).ReturnProducts != null)
-                {
-                    foreach (var product in (tempOrder as ReturnOrder).ReturnProducts)
-                        if (product.Note != null && product.Note.Contains(SearchString))
-                        {
-                            returnValue = true;
-                            break;
-                        }
-                        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
-                        {
-                            returnValue = true;
-                            break;
-                        }
-                }
+                //if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )
+                //{
+                //    foreach (var product in (tempOrder as PurchaseOrder).OrderProducts)
+                //        if (product.Note != null && product.Note.Contains(SearchString))
+                //        {
+                //            returnValue = true;
+                //            break;
+                //        }
+                //        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
+                //        {
+                //            returnValue = true;
+                //            break;
+                //        }
+                //}
+                //else if (tempOrder is ReturnOrder && (tempOrder as ReturnOrder).ReturnProducts != null)
+                //{
+                //    foreach (var product in (tempOrder as ReturnOrder).ReturnProducts)
+                //        if (product.Note != null && product.Note.Contains(SearchString))
+                //        {
+                //            returnValue = true;
+                //            break;
+                //        }
+                //        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
+                //        {
+                //            returnValue = true;
+                //            break;
+                //        }
+                //}
             }
 
             //Order Status Filter

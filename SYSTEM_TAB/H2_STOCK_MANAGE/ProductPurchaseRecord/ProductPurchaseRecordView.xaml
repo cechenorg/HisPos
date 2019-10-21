@@ -10,6 +10,7 @@
              xmlns:command="http://www.galasoft.ch/mvvmlight"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:newclass="clr-namespace:His_Pos.NewClass"
              mc:Ignorable="d">
     <i:Interaction.Triggers >
         <i:EventTrigger EventName="Loaded">
@@ -46,152 +47,169 @@
             <Image Source="/Images/BlueDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="WaitingIcon" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
-            <Image Source="/Images/BlueRingDot.png" Width="20" Margin="10,0,5,0"/>
+            <Image Source="/Images/GreenDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="NotScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
-            <Label Content="{Binding OrderManufactory.GetName}" Foreground="{StaticResource ForeGround}" Margin="5,0,0,0" Width="125" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Width="130">
+                <Label Content="{Binding OrderWarehouse.Name}" Foreground="RoyalBlue" Width="45" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                <Label Content="{Binding OrderManufactory.GetName}" Foreground="{StaticResource ForeGround}" Width="60" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center"/>
+            </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="ScrapOrder" DataType="{x:Type local:ProductPurchaseRecordViewModel}">
             <Label Content="處理單已作廢" Margin="5,0,0,0" Width="125" Foreground="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center"/>
         </DataTemplate>
+        <newclass:BindingProxy x:Key="proxy" Data="{Binding}" />
     </UserControl.Resources>
-    <Grid Width="1365" Height="870">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="9">
-            <Label Content="日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <xctk:MaskedTextBox Width="100" Height="30" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
-                <xctk:MaskedTextBox.Text>
-                    <Binding Path="SearchStartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+        <Grid Width="1365" Height="870">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center">
+                <Label Content="日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <xctk:MaskedTextBox Name="StartDate" Width="100" Height="30" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" KeyDown="StartDate_OnKeyDown">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="SearchStartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                        <Binding.ValidationRules>
-                            <service:DateValidationRule/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </xctk:MaskedTextBox.Text>
-            </xctk:MaskedTextBox>
-            <Label Content="~" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
-            <xctk:MaskedTextBox Width="100" Height="30" Margin="0,0,10,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <Label Content="~" VerticalContentAlignment="Center" Margin="5,0,5,0"/>
+                <xctk:MaskedTextBox Name="EndDate" Width="100" Height="30" Margin="0,0,10,0" HorizontalContentAlignment="Center"  FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                     Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
-                <xctk:MaskedTextBox.Text>
-                    <Binding Path="SearchEndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="SearchEndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                        <Binding.ValidationRules>
-                            <service:DateValidationRule/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </xctk:MaskedTextBox.Text>
-            </xctk:MaskedTextBox>
-            <Label Content="單號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding SearchOrderID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-            <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding SearchManufactoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-            <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding SearchProductID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-            <Button Content="清除" BorderThickness="0" Background="DimGray" Height="30" FontSize="18" FontWeight="Bold" Width="100" Command="{Binding ClearSearchConditionCommand}" Margin="170,0,0,0"/>
-            <Button Content="查詢" BorderThickness="0" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Command="{Binding SearchOrderCommand}" Margin="10,0,0,0"/>
-        </StackPanel>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="270"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                    <RadioButton Content="進貨" Tag="0" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
-                    <RadioButton Content="退貨" Tag="1" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
-                    <RadioButton Content="全部" Tag="2" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" />
-                </StackPanel>
-                <DataGrid Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}"
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <Button Content="清除" BorderThickness="0" Background="DimGray" Height="30" FontSize="18" FontWeight="Bold" Width="100" Command="{Binding ClearSearchConditionCommand}" Margin="830,0,0,0"/>
+                <Button Content="查詢" BorderThickness="0" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Command="{Binding SearchOrderCommand}" Margin="10,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Center">
+                <Label Content="單號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Text="{Binding SearchOrderID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
+                <Label Content="商品代碼/名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Text="{Binding SearchProductID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
+                <Label Content="庫別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Text="{Binding SearchWareName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
+                <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Text="{Binding SearchManufactoryID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
+            </StackPanel>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="270"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                        <RadioButton Content="進貨" Tag="0" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                        <RadioButton Content="退貨" Tag="1" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                        <RadioButton Content="全部" Tag="2" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" />
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}" CanUserDeleteRows="False"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="260">
-                            <DataGridTemplateColumn.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="Transparent"/>
-                                    <Setter Property="Foreground" Value="#FF424040"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridTemplateColumn.CellStyle>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid Height="70" Margin="10,0,0,0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                            <Label Content="{Binding ReceiveID}" Width="180" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
-                                            <ContentControl>
-                                                <ContentControl.Style>
-                                                    <Style TargetType="{x:Type ContentControl}">
-                                                        <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderIcon}" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding OrderType}" Value="RETURN">
-                                                                <Setter Property="ContentTemplate" Value="{StaticResource ReturnOrderIcon}" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </ContentControl.Style>
-                                            </ContentControl>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                            <ContentControl Content="{Binding}">
-                                                <ContentControl.Style>
-                                                    <Style TargetType="{x:Type ContentControl}">
-                                                        <Setter Property="ContentTemplate" Value="{StaticResource NotScrapOrder}" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SCRAP">
-                                                                <Setter Property="ContentTemplate" Value="{StaticResource ScrapOrder}" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </ContentControl.Style>
-                                            </ContentControl>
-                                            <Label Content="{Binding ProductCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
-                                            <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                    <Label Content="共" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                    <Label Content="{Binding StoreOrderCollection.Count, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Margin="0,0,0,0" FontSize="18" Width="40" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                    <Label Content="張    總計$" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding TotalPrice, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                </StackPanel>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="260">
+                                <DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="#FF424040"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid Height="70" Margin="10,0,0,0">
+                                            <Grid.ContextMenu>
+                                                <ContextMenu TextBlock.TextAlignment="Center">
+                                                    <MenuItem Header="匯出選取訂單資料" Command="{Binding Data.ExportOrderDataCommand, Source={StaticResource proxy}}" CommandParameter="S"/>
+                                                    <MenuItem Header="匯出查詢結果所有訂單資料" Command="{Binding Data.ExportOrderDataCommand, Source={StaticResource proxy}}" CommandParameter="A"/>
+                                                </ContextMenu>
+                                            </Grid.ContextMenu>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                                <Label Content="{Binding ReceiveID}" Width="180" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                                <ContentControl>
+                                                    <ContentControl.Style>
+                                                        <Style TargetType="{x:Type ContentControl}">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderIcon}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding OrderType}" Value="RETURN">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource ReturnOrderIcon}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ContentControl.Style>
+                                                </ContentControl>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                <ContentControl Content="{Binding}">
+                                                    <ContentControl.Style>
+                                                        <Style TargetType="{x:Type ContentControl}">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource NotScrapOrder}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SCRAP">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource ScrapOrder}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ContentControl.Style>
+                                                </ContentControl>
+                                                <Label Content="{Binding ProductCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
+                                                <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                        <Label Content="共" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                        <Label Content="{Binding StoreOrderCollection.Count, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Margin="0,0,0,0" FontSize="18" Width="40" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                        <Label Content="張    總計$" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding TotalPrice, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+                <ContentControl Grid.Column="1" Margin="0,0,10,10">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource NoDataDetailControl}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType, UpdateSourceTrigger=PropertyChanged}" Value="RETURN">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource ReturnRecordOrderDetail}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType, UpdateSourceTrigger=PropertyChanged}" Value="PURCHASE">
+                                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseRecordOrderDetail}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
             </Grid>
-            <ContentControl Grid.Column="1" Margin="0,0,10,10">
-                <ContentControl.Style>
-                    <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoDataDetailControl}" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType, UpdateSourceTrigger=PropertyChanged}" Value="RETURN">
-                                <Setter Property="ContentTemplate" Value="{StaticResource ReturnRecordOrderDetail}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType, UpdateSourceTrigger=PropertyChanged}" Value="PURCHASE">
-                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseRecordOrderDetail}" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>
         </Grid>
-    </Grid>
+    </xctk:BusyIndicator>
 </UserControl>

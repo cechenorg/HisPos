@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using His_Pos.NewClass.Medicine.Position;
+using His_Pos.NewClass.Medicine.Usage;
 using His_Pos.NewClass.OfflineDataSet;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -15,8 +17,6 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
-using His_Pos.NewClass.Product.Medicine.Position;
-using His_Pos.NewClass.Product.Medicine.Usage;
 using His_Pos.SYSTEM_TAB.OfflineOperation;
 using ZeroFormatter;
 

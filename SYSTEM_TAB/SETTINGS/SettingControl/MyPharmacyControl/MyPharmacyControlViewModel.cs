@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
-using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
@@ -24,6 +20,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand VerifyHPCPinCommand { get; set; }
         public RelayCommand VerifySAMDCCommand { get; set; }
+        public RelayCommand NewInstitutionOnCommand { get; set; }
+        public RelayCommand PharmacyIDChangedCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -31,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         private string busyContent;
         public Pharmacy myPharmacy;
         private bool isDataChanged;
-
+        private bool pharmacyIDChanged;
         public bool IsBusy
         {
             get => isBusy;
@@ -49,12 +47,20 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
         }
         public bool IsDataChanged
         {
-            get { return isDataChanged; }
+            get => isDataChanged;
             set
             {
                 Set(() => IsDataChanged, ref isDataChanged, value);
                 CancelChangeCommand.RaiseCanExecuteChanged();
                 ConfirmChangeCommand.RaiseCanExecuteChanged();
+            }
+        }
+        public bool PharmacyIDChanged
+        {
+            get => pharmacyIDChanged;
+            set
+            {
+                Set(() => PharmacyIDChanged, ref pharmacyIDChanged, value);
             }
         }
         #endregion
@@ -73,11 +79,18 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
                 MessageWindow.ShowMessage("VPN 格式錯誤!", MessageType.ERROR);
                 return;
             }
+            if (!CheckPharmacyIDChanged())
+                return;
             MainWindow.ServerConnection.OpenConnection();
-            myPharmacy.SetPharmacy();
+            if (!MyPharmacy.SetPharmacy()) {
+                MessageWindow.ShowMessage("更新機構代碼失敗，已有相同機構代碼", MessageType.ERROR);
+                PharmacyIDChanged = false;
+            } 
+            ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
+            ViewModelMainWindow.CurrentPharmacy.GetPharmacists(DateTime.Today);
+            MyPharmacy = Pharmacy.GetCurrentPharmacy();
             MainWindow.ServerConnection.CloseConnection();
-            WebApi.UpdatePharmacyMedicalNum(myPharmacy.ID);
-            Properties.Settings.Default.ReaderComPort = myPharmacy.ReaderCom.ToString();
+            Properties.Settings.Default.ReaderComPort = MyPharmacy.ReaderCom.ToString();
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -100,9 +113,40 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
 
             IsDataChanged = false;
         }
+
+        private bool CheckPharmacyIDChanged()
+        {
+            if (PharmacyIDChanged)
+            {
+                if (!IsPharmacyIDValid())
+                {
+                    MessageWindow.ShowMessage("機構代碼格式錯誤!", MessageType.ERROR);
+                    return false;
+                } 
+                var startDateSetWindow = new StartDateWindow(MyPharmacy);
+                startDateSetWindow.ShowDialog();
+                MyPharmacy.StartDate = ((StartDateViewModel) startDateSetWindow.DataContext).StartDate;
+                if (MyPharmacy.StartDate is null)
+                {
+                    MessageWindow.ShowMessage("日期未填寫，資料尚未變更!", MessageType.ERROR);
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+
+        private bool IsPharmacyIDValid()
+        {
+            if (string.IsNullOrEmpty(MyPharmacy.ID))
+                return false;
+            return MyPharmacy.ID.Length == 10;
+        }
+
         private void CancelChangeAction()
         {
             InitMyPharmacy();
+            pharmacyIDChanged = false;
             IsDataChanged = false;
         }
         private void DataChangedAction()
@@ -130,6 +174,34 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             IsBusy = true;
             bw.RunWorkerAsync();
         }
+        private void NewInstitutionOnAction()
+        {
+            switch (MyPharmacy.NewInstitution)
+            {
+                case true:
+                    var openConfirm =
+                        new ConfirmWindow("此功能為新特約使用，若開啟會關閉每日健保資料上傳功能且過卡自動選擇異常上傳G000，確認開啟?", "新特約開啟確認");
+                    if ((bool) openConfirm.DialogResult)
+                        IsDataChanged = true;
+                    else
+                        MyPharmacy.NewInstitution = false;
+                    break;
+                case false:
+                    var closeConfirm =
+                        new ConfirmWindow("目前為新特約，若開啟會自動執行每日上傳且正常過卡，確定關閉?", "新特約關閉確認");
+                    if ((bool) closeConfirm.DialogResult)
+                        IsDataChanged = true;
+                    else
+                        MyPharmacy.NewInstitution = true;
+                    break;
+            }
+        }
+
+        private void PharmacyIDChangedAction()
+        {
+            PharmacyIDChanged = ViewModelMainWindow.CurrentPharmacy.ID != MyPharmacy.ID;
+            IsDataChanged = true;
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -140,7 +212,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             DataChangedCommand = new RelayCommand(DataChangedAction);
             VerifyHPCPinCommand = new RelayCommand(VerifyHPCPinAction);
             VerifySAMDCCommand = new RelayCommand(VerifySAMDCAction);
+            NewInstitutionOnCommand = new RelayCommand(NewInstitutionOnAction);
+            PharmacyIDChangedCommand = new RelayCommand(PharmacyIDChangedAction);
         }
+
         private bool IsPharmacyDataChanged()
         {
             return IsDataChanged;

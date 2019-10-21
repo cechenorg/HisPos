@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl"
         mc:Ignorable="d"
-        Title="新增倉庫" Height="150" Width="200" WindowStartupLocation="CenterScreen">
+        Title="新增庫別" Height="150" Width="200" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="新倉庫名稱" Grid.Row="0" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="新庫別名稱" Grid.Row="0" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <TextBox Text="{Binding NewName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="10,0,10,2" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center"/>
         <Button Width="120" Grid.Row="2" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="ConfirmClick"/>
     </Grid>

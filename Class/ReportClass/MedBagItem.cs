@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using His_Pos.NewClass.Product.Medicine.MedBag;
+using His_Pos.NewClass.Medicine.MedBag;
 
 namespace His_Pos.Class.ReportClass
 {

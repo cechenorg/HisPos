@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow"
         xmlns:newOrderTypeControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
         mc:Ignorable="d"
-        Title="AddNewOrderWindow" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+        Title="新增進退貨單" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <local:AddNewOrderWindowViewModel/>
     </Window.DataContext>
@@ -21,6 +21,7 @@
     <Grid Width="500">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
@@ -28,7 +29,12 @@
             <RadioButton Tag="P" Content="進貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" IsChecked="True" Command="{Binding ToPurchaseCommand}"/>
             <RadioButton Tag="R" Content="退貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="50,0,0,0" Command="{Binding ToReturnCommand}"/>
         </StackPanel>
-        <ContentControl Grid.Row="1" Content="{Binding}">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+            <Label Content="選擇庫別:" Foreground="Black" Margin="10,0,0,0" Style="{StaticResource BoldLabelHeader25}"/>
+            <ComboBox Width="200" Margin="10,0,0,0" DisplayMemberPath="Name" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" ItemsSource="{Binding WareHouseCollection}"
+                      ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <ContentControl Grid.Row="2" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
                     <Setter Property="ContentTemplate" Value="{StaticResource PurchaseTypeControl}"/>
@@ -40,6 +46,6 @@
                 </Style>
             </ContentControl.Style>
         </ContentControl>
-        <Button Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Command="{Binding ConfirmAddCommand}"/>
+        <Button Content="確認" Grid.Row="3" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Command="{Binding ConfirmAddCommand}"/>
     </Grid>
 </Window>

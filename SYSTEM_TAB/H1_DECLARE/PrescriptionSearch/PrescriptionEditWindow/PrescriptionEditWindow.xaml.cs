@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Interface;
-using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.Medicine.Base;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using Xceed.Wpf.Toolkit;
+using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
@@ -20,7 +17,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
     /// </summary>
     public partial class PrescriptionEditWindow : Window
     {
-        public PrescriptionEditWindow(int preID, PrescriptionSource pSource = PrescriptionSource.Normal)
+        int prevRowIndex = -1;
+        public delegate Point GetDragDropPosition(IInputElement theElement);
+        public PrescriptionEditWindow()
+        {
+            InitializeComponent();
+        }
+
+        public PrescriptionEditWindow(Prescription p,string title)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -28,19 +32,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 if (notificationMessage.Notification.Equals("ClosePrescriptionEditWindow"))
                     Close();
             });
-            
-            DataContext = new PrescriptionEditViewModel(preID, pSource);
             Messenger.Default.Register<NotificationMessage>("FocusDivision", FocusDivision);
-            Messenger.Default.Register<NotificationMessage<int>>("FocusDosage", FocusDosage);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
             Closing += (sender, e) => Messenger.Default.Unregister(this);
-        }
-
-        private void FocusDosage(NotificationMessage<int> msg)
-        {
-            if(msg.Sender is PrescriptionEditViewModel && msg.Notification.Equals("FocusDosage"))
-                FocusDataGridCell("Dosage", PrescriptionMedicines, msg.Content);
+            PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
+            DataContext = new PrescriptionEditViewModel(p, title);
+            ShowDialog();
         }
 
         private void FocusChronicTotal(NotificationMessage msg)
@@ -67,14 +65,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 DivisionCombo.Focus();
         }
 
-        private void PrescriptionMedicines_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!(sender is DataGrid dg)) return;
-            var index = dg.SelectedIndex;
-            if (index == -1) return;
-            ((PrescriptionEditViewModel)DataContext).SelectedMedicinesIndex = index;
-        }
-
         private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
@@ -93,18 +83,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (e.Key == Key.Enter)
             {
-                AdjustDate.Focus();
-                AdjustDate.SelectionStart = 0;
-            }
-        }
-
-        private void AdjustDate_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
                 MainDiagnosis.Focus();
                 MainDiagnosis.SelectionStart = 0;
-                e.Handled = true;
             }
         }
 
@@ -122,17 +102,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (e.Key == Key.Enter)
             {
-                AdjustCombo.Focus();
-            }
-        }
-
-        private void AdjustCombo_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
                 PrescriptionCaseCombo.Focus();
             }
         }
+
         private void PrescriptionCaseCombo_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -219,51 +192,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        private void MedicineTotal_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                var focusIndex = GetCurrentRowIndex(sender) + 1;
-                FocusDataGridCell("MedicineID", PrescriptionMedicines, focusIndex);
-            }
-        }
-        private int GetCurrentRowIndex(object sender)
-        {
-            switch (sender)
-            {
-                case TextBox textBox:
-                    {
-                        var temp = new List<TextBox>();
-                        NewFunction.FindChildGroup(PrescriptionMedicines, textBox.Name, ref temp);
-                        for (var x = 0; x < temp.Count; x++)
-                        {
-                            if (temp[x].Equals(textBox))
-                                return x;
-                        }
-                        break;
-                    }
-            }
-            return -1;
-        }
-        private void FocusDataGridCell(string controlName, DataGrid focusGrid, int rowIndex)
-        {
-            var dataGridCells = new List<TextBox>();
-            NewFunction.FindChildGroup(focusGrid, controlName, ref dataGridCells);
-            if (controlName.Equals("MedicineID") && rowIndex >= dataGridCells.Count)
-                rowIndex = dataGridCells.Count - 1;
-            if(rowIndex >= dataGridCells.Count) return;
-            dataGridCells[rowIndex].Focus();
-            dataGridCells[rowIndex].SelectAll();
-            focusGrid.SelectedIndex = rowIndex;
-            ((PrescriptionEditViewModel)DataContext).SelectedMedicinesIndex = rowIndex;
-        }
-
-        private void MedicineID_OnTextInput(object sender, TextCompositionEventArgs e)
-        {
-            var focusIndex = GetCurrentRowIndex(sender);
-            ((PrescriptionEditViewModel)DataContext).previousSelectedIndex = focusIndex;
-        }
-
         private void InputTextBox_OnGotFocus(object sender, RoutedEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
@@ -285,12 +213,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
-            var row = sender as DataGridRow;
-            if (row?.Item is null) return;
-            if (!((Medicine)row.Item is MedicineNHI) && !((Medicine)row.Item is MedicineOTC) &&
-                !((Medicine)row.Item is MedicineSpecialMaterial)) return;
-            ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<string>(this, ((Medicine)row.Item).ID, "ShowProductDetail"));
+            if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
+            ((PrescriptionEditViewModel)DataContext).ShowMedicineDetail.Execute(med.ID);
         }
 
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)
@@ -298,7 +222,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-
+            if(PrescriptionMedicines.CurrentCell.Item is null) return;
             if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;
@@ -337,6 +261,110 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 e.Handled = true;
                 t.CaretIndex++;
             }
+        }
+
+        private void MedicineID_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox t)
+            {
+                t.SelectAll();
+            }
+        }
+
+        private void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
+        {
+            TextBox tb = (sender as TextBox);
+            if (tb != null)
+            {
+                if (!tb.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    tb.Focus();
+                    PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
+                }
+            }
+        }
+
+        private void MedicalNumber_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Space)
+                e.Handled = true;
+        }
+
+        private void PrescriptionMedicines_Drop(object sender, DragEventArgs e)
+        {
+            if (prevRowIndex < 0)
+                return;
+           
+            var index = GetDataGridItemCurrentRowIndex(e.GetPosition);
+
+            if (index < 0)
+                return;
+            if (index == prevRowIndex)
+                return;
+            if (index == PrescriptionMedicines.Items.Count-1)
+                return;
+
+            var medicines = ((PrescriptionEditViewModel)DataContext).EditedPrescription.Medicines;
+            var movedMedicine = medicines[prevRowIndex];
+            medicines.RemoveAt(prevRowIndex);
+            medicines.Insert(index, movedMedicine);
+            ((PrescriptionEditViewModel)DataContext).EditedPrescription.Medicines.ReOrder();
+            ((PrescriptionEditViewModel) DataContext).IsEdit = true;
+        }
+
+        private void PrescriptionMedicines_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            prevRowIndex = GetDataGridItemCurrentRowIndex(e.GetPosition);
+
+            if (prevRowIndex < 0)
+                return;
+            PrescriptionMedicines.SelectedIndex = prevRowIndex;
+
+            if (!(PrescriptionMedicines.Items[prevRowIndex] is Medicine selectedEmp))
+                return;
+
+            var dragDropEffects = DragDropEffects.Move;
+
+            if (DragDrop.DoDragDrop(PrescriptionMedicines, selectedEmp, dragDropEffects) != DragDropEffects.None)
+            {
+                PrescriptionMedicines.SelectedItem = selectedEmp;
+            }
+        }
+
+        private bool IsTheMouseOnTargetRow(Visual theTarget, GetDragDropPosition pos)
+        {
+            var posBounds = VisualTreeHelper.GetDescendantBounds(theTarget);
+            var theMousePos = pos((IInputElement)theTarget);
+            return posBounds.Contains(theMousePos);
+        }
+
+        private DataGridRow GetDataGridRowItem(int index)
+        {
+            if (PrescriptionMedicines.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+                return null;
+            return PrescriptionMedicines.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
+        }
+
+        private int GetDataGridItemCurrentRowIndex(GetDragDropPosition pos)
+        {
+            var curIndex = -1;
+            for (var i = 0; i < PrescriptionMedicines.Items.Count; i++)
+            {
+                var itm = GetDataGridRowItem(i);
+                if (IsTheMouseOnTargetRow(itm, pos))
+                {
+                    curIndex = i;
+                    break;
+                }
+            }
+            return curIndex;
+        }
+
+        private void ChangeMedicineIDToMostPriced(object sender, MouseButtonEventArgs e)
+        {
+            PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
+            ((PrescriptionEditViewModel) DataContext).ChangeMedicineIDToMostPriced.Execute(null);
         }
     }
 }

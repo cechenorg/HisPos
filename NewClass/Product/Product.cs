@@ -1,10 +1,12 @@
 ﻿using System.Data;
 using GalaSoft.MvvmLight;
-using His_Pos.NewClass.Product.Medicine.MedicineSet;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
+using His_Pos.NewClass.Medicine.MedicineSet;
 
 namespace His_Pos.NewClass.Product
 {
-    public class Product : ObservableObject
+    public abstract class Product : ObservableObject
     {
         public Product()
         {
@@ -31,6 +33,20 @@ namespace His_Pos.NewClass.Product
             ChineseName = m.ChineseName;
             EnglishName = m.EnglishName;
         }
+
+        protected Product(OrthopedicsMedicine m)
+        {
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+        }
+
+        protected Product(CooperativePrescription.Item m)
+        {
+            ID = m.Id;
+            ChineseName = m.Desc;
+            EnglishName = m.Desc;
+        }
         #region ----- Define Variables -----
 
         private string id;
@@ -42,8 +58,27 @@ namespace His_Pos.NewClass.Product
                 Set(() => ID, ref id, value);
             }
         }
-        public string ChineseName { get; set; }
-        public string EnglishName { get; set; }
+        private string chineseName;
+        public string ChineseName
+        {
+            get { return chineseName; }
+            set
+            {
+                Set(() => ChineseName, ref chineseName, value);
+                RaisePropertyChanged(nameof(FullName));
+            }
+        }
+
+        private string englishName;
+        public string EnglishName
+        {
+            get { return englishName; }
+            set
+            {
+                Set(() => EnglishName, ref englishName, value);
+                RaisePropertyChanged(nameof(FullName));
+            }
+        }
 
         public string FullName
         {

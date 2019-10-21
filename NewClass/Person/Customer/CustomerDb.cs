@@ -30,25 +30,20 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", customer.Tel); 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomer]", parameterList);  
         }
-        public static DataTable GetDataByCondition(Customer customer) {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", customer.IDNumber);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", customer.Name);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", customer.Birthday);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", customer.Tel); 
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCondition]", parameterList); 
-        }
+
         public static void UpdateEditTime(int cusId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_id", cusId); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCustomerEditTime]", parameterList);
         }
+
         public static void Save(Customer customer)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>(); 
             DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(customer)); 
             MainWindow.ServerConnection.ExecuteProc("[Set].[SaveCustomer]", parameterList); 
         }
+
         public static DataTable SetCustomer(Customer c) {
             DataTable customerTable = CustomerTable();
             DataRow newRow = customerTable.NewRow();
@@ -69,9 +64,11 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddColumnValue(newRow, "Cus_LINE", c.Line);
             DataBaseFunction.AddColumnValue(newRow, "Cus_UrgentNote",c.ContactNote);
             DataBaseFunction.AddColumnValue(newRow, "Cus_Note", c.Note);
+            DataBaseFunction.AddColumnValue(newRow, "Cus_IsEnable", c.IsEnable);
             customerTable.Rows.Add(newRow);
             return customerTable;
         }
+
         public static DataTable SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> Ddatas) {
             DataTable table = CustomerTable();
             foreach (var d in Ddatas) {
@@ -86,11 +83,13 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Customers", table);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomers]", parameterList); 
         }
-        public static DataTable GetDataByNameOrBirth(string name, DateTime? date)
+
+        public static DataTable GetDataByNameOrBirth(string name, DateTime? date, string idNumber)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", name);
             DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", date);
+            DataBaseFunction.AddSqlParameter(parameterList, "IdNumber", idNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByNameOrBirth]", parameterList);
         }
         public static DataTable CustomerTable()
@@ -107,7 +106,9 @@ namespace His_Pos.NewClass.Person.Customer
             customerTable.Columns.Add("Cus_Email", typeof(String));
             customerTable.Columns.Add("Cus_LINE", typeof(String));
             customerTable.Columns.Add("Cus_UrgentNote", typeof(String)); 
-            customerTable.Columns.Add("Cus_Note", typeof(String)); 
+            customerTable.Columns.Add("Cus_Note", typeof(String));
+            customerTable.Columns.Add("Cus_IsEnable", typeof(bool));
+            
             return customerTable;
         }
         public static DataTable GetCustomerCountByCustomer(Customer c)
@@ -123,21 +124,38 @@ namespace His_Pos.NewClass.Person.Customer
         public static DataTable InsertCustomerData(Customer c)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", c.IDNumber.Trim());
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", c.Name);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", c.Birthday);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", c.Tel);
-            DataBaseFunction.AddSqlParameter(parameterList, "gender", c.CheckGender());
+            DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertDeclareCustomer]", parameterList);
         }
-        public static DataTable CheckCustomerIDNumberExist(string idNumber)
+
+        public static DataTable AddNewCustomer(Customer c)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCustomer]", parameterList);
+        }
+
+        public static DataTable SearchCustomers(string idNumber, string name, string cellPhone, string tel, DateTime? birth)
+        {
+            var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", DBNull.Value);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", DBNull.Value);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", DBNull.Value);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerExist]", parameterList);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", name);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", birth);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_CellPhone", cellPhone);
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", tel);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchCustomer]", parameterList);
+        }
+
+        public static DataTable CheckCustomerByCard(string idNumber)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerByCard]", parameterList);
+        }
+
+        public static DataTable GetTodayEdited()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[TodayEditedCustomers]");
         }
     }
 }

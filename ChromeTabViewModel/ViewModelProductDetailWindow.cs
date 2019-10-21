@@ -3,11 +3,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Product.Medicine;
-using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.ChromeTabViewModel
@@ -18,8 +13,8 @@ namespace His_Pos.ChromeTabViewModel
         private bool _canMoveTabs;
         private bool _showAddButton;
 
-        public double WindowWidth => SystemParameters.WorkArea.Width * 0.8;
-        public double WindowHeight => SystemParameters.WorkArea.Height * 0.8;
+        public double WindowWidth => SystemParameters.WorkArea.Width * 0.9;
+        public double WindowHeight => SystemParameters.WorkArea.Height * 0.9;
         public double StartTop => (SystemParameters.WorkArea.Height - WindowHeight) / 2;
         public double StartLeft => (SystemParameters.WorkArea.Width - WindowWidth) / 2;
 
@@ -63,10 +58,10 @@ namespace His_Pos.ChromeTabViewModel
         #region ----- Define Functions -----
         private void RegisterMessenger()
         {
-            Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedProductDetail);
+            Messenger.Default.Register<NotificationMessage<string[]>>(this, GetSelectedProductDetail);
             Messenger.Default.Register<NotificationMessage>(this, ClearTabs);
         }
-        private void GetSelectedProductDetail(NotificationMessage<string> notificationMessage)
+        private void GetSelectedProductDetail(NotificationMessage<string[]> notificationMessage)
         {
             if (notificationMessage.Notification == "ShowProductDetail")
                 AddTabCommandAction(notificationMessage.Content);

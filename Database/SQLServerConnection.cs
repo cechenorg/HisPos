@@ -100,7 +100,50 @@ namespace His_Pos.Database
 
             return table;
         }
-        
+        public DataTable ExecuteProcBySchema(string schema,string procName, List<SqlParameter> parameterList = null) {
+            while (isBusy)
+                Thread.Sleep(500);
+
+            isBusy = true;
+
+            var table = new DataTable();
+            try
+            {
+                SqlCommand myCommand = new SqlCommand("[" + schema + "]." + procName, connection);
+
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandTimeout = 120;
+                if (parameterList != null)
+                    foreach (var param in parameterList)
+                    {
+                        myCommand.Parameters.Add(param);
+                    }
+
+                var sqlDapter = new SqlDataAdapter(myCommand);
+                table.Locale = CultureInfo.InvariantCulture;
+                sqlDapter.Fill(table);
+            }
+            catch (SqlException sqlException)
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    MessageWindow.ShowMessage(procName + sqlException.Message, MessageType.ERROR);
+                });
+                NewFunction.ExceptionLog(sqlException.Message);
+            }
+            catch (Exception ex)
+            {
+                NewFunction.ExceptionLog(ex.Message);
+
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
+                    MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
+                });
+            }
+
+            isBusy = false;
+
+            return table;
+        }
         private void LogError(string procName, string parameters, string error)
         {
             var parameterList = new List<SqlParameter>();

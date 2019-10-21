@@ -13,9 +13,9 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
-using His_Pos.NewClass.CooperativeClinicJson;
+using His_Pos.NewClass.Medicine.Position;
+using His_Pos.NewClass.Medicine.Usage;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -23,9 +23,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
-using His_Pos.NewClass.Product.Medicine.Position;
-using His_Pos.NewClass.Product.Medicine.Usage;
-using His_Pos.NewClass.StockValue;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
@@ -36,58 +34,58 @@ namespace His_Pos.ChromeTabViewModel
     public class ViewModelMainWindow : MainViewModel, IViewModelMainWindow, IChromeTabViewModel
     {
         //this property is to show you can lock the tabs with a binding
-        private bool _canMoveTabs;
+        private bool canMoveTabs;
         public bool CanMoveTabs
         {
-            get => _canMoveTabs;
+            get => canMoveTabs;
             set
             {
-                if (_canMoveTabs != value)
+                if (canMoveTabs != value)
                 {
-                    Set(() => CanMoveTabs, ref _canMoveTabs, value);
+                    Set(() => CanMoveTabs, ref canMoveTabs, value);
                 }
             }
         }
         //this property is to show you can bind the visibility of the add button
-        private bool _showAddButton;
+        private bool showAddButton;
         public bool ShowAddButton
         {
-            get => _showAddButton;
+            get => showAddButton;
             set
             {
-                if (_showAddButton != value)
+                if (showAddButton != value)
                 {
-                    Set(() => ShowAddButton, ref _showAddButton, value);
+                    Set(() => ShowAddButton, ref showAddButton, value);
                 }
             }
         }
 
-        private string _cardReaderStatus;
+        private string cardReaderStatus;
         public string CardReaderStatus
         {
-            get => _cardReaderStatus;
+            get => cardReaderStatus;
             set
             {
-                Set(() => CardReaderStatus, ref _cardReaderStatus, value);
+                Set(() => CardReaderStatus, ref cardReaderStatus, value);
             }
         }
-        private string _samDcStatus;
+        private string samDcStatus;
         public string SamDcStatus
         {
-            get => _samDcStatus;
+            get => samDcStatus;
             set
             {
-                Set(() => SamDcStatus, ref _samDcStatus, value);
+                Set(() => SamDcStatus, ref samDcStatus, value);
             }
         }
 
-        private string _hpcCardStatus;
+        private string hpcCardStatus;
         public string HpcCardStatus
         {
-            get => _hpcCardStatus;
+            get => hpcCardStatus;
             set
             {
-                Set(() => HpcCardStatus, ref _hpcCardStatus, value);
+                Set(() => HpcCardStatus, ref hpcCardStatus, value);
             }
         }
         public static bool IsConnectionOpened { get; set; }
@@ -96,23 +94,23 @@ namespace His_Pos.ChromeTabViewModel
         public static bool IsHpcValid { get; set; }
         public static bool IsVerifySamDc { get; set; }
 
-        private bool _isBusy;
+        private bool isBusy;
         public bool IsBusy
         {
-            get => _isBusy;
+            get => isBusy;
             set
             {
-                Set(() => IsBusy, ref _isBusy, value);
+                Set(() => IsBusy, ref isBusy, value);
             }
         }
-        private string _busyContent;
+        private string busyContent;
 
         public string BusyContent
         {
-            get => _busyContent;
+            get => busyContent;
             set
             {
-                Set(() => BusyContent, ref _busyContent, value);
+                Set(() => BusyContent, ref busyContent, value);
             }
         }
 
@@ -129,16 +127,17 @@ namespace His_Pos.ChromeTabViewModel
         public static Positions Positions { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
         public static Employee CurrentUser { get; set; }
+        public static Employees EmployeeCollection { get; set; }
         public static string CooperativeInstitutionID { get; private set; }
-        private int m_currentPageIndex;
-        private IList<Stream> m_streams;
+        private int mCurrentPageIndex;
+        private IList<Stream> mStreams;
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
             MainWindow.ServerConnection.OpenConnection();
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
-            CurrentPharmacy.MedicalPersonnels = new MedicalPersonnels(true);
+            CurrentPharmacy.MedicalPersonnels = new Employees();
             CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
@@ -167,18 +166,18 @@ namespace His_Pos.ChromeTabViewModel
             worker.DoWork += (o, ea) =>
             {
                 MainWindow.ServerConnection.OpenConnection(); 
-                BusyContent = "取得倉庫名";
-                WareHouses = new WareHouses();
-                WareHouses.Init();
+                BusyContent = "取得庫別名";
+                WareHouses = WareHouses.GetWareHouses();
                 BusyContent = StringRes.取得院所;
                 Institutions = new Institutions(true);
                 BusyContent = "取得合作院所設定";
                 CooperativeClinicSettings = new CooperativeClinicSettings();
                 CooperativeClinicSettings.Init();
+                CooperativeClinicSettings.FilePurge();
                 BusyContent = StringRes.取得科別;
                 Divisions = new Divisions();
                 BusyContent = StringRes.GetAdjustCases;
-                AdjustCases = new AdjustCases();
+                AdjustCases = new AdjustCases(true);
                 BusyContent = StringRes.取得給付類別;
                 PaymentCategories = new PaymentCategories();
                 BusyContent = StringRes.取得處方案件;
@@ -191,10 +190,20 @@ namespace His_Pos.ChromeTabViewModel
                 Usages = new Usages();
                 BusyContent = StringRes.取得用藥途徑;
                 Positions = new Positions();
-                BusyContent = "更新庫存現值變化";
-                StockValue.UpdateDailyStockValue(); //做每日帳
-                BusyContent = "回傳合作診所處方";
-                WebApi.SendToCooperClinic(); //骨科上傳
+                BusyContent = "藥袋量計算中";
+                ProductDB.UpdateAllInventoryMedBagAmount();
+                BusyContent = "同步員工資料";
+                EmployeeDb.SyncData();
+                BusyContent = "取得員工";
+                EmployeeCollection = new Employees();
+                EmployeeCollection.Init();
+                int i = 100;
+                BusyContent = "準備回傳骨科拋轉資料";
+                while (WebApi.SendToCooperClinicLoop100())
+                { 
+                    BusyContent = "回傳合作診所處方中 " + i.ToString() + "筆";
+                    i += 100;
+                } //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
                 //File.WriteAllBytes("C:\\Program Files\\HISPOS\\OfflineDataSet.singde", bytes.ToArray());
@@ -225,7 +234,7 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static Division GetDivision(string id)
         {
-            var result = Divisions.SingleOrDefault(i => i.ID.Equals(id));
+            var result = Divisions.SingleOrDefault(i => !string.IsNullOrEmpty(i.ID) && i.ID.Equals(id));
             return result;
         }
         public static PaymentCategory GetPaymentCategory(string id)
@@ -256,7 +265,7 @@ namespace His_Pos.ChromeTabViewModel
                     result.Name = name;
                     if (name.Contains("AC"))
                         result.PrintName += "(飯前)";
-                    else if(name.Contains("PC"))
+                    else if (name.Contains("PC"))
                         result.PrintName += "(飯後)";
                 }
                 return result;
@@ -284,11 +293,8 @@ namespace His_Pos.ChromeTabViewModel
         }
         public static Usage FindUsageByQuickName(string quickName)
         {
-            if (Usages.Count(u => u.QuickName.Equals(quickName)) == 1)
-            {
-                return Usages.SingleOrDefault(u => u.QuickName.Equals(quickName));
-            }
-            return null;
+            return Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).Count(u => u.QuickName.Equals(quickName)) == 1 ? 
+                Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).SingleOrDefault(u => u.QuickName.Equals(quickName)) : null;
         }
         public static Position GetPosition(string id)
         {
@@ -305,16 +311,22 @@ namespace His_Pos.ChromeTabViewModel
             return result ?? new SpecialTreat();
         }
 
-        public static MedicalPersonnel GetMedicalPersonByID(int id)
+        public static Employee GetMedicalPersonByID(int id)
         {
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
-        public static MedicalPersonnel GetMedicalPersonByIDNumber(string idNum)
+        public static Employee GetMedicalPersonByIDNumber(string idNum)
         {
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.IDNumber.Equals(idNum));
             return result;
         }
+        public static Employee GetEmployeeByID(int ID)
+        {
+            var result = EmployeeCollection.SingleOrDefault(i => i.ID.Equals(ID));
+            return result;
+        }
+        
         public void StartPrintMedBag(ReportViewer r)
         {
             IsBusy = true;
@@ -323,16 +335,55 @@ namespace His_Pos.ChromeTabViewModel
             ReportPrint(Properties.Settings.Default.MedBagPrinter);
             IsBusy = false;
         }
+
         public void StartPrintReceipt(ReportViewer r)
         {
             BusyContent = StringRes.收據列印;
-            Export(r.LocalReport, 25.4, 9.3);
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    Export(r.LocalReport, 21, 14.8);
+                    break;
+                default:
+                    Export(r.LocalReport, 25.4, 9.3);
+                    break;
+            }
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+        }
+
+        public void StartPrintReserve(ReportViewer r) {
+            BusyContent = "封包列印...";
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    Export(r.LocalReport, 21, 14.8);
+                    break;
+                default:
+                    Export(r.LocalReport, 25.4, 9.3);
+                    break;
+            }
+            ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+        }
+        public void StartPrintMedicineTag(ReportViewer r)
+        {
+            IsBusy = true;
+            BusyContent = StringRes.MedBagPrinting;
+            Export(r.LocalReport, 21, 29.7);
+            ReportPrint(Properties.Settings.Default.ReportPrinter);
+            IsBusy = false;
         }
         public void StartPrintDeposit(ReportViewer r)
         {
             BusyContent = StringRes.押金單據列印;
-            Export(r.LocalReport, 25.4, 9.3);
+            switch (Properties.Settings.Default.ReceiptForm)
+            {
+                case "一般":
+                    Export(r.LocalReport, 21, 14.8);
+                    break;
+                default:
+                    Export(r.LocalReport, 25.4, 9.3);
+                    break;
+            }
             ReportPrint(Properties.Settings.Default.ReceiptPrinter);
         }
         private void Export(LocalReport report, double width, double height)
@@ -348,9 +399,9 @@ namespace His_Pos.ChromeTabViewModel
                 "  <MarginBottom>0cm</MarginBottom>" +
                 "</DeviceInfo>";
             Warning[] warnings;
-            m_streams = new List<Stream>();
+            mStreams = new List<Stream>();
             report.Render("Image", deviceInfo, CreateStream, out warnings);
-            foreach (Stream stream in m_streams)
+            foreach (Stream stream in mStreams)
                 stream.Position = 0;
             //try
             //{
@@ -384,7 +435,7 @@ namespace His_Pos.ChromeTabViewModel
             PrintDocument printDoc = new PrintDocument();
             printDoc.PrinterSettings.PrinterName = printer;
             printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
-            m_currentPageIndex = 0;
+            mCurrentPageIndex = 0;
             try
             {
                 printDoc.Print();
@@ -415,7 +466,7 @@ namespace His_Pos.ChromeTabViewModel
             string mimeType, bool willSeek)
         {
             Stream stream = new MemoryStream();
-            m_streams.Add(stream);
+            mStreams.Add(stream);
             return stream;
         }
         public void WindowCloseAction() {
@@ -424,7 +475,7 @@ namespace His_Pos.ChromeTabViewModel
         private void printDoc_PrintPage(object sender, PrintPageEventArgs ev)
         {
             Metafile pageImage = new
-                Metafile(m_streams[m_currentPageIndex]);
+                Metafile(mStreams[mCurrentPageIndex]);
 
             // Adjust rectangular area with printer margins.
             Rectangle adjustedRect = new Rectangle(
@@ -440,8 +491,8 @@ namespace His_Pos.ChromeTabViewModel
             ev.Graphics.DrawImage(pageImage, adjustedRect);
 
             // Prepare for the next page. Make sure we haven't hit the end.
-            m_currentPageIndex++;
-            ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
+            mCurrentPageIndex++;
+            ev.HasMorePages = (mCurrentPageIndex < mStreams.Count);
             //try
             //{
             //    Metafile pageImage = new
@@ -470,27 +521,6 @@ namespace His_Pos.ChromeTabViewModel
             //        MessageWindow.ShowMessage("printDoc_PrintPage" + ex.Message, MessageType.ERROR);
             //    });
             //}
-        }
-        private void SaveSettingFile()
-        {
-            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
-
-            string leftLines = "";
-
-            using (StreamReader fileReader = new StreamReader(filePath))
-            {
-                leftLines = fileReader.ReadLine();
-            }
-
-            using (TextWriter fileWriter = new StreamWriter(filePath, false))
-            {
-                fileWriter.WriteLine(leftLines);
-
-                fileWriter.WriteLine("M " + Properties.Settings.Default.MedBagPrinter);
-                fileWriter.WriteLine("Rc " + Properties.Settings.Default.ReceiptPrinter);
-                fileWriter.WriteLine("Rp " + Properties.Settings.Default.ReportPrinter);
-                fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
-            }
         }
     }
 }

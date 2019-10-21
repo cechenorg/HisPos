@@ -2,16 +2,22 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Threading;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.AccountReport.InstitutionDeclarePoint;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
+using His_Pos.Properties;
 using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
@@ -147,7 +153,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             }
             
         }
-        public void CreateDeclareFile(DeclareFile.DeclareFile doc,DateTime declare)
+        public void CreateDeclareFile(DeclareFile.DeclareFile doc,DateTime declareStart, DateTime declareEnd)
         {
             XDocument result;
             var xmlSerializer = new XmlSerializer(doc.GetType());
@@ -166,19 +172,69 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             var declareList = DeclarePres.Where(p => p.IsDeclare).Select(p => p.ID).ToList();
             //DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId, declareList);
             //匯出xml檔案
-            var fileName = ViewModelMainWindow.CurrentPharmacy.Name + declare.Date.Month + "月申報檔";
-            Function.ExportXml(result, "每月申報檔", fileName);
+            var fileName = ViewModelMainWindow.CurrentPharmacy.Name + declareStart.Date.Month + "月申報檔";
+            var filePath = Function.ExportXml(result, "每月申報檔", declareStart,fileName);
+            ExportExcelAction(declareStart, declareEnd, filePath.Replace("\\DRUGT",""));
         }
 
-        public void GetNotAdjustPrescriptionCount(DateTime start, DateTime end,string pharmacyID)
+        public void GetNotAdjustPrescriptionCount(DateTime? start, DateTime? end,string pharmacyID)
         {
-            var table = PrescriptionDb.GetNotAdjustPrescriptionCount(start, end, pharmacyID);
+            Debug.Assert(start != null, nameof(start) + " != null");
+            Debug.Assert(end != null, nameof(end) + " != null");
+            var sDate = (DateTime) start;
+            var eDate = (DateTime) end;
+            var table = PrescriptionDb.GetNotAdjustPrescriptionCount(sDate, eDate, pharmacyID);
             if (table.Rows.Count > 0)
             {
                 var count = table.Rows[0].Field<int>("NotAdjustCount");
-                var declareDateStr = (start.Year - 1911) + " 年 " + start.Month.ToString().PadLeft(2, '0') + " 月 ";
+                var declareDateStr = sDate.Year - 1911 + " 年 " + sDate.Month.ToString().PadLeft(2, '0') + " 月 ";
                 if (count > 0)
                     MessageWindow.ShowMessage(declareDateStr + "尚有 " + count + " 張慢箋未調劑結案",MessageType.WARNING);
+            }
+        }
+
+        private void ExportExcelAction( DateTime declareStart, DateTime declareEnd, string filePath) {
+            var institutionDeclarePoints = new InstitutionDeclarePoints();
+            institutionDeclarePoints.GetDataByDate(declareStart, declareEnd);
+            try
+            {
+                CreateInstitutionSummaryFile(institutionDeclarePoints, declareStart, filePath);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(delegate
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                });
+            }
+        }
+
+        private void CreateInstitutionSummaryFile(InstitutionDeclarePoints institutionDeclarePoints, DateTime decDate,string filePath)
+        {
+            using (var file = new StreamWriter(filePath+"\\"+ViewModelMainWindow.CurrentPharmacy.Name+decDate.Month+"月院所申報統計表.csv", false, Encoding.UTF8))
+            {
+                file.WriteLine(ViewModelMainWindow.CurrentPharmacy.Name);
+                file.WriteLine("院所申報統計表");
+                file.WriteLine("月份 " + decDate.Month + "月");
+                file.WriteLine("院所,藥品點,特材點,藥服費,小計,部分負擔,申報額,筆數");
+                foreach (var ins in institutionDeclarePoints)
+                {
+                    file.WriteLine($"{ins.InsName},{ins.MedicinePoint},{ins.SpecialMedPoint},{ins.MedicalServicePoint},{ins.SubTotal},{ins.CopayMentPoint},{ins.DeclarePoint},{ins.PrescriptionCount}");
+                }
+                var sum = new InstitutionDeclarePoint
+                {
+                    InsName = "總計",
+                    MedicinePoint = institutionDeclarePoints.Sum(ins => ins.MedicinePoint),
+                    SpecialMedPoint = institutionDeclarePoints.Sum(ins => ins.SpecialMedPoint),
+                    MedicalServicePoint = institutionDeclarePoints.Sum(ins => ins.MedicalServicePoint),
+                    SubTotal = institutionDeclarePoints.Sum(ins => ins.SubTotal),
+                    CopayMentPoint = institutionDeclarePoints.Sum(ins => ins.CopayMentPoint),
+                    DeclarePoint = institutionDeclarePoints.Sum(ins => ins.DeclarePoint),
+                    PrescriptionCount = institutionDeclarePoints.Sum(ins => ins.PrescriptionCount)
+                };
+                file.WriteLine($"{sum.InsName},{sum.MedicinePoint},{sum.SpecialMedPoint},{sum.MedicalServicePoint},{sum.SubTotal},{sum.CopayMentPoint},{sum.DeclarePoint},{sum.PrescriptionCount}");
+                file.Close();
+                file.Dispose();
             }
         }
     }

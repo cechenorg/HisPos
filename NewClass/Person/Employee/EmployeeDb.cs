@@ -10,19 +10,53 @@ namespace His_Pos.NewClass.Person.Employee
     {
         public static  DataTable GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[Employee]"); 
+           return MainWindow.ServerConnection.ExecuteProc("[Get].[Employee]"); 
         }
-        public static DataTable Save(Employee e)
+        public static DataTable GetDataByID(int ID)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>(); 
-            parameterList.Add(new SqlParameter("Employee", SetCustomer(e))); 
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[SaveEmployee]", parameterList); 
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@EmpID",ID));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeByID]",parameterList);  
+        }
+        public static void Insert(Employee e) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
+            if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+                MainWindow.ServerConnection.ExecuteProc("[Set].[InsertEmployee]", parameterList);
+            else {
+                MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertEmployee]", parameterList);
+                SyncData();
+                UpdateIsLocal(e.IDNumber, true);
+            } 
+        }
+        public static void Update(Employee e) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
+            if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList);
+            else
+            {
+                MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateEmployee]", parameterList);
+                SyncData();
+            } 
         }
         public static void Delete(int empId) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("EmpId", empId));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteEmployee]", parameterList); 
+            if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+                MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteEmployee]", parameterList);
+            else
+            {
+                MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[DeleteEmployee]", parameterList);
+                SyncData();
+            } 
         }
+        public static DataTable GetEmployeeNewAccount()
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+           return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeNewAccount]", parameterList); 
+        }
+        
         public static DataTable EmployeeLogin(string account,string password) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Account", account));
@@ -30,24 +64,80 @@ namespace His_Pos.NewClass.Person.Employee
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeLogin]",parameterList);  
             return table;
         }
+        public static DataTable CheckIdNumber(string idNumber)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("IdNumber", idNumber)); 
+            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeCheckIdNumber]", parameterList);
+            return table;
+        }
+        public static DataTable CheckEmployeeAccountSame(string account)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("Account", account));
+            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[CheckEmployeeAccountSame]", parameterList);
+            return table;
+        } 
         public static DataTable GetTabAuth(int AuthValue) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("AuthValue", AuthValue)); 
-            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[TabAuth]", parameterList);
+
+            var table = string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName)
+                 ? MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Get].[TabAuth]", parameterList)
+                 : MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[TabAuth]", parameterList);
             return table;
         }
-        public static DataTable GetPassword(int empId) {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("EmpId", empId));
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeePassword]", parameterList); 
-        }
-        public static void ChangePassword(int empid, string password)
+        public static void SyncData( )
         { 
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "EmpId", empid); 
-            DataBaseFunction.AddSqlParameter(parameterList, "Password", password);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[ChangeEmployeePassword]", parameterList);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[SyncEmployee]");
         }
+        public static void UpdateIsLocal(string idNumber,bool isLocal) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "IdNumber", idNumber);
+            DataBaseFunction.AddSqlParameter(parameterList, "isLocal", isLocal); 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateIsLocal]", parameterList); 
+        }
+
+        public static DataTable GetEnableMedicalPersonnels(DateTime selectedDate)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Date", selectedDate);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[EnablePharmacists]", parameterList);
+        }
+
+        public static DataTable SetCustomers(Employees es) {
+            DataTable employeeTable = EmployeeTable();
+
+            foreach (Employee e in es) {
+                DataRow newRow = employeeTable.NewRow();
+                if (e.ID == 0)
+                    newRow["Emp_ID"] = DBNull.Value;
+                else
+                    newRow["Emp_ID"] = e.ID;
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Account", e.Account);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Password", e.Password);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", e.AuthorityValue);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Name", e.Name);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_NickName", e.NickName);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Gender", e.Gender);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_IDNumber", e.IDNumber);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_BirthDay", e.Birthday);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Address", e.Address);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Telephone", e.Tel);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Cellphone", e.CellPhone);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Email", e.Email);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_LINE", e.Line);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", e.WorkPosition.WorkPositionId);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_StartDate", e.StartDate);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_LeaveDate", e.LeaveDate);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_PurchaseLimit", e.PurchaseLimit);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_Note", e.Note);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_IsEnable", e.IsEnable);
+                employeeTable.Rows.Add(newRow);
+            } 
+            return employeeTable;
+        }
+
         public static DataTable SetCustomer(Employee e)
         {
             DataTable employeeTable = EmployeeTable();
@@ -56,6 +146,9 @@ namespace His_Pos.NewClass.Person.Employee
                 newRow["Emp_ID"] = DBNull.Value;
             else
                 newRow["Emp_ID"] = e.ID;
+            DataBaseFunction.AddColumnValue(newRow, "Emp_Account", e.Account);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_Password", e.Password);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", e.AuthorityValue); 
             DataBaseFunction.AddColumnValue(newRow,"Emp_Name",e.Name);
             DataBaseFunction.AddColumnValue(newRow,"Emp_NickName", e.NickName);
             DataBaseFunction.AddColumnValue(newRow,"Emp_Gender", e.Gender);
@@ -66,18 +159,21 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddColumnValue(newRow,"Emp_Cellphone", e.CellPhone);
             DataBaseFunction.AddColumnValue(newRow,"Emp_Email", e.Email);
             DataBaseFunction.AddColumnValue(newRow,"Emp_LINE", e.Line);
-            DataBaseFunction.AddColumnValue(newRow,"Emp_WorkPositionID", e.WorkPositionID);
+            DataBaseFunction.AddColumnValue(newRow,"Emp_WorkPositionID", e.WorkPosition.WorkPositionId);
             DataBaseFunction.AddColumnValue(newRow,"Emp_StartDate", e.StartDate);
             DataBaseFunction.AddColumnValue(newRow,"Emp_LeaveDate", e.LeaveDate);
             DataBaseFunction.AddColumnValue(newRow,"Emp_PurchaseLimit", e.PurchaseLimit);
             DataBaseFunction.AddColumnValue(newRow,"Emp_Note", e.Note);
             DataBaseFunction.AddColumnValue(newRow, "Emp_IsEnable", e.IsEnable); 
             employeeTable.Rows.Add(newRow);
-            return employeeTable;
+            return employeeTable; 
         }
         public static DataTable EmployeeTable() {
             DataTable employeeTable = new DataTable();
             employeeTable.Columns.Add("Emp_ID", typeof(int));
+            employeeTable.Columns.Add("Emp_Account", typeof(string));
+            employeeTable.Columns.Add("Emp_Password", typeof(string));
+            employeeTable.Columns.Add("Emp_AuthorityLevel", typeof(int));
             employeeTable.Columns.Add("Emp_Name", typeof(String));
             employeeTable.Columns.Add("Emp_NickName", typeof(String));
             employeeTable.Columns.Add("Emp_Gender", typeof(String));

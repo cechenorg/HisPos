@@ -1,6 +1,10 @@
 ﻿using System.Data;
+using System.Linq;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using ZeroFormatter;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {
@@ -40,5 +44,25 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             InstitutionDb.UpdateUsedTime(ID);
         }
         #endregion
+
+        public CooperativeClinicSetting IsCooperativeClinic()
+        {
+            return VM.CooperativeClinicSettings.SingleOrDefault(c => c.CooperavieClinic.ID.Equals(ID));
+        }
+
+        public bool CheckIsOrthopedics()
+        {
+            return !string.IsNullOrEmpty(VM.CooperativeInstitutionID) && ID.Equals(VM.CooperativeInstitutionID);
+        }
+
+        public bool CheckCooperative()
+        {
+            return VM.CooperativeClinicSettings.Count(c => c.CooperavieClinic.ID.Equals(ID)) > 0;
+        }
+
+        public bool CheckIDEqualsCurrentPharmacy()
+        {
+            return !string.IsNullOrEmpty(ID) && ID.Equals(VM.CurrentPharmacy.ID);
+        }
     }
 }

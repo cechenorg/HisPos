@@ -2,19 +2,23 @@
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Data;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
-using IcCard = His_Pos.NewClass.Prescription.IcCard;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 
 namespace His_Pos.NewClass.Person.Customer
 {
     public class Customer:Person,ICloneable
     {
-        public Customer() {}
+        public Customer()
+        {
+            ID = -1;
+        }
 
         public Customer(DataRow r) : base(r)
         {
@@ -29,7 +33,15 @@ namespace His_Pos.NewClass.Person.Customer
             Birthday = card.Birthday;
             Gender = card.Gender;
         }
-
+        private bool isEnable = true;
+        public bool IsEnable
+        {
+            get => isEnable;
+            set
+            {
+                Set(() => IsEnable, ref isEnable, value); 
+            }
+        } 
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間
         public CustomerHistories Histories { get; set; }//處方.自費調劑紀錄
@@ -44,6 +56,26 @@ namespace His_Pos.NewClass.Person.Customer
         }
 
         private ICollectionView historyCollectionView;
+
+        public Customer(Cooperative.CooperativeInstitution.Customer customer,int birthYear, int birthMonth, int birthDay)
+        {
+            IDNumber = customer.IdNumber;
+            Name = customer.Name;
+            Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            Tel = customer.Phone;
+        }
+
+        public Customer(CooperativePrescription.Customer customer, int birthYear, int birthMonth, int birthDay)
+        {
+            IDNumber = customer.IdNumber;
+            Name = customer.Name;
+            if (birthYear >= 1911)
+            {
+                Birthday = new DateTime(birthYear, birthMonth, birthDay);
+            }
+            Tel = customer.Phone;
+        }
+
         public ICollectionView HistoryCollectionView
         {
             get => historyCollectionView;
@@ -55,12 +87,15 @@ namespace His_Pos.NewClass.Person.Customer
         #region Function
         public void Save()
         {
+            if (ID == 0 || IDNumber.Equals("A111111111") || Name.Equals("匿名"))
+            {
+                MessageWindow.ShowMessage("匿名資料不可編輯",MessageType.ERROR);
+                return;
+            }
             CustomerDb.Save(this);
         }
-        public void Delete()
-        {
-        }
-        public Customer GetCustomerByCusId(int cusId)
+
+        public static Customer GetCustomerByCusId(int cusId)
         {
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
@@ -98,6 +133,7 @@ namespace His_Pos.NewClass.Person.Customer
 
         public int CheckAgePercentage()
         {
+            if (Birthday is null) return 100;
             var cusAge = CountAgeToMonth();
             if (cusAge.Years == 0 && cusAge.Months < 6)
             {
@@ -126,37 +162,11 @@ namespace His_Pos.NewClass.Person.Customer
             return 100;
         }
 
-        private string CheckBirthday()
-        {
-            if (Birthday is null) return "請填寫病患出生年月日\r\n";
-            return DateTime.Compare((DateTime) Birthday, DateTime.Today) > 0 ? "出生年月日不可大於今天\r\n" : string.Empty;
-        }
-
-        private string CheckIDNumber()
-        {
-            return string.IsNullOrEmpty(IDNumber) ? "請填寫病患身分證字號\r\n" : string.Empty;
-        }
-        private string CheckName()
-        {
-            return string.IsNullOrEmpty(Name) ? "請填寫病患姓名\r\n" : string.Empty;
-        }
-
-        public string CheckBasicData()
-        {
-            return
-            CheckBirthday()+
-            CheckIDNumber()+
-            CheckName();
-        }
-        public int Count()
-        {
-            var count = (CustomerDb.GetCustomerCountByCustomer(this).Rows[0]).Field<int>("Count");
-            return count;
-        }
         public bool CheckData()
         {
-            return (!string.IsNullOrEmpty(IDNumber) && IDNumber.Trim().Length == 10) && Birthday != null && !string.IsNullOrEmpty(Name);
+            return !string.IsNullOrEmpty(IDNumber) && VerifyService.VerifyIDNumber(IDNumber.Trim()) && Birthday != null && !string.IsNullOrEmpty(Name);
         }
+
         public object Clone()
         {
             var c = new Customer();
@@ -173,6 +183,7 @@ namespace His_Pos.NewClass.Person.Customer
             c.Name = Name;
             c.Note = Note;
             c.Tel = Tel;
+            c.IsEnable = IsEnable;
             c.Histories = new CustomerHistories();
             if (Histories != null)
             {
@@ -184,23 +195,29 @@ namespace His_Pos.NewClass.Person.Customer
             return c;
         }
 
-        public void InsertData()
+        public bool InsertData()
         {
             var table = CustomerDb.InsertCustomerData(this);
-            var c = new Customer(table.Rows[0]);
-            ID = c.ID;
-            Name = c.Name;
-            IDNumber = c.IDNumber;
-            Birthday = c.Birthday;
-            Tel = c.Tel;
-            ContactNote = c.ContactNote;
-            LastEdit = c.LastEdit;
-            Address = c.Address;
-            CellPhone = c.CellPhone;
-            Email = c.Email;
-            Gender = c.Gender;
-            Line = c.Line;
-            Note = c.Note;
+            if (table.Rows.Count > 0)
+            {
+                var c = new Customer(table.Rows[0]);
+                ID = c.ID;
+                Name = c.Name;
+                IDNumber = c.IDNumber;
+                Birthday = c.Birthday;
+                Tel = c.Tel;
+                ContactNote = c.ContactNote;
+                LastEdit = c.LastEdit;
+                Address = c.Address;
+                CellPhone = c.CellPhone;
+                Email = c.Email;
+                Gender = c.Gender;
+                Line = c.Line;
+                Note = c.Note;
+                return true;
+            }
+            MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
+            return false;
         }
 
         public void GetHistories()
@@ -210,10 +227,47 @@ namespace His_Pos.NewClass.Person.Customer
             HistoryCollectionView =HistoryCollectionViewSource.View;
         }
 
-        public bool CheckIDNumberExist()
+        public void CheckPatientWithCard(Customer patientFromCard)
         {
-            var table = CustomerDb.CheckCustomerIDNumberExist(IDNumber);
-            return table.Rows[0].Field<int>("Count") > 0;
+            if (!IDNumber.Equals(patientFromCard.IDNumber))
+                IDNumber = patientFromCard.IDNumber;
+            if (!Name.Equals(patientFromCard.Name))
+                Name = patientFromCard.Name;
+            if (!Birthday.Equals(patientFromCard.Birthday))
+                Birthday = patientFromCard.Birthday;
+            CheckGender();
+        }
+
+        public bool CheckIDNumberEmpty()
+        {
+            return string.IsNullOrEmpty(IDNumber != null ? IDNumber.Trim() : IDNumber);
+        }
+
+        public bool CheckNameEmpty()
+        {
+            return string.IsNullOrEmpty(Name != null ? Name.Trim() : Name);
+        }
+
+        public bool CheckBirthdayNull()
+        {
+            return Birthday is null;
+        }
+
+        public bool CheckTelEmpty()
+        {
+            return string.IsNullOrEmpty(Tel != null ? Tel.Trim() : Tel);
+        }
+
+        public bool CheckCellPhoneEmpty()
+        {
+            return string.IsNullOrEmpty(CellPhone != null ? CellPhone.Trim() : CellPhone);
+        }
+
+        public bool IsAnonymous()
+        {
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(IDNumber) || Birthday is null)
+                return false;
+            return Name.Equals("匿名") && IDNumber.Equals("A111111111");
         }
     }
 }

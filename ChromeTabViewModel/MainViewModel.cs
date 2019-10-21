@@ -8,20 +8,19 @@ using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.SYSTEM_TAB.H10_WEB.CompanyWeb;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking;
+using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
@@ -30,12 +29,16 @@ using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare;
-using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
+using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport;
+using His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial;
 using His_Pos.SYSTEM_TAB.INDEX;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -163,7 +166,6 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.商品查詢):
                     break;
-
                 case nameof(FeatureItem.進退貨管理):
                     //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
                     //{
@@ -171,51 +173,35 @@ namespace His_Pos.ChromeTabViewModel
                     //    return;
                     //}
                     break;
-
                 case nameof(FeatureItem.進退貨紀錄):
                     break;
-
                 case nameof(FeatureItem.新增盤點):
+                    ConfirmWindow confirmWindow = new ConfirmWindow("關閉視窗後盤點單不會儲存 是否關閉?","關閉新增盤點確認");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
                     break;
-
                 case nameof(FeatureItem.庫存盤點紀錄):
                     break;
-
                 case nameof(FeatureItem.商品類別管理):
                     break;
-
                 case nameof(FeatureItem.供應商管理):
                     break;
-
                 case nameof(FeatureItem.櫃位管理):
                     LocationManageView.Instance.SaveLocation();
                     break;
-
                 case nameof(FeatureItem.員工管理):
                     break;
                 case nameof(FeatureItem.顧客管理):
                     break;
                 case nameof(FeatureItem.藥品頻率管理):
                     break;
-
-                case nameof(FeatureItem.上下班打卡):
-                    break;
-
-                case nameof(FeatureItem.排班管理):
-                    break;
-
                 case nameof(FeatureItem.審核管理):
-                    break;
-
-                case nameof(FeatureItem.藥袋管理):
                     break;
                 case nameof(FeatureItem.藥局管理):
                     break;
-                case nameof(FeatureItem.庫存現值查詢):
+                case nameof(FeatureItem.庫存現值報表):
                     break;
-                case nameof(FeatureItem.進退貨報表查詢):
-                    break;
-                case nameof(FeatureItem.部分負擔自費報表):
+                case nameof(FeatureItem.進退貨報表):
                     break;
                 case nameof(FeatureItem.合作診所藥品耗用):
                     break;
@@ -225,7 +211,19 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.系統函式):
                     break;
-                case nameof(FeatureItem.合作診所結帳報表):
+                case nameof(FeatureItem.申報院所點數總表):
+                    break;
+                case nameof(FeatureItem.盤點計畫):
+                    break;
+                case nameof(FeatureItem.藥袋查詢):
+                    break;
+                case nameof(FeatureItem.藥健康網頁):
+                    break;
+                case nameof(FeatureItem.促銷管理):
+                    break;
+                case nameof(FeatureItem.銷售紀錄):
+                    break;
+                case nameof(FeatureItem.結帳作業):
                     break;
                 default:
                     return;
@@ -243,10 +241,6 @@ namespace His_Pos.ChromeTabViewModel
 
             switch (featureItem.ToString())
             {
-                //系統函式
-                case nameof(FeatureItem.系統函式):
-                    newTab = new  AdminFunction() { TabName = "系統函式", Icon = MainWindow.HisFeatures[0].Icon };
-                    break;
                 //每日作業
                 case nameof(FeatureItem.每日作業):
                     newTab = new Index() { TabName = "每日作業", Icon = @"..\Images\Home.png", IsPinned = true };
@@ -261,24 +255,34 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new PrescriptionSearchViewModel() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
-                case nameof(FeatureItem.藥品頻率管理):
-                    newTab = new MedFrequencyManage() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
-                    break;
-                
-                case nameof(FeatureItem.藥袋管理):
-                    newTab = new MedBagManage() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
+                case nameof(FeatureItem.匯出申報檔):
+                    newTab = new DeclareFileManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
-                case nameof(FeatureItem.匯出申報檔):
-                    newTab = new DeclareFileManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[4], Icon = MainWindow.HisFeatures[0].Icon };
-                    break;
                 case nameof(FeatureItem.額外收入登錄):
-                    newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[5], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
-                    
+
+                //銷售作業
+                case nameof(FeatureItem.結帳作業):
+                    newTab = new ProductTransactionViewModel() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
+
+                case nameof(FeatureItem.銷售紀錄):
+                    newTab = new ProductTransactionRecordViewModel() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
+
+                case nameof(FeatureItem.促銷管理):
+                    newTab = new ActivityManageViewModel() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
+
                 //商品管理
                 case nameof(FeatureItem.商品查詢):
-                    newTab = new ProductManagementViewModel() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = new ProductManagementViewModel() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
+                    break;
+
+                case nameof(FeatureItem.藥袋查詢):
+                    newTab = new MedBagViewModel() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 case nameof(FeatureItem.進退貨管理):
@@ -290,65 +294,79 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.商品類別管理):
-                    newTab = new ProductTypeManage() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new ProductTypeManageViewModel() { TabName = MainWindow.HisFeatures[2].Functions[4], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 case nameof(FeatureItem.櫃位管理):
-                    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[2].Functions[5], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 //盤點
                 case nameof(FeatureItem.新增盤點):
-                    newTab = new StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
+                    newTab = new StockTakingViewModel() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
                 case nameof(FeatureItem.庫存盤點紀錄):
-                    newTab = new StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
+                    newTab = new StockTakingRecord() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+
+                case nameof(FeatureItem.盤點計畫):
+                    newTab = new StockTakingPlanViewModel() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
                 //基本資料管理
                 case nameof(FeatureItem.供應商管理):
-                    newTab = new ManufactoryManageViewModel() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new ManufactoryManageViewModel() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
 
                 case nameof(FeatureItem.員工管理):
-                    newTab = new EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new EmployeeManageViewModel() { TabName = MainWindow.HisFeatures[4].Functions[2], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
 
                 case nameof(FeatureItem.審核管理):
-                    newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[4].Functions[3], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
                 case nameof(FeatureItem.顧客管理):
-                    newTab = new CustomerManageViewModel() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new CustomerManageViewModel() { TabName = MainWindow.HisFeatures[4].Functions[4], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
 
                 //打卡
                 case nameof(FeatureItem.排班管理):
-                    newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
+                    newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
 
                 //報表
-                case nameof(FeatureItem.庫存現值查詢):
-                    newTab = new EntrySearchViewModel() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
+                case nameof(FeatureItem.庫存現值報表):
+                    newTab = new EntrySearchViewModel() { TabName = MainWindow.HisFeatures[6].Functions[0], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
-                case nameof(FeatureItem.進退貨報表查詢):
-                    newTab = new PurchaseReturnReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
-                    break;
-                case nameof(FeatureItem.合作診所藥品耗用):
-                    newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[2], Icon = MainWindow.HisFeatures[5].Icon };
-                    break;
-                case nameof(FeatureItem.部分負擔自費報表):
-                    newTab = new CooperativeEntry() { TabName = MainWindow.HisFeatures[5].Functions[3], Icon = MainWindow.HisFeatures[5].Icon };
+                case nameof(FeatureItem.進退貨報表):
+                    newTab = new PurchaseReturnReportViewModel() { TabName = MainWindow.HisFeatures[6].Functions[1], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
                 case nameof(FeatureItem.管制藥品簿冊申報):
-                    newTab = new ControlMedicineDeclareViewModel() { TabName = MainWindow.HisFeatures[5].Functions[4], Icon = MainWindow.HisFeatures[5].Icon };
+                    newTab = new ControlMedicineDeclareViewModel() { TabName = MainWindow.HisFeatures[6].Functions[2], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
                 case nameof(FeatureItem.每日總帳報表):
-                    newTab = new CashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[5], Icon = MainWindow.HisFeatures[5].Icon };
+                    newTab = new CashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[6].Functions[3], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
-                case nameof(FeatureItem.合作診所結帳報表):
-                    newTab = new CooperativeEntryReportViewModel() { TabName = MainWindow.HisFeatures[5].Functions[6], Icon = MainWindow.HisFeatures[5].Icon };
+
+                //會計報表
+                case nameof(FeatureItem.申報院所點數總表):
+                    newTab = new InstitutionDeclarePointReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[0], Icon = MainWindow.HisFeatures[7].Icon };
                     break;
+                //系統教學
+                case nameof(FeatureItem.系統教學文件): 
+                    newTab = new TutorialViewModel() { TabName = MainWindow.HisFeatures[9].Functions[0], Icon = MainWindow.HisFeatures[9].Icon };
+                    break;
+                //公司網站
+                case nameof(FeatureItem.藥健康網頁):
+                    newTab = new CompanyWebViewModel() { TabName = MainWindow.HisFeatures[10].Functions[0], Icon = MainWindow.HisFeatures[10].Icon };
+                    break;
+
+                //系統函式
+                case nameof(FeatureItem.系統函式):
+                    newTab = new AdminFunction() { TabName = "系統函式", Icon = MainWindow.HisFeatures[8].Icon };
+                    break;
+
                 default:
                     return;
             }
@@ -376,30 +394,6 @@ namespace His_Pos.ChromeTabViewModel
                                 continue;
                             }
                             break;
-                        case nameof(FeatureItem.商品查詢):
-                            if (InventoryManagementView.Instance is null) break;
-
-                            if (InventoryManagementView.DataChanged)
-                            {
-                                //InventoryManagementView.Instance.MergingData();
-                                InventoryManagementView.Instance.SearchData();
-                            }
-                            break;
-
-                        case nameof(FeatureItem.進退貨紀錄):
-                            break;
-
-                        case nameof(FeatureItem.新增盤點):
-                            if (StockTakingView.Instance is null) break;
-
-                            if (StockTakingView.DataChanged)
-                            {
-                                StockTakingView.Instance.InitProduct();
-
-                                StockTakingView.DataChanged = false;
-                            }
-                            break;
-
                         case nameof(FeatureItem.審核管理):
                             if (AuthenticationManageView.Instance is null) break;
 

@@ -7,11 +7,11 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.NewClass.Prescription.IcData.Upload;
-using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.Medicine.Base;
+using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ICCard.Upload;
 using His_Pos.Properties;
 using His_Pos.Service;
-using Prescription = His_Pos.NewClass.Prescription.Prescription;
 // ReSharper disable All
 
 namespace His_Pos.HisApi
@@ -25,10 +25,10 @@ namespace His_Pos.HisApi
             var medList = p.Medicines.Where(m => (m is MedicineNHI || m is MedicineSpecialMaterial || m is MedicineVirtual) && !m.PaySelf).ToList();
             var iWriteCount = medList.Count;
             var iBufferLength = 40 * iWriteCount;
-            p.Card.GetBasicData();
+            p.Card.Read();
             var treatDateTime = DateTimeExtensions.ToStringWithSecond(p.Card.MedicalNumberData.TreatDateTime);
             var pDataWriteStr = p.Medicines.CreateMedicalData(treatDateTime);
-            byte[] pDateTime = ConvertData.StringToBytes(treatDateTime+"\0",14);
+            byte[] pDateTime = ConvertData.StringToBytes(treatDateTime + "\0", 14);
             byte[] pPatientID = ConvertData.StringToBytes(p.Card.PatientBasicData.IDNumber + "\0", 11);
             byte[] pPatientBirthDay = ConvertData.StringToBytes(p.Card.PatientBasicData.BirthdayStr + "\0", 8);
             byte[] pDataWrite = ConvertData.StringToBytes(pDataWriteStr, 3660);
@@ -42,7 +42,7 @@ namespace His_Pos.HisApi
                     var startIndex = 0;
                     for (int i = 0; i < iWriteCount; i++)
                     {
-                        signList.Add(ConvertData.ByToString(pBuffer, startIndex,40));
+                        signList.Add(ConvertData.ByToString(pBuffer, startIndex, 40));
                         startIndex += 40;
                     }
                 }
@@ -50,6 +50,7 @@ namespace His_Pos.HisApi
             }
             return signList;
         }
+
         //正常上傳
         public static DataTable CreatDailyUploadData(Prescription p, bool isMakeUp)
         {
@@ -63,7 +64,7 @@ namespace His_Pos.HisApi
         }
 
         //異常上傳
-        public static DataTable CreatErrorDailyUploadData(Prescription p, bool isMakeUp ,ErrorUploadWindowViewModel.IcErrorCode e = null)
+        public static DataTable CreatErrorDailyUploadData(Prescription p, bool isMakeUp, ErrorUploadWindowViewModel.IcErrorCode e = null)
         {
             DataTable table;
             Rec rec = new Rec(p, isMakeUp, e);
@@ -228,6 +229,7 @@ namespace His_Pos.HisApi
 
         public static void CheckDailyUpload()
         {
+            if(ViewModelMainWindow.CurrentPharmacy.NewInstitution) return;
             var uploadTable = UploadFunctions.CheckUpload();
             if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
             {
@@ -238,13 +240,23 @@ namespace His_Pos.HisApi
             }
         }
 
-        private static DataTable InsertUploadData(Prescription p,string uploadData,DateTime treat)
+        public static void CheckDailyUpload100()
         {
-            var table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, treat);
-            while (table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result"))
+            if(ViewModelMainWindow.CurrentPharmacy.NewInstitution) return;
+            var uploadTable = UploadFunctions.CheckUpload();
+            if (uploadTable.Rows.Count >= 100 && ViewModelMainWindow.IsVerifySamDc)
+            {
+                UploadFunctions.StartDailyUpload100(uploadTable);
+            }
+        }
+
+        private static DataTable InsertUploadData(Prescription p, string uploadData, DateTime treat)
+        {
+            var table = IcDataUploadDb.InsertDailyUploadData(p.ID, uploadData, treat);
+            while (NewFunction.CheckTransaction(table))
             {
                 MessageWindow.ShowMessage("寫卡資料存檔異常，按下OK重試", MessageType.WARNING);
-                table = IcDataUploadDb.InsertDailyUploadData(p.Id, uploadData, treat);
+                table = IcDataUploadDb.InsertDailyUploadData(p.ID, uploadData, treat);
             }
             return table;
         }

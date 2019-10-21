@@ -151,7 +151,7 @@
     <value>進退貨紀錄</value>
   </data>
   <data name="StockManage" xml:space="preserve">
-    <value>商品管理</value>
+    <value>庫存管理</value>
   </data>
   <data name="StockTaking" xml:space="preserve">
     <value>庫存盤點</value>
@@ -202,7 +202,7 @@
     <value>審核管理</value>
   </data>
   <data name="MedBagManage" xml:space="preserve">
-    <value>藥袋管理</value>
+    <value>藥袋查詢</value>
   </data>
   <data name="ImageSelectorsFileTpyes" xml:space="preserve">
     <value>Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*</value>
@@ -220,19 +220,13 @@
     <value>&lt;? xml version = "1.0" encoding = "Big5" ?&gt;</value>
   </data>
   <data name="ReportSystem" xml:space="preserve">
-    <value>報表系統</value>
+    <value>報表</value>
   </data>
   <data name="EntrySearch" xml:space="preserve">
-    <value>庫存現值查詢</value>
+    <value>庫存現值報表</value>
   </data>
   <data name="PurchaseReturnReport" xml:space="preserve">
-    <value>進退貨報表查詢</value>
-  </data>
-  <data name="CooperativeAdjustReport" xml:space="preserve">
-    <value>合作診所藥品耗用</value>
-  </data>
-  <data name="CooperativeEntry" xml:space="preserve">
-    <value>部分負擔自費報表</value>
+    <value>進退貨報表</value>
   </data>
   <data name="AdminFunction" xml:space="preserve">
     <value>系統函式</value>
@@ -301,7 +295,7 @@
     <value>請填寫給付類別
 </value>
   </data>
-  <data name="PharmacistIDError" xml:space="preserve">
+  <data name="尚未選擇藥師" xml:space="preserve">
     <value>未選擇調劑藥師或調劑藥師身分證未填寫\n</value>
   </data>
   <data name="PrescriptionCaseError" xml:space="preserve">
@@ -324,13 +318,13 @@
   <data name="查無藥品" xml:space="preserve">
     <value>查無藥品</value>
   </data>
-  <data name="PrintConfirm" xml:space="preserve">
+  <data name="列印確認" xml:space="preserve">
     <value>列印確認</value>
   </data>
-  <data name="PrintMedBag" xml:space="preserve">
+  <data name="藥袋列印確認" xml:space="preserve">
     <value>是否列印藥袋</value>
   </data>
-  <data name="PrintReceipt" xml:space="preserve">
+  <data name="收據列印確認" xml:space="preserve">
     <value>是否列印收據</value>
   </data>
   <data name="搜尋字串長度不足" xml:space="preserve">
@@ -459,8 +453,8 @@
   <data name="押金確認" xml:space="preserve">
     <value>押金確認</value>
   </data>
-  <data name="重新過卡或押金" xml:space="preserve">
-    <value>尚未選擇異常代碼，請以欠卡調劑或重新過卡後再次按下調劑按鈕</value>
+  <data name="尚未選擇異常代碼" xml:space="preserve">
+    <value>尚未選擇異常代碼，請重新過卡後再次按下調劑按鈕</value>
   </data>
   <data name="卡片資料不符" xml:space="preserve">
     <value>卡片資料與目前顧客資訊不符，
@@ -510,7 +504,7 @@
     <value>身分證/居留證號長度須為10</value>
   </data>
   <data name="顧客資料不足" xml:space="preserve">
-    <value>此顧客為新客人，若要新增請填寫姓名.身分證與生日</value>
+    <value>查無此病患且病患資料不足，請至少填寫身分證(長度為10並且符合身分證或居留證號檢查規則).姓名及生日</value>
   </data>
   <data name="匿名自費" xml:space="preserve">
     <value>未填寫顧客資料，是否以匿名取代?</value>
@@ -547,5 +541,71 @@
   </data>
   <data name="AdditionalCashFlowManage" xml:space="preserve">
     <value>額外收入登錄</value>
+  </data>
+  <data name="代入處方錯誤" xml:space="preserve">
+    <value>代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。</value>
+  </data>
+  <data name="列印錯誤" xml:space="preserve">
+    <value>列印報表發生問題，請重試</value>
+  </data>
+  <data name="姓名空值" xml:space="preserve">
+    <value>查詢姓名不可為空</value>
+  </data>
+  <data name="生日空值" xml:space="preserve">
+    <value>查詢生日不可為空</value>
+  </data>
+  <data name="身分證空值" xml:space="preserve">
+    <value>查詢身分證不可為空</value>
+  </data>
+  <data name="電話空值" xml:space="preserve">
+    <value>查詢電話不可為空</value>
+  </data>
+  <data name="AccountReportSystem" xml:space="preserve">
+    <value>會計報表系統</value>
+  </data>
+  <data name="InstitutionDeclarePointReport" xml:space="preserve">
+    <value>申報院所點數總表</value>
+  </data>
+  <data name="StockTakingPlan" xml:space="preserve">
+    <value>盤點計畫</value>
+  </data>
+  <data name="院所統計表" xml:space="preserve">
+    <value>院所申報點數統計表</value>
+  </data>
+  <data name="CSV檔案" xml:space="preserve">
+    <value>Csv檔案|*.csv</value>
+  </data>
+  <data name="Activity" xml:space="preserve">
+    <value>促銷管理</value>
+  </data>
+  <data name="ProductTransaction" xml:space="preserve">
+    <value>結帳作業</value>
+  </data>
+  <data name="ProductTransactionRecord" xml:space="preserve">
+    <value>銷售紀錄</value>
+  </data>
+  <data name="Transaction" xml:space="preserve">
+    <value>銷售作業</value>
+  </data>
+  <data name="處方存檔" xml:space="preserve">
+    <value>處方存檔</value>
+  </data>
+  <data name="PrescriptionFileType" xml:space="preserve">
+    <value>我是處方請存我|*.csv</value>
+  </data>
+  <data name="藥品統計存檔" xml:space="preserve">
+    <value>藥品統計存檔</value>
+  </data>
+  <data name="CSVFileType" xml:space="preserve">
+    <value>Csv檔案|*.csv</value>
+  </data>
+  <data name="CompanyWeb" xml:space="preserve">
+    <value>藥健康網頁</value>
+  </data>
+  <data name="SystemTutorial" xml:space="preserve">
+    <value>系統教學文件</value>
+  </data>
+  <data name="Web" xml:space="preserve">
+    <value>網頁連結</value>
   </data>
 </root>

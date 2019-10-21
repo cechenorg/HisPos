@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.StoreOrder
         private OrderStatusEnum orderStatus;
         private double totalPrice;
 
-        protected int initProductCount = 0;
+        protected int initProductCount;
 
         public Product.Product SelectedItem
         {
@@ -112,6 +112,8 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Status Function /////
         public void MoveToNextStatus()
         {
+            SaveOrder();
+
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
@@ -129,7 +131,6 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
             }
 
-            SaveOrder();
         }
         private void ToWaitingStatus()
         {
@@ -137,8 +138,19 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (isSuccess)
             {
-                SaveOrder();
                 OrderStatus = OrderStatusEnum.WAITING;
+
+                if (OrderType == OrderTypeEnum.RETURN)
+                {
+                    DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
+
+                    if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                    {
+                        MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
+                        return;
+                    }
+                }
+
                 StoreOrderDB.StoreOrderToWaiting(ID);
             }
             else
@@ -146,7 +158,17 @@ namespace His_Pos.NewClass.StoreOrder
         }
         private void ToNormalProcessingStatus()
         {
-            SaveOrder();
+            if (OrderType == OrderTypeEnum.RETURN)
+            {
+                DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
+
+                if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                {
+                    MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
+                    return;
+                }
+            }
+
             OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
             ReceiveID = ID;
             SetProductToProcessingStatus();
@@ -157,14 +179,13 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
         }
-        protected void ToScrapStatus()
+        private void ToScrapStatus()
         {
             OrderStatus = OrderStatusEnum.SCRAP;
             StoreOrderDB.StoreOrderToScrap(ID);
         }
         private void ToDoneStatus()
         {
-            SaveOrder();
             OrderStatus = OrderStatusEnum.DONE;
 
             DataTable result = new DataTable();
@@ -181,8 +202,6 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                 MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
-            else
-                MessageWindow.ShowMessage("已完成" + (OrderType == OrderTypeEnum.PURCHASE? "進":"退") +"貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
         }
         #endregion
 
@@ -218,11 +237,11 @@ namespace His_Pos.NewClass.StoreOrder
         {
             long orderFlag = dataRow.Field<long>("FLAG");
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
-            string PrescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
+            string prescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
 
             if (orderFlag == 2)
             {
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                System.Windows.Application.Current.Dispatcher.Invoke(delegate
                 {
                     MessageWindow.ShowMessage("訂單 " + ID + " 已被杏德作廢\r\n紀錄可至進退或記錄查詢!", MessageType.ERROR);
                 });
@@ -231,7 +250,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else if (isShipment)
             {
-                ReceiveID = PrescriptionReceiveID;
+                ReceiveID = prescriptionReceiveID;
 
                 bool isSuccess = UpdateOrderProductsFromSingde();
 
@@ -272,9 +291,9 @@ namespace His_Pos.NewClass.StoreOrder
             return dataTable.Rows[0].Field<bool>("RESULT");
         }
 
-        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)
+        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID)
         {
-            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID);
+            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID);
 
             switch (orderType)
             {

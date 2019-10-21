@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
-using His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
-namespace His_Pos.SYSTEM_TAB.OfflineOperation
+namespace His_Pos.ChromeTabViewModel
 {
     public class OfflineOperationWindowViewModel : ViewModelBase
     {
@@ -140,13 +131,13 @@ namespace His_Pos.SYSTEM_TAB.OfflineOperation
             switch (tabName)
             {
                 case "調劑":
-                    newTab = new OfflineAdjustViewModel { TabName = "調劑", Icon = "/Images/PrescriptionIcon.png" };
+                    //newTab = new OfflineAdjustViewModel { TabName = "調劑", Icon = "/Images/PrescriptionIcon.png" };
                     break;
                 default:
                     return;
             }
 
-            this.ItemCollection.Add(newTab.getTab());
+            //this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
         }
     }

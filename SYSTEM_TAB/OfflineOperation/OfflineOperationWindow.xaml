@@ -4,16 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.OfflineOperation"
-        xmlns:adjustControl="clr-namespace:His_Pos.SYSTEM_TAB.OfflineOperation.AdjustView"
         xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
         DataContext="{Binding Source={StaticResource Locator},Path=ViewModelOfflineOperationWindow}"
         mc:Ignorable="d"
         Title="離線作業" Height="800" Width="1365">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type adjustControl:OfflineAdjustViewModel}">
+        <!--<DataTemplate DataType="{x:Type adjustControl:OfflineAdjustViewModel}">
             <adjustControl:OfflineAdjustView/>
-        </DataTemplate>
+        </DataTemplate>-->
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid Height="930" Width="1600">

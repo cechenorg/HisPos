@@ -13,14 +13,14 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition Height="300"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="30"/>
+        <Label Grid.Row="0" Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
         <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding CashDetailReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CashDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
-                  CanUserSortColumns="False" CanUserReorderColumns="False" >
+                  CanUserDeleteRows="False" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding CashDetailClickCommand}"/>
@@ -112,7 +112,7 @@
         <Rectangle Grid.Row="2" Fill="{StaticResource GridBackGround}"/>
         <DataGrid Grid.Row="2" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding CashDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
-                  CanUserSortColumns="False" CanUserReorderColumns="False">
+                  CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>

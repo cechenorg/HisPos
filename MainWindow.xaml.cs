@@ -16,7 +16,6 @@ using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
-using His_Pos.NewClass.CooperativeClinicJson;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.StockValue;
@@ -44,13 +43,16 @@ namespace His_Pos
         public MainWindow(Employee user)
         {
             InitializeComponent();
+            Instance = this;
             FeatureFactory();
             WindowState = WindowState.Maximized;
             ViewModelMainWindow.CurrentUser = user;
-            if (ViewModelMainWindow.CurrentUser.WorkPositionName == "藥師")
-                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = new MedicalPersonnel(ViewModelMainWindow.CurrentUser);
-
-            Instance = this;
+            ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.InitPharmacists();
+            if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師") && ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Count(e => e.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber)) == 0)
+            {
+                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = ViewModelMainWindow.CurrentUser;
+                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Add(ViewModelMainWindow.CurrentUser);
+            }
             InitializeMenu();
             InitialUserBlock();
             StartClock();
@@ -61,31 +63,40 @@ namespace His_Pos
         private void InitialUserBlock()
         {
             UserName.Content = ViewModelMainWindow.CurrentUser.Name;
+            PharmacyName.Content = ViewModelMainWindow.CurrentPharmacy.Name;
         }
 
         private void FeatureFactory()
         {
             HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", StringRes.hisPrescription,
-                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.MedFrequencyManage, StringRes.MedBagManage , StringRes.DeclareFileExport,StringRes.AdditionalCashFlowManage }));
+                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.DeclareFileExport,StringRes.AdditionalCashFlowManage }));
+
+            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.Transaction,
+                            new[] { StringRes.ProductTransaction, StringRes.ProductTransactionRecord, StringRes.Activity }));
 
             HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", StringRes.StockManage,
-                            new[] { StringRes.StockSearch, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
+                            new[] { StringRes.StockSearch, StringRes.MedBagManage, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", StringRes.StockTaking,
-                            new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord }));
+                            new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord, StringRes.StockTakingPlan }));
 
             HisFeatures.Add(new Feature(@"..\Images\Management.png", StringRes.DataManagement,
-                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage,
-                                           StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage}));
+                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage, StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage}));
 
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", StringRes.Attend,
                             new[] { StringRes.ClockIn, StringRes.WorkScheduleManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
-              new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.CooperativeAdjustReport,
-                  StringRes.CooperativeEntry, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport,StringRes.CooperativeEntryReport }));
-            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.AdminManage,
-              new[] { StringRes.AdminFunction }));
+                            new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport }));
+            
+            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.AccountReportSystem,
+                            new[] { StringRes.InstitutionDeclarePointReport })); 
+            HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", StringRes.AdminManage,
+                            new[] { StringRes.AdminManage }));
+            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.SystemTutorial,
+                            new[] { StringRes.SystemTutorial }));
+            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
+                            new[] { StringRes.CompanyWeb }));
         }
         
         private void InitializeMenu()
@@ -181,9 +192,9 @@ namespace His_Pos
             try
             {
                 ServerConnection.OpenConnection();
-                StockValue.UpdateDailyStockValue(); //做每日進退帳
-                WebApi.SendToCooperClinic();
-                CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
+                while (WebApi.SendToCooperClinicLoop100())
+                {  
+                } //骨科上傳
                 ServerConnection.CloseConnection();
             }
             catch (Exception ex) {

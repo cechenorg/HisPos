@@ -1,5 +1,8 @@
-﻿using System.Windows;
-using His_Pos.Class.ProductType;
+﻿using System.Data;
+using System.Windows;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.ProductType;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
@@ -8,34 +11,40 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
     /// </summary>
     public partial class DeleteTypeWindow : Window
     {
-        public ProductType DeleteType;
+        #region ----- Define Variables -----
+        public ProductTypeManageMaster SelectedType { get; set; }
+        #endregion
 
-        private ProductTypeManageMaster Master;
-        private ProductTypeManageDetail Detail;
-
-        public DeleteTypeWindow(ProductTypeManageMaster master, ProductTypeManageDetail detail)
+        public DeleteTypeWindow(ProductTypeManageMaster currentType)
         {
+            SelectedType = currentType;
             InitializeComponent();
-
-            BigType.Content = master.Name;
-
-            if (detail is null)
-            {
-                SmallTypeRadioButton.IsEnabled = false;
-                BigTypeRadioButton.IsChecked = true;
-            }
-            else
-            {
-                SmallType.Content = detail.Name;
-            }
-
-            Master = master;
-            Detail = detail;
+            DataContext = this;
         }
 
-        private void DeleteClick(object sender, RoutedEventArgs e)
+        private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
-            DeleteType = ((bool)BigTypeRadioButton.IsChecked) ? (ProductType)Master : (ProductType)Detail;
+            if ((bool) SmallCategoryRadioButton.IsChecked && SelectedType.CurrentDetailType.ProductCollection.Count > 0)
+            {
+                MessageWindow.ShowMessage("小類別中還有商品 無法刪除", MessageType.ERROR);
+                return;
+            }
+            else if(!(bool)SmallCategoryRadioButton.IsChecked && SelectedType.TypeDetailCount > 0)
+            {
+                MessageWindow.ShowMessage("大類別中還有小類別 無法刪除", MessageType.ERROR);
+                return;
+            }
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductTypeDB.DeleteType(((bool)SmallCategoryRadioButton.IsChecked)? SelectedType.CurrentDetailType.ID : SelectedType.ID);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (dataTable is null || dataTable.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("新增失敗 請稍後再試", Class.MessageType.ERROR);
+                return;
+            }
+
             Close();
         }
     }

@@ -1,41 +1,164 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
 using System.Windows.Forms;
-using System.Xml;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class; 
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using His_Pos.NewClass.Prescription.Search;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.Product.Medicine;
+using His_Pos.NewClass.WareHouse;
+using His_Pos.Properties;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
-using static His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml;
-using StringRes = His_Pos.Properties.Resources;
-// ReSharper disable InconsistentNaming
+using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
+
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 {
     public class PrescriptionSearchViewModel : TabBase
     {
-        #region Variables
-        public override TabBase getTab()
+        #region Properties
+
+        public Collection<string> TimeIntervalTypes => new Collection<string> {"調劑日","登錄日","預約日"};
+        public Collection<string> PatientConditions => new Collection<string> { "姓名", "身分證"};
+        public Collection<string> MedicineConditions => new Collection<string> { "藥品代碼", "藥品名稱" };
+        private PrescriptionType searchType { get; set; }
+        private bool isBusy;
+        public bool IsBusy
         {
-            return this;
+            get => isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref isBusy, value);
+            }
         }
-        public Institutions Institutions { get; set; }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
+        }
+        private string selectedTimeIntervalType;
+        public string SelectedTimeIntervalType
+        {
+            get => selectedTimeIntervalType;
+            set
+            {
+                Set(() => SelectedTimeIntervalType, ref selectedTimeIntervalType, value);
+                if (!selectedTimeIntervalType.Equals("調劑日"))
+                {
+                    FilterNoBuckle = false;
+                    FilterNotAdjust = false;
+                    FilterNoGetCard = false;
+                }
+                RaisePropertyChanged("NoBuckleFilterEnable");
+            }
+        }
+        private string selectedPatientCondition;
+        public string SelectedPatientCondition
+        {
+            get => selectedPatientCondition;
+            set
+            {
+                Set(() => SelectedPatientCondition, ref selectedPatientCondition, value);
+            }
+        }
+        private string patientCondition;
+        public string PatientCondition
+        {
+            get => patientCondition;
+            set
+            {
+                Set(() => PatientCondition, ref patientCondition, value);
+            }
+        }
+        private string selectedMedicineCondition;
+        public string SelectedMedicineCondition
+        {
+            get => selectedMedicineCondition;
+            set
+            {
+                Set(() => SelectedMedicineCondition, ref selectedMedicineCondition, value);
+            }
+        }
+        private string medicineCondition;
+        public string MedicineCondition
+        {
+            get => medicineCondition;
+            set
+            {
+                Set(() => MedicineCondition, ref medicineCondition, value);
+            }
+        }
+        private DateTime? patientBirth;
+        public DateTime? PatientBirth
+        {
+            get => patientBirth;
+            set
+            {
+                Set(() => PatientBirth, ref patientBirth, value);
+            }
+        }
+        private AdjustCase selectedAdjustCase;
+        public AdjustCase SelectedAdjustCase
+        {
+            get => selectedAdjustCase;
+            set
+            {
+                if (string.IsNullOrEmpty(value.ID))
+                    value = null;
+                Set(() => SelectedAdjustCase, ref selectedAdjustCase, value);
+            }
+        }
+        private Division selectedDivision;
+        public Division SelectedDivision
+        {
+            get => selectedDivision;
+            set
+            {
+                if (string.IsNullOrEmpty(value.ID))
+                    value = null;
+                Set(() => SelectedDivision, ref selectedDivision, value);
+            }
+        }
+        private PrescriptionSearchPreview selectedPrescription;
+        public PrescriptionSearchPreview SelectedPrescription
+        {
+            get => selectedPrescription;
+            set
+            {
+                Set(() => SelectedPrescription, ref selectedPrescription, value);
+            }
+        }
+        private int? editedPrescription;
+        public int? EditedPrescription
+        {
+            get => editedPrescription;
+            set
+            {
+                Set(() => EditedPrescription, ref editedPrescription, value);
+            }
+        }
+        public PrescriptionSearchInstitutions Institutions { get; set; }
         public AdjustCases AdjustCases { get; set; }
         public Divisions Divisions { get; set; }
         private PrescriptionSearchPreviews searchPrescriptions;
@@ -83,60 +206,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => EndDate, ref endDate, value);
             }
         }
-        private string patientName;
-        public string PatientName
+        private string selectedInstitutionCount;
+        public string SelectedInstitutionCount
         {
-            get => patientName;
+            get => selectedInstitutionCount;
             set
             {
-                Set(() => PatientName, ref patientName, value);
+                Set(() => SelectedInstitutionCount, ref selectedInstitutionCount, value);
             }
         }
-        private string patientIDNumber;
-        public string PatientIDNumber
+        public override TabBase getTab()
         {
-            get => patientIDNumber;
-            set
-            {
-                Set(() => PatientIDNumber, ref patientIDNumber, value);
-            }
+            return this;
         }
-        private DateTime? patientBirth;
-        public DateTime? PatientBirth
-        {
-            get => patientBirth;
-            set
-            {
-                Set(() => PatientBirth, ref patientBirth, value);
-            }
-        }
-        private AdjustCase selectedAdjustCase;
-        public AdjustCase SelectedAdjustCase
-        {
-            get => selectedAdjustCase;
-            set
-            {
-                Set(() => SelectedAdjustCase, ref selectedAdjustCase, value);
-            }
-        }
-        private PrescriptionSearchPreview selectedPrescription;
-        public PrescriptionSearchPreview SelectedPrescription
-        {
-            get => selectedPrescription;
-            set
-            {
-                Set(() => SelectedPrescription, ref selectedPrescription, value);
-            }
-        }
-        private PrescriptionSearchPreview editedPrescription;
-        public PrescriptionSearchPreview EditedPrescription
-        {
-            get => editedPrescription;
-            set
-            {
-                Set(() => EditedPrescription, ref editedPrescription, value);
-            }
-        }
+        private BackgroundWorker worker;
         private int totalCount;
         public int TotalCount
         {
@@ -191,306 +274,262 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => CopaymentPoint, ref copaymentPoint, value);
             }
         }
-        private int profit;
-        public int Profit
+        private int applyPoint;
+        public int ApplyPoint
         {
-            get => profit;
+            get => applyPoint;
             set
             {
-                Set(() => Profit, ref profit, value);
+                Set(() => ApplyPoint, ref applyPoint, value);
             }
         }
-        private int medicineCount;
-        public int MedicineCount
+
+        public bool NoBuckleFilterEnable => SelectedTimeIntervalType.Equals("調劑日");
+
+        private bool filterNoBuckle;
+        public bool FilterNoBuckle
         {
-            get => medicineCount;
+            get => filterNoBuckle;
             set
             {
-                Set(() => MedicineCount, ref medicineCount, value);
+                Set(() => FilterNoBuckle, ref filterNoBuckle, value);
+                if (PrescriptionCollectionVS != null)
+                {
+                    PrescriptionCollectionVS.Filter += NoBuckleFilter;
+                    SetPrescriptionsSummary();
+                }
             }
         }
-        private bool isBusy;
-        public bool IsBusy
+        private bool filterNotAdjust;
+        public bool FilterNotAdjust
         {
-            get => isBusy;
-            private set
-            {
-                Set(() => IsBusy, ref isBusy, value);
-            }
-        }
-        private string busyContent;
-        public string BusyContent
-        {
-            get => busyContent;
-            private set
-            {
-                Set(() => BusyContent, ref busyContent, value);
-            }
-        }
-        private string medicineID;
-        public string MedicineID
-        {
-            get => medicineID;
+            get => filterNotAdjust;
             set
             {
-                Set(() => MedicineID, ref medicineID, value);
+                Set(() => FilterNotAdjust, ref filterNotAdjust, value);
+                if (PrescriptionCollectionVS != null)
+                {
+                    PrescriptionCollectionVS.Filter += NotAdjustFilter;
+                    SetPrescriptionsSummary();
+                }
             }
         }
-        private string medicineName;
-        public string MedicineName
+        private bool filterNoGetCard;
+        public bool FilterNoGetCard
         {
-            get => medicineName;
+            get => filterNoGetCard;
             set
             {
-                Set(() => MedicineName, ref medicineName, value);
-            }
-        }
-        private Institution selectedInstitution;
-        public Institution SelectedInstitution
-        {
-            get => selectedInstitution;
-            set
-            {
-                Set(() => SelectedInstitution, ref selectedInstitution, value);
-            }
-        }
-        private Division selectedDivision;
-        public Division SelectedDivision
-        {
-            get => selectedDivision;
-            set
-            {
-                Set(() => SelectedDivision, ref selectedDivision, value);
+                Set(() => FilterNoGetCard, ref filterNoGetCard, value);
+                if (PrescriptionCollectionVS != null)
+                {
+                    PrescriptionCollectionVS.Filter += NoGetCardFilter;
+                    SetPrescriptionsSummary();
+                }
             }
         }
         #endregion
         #region Commands
+        public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
+        public RelayCommand FilterAdjustedInstitution { get; set; }
         public RelayCommand Search { get; set; }
-        public RelayCommand ReserveSearch { get; set; }
-        public RelayCommand ImportDeclareFileCommand { get; set; }
-        public RelayCommand ExportPrescriptionCsvCommand { get; set; }
-        public RelayCommand ExportMedicineCsvCommand { get; set; }
         public RelayCommand Clear { get; set; }
-        public RelayCommand<string> ShowInstitutionSelectionWindow { get; set; }
-        public RelayCommand<string> CheckInsEmpty { get; set; }
+        public RelayCommand ShowPrescriptionEdit { get; set; }
+        public RelayCommand ExportPrescriptionCsv { get; set; }
+        public RelayCommand ExportMedicineCsv { get; set; }
         #endregion
         public PrescriptionSearchViewModel()
         {
-            InitialVariables();
-            InitialCommands();
-            RegisterMessengers();
+            InitProperties();
+            InitCondition();
+            InitCommand();
         }
-        ~PrescriptionSearchViewModel()
+
+        #region InitFunctions
+        private void InitProperties()
         {
-            Messenger.Default.Unregister(this);
+            AdjustCases = new AdjustCases(false) { new AdjustCase() };
+            foreach (var adjust in ViewModelMainWindow.AdjustCases)
+            {
+                AdjustCases.Add(adjust);
+            }
+            Divisions = new Divisions { new Division() };
+            foreach (var division in ViewModelMainWindow.Divisions)
+            {
+                Divisions.Add(division);
+            }
         }
-        #region InitialFunctions
-        private void InitialVariables()
+        private void InitCondition()
         {
             SearchPrescriptions = new PrescriptionSearchPreviews();
-            Institutions = ViewModelMainWindow.Institutions;
-            AdjustCases = ViewModelMainWindow.AdjustCases;
-            Divisions = ViewModelMainWindow.Divisions;
+            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
+            PrescriptionCollectionView = PrescriptionCollectionVS.View;
+            SelectedTimeIntervalType = TimeIntervalTypes[0];
+            SelectedPatientCondition = PatientConditions[0];
+            SelectedMedicineCondition = MedicineConditions[0];
+            Institutions = new PrescriptionSearchInstitutions();
+            Institutions.GetAdjustedInstitutions();
+            SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
+            SelectedAdjustCase = AdjustCases[0];
+            SelectedDivision = Divisions[0];
             StartDate = DateTime.Today;
             EndDate = DateTime.Today;
-        }
-        private void InitialCommands()
-        {
-            Search = new RelayCommand(SearchAction);
-            ReserveSearch = new RelayCommand(ReserveSearchAction);
-            ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
-            ExportPrescriptionCsvCommand = new RelayCommand(ExportPrescriptionCsvAction);
-            ExportMedicineCsvCommand = new RelayCommand(ExportMedicineCsvAction);
-            Clear = new RelayCommand(ClearAction);
-            ShowInstitutionSelectionWindow = new RelayCommand<string>(GetInstitutionAction);
-            CheckInsEmpty = new RelayCommand<string>(CheckInsEmptyAction);
-
-        }
-
-        private void RegisterMessengers()
-        {
-            Messenger.Default.Register<NotificationMessage>(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow", ShowPrescriptionEditWindowAction);
-        }
-        #endregion
-        #region CommandActions
-        private void SearchAction()
-        {
-            if (!CheckCondition()) return;
-            if(!CheckStartDate()) return;
-            if (!CheckEndDate()) return;
-            if(!CheckDateOutOfRange()) return;
-            var previews = new PrescriptionSearchPreviews();
-            SearchPrescriptions.Clear();
-            MainWindow.ServerConnection.OpenConnection();
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = StringRes.處方查詢;
-                //依條件查詢對應處方
-                previews.GetSearchPrescriptions(StartDate, EndDate, PatientName?.Trim(),PatientIDNumber?.Trim(), PatientBirth, SelectedAdjustCase,MedicineID?.Trim(), MedicineName?.Trim(), SelectedInstitution,SelectedDivision);
-                SearchPrescriptions = previews;
-                SetPrescriptionsSummary(false);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                MainWindow.ServerConnection.CloseConnection();
-                UpdateCollectionView();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-        }
-
-        private void SetPrescriptionsSummary(bool reserve)
-        {
-            var summary = SearchPrescriptions.GetSummary(reserve, MedicineID);
-            TotalCount = SearchPrescriptions.Count;
-            ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
-            TotalPoint = summary[0];
-            MedicinePoint = summary[1];
-            MedicalServicePoint = summary[2];
-            CopaymentPoint = summary[3];
-            Profit = summary[4];
-            MedicineCount = summary[5];
-        }
-
-        private void ReserveSearchAction()
-        {
-            if (!CheckCondition()) return;
-            if (!CheckStartDate()) return;
-            if (!CheckEndDate()) return;
-            if (!CheckDateOutOfRange()) return;
-            var previews = new PrescriptionSearchPreviews();
-            SearchPrescriptions.Clear();
-            MainWindow.ServerConnection.OpenConnection();
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = StringRes.處方查詢;
-                //依條件查詢對應處方
-                previews.GetReservePrescription(StartDate, EndDate, PatientName, PatientIDNumber, PatientBirth, SelectedAdjustCase, MedicineID, MedicineName, SelectedInstitution,SelectedDivision);
-                SearchPrescriptions = previews;
-                SetPrescriptionsSummary(true);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                MainWindow.ServerConnection.CloseConnection();
-                UpdateCollectionView();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-        }
-        private void ImportDeclareFileAction()
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            ImportDeclareFile();
-            MainWindow.ServerConnection.CloseConnection();
-        }
-        private void ShowPrescriptionEditWindowAction(NotificationMessage msg)
-        {
-            if(SelectedPrescription is null || !msg.Notification.Equals(nameof(PrescriptionSearchView) + "ShowPrescriptionEditWindow")) return;
-            EditedPrescription = SelectedPrescription;
-            MainWindow.ServerConnection.OpenConnection();
-            var prescription = SelectedPrescription.Source.Equals(PrescriptionSource.Normal) ? 
-                SelectedPrescription.GetPrescriptionByID() : SelectedPrescription.GetReservePrescriptionByID();
-            MainWindow.ServerConnection.CloseConnection();
-            prescription.Source = SelectedPrescription.Source;
-            var pSource = SelectedPrescription.Source;
-            var prescriptionEdit = new PrescriptionEditWindow.PrescriptionEditWindow(SelectedPrescription.ID, pSource);
-            Messenger.Default.Register<NotificationMessage>(this, Refresh);
-            prescriptionEdit.ShowDialog();
-            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
-        }
-        private void ClearAction()
-        {
-            StartDate = null;
-            EndDate = null;
-            SelectedAdjustCase = null;
-            PatientName = string.Empty;
-            PatientIDNumber = string.Empty;
-            PatientBirth = null;
-            MedicineID = string.Empty;
-            MedicineName = string.Empty;
-            SelectedInstitution = null;
-            SelectedDivision = null;
-            SearchPrescriptions.Clear();
-            UpdateCollectionView();
             TotalCount = 0;
             ChronicCount = 0;
             TotalPoint = 0;
             MedicinePoint = 0;
             MedicalServicePoint = 0;
             CopaymentPoint = 0;
-            Profit = 0;
-            MedicineCount = 0;
+            ApplyPoint = 0;
+            MedicineCondition = string.Empty;
+            PatientCondition = string.Empty;
+            PatientBirth = null;
         }
 
-        private void Refresh(NotificationMessage msg)
+        private void InitCommand()
         {
-            if (msg.Notification.Equals("PrescriptionEdited"))
-                SearchAction();
-            else if (msg.Notification.Equals("ReservePrescriptionEdited"))
-            {
-                ReserveSearchAction();
-            }
-        }
-        private void GetInstitutionAction(string search)
-        {
-            SelectedInstitution = null;
-            var result = Institutions.Where(i => i.ID.Contains(search) || i.Name.Contains(search)).ToList();
-            switch (result.Count)
-            {
-                case 0:
-                    return;
-                case 1:
-                    SelectedInstitution = result[0];
-                    break;
-                default:
-                    Messenger.Default.Register<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
-                    var institutionSelectionWindow = new InstitutionSelectionWindow(search, ViewModelEnum.PrescriptionSearch);
-                    institutionSelectionWindow.ShowDialog();
-                    Messenger.Default.Unregister<Institution>(this, nameof(PrescriptionSearchViewModel) + "InsSelected", GetSelectedInstitution);
-                    break;
-            }
-        }
-        private void CheckInsEmptyAction(string search)
-        {
-            if (string.IsNullOrEmpty(search))
-                SelectedInstitution = null;
+            DateMouseDoubleClick = new RelayCommand<MaskedTextBox>(DateMouseDoubleClickAction);
+            Search = new RelayCommand(SearchAction);
+            Clear = new RelayCommand(ClearAction);
+            FilterAdjustedInstitution = new RelayCommand(FilterAdjustedInstitutionAction);
+            ShowPrescriptionEdit = new RelayCommand(ShowPrescriptionEditAction);
+            ExportPrescriptionCsv = new RelayCommand(ExportPrescriptionCsvAction);
+            ExportMedicineCsv = new RelayCommand(ExportMedicineCsvAction);
         }
         #endregion
-        #region Functions
-        private void ExportMedicineCsvAction() {
-            List<int> idList = new List<int>();
-            foreach (var a in SearchPrescriptions) {
-                idList.Add(a.ID);
-            }
-            DataTable table = MedicineDb.GetPrescriptionMedicineSumById(idList); 
-            SaveFileDialog fdlg = new SaveFileDialog();
-            fdlg.Title = "藥品統計存檔";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
-            fdlg.Filter = "Csv檔案|*.csv";
-            fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") +  "藥品統計存檔";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
+
+        #region CommandAction
+        private void DateMouseDoubleClickAction(MaskedTextBox sender)
+        {
+            switch (sender.Name)
             {
-                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
-                Properties.Settings.Default.Save();
+                case "StartDate":
+                    StartDate = DateTime.Today;
+                    break;
+                case "EndDate":
+                    EndDate = DateTime.Today;
+                    break;
+            }
+        }
+
+        private void SearchAction()
+        {
+            if (CheckSearchConditionsEmpty())
+            {
+                MessageWindow.ShowMessage("請至少填寫一個查詢條件",MessageType.WARNING);
+                return;
+            }
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) => { SearchByConditions(); };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                EndSearch();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+
+        private bool CheckSearchConditionsEmpty()
+        {
+            return (StartDate is null || EndDate is null) && string.IsNullOrEmpty(PatientCondition) &&
+                   PatientBirth is null && string.IsNullOrEmpty(MedicineCondition) && string.IsNullOrEmpty(SelectedAdjustCase?.ID) &&
+                   string.IsNullOrEmpty(SelectedDivision?.ID);
+        }
+
+        private void ClearAction()
+        {
+            InitCondition();
+            StartDate = null;
+            EndDate = null;
+        }
+
+        private void FilterAdjustedInstitutionAction()
+        {
+            var insFilter = new AdjustedInstitutionSelectionWindow.AdjustedInstitutionSelectionWindow(Institutions);
+            var selectCount = Institutions.Count(i => i.Selected);
+            if (selectCount <= 3)
+            {
+                SelectedInstitutionCount = string.Empty;
+                foreach (var ins in Institutions.Where(i => i.Selected))
+                {
+                    SelectedInstitutionCount += ins.Name.Length > 10 ? $"{ins.Name.Substring(0, 10)}... " : $"{ins.Name} ";
+                }
+            }
+            else
+            {
+                SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
+            }
+        }
+
+        private void ShowPrescriptionEditAction()
+        {
+            if (SelectedPrescription is null) return;
+            EditedPrescription = SelectedPrescription.ID;
+            Messenger.Default.Register<NotificationMessage>(this, Refresh);
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Type);
+            Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
+        }
+
+        private void ExportPrescriptionCsvAction()
+        {
+            var fileDialog = CreatePrescriptionExportFileDialog();
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.DeclareXmlPath = fileDialog.FileName;
+                Settings.Default.Save();
+                StartExportPrescriptionCsv(fileDialog);
+                MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+            }
+        }
+
+        private void StartExportPrescriptionCsv(SaveFileDialog fileDialog)
+        {
+            using (var file = new StreamWriter(fileDialog.FileName, false, Encoding.UTF8))
+            {
+                file.WriteLine("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日,登錄日,藥品費,特殊材料費,藥事服務費,部分負擔,總點數");
+                foreach (var s in SearchPrescriptions)
+                {
+                    var insName = s.Institution is null ? "" : s.Institution.Name;
+                    var divName = s.Division is null ? "" : s.Division.Name;
+                    var sAdjust = s.IsAdjust ? "已調劑" : "未調劑";
+                    var adjDate = DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(s.AdjustDate);
+                    var treatDate = s.TreatDate is null ? "" : ((DateTime)s.TreatDate).AddYears(-1911).ToString("yyy/MM/dd");
+                    Debug.Assert(s.Patient.Birthday != null, "s.Patient.Birthday != null");
+                    file.WriteLine($"{sAdjust},{s.StoStatus},{insName}," +
+                            $"{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber}," +
+                            $"{((DateTime)s.Patient.Birthday).AddYears(-1911):yyy/MM/dd}," +
+                            $"{treatDate}," + $"{adjDate},{s.InsertDate},{s.RegisterDate},{s.MedicinePoint},{s.SpecialMaterialPoint},{s.MedicalServicePoint},{s.CopaymentPoint},{s.TotalPoint}")  ;
+                }
+                file.Close();
+                file.Dispose();
+            }
+        }
+
+        private SaveFileDialog CreatePrescriptionExportFileDialog()
+        {
+            return new SaveFileDialog
+            {
+                Title = Resources.處方存檔,
+                InitialDirectory = string.IsNullOrEmpty(Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath,
+                Filter = Resources.PrescriptionFileType,
+                FileName = DateTime.Today.ToString("yyyyMMdd") + Resources.處方存檔,
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+        }
+
+        private void ExportMedicineCsvAction()
+        {
+            var idList = CreatePrescriptionIDList();
+            var fileDialog = CreateMedicineExportFileDialog();
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.DeclareXmlPath = fileDialog.FileName;
+                Settings.Default.Save();
                 try
                 {
-                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
-                    {
-                        file.WriteLine("商品代碼,藥品中文名稱,藥品英文名稱,上次進價,健保價,庫存,調劑量,扣庫量");
-                        foreach (DataRow s in table.Rows)
-                        {
-
-                            file.WriteLine($@"{s.Field<string>("Pro_ID")},{s.Field<string>("cName")},{s.Field<string>("eName")},{s.Field<int>("Pro_LastPrice")}, {s.Field<int>("Med_Price")},{s.Field<double>("Inv_Inventory")},{s.Field<int>("TotalAmount")},{s.Field<int>("BuckleAmount")}");
-                        }
-                        file.Close();
-                        file.Dispose();
-                    }
+                    StartExportMedicineCsv(fileDialog, idList);
                     MessageWindow.ShowMessage("匯出Excel", MessageType.SUCCESS);
                 }
                 catch (Exception ex)
@@ -500,132 +539,169 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
             }
         }
-        private void ExportPrescriptionCsvAction() {
-            SaveFileDialog fdlg = new SaveFileDialog();
-            fdlg.Title = "處方存檔";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
-            fdlg.Filter = "我是處方請存我|*.csv";
-            fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") + "處方存檔";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
-                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
-                Properties.Settings.Default.Save();
 
-                using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+        private void StartExportMedicineCsv(SaveFileDialog fileDialog, List<int> idList)
+        {
+            using (var file = new StreamWriter(fileDialog.FileName, false, Encoding.UTF8))
+            {
+                var wareHouses = WareHouses.GetWareHouses();
+                foreach (var w in wareHouses)
                 {
-                    file.WriteLine("調劑狀態,藥袋狀態,醫療院所,科別,病患姓名,就醫序號,身分證,生日,處方就醫日,處方調劑日,實際調劑日");
-                    foreach (var s in SearchPrescriptions)
+                    file.WriteLine("庫名," + w.Name);
+                    file.WriteLine("商品代碼,藥品中文名稱,藥品英文名稱,上次進價,健保價,庫存,調劑量,扣庫量");
+                    var table = MedicineDb.GetPrescriptionMedicineSumById(idList, w.ID);
+                    foreach (DataRow s in table.Rows)
                     {
-                        string insName = s.Institution is null ? "" : s.Institution.Name;
-                        string divName = s.Division is null ? "" : s.Division.Name;
-                        string s_adjust = s.IsAdjust == true ? "已調劑" : "未調劑";
-                        string adjDate = s.AdjustDate == null ? "" : ((DateTime)s.AdjustDate).AddYears(-1911).ToString("yyy/MM/dd");
-                        string treatDate = s.TreatDate == null ? "" : ((DateTime)s.TreatDate).AddYears(-1911).ToString("yyy/MM/dd");
-
-                        file.WriteLine($"{s_adjust},{s.StoStatus},{insName}," +
-                                $"{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber}," +
-                                $"{((DateTime)s.Patient.Birthday).AddYears(-1911).ToString("yyy/MM/dd")}," +
-                                $"{treatDate}," + $"{adjDate},{s.InsertDate}");
+                        file.WriteLine($@"{s.Field<string>("Pro_ID")},{s.Field<string>("cName")},{s.Field<string>("eName")},{s.Field<int>("Pro_LastPrice")}, {s.Field<int>("Med_Price")},{s.Field<double>("Inv_Inventory")},{s.Field<int>("TotalAmount")},{s.Field<int>("BuckleAmount")}");
                     }
-                    file.Close();
-                    file.Dispose();
+                    file.WriteLine();
+                    file.WriteLine();
+                    file.WriteLine();
                 }
-                MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
-
-
+                file.Close();
+                file.Dispose();
             }
-        }
-        private void UpdateCollectionView()
-        {
-            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
-            PrescriptionCollectionView = PrescriptionCollectionVS.View;
-            PrescriptionCollectionView.MoveCurrentToFirst();
-            SelectedPrescription = (PrescriptionSearchPreview)PrescriptionCollectionView.CurrentItem;
-        }
-        private void ImportDeclareFile() {
-            OpenFileDialog fdlg = new OpenFileDialog();
-            fdlg.Title = "選擇申報檔";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
-            fdlg.Filter = "Xml健保申報檔案|*.xml";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            XmlDocument doc = new XmlDocument();
-            doc.PreserveWhitespace = true;
-            List<Ddata> ddatasCollection = new List<Ddata>(); 
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
-                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName.Replace("\\" + fdlg.SafeFileName, "");
-                Properties.Settings.Default.Save();
-                doc.Load(fdlg.FileName);
-                string fileId;
-                string fileHead = doc.GetElementsByTagName("tdata")[0].InnerXml; 
-                DataTable filetable = PrescriptionDb.CheckImportDeclareFileExist(fileHead);
-                if (filetable.Rows.Count > 0)
-                    fileId = filetable.Rows[0]["newId"].ToString();
-                else {
-                    MessageWindow.ShowMessage("此申報檔已經匯入~!", MessageType.ERROR);
-                    return;
-                }
-                List<string> declareFiles = new List<string>();
-                XmlNodeList ddatas = doc.GetElementsByTagName("ddata");
-                XmlDocument data = new XmlDocument();
-                foreach (XmlNode node in ddatas)
-                { 
-                    data.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
-                    Ddata d = XmlService.Deserialize<ImportDeclareXml.Ddata>(data.InnerXml);
-                    declareFiles.Add(node.InnerXml);
-                    ddatasCollection.Add(d); 
-                }
-                PrescriptionDb.ImportDeclareXml(ddatasCollection, declareFiles, fileId);
-                MessageWindow.ShowMessage("匯入申報檔完成!",MessageType.SUCCESS);
-            }
-        }
-        private bool CheckCondition()
-        {
-            if (StartDate is null && EndDate is null && string.IsNullOrEmpty(PatientName) && string.IsNullOrEmpty(PatientIDNumber) && PatientBirth is null && string.IsNullOrEmpty(MedicineID) && string.IsNullOrEmpty(MedicineName) && (SelectedInstitution is null || string.IsNullOrEmpty(SelectedInstitution.Name)) && SelectedDivision is null)
-            {
-                MessageWindow.ShowMessage("起始結束日期.病患姓名.身分證.生日.藥品代碼.藥品名稱.釋出院所或科別請至少擇一填寫", MessageType.WARNING);
-                return false;
-            }
-            return true;
         }
 
-        private bool CheckStartDate()
+        private SaveFileDialog CreateMedicineExportFileDialog()
         {
-            if (StartDate is null && EndDate != null)
+            return new SaveFileDialog
             {
-                MessageWindow.ShowMessage("請填寫起始日期", MessageType.WARNING);
-                return false;
-            }
-            return true;
+                Title = Resources.藥品統計存檔,
+                InitialDirectory = string.IsNullOrEmpty(Settings.Default.DeclareXmlPath) ? @"c:\" : Settings.Default.DeclareXmlPath,
+                Filter = Resources.CSVFileType,
+                FileName = DateTime.Today.ToString("yyyyMMdd") + Resources.藥品統計存檔,
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
         }
-        private bool CheckEndDate()
+
+        private List<int> CreatePrescriptionIDList()
         {
-            if (StartDate != null && EndDate is null)
+            var idList = new List<int>();
+            foreach (var a in SearchPrescriptions)
             {
-                MessageWindow.ShowMessage("請填寫結束日期", MessageType.WARNING);
-                return false;
+                idList.Add(a.ID);
             }
-            return true;
+            return idList;
         }
-        private bool CheckDateOutOfRange()
-        {
-            if (StartDate != null && EndDate != null)
-            {
-                if (DateTime.Compare((DateTime)StartDate, (DateTime)EndDate) > 0)
-                {
-                    MessageWindow.ShowMessage(StringRes.StartDateOutOfRange, MessageType.WARNING);
-                    return false;
-                }
-            }
-            return true;
-        }
-        private void GetSelectedInstitution(Institution ins)
-        {
-            SelectedInstitution = ins;
-        }
+
         #endregion
+
+        private void SearchByConditions()
+        {
+            BusyContent = "處方查詢中...";
+            var selectedIns = Institutions.Where(i => i.Selected);
+            var insIDList = selectedIns.Select(i => i.ID).ToList();
+            var conditionTypes = new Dictionary<string, string>
+            {
+                {"TimeInterval", SelectedTimeIntervalType},
+                {"Patient", SelectedPatientCondition},
+                {"Medicine", SelectedMedicineCondition}
+            };
+            var conditions = new Dictionary<string, string>
+            {
+                {"Patient", PatientCondition},
+                {"Medicine", MedicineCondition}
+            };
+            var dates = new Dictionary<string, DateTime?>
+            {
+                {"sDate", StartDate}, {"eDate", EndDate}, {"PatientBirthday", PatientBirth}
+            };
+            SearchPrescriptions = new PrescriptionSearchPreviews();
+            MainWindow.ServerConnection.OpenConnection();
+            SearchPrescriptions.GetSearchPrescriptionsRe(conditionTypes, conditions, dates, SelectedAdjustCase, insIDList, SelectedDivision);
+            MainWindow.ServerConnection.CloseConnection();
+            searchType = SelectedTimeIntervalType.Equals("預約日") ? PrescriptionType.ChronicReserve : PrescriptionType.Normal;
+        }
+
+        private void EndSearch()
+        {
+            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions};
+            PrescriptionCollectionView = PrescriptionCollectionVS.View;
+            TotalCount = SearchPrescriptions.Count;
+            ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
+            if (PrescriptionCollectionVS != null && searchType.Equals(PrescriptionType.Normal))
+            {
+                PrescriptionCollectionVS.Filter += NoBuckleFilter;
+                PrescriptionCollectionVS.Filter += NotAdjustFilter;
+            }
+            if (EditedPrescription != null && SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)) != null)
+            {
+                PrescriptionCollectionView.MoveCurrentTo(SearchPrescriptions.SingleOrDefault(p => p.ID.Equals(EditedPrescription)));
+            }
+            SetPrescriptionsSummary();
+        }
+
+        private void Refresh(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("PrescriptionEdited"))
+                SearchAction();
+        }
+
+        private void SetPrescriptionsSummary()
+        {
+            var summary = searchType.Equals(PrescriptionType.ChronicReserve) ? GetReserveSummary() : GetSummary();
+            TotalCount = PrescriptionCollectionView.Cast<object>().Count();
+            ChronicCount = PrescriptionCollectionView.Cast<object>()
+                .Count(p => ((PrescriptionSearchPreview) p).AdjustCase.ID.Equals("2"));
+            MedicinePoint = summary[0];
+            CopaymentPoint = summary[1];
+            MedicalServicePoint = summary[2];
+            ApplyPoint = summary[3];
+            TotalPoint = summary[4];
+        }
+
+        private void NoBuckleFilter(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is PrescriptionSearchPreview src))
+                e.Accepted = false;
+            else
+            {
+                if (FilterNoBuckle)
+                {
+                    if (src.NoBuckleStatus != null && src.NoBuckleStatus.Equals(1))
+                        e.Accepted = true;
+                    else
+                        e.Accepted = false;
+                }
+                else
+                    e.Accepted = true;
+            }
+        }
+
+        private void NotAdjustFilter(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is PrescriptionSearchPreview src))
+                e.Accepted = false;
+            else
+            {
+                e.Accepted = FilterNotAdjust || src.IsAdjust;
+            }
+        }
+
+        private void NoGetCardFilter(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is PrescriptionSearchPreview src))
+                e.Accepted = false;
+            else
+            {
+                e.Accepted = !FilterNoGetCard || src.IsDeposit;
+            }
+        }
+
+        public List<int> GetSummary()
+        {
+            var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview) p).ID).ToList();
+            var table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
+            return (from DataColumn c in table.Rows[0].Table.Columns select table.Rows[0].Field<int>(c.ColumnName)).ToList();
+        }
+
+        public List<int> GetReserveSummary()
+        {
+            var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview) p).ID).ToList();
+            var table = PrescriptionDb.GetSearchReservesSummary(presID);
+            return (from DataColumn c in table.Rows[0].Table.Columns select table.Rows[0].Field<int>(c.ColumnName)).ToList();
+        }
     }
 }

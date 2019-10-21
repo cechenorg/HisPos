@@ -8,9 +8,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
         {
             ProductType = (ProductTypeEnum)row.Field<int>("TYPE");
             ID = row.Field<string>("Pro_ID");
+            WareHouseID = row.Field<int>("ProInv_WareHouseID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
             Inventory = row.Field<double>("Inv_Inventory");
+            ShelfAmount = row.Field<double>("SHELF_INV");
+            MedBagAmount = row.Field<double>("Inv_MedBagAmount");
             SafeAmount = row.Field<int>("Inv_SafeAmount");
             BasicAmount = row.Field<int>("Inv_BasicAmount");
             OnTheWayAmount = row.Field<double>("Inv_OnTheWay");
@@ -19,11 +22,14 @@ namespace His_Pos.NewClass.Product.ProductManagement
             IsFrozen = row.Field<bool>("Med_IsFrozen");
             ControlLevel = row.Field<byte?>("Med_Control");
             StockValue = row.Field<double>("STOCK_VALUE");
+            ShelfStockValue = row.Field<double>("SHELF_STOCK_VALUE");
             IsEnable = row.Field<bool>("Pro_IsEnable");
+            InventoryError = row.Field<bool>("ERROR_FLAG");
         }
 
         public ProductTypeEnum ProductType { get; set; }
         public string ID { get; set; }
+        public int WareHouseID { get; set; }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
         public string FullName
@@ -36,14 +42,18 @@ namespace His_Pos.NewClass.Product.ProductManagement
             }
         }
         public double Inventory { get; set; }
+        public double ShelfAmount { get; set; }
+        public double MedBagAmount { get; set; }
         public int SafeAmount { get; set; }
         public int BasicAmount { get; set; }
         public double OnTheWayAmount { get; set; }
         public double MedBagOnTheWayAmount { get; set; }
         public double StockValue { get; set; }
+        public double ShelfStockValue { get; set; }
         public int? ControlLevel { get; set; }
         public bool IsCommon { get; set; }
         public bool IsFrozen { get; set; }
         public bool IsEnable { get; set; }
+        public bool InventoryError { get; set; }
     }
 }

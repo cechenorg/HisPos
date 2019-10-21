@@ -48,7 +48,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
             SettingTabCollection.Add(new SettingTabData(SettingTabs.MyPharmacy, "藥局設定", "/Images/pharmacy.png"));
             SettingTabCollection.Add(new SettingTabData(SettingTabs.Printer, "印表機設定", "/Images/Printer.png"));
             SettingTabCollection.Add(new SettingTabData(SettingTabs.CooperativeClinic, "合作診所設定", "/Images/Cooperate.png"));
-            SettingTabCollection.Add(new SettingTabData(SettingTabs.WareHouse, "倉庫設定", "/Images/StockTaking.png"));
+            SettingTabCollection.Add(new SettingTabData(SettingTabs.WareHouse, "庫別設定", "/Images/StockTaking.png"));
 
             SelectedSettingTab = SettingTabCollection[0];
         }
@@ -57,6 +57,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
         {
             Regex medReg = new Regex(@"M (.*)");
             Regex recReg = new Regex(@"Rc (.*)");
+            Regex recRegWithForm = new Regex(@"Rc (.*)[$](.*)");
             Regex repReg = new Regex(@"Rp (.*)");
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -70,8 +71,18 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
                 Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
 
                 newLine = fileReader.ReadLine();
-                match = recReg.Match(newLine);
-                Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+                if (newLine.Contains("$"))
+                {
+                    match = recRegWithForm.Match(newLine);
+                    Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+                    Properties.Settings.Default.ReceiptForm = match.Groups[2].Value;
+                }
+                else
+                {
+                    match = recReg.Match(newLine);
+                    Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+                    Properties.Settings.Default.ReceiptForm = "點陣";
+                }
 
                 newLine = fileReader.ReadLine();
                 match = repReg.Match(newLine);

@@ -58,6 +58,7 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
                     Add(new IcErrorCode("E000", "健保署資訊系統當機"));
                     Add(new IcErrorCode("E001", "控卡名單已簽切結書"));
                     Add(new IcErrorCode("F000", "醫事機構赴偏遠地區因無電話撥接"));
+                    Add(new IcErrorCode("G000", "新特約使用"));
                 }
             }
         }
@@ -73,12 +74,12 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
         }
 
         public RelayCommand ConfirmClick { get; set; }
-        public RelayCommand CancleClick { get; set; }
+        public RelayCommand CancelClick { get; set; }
         public ErrorUploadWindowViewModel(bool isGetMedicalNumber)
         {
             IcErrorCodeList = new IcErrorCodes(isGetMedicalNumber);
             ConfirmClick = new RelayCommand(ConfirmClickAction);
-            CancleClick = new RelayCommand(CancleClickAction);
+            CancelClick = new RelayCommand(CancelClickAction);
         }
 
         private void ConfirmClickAction()
@@ -91,8 +92,9 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
             Messenger.Default.Send(SelectedIcErrorCode, "SelectedIcErrorCode");
             Messenger.Default.Send(new NotificationMessage("CloseErrorUploadWindow"));
         }
-        private void CancleClickAction()
+        private void CancelClickAction()
         {
+            SelectedIcErrorCode = null;
             Messenger.Default.Send(new NotificationMessage("CloseErrorUploadWindow"));
         }
     }

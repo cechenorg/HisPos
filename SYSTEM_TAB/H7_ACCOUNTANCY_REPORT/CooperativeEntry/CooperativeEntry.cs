@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.CashFlow;
 using System;
 using System.Linq;
 

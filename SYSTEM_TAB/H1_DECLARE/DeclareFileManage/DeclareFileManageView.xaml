@@ -12,7 +12,6 @@
              d:DesignHeight="870" d:DesignWidth="1365" FontFamily="Segoe UI Semibold">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
-        <service:DateConverterNoDate x:Key="DateConverterNoDate" />
         <service:BoolToColorConverter x:Key="BoolToColorConverter" />
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
@@ -29,20 +28,31 @@
                 <ColumnDefinition Width="1015" />
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Background="{StaticResource GridBackGround}">
-                <Label Content="申報年月:" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
+                <Label Content="日期:" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0"/>
                 <xctk:MaskedTextBox Width="80" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontStretch="UltraExpanded">
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontStretch="UltraExpanded">
                     <xctk:MaskedTextBox.Text>
-                        <Binding Path="DeclareDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverterNoDate}">
+                        <Binding Path="DeclareDateStart" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                             <Binding.ValidationRules>
                                 <service:DateValidationRuleNoDate/>
                             </Binding.ValidationRules>
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-               
-                <Button Margin="90,0,10,0" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding GetPreviewPrescriptions}" />
+                <Label Content="~" FontSize="18" VerticalContentAlignment="Center"/>
+                <xctk:MaskedTextBox Width="80" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontStretch="UltraExpanded">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="DeclareDateEnd" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                            <Binding.ValidationRules>
+                                <service:DateValidationRuleNoDate/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <Button Margin="10,0,10,0" Content="查詢" Background="RoyalBlue" BorderBrush="RoyalBlue" Command="{Binding GetPreviewPrescriptions}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}">
                 <Label Content="機構代碼 :" Style="{StaticResource BoldLabelContent18}" Margin="10,0,5,0" />
@@ -294,7 +304,7 @@
                 <Label Content="{Binding ChronicPoint,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                 <Label Content="申報件數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
                 <Label Content="{Binding DeclareCount,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
-                <Label Content="總點數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
+                <Label Content="總申請點數 :" Style="{StaticResource BoldLabelContent16}" Margin="10,0,0,0" />
                 <Label Content="{Binding TotalDeclarePoint,UpdateSourceTrigger=PropertyChanged}" FontSize="16" Width="70" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" />
                 <Button Width="100" Margin="50,0,0,0" Background="RoyalBlue" BorderThickness="0" Content="整月調整" Command="{Binding DataContext.AdjustPharmacistOfMonth,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
                 <Button Width="105" Margin="10,0,10,0" Background="IndianRed" BorderThickness="0" Content="轉出申報檔" Command="{Binding DataContext.CreateDeclareFileCommand,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
