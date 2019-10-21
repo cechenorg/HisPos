@@ -1271,7 +1271,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             currentService.CloneTempPre();
             StartPrint(false);
+            CheckAutoRegister();
             DeclareSuccess();
+        }
+
+        private void CheckAutoRegister()
+        {
+            var registerList = new Prescriptions();
+            MainWindow.ServerConnection.OpenConnection();
+            registerList.GetAutoRegisterReserve(CurrentPrescription);
+            MainWindow.ServerConnection.CloseConnection();
+            if (registerList.Count > 0)
+            {
+
+                foreach (var p in registerList)
+                {
+                    p.PrescriptionStatus.IsSendOrder = true;
+                    CheckPrescriptionAutoRegister(p);
+                }
+            }
         }
 
         private void StartPrescribeAdjust()
@@ -1311,6 +1329,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
                 CurrentPrescription.SetDetail();
             return checkPrescription;
+        }
+
+        private void CheckPrescriptionAutoRegister(Prescription p)
+        {
+            currentService = PrescriptionService.CreateService(p);
+            currentService.SetPharmacistWithoutCheckCount(SelectedPharmacist);
+            MainWindow.ServerConnection.OpenConnection();
+            currentService.CheckPrescription(false, false);
+            MainWindow.ServerConnection.CloseConnection();
+            p.SetDetail();
         }
 
         private void DeclareSuccess()

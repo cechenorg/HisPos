@@ -694,6 +694,10 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml.cs">
       <DependentUpon>DuplicatePrescriptionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\AutoRegisterWindow\AutoRegisterViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\AutoRegisterWindow\AutoRegisterWindow.xaml.cs">
+      <DependentUpon>AutoRegisterWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativePrescriptionWindow\CooperativePrescriptionViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\CooperativePrescriptionWindow\CooperativePrescriptionWindow.xaml.cs">
       <DependentUpon>CooperativePrescriptionWindow.xaml</DependentUpon>
@@ -1398,6 +1402,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\DuplicatePrescriptionWindow\DuplicatePrescriptionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\FunctionWindow\AutoRegisterWindow\AutoRegisterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

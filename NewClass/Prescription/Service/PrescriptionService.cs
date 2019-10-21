@@ -129,6 +129,10 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.Pharmacist = selectedPharmacist;
             return true;
         }
+        public void SetPharmacistWithoutCheckCount(Employee selectedPharmacist)
+        {
+            Current.Pharmacist = selectedPharmacist;
+        }
         public void SetCard(IcCard c)
         {
             Current.Card = c;

@@ -1072,5 +1072,17 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionID", preID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionOrderByPrescriptionID]", parameterList);
         }
+
+        public static DataTable GetReserveByPrescription(Prescription p)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusID", p.Patient.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionID", p.Institution.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivisionID", p.Division.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MainDiseaseID", p.MainDisease.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "TreatDate", p.TreatDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "ChronicSequence", p.ChronicSeq);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveByPrescription]", parameterList);
+        }
     }
 }
