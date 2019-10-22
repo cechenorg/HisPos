@@ -36,6 +36,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.CustomerHistoryProduct;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow;
@@ -1281,15 +1282,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.OpenConnection();
             registerList.GetAutoRegisterReserve(CurrentPrescription);
             MainWindow.ServerConnection.CloseConnection();
-            if (registerList.Count > 0)
+            if (registerList.Count > 0 && RegisterConfirm(registerList))
             {
-
-                foreach (var p in registerList)
+                foreach (var p in registerList )
                 {
                     p.PrescriptionStatus.IsSendOrder = true;
-                    CheckPrescriptionAutoRegister(p);
+                    StartAutoRegister(p);
                 }
             }
+        }
+
+        private bool RegisterConfirm(Prescriptions registerList)
+        {
+            return (bool)new AutoRegisterWindow(CurrentPrescription,registerList).DialogResult;
         }
 
         private void StartPrescribeAdjust()
@@ -1331,14 +1336,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return checkPrescription;
         }
 
-        private void CheckPrescriptionAutoRegister(Prescription p)
+        private void StartAutoRegister(Prescription p)
         {
-            currentService = PrescriptionService.CreateService(p);
-            currentService.SetPharmacistWithoutCheckCount(SelectedPharmacist);
+            var service = PrescriptionService.CreateService(p);
+            service.SetPharmacistWithoutCheckCount(SelectedPharmacist);
             MainWindow.ServerConnection.OpenConnection();
-            currentService.CheckPrescription(false, false);
+            service.CheckPrescription(false, false);
             MainWindow.ServerConnection.CloseConnection();
             p.SetDetail();
+            service.StartRegister();
+            service.CloneTempPre();
+            StartPrint(false);
         }
 
         private void DeclareSuccess()

@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Prescription;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow
@@ -23,6 +25,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
         public AutoRegisterWindow()
         {
             InitializeComponent();
+        }
+
+        public AutoRegisterWindow(Prescription current,Prescriptions registerList)
+        {
+            InitializeComponent();
+            DataContext = new AutoRegisterViewModel(current,registerList);
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                switch (notificationMessage.Notification)
+                {
+                    case "AutoRegisterSubmit":
+                        DialogResult = true;
+                        Close();
+                        break;
+                    case "AutoRegisterCancel":
+                        DialogResult = false;
+                        Close();
+                        break;
+                }
+            });
+            if(registerList.Count > 0)
+                ShowDialog();
         }
 
         private void DateControl_GotFocus(object sender, RoutedEventArgs e)

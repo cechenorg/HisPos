@@ -9,23 +9,63 @@
         xmlns:service="clr-namespace:His_Pos.Service"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d" FontSize="16" FontFamily="Segoe UI Semibold"
-        Title="自動登錄確認" Height="400" Width="500">
+        Height="400" Width="600" WindowStyle="None">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="125"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="45"/>
             <RowDefinition/>
             <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical">
-            <Label Content="{Binding CurrentPrescriptionInfo}" Height="70" Margin="10"/>
-            <Label Content="此處方尚有下列預約可登錄，填寫日期後按下確認繼續登錄，取消返回繼續調劑。" Margin="10,0,10,0"/>
-        </StackPanel>
-        <DataGrid Width="300" Height="250" Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Width="600" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="GhostWhite" Background="CornflowerBlue" FontSize="16" Content="預約登錄確認" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+        <TextBlock Height="30" FontSize="15" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="*此處方尚有右列預約可登錄，如需一併登錄請填寫欲調劑日期後按下確定，取消返回。" Foreground="Red"/>
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="45"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Label Height="35" Content="姓名:"/>
+                <Label Height="35" Content="{Binding CurrentPrescription.Patient.Name}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <Label Height="35" Content="院所:"/>
+                <Label Height="35" Content="{Binding CurrentPrescription.Institution.Name}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                <Label Height="35" Content="科別:"/>
+                <Label Height="35" Content="{Binding CurrentPrescription.Division.Name}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="3">
+                <Label Height="35" Content="就醫日:"/>
+                <Label Height="35" Content="{Binding CurrentPrescription.TreatDate,Converter={StaticResource NullableDateConverter}}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="4">
+                <Label Height="35" Content="調劑日:"/>
+                <Label Height="35" Content="{Binding CurrentPrescription.AdjustDate,Converter={StaticResource NullableDateConverter}}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="5">
+                <Label Height="35" Content="調劑次數:"/>
+                <Label Height="35" Content="{Binding CurrentPrescription.ChronicTotal}"/>
+                <Label Height="35" Content="-"/>
+                <Label Height="35" Content="{Binding CurrentPrescription.ChronicSeq}"/>
+            </StackPanel>
+        </Grid>
+        <DataGrid Width="280" Height="250" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="10,0,10,0" ItemsSource="{Binding RegisterList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                  CanUserAddRows="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn MinWidth="60" Header="可調劑次數" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicTotal,UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Width="80" Header="可調劑" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicTotal,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -41,7 +81,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn MinWidth="60" Header="調劑次數" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicSequence,UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Width="80" Header="調劑次數" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicSequence,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -49,7 +89,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="170" Header="調劑日期" IsReadOnly="True"  >
+                <DataGridTemplateColumn Width="80" Header="調劑日期" IsReadOnly="True"  >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="170" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
@@ -72,5 +112,9 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1">
+            <Button Content="取消" Background="DimGray" BorderThickness="0" Command="{Binding Submit}"/>
+            <Button Content="確認" Background="IndianRed" BorderThickness="0" Margin="10" Command="{Binding Cancel}"/>
+        </StackPanel>
     </Grid>
 </Window>
