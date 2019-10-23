@@ -11,6 +11,7 @@
     <UserControl.Resources>
         <service:DateTimeConverter x:Key="DateTimeConverter"/>
         <service:NullableDateConverter x:Key="DateConverter"/>
+
     </UserControl.Resources>
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
@@ -178,6 +179,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding OrderManufactory.ID}" Value="0">
                                 <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ViewModelMainWindow.CurrentUser.ID, Source={StaticResource Locator}}" Value="1">
+                                <Setter Property="IsEnabled" Value="True"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
