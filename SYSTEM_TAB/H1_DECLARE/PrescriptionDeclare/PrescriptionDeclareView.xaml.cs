@@ -489,9 +489,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             var t = sender as TextBox;
-            if (e.Key != Key.Decimal) return;
-            e.Handled = true;
-            if (t != null) t.CaretIndex++;
+            switch (e.Key)
+            {
+                case Key.Decimal:
+                    e.Handled = true;
+                    if (t != null) t.CaretIndex++;
+                    break;
+                case Key.Subtract:
+                    e.Handled = true;
+                    break;
+                default:
+                    return;
+            }
         }
         private void ShowPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {

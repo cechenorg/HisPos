@@ -1346,7 +1346,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             p.SetDetail();
             service.StartRegister();
             service.CloneTempPre();
-            StartPrint(false);
+            service.Print(false);
         }
 
         private void DeclareSuccess()

@@ -62,57 +62,60 @@
                 <Label Height="35" Content="{Binding CurrentPrescription.ChronicSeq}"/>
             </StackPanel>
         </Grid>
-        <DataGrid Width="280" Height="250" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="10,0,10,0" ItemsSource="{Binding RegisterList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+            <Label Content="可登錄處方"/>
+            <DataGrid Width="280" Height="230" VerticalAlignment="Top" Margin="0,0,10,0" ItemsSource="{Binding RegisterList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                   CanUserAddRows="False" CanUserDeleteRows="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="80" Header="可調劑" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicTotal,UpdateSourceTrigger=PropertyChanged}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTemplateColumn Width="20" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Label Width="20" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" 
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="80" Header="可調劑" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicTotal,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Width="20" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Width="20" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" 
                                      FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth" Content="-" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Width="80" Header="調劑次數" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicSequence,UpdateSourceTrigger=PropertyChanged}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTemplateColumn Width="80" Header="調劑日期" IsReadOnly="True"  >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="170" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="80" Header="調劑次數" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicSequence,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Width="80" Header="調劑日期" IsReadOnly="True"  >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="170" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" InputScope="Number"
                                                 CaretBrush="Black">
-                                <Binding Path="AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
+                                    <Binding Path="AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                          ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                                    <Binding.ValidationRules>
-                                        <service:DateValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDoubleClick">
-                                        <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=AdjustDateTextBox}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </xctk:MaskedTextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1">
+                                        <Binding.ValidationRules>
+                                            <service:DateValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=AdjustDateTextBox}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </xctk:MaskedTextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1">
             <Button Content="取消" Background="DimGray" BorderThickness="0" Command="{Binding Submit}"/>
             <Button Content="確認" Background="IndianRed" BorderThickness="0" Margin="10" Command="{Binding Cancel}"/>
         </StackPanel>
