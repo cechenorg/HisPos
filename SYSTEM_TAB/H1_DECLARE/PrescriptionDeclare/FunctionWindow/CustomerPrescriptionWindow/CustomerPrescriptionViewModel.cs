@@ -373,8 +373,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Card.UpdateCard();
             }
             BusyContent = Resources.取得就醫序號;
-            Card.GetMedicalNumber(2);
-            if(Card.IsGetMedicalNumber)
+            var res = Card.GetMedicalNumber(2);
+            if (res == 5003)
+            {
+                BusyContent = Resources.更新卡片;
+                Card.UpdateCard();
+                BusyContent = Resources.取得就醫序號;
+                Card.GetMedicalNumber(2);
+            }
+            if (Card.IsGetMedicalNumber)
                 pre.TempMedicalNumber = Card.GetLastMedicalNumber();
         }
 

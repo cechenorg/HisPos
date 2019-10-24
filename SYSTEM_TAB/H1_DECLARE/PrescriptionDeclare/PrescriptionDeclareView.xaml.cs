@@ -502,6 +502,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     return;
             }
         }
+
         private void ShowPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;

@@ -32,6 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand AddOrderCommand { get; set; }
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
+        public RelayCommand DeleteWaitingOrderCommand { get; set; }
         public RelayCommand<string> AddProductByInputCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand DeleteProductCommand { get; set; }
@@ -138,6 +139,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             }
         }
         private void DeleteOrderAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
+            bool isSuccess = CurrentStoreOrder.DeleteOrder();
+            MainWindow.SingdeConnection.CloseConnection();
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (isSuccess)
+            {
+                storeOrderCollection.Remove(CurrentStoreOrder);
+                CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
+            }
+        }
+        private void DeleteWaitingOrderAction()
         {
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
@@ -346,6 +361,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             AddOrderCommand = new RelayCommand(AddOrderAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
+            DeleteWaitingOrderCommand = new RelayCommand(DeleteWaitingOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
             ReloadCommand = new RelayCommand(ReloadAction);
             AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.NewClass.Product.ProductManagement.MedBagDetail;
+using His_Pos.NewClass.Product.ProductManagement.OnTheWayDetail;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 {
@@ -13,6 +14,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         #region ----- Define Variables -----
         private string stockDetail = "";
         private MedBagDetailStructs medBagDetails;
+        private OnTheWayDetailStructs onTheWayDetail;
 
         public double MedBagOnTheWayAmount { get; set; }
         public double TotalOnTheWayAmount
@@ -26,6 +28,11 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         {
             get { return stockDetail; }
             set { Set(() => StockDetail, ref stockDetail, value); }
+        }
+        public OnTheWayDetailStructs OnTheWayDetail
+        {
+            get { return onTheWayDetail; }
+            set { Set(() => OnTheWayDetail, ref onTheWayDetail, value); }
         }
         public IEnumerable<MedBagDetailStruct> MedBagStockDetails
         {
@@ -73,6 +80,10 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             medBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID);
             RaisePropertyChanged(nameof(MedBagStockDetails));
             RaisePropertyChanged(nameof(MedBagSendDetails));
+        }
+        internal void GetOnTheWayDetailByID(string proID, string wareID)
+        {
+            OnTheWayDetail = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID);
         }
         #endregion
     }

@@ -478,6 +478,15 @@ namespace His_Pos.NewClass.StoreOrder
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
         }
+        internal static DataTable RemoveStoreOrderToSingdeByID(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderToSingde]", parameters);
+        }
+
         internal static DataTable CheckReturnProductValid(ReturnOrder order)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

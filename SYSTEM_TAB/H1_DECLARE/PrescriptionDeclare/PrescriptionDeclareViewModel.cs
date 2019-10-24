@@ -1056,6 +1056,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 BusyContent = Resources.更新卡片;
                 currentCard.UpdateCard();
             }
+            var res = currentCard.GetMedicalNumber(1);
+            if (res != 5003) return;
+            BusyContent = Resources.更新卡片;
+            currentCard.UpdateCard();
             BusyContent = Resources.取得就醫序號;
             currentCard.GetMedicalNumber(1);
         }

@@ -522,6 +522,8 @@
     <Compile Include="NewClass\Product\ProductManagement\MedBagDetail\MedBagDetailStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\MedBagDetail\MedBagDetailStructs.cs" />
     <Compile Include="NewClass\Product\ProductManagement\MedicineTagStruct.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\OnTheWayDetail\OnTheWayDetailStruct.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\OnTheWayDetail\OnTheWayDetailStructs.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductDetailDB.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductInventoryRecord.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductInventoryRecords.cs" />
