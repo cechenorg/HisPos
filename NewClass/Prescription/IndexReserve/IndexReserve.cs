@@ -228,7 +228,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("PatientTel",PhoneNote),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
-                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustStart", $"{AdjustDate.AddYears(-1911):yyy-MM-dd}"),
+                new ReportParameter("AdjustEnd", $"{AdjustDate.AddYears(-1911).AddDays(20):yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
         }
@@ -243,7 +244,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("PatientTel",PhoneNote),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
-                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustStart", $"{AdjustDate.AddYears(-1911):yyy-MM-dd}"),
+                new ReportParameter("AdjustEnd", $"{AdjustDate.AddYears(-1911).AddDays(20):yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
         }

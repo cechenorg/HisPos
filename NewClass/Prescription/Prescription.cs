@@ -155,7 +155,10 @@ namespace His_Pos.NewClass.Prescription
                     PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Contains("已備藥");
                     OrderContent = PrescriptionStatus.OrderStatus;
                     if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
-                        OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
+                    {
+                        OrderID = r.Field<string>("StoreOrderID");
+                        OrderContent += " 單號:" + OrderID;
+                    }
                     break;
                 default:
                     Medicines = new Medicines();
@@ -558,6 +561,16 @@ namespace His_Pos.NewClass.Prescription
             set
             {
                 Set(() => OrderContent, ref orderContent, value);
+            }
+        }
+
+        private string orderID;
+        public string OrderID
+        {
+            get => orderID;
+            set
+            {
+                Set(() => OrderID, ref orderID, value);
             }
         }
         #endregion
@@ -1123,6 +1136,8 @@ namespace His_Pos.NewClass.Prescription
                 PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson(),
                 InsertTime = InsertTime,
                 Type = Type,
+                OrderContent = OrderContent,
+                OrderID = OrderID,
                 Medicines = new Medicines()
             };
             foreach (var m in Medicines)

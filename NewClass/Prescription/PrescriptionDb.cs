@@ -411,7 +411,8 @@ namespace His_Pos.NewClass.Prescription
             dtlData.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
             dtlData.Append(p.ChronicTotal.ToString().PadRight(1, ' ')); //可調劑次數
             dtlData.Append(p.ChronicSeq.ToString().PadRight(1, ' ')); //本次調劑次數
-            dtlData.Append(p.PrescriptionPoint.AmountSelfPay.ToString().PadRight(8, ' ')); //自費金額
+            var selfPay = p.PrescriptionPoint.AmountSelfPay ?? 0;
+            dtlData.Append(selfPay.ToString().PadRight(8, ' ')); //自費金額
         }
 
         private static void AppendMedicineCost(StringBuilder dtlData, Prescription p)
@@ -601,7 +602,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", p.Copayment?.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", p.PrescriptionPoint.ApplyPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentPoint", p.PrescriptionPoint.CopaymentPoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", p.PrescriptionPoint.AmountSelfPay);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", p.PrescriptionPoint.AmountSelfPay ?? 0);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_DepositPoint", p.PrescriptionPoint.Deposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint", p.PrescriptionPoint.TotalPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", p.Institution.ID);

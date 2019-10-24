@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
     /// </summary>
     public partial class AutoRegisterWindow : Window
     {
+        public bool RegisterResult { get; set; }
+
         public AutoRegisterWindow()
         {
             InitializeComponent();
@@ -36,11 +39,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
                 switch (notificationMessage.Notification)
                 {
                     case "AutoRegisterSubmit":
-                        DialogResult = true;
+                        RegisterResult = true;
                         Close();
                         break;
                     case "AutoRegisterCancel":
-                        DialogResult = false;
+                        RegisterResult = false;
                         Close();
                         break;
                 }
@@ -52,6 +55,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
         private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;  
+            this.Hide();
         }
     }
 }

@@ -8,8 +8,9 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:service="clr-namespace:His_Pos.Service"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
-        mc:Ignorable="d" FontSize="16" FontFamily="Segoe UI Semibold"
-        Height="400" Width="600" WindowStyle="None">
+        mc:Ignorable="d" FontSize="18" FontFamily="Segoe UI Semibold"
+        Height="400" Width="750" WindowStyle="None"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
@@ -24,8 +25,8 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Width="600" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="GhostWhite" Background="CornflowerBlue" FontSize="16" Content="預約登錄確認" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
-        <TextBlock Height="30" FontSize="15" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="*此處方尚有右列預約可登錄，如需一併登錄請填寫欲調劑日期後按下確定，取消返回。" Foreground="Red"/>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="GhostWhite" Background="CornflowerBlue" FontSize="16" Content="預約登錄確認" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+        <TextBlock Height="30" FontSize="18" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="*此處方尚有右列預約可登錄，如需一併登錄請填寫欲調劑日期後按下確定，取消返回。" Foreground="Red" Margin="10,0,0,0"/>
         <Grid Grid.Row="2" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
@@ -64,10 +65,10 @@
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
             <Label Content="可登錄處方"/>
-            <DataGrid Width="280" Height="230" VerticalAlignment="Top" Margin="0,0,10,0" ItemsSource="{Binding RegisterList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                  CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid Width="330" Height="230" VerticalAlignment="Top" ItemsSource="{Binding RegisterList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"
+                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="80" Header="可調劑" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicTotal,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn Width="80" Header="可調劑" FontSize="18" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicTotal,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -78,12 +79,12 @@
                     <DataGridTemplateColumn Width="20" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Label Width="20" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" 
-                                     FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth" Content="-" />
+                                <Label Width="20" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0" 
+                                     FontSize="18" FontWeight="Bold" InputScope="AlphanumericHalfWidth" Content="-" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="80" Header="調劑次數" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicSequence,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn Width="80" Header="調劑次數" FontSize="18"  FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicSeq,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -91,10 +92,10 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Width="80" Header="調劑日期" IsReadOnly="True"  >
+                    <DataGridTemplateColumn Width="110" Header="調劑日期" IsReadOnly="True" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="170" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
+                                <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="110" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" InputScope="Number"
                                                 CaretBrush="Black">
                                     <Binding Path="AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
@@ -103,11 +104,6 @@
                                             <service:DateValidationRule/>
                                         </Binding.ValidationRules>
                                     </Binding>
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseDoubleClick">
-                                            <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=AdjustDateTextBox}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
                                 </xctk:MaskedTextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -115,9 +111,9 @@
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1">
-            <Button Content="取消" Background="DimGray" BorderThickness="0" Command="{Binding Submit}"/>
-            <Button Content="確認" Background="IndianRed" BorderThickness="0" Margin="10" Command="{Binding Cancel}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1">
+            <Button Content="取消" Background="DimGray" BorderThickness="0" Command="{Binding Cancel}"/>
+            <Button Content="確認" Background="IndianRed" BorderThickness="0" Margin="10" Command="{Binding Submit}"/>
         </StackPanel>
     </Grid>
 </Window>

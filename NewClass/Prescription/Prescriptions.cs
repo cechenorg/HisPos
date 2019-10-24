@@ -38,10 +38,11 @@ namespace His_Pos.NewClass.Prescription
 
         public void GetAutoRegisterReserve(Prescription p)
         {
-            DataTable table = PrescriptionDb.GetReserveByPrescription(p);
+            var table = PrescriptionDb.GetReserveByPrescription(p);
             foreach (DataRow r in table.Rows)
             {
-                var pre = new Prescription(r, PrescriptionType.ChronicReserve) {AdjustDate = null};
+                var resTable = PrescriptionDb.GetReservePrescriptionByID(r.Field<int>("ID"));
+                var pre = new Prescription(resTable.Rows[0], PrescriptionType.ChronicReserve) {AdjustDate = null};
                 Add(pre);
             }
         }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
 
@@ -27,17 +29,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
         {
             CurrentPrescription = current;
             RegisterList = registerList;
-            Submit = new RelayCommand(SubmitAction,CanSubmit);
+            Submit = new RelayCommand(SubmitAction);
             Cancel = new RelayCommand(CancelAction);
-        }
-
-        private bool CanSubmit()
-        {
-            return RegisterList.Count(p => p.AdjustDate != null) > 0;
         }
 
         private void SubmitAction()
         {
+            if (RegisterList.Count(p => p.AdjustDate != null) == 0)
+            {
+                MessageWindow.ShowMessage("請填寫欲一併登錄處方之調劑日。",MessageType.ERROR);
+                return;
+            }
             Messenger.Default.Send(new NotificationMessage("AutoRegisterSubmit"));
         }
 

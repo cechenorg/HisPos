@@ -98,8 +98,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public bool StartRegister()
         {
             MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
             var result = Register();
             MainWindow.ServerConnection.CloseConnection();
+            MainWindow.SingdeConnection.CloseConnection();
             return result;
         }
 
@@ -298,7 +300,18 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public bool PrintConfirm()
         {
-            PrintResult = NewFunction.CheckPrint(Current);
+            bool? focus = null;
+            if (vm?.PrescriptionSendData != null)
+            {
+                var printSendData = vm.PrescriptionSendData; 
+                var allSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
+                var allPrepareCount = printSendData.Count(p => p.SendAmount == 0);
+                if (printSendData.Count == allSendCount)
+                    focus = false;
+                else if (printSendData.Count == allPrepareCount)
+                    focus = true;
+            }
+            PrintResult = NewFunction.CheckPrint(Current,focus);
             var printMedBag = PrintResult[0];
             var printSingle = PrintResult[1];
             var printReceipt = PrintResult[2];
@@ -360,7 +373,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("RecId", " "), //病歷號
                         new ReportParameter("Division",p.Division is null ?string.Empty:p.Division.Name),
                         new ReportParameter("Hospital", p.Institution.Name),
-                        new ReportParameter("PaySelf", p.PrescriptionPoint.AmountSelfPay.ToString()),
+                        new ReportParameter("PaySelf", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
                         new ReportParameter("ServicePoint", p.PrescriptionPoint.MedicalServicePoint.ToString()),
                         new ReportParameter("TotalPoint", p.PrescriptionPoint.TotalPoint.ToString()),
                         new ReportParameter("CopaymentPoint", p.PrescriptionPoint.CopaymentPointPayable.ToString()),
@@ -415,7 +428,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("PatientGender_Birthday",$"{cusGender}/{DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)}"),
                 new ReportParameter("TreatmentDate", treatmentDateChi),
                 new ReportParameter("Hospital", p.Institution.Name),
-                new ReportParameter("PaySelf", p.PrescriptionPoint.AmountSelfPay.ToString()),
+                new ReportParameter("PaySelf", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
                 new ReportParameter("ServicePoint", p.PrescriptionPoint.MedicalServicePoint.ToString()),
                 new ReportParameter("TotalPoint", p.PrescriptionPoint.TotalPoint.ToString()),
                 new ReportParameter("CopaymentPoint",p.PrescriptionPoint.CopaymentPointPayable.ToString()),
@@ -449,7 +462,7 @@ namespace His_Pos.NewClass.Prescription.Service
             var adjustDate = DateTimeExtensions.NullableDateToTWCalender(p.AdjustDate, true);
             var cusGender = p.Patient.CheckGender();
             var copaymentPoint = p.PrescriptionPoint.CopaymentPointPayable;
-            var actualReceive = p.PrescriptionPoint.ActualReceive;
+            var actualReceive = p.PrescriptionPoint.ActualReceive ?? 0;
             var birth = DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true);
             string patientName;
             if (string.IsNullOrEmpty(p.Patient.Name) || p.Patient.Name.Equals("匿名"))
@@ -470,14 +483,14 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("Hospital", p.Institution.Name),
                         new ReportParameter("Doctor", " "), //病歷號
                         new ReportParameter("MedicalNumber"," "),
-                        new ReportParameter("MedicineCost", p.PrescriptionPoint.AmountSelfPay.ToString()),
-                        new ReportParameter("MedicalServiceCost", (p.PrescriptionPoint.AmountsPay - p.PrescriptionPoint.AmountSelfPay).ToString()),
+                        new ReportParameter("MedicineCost", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
+                        new ReportParameter("MedicalServiceCost", (p.PrescriptionPoint.AmountsPay - (p.PrescriptionPoint.AmountSelfPay ?? 0)).ToString()),
                         new ReportParameter("TotalMedicalCost","0"),
                         new ReportParameter("CopaymentCost", "0"),
                         new ReportParameter("HcPay", "0"),
-                        new ReportParameter("SelfCost", p.PrescriptionPoint.AmountSelfPay.ToString()),
-                        new ReportParameter("ActualReceive", p.PrescriptionPoint.ActualReceive.ToString()),
-                        new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(p.PrescriptionPoint.ActualReceive))
+                        new ReportParameter("SelfCost", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
+                        new ReportParameter("ActualReceive", (p.PrescriptionPoint.ActualReceive ?? 0).ToString()),
+                        new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(p.PrescriptionPoint.ActualReceive ?? 0))
                     };
             }
             return new List<ReportParameter>
@@ -495,7 +508,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("TotalMedicalCost",p.PrescriptionPoint.TotalPoint.ToString()),
                 new ReportParameter("CopaymentCost", copaymentPoint.ToString()),
                 new ReportParameter("HcPay", p.PrescriptionPoint.ApplyPoint.ToString()),
-                new ReportParameter("SelfCost", p.PrescriptionPoint.AmountSelfPay.ToString()),
+                new ReportParameter("SelfCost", (p.PrescriptionPoint.AmountSelfPay ?? 0).ToString()),
                 new ReportParameter("ActualReceive", actualReceive.ToString()),
                 new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(actualReceive))
             };
@@ -571,7 +584,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
-            PrescriptionSendDatas printSendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
+            var printSendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
             var sendData = vm.PrescriptionSendData;
             if (sendData.Count(s => s.SendAmount == 0) != sendData.Count)
             {
@@ -583,12 +596,27 @@ namespace His_Pos.NewClass.Prescription.Service
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
                 } //更新傳送藥健康  
             }
-
+            else
+            {
+                if (!string.IsNullOrEmpty(Current.OrderID))
+                {
+                    var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(Current.OrderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");;
+                    if (!removeSingdeOrder)
+                        MessageWindow.ShowMessage("處方訂單已出貨或網路異常，訂單更改失敗", MessageType.ERROR);
+                    else
+                    {
+                        var dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(Current.OrderID);
+                        var removeLocalOrder = dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+                        if (!removeLocalOrder)
+                            MessageWindow.ShowMessage("處方訂單更改失敗", MessageType.ERROR);
+                    }
+                }
+            }
             var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
             var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
             //部分傳送的品項 > 0 或是 全傳送的品項 > 0 且 < 處方總量
             if (selfcoSendCount > 0 ||  (selfallSendCount < printSendData.Count && selfallSendCount > 0)) {
-                ReportViewer rptViewer = new ReportViewer();
+                var rptViewer = new ReportViewer();
                 SetReserveMedicinesSheetReportViewer(rptViewer, printSendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
@@ -632,7 +660,8 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("PatientTel",Current.Patient.ContactNote),
                 new ReportParameter("Institution", Current.Institution.Name),
                 new ReportParameter("Division", Current.Division.Name),
-                new ReportParameter("AdjustRange", $"{((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd")} ~ {((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(19).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustStart", $"{((DateTime)Current.AdjustDate).AddYears(-1911):yyy-MM-dd}"),
+                new ReportParameter("AdjustEnd", $"{((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(20):yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", ((DateTime)Current.AdjustDate).Day.ToString())
             };
         }
@@ -646,7 +675,8 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("PatientTel",Current.Patient.ContactNote),
                 new ReportParameter("Institution", Current.Institution.Name),
                 new ReportParameter("Division", Current.Division.Name),
-                new ReportParameter("AdjustRange", $"{((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd")} ~ {((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(19).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustStart", $"{((DateTime)Current.AdjustDate).AddYears(-1911):yyy-MM-dd}"),
+                new ReportParameter("AdjustEnd", $"{((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(20):yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", ((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd"))
             };
         }

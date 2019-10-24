@@ -1298,7 +1298,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool RegisterConfirm(Prescriptions registerList)
         {
-            return (bool)new AutoRegisterWindow(CurrentPrescription,registerList).DialogResult;
+            var registerWindow = new AutoRegisterWindow(CurrentPrescription, registerList);
+            return registerWindow.RegisterResult;
         }
 
         private void StartPrescribeAdjust()
