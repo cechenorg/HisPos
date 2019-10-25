@@ -40,6 +40,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
                 MessageWindow.ShowMessage("請填寫欲一併登錄處方之調劑日。",MessageType.ERROR);
                 return;
             }
+            var adjustDateOutOfRange = false;
+            foreach (var r in RegisterList)
+            {
+                if (r.AdjustDate != null && DateTime.Compare((DateTime)r.AdjustDate, (DateTime)CurrentPrescription.AdjustDate) < 0)
+                    adjustDateOutOfRange = true;
+            }
+            if(adjustDateOutOfRange)
+            {
+                MessageWindow.ShowMessage("自動登錄之預約處方調劑日不可小於目前處方",MessageType.ERROR);
+                return;
+            }
             Messenger.Default.Send(new NotificationMessage("AutoRegisterSubmit"));
         }
 
