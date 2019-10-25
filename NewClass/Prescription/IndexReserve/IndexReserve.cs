@@ -30,6 +30,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             AdjustDate = r.Field<DateTime>("AdjustDate");
             PhoneNote = r.Field<string>("Cus_UrgentNote");
             Profit = Convert.ToInt32(r.Field<double>("Profit"));
+            ChronicSequence = r.Field<byte>("ResMas_ChronicSequence");
+            ChronicTotal = r.Field<byte>("ResMas_ChronicTotal");
             IsExpensive = r.Field<bool>("IsExpensive");
             CusBirth = r.Field<DateTime>("Cus_Birthday"); 
             switch (r.Field<string>("MedPrepareStatus")) {
@@ -65,6 +67,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public string InsName { get; set; }
         public string DivName { get; set; }
         public int Profit { get; set; }
+        public int ChronicSequence { get; set; }
+        public int ChronicTotal { get; set; }
         public DateTime TreatDate { get; set; }
         public DateTime AdjustDate { get; set; }
         public string PhoneNote { get; set; }
@@ -219,7 +223,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             rptViewer.LocalReport.Refresh();
         }
 
-        private List<ReportParameter> CreateReserveMedicinesSheetParameters() {
+        private List<ReportParameter> CreateReserveMedicinesSheetParameters() 
+        {
+            var adjustEnd = ChronicSequence == 1 ? AdjustDate.AddYears(-1911).AddDays(10) : AdjustDate.AddYears(-1911).AddDays(20);
             return new List<ReportParameter>
             {
                 new ReportParameter("Type","預約"),
@@ -229,13 +235,14 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
                 new ReportParameter("AdjustStart", $"{AdjustDate.AddYears(-1911):yyy-MM-dd}"),
-                new ReportParameter("AdjustEnd", $"{AdjustDate.AddYears(-1911).AddDays(20):yyy-MM-dd}"),
+                new ReportParameter("AdjustEnd", $"{adjustEnd:yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
         }
 
         private List<ReportParameter> CreateReserveMedicinesSheetParametersA5()
         {
+            var adjustEnd = ChronicSequence == 1 ? AdjustDate.AddYears(-1911).AddDays(10) : AdjustDate.AddYears(-1911).AddDays(20);
             return new List<ReportParameter>
             {
                 new ReportParameter("Type","預約"),
@@ -245,7 +252,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
                 new ReportParameter("AdjustStart", $"{AdjustDate.AddYears(-1911):yyy-MM-dd}"),
-                new ReportParameter("AdjustEnd", $"{AdjustDate.AddYears(-1911).AddDays(20):yyy-MM-dd}"),
+                new ReportParameter("AdjustEnd", $"{adjustEnd:yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
         }

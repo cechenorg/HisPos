@@ -332,13 +332,11 @@ namespace His_Pos.NewClass.Prescription
         {
             var rxID = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
             var result = "FAIL";
-            MainWindow.SingdeConnection.OpenConnection();
             var table = MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrderData('{rxID}','{storId}','{rxOrder}','{dtlData}')");
             if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 result = "SUCCESS";
             else if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("DONE"))
                 result = "DONE";
-            MainWindow.SingdeConnection.CloseConnection();
             return result;
         }
 
@@ -346,12 +344,10 @@ namespace His_Pos.NewClass.Prescription
         {
             var rxID = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
             var result = "FAIL";
-            MainWindow.SingdeConnection.OpenConnection();
             Debug.Assert(adjustDate != null, nameof(adjustDate) + " != null");
             var table = MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{rxID}', '{storId}', '{patientName}','{dtlData}','{((DateTime)adjustDate).AddYears(-1911):yyyMMdd}')");
             if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 result = "SUCCESS";
-            MainWindow.SingdeConnection.CloseConnection();
             return result;
         }
 
