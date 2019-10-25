@@ -1269,15 +1269,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartRegister()
         {
-            if (!currentService.StartRegister())
+            var result = true;
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                isAdjusting = false;
-                return;
-            }
-            currentService.CloneTempPre();
-            StartPrint(false);
-            CheckAutoRegister();
-            DeclareSuccess();
+                BusyContent = "處方登錄中...";
+                if (!currentService.StartRegister())
+                {
+                    isAdjusting = false;
+                    result = false;
+                }
+                else
+                {
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        currentService.CloneTempPre();
+                    });
+                    StartPrint(false);
+                    BusyContent = "取得預約處方...";
+                    CheckAutoRegister();
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                if(result) 
+                    DeclareSuccess();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void CheckAutoRegister()
@@ -1291,15 +1311,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 foreach (var p in registerList )
                 {
                     p.PrescriptionStatus.IsSendOrder = true;
-                    StartAutoRegister(p);
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        StartAutoRegister(p);
+                    });
                 }
             }
         }
 
         private bool RegisterConfirm(Prescriptions registerList)
         {
-            var registerWindow = new AutoRegisterWindow(CurrentPrescription, registerList);
-            return registerWindow.RegisterResult;
+            var result = false;
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                var registerWindow = new AutoRegisterWindow(CurrentPrescription, registerList);
+                result = registerWindow.RegisterResult;
+            });
+            return result;
         }
 
         private void StartPrescribeAdjust()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -11,6 +12,7 @@ using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.NewClass.Prescription.ICCard;
 using His_Pos.NewClass.Prescription.Service;
+using His_Pos.NewClass.StoreOrder;
 using His_Pos.Properties;
 using His_Pos.Service;
 using Application = System.Windows.Application;
@@ -130,10 +132,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         public bool CooperativeRadioBtnEnable => CooperativePres != null && CooperativePres.Count > 0;
         public bool RegisterRadioBtnEnable => ChronicRegisterPres != null && ChronicRegisterPres.Count > 0;
         public bool ReserveRadioBtnEnable => ChronicReservePres != null && ChronicReservePres.Count > 0;
-        public CusPrePreviewBases CooperativePres { get; set; }
-        public CusPrePreviewBases ChronicRegisterPres { get; set; }
-        public CusPrePreviewBases ChronicReservePres { get; set; }
-        public CusPrePreviewBases NoCardPres { get; set; }
+        private CusPrePreviewBases cooperativePres;
+        public CusPrePreviewBases CooperativePres 
+        { 
+            get => cooperativePres; 
+            set
+            {
+                Set(() => CooperativePres, ref cooperativePres, value);
+            }
+        }
+        private CusPrePreviewBases chronicRegisterPres;
+
+        public CusPrePreviewBases ChronicRegisterPres
+        {
+            get => chronicRegisterPres; 
+            set
+            {
+                Set(() => ChronicRegisterPres, ref chronicRegisterPres, value);
+            }
+        }
+        private CusPrePreviewBases chronicReservePres;
+
+        public CusPrePreviewBases ChronicReservePres
+        {
+            get => chronicReservePres; 
+            set
+            {
+                Set(() => ChronicReservePres, ref chronicReservePres, value);
+            }
+        }
+        private CusPrePreviewBases noCardPres;
+
+        public CusPrePreviewBases NoCardPres
+        {
+            get => noCardPres; 
+            set
+            {
+                Set(() => NoCardPres, ref noCardPres, value);
+            }
+        }
         private CusPrePreviewBase selectedPrescription;
         public CusPrePreviewBase SelectedPrescription
         {
@@ -179,7 +216,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             Patient = customer;
             Card = card.DeepCloneViaJson();
             InitCommands();
+            MainWindow.ServerConnection.OpenConnection();
             InitVariable();
+            MainWindow.ServerConnection.CloseConnection();
             CheckShowDialog();
         }
 
@@ -201,18 +240,36 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 {
                     if (pre.Type.Equals(PrescriptionType.ChronicRegister))
                     {
-                        ConfirmWindow deleteConfirm = new ConfirmWindow("確定刪除此處方?", "刪除確認");
+                        var deleteConfirm = new ConfirmWindow("確定刪除此處方?", "刪除確認");
                         var delete = deleteConfirm.DialogResult;
                         if ((bool)delete)
                         {
-                            MainWindow.ServerConnection.OpenConnection();
-                            SelectedPrescription.CreatePrescription().Delete();
-                            MainWindow.ServerConnection.CloseConnection();
-                            InitVariable();
-                            SelectedRadioButton = "Option2";
-                            RaisePropertyChanged("CooperativeRadioBtnEnable");
-                            RaisePropertyChanged("RegisterRadioBtnEnable");
-                            RaisePropertyChanged("ReserveRadioBtnEnable");
+                            worker = new BackgroundWorker();
+                            worker.DoWork += (o, ea) =>
+                            {
+                                BusyContent = "刪除處方...";
+                                MainWindow.ServerConnection.OpenConnection();
+                                MainWindow.SingdeConnection.OpenConnection();
+                                SelectedPrescription.CreatePrescription().Delete();
+                                BusyContent = "刪除處方相關訂單...";
+                                ((ChronicPreview)SelectedPrescription).DeleteOrder();
+                                BusyContent = "取得顧客處方...";
+                                Application.Current.Dispatcher.Invoke(InitVariable);
+                                MainWindow.ServerConnection.CloseConnection();
+                                MainWindow.SingdeConnection.CloseConnection();
+                                
+                            };
+                            worker.RunWorkerCompleted += (o, ea) =>
+                            {
+                                IsBusy = false;
+                                SelectedRadioButton = "Option2";
+                                RaisePropertyChanged("CooperativeRadioBtnEnable");
+                                RaisePropertyChanged("RegisterRadioBtnEnable");
+                                RaisePropertyChanged("ReserveRadioBtnEnable");
+                                RaisePropertyChanged("SelectedRadioButton");
+                            };
+                            IsBusy = true;
+                            worker.RunWorkerAsync();
                         }
                     }
                     else
@@ -251,12 +308,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             ChronicRegisterPres = new CusPrePreviewBases();
             ChronicReservePres = new CusPrePreviewBases();
             NoCardPres = new CusPrePreviewBases();
-            MainWindow.ServerConnection.OpenConnection();
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
             NoCardPres.GetNoCardByCusId(Patient.ID);
-            MainWindow.ServerConnection.CloseConnection();
         }
 
         private bool CheckCardNotNull()

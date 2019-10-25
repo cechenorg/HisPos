@@ -53,7 +53,6 @@
       <Body>
         <ReportItems>
           <Textbox Name="Textbox8">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -71,7 +70,7 @@
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
             <Top>2.75861cm</Top>
-            <Left>1.69326cm</Left>
+            <Left>1.8539cm</Left>
             <Height>0.8cm</Height>
             <Width>1.70215cm</Width>
             <Style>
@@ -83,7 +82,6 @@
             </Style>
           </Textbox>
           <Textbox Name="Textbox9">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -102,10 +100,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>1.78222cm</Top>
-            <Left>1.69326cm</Left>
+            <Top>1.78358cm</Top>
+            <Left>2.04361cm</Left>
             <Height>0.8cm</Height>
-            <Width>1.61396cm</Width>
+            <Width>1.51244cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -115,7 +113,6 @@
             </Style>
           </Textbox>
           <Textbox Name="Textbox11">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -163,9 +160,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
             <Top>2.75861cm</Top>
-            <Left>3.46597cm</Left>
+            <Left>3.58063cm</Left>
             <Height>0.8cm</Height>
-            <Width>9.60146cm</Width>
+            <Width>9.4868cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -196,7 +193,7 @@
             <Top>2.75861cm</Top>
             <Left>14.80605cm</Left>
             <Height>0.8cm</Height>
-            <Width>3.7602cm</Width>
+            <Width>4.40159cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -224,10 +221,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>1.78222cm</Top>
-            <Left>3.30722cm</Left>
+            <Top>1.78358cm</Top>
+            <Left>3.58063cm</Left>
             <Height>0.8cm</Height>
-            <Width>3.23041cm</Width>
+            <Width>2.88645cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border>
@@ -240,7 +237,6 @@
             </Style>
           </Textbox>
           <Textbox Name="Textbox15">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -289,7 +285,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>1.7483cm</Top>
+            <Top>1.78358cm</Top>
             <Left>8.26151cm</Left>
             <Height>0.8cm</Height>
             <Width>4.80592cm</Width>
@@ -360,14 +356,10 @@
             <ZIndex>9</ZIndex>
             <Style>
               <Border />
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
+              <VerticalAlign>Middle</VerticalAlign>
             </Style>
           </Textbox>
           <Textbox Name="Textbox1">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -384,7 +376,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>0.10583cm</Top>
+            <Top>0.14111cm</Top>
             <Left>2.04361cm</Left>
             <Height>1.5cm</Height>
             <Width>5.15548cm</Width>
@@ -503,7 +495,7 @@
             </Paragraphs>
             <rd:DefaultName>AdjustDay</rd:DefaultName>
             <Top>0.07055cm</Top>
-            <Left>0.25124cm</Left>
+            <Left>0.0377cm</Left>
             <Height>1.71303cm</Height>
             <Width>1.61597cm</Width>
             <ZIndex>14</ZIndex>
@@ -522,7 +514,7 @@
                   <Width>4.0187cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>10.09663cm</Width>
+                  <Width>9.83613cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.78483cm</Width>
@@ -955,9 +947,9 @@
             </TablixRowHierarchy>
             <DataSetName>ReserveMedicinesDataSet</DataSetName>
             <Top>3.735cm</Top>
-            <Left>1.69326cm</Left>
+            <Left>1.8832cm</Left>
             <Height>1.27288cm</Height>
-            <Width>17.66905cm</Width>
+            <Width>17.40855cm</Width>
             <ZIndex>15</ZIndex>
             <Style>
               <Border>
@@ -966,7 +958,6 @@
             </Style>
           </Tablix>
           <Textbox Name="Textbox19">
-            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
@@ -983,7 +974,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>1.7483cm</Top>
+            <Top>1.78358cm</Top>
             <Left>13.10271cm</Left>
             <Height>0.8cm</Height>
             <Width>3.22318cm</Width>
@@ -1015,10 +1006,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>1.7483cm</Top>
+            <Top>1.78358cm</Top>
             <Left>16.32589cm</Left>
             <Height>0.8cm</Height>
-            <Width>3.05814cm</Width>
+            <Width>2.88175cm</Width>
             <ZIndex>17</ZIndex>
             <Style>
               <Border>
@@ -1041,7 +1032,7 @@
       <Width>21cm</Width>
       <Page>
         <PageHeader>
-          <Height>0.25cm</Height>
+          <Height>0.07937cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <Style>

@@ -677,7 +677,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("Division", Current.Division.Name),
                 new ReportParameter("AdjustStart", $"{((DateTime)Current.AdjustDate).AddYears(-1911):yyy-MM-dd}"),
                 new ReportParameter("AdjustEnd", $"{((DateTime)Current.AdjustDate).AddYears(-1911).AddDays(20):yyy-MM-dd}"),
-                new ReportParameter("AdjustDay", ((DateTime)Current.AdjustDate).AddYears(-1911).ToString("yyy-MM-dd"))
+                new ReportParameter("AdjustDay", ((DateTime)Current.AdjustDate).Day.ToString())
             };
         }
         public void SetMedicalNumberByErrorCode(ErrorUploadWindowViewModel.IcErrorCode errorCode)
