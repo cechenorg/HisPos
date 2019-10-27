@@ -225,7 +225,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         public PrescriptionEditViewModel(Prescription p,string title)
         {
-            Title = title;
+            Title = $"{title} {p.OrderContent}";
             IsEdit = false;
             OriginalPrescription = p;
             ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
