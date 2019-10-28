@@ -843,10 +843,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (currentCard.IsRead)
             {
+                if(EditedPrescription.Patient.IsAnonymous())
+                {
+                    if (!GetPatientFromIcCard())
+                        return false;
+                }
                 GetMedicalNumber(pre);
                 return true;
             }
-
             var result = false;
             Application.Current.Dispatcher.Invoke(() => result = AskErrorUpload());
             return result;
@@ -916,6 +920,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             return errorCode != null;
         }
 
+        private bool GetPatientFromIcCard()
+        {
+            var patientFromCard = new Customer(currentCard);
+            return CheckCustomerByCard(patientFromCard);
+        }
+
+        private bool CheckCustomerByCard(Customer patientFromCard)
+        {
+            Customer checkedPatient;
+            MainWindow.ServerConnection.OpenConnection();
+            var table = CustomerDb.CheckCustomerByCard(currentCard.IDNumber);
+            if (table.Rows.Count > 0)
+            {
+                var patientFromDB = new Customer(table.Rows[0]);
+                patientFromDB.CheckPatientWithCard(patientFromCard);
+                checkedPatient = patientFromDB;
+                checkedPatient.Save();
+            }
+            else
+            {
+                var insertResult = patientFromCard.InsertData();
+                if (!insertResult)
+                {
+                    MessageWindow.ShowMessage("顧客新增失敗。", MessageType.WARNING);
+                    return false;
+                }
+                checkedPatient = patientFromCard;
+            }
+            EditedPrescription.Patient = checkedPatient;
+            return true;
+        }
         #endregion
     }
 }

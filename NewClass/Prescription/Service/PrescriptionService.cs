@@ -530,6 +530,7 @@ namespace His_Pos.NewClass.Prescription.Service
         private void CreatePrescriptionSign()
         {
             Current.PrescriptionSign = HisAPI.WritePrescriptionData(Current);
+
             if (Current.WriteCardSuccess != 0)
             {
                 Application.Current.Dispatcher.Invoke(delegate {
