@@ -311,7 +311,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
-            NoCardPres.GetNoCardByCusId(Patient.ID);
+            if(!Patient.IsAnonymous())
+                NoCardPres.GetNoCardByCusId(Patient.ID);
         }
 
         private bool CheckCardNotNull()
