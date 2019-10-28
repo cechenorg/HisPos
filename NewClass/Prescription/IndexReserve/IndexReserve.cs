@@ -180,7 +180,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             } 
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            if (StoreOrderDB.InsertIndexReserveOrder(this, note).Rows.Count > 0)
+            if (StoreOrderDB.InsertIndexReserveOrder(this).Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
                 if (StoreOrderDB.SendStoreOrderToSingde(this, note).Rows[0][0].ToString() == "SUCCESS")
                 {
@@ -193,7 +193,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR); 
             }
             else
-                MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage(StoOrdID + "已傳送過 請重新查詢!", Class.MessageType.ERROR);
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             return result;
