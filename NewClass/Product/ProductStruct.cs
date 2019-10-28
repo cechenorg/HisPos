@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.Product
             OnTheWayAmount = row.Field<double>("Inv_OnTheWay");
             MedBagOnTheWayAmount = row.Field<double>("Inv_MedBagOnTheWay");
             NHIPrice = (double)row.Field<decimal>("Med_Price");
-            SellPrice = (double)row.Field<decimal>("Unit_Price");
+            SellPrice = row.Field<double>("Unit_Price");
             IsCommon = row.Field<bool>("Pro_IsCommon");
             IsFrozen = row.Field<bool>("Med_IsFrozen");
             ControlLevel = row.Field<byte?>("Med_Control");

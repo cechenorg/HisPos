@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData.PatientReadOnlyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData"
+             xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d" 
+             d:DesignHeight="55" d:DesignWidth="915">
+    <UserControl.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
+    </UserControl.Resources>
+    <StackPanel Margin="0,0,10,0" Orientation="Horizontal">
+        <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
+        <Label Name="PatientIDNumber" Width="130" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"
+               Content="{Binding CurrentPrescription.Patient.IDNumber, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientIDNumber}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Label>
+        <Image Source="../../../../../Images/User_48px.png" Margin="10,0,10,0" Height="30" Width="30"/>
+        <Label Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"
+               Content="{Binding CurrentPrescription.Patient.Name,UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientName}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Label>
+        <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
+        <Label Name="PatientBirthday" Width="95" Height="35" Margin="0,0,10,0"  HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"
+               Content="{Binding CurrentPrescription.Patient.Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientBirthday}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Label>
+        <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
+        <Label Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"
+               Content="{Binding CurrentPrescription.Patient.CellPhone,UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientCellPhone}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Label>
+        <Image Width="25" Height="25" Source="/Images/Telephone.png" Margin="10,0,10,0"/>
+        <Label Name="PatientTel" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}" 
+               Content="{Binding CurrentPrescription.Patient.Tel,UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientTel}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Label>
+    </StackPanel>
+</UserControl>

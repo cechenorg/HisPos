@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile.CooperativeFtpFile {
 
             FtpMethod ftpMethod = new FtpMethod(@"ftp://ftp_sd:ftp.sd123@www.ihis.com.tw/nhdata/" + VM.CooperativeInstitutionID + "/" + filename, "ftp_sd", "ftp.sd123");
             ftpMethod.Getfile(path + @"\" + filename);
-            NewFunction.Uncompress(path + @"\" + filename, path);
+            //NewFunction.Uncompress(path + @"\" + filename, path);
             XmlDocument xml = new XmlDocument();
             xml.Load(path + @"\TOTFA.xml");
             return xml;

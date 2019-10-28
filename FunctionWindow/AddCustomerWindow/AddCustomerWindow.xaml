@@ -38,7 +38,8 @@
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
             <Label Content="身分證 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Name="CusIdNumber" Width="120" Height="35" Text="{Binding NewCustomer.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusIdNumber_OnPreviewKeyDown"/>
+            <TextBox Name="CusIdNumber" Width="120" Height="35" Text="{Binding NewCustomer.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusIdNumber_OnPreviewKeyDown"
+                     InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" InputScope="AlphanumericHalfWidth"/>
         </StackPanel>
         <StackPanel Grid.Row="1"   Orientation="Horizontal">
             <Label Content="手機 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>

@@ -332,13 +332,11 @@ namespace His_Pos.NewClass.Prescription
         {
             var rxID = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
             var result = "FAIL";
-            MainWindow.SingdeConnection.OpenConnection();
             var table = MainWindow.SingdeConnection.ExecuteProc($"call UpdateDeclareOrderData('{rxID}','{storId}','{rxOrder}','{dtlData}')");
             if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 result = "SUCCESS";
             else if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("DONE"))
                 result = "DONE";
-            MainWindow.SingdeConnection.CloseConnection();
             return result;
         }
 
@@ -346,12 +344,10 @@ namespace His_Pos.NewClass.Prescription
         {
             var rxID = ViewModelMainWindow.CurrentPharmacy.ID; //藥局機構代號 傳輸主KEY
             var result = "FAIL";
-            MainWindow.SingdeConnection.OpenConnection();
             Debug.Assert(adjustDate != null, nameof(adjustDate) + " != null");
             var table = MainWindow.SingdeConnection.ExecuteProc($"call AddDeclareOrderToPreDrug('{rxID}', '{storId}', '{patientName}','{dtlData}','{((DateTime)adjustDate).AddYears(-1911):yyyMMdd}')");
             if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 result = "SUCCESS";
-            MainWindow.SingdeConnection.CloseConnection();
             return result;
         }
 
@@ -411,7 +407,8 @@ namespace His_Pos.NewClass.Prescription
             dtlData.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
             dtlData.Append(p.ChronicTotal.ToString().PadRight(1, ' ')); //可調劑次數
             dtlData.Append(p.ChronicSeq.ToString().PadRight(1, ' ')); //本次調劑次數
-            dtlData.Append(p.PrescriptionPoint.AmountSelfPay.ToString().PadRight(8, ' ')); //自費金額
+            var selfPay = p.PrescriptionPoint.AmountSelfPay ?? 0;
+            dtlData.Append(selfPay.ToString().PadRight(8, ' ')); //自費金額
         }
 
         private static void AppendMedicineCost(StringBuilder dtlData, Prescription p)
@@ -440,7 +437,7 @@ namespace His_Pos.NewClass.Prescription
         {
             //第四行
             var i = 1;
-            foreach (var declareMedicine in p.Medicines)
+            foreach (var declareMedicine in p.Medicines.Where(m => !m.AdjustNoBuckle))
             {
                 if (declareMedicine is MedicineNHI || declareMedicine is MedicineSpecialMaterial)
                 {
@@ -601,7 +598,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentID", p.Copayment?.Id);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_ApplyPoint", p.PrescriptionPoint.ApplyPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_CopaymentPoint", p.PrescriptionPoint.CopaymentPoint);
-            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", p.PrescriptionPoint.AmountSelfPay);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_PaySelfPoint", p.PrescriptionPoint.AmountSelfPay ?? 0);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_DepositPoint", p.PrescriptionPoint.Deposit);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_TotalPoint", p.PrescriptionPoint.TotalPoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_InstitutionID", p.Institution.ID);
@@ -1071,6 +1068,18 @@ namespace His_Pos.NewClass.Prescription
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionID", preID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionOrderByPrescriptionID]", parameterList);
+        }
+
+        public static DataTable GetReserveByPrescription(Prescription p)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CusID", p.Patient.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "InstitutionID", p.Institution.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "DivisionID", p.Division.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MainDiseaseID", p.MainDisease.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "TreatDate", p.TreatDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "ChronicSequence", p.ChronicSeq);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveByPrescription]", parameterList);
         }
     }
 }

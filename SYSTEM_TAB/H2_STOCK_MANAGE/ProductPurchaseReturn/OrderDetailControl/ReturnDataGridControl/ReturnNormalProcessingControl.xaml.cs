@@ -41,6 +41,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                 MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 單價 請先將小計歸零!", MessageType.WARNING);
             else if (textBox.Name.Equals("ProductSubTotalTextbox") && textBox.IsReadOnly)
                 MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 小計 請先將單價歸零!", MessageType.WARNING);
+            else if (e.Key == Key.Decimal)
+            {
+                e.Handled = true;
+                textBox.CaretIndex++;
+            }
         }
         private void MoveFocusNext(object sender)
         {

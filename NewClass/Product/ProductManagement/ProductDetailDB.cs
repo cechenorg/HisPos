@@ -20,6 +20,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
         }
 
+        internal static DataTable GetOnTheWayDetailByID(string proID, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proID));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageOnTheWayDetailByID]", parameters);
+        }
+
         internal static DataTable GetRegisterPrescriptionsByID(string proID, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -57,6 +66,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductInventoryRecordByID]", parameters);
         }
 
+        internal static DataTable SetSelfPayMultiplier(double selfPayMultiplier)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("NAME", "SelfPayMultiplier"));
+            parameters.Add(new SqlParameter("VALUE", selfPayMultiplier.ToString("N1")));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSystemParameters]", parameters);
+        }
+
         internal static DataTable GetMedBagDetailByID(string proID, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -90,6 +108,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
             DataBaseFunction.AddSqlParameter(parameters, "PRO_SIDEEFFECT", productManageMedicine.SideEffect);
             DataBaseFunction.AddSqlParameter(parameters, "PRO_WARNING", productManageMedicine.Warnings);
             DataBaseFunction.AddSqlParameter(parameters, "PRO_NOTE", productManageMedicine.Note);
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_SELFPAYTYPE", productManageMedicine.SelfPayType == SelfPayTypeEnum.Default? "D" : "C");
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_SELFPAYPRICE", productManageMedicine.SelfPayPrice);
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
         }

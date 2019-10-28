@@ -5,6 +5,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
+using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
+using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PrescriptionSendData;
@@ -260,6 +262,34 @@ namespace His_Pos.NewClass.StoreOrder
             }
             return storeOrderDetailTable;
         }
+
+        public static DataTable SetPrescriptionNotEnoughOrderDetail(NotEnoughMedicines purchaseList)
+        {
+            DataTable storeOrderDetailTable = StoreOrderDetailTable();
+            int detailId = 1;
+            foreach (var pro in purchaseList)
+            {
+                DataRow newRow = storeOrderDetailTable.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", purchaseList.StoreOrderID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.Amount);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "顆");
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", null);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
+                storeOrderDetailTable.Rows.Add(newRow);
+                detailId++;
+            }
+            return storeOrderDetailTable;
+        }
+
         private static DataTable SetReturnInventoryDetail(ReturnProducts returnProducts)
         {
             DataTable inventoryDetailTable = InventoryDetailTable();
@@ -448,6 +478,15 @@ namespace His_Pos.NewClass.StoreOrder
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
         }
+        internal static DataTable RemoveStoreOrderToSingdeByID(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderToSingde]", parameters);
+        }
+
         internal static DataTable CheckReturnProductValid(ReturnOrder order)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -566,12 +605,13 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas)); 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList); 
         }
-        public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve,string note)
+        public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve));
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserve));
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", indexReserve.CusName);
+            DataBaseFunction.AddSqlParameter(parameterList, "RESERVE_ID", indexReserve.Id);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
         }
         internal static DataTable GetStoOrdMasterCountByDate( )
@@ -707,6 +747,30 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
         }
 
+        internal static DataTable SendStoreOrderToSingde(NotEnoughMedicines purchaseList,string note)
+        {
+            string orderMedicines = "";
+            string cusName = "";
+            string planDate = "";
+
+            foreach (var product in purchaseList)
+            {
+                if (product.ID.Length > 12)
+                    orderMedicines += product.ID.Substring(0, 12);
+                else
+                    orderMedicines += product.ID.PadRight(12, ' ');
+
+                orderMedicines += product.Amount.ToString().PadLeft(10, ' ');
+
+                if (product.ID.Length > 12)
+                    orderMedicines += product.ID.Substring(13);
+
+                orderMedicines += "\r\n";
+            }
+
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{purchaseList.StoreOrderID}','','','{note}', '{orderMedicines}')");
+        }
+
         internal static DataTable GetNewSingdeOrders()
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
@@ -767,6 +831,14 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetPrescriptionOrderDetail(prescriptionSendDatas));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
         }
-         
+        
+        public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicines purchaseList,string note)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionNotEnoughOrderDetail(purchaseList));
+            DataBaseFunction.AddSqlParameter(parameterList, "EMP_ID", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "NOTE", note);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
+        }
     }
 }

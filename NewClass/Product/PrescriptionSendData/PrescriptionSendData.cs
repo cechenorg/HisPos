@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Medicine.Base;
 
 namespace His_Pos.NewClass.Product.PrescriptionSendData
 {
@@ -13,7 +14,13 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             TreatAmount = m.Amount; 
             SendAmount = 0;
             InvID = m.InventoryID;
-            CanUseAmount = 0; 
+            CanUseAmount = 0;
+            if (m is MedicineNHI nhiMed)
+            {
+                IsControl = nhiMed.ControlLevel != null;
+                IsCommon = nhiMed.IsCommon;
+                IsFrozen = nhiMed.Frozen;
+            }
         }
         public string MedId { get; set; }
         public string MedName { get; set; }
@@ -47,5 +54,8 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 Set(() => PrepareAmount, ref prepareAmount, value);
             }
         }
+        public bool IsFrozen { get; set; }
+        public bool IsControl { get; set; }
+        public bool IsCommon { get; set; }
     }
 }

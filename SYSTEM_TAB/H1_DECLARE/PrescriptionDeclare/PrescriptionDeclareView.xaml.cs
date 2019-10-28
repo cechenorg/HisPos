@@ -60,9 +60,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void Division_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter || DivisionCombo.SelectedItem is null) return;
-            MedicalNumber.Focus();
-            MedicalNumber.SelectAll();
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    if (PharmacistCombo.SelectedItem is null)
+                        PharmacistCombo.Focus();
+                    else
+                    {
+                        MedicalNumber.Focus();
+                        MedicalNumber.SelectAll();
+                    }
+                    break;
+                case Key.Left:
+                    e.Handled = true;
+                    ReleaseHospital.Focus();
+                    break;
+            }
         }
 
         private void MedicalNumber_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -76,107 +89,179 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     TreatDateTextBox.Focus();
                     TreatDateTextBox.SelectionStart = 0;
                     break;
+                case Key.Left:
+                    PharmacistCombo.Focus();
+                    break;
             }
         }
 
         private void TreatDate_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            if (sender is MaskedTextBox t)
             {
-                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
-                AdjustDateTextBox.Focus();
-                AdjustDateTextBox.SelectionStart = 0;
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+                        AdjustDateTextBox.Focus();
+                        AdjustDateTextBox.SelectionStart = 0;
+                        e.Handled = true;
+                        break;
+                    case Key.Left:
+                        MedicalNumber.Focus();
+                        break;
+                }
             }
         }
 
         private void AdjustDate_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            if (!(sender is MaskedTextBox t)) return;
+            switch (e.Key)
             {
-                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
-                MainDiagnosis.Focus();
-                MainDiagnosis.SelectionStart = 0;
-                e.Handled = true;
+                case Key.Enter:
+                    t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+                    MainDiagnosis.Focus();
+                    MainDiagnosis.SelectionStart = 0;
+                    e.Handled = true;
+                    break;
+                //case Key.Left:
+                //    TreatDateTextBox.Focus();
+                //    break;
             }
         }
 
         private void FocusSubDisease(NotificationMessage msg)
         {
-            if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusSubDisease"))
-            {
-                SecondDiagnosis.Focus();
-                SecondDiagnosis.SelectionStart = 0;
-            }
+            if (!(msg.Sender is PrescriptionDeclareViewModel) || !msg.Notification.Equals("FocusSubDisease")) return;
+            SecondDiagnosis.Focus();
+            SecondDiagnosis.SelectionStart = 0;
         }
 
         private void FocusChronicTotal(NotificationMessage msg)
         {
-            if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusChronicTotal"))
+            if (!(msg.Sender is PrescriptionDeclareViewModel) || !msg.Notification.Equals("FocusChronicTotal")) return;
+            ChronicTotal.Focus();
+            ChronicTotal.SelectionStart = 0;
+        }
+
+
+        private void MainDiagnosis_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left)
             {
-                ChronicTotal.Focus();
-                ChronicTotal.SelectionStart = 0;
+                AdjustDateTextBox.Focus();
+            }
+        }
+
+        private void SecondDiagnosis_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left)
+            {
+                MainDiagnosis.Focus();
             }
         }
 
         private void ChronicTotal_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                ChronicSequence.Focus();
-                ChronicSequence.SelectionStart = 0;
-
+                case Key.Enter:
+                    ChronicSequence.Focus();
+                    ChronicSequence.SelectionStart = 0;
+                    break;
+                case Key.Left:
+                    SecondDiagnosis.Focus();
+                    break;
             }
         }
 
         private void ChronicSequence_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                AdjustCombo.Focus();
+                case Key.Enter:
+                    AdjustCombo.Focus();
+                    break;
+                case Key.Left:
+                    ChronicTotal.Focus();
+                    break;
             }
         }
 
         private void AdjustCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                PrescriptionCaseCombo.Focus();
+                case Key.Enter:
+                    PrescriptionCaseCombo.Focus();
+                    break;
+                case Key.Left:
+                    e.Handled = true;
+                    ChronicSequence.Focus();
+                    break;
             }
         }
         private void PrescriptionCaseCombo_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                CopaymentCombo.Focus();
+                case Key.Enter:
+                    CopaymentCombo.Focus();
+                    break;
+                case Key.Left:
+                    e.Handled = true;
+                    AdjustCombo.Focus();
+                    break;
             }
         }
 
         private void CopaymentCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                PaymentCategoryCombo.Focus();
+                case Key.Enter:
+                    PaymentCategoryCombo.Focus();
+                    break;
+                case Key.Left:
+                    e.Handled = true;
+                    PrescriptionCaseCombo.Focus();
+                    break;
             }
         }
 
         private void PaymentCategoryCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                SpecialTreatCombo.Focus();
+                case Key.Enter:
+                    SpecialTreatCombo.Focus();
+                    break;
+                case Key.Left:
+                    e.Handled = true;
+                    CopaymentCombo.Focus();
+                    break;
             }
         }
 
         private void SpecialTreatCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                var dataGridTextBox = new List<TextBox>();
-                NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID",
-                    ref dataGridTextBox);
-                dataGridTextBox[0].Focus();
-                dataGridTextBox[0].SelectionStart = 0;
-                PrescriptionMedicines.SelectedItem = PrescriptionMedicines.Items[0];
+                case Key.Enter:
+                {
+                    var dataGridTextBox = new List<TextBox>();
+                    NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID",
+                        ref dataGridTextBox);
+                    dataGridTextBox[0].Focus();
+                    dataGridTextBox[0].SelectionStart = 0;
+                    PrescriptionMedicines.SelectedItem = PrescriptionMedicines.Items[0];
+                    break;
+                }
+                case Key.Left:
+                    e.Handled = true;
+                    PaymentCategoryCombo.Focus();
+                    break;
             }
         }
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -398,10 +483,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             var t = sender as TextBox;
-            if (e.Key != Key.Decimal) return;
-            e.Handled = true;
-            if (t != null) t.CaretIndex++;
+            switch (e.Key)
+            {
+                case Key.Decimal:
+                    e.Handled = true;
+                    if (t != null) t.CaretIndex++;
+                    break;
+                case Key.Subtract:
+                    e.Handled = true;
+                    break;
+                default:
+                    return;
+            }
         }
+
         private void ShowPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
@@ -525,6 +620,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (!(sender is TextBox textBox)) return;
             textBox.SelectAll();
+        }
+
+        private void PharmacistCombo_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is ComboBox)
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        MedicalNumber.Focus();
+                        break;
+                    case Key.Left:
+                        e.Handled = true;
+                        DivisionCombo.Focus();
+                        break;
+                }
+            }
         }
     }
 }

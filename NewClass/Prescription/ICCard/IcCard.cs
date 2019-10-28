@@ -99,7 +99,7 @@ namespace His_Pos.NewClass.Prescription.ICCard
             Tel = PatientBasicData.Tel;
         }
 
-        public void GetMedicalNumber(byte makeUp)
+        public int GetMedicalNumber(byte makeUp)
         {
             byte[] cTreatItem = ConvertData.StringToBytes("AF\0", 3);//就醫類別長度3個char;
             byte[] cBabyTreat = ConvertData.StringToBytes(" ", 2);//新生兒就醫註記,長度2個char
@@ -109,30 +109,24 @@ namespace His_Pos.NewClass.Prescription.ICCard
             if (HisApiFunction.OpenCom())
             {
                 var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
-                if (res == 0)
+                switch (res)
                 {
-                    MedicalNumberData = new SeqNumber(pBuffer);
-                    IsGetMedicalNumber = true;
-                    TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
-                    HisApiFunction.CloseCom();
-                    return;
-                }
-                if (res == 5003)
-                {
-                    UpdateCard();
-                    res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, pBuffer, ref iBufferLen);
-                    if (res == 0)
-                    {
+                    case 0:
                         MedicalNumberData = new SeqNumber(pBuffer);
                         IsGetMedicalNumber = true;
                         TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
-                        HisApiFunction.CloseCom();
-                        return;
-                    }
+                        break;
+                    case 5003:
+                        break;
+                    default:
+                        ShowHISAPIErrorMessage(res, "取得就醫序號異常 ");
+                        break;
                 }
-                ShowHISAPIErrorMessage(res, "取得就醫序號異常 ");
                 HisApiFunction.CloseCom();
+                return res;
             }
+            MessageWindow.ShowMessage("讀卡機連接開啟失敗", MessageType.ERROR);
+            return -1;
         }
 
         public void GetTreatDataNoNeedHPC()

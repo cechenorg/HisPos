@@ -282,13 +282,13 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if (!isSuccess)
                 {
-                    MessageWindow.ShowMessage("作廢杏德訂單失敗 請稍後再試", MessageType.ERROR);
+                    MessageWindow.ShowMessage("杏德已處理準備出貨 無法作廢", MessageType.ERROR);
                     return false;
                 }
             }
 
-            DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
-            return dataTable.Rows[0].Field<bool>("RESULT");
+            DataTable dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(ID);
+            return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID)

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -44,6 +45,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         internal void GetStockDetailByID()
         {
             StockDetail.GetStockDetailByID(medicineID, wareHouseID);
+        }
+        internal void GetOnTheWayDetailByID()
+        {
+            StockDetail.GetOnTheWayDetailByID(medicineID, wareHouseID);
         }
         #endregion
     }

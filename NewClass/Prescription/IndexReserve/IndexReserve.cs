@@ -30,6 +30,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             AdjustDate = r.Field<DateTime>("AdjustDate");
             PhoneNote = r.Field<string>("Cus_UrgentNote");
             Profit = Convert.ToInt32(r.Field<double>("Profit"));
+            ChronicSequence = r.Field<byte>("ResMas_ChronicSequence");
+            ChronicTotal = r.Field<byte>("ResMas_ChronicTotal");
             IsExpensive = r.Field<bool>("IsExpensive");
             CusBirth = r.Field<DateTime>("Cus_Birthday"); 
             switch (r.Field<string>("MedPrepareStatus")) {
@@ -65,6 +67,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public string InsName { get; set; }
         public string DivName { get; set; }
         public int Profit { get; set; }
+        public int ChronicSequence { get; set; }
+        public int ChronicTotal { get; set; }
         public DateTime TreatDate { get; set; }
         public DateTime AdjustDate { get; set; }
         public string PhoneNote { get; set; }
@@ -83,29 +87,25 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             get => isNoSend;
             set
             {
-                Set(() => IsNoSend, ref isNoSend, value);
-                if (IsNoSend)
+                if (value)
                 {
                     if (PrepareMedStatus == IndexPrepareMedType.Prepare)
                     {
-                        ConfirmWindow confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (已備藥訂單不會取消)", "預約處方通知");
+                        var confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (已備藥訂單不會取消)", "預約處方通知");
                         if ((bool)confirmWindow.DialogResult)
-                        {
                             PrepareMedStatus = IndexPrepareMedType.UnPrepare;
-                            this.SaveStatus();
-                        }
                         else
-                            IsNoSend = false;
+                            value = false;
                     }
                     else
                         PrepareMedStatus = IndexPrepareMedType.UnPrepare;
-                    this.SaveStatus();
                 }
-                else {
+                else
+                {
                     PrepareMedStatus = IndexPrepareMedType.Unprocess;
-                    this.SaveStatus();
                 }
-                   
+                SaveStatus();
+                Set(() => IsNoSend, ref isNoSend, value);
             }
         }
 
@@ -180,7 +180,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             } 
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            if (StoreOrderDB.InsertIndexReserveOrder(this, note).Rows.Count > 0)
+            if (StoreOrderDB.InsertIndexReserveOrder(this).Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
                 if (StoreOrderDB.SendStoreOrderToSingde(this, note).Rows[0][0].ToString() == "SUCCESS")
                 {
@@ -193,7 +193,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR); 
             }
             else
-                MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage(CusName + "預約已傳送過 請重新查詢!", Class.MessageType.ERROR);
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             return result;
@@ -223,7 +223,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             rptViewer.LocalReport.Refresh();
         }
 
-        private List<ReportParameter> CreateReserveMedicinesSheetParameters() {
+        private List<ReportParameter> CreateReserveMedicinesSheetParameters() 
+        {
+            var adjustEnd = ChronicSequence == 1 ? AdjustDate.AddYears(-1911).AddDays(10) : AdjustDate.AddYears(-1911).AddDays(20);
             return new List<ReportParameter>
             {
                 new ReportParameter("Type","預約"),
@@ -232,13 +234,15 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("PatientTel",PhoneNote),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
-                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustStart", $"{AdjustDate.AddYears(-1911):yyy-MM-dd}"),
+                new ReportParameter("AdjustEnd", $"{adjustEnd:yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
         }
 
         private List<ReportParameter> CreateReserveMedicinesSheetParametersA5()
         {
+            var adjustEnd = ChronicSequence == 1 ? AdjustDate.AddYears(-1911).AddDays(10) : AdjustDate.AddYears(-1911).AddDays(20);
             return new List<ReportParameter>
             {
                 new ReportParameter("Type","預約"),
@@ -247,7 +251,8 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("PatientTel",PhoneNote),
                 new ReportParameter("Institution", InsName),
                 new ReportParameter("Division", DivName),
-                new ReportParameter("AdjustRange", $"{AdjustDate.AddYears(-1911).ToString("yyy-MM-dd")} ~ {AdjustDate.AddYears(-1911).AddDays(20).ToString("yyy-MM-dd")}"),
+                new ReportParameter("AdjustStart", $"{AdjustDate.AddYears(-1911):yyy-MM-dd}"),
+                new ReportParameter("AdjustEnd", $"{adjustEnd:yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
         }

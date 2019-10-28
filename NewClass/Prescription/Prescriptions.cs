@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Prescription
             var table = PrescriptionDb.GetOrthopedicsPrescriptions(sDate, eDate);
             foreach (var xmlDocument in table)
             {
-                Add(new NewClass.Prescription.Prescription(XmlService.Deserialize<OrthopedicsPrescription>(xmlDocument.InnerXml)));
+                Add(new Prescription(XmlService.Deserialize<OrthopedicsPrescription>(xmlDocument.InnerXml)));
             }
         }
 
@@ -32,7 +32,19 @@ namespace His_Pos.NewClass.Prescription
             {
                 var xDocument = new XmlDocument();
                 xDocument.LoadXml(r["CooCli_XML"].ToString());
-                Add(new NewClass.Prescription.Prescription(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead")));
+                Add(new Prescription(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead")));
+            }
+        }
+
+        public void GetAutoRegisterReserve(Prescription p)
+        {
+            var table = PrescriptionDb.GetReserveByPrescription(p);
+            foreach (DataRow r in table.Rows)
+            {
+                var resTable = PrescriptionDb.GetReservePrescriptionByID(r.Field<int>("ID"));
+                var pre = new Prescription(resTable.Rows[0], PrescriptionType.ChronicReserve) {AdjustDate = null};
+                pre.TempMedicalNumber = p.TempMedicalNumber;
+                Add(pre);
             }
         }
     }

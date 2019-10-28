@@ -552,7 +552,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     var table = MedicineDb.GetPrescriptionMedicineSumById(idList, w.ID);
                     foreach (DataRow s in table.Rows)
                     {
-                        file.WriteLine($@"{s.Field<string>("Pro_ID")},{s.Field<string>("cName")},{s.Field<string>("eName")},{s.Field<int>("Pro_LastPrice")}, {s.Field<int>("Med_Price")},{s.Field<double>("Inv_Inventory")},{s.Field<int>("TotalAmount")},{s.Field<int>("BuckleAmount")}");
+                        file.WriteLine($@"{s.Field<string>("Pro_ID")},{s.Field<string>("cName")},{s.Field<string>("eName")},{s.Field<int>("Inv_LastPrice")}, {s.Field<int>("Med_Price")},{s.Field<double>("Inv_Inventory")},{s.Field<int>("TotalAmount")},{s.Field<int>("BuckleAmount")}");
                     }
                     file.WriteLine();
                     file.WriteLine();
@@ -633,6 +633,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             SetPrescriptionsSummary();
         }
 
+        private void Resort()
+        {
+            switch (SelectedTimeIntervalType)
+            {
+                case "調劑日":
+                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription ("InsertDate", ListSortDirection.Descending));
+                    PrescriptionCollectionVS.View.Refresh();
+                    break;
+                case "登錄日":
+                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription ("RegisterDate", ListSortDirection.Descending));
+                    PrescriptionCollectionVS.View.Refresh();
+                    break;
+                default:
+                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription ("AdjustDate", ListSortDirection.Descending));
+                    PrescriptionCollectionVS.View.Refresh();
+                    break;
+            }
+            
+        }
+
         private void Refresh(NotificationMessage msg)
         {
             if (msg.Notification.Equals("PrescriptionEdited"))
@@ -650,6 +670,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MedicalServicePoint = summary[2];
             ApplyPoint = summary[3];
             TotalPoint = summary[4];
+            Resort();
         }
 
         private void NoBuckleFilter(object sender, FilterEventArgs e)
@@ -658,15 +679,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 e.Accepted = false;
             else
             {
-                if (FilterNoBuckle)
-                {
-                    if (src.NoBuckleStatus != null && src.NoBuckleStatus.Equals(1))
-                        e.Accepted = true;
-                    else
-                        e.Accepted = false;
-                }
-                else
-                    e.Accepted = true;
+                e.Accepted = (!FilterNoBuckle || src.NoBuckleStatus != null && src.NoBuckleStatus.Equals(1)) &&
+                             (!FilterNoGetCard || src.IsDeposit);
             }
         }
 
@@ -676,7 +690,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 e.Accepted = false;
             else
             {
-                e.Accepted = FilterNotAdjust || src.IsAdjust;
+                e.Accepted = (FilterNotAdjust || src.IsAdjust) &&
+                             (!FilterNoBuckle || src.NoBuckleStatus != null && src.NoBuckleStatus.Equals(1));
             }
         }
 
@@ -686,7 +701,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 e.Accepted = false;
             else
             {
-                e.Accepted = !FilterNoGetCard || src.IsDeposit;
+                e.Accepted = !FilterNoGetCard || src.IsDeposit && 
+                             (!FilterNoBuckle || src.NoBuckleStatus != null && src.NoBuckleStatus.Equals(1));
             }
         }
 

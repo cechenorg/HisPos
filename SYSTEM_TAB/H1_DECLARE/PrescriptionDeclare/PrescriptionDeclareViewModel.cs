@@ -36,6 +36,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.CustomerHistoryProduct;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow;
@@ -46,6 +47,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using Application = System.Windows.Application;
+using Label = System.Windows.Controls.Label;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
@@ -249,6 +251,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region Commands
         public RelayCommand ScanPrescriptionQRCode { get; set; }
         public RelayCommand<TextBox> GetCustomers { get; set; }
+        public RelayCommand<Label> GetCustomersEditedToday { get; set; }
         public RelayCommand ClearPatient { get; set; }
         public RelayCommand CustomerDataEdited { get; set; }
         public RelayCommand ShowCustomerEditWindow { get; set; }
@@ -273,6 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
         public RelayCommand CopyPrescription { get; set; }
+        public RelayCommand CheckDeclareStatusCmd { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
         public RelayCommand<string> EditMedicineSet { get; set; }
         public RelayCommand CustomerDetailEdited { get; set; }
@@ -351,6 +355,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
             AddCustomer = new RelayCommand(AddCustomerAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
+            GetCustomersEditedToday = new RelayCommand<Label>(GetCustomersEditedTodayAction);
             ClearPatient = new RelayCommand(ClearPatientAction);
             CustomerDataEdited = new RelayCommand(CustomerDataEditedAction);
             ShowCustomerEditWindow = new RelayCommand(ShowCustomerEditWindowAction);
@@ -372,6 +377,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
+            CheckDeclareStatusCmd = new RelayCommand(CheckDeclareStatus);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
             EditMedicineSet = new RelayCommand<string>(EditMedicineSetAction);
             CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
@@ -443,6 +449,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 ShowCustomerSearchEditedToday(condition.Name);
             else
                 ShowCustomerSearch(condition.Name);
+        }
+
+        private void GetCustomersEditedTodayAction(Label condition)
+        {
+            Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
+            ShowCustomerSearchEditedToday(condition.Name);
         }
 
         private void ClearPatientAction()
@@ -836,6 +848,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ErrorAdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
@@ -847,6 +860,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void DepositAdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -856,6 +870,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void AdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -868,6 +883,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
                 CheckIsReadCard();
+        }
+
+        private void CheckCustomerValid()
+        {
+            if (CanSearchPatient)
+                CheckNewCustomer();
         }
 
         private void CheckChronicCopayment()
@@ -891,6 +912,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
@@ -904,6 +926,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrescribeAdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -1033,6 +1056,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 BusyContent = Resources.更新卡片;
                 currentCard.UpdateCard();
             }
+            var res = currentCard.GetMedicalNumber(1);
+            if (res != 5003) return;
+            BusyContent = Resources.更新卡片;
+            currentCard.UpdateCard();
             BusyContent = Resources.取得就醫序號;
             currentCard.GetMedicalNumber(1);
         }
@@ -1242,14 +1269,65 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartRegister()
         {
-            if (!currentService.StartRegister())
+            var result = true;
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                isAdjusting = false;
-                return;
+                BusyContent = "處方登錄中...";
+                if (!currentService.StartRegister())
+                {
+                    isAdjusting = false;
+                    result = false;
+                }
+                else
+                {
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        currentService.CloneTempPre();
+                    });
+                    StartPrint(false);
+                    BusyContent = "取得預約處方...";
+                    CheckAutoRegister();
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                if(result) 
+                    DeclareSuccess();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+
+        private void CheckAutoRegister()
+        {
+            var registerList = new Prescriptions();
+            MainWindow.ServerConnection.OpenConnection();
+            registerList.GetAutoRegisterReserve(CurrentPrescription);
+            MainWindow.ServerConnection.CloseConnection();
+            if (registerList.Count > 0 && RegisterConfirm(registerList))
+            {
+                foreach (var p in registerList )
+                {
+                    p.PrescriptionStatus.IsSendOrder = true;
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        StartAutoRegister(p);
+                    });
+                }
             }
-            currentService.CloneTempPre();
-            StartPrint(false);
-            DeclareSuccess();
+        }
+
+        private bool RegisterConfirm(Prescriptions registerList)
+        {
+            var result = false;
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                var registerWindow = new AutoRegisterWindow(CurrentPrescription, registerList);
+                result = registerWindow.RegisterResult;
+            });
+            return result;
         }
 
         private void StartPrescribeAdjust()
@@ -1289,6 +1367,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
                 CurrentPrescription.SetDetail();
             return checkPrescription;
+        }
+
+        private void StartAutoRegister(Prescription p)
+        {
+            var service = PrescriptionService.CreateService(p);
+            service.SetPharmacistWithoutCheckCount(SelectedPharmacist);
+            MainWindow.ServerConnection.OpenConnection();
+            service.CheckPrescription(false, false);
+            MainWindow.ServerConnection.CloseConnection();
+            p.SetDetail();
+            service.StartRegister();
+            service.CloneTempPre();
+            service.Print(false);
         }
 
         private void DeclareSuccess()
@@ -1433,11 +1524,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckInsertCustomerData()
         {
-            if (!CurrentPrescription.Patient.CheckData())
-                return false;
-            var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認");
-            if (!(bool) insertCustomerConfirm.DialogResult) return false;
-            return CurrentPrescription.Patient.InsertData();
+            return CurrentPrescription.Patient.CheckData() && CurrentPrescription.Patient.InsertData();
         }
 
         private bool CheckFocusDivision(string insID)
@@ -1456,7 +1543,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckMedicinesNegativeStock()
         {
-            string result = string.Empty;
+            var result = string.Empty;
             result = CurrentPrescription.CheckMedicinesNegativeStock();
             if (!string.IsNullOrEmpty(result))
                 isAdjusting = false;

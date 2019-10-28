@@ -105,12 +105,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     MainWindow.ServerConnection.OpenConnection();
                     ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString, wareID);
                     MainWindow.ServerConnection.CloseConnection();
-                    if (addProEnum == AddProductEnum.PrescriptionDeclare || addProEnum == AddProductEnum.PrescriptionEdit)
-                        ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection.OrderByDescending(p => p.NHIPrice) };
-                    else
-                    {
-                        ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection };
-                    }
+                    ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection };
                     ProStructCollectionView = ProStructCollectionViewSource.View;
                     AddFilter();
                     switch (ProStructCollectionView.Cast<object>().Count())

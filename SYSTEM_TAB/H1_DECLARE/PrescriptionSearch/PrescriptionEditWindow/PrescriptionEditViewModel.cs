@@ -225,7 +225,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         public PrescriptionEditViewModel(Prescription p,string title)
         {
-            Title = title;
+            Title = $"{title} {p.OrderContent}";
             IsEdit = false;
             OriginalPrescription = p;
             ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
@@ -620,6 +620,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!currentService.CheckEditPrescription(EditedPrescription.PrescriptionStatus.IsGetCard)) return;
             EditedPrescription.SetDetail();
             MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
             var result = EditedPrescription.Update();
             if (result && EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
             {
@@ -631,7 +632,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 currentService.SendOrder(vm);
             }
             MainWindow.ServerConnection.CloseConnection();
-            if(result)
+            MainWindow.SingdeConnection.CloseConnection();
+            if (result)
                 MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
             Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
