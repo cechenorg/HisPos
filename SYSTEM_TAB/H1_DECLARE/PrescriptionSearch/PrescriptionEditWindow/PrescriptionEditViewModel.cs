@@ -883,6 +883,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 currentService = PrescriptionService.CreateService(EditedPrescription);
                 WriteCard();
                 currentService.MakeUpComplete();
+                RaisePropertyChanged("CanMakeUp");
                 IsBusy = false;
             }
             else
