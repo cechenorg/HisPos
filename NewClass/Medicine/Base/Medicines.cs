@@ -684,9 +684,9 @@ namespace His_Pos.NewClass.Medicine.Base
                     .Where(med => med.InventoryID.Equals(inv.ID))
                     .Aggregate(negativeStock, (current, med) => current + ("藥品" + med.ID + "\n"));
             }
-            if (notEnoughMedicines.Count > 0)
+            if (notEnoughMedicines.Count > 0 && warID.Equals("0"))
             {
-                var purchaseWindow = new NotEnoughMedicinePurchaseWindow(warID,note,notEnoughMedicines);
+                var purchaseWindow = new NotEnoughMedicinePurchaseWindow(note,notEnoughMedicines);
             }
             if (string.IsNullOrEmpty(negativeStock)) return negativeStock;
             negativeStock += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";

@@ -926,7 +926,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrescribeAdjustAction()
         {
-            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -1308,7 +1307,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.CloseConnection();
             if (registerList.Count > 0 && RegisterConfirm(registerList))
             {
-                foreach (var p in registerList )
+                foreach (var p in registerList.Where(r => r.AdjustDate != null))
                 {
                     p.PrescriptionStatus.IsSendOrder = true;
                     Application.Current.Dispatcher.Invoke(delegate

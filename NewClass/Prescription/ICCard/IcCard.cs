@@ -117,6 +117,8 @@ namespace His_Pos.NewClass.Prescription.ICCard
                         TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
                         break;
                     case 5003:
+                        UpdateCard();
+                        GetMedicalNumber(makeUp);
                         break;
                     default:
                         ShowHISAPIErrorMessage(res, "取得就醫序號異常 ");
@@ -169,7 +171,6 @@ namespace His_Pos.NewClass.Prescription.ICCard
 
         public void UpdateCard()
         {
-            if (AvailableTimes != 0) return;
             if (HisApiFunction.OpenCom())
             {
                 var res = HisApiBase.csUpdateHCContents();

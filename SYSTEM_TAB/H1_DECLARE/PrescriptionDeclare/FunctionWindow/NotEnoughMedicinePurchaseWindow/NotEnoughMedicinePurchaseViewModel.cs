@@ -25,7 +25,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
                 Set(() => PurchaseList, ref purchaseList, value);
             }
         }
-        private string wareHouseID { get; set; }
         private string Note { get; set; }
         #endregion
 
@@ -35,9 +34,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         public RelayCommand Cancel { get; set; }
         #endregion
 
-        public NotEnoughMedicinePurchaseViewModel(string wareID,string note,NotEnoughMedicines purchaseList)
+        public NotEnoughMedicinePurchaseViewModel(string note,NotEnoughMedicines purchaseList)
         {
-            wareHouseID = wareID;
             PurchaseList = purchaseList;
             Note = note;
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
@@ -48,7 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         private void ShowMedicineDetailAction(string medicineID)
         {
             ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { medicineID, wareHouseID }, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { medicineID, "0" }, "ShowProductDetail"));
         }
 
         private void CreateStoreOrderAction()
