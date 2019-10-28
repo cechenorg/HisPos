@@ -193,7 +193,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR); 
             }
             else
-                MessageWindow.ShowMessage(StoOrdID + "已傳送過 請重新查詢!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage(CusName + "預約已傳送過 請重新查詢!", Class.MessageType.ERROR);
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             return result;
