@@ -65,7 +65,7 @@
         </Grid>
         <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
             <Label Content="可登錄處方"/>
-            <DataGrid Width="330" Height="230" VerticalAlignment="Top" ItemsSource="{Binding RegisterList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"
+            <DataGrid Name="ReserveGrid" Width="330" Height="230" VerticalAlignment="Top" ItemsSource="{Binding RegisterList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"
                   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="80" Header="可調劑" FontSize="18" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicTotal,UpdateSourceTrigger=PropertyChanged}">
@@ -97,7 +97,7 @@
                             <DataTemplate>
                                 <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="110" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
                                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" InputScope="Number"
-                                                CaretBrush="Black">
+                                                CaretBrush="Black" PreviewKeyDown="AdjustDateTextBox_OnPreviewKeyDown">
                                     <Binding Path="AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
                                          ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
                                         <Binding.ValidationRules>

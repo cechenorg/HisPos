@@ -116,39 +116,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void AdjustDate_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (sender is MaskedTextBox t)
+            if (!(sender is MaskedTextBox t)) return;
+            switch (e.Key)
             {
-                switch (e.Key)
-                {
-                    case Key.Enter:
-                        t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
-                        MainDiagnosis.Focus();
-                        MainDiagnosis.SelectionStart = 0;
-                        e.Handled = true;
-                        break;
-                    case Key.Left:
-                        TreatDateTextBox.Focus();
-                        break;
-                }
+                case Key.Enter:
+                    t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+                    MainDiagnosis.Focus();
+                    MainDiagnosis.SelectionStart = 0;
+                    e.Handled = true;
+                    break;
+                //case Key.Left:
+                //    TreatDateTextBox.Focus();
+                //    break;
             }
         }
 
         private void FocusSubDisease(NotificationMessage msg)
         {
-            if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusSubDisease"))
-            {
-                SecondDiagnosis.Focus();
-                SecondDiagnosis.SelectionStart = 0;
-            }
+            if (!(msg.Sender is PrescriptionDeclareViewModel) || !msg.Notification.Equals("FocusSubDisease")) return;
+            SecondDiagnosis.Focus();
+            SecondDiagnosis.SelectionStart = 0;
         }
 
         private void FocusChronicTotal(NotificationMessage msg)
         {
-            if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusChronicTotal"))
-            {
-                ChronicTotal.Focus();
-                ChronicTotal.SelectionStart = 0;
-            }
+            if (!(msg.Sender is PrescriptionDeclareViewModel) || !msg.Notification.Equals("FocusChronicTotal")) return;
+            ChronicTotal.Focus();
+            ChronicTotal.SelectionStart = 0;
         }
 
 

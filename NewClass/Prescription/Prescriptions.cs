@@ -43,7 +43,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 var resTable = PrescriptionDb.GetReservePrescriptionByID(r.Field<int>("ID"));
                 var pre = new Prescription(resTable.Rows[0], PrescriptionType.ChronicReserve) {AdjustDate = null};
-                pre.TempMedicalNumber = pre.OriginalMedicalNumber;
+                pre.TempMedicalNumber = p.TempMedicalNumber;
                 Add(pre);
             }
         }
