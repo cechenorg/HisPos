@@ -575,12 +575,13 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas)); 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList); 
         }
-        public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve,string note)
+        public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve));
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserve));
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", indexReserve.CusName);
+            DataBaseFunction.AddSqlParameter(parameterList, "RESERVE_ID", indexReserve.Id);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
         }
         internal static DataTable GetStoOrdMasterCountByDate( )
