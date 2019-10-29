@@ -29,6 +29,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
@@ -1714,6 +1715,23 @@ namespace His_Pos.NewClass.Prescription
                 m.SendAmount = -1;
             }
             UpdateMedicines();
+        }
+
+        public bool CheckChronicAdjustDateValid()
+        {
+            var adjust = (DateTime) AdjustDate;
+            var treat = (DateTime) TreatDate;
+            var seq = (int) ChronicSeq - 1;
+            switch (ChronicSeq)
+            {
+                case 1:
+                    return DateTime.Compare(adjust, treat.AddDays(10)) <= 0 && DateTime.Compare(adjust, treat) >= 0;
+                default:
+                    var standardDate = treat.AddDays(MedicineDays * seq);
+                    var start = standardDate.AddDays(-10);
+                    var end = standardDate.AddDays(10);
+                    return DateTime.Compare(adjust, start) >= 0 && DateTime.Compare(adjust, end) <= 0;
+            }
         }
     }
 }
