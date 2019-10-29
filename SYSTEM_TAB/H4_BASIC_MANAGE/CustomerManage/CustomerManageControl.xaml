@@ -11,7 +11,7 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
-        <service:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <service:InvertBoolConverter x:Key="InvertBoolConverter" />
         <DataTemplate x:Key="DataNotChanged" DataType="UserControl">
             <Label Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
         </DataTemplate>
@@ -43,7 +43,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <CheckBox IsChecked="{Binding Customer.IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBooleanConverter}}" Content="關閉病歷" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="20,0,0,0">
+            <CheckBox IsChecked="{Binding Customer.IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InvertBoolConverter}}" Content="關閉病歷" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" VerticalAlignment="Center" FontSize="18" Margin="20,0,0,0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" CommandParameter="{Binding}"/>
