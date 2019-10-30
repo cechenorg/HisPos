@@ -251,7 +251,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private bool CheckAdjustDatePast()
         {
-            if (Current.AdjustDate >= DateTime.Today) return true;
+            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1) return true;
             MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
             return false;
         }
@@ -332,19 +332,19 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p,string orderNumber)
+        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p,string orderNumber,int medDays)
         {
             var adjustDate = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(p.AdjustDate, true);
             var adjustDateNext = string.Empty;
             var treatReturn = string.Empty;
             if (p.CheckChronicSeqValid() && p.CheckChronicTotalValid())
             {
-                if (p.ChronicTotal != p.ChronicSeq)
+                if (p.ChronicSeq < p.ChronicTotal)
                 {
-                    var nextAdjust = ((DateTime)p.AdjustDate).AddDays(p.MedicineDays);
+                    var nextAdjust = ((DateTime)p.AdjustDate).AddDays(medDays);
                     adjustDateNext = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(nextAdjust, true);
                 }
-                DateTime? treatReturnDate = ((DateTime)p.TreatDate).AddDays((p.MedicineDays * (int)p.ChronicTotal));
+                DateTime? treatReturnDate = ((DateTime)p.TreatDate).AddDays((medDays * (int)p.ChronicTotal));
                 treatReturn = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(treatReturnDate, true);
             }
             var cusGender = p.Patient.CheckGender();
