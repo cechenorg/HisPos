@@ -595,7 +595,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (Current.PrescriptionStatus.IsSendToSingde)
                 {
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
-                } //更新傳送藥健康  
+                }//更新傳送藥健康  
             }
             else
             {
@@ -603,13 +603,13 @@ namespace His_Pos.NewClass.Prescription.Service
                 {
                     var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(Current.OrderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");;
                     if (!removeSingdeOrder)
-                        MessageWindow.ShowMessage("處方訂單已出貨或網路異常，訂單更改失敗", MessageType.ERROR);
+                        NewFunction.ShowMessageFromDispatcher("處方訂單已出貨或網路異常，訂單更改失敗",MessageType.ERROR);
                     else
                     {
                         var dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(Current.OrderID);
                         var removeLocalOrder = dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
                         if (!removeLocalOrder)
-                            MessageWindow.ShowMessage("處方訂單更改失敗", MessageType.ERROR);
+                            NewFunction.ShowMessageFromDispatcher("處方訂單更改失敗",MessageType.ERROR);
                     }
                 }
             }
@@ -703,9 +703,7 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.PrescriptionStatus.SetNormalAdjustStatus();
             Current.Update();
             MainWindow.ServerConnection.CloseConnection();
-            Application.Current.Dispatcher.Invoke((Action)delegate {
-                MessageWindow.ShowMessage("補卡作業成功，退還押金" + deposit + "元", MessageType.SUCCESS);
-            });
+            NewFunction.ShowMessageFromDispatcher($"補卡作業成功，退還押金{deposit}元", MessageType.SUCCESS);
         }
 
         public void CheckDailyUploadMakeUp(ErrorUploadWindowViewModel.IcErrorCode errorCode)

@@ -326,5 +326,13 @@ namespace His_Pos.Service
                     return false;
             }
         }
+
+        public static void ShowMessageFromDispatcher(string message,MessageType type)
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                MessageWindow.ShowMessage(message, type);
+            });
+        }
     }
 }

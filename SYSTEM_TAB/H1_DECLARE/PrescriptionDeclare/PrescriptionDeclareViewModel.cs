@@ -1075,7 +1075,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             catch (Exception e)
             {
                 NewFunction.ExceptionLog(e.Message);
-                Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
+                NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
             }
         }
         private bool AskErrorUpload()
