@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" x:Name="PurchaseMedicinesGrid" Margin="10" ItemsSource="{Binding PurchaseList, UpdateSourceTrigger=PropertyChanged}"
                   HorizontalGridLinesBrush="Transparent" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserDeleteRows="False" CanUserAddRows="False"
-                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" SelectedItem="{Binding SelectedMedicine,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   FrozenColumnCount="3" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" >
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -57,6 +57,17 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
+                <DataGridTemplateColumn Width="50" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Image.InputBindings>
+                                    <MouseBinding Command="{Binding DataContext.DeleteMedicine, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
+                                </Image.InputBindings>
+                            </Image>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="150" Header="代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

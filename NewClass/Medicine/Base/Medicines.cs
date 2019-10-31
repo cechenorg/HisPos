@@ -668,7 +668,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 }
             }
             var negativeStock = string.Empty;
-            var notEnoughMedicines = new NotEnoughMedicines();
+            var notEnoughMedicines = new NotEnoughMedicines(true);
             foreach (var inv in inventoryList)
             {
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
