@@ -47,7 +47,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         #endregion
 
         #region Commands
-        public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand<string> ShowMedicineDetail { get; set; }
         public RelayCommand CreateStoreOrder { get; set; }
         public RelayCommand Cancel { get; set; }
@@ -57,23 +56,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         {
             PurchaseList = purchaseList;
             Note = note;
-            DeleteMedicine = new RelayCommand(DeleteMedicineAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CreateStoreOrder = new RelayCommand(CreateStoreOrderAction);
             Cancel = new RelayCommand(CancelAction);
-        }
-
-        private void DeleteMedicineAction()
-        {
-            if (PurchaseList.Count == 1)
-            {
-                var deleteConfirm = new ConfirmWindow("訂單只剩此品項，刪除後將自動關閉視窗，確認刪除?","刪除品項確認");
-                if(!(bool)deleteConfirm.DialogResult) 
-                    return;
-            }
-            PurchaseList.Remove(SelectedMedicine);
-            if(PurchaseList.Count == 0)
-                Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindow"));
         }
 
         private void ShowMedicineDetailAction(string medicineID)
@@ -84,31 +69,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
 
         private void CreateStoreOrderAction()
         {
-            var orderProList = new NotEnoughMedicines(false);
-            foreach (var p in PurchaseList.Where(p => p.Amount > 0))
+            MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
+            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(PurchaseList, Note);
+            if (result.Rows.Count > 0)
             {
-                orderProList.Add(p);
+                PurchaseList.ToWaitingStatus(Note);
             }
-            if (orderProList.Count > 0)
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                MainWindow.SingdeConnection.OpenConnection();
-                var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(orderProList,Note);
-                if (result.Rows.Count > 0)
-                {
-                    PurchaseList.ToWaitingStatus(Note);
-                }
-                MainWindow.ServerConnection.CloseConnection();
-                MainWindow.SingdeConnection.CloseConnection();
-            }
-            else
-                MessageWindow.ShowMessage("訂單已無訂購量大於0的品項。",MessageType.WARNING);
-            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindow"));
+            MainWindow.ServerConnection.CloseConnection();
+            MainWindow.SingdeConnection.CloseConnection();
+            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowPurchase"));
         }
 
         private void CancelAction()
         {
-            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindow"));
+            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowCancel"));
         }
     }
 }
