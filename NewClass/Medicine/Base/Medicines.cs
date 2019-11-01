@@ -704,7 +704,7 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             foreach (var m in notEnoughMedicines)
             {
-                this.Single(med => med.ID.EndsWith(m.ID)).BuckleAmount = 0;
+                this.Single(med => med.ID.Equals(m.ID)).BuckleAmount = 0;
             }
         }
 
