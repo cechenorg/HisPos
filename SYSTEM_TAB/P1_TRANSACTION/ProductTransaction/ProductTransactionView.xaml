@@ -62,8 +62,8 @@
                 </ContentControl.Style>
             </ContentControl>
             <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" 
-                      ItemsSource="{Binding NewTransaction.ProductCollection}" FrozenColumnCount="3" DataContext="{Binding TradeViewModel}"
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True"
+                      ItemsSource="{Binding NewTransaction.ProductCollection}" FrozenColumnCount="3"
                       SelectedItem="{Binding NewTransaction.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">

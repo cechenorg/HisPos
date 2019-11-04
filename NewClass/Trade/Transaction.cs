@@ -40,6 +40,11 @@ namespace His_Pos.NewClass.Trade
         }
         #endregion
 
+        public Transaction()
+        {
+            ProductCollection = new TradeProducts();
+        }
+
         #region ----- Define Functions -----
         internal void Clear()
         {
