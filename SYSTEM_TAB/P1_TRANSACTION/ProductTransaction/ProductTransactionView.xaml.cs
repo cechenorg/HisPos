@@ -24,5 +24,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             InitializeComponent();
         }
+
+        private void ProductIDTextbox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            
+        }
     }
 }
