@@ -668,7 +668,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 }
             }
             var negativeStock = string.Empty;
-            var notEnoughMedicines = new NotEnoughMedicines();
+            var notEnoughMedicines = new NotEnoughMedicines(true);
             foreach (var inv in inventoryList)
             {
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
@@ -678,7 +678,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 {
                     if (!m.InventoryID.Equals(inv.ID) || m is MedicineVirtual) continue;
                     var controlLevel = m is MedicineNHI nhiMed ? nhiMed.ControlLevel : null;
-                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID,m.FullName,m.Amount-m.UsableAmount,m.IsCommon,m.Frozen,controlLevel,m.AveragePrice));
+                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID,m.FullName,m.Amount-m.UsableAmount,m.IsCommon,m.Frozen,controlLevel,m.AveragePrice, m.Amount - m.UsableAmount));
                 }
                 negativeStock = this.Where(med => !(med is MedicineVirtual))
                     .Where(med => med.InventoryID.Equals(inv.ID))
@@ -687,11 +687,25 @@ namespace His_Pos.NewClass.Medicine.Base
             if (notEnoughMedicines.Count > 0 && warID.Equals("0"))
             {
                 var purchaseWindow = new NotEnoughMedicinePurchaseWindow(note,notEnoughMedicines);
+                if ((bool) purchaseWindow.DialogResult)
+                {
+                    SetBuckleAmountZero(notEnoughMedicines);
+                    MessageWindow.ShowMessage("欠藥已採購並更改扣庫量為0，收貨後請記得修改扣庫量。", MessageType.WARNING);
+                    return string.Empty;
+                }
             }
             if (string.IsNullOrEmpty(negativeStock)) return negativeStock;
             negativeStock += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
             MessageWindow.ShowMessage(negativeStock, MessageType.WARNING);
             return negativeStock;
+        }
+
+        private void SetBuckleAmountZero(NotEnoughMedicines notEnoughMedicines)
+        {
+            foreach (var m in notEnoughMedicines)
+            {
+                this.Single(med => med.ID.Equals(m.ID)).BuckleAmount = 0;
+            }
         }
 
         public void ReOrder()

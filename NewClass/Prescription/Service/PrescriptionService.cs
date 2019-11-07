@@ -251,7 +251,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private bool CheckAdjustDatePast()
         {
-            if (Current.AdjustDate >= DateTime.Today) return true;
+            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1) return true;
             MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
             return false;
         }
@@ -332,19 +332,19 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p,string orderNumber)
+        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p,string orderNumber,int medDays)
         {
             var adjustDate = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(p.AdjustDate, true);
             var adjustDateNext = string.Empty;
             var treatReturn = string.Empty;
             if (p.CheckChronicSeqValid() && p.CheckChronicTotalValid())
             {
-                if (p.ChronicTotal != p.ChronicSeq)
+                if (p.ChronicSeq < p.ChronicTotal)
                 {
-                    var nextAdjust = ((DateTime)p.AdjustDate).AddDays(p.MedicineDays);
+                    var nextAdjust = ((DateTime)p.AdjustDate).AddDays(medDays);
                     adjustDateNext = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(nextAdjust, true);
                 }
-                DateTime? treatReturnDate = ((DateTime)p.TreatDate).AddDays((p.MedicineDays * (int)p.ChronicTotal));
+                DateTime? treatReturnDate = ((DateTime)p.TreatDate).AddDays((medDays * (int)p.ChronicTotal));
                 treatReturn = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(treatReturnDate, true);
             }
             var cusGender = p.Patient.CheckGender();
@@ -595,7 +595,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (Current.PrescriptionStatus.IsSendToSingde)
                 {
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
-                } //更新傳送藥健康  
+                }//更新傳送藥健康  
             }
             else
             {
@@ -603,13 +603,13 @@ namespace His_Pos.NewClass.Prescription.Service
                 {
                     var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(Current.OrderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");;
                     if (!removeSingdeOrder)
-                        MessageWindow.ShowMessage("處方訂單已出貨或網路異常，訂單更改失敗", MessageType.ERROR);
+                        NewFunction.ShowMessageFromDispatcher("處方訂單已出貨或網路異常，訂單更改失敗",MessageType.ERROR);
                     else
                     {
                         var dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(Current.OrderID);
                         var removeLocalOrder = dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
                         if (!removeLocalOrder)
-                            MessageWindow.ShowMessage("處方訂單更改失敗", MessageType.ERROR);
+                            NewFunction.ShowMessageFromDispatcher("處方訂單更改失敗",MessageType.ERROR);
                     }
                 }
             }
@@ -703,9 +703,7 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.PrescriptionStatus.SetNormalAdjustStatus();
             Current.Update();
             MainWindow.ServerConnection.CloseConnection();
-            Application.Current.Dispatcher.Invoke((Action)delegate {
-                MessageWindow.ShowMessage("補卡作業成功，退還押金" + deposit + "元", MessageType.SUCCESS);
-            });
+            NewFunction.ShowMessageFromDispatcher($"補卡作業成功，退還押金{deposit}元", MessageType.SUCCESS);
         }
 
         public void CheckDailyUploadMakeUp(ErrorUploadWindowViewModel.IcErrorCode errorCode)
