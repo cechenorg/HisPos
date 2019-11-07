@@ -926,7 +926,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrescribeAdjustAction()
         {
-            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -1076,7 +1075,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             catch (Exception e)
             {
                 NewFunction.ExceptionLog(e.Message);
-                Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
+                NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
             }
         }
         private bool AskErrorUpload()
@@ -1308,7 +1307,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.CloseConnection();
             if (registerList.Count > 0 && RegisterConfirm(registerList))
             {
-                foreach (var p in registerList )
+                foreach (var p in registerList.Where(r => r.AdjustDate != null))
                 {
                     p.PrescriptionStatus.IsSendOrder = true;
                     Application.Current.Dispatcher.Invoke(delegate

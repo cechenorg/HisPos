@@ -12,14 +12,14 @@ namespace His_Pos.NewClass.Medicine.ReserveMedicine
             Name = Strings.StrConv(indexReserveDetail.FullName, VbStrConv.Narrow);
             if (indexReserveDetail.IsCommon)
                 Name += "(常備)";
-            if (!(indexReserveDetail.IsControl is null) && indexReserveDetail.IsControl == 1)
+            if (!(indexReserveDetail.IsControl is null) && indexReserveDetail.IsControl > 0)
                 Name += "(管藥)";
             if(indexReserveDetail.IsFrozen)
                 Name += "(冰品)";
             PrepareAmount = indexReserveDetail.Amount - indexReserveDetail.SendAmount;
             Amount = indexReserveDetail.Amount;
             IsControlCommonFrozen = indexReserveDetail.IsFrozen || indexReserveDetail.IsCommon ||
-                                    !(indexReserveDetail.IsControl is null) && indexReserveDetail.IsControl == 1;
+                                    !(indexReserveDetail.IsControl is null) && indexReserveDetail.IsControl > 0;
         }
         public ReserveMedicine(PrescriptionSendData prescriptionSendData)
         {

@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" x:Name="PurchaseMedicinesGrid" Margin="10" ItemsSource="{Binding PurchaseList, UpdateSourceTrigger=PropertyChanged}"
                   HorizontalGridLinesBrush="Transparent" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserDeleteRows="False" CanUserAddRows="False"
-                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" SelectedItem="{Binding SelectedMedicine,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   FrozenColumnCount="3" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" >
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -74,17 +74,31 @@
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <EventSetter Event="MouseDoubleClick" Handler="ShowMedicineDetail"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="#FF424040" />
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="60" Header="採購量" IsReadOnly="True"  >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox x:Name="MedicineAmount" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" Foreground="IndianRed" CaretBrush="Black" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
-                                     FontSize="16" FontWeight="Bold" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown"
-                                     Text="{Binding Amount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N2}">
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn MinWidth="60" Header="欠量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding NotEnoughAmount,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn MinWidth="60" Header="採購量" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Amount,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn MinWidth="60" Header="進價" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding AveragePrice,StringFormat=N2,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">

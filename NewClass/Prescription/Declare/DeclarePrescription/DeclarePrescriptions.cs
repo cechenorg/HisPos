@@ -99,10 +99,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 }
                 else
                 {
-                    System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
-                    {
-                        MessageWindow.ShowMessage(g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續", MessageType.WARNING);
-                    });
+                    var warningMsg = g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續";
+                    NewFunction.ShowMessageFromDispatcher(warningMsg,MessageType.WARNING);
                 }
             }
         }

@@ -5,7 +5,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using His_Pos.Class;
 using His_Pos.NewClass.Cooperative.CooperativeClinicJson;
+using CooperativeClinicJson = His_Pos.NewClass.Cooperative.CooperativeClinicJson.CooperativeClinicJson;
 
 
 namespace His_Pos.NewClass
@@ -30,11 +32,9 @@ namespace His_Pos.NewClass
                 CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatus();
             }
             else
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    MessageWindow.ShowMessage("骨科回傳扣庫失敗, 請通知資訊人員", Class.MessageType.ERROR);
-                }); 
-            
+            {
+                NewFunction.ShowMessageFromDispatcher("骨科回傳扣庫失敗, 請通知資訊人員", MessageType.ERROR);
+            }
         } 
         internal static string GetCooperativeClinicId(string medicalNum) {
             Dictionary<string, string> keyValues;
@@ -84,14 +84,8 @@ namespace His_Pos.NewClass
                 CooperativeClinicJsonDb.UpdateCooperAdjustMedcinesStatusTop100();
                 return true;
             }
-            else {
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    MessageWindow.ShowMessage("骨科回傳扣庫失敗, 請通知資訊人員", Class.MessageType.ERROR);
-                });
-                return false;
-            }
-             
+            NewFunction.ShowMessageFromDispatcher("骨科回傳扣庫失敗, 請通知資訊人員", MessageType.ERROR);
+            return false;
         }
     }
 }

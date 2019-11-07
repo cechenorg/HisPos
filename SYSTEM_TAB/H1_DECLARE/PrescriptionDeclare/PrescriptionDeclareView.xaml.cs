@@ -388,7 +388,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void InputTextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
-
             e.Handled = true;
             textBox.Focus();
         }

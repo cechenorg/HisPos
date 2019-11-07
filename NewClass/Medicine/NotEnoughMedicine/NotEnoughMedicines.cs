@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.Interface;
 using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
 {
-    public class NotEnoughMedicines: Collection<NotEnoughMedicine>
+    public class NotEnoughMedicines: ObservableCollection<NotEnoughMedicine>
     {
         public string StoreOrderID { get; set; }
 
-        public NotEnoughMedicines()
+        public NotEnoughMedicines(bool init)
+        {
+            if(init)
+                Init();
+        }
+
+        private void Init()
         {
             MainWindow.ServerConnection.OpenConnection();
             var count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");

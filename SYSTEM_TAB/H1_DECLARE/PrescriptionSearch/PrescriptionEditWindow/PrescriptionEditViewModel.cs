@@ -835,7 +835,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             catch (Exception e)
             {
                 NewFunction.ExceptionLog(e.Message);
-                Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
+                NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
             }
         }
 
@@ -843,10 +843,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (currentCard.IsRead)
             {
+                if(EditedPrescription.Patient.IsAnonymous())
+                {
+                    if (!GetPatientFromIcCard())
+                        return false;
+                }
                 GetMedicalNumber(pre);
                 return true;
             }
-
             var result = false;
             Application.Current.Dispatcher.Invoke(() => result = AskErrorUpload());
             return result;
@@ -879,13 +883,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 currentService = PrescriptionService.CreateService(EditedPrescription);
                 WriteCard();
                 currentService.MakeUpComplete();
+                RaisePropertyChanged("CanMakeUp");
                 IsBusy = false;
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage("補卡失敗，如卡片異常請選擇異常代碼。", MessageType.ERROR);
-                });
+                NewFunction.ShowMessageFromDispatcher("補卡失敗，如卡片異常請選擇異常代碼。", MessageType.ERROR);
                 IsBusy = false;
             }
         }
@@ -916,6 +919,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             return errorCode != null;
         }
 
+        private bool GetPatientFromIcCard()
+        {
+            var patientFromCard = new Customer(currentCard);
+            return CheckCustomerByCard(patientFromCard);
+        }
+
+        private bool CheckCustomerByCard(Customer patientFromCard)
+        {
+            Customer checkedPatient;
+            MainWindow.ServerConnection.OpenConnection();
+            var table = CustomerDb.CheckCustomerByCard(currentCard.IDNumber);
+            if (table.Rows.Count > 0)
+            {
+                var patientFromDB = new Customer(table.Rows[0]);
+                patientFromDB.CheckPatientWithCard(patientFromCard);
+                checkedPatient = patientFromDB;
+                checkedPatient.Save();
+            }
+            else
+            {
+                var insertResult = patientFromCard.InsertData();
+                if (!insertResult)
+                {
+                    MessageWindow.ShowMessage("顧客新增失敗。", MessageType.WARNING);
+                    return false;
+                }
+                checkedPatient = patientFromCard;
+            }
+            EditedPrescription.Patient = checkedPatient;
+            return true;
+        }
         #endregion
     }
 }

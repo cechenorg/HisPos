@@ -85,13 +85,13 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             if (!MyPharmacy.SetPharmacy()) {
                 MessageWindow.ShowMessage("更新機構代碼失敗，已有相同機構代碼", MessageType.ERROR);
                 PharmacyIDChanged = false;
-            } 
+            }
+            Properties.Settings.Default.ReaderComPort = MyPharmacy.ReaderCom.ToString();
+            Properties.Settings.Default.Save();
             ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             ViewModelMainWindow.CurrentPharmacy.GetPharmacists(DateTime.Today);
             MyPharmacy = Pharmacy.GetCurrentPharmacy();
             MainWindow.ServerConnection.CloseConnection();
-            Properties.Settings.Default.ReaderComPort = MyPharmacy.ReaderCom.ToString();
-            Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
 
