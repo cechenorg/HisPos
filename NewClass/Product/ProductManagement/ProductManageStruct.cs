@@ -48,6 +48,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int BasicAmount { get; set; }
         public double OnTheWayAmount { get; set; }
         public double MedBagOnTheWayAmount { get; set; }
+        public double AllOnTheWayAmount { get {return OnTheWayAmount + MedBagOnTheWayAmount;} }
         public double StockValue { get; set; }
         public double ShelfStockValue { get; set; }
         public int? ControlLevel { get; set; }
