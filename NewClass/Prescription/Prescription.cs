@@ -155,7 +155,10 @@ namespace His_Pos.NewClass.Prescription
                     PrescriptionStatus.ReserveSend = PrescriptionStatus.OrderStatus.Contains("已備藥");
                     OrderContent = PrescriptionStatus.OrderStatus;
                     if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
-                        OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
+                    {
+                        OrderID = r.Field<string>("StoreOrderID");
+                        OrderContent += " 單號:" + OrderID;
+                    }
                     break;
                 default:
                     Medicines = new Medicines();
@@ -560,6 +563,16 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => OrderContent, ref orderContent, value);
             }
         }
+
+        private string orderID;
+        public string OrderID
+        {
+            get => orderID;
+            set
+            {
+                Set(() => OrderID, ref orderID, value);
+            }
+        }
         #endregion
 
         public bool CheckDiseaseEquals(List<string> parameters)
@@ -879,9 +892,10 @@ namespace His_Pos.NewClass.Prescription
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
             var medBagMedicines = new MedBagMedicines(Medicines, true);
+            var medDays = Medicines.CountMedicineDays();
             for (int i = 1;i <= medBagMedicines.Count;i++ )
             {
-                SetSingleModeReportViewer(rptViewer, medBagMedicines[i-1], $"{i}/{medBagMedicines.Count}");
+                SetSingleModeReportViewer(rptViewer, medBagMedicines[i-1], $"{i}/{medBagMedicines.Count}",medDays);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
@@ -929,11 +943,11 @@ namespace His_Pos.NewClass.Prescription
             });
         }
         #region ReportViewerSettingFunctions
-        private void SetSingleModeReportViewer(ReportViewer rptViewer, MedBagMedicine m,string orderNumber)
+        private void SetSingleModeReportViewer(ReportViewer rptViewer, MedBagMedicine m,string orderNumber,int medDays)
         {
             rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingle.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
-            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this, orderNumber);
+            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this, orderNumber,medDays);
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
@@ -1123,6 +1137,8 @@ namespace His_Pos.NewClass.Prescription
                 PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson(),
                 InsertTime = InsertTime,
                 Type = Type,
+                OrderContent = OrderContent,
+                OrderID = OrderID,
                 Medicines = new Medicines()
             };
             foreach (var m in Medicines)
@@ -1556,6 +1572,11 @@ namespace His_Pos.NewClass.Prescription
             return ChronicSeq != null && ChronicSeq > 0;
         }
 
+        public bool CheckChronicTotalValid()
+        {
+            return ChronicTotal != null && ChronicTotal > 0;
+        }
+
         public string GetWareHouseID()
         {
             return WareHouse.ID;
@@ -1609,7 +1630,7 @@ namespace His_Pos.NewClass.Prescription
             var usableAmountList = CheckUsableMedicinesByType();
             MainWindow.ServerConnection.CloseConnection();
             Medicines.CheckUsableAmount(usableAmountList);
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList);
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList, $"{Patient.Name} {DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(AdjustDate,true)} 欠藥採購");
         }
 
         public void CountSelfPay()

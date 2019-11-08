@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Data;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 {
@@ -19,7 +22,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             ChronicSeq = r.Field<byte>("ChronicSequence");
             ChronicTotal = r.Field<byte>("ChronicTotal");
             if(!string.IsNullOrEmpty(r.Field<string>("StoOrdID")))
-                OrderID = "單號:" + r.Field<string>("StoOrdID");
+                OrderID = r.Field<string>("StoOrdID");
             switch (type)
             {
                 case PrescriptionType.ChronicReserve:
@@ -91,6 +94,23 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 default:
                     Medicines.GetDataByPrescriptionId(ID);
                     break;
+            }
+        }
+
+        public void DeleteOrder()
+        {
+            if (!string.IsNullOrEmpty(OrderID))
+            {
+                var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(OrderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");;
+                if (!removeSingdeOrder)
+                    MessageWindow.ShowMessage("處方訂單已出貨或網路異常，訂單刪除失敗", MessageType.ERROR);
+                else
+                {
+                    var dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(OrderID);
+                    var removeLocalOrder = dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+                    if (!removeLocalOrder)
+                        MessageWindow.ShowMessage("處方訂單刪除失敗，請至進退貨管理確認。", MessageType.ERROR);
+                }
             }
         }
     }

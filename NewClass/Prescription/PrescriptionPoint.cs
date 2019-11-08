@@ -117,8 +117,8 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => Deposit, ref deposit, value);
             }
         }
-        private int actualReceive;//實付金額
-        public int ActualReceive
+        private int? actualReceive;//實付金額
+        public int? ActualReceive
         {
             get => actualReceive;
             set
@@ -127,8 +127,8 @@ namespace His_Pos.NewClass.Prescription
                 CountChange();
             }
         }
-        private int amountSelfPay;//自費金額
-        public int AmountSelfPay
+        private int? amountSelfPay;//自費金額
+        public int? AmountSelfPay
         {
             get => amountSelfPay;
             set
@@ -148,7 +148,7 @@ namespace His_Pos.NewClass.Prescription
         }
         private void CountChange()
         {
-            Change = ActualReceive - AmountsPay;
+            Change = (ActualReceive ?? 0) - AmountsPay;
 
         }
         public void CountDeposit()
@@ -158,7 +158,8 @@ namespace His_Pos.NewClass.Prescription
 
         public void CountAmountsPay()
         {
-            AmountsPay = AmountSelfPay + CopaymentPointPayable;
+            var selfPay = AmountSelfPay ?? 0;
+            AmountsPay = selfPay + CopaymentPointPayable;
             ActualReceive = AmountsPay;
         }
 

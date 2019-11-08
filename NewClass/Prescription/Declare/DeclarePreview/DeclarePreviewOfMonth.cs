@@ -202,10 +202,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             }
             catch (Exception ex)
             {
-                System.Windows.Application.Current.Dispatcher.Invoke(delegate
-                {
-                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                });
+                NewFunction.ShowMessageFromDispatcher(ex.Message, MessageType.ERROR);
             }
         }
 

@@ -225,7 +225,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         public PrescriptionEditViewModel(Prescription p,string title)
         {
-            Title = title;
+            Title = $"{title} {p.OrderContent}";
             IsEdit = false;
             OriginalPrescription = p;
             ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
@@ -620,6 +620,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!currentService.CheckEditPrescription(EditedPrescription.PrescriptionStatus.IsGetCard)) return;
             EditedPrescription.SetDetail();
             MainWindow.ServerConnection.OpenConnection();
+            MainWindow.SingdeConnection.OpenConnection();
             var result = EditedPrescription.Update();
             if (result && EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
             {
@@ -631,7 +632,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 currentService.SendOrder(vm);
             }
             MainWindow.ServerConnection.CloseConnection();
-            if(result)
+            MainWindow.SingdeConnection.CloseConnection();
+            if (result)
                 MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
             Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
@@ -833,7 +835,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             catch (Exception e)
             {
                 NewFunction.ExceptionLog(e.Message);
-                Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
+                NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
             }
         }
 
@@ -841,10 +843,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (currentCard.IsRead)
             {
+                if(EditedPrescription.Patient.IsAnonymous())
+                {
+                    if (!GetPatientFromIcCard())
+                        return false;
+                }
                 GetMedicalNumber(pre);
                 return true;
             }
-
             var result = false;
             Application.Current.Dispatcher.Invoke(() => result = AskErrorUpload());
             return result;
@@ -877,13 +883,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 currentService = PrescriptionService.CreateService(EditedPrescription);
                 WriteCard();
                 currentService.MakeUpComplete();
+                RaisePropertyChanged("CanMakeUp");
                 IsBusy = false;
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage("補卡失敗，如卡片異常請選擇異常代碼。", MessageType.ERROR);
-                });
+                NewFunction.ShowMessageFromDispatcher("補卡失敗，如卡片異常請選擇異常代碼。", MessageType.ERROR);
                 IsBusy = false;
             }
         }
@@ -914,6 +919,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             return errorCode != null;
         }
 
+        private bool GetPatientFromIcCard()
+        {
+            var patientFromCard = new Customer(currentCard);
+            return CheckCustomerByCard(patientFromCard);
+        }
+
+        private bool CheckCustomerByCard(Customer patientFromCard)
+        {
+            Customer checkedPatient;
+            MainWindow.ServerConnection.OpenConnection();
+            var table = CustomerDb.CheckCustomerByCard(currentCard.IDNumber);
+            if (table.Rows.Count > 0)
+            {
+                var patientFromDB = new Customer(table.Rows[0]);
+                patientFromDB.CheckPatientWithCard(patientFromCard);
+                checkedPatient = patientFromDB;
+                checkedPatient.Save();
+            }
+            else
+            {
+                var insertResult = patientFromCard.InsertData();
+                if (!insertResult)
+                {
+                    MessageWindow.ShowMessage("顧客新增失敗。", MessageType.WARNING);
+                    return false;
+                }
+                checkedPatient = patientFromCard;
+            }
+            EditedPrescription.Patient = checkedPatient;
+            return true;
+        }
         #endregion
     }
 }

@@ -203,49 +203,18 @@ namespace His_Pos.Service
             str.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  Event:" + log);
             str.Close();
         }
-        public static void Uncompress(string zipFileName, string targetPath) {
-            //using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFileName)))
-            //{ 
-            //    DirectoryInfo di = new DirectoryInfo(targetPath); 
-            //    ZipEntry theEntry; 
-            //    // 逐一取出壓縮檔內的檔案(解壓縮)
-            //    while ((theEntry = s.GetNextEntry()) != null)
-            //    {
-            //        int size = 2048;
-            //        byte[] data = new byte[2048];
-            //        using (FileStream fs = new FileStream(di.FullName + "\\" + GetBasename(theEntry.Name), FileMode.Create))
-            //        {
-            //            while (true)
-            //            {
-            //                size = s.Read(data, 0, data.Length);
 
-            //                if (size > 0)
-            //                    fs.Write(data, 0, size);
-            //                else
-            //                    break;
-            //            } 
-            //        }
-            //    }
-            //}
-        }
-
-        // 取得檔名(去除路徑)
-        public static string GetBasename(string fullName) {
-            string result;
-            int lastBackSlash = fullName.LastIndexOf("\\");
-            result = fullName.Substring(lastBackSlash + 1); 
-        return result;
-        }
-        public static List<bool?> CheckPrint(Prescription p)
+        public static List<bool?> CheckPrint(Prescription p,bool? focus = null)
         {
+            var print = focus ?? true;
             var result = new List<bool?>();
-            var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, true);
+            var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, print);
             var printMedBag = medBagPrint.DialogResult;
             bool? printSingle = null;
             bool? receiptPrint = null;
             if (printMedBag != null)
             {
-                if (p.PrescriptionPoint.CopaymentPoint + p.PrescriptionPoint.AmountSelfPay > 0)
+                if (p.PrescriptionPoint.AmountsPay > 0)
                 {
                     var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
                     receiptPrint = receiptResult.DialogResult;
@@ -370,6 +339,14 @@ namespace His_Pos.Service
                     MessageWindow.ShowMessage("就醫序號長度錯誤，應為4碼", MessageType.ERROR);
                     return false;
             }
+        }
+
+        public static void ShowMessageFromDispatcher(string message,MessageType type)
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                MessageWindow.ShowMessage(message, type);
+            });
         }
     }
 }

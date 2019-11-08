@@ -172,6 +172,7 @@
                                                 </Style>
                                             </ContentControl.Style>
                                         </ContentControl>
+                                        <Label Content="單號:" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
                                         <Label Content="{Binding OrderID}" FontSize="16" HorizontalContentAlignment="Left" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,5">

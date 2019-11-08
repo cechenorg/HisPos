@@ -580,7 +580,7 @@
                     <StackPanel Grid.Row="1" Margin="10,0,10,0" Orientation="Horizontal">
                         <Label  Content="自費 $" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="SelfCostText" Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}"  InputScope="Number" CaretBrush="Black"
-                                     Text="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="0.5,0.5" GotFocus="TextBox_SelectAll">
+                                     Text="{Binding CurrentPrescription.PrescriptionPoint.AmountSelfPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" RenderTransformOrigin="0.5,0.5" GotFocus="TextBox_SelectAll">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <command:EventToCommand Command="{Binding SelfPayTextChanged}" CommandParameter="{Binding Text, ElementName=SelfCostText}"/>
@@ -594,7 +594,7 @@
                     <StackPanel Grid.Row="2" Margin="10,0,10,0" Orientation="Horizontal">
                         <Label Content="已付 $" Style="{StaticResource BoldLabelContent18}"/>
                         <TextBox x:Name="PaidText" Width="90" Height="35" HorizontalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" CaretBrush="Black"
-                                 Text="{Binding CurrentPrescription.PrescriptionPoint.ActualReceive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" PreviewMouseLeftButtonDown="TextBox_SelectAll"/>
+                                 Text="{Binding CurrentPrescription.PrescriptionPoint.ActualReceive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableIntConverter}}" InputScope="Number" PreviewMouseLeftButtonDown="TextBox_SelectAll"/>
                         <Label Margin="20,0,0,0" Content="找零 $" Style="{StaticResource BoldLabelContent18}"/>
                         <Label Content="{Binding CurrentPrescription.PrescriptionPoint.Change, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" Width="90" HorizontalContentAlignment="Center"/>
                     </StackPanel>

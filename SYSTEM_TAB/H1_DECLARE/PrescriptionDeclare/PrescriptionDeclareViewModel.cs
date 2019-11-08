@@ -36,6 +36,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.CustomerHistoryProduct;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow;
@@ -847,6 +848,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ErrorAdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
@@ -858,6 +860,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void DepositAdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -867,6 +870,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void AdjustAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -879,6 +883,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
                 CheckIsReadCard();
+        }
+
+        private void CheckCustomerValid()
+        {
+            if (CanSearchPatient)
+                CheckNewCustomer();
         }
 
         private void CheckChronicCopayment()
@@ -902,6 +912,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterAction()
         {
+            CheckCustomerValid();
             CheckCustomerEdited();
             isAdjusting = true;
             CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
@@ -1064,7 +1075,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             catch (Exception e)
             {
                 NewFunction.ExceptionLog(e.Message);
-                Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
+                NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
             }
         }
         private bool AskErrorUpload()
@@ -1257,14 +1268,65 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void StartRegister()
         {
-            if (!currentService.StartRegister())
+            var result = true;
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                isAdjusting = false;
-                return;
+                BusyContent = "處方登錄中...";
+                if (!currentService.StartRegister())
+                {
+                    isAdjusting = false;
+                    result = false;
+                }
+                else
+                {
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        currentService.CloneTempPre();
+                    });
+                    StartPrint(false);
+                    BusyContent = "取得預約處方...";
+                    CheckAutoRegister();
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                if(result) 
+                    DeclareSuccess();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+
+        private void CheckAutoRegister()
+        {
+            var registerList = new Prescriptions();
+            MainWindow.ServerConnection.OpenConnection();
+            registerList.GetAutoRegisterReserve(CurrentPrescription);
+            MainWindow.ServerConnection.CloseConnection();
+            if (registerList.Count > 0 && RegisterConfirm(registerList))
+            {
+                foreach (var p in registerList.Where(r => r.AdjustDate != null))
+                {
+                    p.PrescriptionStatus.IsSendOrder = true;
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        StartAutoRegister(p);
+                    });
+                }
             }
-            currentService.CloneTempPre();
-            StartPrint(false);
-            DeclareSuccess();
+        }
+
+        private bool RegisterConfirm(Prescriptions registerList)
+        {
+            var result = false;
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                var registerWindow = new AutoRegisterWindow(CurrentPrescription, registerList);
+                result = registerWindow.RegisterResult;
+            });
+            return result;
         }
 
         private void StartPrescribeAdjust()
@@ -1304,6 +1366,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
                 CurrentPrescription.SetDetail();
             return checkPrescription;
+        }
+
+        private void StartAutoRegister(Prescription p)
+        {
+            var service = PrescriptionService.CreateService(p);
+            service.SetPharmacistWithoutCheckCount(SelectedPharmacist);
+            MainWindow.ServerConnection.OpenConnection();
+            service.CheckPrescription(false, false);
+            MainWindow.ServerConnection.CloseConnection();
+            p.SetDetail();
+            service.StartRegister();
+            service.CloneTempPre();
+            service.Print(false);
         }
 
         private void DeclareSuccess()
@@ -1448,11 +1523,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckInsertCustomerData()
         {
-            if (!CurrentPrescription.Patient.CheckData())
-                return false;
-            var insertCustomerConfirm = new ConfirmWindow("此病患為新病患，是否新增?", "新增確認");
-            if (!(bool) insertCustomerConfirm.DialogResult) return false;
-            return CurrentPrescription.Patient.InsertData();
+            return CurrentPrescription.Patient.CheckData() && CurrentPrescription.Patient.InsertData();
         }
 
         private bool CheckFocusDivision(string insID)
@@ -1471,7 +1542,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckMedicinesNegativeStock()
         {
-            string result = string.Empty;
+            var result = string.Empty;
             result = CurrentPrescription.CheckMedicinesNegativeStock();
             if (!string.IsNullOrEmpty(result))
                 isAdjusting = false;

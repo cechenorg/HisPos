@@ -749,7 +749,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>領藥日：</Value>
+                    <Value>領藥起始日：</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
                       <FontSize>19pt</FontSize>
@@ -763,7 +763,7 @@
             <Top>0.10583cm</Top>
             <Left>1.72994cm</Left>
             <Height>1.07624cm</Height>
-            <Width>3.22828cm</Width>
+            <Width>4.31307cm</Width>
             <ZIndex>9</ZIndex>
             <Style>
               <Border />
@@ -779,7 +779,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!AdjustRange.Value</Value>
+                    <Value>=Parameters!AdjustStart.Value</Value>
                     <Style>
                       <FontFamily>微軟正黑體</FontFamily>
                       <FontSize>24pt</FontSize>
@@ -790,10 +790,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox10</rd:DefaultName>
-            <Top>0.07056cm</Top>
-            <Left>4.95822cm</Left>
+            <Top>0.14111cm</Top>
+            <Left>6.07829cm</Left>
             <Height>1.11151cm</Height>
-            <Width>9.74203cm</Width>
+            <Width>5.34995cm</Width>
             <ZIndex>10</ZIndex>
             <Style>
               <Border />
@@ -823,8 +823,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Type</rd:DefaultName>
-            <Top>0.07056cm</Top>
-            <Left>14.73553cm</Left>
+            <Top>0.10583cm</Top>
+            <Left>16.22178cm</Left>
             <Height>1.11151cm</Height>
             <Width>3.98661cm</Width>
             <ZIndex>11</ZIndex>
@@ -954,6 +954,71 @@
               <WritingMode>Rotate270</WritingMode>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox19">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>最後領藥日：</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>14pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox7</rd:DefaultName>
+            <Top>1.32319cm</Top>
+            <Left>12.6183cm</Left>
+            <Height>0.70583cm</Height>
+            <Width>3.2303cm</Width>
+            <ZIndex>16</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox20">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!AdjustEnd.Value</Value>
+                    <Style>
+                      <FontFamily>微軟正黑體</FontFamily>
+                      <FontSize>13pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox10</rd:DefaultName>
+            <Top>1.32319cm</Top>
+            <Left>15.8486cm</Left>
+            <Height>0.70583cm</Height>
+            <Width>4.50632cm</Width>
+            <ZIndex>17</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <Height>6.97793cm</Height>
         <Style>
@@ -1008,7 +1073,7 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="AdjustRange">
+    <ReportParameter Name="AdjustEnd">
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
@@ -1019,6 +1084,11 @@
     <ReportParameter Name="AdjustDay">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="AdjustStart">
+      <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
@@ -1056,7 +1126,7 @@
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>1</RowIndex>
-          <ParameterName>AdjustRange</ParameterName>
+          <ParameterName>AdjustEnd</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>2</ColumnIndex>
@@ -1067,6 +1137,11 @@
           <ColumnIndex>3</ColumnIndex>
           <RowIndex>1</RowIndex>
           <ParameterName>AdjustDay</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>2</RowIndex>
+          <ParameterName>AdjustStart</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
