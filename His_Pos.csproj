@@ -303,6 +303,9 @@
       <DependentUpon>AddCustomerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="FunctionWindow\AddCustomerWindow\AddCustomerWindowViewModel.cs" />
+    <Compile Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml.cs">
+      <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewClass\Manufactory\ControlManufactory.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
@@ -1356,6 +1359,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FunctionWindow\AddProductWindow\ProductPurchaseReturnAddProductWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
