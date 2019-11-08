@@ -196,7 +196,7 @@ namespace His_Pos.NewClass.Prescription.Service
             //if (notCheckPast10Days)
             //    return CheckTreatDate() && CheckAdjustDate();
             //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
-            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate()/* && CheckAdjustDatePast()*/ /*&& CheckAdjustDateFutureOutOfRange()*/;
+            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate() && CheckAdjustDatePast() /*&& CheckAdjustDateFutureOutOfRange()*/;
         }
 
         protected bool CheckAdjustAndTreatDateFromEdit()
