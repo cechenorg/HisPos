@@ -33,9 +33,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             DataContext = new NotEnoughMedicinePurchaseViewModel(note,purchaseList);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
-                if (notificationMessage.Notification.Equals("CloseNotEnoughMedicinePurchaseWindow"))
+                switch (notificationMessage.Notification)
                 {
-                    Close();
+                    case "CloseNotEnoughMedicinePurchaseWindowPurchase":
+                        DialogResult = true;
+                        Close();
+                        break;
+                    case "CloseNotEnoughMedicinePurchaseWindowCancel":
+                        DialogResult = true;
+                        Close();
+                        break;
                 }
             });
             ShowDialog();
@@ -45,27 +52,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         {
             if (!(sender is DataGridCell cell) || !(cell.DataContext is NotEnoughMedicine med)) return;
             ((NotEnoughMedicinePurchaseViewModel)DataContext).ShowMedicineDetail.Execute(med.ID);
-        }
-
-        private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            var t = sender as TextBox;
-            if (e.Key != Key.Decimal) return;
-            e.Handled = true;
-            if (t != null) t.CaretIndex++;
-        }
-
-        private void InputTextBox_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is TextBox textBox)) return;
-            textBox.SelectAll();
-        }
-
-        private void InputTextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!(sender is TextBox textBox)) return;
-            e.Handled = true;
-            textBox.Focus();
         }
     }
 }

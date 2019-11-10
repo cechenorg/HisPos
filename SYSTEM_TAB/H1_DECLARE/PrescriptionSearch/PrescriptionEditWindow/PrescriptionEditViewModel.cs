@@ -835,7 +835,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             catch (Exception e)
             {
                 NewFunction.ExceptionLog(e.Message);
-                Application.Current.Dispatcher.Invoke(() => MessageWindow.ShowMessage("讀卡作業異常，請重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING));
+                NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
             }
         }
 
@@ -888,9 +888,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(delegate {
-                    MessageWindow.ShowMessage("補卡失敗，如卡片異常請選擇異常代碼。", MessageType.ERROR);
-                });
+                NewFunction.ShowMessageFromDispatcher("補卡失敗，如卡片異常請選擇異常代碼。", MessageType.ERROR);
                 IsBusy = false;
             }
         }

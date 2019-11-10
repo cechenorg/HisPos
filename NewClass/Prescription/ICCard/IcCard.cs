@@ -183,10 +183,7 @@ namespace His_Pos.NewClass.Prescription.ICCard
         private void ShowHISAPIErrorMessage(int res, string title)
         {
             var description = MainWindow.GetEnumDescription((ErrorCode)res);
-            Application.Current.Dispatcher.Invoke(delegate
-            {
-                MessageWindow.ShowMessage(title + res + ":" + description, MessageType.WARNING);
-            });
+            NewFunction.ShowMessageFromDispatcher($"{title + res}:{description}", MessageType.WARNING);
         }
 
         public object Clone()

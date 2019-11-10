@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.Interface;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.StoreOrder;
@@ -23,6 +26,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             private set
             {
                 Set(() => PurchaseList, ref purchaseList, value);
+            }
+        }
+        private NotEnoughMedicine selectedMedicine;
+        public NotEnoughMedicine SelectedMedicine
+        {
+            get => selectedMedicine;
+            set
+            {
+                if (selectedMedicine != null)
+                    ((IDeletableProduct)selectedMedicine).IsSelected = false;
+
+                Set(() => SelectedMedicine, ref selectedMedicine, value);
+
+                if (selectedMedicine != null)
+                    ((IDeletableProduct)selectedMedicine).IsSelected = true;
             }
         }
         private string Note { get; set; }
@@ -53,19 +71,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         {
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(purchaseList,Note);
+            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(PurchaseList, Note);
             if (result.Rows.Count > 0)
             {
-                purchaseList.ToWaitingStatus(Note);
+                PurchaseList.ToWaitingStatus(Note);
             }
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
-            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindow"));
+            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowPurchase"));
         }
 
         private void CancelAction()
         {
-            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindow"));
+            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowCancel"));
         }
     }
 }

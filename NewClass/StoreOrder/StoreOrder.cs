@@ -276,6 +276,8 @@ namespace His_Pos.NewClass.StoreOrder
             if (!(bool) confirmWindow.DialogResult)
                 return false;
 
+            DataTable dataTable;
+
             if (OrderManufactory.ID.Equals("0") && OrderStatus == OrderStatusEnum.WAITING)
             {
                 bool isSuccess = StoreOrderDB.RemoveSingdeStoreOrderByID(ID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");
@@ -285,9 +287,14 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage("杏德已處理準備出貨 無法作廢", MessageType.ERROR);
                     return false;
                 }
+
+                dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(ID);
+            }
+            else
+            {
+                dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
             }
 
-            DataTable dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(ID);
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
