@@ -1373,7 +1373,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             var service = PrescriptionService.CreateService(p);
             service.SetPharmacistWithoutCheckCount(SelectedPharmacist);
             MainWindow.ServerConnection.OpenConnection();
-            service.CheckPrescription(false, false);
+            ((NormalPrescriptionService)service).CheckPrescriptionFromAutoRegister();
             MainWindow.ServerConnection.CloseConnection();
             p.SetDetail();
             service.StartRegister();

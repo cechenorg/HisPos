@@ -32,6 +32,12 @@ namespace His_Pos.NewClass.Prescription.Service
             return PrintConfirm();
         }
 
+        public void CheckPrescriptionFromAutoRegister()
+        {
+            CheckSendOrderFromAutoRegister();
+            PrintConfirm();
+        }
+
         private bool CheckSendOrder()
         {
             if (string.IsNullOrEmpty(Current.PrescriptionStatus.OrderStatus))
@@ -39,6 +45,19 @@ namespace His_Pos.NewClass.Prescription.Service
             if (Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
             {
                 var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current);
+                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
+                return !((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn;
+            }
+            return true;
+        }
+
+        private bool CheckSendOrderFromAutoRegister()
+        {
+            if (string.IsNullOrEmpty(Current.PrescriptionStatus.OrderStatus))
+                Current.PrescriptionStatus.OrderStatus = "訂單狀態:無訂單";
+            if (Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
+            {
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current,true);
                 vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
                 return !((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn;
             }

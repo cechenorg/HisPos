@@ -693,6 +693,10 @@ namespace His_Pos.NewClass.Medicine.Base
                     MessageWindow.ShowMessage("欠藥已採購並更改扣庫量為0，收貨後請記得修改扣庫量。", MessageType.WARNING);
                     return string.Empty;
                 }
+                else
+                {
+                    negativeStock += "欠藥採購取消，";
+                }
             }
             if (string.IsNullOrEmpty(negativeStock)) return negativeStock;
             negativeStock += "如需繼續調劑請將扣庫量調至小於等於庫存或0。";
