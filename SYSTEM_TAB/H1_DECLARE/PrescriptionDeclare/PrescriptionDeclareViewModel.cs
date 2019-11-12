@@ -275,6 +275,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand CountPrescriptionPoint { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
+        public RelayCommand ResetBuckleAmount { get; set; }
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand CheckDeclareStatusCmd { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
@@ -376,6 +377,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
+            ResetBuckleAmount = new RelayCommand(ResetBuckleAmountAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             CheckDeclareStatusCmd = new RelayCommand(CheckDeclareStatus);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
@@ -752,6 +754,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.SelectedMedicine.BuckleAmount = 0;
                     break;
             }
+        }
+
+        private void ResetBuckleAmountAction()
+        {
+            CurrentPrescription.SelectedMedicine?.ResetBuckleAmount();
         }
 
         private void CountMedicinePointAction()

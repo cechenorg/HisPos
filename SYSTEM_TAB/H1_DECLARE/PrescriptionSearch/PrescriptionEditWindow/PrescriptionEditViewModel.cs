@@ -213,6 +213,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
+        public RelayCommand ResetBuckleAmount { get; set; }
         public RelayCommand CustomerDetailEdited { get; set; }
         public RelayCommand CustomerRedoEdited { get; set; }
         public RelayCommand SavePatientData { get; set; }
@@ -319,6 +320,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
+            ResetBuckleAmount = new RelayCommand(ResetBuckleAmountAction);
             CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
             CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
             SavePatientData = new RelayCommand(SavePatientDataAction);
@@ -553,6 +555,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     break;
             }
             DataChangedAction();
+        }
+
+        private void ResetBuckleAmountAction()
+        {
+            EditedPrescription.SelectedMedicine?.ResetBuckleAmount();
+            IsEdit = true;
         }
 
         private void CustomerDetailEditedAction()
