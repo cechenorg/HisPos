@@ -215,51 +215,6 @@ namespace His_Pos.NewClass.Medicine.Base
                 medicine.SetValueByDataRow(r);
                 Add(medicine);
             }
-            //foreach (DataRow r in table.Rows)
-            //{
-            //    if(!idList.Contains(r.Field<string>("Pro_ID")))
-            //        idList.Add(r.Field<string>("Pro_ID"));
-            //}
-            //var medicinesTable = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
-            //var medicineRows = new List<DataRow>();
-            //foreach (DataRow r in medicinesTable.Rows)
-            //{
-            //    medicineRows.Add(r);
-            //}
-            //foreach (DataRow r in table.Rows)
-            //{
-            //    Medicine medicine;
-            //    var medicineRow = medicineRows.SingleOrDefault(row => row.Field<string>("Pro_ID").Equals(r.Field<string>("Pro_ID")));
-            //    if(medicineRow is null)
-            //    {
-            //        switch (r.Field<string>("Pro_ID"))
-            //        {
-            //            case "R001":
-            //            case "R002":
-            //            case "R003":
-            //            case "R004":
-            //                medicine = new MedicineVirtual(r.Field<string>("Pro_ID"));
-            //                Add(medicine);
-            //                continue;
-            //        }
-            //    }
-            //    switch (medicineRow.Field<int>("DataType"))
-            //    {
-            //        case 1:
-            //            medicine = new MedicineNHI(medicineRow);
-            //            break;
-            //        case 2:
-            //            medicine = new MedicineOTC(medicineRow);
-            //            break;
-            //        case 3:
-            //            medicine = new MedicineSpecialMaterial(medicineRow);
-            //            break;
-            //        default:
-            //            continue;
-            //    }
-            //    medicine.SetValueByDataRow(r);
-            //    Add(medicine);
-            //}
         }
 
         public int CountMedicinePoint()
@@ -668,7 +623,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 }
             }
             var negativeStock = string.Empty;
-            var notEnoughMedicines = new NotEnoughMedicines(true);
+            var notEnoughMedicines = new NotEnoughMedicines();
             foreach (var inv in inventoryList)
             {
                 var buckle = buckleMedicines.Single(m => m.ID.Equals(inv.ID));
@@ -689,8 +644,8 @@ namespace His_Pos.NewClass.Medicine.Base
                 var purchaseWindow = new NotEnoughMedicinePurchaseWindow(note,notEnoughMedicines);
                 if ((bool) purchaseWindow.DialogResult)
                 {
-                    SetBuckleAmountZero(notEnoughMedicines);
-                    MessageWindow.ShowMessage("欠藥已採購並更改扣庫量為0，收貨後請記得修改扣庫量。", MessageType.WARNING);
+                    SetBuckleAmountToUsableAmount(notEnoughMedicines);
+                    MessageWindow.ShowMessage("欠藥已採購並更改扣庫量為可用量，收貨後請記得修改扣庫量。", MessageType.WARNING);
                     return string.Empty;
                 }
                 else
@@ -704,11 +659,12 @@ namespace His_Pos.NewClass.Medicine.Base
             return negativeStock;
         }
 
-        private void SetBuckleAmountZero(NotEnoughMedicines notEnoughMedicines)
+        private void SetBuckleAmountToUsableAmount(NotEnoughMedicines notEnoughMedicines)
         {
             foreach (var m in notEnoughMedicines)
             {
-                this.Single(med => med.ID.Equals(m.ID)).BuckleAmount = 0;
+                var originalMed = this.Single(med => med.ID.Equals(m.ID));
+                originalMed.BuckleAmount = originalMed.UsableAmount;
             }
         }
 

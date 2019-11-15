@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.Prescription.Service
     {
         #region AbstractFunctions
         public abstract bool CheckPrescription(bool noCard,bool errorAdjust);
-        public abstract bool CheckEditPrescription(bool noCard);
+        public abstract bool CheckEditPrescription(bool hasCard);
         public abstract bool NormalAdjust();
         public abstract bool ErrorAdjust();
         public abstract bool DepositAdjust();

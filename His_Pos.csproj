@@ -2232,14 +2232,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewClass\Product\Medicine\ControlMedicineDeclare\" />
-    <Folder Include="NewClass\Product\Medicine\ControlMedicineDetail\" />
-    <Folder Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\" />
-    <Folder Include="NewClass\Product\Medicine\MedBag\" />
-    <Folder Include="NewClass\Product\Medicine\MedicineSet\" />
-    <Folder Include="NewClass\Product\Medicine\Position\" />
-    <Folder Include="NewClass\Product\Medicine\PreviewMedicine\" />
-    <Folder Include="NewClass\Product\Medicine\Usage\" />
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />

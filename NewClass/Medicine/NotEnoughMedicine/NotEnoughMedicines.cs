@@ -13,11 +13,7 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
     {
         public string StoreOrderID { get; set; }
 
-        public NotEnoughMedicines(bool init)
-        {
-            if(init)
-                Init();
-        }
+        public NotEnoughMedicines() { }
 
         private void Init()
         {
@@ -44,6 +40,14 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
         {
             DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this,note);
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+        }
+
+        public void CreateOrder(string note)
+        {
+            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(this, note);
+            if (result.Rows.Count <= 0) return;
+            StoreOrderID = result.Rows[0].Field<string>("newStoordId");
+            ToWaitingStatus(note);
         }
     }
 }
