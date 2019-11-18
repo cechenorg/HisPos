@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
+﻿using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 
 namespace His_Pos.NewClass.Prescription.Service
 {

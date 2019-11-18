@@ -87,8 +87,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             if (IndexReserveSelectedItem is null) return;
             string askstring = IndexReserveSelectedItem.PrepareMedType == ReserveSendType.AllPrepare  ? "是否列印封包明細?" : "是否傳送藥健康?";
             ConfirmWindow confirmWindow = new ConfirmWindow(askstring, "預約慢箋採購");
-            if ((bool)confirmWindow.DialogResult)   
-                SendReserveStoOrder();
+            var print = (bool) confirmWindow.DialogResult;
+            SendReserveStoOrder(print);
             if (IndexReserveCollection.Count == 0) {
                 MessageWindow.ShowMessage("未有備藥傳送處方", MessageType.SUCCESS);
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseReserveSendConfirmWindow"));
@@ -97,19 +97,20 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         private void SendAmountChangeAction() {
             CheckSendStatus();
         }
-        private void SendReserveStoOrder() {
+        private void SendReserveStoOrder(bool print) {
             MainWindow.ServerConnection.OpenConnection();
-
             switch (IndexReserveSelectedItem.PrepareMedType) {
                 case ReserveSendType.AllPrepare: 
                     IndexReserveSelectedItem.PrepareMedStatus = IndexPrepareMedType.Prepare;
                     IndexReserveSelectedItem.SaveStatus();
-                    PrintPackage();
+                    if(print)
+                        PrintPackage();
                     IndexReserveCollection.Remove(IndexReserveSelectedItem);
                     break;
                 case ReserveSendType.AllSend:
                 case ReserveSendType.CoPrepare:
-                    if (IndexReserveSelectedItem.StoreOrderToSingde()) { 
+                    if (IndexReserveSelectedItem.StoreOrderToSingde()) {
+                        if (print)
                             PrintPackage();
                         IndexReserveCollection.Remove(IndexReserveSelectedItem);
                     }
