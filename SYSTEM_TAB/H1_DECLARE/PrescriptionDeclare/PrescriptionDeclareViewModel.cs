@@ -6,7 +6,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -45,7 +44,6 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Instituti
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
-using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using Application = System.Windows.Application;
 using Label = System.Windows.Controls.Label;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
@@ -858,6 +856,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CheckCustomerValid();
             CheckCustomerEdited();
+            if(!CheckAdjustDate()) return;
             if(!ErrorAdjustConfirm()) return;
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
@@ -870,6 +869,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CheckCustomerValid();
             CheckCustomerEdited();
+            if(!CheckAdjustDate()) return;
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
             if (!CheckPrescription(true,false)) return;
@@ -880,6 +880,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             CheckCustomerValid();
             CheckCustomerEdited();
+            if(!CheckAdjustDate()) return;
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
             CheckChronicCopayment();
@@ -1555,6 +1556,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!string.IsNullOrEmpty(result))
                 isAdjusting = false;
             return string.IsNullOrEmpty(result);
+        }
+
+        private bool CheckAdjustDate()
+        {
+            if (CurrentPrescription.AdjustDate is null)
+            {
+                MessageWindow.ShowMessage("請填寫調劑日期",MessageType.ERROR);
+                return false;
+            }
+            return true;
         }
         #endregion
     }

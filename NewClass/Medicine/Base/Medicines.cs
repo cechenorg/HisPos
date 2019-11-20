@@ -642,15 +642,15 @@ namespace His_Pos.NewClass.Medicine.Base
             if (notEnoughMedicines.Count > 0 && warID.Equals("0"))
             {
                 var purchaseWindow = new NotEnoughMedicinePurchaseWindow(note,notEnoughMedicines);
-                if ((bool) purchaseWindow.DialogResult)
+                if (purchaseWindow.DialogResult is null || !(bool)purchaseWindow.DialogResult)
+                {
+                    negativeStock = "欠藥採購取消。";
+                }
+                else
                 {
                     SetBuckleAmountToUsableAmount(notEnoughMedicines);
                     MessageWindow.ShowMessage("欠藥已採購並更改扣庫量為可用量，收貨後請記得修改扣庫量。", MessageType.WARNING);
                     return string.Empty;
-                }
-                else
-                {
-                    negativeStock += "欠藥採購取消，";
                 }
             }
             if (string.IsNullOrEmpty(negativeStock)) return negativeStock;
