@@ -221,6 +221,7 @@ namespace His_Pos.NewClass.StoreOrder
         public override void DeleteSelectedProduct()
         {
             OrderProducts.Remove((PurchaseProduct)SelectedItem);
+            CalculateTotalPrice();
 
             RaisePropertyChanged(nameof(ProductCount));
         }
