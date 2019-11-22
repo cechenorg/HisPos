@@ -4,17 +4,18 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl
 {
     /// <summary>
-    /// PurchaseWaitingControl.xaml 的互動邏輯
+    /// PurchaseSingdeProcessingControl.xaml 的互動邏輯
     /// </summary>
-    public partial class PurchaseWaitingControl : UserControl
+    public partial class PurchaseSingdeProcessingControl : UserControl
     {
-        public PurchaseWaitingControl()
+        public PurchaseSingdeProcessingControl()
         {
             InitializeComponent();
         }
+
         private void ShowDetail(object sender, MouseButtonEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;

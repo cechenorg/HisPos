@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.ReturnDataGridControl
 {
     /// <summary>
     /// ReturnSingdeProcessingControl.xaml 的互動邏輯

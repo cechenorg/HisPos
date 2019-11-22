@@ -10,15 +10,20 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using Button = System.Windows.Controls.Button;
+using DataGridCell = System.Windows.Controls.DataGridCell;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using TextBox = System.Windows.Controls.TextBox;
+using UserControl = System.Windows.Controls.UserControl;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl
 {
     /// <summary>
-    /// ReturnNormalProcessingControl.xaml 的互動邏輯
+    /// PurchaseNormalProcessingControl.xaml 的互動邏輯
     /// </summary>
-    public partial class ReturnNormalProcessingControl : UserControl
+    public partial class PurchaseNormalProcessingControl : UserControl
     {
-        public ReturnNormalProcessingControl()
+        public PurchaseNormalProcessingControl()
         {
             InitializeComponent();
         }
@@ -26,6 +31,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
         #region ----- Define Functions -----
 
         #region ///// Enter MoveNext Functions /////
+        private void MaskedTextBox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            Xceed.Wpf.Toolkit.MaskedTextBox maskedTextBox = sender as Xceed.Wpf.Toolkit.MaskedTextBox;
+
+            if (maskedTextBox is null) return;
+
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+
+                ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.SelectedIndex], ProductDataGrid.Columns[10]);
+
+                ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
+
+                var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
+                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                if (firstChild is TextBox)
+                    firstChild.Focus();
+            }
+
+        }
         private void UIElement_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -39,8 +66,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             }
             else if (textBox.Name.Equals("ProductPriceTextbox") && textBox.IsReadOnly)
                 MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 單價 請先將小計歸零!", MessageType.WARNING);
-            else if (textBox.Name.Equals("ProductSubTotalTextbox") && textBox.IsReadOnly)
-                MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 小計 請先將單價歸零!", MessageType.WARNING);
             else if (e.Key == Key.Decimal)
             {
                 e.Handled = true;
@@ -96,6 +121,41 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                 FocusRow(secondChild as TextBox);
             }
         }
+        private void ProductSubTotalTextbox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+
+                int index = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentCell.Item);
+
+                if(ProductDataGrid.Items.Count == index + 1)
+                    MoveFocusNext(textBox);
+                else
+                {
+                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index + 1], ProductDataGrid.Columns[3]);
+
+                    ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
+
+                    var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
+                    UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                    if (firstChild is TextBox)
+                        firstChild.Focus();
+                }
+            }
+            else if (textBox.Name.Equals("ProductSubTotalTextbox") && textBox.IsReadOnly)
+                MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 小計 請先將單價歸零!", MessageType.WARNING);
+            else if (e.Key == Key.Decimal)
+            {
+                e.Handled = true;
+                textBox.CaretIndex++;
+            }
+        }
         #endregion
 
         #region ///// Focus Functions /////
@@ -132,12 +192,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
         {
             DataGridCell cell = sender as DataGridCell;
 
-            if (!(cell?.DataContext is ReturnProduct)) return;
+            if (!(cell?.DataContext is PurchaseProduct)) return;
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((ReturnProduct)cell.DataContext).ID, ((ReturnProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
         }
+
         #endregion
     }
 }

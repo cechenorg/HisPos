@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
@@ -11,21 +10,15 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
-using MahApps.Metro.Controls;
-using Button = System.Windows.Controls.Button;
-using DataGridCell = System.Windows.Controls.DataGridCell;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using TextBox = System.Windows.Controls.TextBox;
-using UserControl = System.Windows.Controls.UserControl;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl
 {
     /// <summary>
-    /// PurchaseNormalProcessingControl.xaml 的互動邏輯
+    /// PurchaseNormalUnProcessingControl.xaml 的互動邏輯
     /// </summary>
-    public partial class PurchaseNormalProcessingControl : UserControl
+    public partial class PurchaseNormalUnProcessingControl : UserControl
     {
-        public PurchaseNormalProcessingControl()
+        public PurchaseNormalUnProcessingControl()
         {
             InitializeComponent();
         }
@@ -33,17 +26,42 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
         #region ----- Define Functions -----
 
         #region ///// Enter MoveNext Functions /////
-        private void MaskedTextBox_OnKeyDown(object sender, KeyEventArgs e)
+        private void ProductIDTextbox_OnKeyDown(object sender, KeyEventArgs e)
         {
-            Xceed.Wpf.Toolkit.MaskedTextBox maskedTextBox = sender as Xceed.Wpf.Toolkit.MaskedTextBox;
+            TextBox textBox = sender as TextBox;
 
-            if (maskedTextBox is null) return;
+            if (textBox is null) return;
 
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
 
-                ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.SelectedIndex], ProductDataGrid.Columns[10]);
+                if (ProductDataGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
+                {
+                    int oldCount = ProductDataGrid.Items.Count;
+
+                    (DataContext as ProductPurchaseReturnViewModel).AddProductByInputCommand.Execute(textBox.Text);
+
+                    textBox.Text = "";
+
+                    if (ProductDataGrid.Items.Count != oldCount)
+                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[3]);
+                }
+                else if (ProductDataGrid.CurrentCell.Item is Product)
+                {
+                    if (!(ProductDataGrid.CurrentCell.Item as Product).ID.Equals(textBox.Text))
+                        (DataContext as ProductPurchaseReturnViewModel).AddProductByInputCommand.Execute(textBox.Text);
+
+                    List<TextBox> textBoxs = new List<TextBox>();
+                    NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox", ref textBoxs);
+
+                    int index = textBoxs.IndexOf(sender as TextBox);
+
+                    if (!(ProductDataGrid.Items[index] as Product).ID.Equals(textBox.Text))
+                        textBox.Text = (ProductDataGrid.Items[index] as Product).ID;
+
+                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[3]);
+                }
 
                 ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
 
@@ -53,7 +71,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                 if (firstChild is TextBox)
                     firstChild.Focus();
             }
-
         }
         private void UIElement_OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -68,6 +85,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             }
             else if (textBox.Name.Equals("ProductPriceTextbox") && textBox.IsReadOnly)
                 MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 單價 請先將小計歸零!", MessageType.WARNING);
+            else if (textBox.Name.Equals("ProductSubTotalTextbox") && textBox.IsReadOnly)
+                MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 小計 請先將單價歸零!", MessageType.WARNING);
             else if (e.Key == Key.Decimal)
             {
                 e.Handled = true;
@@ -93,13 +112,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
                 {
                     UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
 
-                    if (child is StackPanel)
-                    {
-                        StackPanel stackPanel = child as StackPanel;
-                        if (stackPanel.Tag != null && stackPanel.Tag.ToString().Equals("NotSkip"))
-                            break;
-                    }
-                    else if (!(child is Image))
+                    if (!(child is Image))
                         break;
                 }
 
@@ -114,48 +127,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             {
                 firstChild.Focus();
                 FocusRow(firstChild as TextBox);
-            }
-            else
-            {
-                UIElement secondChild = (UIElement)VisualTreeHelper.GetChild(firstChild, 0);
-
-                secondChild.Focus();
-                FocusRow(secondChild as TextBox);
-            }
-        }
-        private void ProductSubTotalTextbox_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-
-            if (textBox is null) return;
-
-            if (e.Key == Key.Enter)
-            {
-                e.Handled = true;
-
-                int index = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentCell.Item);
-
-                if(ProductDataGrid.Items.Count == index + 1)
-                    MoveFocusNext(textBox);
-                else
-                {
-                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index + 1], ProductDataGrid.Columns[3]);
-
-                    ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
-
-                    var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
-                    UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
-
-                    if (firstChild is TextBox)
-                        firstChild.Focus();
-                }
-            }
-            else if (textBox.Name.Equals("ProductSubTotalTextbox") && textBox.IsReadOnly)
-                MessageWindow.ShowMessage($"欲編輯 {(ProductDataGrid.SelectedItem as Product).ID} 小計 請先將單價歸零!", MessageType.WARNING);
-            else if (e.Key == Key.Decimal)
-            {
-                e.Handled = true;
-                textBox.CaretIndex++;
             }
         }
         #endregion
@@ -199,6 +170,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailCo
             ProductDetailWindow.ShowProductDetailWindow();
 
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
+        }
+
+        private void GetProductToolTip(object sender, MouseEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+
+            if (!(cell?.DataContext is PurchaseProduct)) return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            ((PurchaseProduct)cell.DataContext).GetOnTheWayDetail();
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         #endregion
