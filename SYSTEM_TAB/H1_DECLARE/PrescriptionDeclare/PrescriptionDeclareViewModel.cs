@@ -43,6 +43,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerS
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
 using Application = System.Windows.Application;
 using Label = System.Windows.Controls.Label;
@@ -247,6 +248,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private bool isCardReading;
         #endregion
         #region Commands
+        public RelayCommand OpenCustomerManage { get; set; }
         public RelayCommand ScanPrescriptionQRCode { get; set; }
         public RelayCommand<TextBox> GetCustomers { get; set; }
         public RelayCommand<Label> GetCustomersEditedToday { get; set; }
@@ -349,6 +351,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         [SuppressMessage("ReSharper", "MethodTooLong")]
         private void InitCommands()
         {
+            OpenCustomerManage = new RelayCommand(OpenCustomerManageAction);
             ScanPrescriptionQRCode = new RelayCommand(ScanPrescriptionQRCodeAction);
             GetCooperativePres = new RelayCommand(GetCooperativePresAction);
             GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
@@ -393,6 +396,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         #endregion
         #region CommandAction
+        private void OpenCustomerManageAction()
+        {
+            CustomerManageViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).CustomerManageViewModel;
+            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, CurrentPrescription.Patient.IDNumber, "CustomerManageResearch"));
+        }
+
         private void ScanPrescriptionQRCodeAction()
         {
             Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
     public class CustomerManageViewModel : TabBase
@@ -182,7 +183,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             }
         }
         #endregion
-        public CustomerManageViewModel() { 
+        public CustomerManageViewModel() {
+            //Messenger.Default.Register<NotificationMessage<string>>(this, "CustomerManageResearch",);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             CancelCommand = new RelayCommand(CancelAction);
             SubmitCommand = new RelayCommand(SubmitAction);
@@ -190,7 +192,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             SearchCommand = new RelayCommand(SearchAction);
             ClearCommand = new RelayCommand(ClearAction);
             ShowMedicinesDetailCommand = new RelayCommand(ShowMedicinesDetailAction);
-
             PrescriptionCaseString = new List<string>() { "全部", "調劑", "登錄", "預約" };
             PrescriptionCaseSelectItem = PrescriptionCaseString[0];
             
