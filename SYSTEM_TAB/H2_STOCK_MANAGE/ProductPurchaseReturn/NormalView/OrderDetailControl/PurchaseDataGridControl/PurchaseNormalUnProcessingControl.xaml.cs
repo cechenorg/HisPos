@@ -40,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 {
                     int oldCount = ProductDataGrid.Items.Count;
 
-                    (DataContext as ProductPurchaseReturnViewModel).AddProductByInputCommand.Execute(textBox.Text);
+                    (DataContext as NormalViewModel).AddProductByInputCommand.Execute(textBox.Text);
 
                     textBox.Text = "";
 
@@ -50,7 +50,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 else if (ProductDataGrid.CurrentCell.Item is Product)
                 {
                     if (!(ProductDataGrid.CurrentCell.Item as Product).ID.Equals(textBox.Text))
-                        (DataContext as ProductPurchaseReturnViewModel).AddProductByInputCommand.Execute(textBox.Text);
+                        (DataContext as NormalViewModel).AddProductByInputCommand.Execute(textBox.Text);
 
                     List<TextBox> textBoxs = new List<TextBox>();
                     NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox", ref textBoxs);

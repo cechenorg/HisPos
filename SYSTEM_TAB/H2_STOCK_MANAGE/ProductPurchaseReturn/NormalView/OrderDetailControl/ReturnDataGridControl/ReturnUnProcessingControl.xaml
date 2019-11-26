@@ -6,7 +6,7 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn}"
+             DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
              mc:Ignorable="d" >
     <UserControl.Resources>
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>

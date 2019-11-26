@@ -9,6 +9,7 @@
              xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              xmlns:orderDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl"
              xmlns:newClass="clr-namespace:His_Pos.NewClass"
+             DataContext="{Binding NormalViewModel, UpdateSourceTrigger=PropertyChanged}"
              mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseOrderDetail" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
