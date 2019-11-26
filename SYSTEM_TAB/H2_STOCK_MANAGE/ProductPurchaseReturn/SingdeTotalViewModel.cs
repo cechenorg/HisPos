@@ -9,9 +9,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
     public class SingdeTotalViewModel : ViewModelBase
     {
+        #region ----- Define Commands -----
+        #endregion
+
+        #region ----- Define Variables -----
+        #endregion
+        
         internal void InitData()
         {
-            throw new NotImplementedException();
+            
         }
+
+        #region ----- Define Actions -----
+        #endregion
+
+        #region ----- Define Functions -----
+        #endregion
     }
 }

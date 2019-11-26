@@ -9,6 +9,7 @@
              xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              xmlns:orderDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl"
              xmlns:newClass="clr-namespace:His_Pos.NewClass"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseOrderDetail" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
@@ -21,12 +22,12 @@
             <orderDetailControl:NoDataDetailControl/>
         </DataTemplate>
         <DataTemplate x:Key="PurchaseOrderIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <Border BorderBrush="Green" BorderThickness="1" CornerRadius="6" Margin="15,8,1,5">
+            <Border BorderBrush="Green" BorderThickness="1" CornerRadius="6" Margin="12,8,1,5">
                 <TextBlock Text="進貨" Foreground="Green" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="ReturnOrderIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <Border BorderBrush="Red" BorderThickness="1" CornerRadius="6" Margin="15,8,1,5">
+            <Border BorderBrush="Red" BorderThickness="1" CornerRadius="6" Margin="12,8,1,5">
                 <TextBlock Text="退貨" Foreground="Red" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
             </Border>
         </DataTemplate>
@@ -46,8 +47,30 @@
             <Label Content="{Binding ReceiveID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
         </DataTemplate>
         <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
+        <ControlTemplate x:Key="ScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition />
+                    <RowDefinition Height="0" />
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="3" Background="LightGray" CornerRadius="8" />
+                <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollBarPageButton}" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Width="8" Margin="1,0,1,0" Style="{StaticResource ScrollBarThumb}" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollBarPageButton}" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
     </UserControl.Resources>
-    <Grid Width="1365" Height="870" DataContext="{Binding NormalViewModel, UpdateSourceTrigger=PropertyChanged}">
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding NormalViewModel, UpdateSourceTrigger=PropertyChanged}">
+        <Grid Width="1365" Height="870">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280"/>
             <ColumnDefinition/>
@@ -87,9 +110,28 @@
                 </TextBox>
             </StackPanel>
             <DataGrid Grid.Row="4" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}" CanUserDeleteRows="False"
+                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}" CanUserDeleteRows="False"
                       SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="StoreOrders_OnSelectionChanged">
-                <DataGrid.RowStyle>
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="Width" Value="50"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="10"/>
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{DynamicResource ScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                    <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
@@ -219,4 +261,5 @@
             </ContentControl.Style>
         </ContentControl>
     </Grid>
+    </xctk:BusyIndicator>
 </UserControl>
