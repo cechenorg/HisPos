@@ -398,7 +398,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         #region CommandAction
         private void OpenCustomerManageAction()
         {
-            CustomerManageViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).CustomerManageViewModel;
+            var viewModel = (App.Current.Resources["Locator"] as ViewModelLocator)?.CustomerManageView;
             Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, CurrentPrescription.Patient.IDNumber, "CustomerManageResearch"));
         }
 

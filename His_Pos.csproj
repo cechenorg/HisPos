@@ -999,7 +999,6 @@
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
       <DependentUpon>AuthenticationManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManage.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageControl.xaml.cs">
       <DependentUpon>CustomerManageControl.xaml</DependentUpon>
     </Compile>
@@ -1159,6 +1158,9 @@
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\TutorialViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ControlMedicineUsageWindow\ControlMedicineUsageWindow.xaml.cs">
+      <DependentUpon>ControlMedicineUsageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml.cs">
       <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -1892,6 +1894,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\Tutorial.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\INDEX\ControlMedicineUsageWindow\ControlMedicineUsageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

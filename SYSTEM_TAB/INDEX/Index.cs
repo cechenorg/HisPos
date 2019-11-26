@@ -248,6 +248,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand ReserveSearchCommand { get; set; }
         public RelayCommand ReserveMedicineSendCommand { get; set; }
         public RelayCommand ReserveMedicineBackCommand { get; set; }
+        public RelayCommand ControlMedicineUsageCommand { get; set; }
         public RelayCommand IndexReserveSelectionChangedCommand { get; set; }
         public RelayCommand CommonMedStoreOrderCommand { get; set; }
         public RelayCommand StatusChangedCommand { get; set; }
@@ -274,6 +275,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
             ReserveMedicineBackCommand = new RelayCommand(ReserveMedicineBackAction);
+            ControlMedicineUsageCommand = new RelayCommand(ControlMedicineUsageAction);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
             ShowCommonProductDetailCommand = new RelayCommand(ShowCommonProductDetailAction); 
@@ -314,6 +316,12 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
            
         }
+
+        private void ControlMedicineUsageAction()
+        {
+
+        }
+
         private void PrintPackageAction() {
             if (IndexReserveSelectedItem is null) return;
 

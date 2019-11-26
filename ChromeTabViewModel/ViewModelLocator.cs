@@ -46,7 +46,7 @@ namespace His_Pos.ChromeTabViewModel
         public ProductPurchaseReturnViewModel ProductPurchaseReturn => ServiceLocator.Current.GetInstance<ProductPurchaseReturnViewModel>();
         public ProductPurchaseRecordViewModel ProductPurchaseRecord => ServiceLocator.Current.GetInstance<ProductPurchaseRecordViewModel>();
         public ViewModelOfflineOperationWindow ViewModelOfflineOperationWindow => ServiceLocator.Current.GetInstance<ViewModelOfflineOperationWindow>();
-        public CustomerManageViewModel CustomerManageViewModel => ServiceLocator.Current.GetInstance<CustomerManageViewModel>();
+        public CustomerManageViewModel CustomerManageView => ServiceLocator.Current.GetInstance<CustomerManageViewModel>();
         public static void Cleanup()
         {
         }

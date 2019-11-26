@@ -184,7 +184,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         }
         #endregion
         public CustomerManageViewModel() {
-            //Messenger.Default.Register<NotificationMessage<string>>(this, "CustomerManageResearch",);
+            TabName = MainWindow.HisFeatures[4].Functions[4];
+            Icon = MainWindow.HisFeatures[4].Icon;
+            Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedCustomer);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             CancelCommand = new RelayCommand(CancelAction);
             SubmitCommand = new RelayCommand(SubmitAction);
@@ -196,6 +198,18 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             PrescriptionCaseSelectItem = PrescriptionCaseString[0];
             
         }
+
+        private void GetSelectedCustomer(NotificationMessage<string> notificationMessage)
+        {
+            if (notificationMessage.Target == this)
+            {
+                MainWindow.Instance.AddNewTab(TabName);
+                IdNumber = notificationMessage.Content;
+                SearchAction();
+            }
+            
+        }
+
         #region Action
         private void ClearAction() {
             TextCusName = string.Empty;
