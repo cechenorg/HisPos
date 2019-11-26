@@ -609,6 +609,7 @@
     <Compile Include="NewClass\StoreOrder\OrderFilterStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
+    <Compile Include="NewClass\StoreOrder\OrderUITypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />
     <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrderDetail.cs" />
     <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrderDetails.cs" />

@@ -37,7 +37,7 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource NormalView}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding }" Value="Y">
+                        <DataTrigger Binding="{Binding UiType, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE">
                             <Setter Property="ContentTemplate" Value="{StaticResource SingdeTotalView}" />
                         </DataTrigger>
                     </Style.Triggers>

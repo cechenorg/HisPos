@@ -9,5 +9,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
     public class SingdeTotalViewModel : ViewModelBase
     {
+        internal void InitData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

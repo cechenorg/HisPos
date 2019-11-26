@@ -7,7 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d">
-    <Grid Width="1365" Height="870">
+    <Grid Width="1365" Height="870" DataContext="{Binding SingdeTotalViewModel, UpdateSourceTrigger=PropertyChanged}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280"/>
             <ColumnDefinition/>
@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
             <Border Margin="5" CornerRadius="5" Width="260" Grid.Row="0" Background="DimGray"/>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-                <Button Content="單張進退貨" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="120" Margin="10,10,5,10" FontFamily="Segoe UI Semibold" FontSize="13"/>
+                <Button Content="單張進退貨" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="120" Margin="10,10,5,10" FontFamily="Segoe UI Semibold" FontSize="13" Command="{Binding DataContext.ChangeUiTypeCommand, RelativeSource={ RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="NORMAL"/>
                 <Button Content="杏德總檔進退貨" Background="DimGray" BorderThickness="0" Height="25" Width="125" Margin="0,10,5,10" FontFamily="Segoe UI Semibold" FontSize="13"/>
             </StackPanel>
             <DataGrid Grid.Row="1" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
@@ -127,15 +127,10 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}">
-                <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0">
-                    <Image.InputBindings>
-                        <MouseBinding Command="{Binding AddOrderCommand}" MouseAction="LeftClick"/>
-                    </Image.InputBindings>
-                </Image>
-                <Rectangle Width="185"/>
+                <Rectangle Width="230"/>
                 <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0">
                     <Image.InputBindings>
-                        <MouseBinding Command="{Binding ReloadCommand}" MouseAction="LeftClick"/>
+                        <MouseBinding  Command="{Binding DataContext.ReloadCommand, RelativeSource={ RelativeSource AncestorType={x:Type UserControl}}}" MouseAction="LeftClick"/>
                     </Image.InputBindings>
                 </Image>
             </StackPanel>

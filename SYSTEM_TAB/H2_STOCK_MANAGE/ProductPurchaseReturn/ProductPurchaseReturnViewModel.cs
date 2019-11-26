@@ -35,6 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         #region ----- Define Command -----
         public RelayCommand ReloadCommand { get; set; }
+        public RelayCommand<string> ChangeUiTypeCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -42,6 +43,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private string busyContent;
         private BackgroundWorker initBackgroundWorker;
         private StoreOrders storeOrderCollection;
+        private OrderUITypeEnum uiType;
 
         public bool IsBusy
         {
@@ -52,6 +54,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             get => busyContent;
             set { Set(() => BusyContent, ref busyContent, value); }
+        }
+        public OrderUITypeEnum UiType
+        {
+            get => uiType;
+            set { Set(() => UiType, ref uiType, value); }
         }
         #endregion
 
@@ -71,6 +78,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void ReloadAction()
         {
             InitVariables();
+        }
+        private void ChangeUiTypeAction(string type)
+        {
+            switch (type)
+            {
+                case "NORMAL":
+                    UiType = OrderUITypeEnum.NORMAL;
+                    break;
+                case "SINGDE":
+                    UiType = OrderUITypeEnum.SINGDE;
+                    break;
+            }
         }
         #endregion
 
@@ -124,7 +143,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
-                NormalViewModel.InitData();
+                SingdeTotalViewModel.InitData();
+                NormalViewModel.InitData(storeOrderCollection);
                 IsBusy = false;
             };
         }
@@ -138,6 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void RegisterCommand()
         {
             ReloadCommand = new RelayCommand(ReloadAction);
+            ChangeUiTypeCommand = new RelayCommand<string>(ChangeUiTypeAction);
         }
         #endregion
     }

@@ -91,7 +91,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public NormalViewModel()
         {
-            InitBackgroundWorker();
             RegisterCommand();
             RegisterMessengers();
         }
@@ -281,37 +280,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #endregion
 
         #region ----- Define Functions -----
-        public void InitData()
+        public void InitData(StoreOrders storeOrders)
         {
-            initBackgroundWorker.RunWorkerAsync();
-        }
-        private void InitBackgroundWorker()
-        {
-            initBackgroundWorker = new BackgroundWorker();
+            StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrders);
+            StoreOrderCollectionView.Filter += OrderFilter;
 
-            initBackgroundWorker.DoWork += (sender, args) =>
+            if (!StoreOrderCollectionView.IsEmpty)
             {
-                MainWindow.ServerConnection.OpenConnection();
-
-                BusyContent = "取得訂單資料...";
-                storeOrderCollection = StoreOrders.GetOrdersNotDone();
-
-                MainWindow.ServerConnection.CloseConnection();
-            };
-
-            initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrderCollection);
-                StoreOrderCollectionView.Filter += OrderFilter;
-
-                if (!StoreOrderCollectionView.IsEmpty)
-                {
-                    StoreOrderCollectionView.MoveCurrentToFirst();
-                    CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
-                }
-
-                IsBusy = false;
-            };
+                StoreOrderCollectionView.MoveCurrentToFirst();
+                CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
+            }
         }
         private void InitVariables(string searchStr = "")
         {
