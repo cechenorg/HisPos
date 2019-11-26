@@ -7,6 +7,29 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="ScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition />
+                    <RowDefinition Height="0" />
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="3" Background="LightGray" CornerRadius="8" />
+                <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollBarPageButton}" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Width="8" Margin="1,0,1,0" Style="{StaticResource ScrollBarThumb}" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollBarPageButton}" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+    </UserControl.Resources>
     <Grid Width="1365" Height="870" DataContext="{Binding SingdeTotalViewModel, UpdateSourceTrigger=PropertyChanged}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280"/>
@@ -24,8 +47,27 @@
                 <Button Content="杏德總檔進退貨" Background="DimGray" BorderThickness="0" Height="25" Width="125" Margin="0,10,5,10" FontFamily="Segoe UI Semibold" FontSize="13"/>
             </StackPanel>
             <DataGrid Grid.Row="1" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}" CanUserDeleteRows="False"
+                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}" CanUserDeleteRows="False"
                       SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="StoreOrders_OnSelectionChanged">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="Width" Value="50"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="10"/>
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{DynamicResource ScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="Transparent"/>
@@ -50,16 +92,25 @@
                         </DataGridTemplateColumn.CellStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Height="70">
+                                <Grid Height="90">
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="40"/>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    
+                                    <Label Content="{Binding ManufactoryName}" Grid.Row="0" FontSize="25" FontFamily="Segoe UI Semibold" Margin="5,0,0,0"/>
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                        <TextBlock Text="進貨單數量" FontSize="15" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Foreground="Green"/>
+                                        <TextBlock Text="{Binding PurchaseCount}" FontSize="15" Width="40" FontFamily="Segoe UI Semi" TextAlignment="Center" Foreground="DimGray"/>
+                                        <TextBlock Text="進貨總額 $" FontSize="15" FontFamily="Segoe UI Semibold" Foreground="Green"/>
+                                        <TextBlock Text="{Binding PurchasePrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="15" FontFamily="Segoe UI Semi" Width="80" TextAlignment="Right" Foreground="DimGray"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                        <TextBlock Text="退貨單數量" FontSize="15" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Foreground="IndianRed"/>
+                                        <TextBlock Text="{Binding ReturnCount}" FontSize="15" Width="40" FontFamily="Segoe UI Semi" TextAlignment="Center" Foreground="DimGray"/>
+                                        <TextBlock Text="退貨總額 $" FontSize="15" FontFamily="Segoe UI Semibold" Foreground="IndianRed"/>
+                                        <TextBlock Text="{Binding ReturnPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="15" FontFamily="Segoe UI Semi" Width="80" TextAlignment="Right" Foreground="DimGray"/>
+                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -75,6 +126,138 @@
                 </Image>
             </StackPanel>
         </Grid>
-        
+        <Grid Grid.Column="1" Margin="0,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
+
+            </StackPanel>
+            <DataGrid Grid.Row="1" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
+                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding CurrentStoreOrder.OrderProducts}">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="Width" Value="100"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource Shadow}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Height" Value="41"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="商品代碼" Width="175" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="上次進價" Width="90" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding LastPrice, StringFormat=N2}" CellStyle="{StaticResource DataGridSpecialCellStyle}" >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn MinWidth="70" Header="單價" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="ProductPriceTextbox" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Style="{DynamicResource CantEditPrice}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="預定量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OrderAmount}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn MinWidth="70" Header="入庫量" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="Amount" Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="70" Header="贈量" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="FreeAmount" Text="{Binding FreeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="70" Header="小計" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="ProductSubTotalTextbox" Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" InputMethod.IsInputMethodEnabled="False" Style="{DynamicResource CantEditSubTotal}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="TextChanged">
+                                            <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="170" Header="批號" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Width="170" Tag="NotSkip">
+                                    <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                                    <Button x:Name="Split" Content="拆批" Width="40" Margin="5,0,0,0"  Background="DarkRed" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Visibility="{Binding IsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding Path=DataContext.SplitBatchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding ID}"/>
+                                    <Button Content="合批" Background="IndianRed" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi"  Visibility="{Binding IsFirstBatch, Converter={StaticResource InverseBoolToVisConverter}}" Command="{Binding Path=DataContext.MergeBatchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="100" Header="發票號碼" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="Invoice" Width="100" FontSize="18" Text="{Binding Invoice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="120" Header="備註" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="Notes" Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
+
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

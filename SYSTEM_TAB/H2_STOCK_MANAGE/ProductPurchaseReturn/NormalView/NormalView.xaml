@@ -112,7 +112,7 @@
             <DataGrid Grid.Row="4" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollectionView}" CanUserDeleteRows="False"
                       SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="StoreOrders_OnSelectionChanged">
-                <DataGrid.Resources>
+                    <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
                         <Setter Property="OverridesDefaultStyle" Value="true"/>
