@@ -974,6 +974,12 @@
       <DependentUpon>ProductPurchaseReturnView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\SingdeTotalViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\SingdeTotalView\SingdeTotalDetailControl\NoDataDetailControl.xaml.cs">
+      <DependentUpon>NoDataDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\SingdeTotalView\SingdeTotalDetailControl\TotalDetailControl.xaml.cs">
+      <DependentUpon>TotalDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\SingdeTotalView\SingdeTotalView.xaml.cs">
       <DependentUpon>SingdeTotalView.xaml</DependentUpon>
     </Compile>
@@ -1693,6 +1699,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\SingdeTotalView\SingdeTotalDetailControl\NoDataDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\SingdeTotalView\SingdeTotalDetailControl\TotalDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
