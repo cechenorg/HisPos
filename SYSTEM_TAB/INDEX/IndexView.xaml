@@ -362,13 +362,13 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Label Content="每日庫存管理" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
-                    <Button Width="120" Command="{Binding ReserveMedicineBackCommand}" Margin="10,0,0,0" Content="慢箋退貨" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
+                    <Label Content="每日庫存管理" Foreground="Black" FontSize="26" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
+                    <Button Width="120" Command="{Binding ReserveMedicineBackCommand}" Margin="25,0,0,0" Content="慢箋退貨" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="IndianRed" BorderThickness="0" />
                     <Button Width="120" Command="{Binding ControlMedicineUsageCommand}" Margin="10,0,0,0" Content="耗用管藥" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="DarkCyan" BorderThickness="0" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Label Content="低於安全量商品" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
-                    <Button Width="120" Command="{Binding CommonProductGetDataCommand}" Content="查詢" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Margin="110,0,0,0"/>
+                    <Label Content="低於安全量商品" Foreground="Black" FontSize="26" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0"/>
+                    <Button Width="120" Command="{Binding CommonProductGetDataCommand}" Content="查詢" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Margin="130,0,0,0"/>
                 </StackPanel>
                 <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Grid.Row="2" ItemsSource="{Binding CommonProductsCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
