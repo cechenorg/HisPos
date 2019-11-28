@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
 {
@@ -22,6 +24,22 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         public ControlMedicineUsageWindow()
         {
             InitializeComponent();
+        }
+
+        private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+                EndDate.Focus();
+                EndDate.SelectionStart = 0;
+            }
+        }
+
+        private void EndDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
         }
     }
 }

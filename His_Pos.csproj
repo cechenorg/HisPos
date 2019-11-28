@@ -1158,6 +1158,7 @@
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\TutorialViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ControlMedicineUsageWindow\ControlMedicineUsageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\INDEX\ControlMedicineUsageWindow\ControlMedicineUsageWindow.xaml.cs">
       <DependentUpon>ControlMedicineUsageWindow.xaml</DependentUpon>
     </Compile>

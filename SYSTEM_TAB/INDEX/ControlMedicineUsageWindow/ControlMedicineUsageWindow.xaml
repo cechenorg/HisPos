@@ -6,14 +6,52 @@
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:service="clr-namespace:His_Pos.Service"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         Title="ControlMedicineUsageWindow" Height="450" Width="800">
     <Grid>
+        <Grid.Resources>
+            <service:NullableDateConverter x:Key="NullableDateConverter" />
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label Content="查詢日期 " Style="{StaticResource BoldLabelContent16}" Margin="10"/>
+            <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
+                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" PreviewKeyDown="StartDate_OnPreviewKeyDown">
+                <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                    <Binding.ValidationRules>
+                        <service:DateValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=StartDate}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </xctk:MaskedTextBox>
+            <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}"/>
+            <xctk:MaskedTextBox x:Name="EndDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" PreviewKeyDown="EndDate_OnPreviewKeyDown">
+                <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                    <Binding.ValidationRules>
+                        <service:DateValidationRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=EndDate}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </xctk:MaskedTextBox>
+            <Rectangle Width="390"/>
+            <Button Content="查詢" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Command="{Binding GetData}"/>
         </StackPanel>
         <DataGrid Name="ControlMedicineGrid" Grid.Row="1" ItemsSource="{Binding ControlCollectionView, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
                    SelectedItem="{Binding SelectItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,0,10">
