@@ -9,8 +9,8 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:service="clr-namespace:His_Pos.Service"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
-        mc:Ignorable="d"
-        Title="ControlMedicineUsageWindow" Height="450" Width="800">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="耗用管藥查詢" Height="450" Width="800">
     <Grid>
         <Grid.Resources>
             <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -54,7 +54,7 @@
             <Button Content="查詢" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Command="{Binding GetData}"/>
         </StackPanel>
         <DataGrid Name="ControlMedicineGrid" Grid.Row="1" ItemsSource="{Binding ControlCollectionView, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
-                   SelectedItem="{Binding SelectItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,0,10">
+                   SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"/>
@@ -115,7 +115,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Width="350" Header="商品名稱" IsReadOnly="True" SortMemberPath="EnglishName" CanUserSort="True">
+                <DataGridTemplateColumn Width="400" Header="商品名稱" IsReadOnly="True" SortMemberPath="EnglishName" CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

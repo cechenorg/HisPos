@@ -319,7 +319,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX
 
         private void ControlMedicineUsageAction()
         {
-
+            var controlMedUsageWindow = new ControlMedicineUsageWindow.ControlMedicineUsageWindow();
+            controlMedUsageWindow.Show();
         }
 
         private void PrintPackageAction() {

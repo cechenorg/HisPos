@@ -24,6 +24,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         public ControlMedicineUsageWindow()
         {
             InitializeComponent();
+            DataContext = new ControlMedicineUsageViewModel();
         }
 
         private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
