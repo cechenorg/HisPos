@@ -616,6 +616,10 @@
     <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrder.cs" />
     <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrders.cs" />
     <Compile Include="NewClass\StoreOrder\ReturnOrder.cs" />
+    <Compile Include="NewClass\StoreOrder\SingdeTotalOrder\ProcessingStoreOrder.cs" />
+    <Compile Include="NewClass\StoreOrder\SingdeTotalOrder\ProcessingStoreOrders.cs" />
+    <Compile Include="NewClass\StoreOrder\SingdeTotalOrder\SingdeTotalOrder.cs" />
+    <Compile Include="NewClass\StoreOrder\SingdeTotalOrder\SingdeTotalOrders.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrder.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrders.cs" />

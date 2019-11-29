@@ -27,10 +27,10 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="{Binding ID}" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <Label Content="{Binding Date}" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
         </StackPanel>
         <DataGrid Grid.Row="1" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding CurrentStoreOrder.OrderProducts}">
+                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding CurrentStoreOrder.StoreOrders}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -96,7 +96,7 @@
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Setter Property="ContentTemplate" Value="{StaticResource OrderNotDone}" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding}" Value="RETURN">
+                                            <DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
                                                 <Setter Property="ContentTemplate" Value="{StaticResource OrderIsDone}" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -122,7 +122,7 @@
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource OrderAllToDone}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding}" Value="RETURN">
+                            <DataTrigger Binding="{Binding IsAllDone, UpdateSourceTrigger=PropertyChanged}" Value="RETURN">
                                 <Setter Property="ContentTemplate" Value="{StaticResource OrderIsDone}" />
                             </DataTrigger>
                         </Style.Triggers>

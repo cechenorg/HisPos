@@ -35,6 +35,11 @@ namespace His_Pos.NewClass.StoreOrder
             return masterTable;
         }
 
+        internal static DataTable GetProcessingStoreOrdersByDate(string date)
+        {
+            throw new NotImplementedException();
+        }
+
         public static DataTable StoreOrderDetailTable()
         {
             DataTable detailTable = new DataTable();
