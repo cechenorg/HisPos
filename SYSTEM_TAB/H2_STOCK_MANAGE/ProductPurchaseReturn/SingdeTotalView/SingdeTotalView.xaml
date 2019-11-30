@@ -38,7 +38,7 @@
             </Grid>
         </ControlTemplate>
     </UserControl.Resources>
-    <xctk:BusyIndicator IsBusy="{Binding SingdeTotalViewModel.IsBusy,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding SingdeTotalViewModel.BusyContent, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding SingdeTotalViewModel, UpdateSourceTrigger=PropertyChanged}">
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding SingdeTotalViewModel, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1365" Height="870" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="280"/>
