@@ -67,5 +67,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             foreach (var product in this)
                 product.SetReturnInventoryDetail();
         }
+
+        internal ReturnProducts GetOldReturnProductsByStoreOrderID(string orederID)
+        {
+            return new ReturnProducts(PurchaseReturnProductDB.GetOldReturnProductsByStoreOrderID(orederID));
+        }
     }
 }
