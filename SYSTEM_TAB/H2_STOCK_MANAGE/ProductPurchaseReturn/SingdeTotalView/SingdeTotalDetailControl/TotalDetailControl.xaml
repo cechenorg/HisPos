@@ -11,13 +11,19 @@
             <Label Content="已完成" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Green" FontSize="20" FontFamily="Segoe UI Semibold"/>
         </DataTemplate>
         <DataTemplate x:Key="OrderNotDone" DataType="UserControl">
-            <Button Width="150" Content="確認完成" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="RoyalBlue" Command="{Binding ToNextStatusCommand}"/>
+            <Button Width="100" Content="確認完成" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="IndianRed" Command="{Binding ToNextStatusCommand}"/>
         </DataTemplate>
         <DataTemplate x:Key="OrderAllToDone" DataType="UserControl">
             <Button Width="150" Content="全部完成" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="RoyalBlue" Command="{Binding ToNextStatusCommand}"/>
         </DataTemplate>
         <DataTemplate x:Key="OrderAllIsDone" DataType="UserControl">
             <Label Content="全部已完成" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+        </DataTemplate>
+        <DataTemplate x:Key="PurchaseIcon" DataType="UserControl">
+            <Label Content="進貨" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Green" FontSize="20"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ReturnIcon" DataType="UserControl">
+            <Label Content="退貨" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="IndianRed" FontSize="20"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
@@ -27,10 +33,10 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="{Binding Date}" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <Label Content="{Binding CurrenTotalOrder.Date}" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
         </StackPanel>
         <DataGrid Grid.Row="1" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding CurrentStoreOrder.StoreOrders}">
+                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding CurrenTotalOrder.StoreOrders}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -64,7 +70,25 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Type}">
+                <DataGridTemplateColumn MinWidth="60" MaxWidth="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl Margin="10,0,0,0">
+                                <ContentControl.Style>
+                                    <Style TargetType="{x:Type ContentControl}">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource PurchaseIcon}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Type}" Value="RETURN">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource ReturnIcon}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="訂單編號" Width="150" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ID}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -72,23 +96,15 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="訂單編號" Width="200" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
+                <DataGridTextColumn Header="金額" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Total, StringFormat=N2}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="金額" Width="200" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Total}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="70" Header="訂單狀態" IsReadOnly="True">
+                <DataGridTemplateColumn MinWidth="150" Header="訂單狀態" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl>
@@ -106,10 +122,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="備註" Width="300" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Note}">
+                <DataGridTextColumn Header="備註" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Note}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="HorizontalAlignment"  Value="Left"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -117,12 +133,14 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
-            <ContentControl Margin="700,0,0,0">
+            <Label Content="總額: $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"/>
+            <TextBlock Text="{Binding CurrenTotalOrder.Total, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="200" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"/>
+            <ContentControl Margin="625,0,0,0">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource OrderAllToDone}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsAllDone, UpdateSourceTrigger=PropertyChanged}" Value="RETURN">
+                            <DataTrigger Binding="{Binding IsAllDone, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                 <Setter Property="ContentTemplate" Value="{StaticResource OrderIsDone}" />
                             </DataTrigger>
                         </Style.Triggers>

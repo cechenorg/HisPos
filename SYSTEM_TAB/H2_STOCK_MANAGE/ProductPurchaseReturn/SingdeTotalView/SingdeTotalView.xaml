@@ -105,18 +105,18 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <Label Content="{Binding Date}" Grid.Row="0" FontSize="25" FontFamily="Segoe UI Semibold" Margin="5,0,0,0"/>
+                                    <Label Content="{Binding Date}" Grid.Row="0" FontSize="30" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" Padding="0"/>
                                     <StackPanel Grid.Row="1" Orientation="Horizontal">
                                         <TextBlock Text="進貨單數量" FontSize="15" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Foreground="Green"/>
-                                        <TextBlock Text="{Binding PurchaseCount}" FontSize="15" Width="40" FontFamily="Segoe UI Semi" TextAlignment="Center" Foreground="DimGray"/>
-                                        <TextBlock Text="進貨總額 $" FontSize="15" FontFamily="Segoe UI Semibold" Foreground="Green"/>
-                                        <TextBlock Text="{Binding PurchasePrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="15" FontFamily="Segoe UI Semi" Width="80" TextAlignment="Right" Foreground="DimGray"/>
+                                        <TextBlock Text="{Binding PurchaseCount, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="50" FontFamily="Segoe UI Semi" TextAlignment="Center" Foreground="DimGray"/>
+                                        <TextBlock Text="總額 $" FontSize="15" FontFamily="Segoe UI Semibold" Foreground="Green"/>
+                                        <TextBlock Text="{Binding PurchasePrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="15" FontFamily="Segoe UI Semi" Width="70" TextAlignment="Right" Foreground="DimGray"/>
                                     </StackPanel>
                                     <StackPanel Grid.Row="2" Orientation="Horizontal">
                                         <TextBlock Text="退貨單數量" FontSize="15" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Foreground="IndianRed"/>
-                                        <TextBlock Text="{Binding ReturnCount}" FontSize="15" Width="40" FontFamily="Segoe UI Semi" TextAlignment="Center" Foreground="DimGray"/>
-                                        <TextBlock Text="退貨總額 $" FontSize="15" FontFamily="Segoe UI Semibold" Foreground="IndianRed"/>
-                                        <TextBlock Text="{Binding ReturnPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="15" FontFamily="Segoe UI Semi" Width="80" TextAlignment="Right" Foreground="DimGray"/>
+                                        <TextBlock Text="{Binding ReturnCount, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="50" FontFamily="Segoe UI Semi" TextAlignment="Center" Foreground="DimGray"/>
+                                        <TextBlock Text="總額 $" FontSize="15" FontFamily="Segoe UI Semibold" Foreground="IndianRed"/>
+                                        <TextBlock Text="{Binding ReturnPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="15" FontFamily="Segoe UI Semi" Width="70" TextAlignment="Right" Foreground="DimGray"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -133,12 +133,12 @@
                 </Image>
             </StackPanel>
         </Grid>
-        <ContentControl Grid.Column="1" Margin="0,10,10,10">
+        <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource NoDataDetailControl}" />
+                    <Setter Property="ContentTemplate" Value="{StaticResource TotalDetailControl}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding}" Value="RETURN">
+                        <DataTrigger Binding="{Binding CurrenTotalOrder}" Value="NULL">
                             <Setter Property="ContentTemplate" Value="{StaticResource TotalDetailControl}" />
                         </DataTrigger>
                     </Style.Triggers>

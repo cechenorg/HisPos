@@ -88,6 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     break;
                 case "SINGDE":
                     UiType = OrderUITypeEnum.SINGDE;
+                    SingdeTotalViewModel.InitData();
                     break;
             }
         }

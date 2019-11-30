@@ -35,11 +35,6 @@ namespace His_Pos.NewClass.StoreOrder
             return masterTable;
         }
 
-        internal static DataTable GetProcessingStoreOrdersByDate(string date)
-        {
-            throw new NotImplementedException();
-        }
-
         public static DataTable StoreOrderDetailTable()
         {
             DataTable detailTable = new DataTable();
@@ -467,7 +462,19 @@ namespace His_Pos.NewClass.StoreOrder
         #endregion
 
         #endregion
-        
+
+
+        internal static DataTable GetSingdeTotalOrders()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrdersNotDone]");
+        }
+        internal static DataTable GetProcessingStoreOrdersByDate(string date)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DATE_STRING", date));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrderProcessingOrders]", parameters);
+        }
         internal static DataTable ReturnOrderRePurchase(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

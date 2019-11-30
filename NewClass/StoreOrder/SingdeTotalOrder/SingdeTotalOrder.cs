@@ -25,15 +25,22 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                 return StoreOrders.Count(s => s.Status == OrderStatusEnum.SINGDE_PROCESSING) == 0;
             }
         }
+        public double Total
+        {
+            get
+            {
+                return PurchasePrice - ReturnPrice;
+            }
+        }
         #endregion
 
         public SingdeTotalOrder(DataRow dataRow)
         {
-            Date = dataRow.Field<string>("");
-            PurchaseCount = dataRow.Field<int>("");
-            ReturnCount = dataRow.Field<int>("");
-            PurchasePrice = dataRow.Field<double>("");
-            ReturnPrice = dataRow.Field<double>("");
+            Date = dataRow.Field<string>("DATE");
+            PurchaseCount = dataRow.Field<int>("P_COUNT");
+            ReturnCount = dataRow.Field<int>("R_COUNT");
+            PurchasePrice = (double)dataRow.Field<decimal>("P_TOTAL");
+            ReturnPrice = (double)dataRow.Field<decimal>("R_TOTAL");
         }
 
         #region ----- Define Functions -----

@@ -19,11 +19,11 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
         public ProcessingStoreOrder(DataRow row)
         {
-            ID = row.Field<string>("");
-            Type = row.Field<string>("").Equals("")? OrderTypeEnum.PURCHASE : OrderTypeEnum.RETURN ;
-            Status = row.Field<string>("").Equals("")? OrderStatusEnum.DONE : OrderStatusEnum.SINGDE_PROCESSING;
-            Total = row.Field<double>("");
-            Note = row.Field<string>("");
+            ID = row.Field<string>("StoOrd_ReceiveID");
+            Type = row.Field<string>("StoOrd_Type").Equals("P")? OrderTypeEnum.PURCHASE : OrderTypeEnum.RETURN ;
+            Status = row.Field<string>("StoOrd_Status").Equals("D")? OrderStatusEnum.DONE : OrderStatusEnum.SINGDE_PROCESSING;
+            Total = (double)row.Field<decimal>("TOTAL");
+            Note = row.Field<string>("StoOrd_Note");
         }
     }
 }
