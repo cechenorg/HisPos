@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         #region ----- Define Variables -----
         private SingdeTotalOrder currenTotalOrder;
+        private bool isBusy;
+        private string busyContent;
 
+        public bool IsBusy
+        {
+            get => isBusy;
+            set { Set(() => IsBusy, ref isBusy, value); }
+        }
+        public string BusyContent
+        {
+            get => busyContent;
+            set { Set(() => BusyContent, ref busyContent, value); }
+        }
         public SingdeTotalOrder CurrenTotalOrder
         {
             get { return currenTotalOrder; }
@@ -31,6 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             }
         }
         public SingdeTotalOrders TotalOrders { get; set; }
+        public bool HasOrder { get { return CurrenTotalOrder != null;} }
         #endregion
 
         public SingdeTotalViewModel()
@@ -42,11 +56,30 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #region ----- Define Actions -----
         private void ToDoneAction(string id)
         {
-
+            MainWindow.ServerConnection.OpenConnection();
+            CurrenTotalOrder.OrderToDone(id);
+            MainWindow.ServerConnection.CloseConnection();
         }
         private void AllToDoneAction()
         {
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
 
+            IsBusy = true;
+
+            backgroundWorker.DoWork += (sender, args) =>
+            {
+                BusyContent = "處理中...";
+                MainWindow.ServerConnection.OpenConnection();
+                CurrenTotalOrder.AllOrderToDone();
+                MainWindow.ServerConnection.CloseConnection();
+            };
+
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                IsBusy = false;
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
         #endregion
 
@@ -66,6 +99,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 CurrenTotalOrder = TotalOrders[0];
             }
+            else
+                CurrenTotalOrder = null;
+
+            RaisePropertyChanged(nameof(HasOrder));
         }
         #endregion
     }

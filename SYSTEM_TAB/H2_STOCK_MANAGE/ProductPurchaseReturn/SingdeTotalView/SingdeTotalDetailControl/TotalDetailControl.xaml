@@ -11,10 +11,10 @@
             <Label Content="已完成" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Green" FontSize="20" FontFamily="Segoe UI Semibold"/>
         </DataTemplate>
         <DataTemplate x:Key="OrderNotDone" DataType="UserControl">
-            <Button Width="100" Content="確認完成" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="IndianRed" Command="{Binding ToNextStatusCommand}"/>
+            <Button Width="100" Content="確認完成" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="IndianRed" Command="{Binding DataContext.ToDoneCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding ID}"/>
         </DataTemplate>
         <DataTemplate x:Key="OrderAllToDone" DataType="UserControl">
-            <Button Width="150" Content="全部完成" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="RoyalBlue" Command="{Binding ToNextStatusCommand}"/>
+            <Button Width="150" Content="全部完成" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="RoyalBlue" Command="{Binding AllToDoneCommand}"/>
         </DataTemplate>
         <DataTemplate x:Key="OrderAllIsDone" DataType="UserControl">
             <Label Content="全部已完成" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
@@ -88,7 +88,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="訂單編號" Width="150" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ID}">
+                <DataGridTextColumn Header="訂單編號" Width="150" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding RecID}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -107,7 +107,7 @@
                 <DataGridTemplateColumn MinWidth="150" Header="訂單狀態" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ContentControl>
+                            <ContentControl Content="{Binding}">
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Setter Property="ContentTemplate" Value="{StaticResource OrderNotDone}" />
@@ -135,13 +135,13 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="總額: $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"/>
             <TextBlock Text="{Binding CurrenTotalOrder.Total, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="200" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"/>
-            <ContentControl Margin="625,0,0,0">
+            <ContentControl Margin="625,0,0,0" Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource OrderAllToDone}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsAllDone, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                <Setter Property="ContentTemplate" Value="{StaticResource OrderIsDone}" />
+                            <DataTrigger Binding="{Binding CurrenTotalOrder.IsAllDone, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <Setter Property="ContentTemplate" Value="{StaticResource OrderAllIsDone}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

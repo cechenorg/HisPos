@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:singdeTotalDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.SingdeTotalView.SingdeTotalDetailControl"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="NoDataDetailControl" DataType="UserControl">
@@ -37,12 +38,13 @@
             </Grid>
         </ControlTemplate>
     </UserControl.Resources>
-    <Grid Width="1365" Height="870" DataContext="{Binding SingdeTotalViewModel, UpdateSourceTrigger=PropertyChanged}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="280"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid Margin="10,10,0,10" Grid.Column="0" Background="{StaticResource GridBackGround}">
+    <xctk:BusyIndicator IsBusy="{Binding SingdeTotalViewModel.IsBusy,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding SingdeTotalViewModel.BusyContent, UpdateSourceTrigger=PropertyChanged}" DataContext="{Binding SingdeTotalViewModel, UpdateSourceTrigger=PropertyChanged}">
+        <Grid Width="1365" Height="870" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Margin="10,10,0,10" Grid.Column="0" Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
                 <RowDefinition/>
@@ -133,17 +135,18 @@
                 </Image>
             </StackPanel>
         </Grid>
-        <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding}">
-            <ContentControl.Style>
-                <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource TotalDetailControl}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding CurrenTotalOrder}" Value="NULL">
-                            <Setter Property="ContentTemplate" Value="{StaticResource TotalDetailControl}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
-    </Grid>
+            <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource TotalDetailControl}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasOrder, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                <Setter Property="ContentTemplate" Value="{StaticResource NoDataDetailControl}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </xctk:BusyIndicator>
 </UserControl>
