@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.ControlMedicineDeclare;
 
 namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
@@ -91,6 +93,16 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
 
         private void GetDataAction()
         {
+            if (StartDate is null)
+            {
+                MessageWindow.ShowMessage("起始日期格式錯誤。",MessageType.ERROR);
+                return;
+            }
+            if (EndDate is null)
+            {
+                MessageWindow.ShowMessage("結束日期格式錯誤。",MessageType.ERROR);
+                return;
+            }
             ControlMedicineDeclares = new ControlMedicineDeclares();
             ControlMedicineDeclares.GetUsageData((DateTime)StartDate, (DateTime)EndDate);
             ControlCollectionViewSource = new CollectionViewSource {Source = ControlMedicineDeclares};

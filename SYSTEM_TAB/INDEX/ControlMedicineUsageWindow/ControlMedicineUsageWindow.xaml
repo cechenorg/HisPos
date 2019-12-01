@@ -49,6 +49,9 @@
                         <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=EndDate}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
+                <xctk:MaskedTextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding GetData}"/>
+                </xctk:MaskedTextBox.InputBindings>
             </xctk:MaskedTextBox>
             <Rectangle Width="390"/>
             <Button Content="查詢" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Command="{Binding GetData}"/>
