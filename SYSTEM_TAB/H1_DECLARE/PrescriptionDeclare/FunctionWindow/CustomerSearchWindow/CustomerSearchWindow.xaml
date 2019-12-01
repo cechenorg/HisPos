@@ -20,7 +20,7 @@
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type customerSearchWindow:CustomerSearchViewModel}">
             <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="720" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCollectionView}"
                       AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" EnableRowVirtualization="True" CanUserAddRows="False" CanUserDeleteRows="False"
-                      SelectedItem="{Binding SelectedCustomer,Mode=TwoWay}" >
+                      SelectedItem="{Binding SelectedCustomer,Mode=TwoWay}" PreviewKeyDown="UIElement_OnPreviewKeyDown" PreviewMouseDown="UIElement_OnPreviewMouseDown">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding CustomerSelected}"/>
@@ -98,11 +98,11 @@
                 </TextBox.InputBindings>
             </TextBox>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
-                <RadioButton Content="姓名" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
-                <RadioButton Content="生日" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
-                <RadioButton Content="手機" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
-                <RadioButton Content="家電" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option5}"/>
+                <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" Click="ButtonBase_OnClick"/>
+                <RadioButton Content="姓名" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}" Click="ButtonBase_OnClick"/>
+                <RadioButton Content="生日" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}" Click="ButtonBase_OnClick"/>
+                <RadioButton Content="手機" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}" Click="ButtonBase_OnClick"/>
+                <RadioButton Content="家電" VerticalAlignment="Center" FontSize="18"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option5}" Click="ButtonBase_OnClick"/>
             </StackPanel>
              <ContentControl Name="ResultGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding}" Margin="10,10,10,0" Width="720">
                 <ContentControl.Style>

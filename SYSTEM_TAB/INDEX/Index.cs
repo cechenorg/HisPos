@@ -248,6 +248,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand ReserveSearchCommand { get; set; }
         public RelayCommand ReserveMedicineSendCommand { get; set; }
         public RelayCommand ReserveMedicineBackCommand { get; set; }
+        public RelayCommand ControlMedicineUsageCommand { get; set; }
         public RelayCommand IndexReserveSelectionChangedCommand { get; set; }
         public RelayCommand CommonMedStoreOrderCommand { get; set; }
         public RelayCommand StatusChangedCommand { get; set; }
@@ -264,6 +265,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         #endregion
         public Index() {
             InitStatusstring();
+            Messenger.Default.Register<NotificationMessage>("ReloadIndexReserves", ReloadIndexReserve);
             ReserveSearchCommand = new RelayCommand(ReserveSearchAction);
             IndexReserveSelectionChangedCommand = new RelayCommand(IndexReserveSelectionChangedAction);
             ReserveMedicineSendCommand = new RelayCommand(ReserveSendAction);
@@ -274,6 +276,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
             ReserveMedicineBackCommand = new RelayCommand(ReserveMedicineBackAction);
+            ControlMedicineUsageCommand = new RelayCommand(ControlMedicineUsageAction);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
             ShowCommonProductDetailCommand = new RelayCommand(ShowCommonProductDetailAction); 
@@ -314,6 +317,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
            
         }
+
+        private void ControlMedicineUsageAction()
+        {
+            var controlMedUsageWindow = new ControlMedicineUsageWindow.ControlMedicineUsageWindow();
+            controlMedUsageWindow.Show();
+        }
+
         private void PrintPackageAction() {
             if (IndexReserveSelectedItem is null) return;
 
@@ -364,13 +374,31 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
         
         private void CommonMedStoreOrderAction() {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否將已設定為常備藥且低於安全量之藥品產生採購製表至基準量?","常備藥轉採購");
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否將低於安全量之藥品傳送訂單至杏德?","常備藥傳送");
             if ((bool)confirmWindow.DialogResult)
             {
                 DataTable table = StoreOrderDB.StoreOrderCommonMedicine();
-                MessageWindow.ShowMessage("已轉出採購單 請至進退貨管理確認", MessageType.SUCCESS);
-                ProductPurchaseReturnViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseReturn;
-                Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, table.Rows[0].Field<string>("StoOrdID"), ""));
+
+                if (table.Rows.Count > 0)
+                {
+                    StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
+                    storeOrder.GetOrderProducts();
+
+                    table = StoreOrderDB.SendStoreOrderToSingde(storeOrder);
+
+                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                    {
+                        StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
+                        MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
+                    }
+                    else
+                    {
+                        StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID);
+                        MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
+                    }
+
+                    CommonProductGetDataAcion();
+                }
             }
         }
       
@@ -409,6 +437,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveCollectionViewSource.Filter += Filter;
             SetPhoneCount();
         }
+
+        private void ReloadIndexReserve(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("ReloadIndexReserves"))
+                ReserveSearchAction();
+        }
+
         private void Filter(object sender, FilterEventArgs e) {
             if (e.Item is null) return;
             if (!(e.Item is IndexReserve src))

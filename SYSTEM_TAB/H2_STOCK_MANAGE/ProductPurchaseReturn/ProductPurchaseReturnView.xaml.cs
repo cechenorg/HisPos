@@ -11,14 +11,5 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             InitializeComponent();
         }
-
-        private void StoreOrders_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DataGrid dataGrid = sender as DataGrid;
-            
-            if(dataGrid?.SelectedItem is null) return;
-
-            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
-        }
     }
 }

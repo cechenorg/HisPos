@@ -12,5 +12,13 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDeclare {
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ControlMedicineDeclareByDate]", parameterList);
         }
+
+        public static DataTable GetUsageDataByDate(DateTime sDate, DateTime eDate)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "SDATE", sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "EDATE", eDate);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ControlMedicineUsageByDate]", parameterList);
+        }
     }
 }

@@ -460,7 +460,19 @@ namespace His_Pos.NewClass.StoreOrder
         #endregion
 
         #endregion
-        
+
+
+        internal static DataTable GetSingdeTotalOrders()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrdersNotDone]");
+        }
+        internal static DataTable GetProcessingStoreOrdersByDate(string date)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DATE_STRING", date));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrderProcessingOrders]", parameters);
+        }
         internal static DataTable ReturnOrderRePurchase(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -580,6 +592,7 @@ namespace His_Pos.NewClass.StoreOrder
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", returnOrder.ID));
             DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", null);
+            DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
@@ -591,6 +604,7 @@ namespace His_Pos.NewClass.StoreOrder
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", purchaseOrder.ID));
             DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", purchaseOrder.PreOrderCustomer);
+            DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", purchaseOrder.TargetPreOrderCustomer);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", purchaseOrder.PlanArriveDate);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
@@ -837,6 +851,11 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "EMP_ID", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "NOTE", note);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
+        }
+
+        public static void UpdateProductOnTheWay()
+        {
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductOnTheWay]");
         }
     }
 }

@@ -54,6 +54,15 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReturnProductByProductID]", parameters);
         }
+
+        internal static DataTable GetOldReturnProductsByStoreOrderID(string orederID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ORDER_ID", orederID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[OldReturnProductByStoreOrderID]", parameters);
+        }
+
         internal static DataTable GetProductOnTheWayDetailByID(string proID, int wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

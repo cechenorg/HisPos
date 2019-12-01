@@ -27,6 +27,9 @@ namespace His_Pos.NewClass.Product
                 case AddProductEnum.ProductReturn:
                     dataTable = ProductDB.GetReturnProductStructCountBySearchString(searchString.Trim(), wareID);
                     break;
+                case AddProductEnum.Trade:
+                    dataTable = ProductDB.GetTradeProductStructCountBySearchString(searchString.Trim());
+                    break;
                 default:
                     dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString.Trim());
                     break;

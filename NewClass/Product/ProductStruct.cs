@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using His_Pos.NewClass.Product.ProductManagement;
 
 namespace His_Pos.NewClass.Product
 {
@@ -6,6 +7,7 @@ namespace His_Pos.NewClass.Product
     {
         public ProductStruct(DataRow row)
         {
+            Type = row.Field<string>("Pro_TypeID").Equals("O") ? ProductTypeEnum.OTC : ProductTypeEnum.NHIMedicine;
             ID = row.Field<string>("Pro_ID");
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
@@ -22,6 +24,7 @@ namespace His_Pos.NewClass.Product
             IsEnable = row.Field<bool>("Pro_IsEnable");
         }
 
+        public ProductTypeEnum Type { get; set; }
         public string ID { get; set; }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }

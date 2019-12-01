@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
@@ -6,6 +7,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
@@ -143,6 +145,14 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             else
                 e.Accepted = false;
         }
+
+        private void ProductTradeFilter(object sender, FilterEventArgs e)
+        {
+            if (((ProductStruct)e.Item).Type == ProductTypeEnum.OTC)
+                e.Accepted = true;
+            else
+                e.Accepted = false;
+        }
         private void FocusUpDownAction(string direction)
         {
             if (!IsEditing && ProductStructCollection.Count > 0)
@@ -220,9 +230,11 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 case AddProductEnum.ProductReturn:
                     ProStructCollectionViewSource.Filter += ProductReturnFilter;
                     break;
+                case AddProductEnum.Trade:
+                    ProStructCollectionViewSource.Filter += ProductTradeFilter;
+                    break;
             }
         }
-
         #endregion
 
     }

@@ -75,7 +75,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                 Set(() => ControlMedicineDeclares, ref controlMedicineDeclares, value);
             }
         }
-        private NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare  selectItem;
+        private NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare selectItem;
         public NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare SelectItem
         {
             get { return selectItem; }

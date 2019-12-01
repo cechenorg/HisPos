@@ -85,14 +85,26 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         #region Action
         private void SubmitAction() {
             if (IndexReserveSelectedItem is null) return;
-            string askstring = IndexReserveSelectedItem.PrepareMedType == ReserveSendType.AllPrepare  ? "是否列印封包明細?" : "是否傳送藥健康?";
-            ConfirmWindow confirmWindow = new ConfirmWindow(askstring, "預約慢箋採購");
-            var print = (bool) confirmWindow.DialogResult;
-            SendReserveStoOrder(print);
+            ConfirmWindow confirmWindow;
+            var print = false;
+            switch (IndexReserveSelectedItem.PrepareMedType)
+            {
+                case ReserveSendType.AllPrepare:
+                    confirmWindow = new ConfirmWindow("是否列印封包明細", "預約慢箋採購");
+                    print = (bool) confirmWindow.DialogResult;
+                    SendReserveStoOrder(print);
+                    break;
+                default:
+                    confirmWindow = new ConfirmWindow("是否傳送藥健康?", "預約慢箋採購");
+                    print = (bool) confirmWindow.DialogResult;
+                    if(!print) return;
+                    SendReserveStoOrder(print);
+                    break;
+            }
             if (IndexReserveCollection.Count == 0) {
                 MessageWindow.ShowMessage("未有備藥傳送處方", MessageType.SUCCESS);
-                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseReserveSendConfirmWindow"));
-            } 
+                Messenger.Default.Send(new NotificationMessage("CloseReserveSendConfirmWindow"));
+            }  
         }
         private void SendAmountChangeAction() {
             CheckSendStatus();

@@ -40,6 +40,13 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             DataBaseFunction.AddSqlParameter(parameterList, "userID", ChromeTabViewModel.ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "stoOrdID", stoOrdID); 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateIndexReserveStatus]", parameterList);
-        } 
+        }
+
+        public static DataTable GetOrderIDByResMasID(int id)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ID", id);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderIDByReserveID]", parameterList);
+        }
     }
 }

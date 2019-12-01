@@ -15,6 +15,7 @@ using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.SYSTEM_TAB.OfflineOperation;
 
 namespace His_Pos.ChromeTabViewModel
@@ -37,6 +38,7 @@ namespace His_Pos.ChromeTabViewModel
             SimpleIoc.Default.Register<ProductPurchaseReturnViewModel>();
             SimpleIoc.Default.Register<ProductPurchaseRecordViewModel>();
             SimpleIoc.Default.Register<ViewModelOfflineOperationWindow>();
+            SimpleIoc.Default.Register<CustomerManageViewModel>();
         }
      
         public ViewModelMainWindow ViewModelMainWindow => ServiceLocator.Current.GetInstance<ViewModelMainWindow>();
@@ -44,6 +46,7 @@ namespace His_Pos.ChromeTabViewModel
         public ProductPurchaseReturnViewModel ProductPurchaseReturn => ServiceLocator.Current.GetInstance<ProductPurchaseReturnViewModel>();
         public ProductPurchaseRecordViewModel ProductPurchaseRecord => ServiceLocator.Current.GetInstance<ProductPurchaseRecordViewModel>();
         public ViewModelOfflineOperationWindow ViewModelOfflineOperationWindow => ServiceLocator.Current.GetInstance<ViewModelOfflineOperationWindow>();
+        public CustomerManageViewModel CustomerManageView => ServiceLocator.Current.GetInstance<CustomerManageViewModel>();
         public static void Cleanup()
         {
         }
