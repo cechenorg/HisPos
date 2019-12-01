@@ -67,7 +67,7 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
-            if (String.IsNullOrEmpty(TargetPreOrderCustomer))
+            if (String.IsNullOrEmpty(TargetPreOrderCustomer) && OrderManufactory.ID.Equals("0"))
             {
                 MessageWindow.ShowMessage("進貨單必須指定顧客!", MessageType.ERROR);
                 return false;
