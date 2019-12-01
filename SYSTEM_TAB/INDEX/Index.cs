@@ -265,6 +265,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         #endregion
         public Index() {
             InitStatusstring();
+            Messenger.Default.Register<NotificationMessage>("ReloadIndexReserves", ReloadIndexReserve);
             ReserveSearchCommand = new RelayCommand(ReserveSearchAction);
             IndexReserveSelectionChangedCommand = new RelayCommand(IndexReserveSelectionChangedAction);
             ReserveMedicineSendCommand = new RelayCommand(ReserveSendAction);
@@ -418,6 +419,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveCollectionViewSource.Filter += Filter;
             SetPhoneCount();
         }
+
+        private void ReloadIndexReserve(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("ReloadIndexReserves"))
+                ReserveSearchAction();
+        }
+
         private void Filter(object sender, FilterEventArgs e) {
             if (e.Item is null) return;
             if (!(e.Item is IndexReserve src))

@@ -838,5 +838,10 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "NOTE", note);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
         }
+
+        public static void UpdateProductOnTheWay()
+        {
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductOnTheWay]");
+        }
     }
 }
