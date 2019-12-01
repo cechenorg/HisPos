@@ -114,6 +114,12 @@
                 </StackPanel>
                 <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"              
                           ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollBar">
+                            <Setter Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground"  Value="#FF535353" />
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>

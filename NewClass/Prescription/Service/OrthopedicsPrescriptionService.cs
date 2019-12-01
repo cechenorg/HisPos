@@ -35,7 +35,7 @@ namespace His_Pos.NewClass.Prescription.Service
             return CheckSameDeclare() && PrintConfirm();
         }
 
-        public override bool CheckEditPrescription(bool noCard)
+        public override bool CheckEditPrescription(bool hasCard)
         {
             if (!CheckAnonymousPatient()) return false;
             if (!CheckValidCustomer()) return false;
@@ -46,8 +46,8 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             else
             {
-                if (!CheckNhiRules(noCard)) return false;
-                if (!noCard)
+                if (!CheckNhiRules(!hasCard)) return false;
+                if (hasCard)
                     if (!CheckMedicalNumber()) return false;
             }
             return CheckPrescribeRules();

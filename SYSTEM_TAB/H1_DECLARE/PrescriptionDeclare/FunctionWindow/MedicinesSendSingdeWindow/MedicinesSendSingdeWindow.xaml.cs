@@ -9,7 +9,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
     /// </summary>
     public partial class MedicinesSendSingdeWindow : Window
     {
-        public MedicinesSendSingdeWindow(Prescription p)
+        public MedicinesSendSingdeWindow(Prescription p,bool autoRegister = false)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -18,7 +18,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                     Close();
             });
             this.Closing += (sender, e) => Messenger.Default.Unregister(this);
-            DataContext = new MedicinesSendSingdeViewModel(p);
+            DataContext = new MedicinesSendSingdeViewModel(p,autoRegister);
             ShowDialog();
         }
     }

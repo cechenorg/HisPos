@@ -5,10 +5,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
-using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.Prescription.IndexReserve;
-using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Product.PurchaseReturn;
 
@@ -853,6 +851,11 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "EMP_ID", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "NOTE", note);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
+        }
+
+        public static void UpdateProductOnTheWay()
+        {
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductOnTheWay]");
         }
     }
 }

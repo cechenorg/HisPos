@@ -30,7 +30,7 @@
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>14</ApplicationRevision>
+    <ApplicationRevision>18</ApplicationRevision>
     <ApplicationVersion>2.0.12.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -1022,7 +1022,6 @@
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
       <DependentUpon>AuthenticationManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManage.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageControl.xaml.cs">
       <DependentUpon>CustomerManageControl.xaml</DependentUpon>
     </Compile>
@@ -1182,6 +1181,10 @@
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H9_SYSTEMTUTORIAL\Tutorial\TutorialViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ControlMedicineUsageWindow\ControlMedicineUsageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\ControlMedicineUsageWindow\ControlMedicineUsageWindow.xaml.cs">
+      <DependentUpon>ControlMedicineUsageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml.cs">
       <DependentUpon>CustomerDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -1938,6 +1941,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\INDEX\ControlMedicineUsageWindow\ControlMedicineUsageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\INDEX\CustomerDetailWindow\CustomerDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2275,14 +2282,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewClass\Product\Medicine\ControlMedicineDeclare\" />
-    <Folder Include="NewClass\Product\Medicine\ControlMedicineDetail\" />
-    <Folder Include="NewClass\Product\Medicine\CooperativeAdjustMedicine\" />
-    <Folder Include="NewClass\Product\Medicine\MedBag\" />
-    <Folder Include="NewClass\Product\Medicine\MedicineSet\" />
-    <Folder Include="NewClass\Product\Medicine\Position\" />
-    <Folder Include="NewClass\Product\Medicine\PreviewMedicine\" />
-    <Folder Include="NewClass\Product\Medicine\Usage\" />
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />

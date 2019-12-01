@@ -40,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
                         Close();
                         break;
                     case "CloseNotEnoughMedicinePurchaseWindowCancel":
-                        DialogResult = true;
+                        DialogResult = false;
                         Close();
                         break;
                 }

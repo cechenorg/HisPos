@@ -71,11 +71,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         {
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(PurchaseList, Note);
-            if (result.Rows.Count > 0)
-            {
-                PurchaseList.ToWaitingStatus(Note);
-            }
+            PurchaseList.CreateOrder(Note);
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowPurchase"));

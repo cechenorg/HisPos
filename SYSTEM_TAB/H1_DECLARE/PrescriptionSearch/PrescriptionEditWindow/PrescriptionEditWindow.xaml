@@ -64,7 +64,7 @@
             </DataTemplate.Resources>
             <DataGrid x:Name="EditRecord" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DataContext.EditRecords,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                       CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserResizeColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" 
-                      CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=Window}}" Height="255" Width="955">
+                      CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=Window}}" Height="200" Width="955">
                 <DataGrid.Resources>
                     <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
                 </DataGrid.Resources>
@@ -887,8 +887,18 @@
                                     <DataTemplate.Resources>
                                         <DataTemplate x:Key="AdjustBuckle">
                                             <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
-                                                     FontSize="16" FontWeight="Bold" CaretBrush="Black" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}"
+                                                     FontSize="16" FontWeight="Bold" CaretBrush="Black" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="BuckleAmount_PreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}"
                                                      Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                <TextBox.Style>
+                                                    <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                                                        <Setter Property= "Foreground" Value="Black"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding ="{Binding NotEnough, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                                <Setter Property= "Foreground" Value="IndianRed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBox.Style>
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="TextChanged">
                                                         <command:EventToCommand Command="{Binding DataContext.DataChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>

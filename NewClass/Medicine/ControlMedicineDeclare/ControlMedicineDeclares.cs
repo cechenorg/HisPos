@@ -13,5 +13,15 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDeclare {
                 Add(new ControlMedicineDeclare(r));
             }
         }
+
+        public void GetUsageData(DateTime sDate, DateTime eDate)
+        {
+            Clear();
+            DataTable table = ControlMedicineDeclareDb.GetUsageDataByDate(sDate, eDate);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new ControlMedicineDeclare(r));
+            }
+        }
     }
 }
