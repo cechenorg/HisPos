@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.Prescription.Service
     {
         #region AbstractFunctions
         public abstract bool CheckPrescription(bool noCard,bool errorAdjust);
-        public abstract bool CheckEditPrescription(bool noCard);
+        public abstract bool CheckEditPrescription(bool hasCard);
         public abstract bool NormalAdjust();
         public abstract bool ErrorAdjust();
         public abstract bool DepositAdjust();
@@ -196,7 +196,7 @@ namespace His_Pos.NewClass.Prescription.Service
             //if (notCheckPast10Days)
             //    return CheckTreatDate() && CheckAdjustDate();
             //return CheckTreatDate() && CheckAdjustDate() && CheckAdjustDatePast10Days();
-            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate()/* && CheckAdjustDatePast()*/ /*&& CheckAdjustDateFutureOutOfRange()*/;
+            return CheckTreatDate() && CheckTreatDateValid() && CheckAdjustDate() && CheckAdjustDatePast() /*&& CheckAdjustDateFutureOutOfRange()*/;
         }
 
         protected bool CheckAdjustAndTreatDateFromEdit()

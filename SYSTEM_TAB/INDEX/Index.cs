@@ -11,15 +11,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Data;
 using His_Pos.NewClass.Product;
-using System.Linq;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
-using His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow;
 using Microsoft.Reporting.WinForms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using His_Pos.NewClass.Product.CommonProduct;
@@ -251,6 +248,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand ReserveSearchCommand { get; set; }
         public RelayCommand ReserveMedicineSendCommand { get; set; }
         public RelayCommand ReserveMedicineBackCommand { get; set; }
+        public RelayCommand ControlMedicineUsageCommand { get; set; }
         public RelayCommand IndexReserveSelectionChangedCommand { get; set; }
         public RelayCommand CommonMedStoreOrderCommand { get; set; }
         public RelayCommand StatusChangedCommand { get; set; }
@@ -267,6 +265,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         #endregion
         public Index() {
             InitStatusstring();
+            Messenger.Default.Register<NotificationMessage>("ReloadIndexReserves", ReloadIndexReserve);
             ReserveSearchCommand = new RelayCommand(ReserveSearchAction);
             IndexReserveSelectionChangedCommand = new RelayCommand(IndexReserveSelectionChangedAction);
             ReserveMedicineSendCommand = new RelayCommand(ReserveSendAction);
@@ -277,6 +276,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CustomerDataSaveCommand = new RelayCommand(CustomerDataSaveAction);
             ShowCustomerPrescriptionChangedCommand = new RelayCommand(ShowCustomerPrescriptionChangedAction);
             ReserveMedicineBackCommand = new RelayCommand(ReserveMedicineBackAction);
+            ControlMedicineUsageCommand = new RelayCommand(ControlMedicineUsageAction);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
             ShowCommonProductDetailCommand = new RelayCommand(ShowCommonProductDetailAction); 
@@ -317,6 +317,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
            
         }
+
+        private void ControlMedicineUsageAction()
+        {
+            var controlMedUsageWindow = new ControlMedicineUsageWindow.ControlMedicineUsageWindow();
+            controlMedUsageWindow.Show();
+        }
+
         private void PrintPackageAction() {
             if (IndexReserveSelectedItem is null) return;
 
@@ -430,6 +437,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ReserveCollectionViewSource.Filter += Filter;
             SetPhoneCount();
         }
+
+        private void ReloadIndexReserve(NotificationMessage msg)
+        {
+            if (msg.Notification.Equals("ReloadIndexReserves"))
+                ReserveSearchAction();
+        }
+
         private void Filter(object sender, FilterEventArgs e) {
             if (e.Item is null) return;
             if (!(e.Item is IndexReserve src))

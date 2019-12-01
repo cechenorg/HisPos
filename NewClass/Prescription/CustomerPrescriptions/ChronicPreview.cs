@@ -101,7 +101,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         {
             if (!string.IsNullOrEmpty(OrderID))
             {
-                var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(OrderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");;
+                var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(OrderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");
                 if (!removeSingdeOrder)
                     MessageWindow.ShowMessage("處方訂單已出貨或網路異常，訂單刪除失敗", MessageType.ERROR);
                 else
