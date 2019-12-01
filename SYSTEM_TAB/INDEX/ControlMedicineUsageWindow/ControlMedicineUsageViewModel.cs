@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.ControlMedicineDeclare;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
 {
@@ -81,13 +82,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         #region Commands
 
         public RelayCommand GetData { get; set; }
-        
+        public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
 
         #endregion
         public ControlMedicineUsageViewModel()
         {
             InitSearchDate();
             GetData = new RelayCommand(GetDataAction);
+            DateMouseDoubleClick = new RelayCommand<MaskedTextBox>(DateMouseDoubleClickAction);
             GetDataAction();
         }
 
@@ -107,6 +109,19 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
             ControlMedicineDeclares.GetUsageData((DateTime)StartDate, (DateTime)EndDate);
             ControlCollectionViewSource = new CollectionViewSource {Source = ControlMedicineDeclares};
             ControlCollectionView = ControlCollectionViewSource.View;
+        }
+
+        private void DateMouseDoubleClickAction(MaskedTextBox sender)
+        {
+            switch (sender.Name)
+            {
+                case "StartDate":
+                    StartDate = DateTime.Today;
+                    break;
+                case "EndDate":
+                    EndDate = DateTime.Today;
+                    break;
+            }
         }
 
         private void InitSearchDate()
