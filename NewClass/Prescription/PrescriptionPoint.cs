@@ -22,7 +22,7 @@ namespace His_Pos.NewClass.Prescription
             SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint");
             TreatmentPoint = r.Field<int>("TreatmentPoint");
             MedicinePoint = r.Field<int>("MedicinePoint");
-            MedicalServicePoint = r.Field<int>("MedicalServicePoint");
+            MedicalServicePoint = r.Field<int?>("MedicalServicePoint") is null ? 0 : r.Field<int>("MedicalServicePoint");
             if (type != PrescriptionType.ChronicReserve)
             {
                 AmountSelfPay = r.Field<int>("PaySelfPoint");
