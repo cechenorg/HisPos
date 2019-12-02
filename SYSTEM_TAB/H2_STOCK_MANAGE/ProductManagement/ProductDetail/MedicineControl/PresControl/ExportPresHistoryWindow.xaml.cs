@@ -55,7 +55,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             Collection<object> tempCollection = new Collection<object>() { new List<object>(){ productID, (DateTime)StartDateTime, (DateTime)EndDateTime, wareHouseID } };
 
             MainWindow.ServerConnection.OpenConnection();
-            ExportExcelService service = new ExportExcelService(tempCollection, new ExportProductUsageTemplate(), "D:\\TEEM.xlsx");
+            ExportExcelService service = new ExportExcelService(tempCollection, new ExportProductUsageTemplate());
             bool isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\{productID} 商品用量歷程{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
             MainWindow.ServerConnection.CloseConnection();
 
