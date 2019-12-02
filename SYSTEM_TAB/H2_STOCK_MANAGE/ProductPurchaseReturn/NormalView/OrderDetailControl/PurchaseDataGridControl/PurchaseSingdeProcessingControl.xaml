@@ -141,10 +141,10 @@
             </DataGrid.RowHeaderTemplate>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="預定客戶" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="580,0,0,0"/>
-            <Label Content="{Binding CurrentStoreOrder.PreOrderCustomer}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>
-            <Label Content="預定到貨日期" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <Label Content="{Binding CurrentStoreOrder.PlanArriveDate, Converter={StaticResource DateConverter}}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>
+            <Label Content="預定客戶" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="850,0,0,0"/>
+            <Label Content="{Binding CurrentStoreOrder.TargetPreOrderCustomer}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>
+            <!--<Label Content="預定到貨日期" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <Label Content="{Binding CurrentStoreOrder.PlanArriveDate, Converter={StaticResource DateConverter}}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>-->
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>

@@ -81,15 +81,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void ChangeUiTypeAction(string type)
         {
+            MainWindow.ServerConnection.OpenConnection();
             switch (type)
             {
                 case "NORMAL":
                     UiType = OrderUITypeEnum.NORMAL;
+                    NormalViewModel.InitData(StoreOrders.GetOrdersNotDone());
                     break;
                 case "SINGDE":
                     UiType = OrderUITypeEnum.SINGDE;
+                    SingdeTotalViewModel.InitData();
                     break;
             }
+            MainWindow.ServerConnection.CloseConnection();
         }
         #endregion
 

@@ -15,12 +15,18 @@ namespace His_Pos.NewClass.StoreOrder
     {
         #region ----- Define Variables -----
         private ReturnProducts returnProducts;
+        private ReturnProducts oldReturnProducts;
         private double returnStockValue;
 
         public ReturnProducts ReturnProducts
         {
             get { return returnProducts; }
             set { Set(() => ReturnProducts, ref returnProducts, value); }
+        }
+        public ReturnProducts OldReturnProducts
+        {
+            get { return oldReturnProducts; }
+            set { Set(() => OldReturnProducts, ref oldReturnProducts, value); }
         }
         public int ProductCount
         {
@@ -138,6 +144,7 @@ namespace His_Pos.NewClass.StoreOrder
             SelectedItem = null;
 
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
+            OldReturnProducts = ReturnProducts.GetOldReturnProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
 
             if(OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)

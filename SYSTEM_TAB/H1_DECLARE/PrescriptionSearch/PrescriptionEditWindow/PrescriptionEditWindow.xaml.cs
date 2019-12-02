@@ -366,5 +366,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
             ((PrescriptionEditViewModel) DataContext).ChangeMedicineIDToMostPriced.Execute(null);
         }
+
+        private void BuckleAmount_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            e.Handled = true;
+            if (textBox.SelectedText.Length.Equals(textBox.Text.Length))
+                ((PrescriptionEditViewModel)DataContext).ResetBuckleAmount.Execute(null);
+            textBox.Focus();
+        }
     }
 }

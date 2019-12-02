@@ -4,6 +4,8 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PrescriptionSendData;
+using His_Pos.RDLC;
+using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow
 {
@@ -37,10 +39,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         }
         private Prescription Prescription;
         private string DecMasId { get; set; }
+        public Visibility AutoRegister { get; set; }
         #endregion
-        public MedicinesSendSingdeViewModel(Prescription p)
+        public MedicinesSendSingdeViewModel(Prescription p,bool autoRegister)
         {
             Prescription = p;
+            AutoRegister = autoRegister ? Visibility.Hidden : Visibility.Visible;
             Init();
         }
 

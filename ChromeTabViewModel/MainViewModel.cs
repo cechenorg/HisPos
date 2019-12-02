@@ -327,7 +327,7 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[4].Functions[3], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
                 case nameof(FeatureItem.顧客管理):
-                    newTab = new CustomerManageViewModel() { TabName = MainWindow.HisFeatures[4].Functions[4], Icon = MainWindow.HisFeatures[4].Icon };
+                    newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).CustomerManageView;
                     break;
 
                 //打卡

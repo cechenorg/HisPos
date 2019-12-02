@@ -20,9 +20,11 @@ namespace His_Pos.NewClass.StoreOrder
         private PurchaseProducts orderProducts;
 
         public string PreOrderCustomer { get; set; }
+        public string TargetPreOrderCustomer { get; set; }
         public DateTime? PlanArriveDate { get; set; }
         public string PatientData { get; set; }
         public bool HasPatient => !string.IsNullOrEmpty(PatientData);
+        public bool HasCustomer => !string.IsNullOrEmpty(PreOrderCustomer);
         public PurchaseProducts OrderProducts
         {
             get { return orderProducts; }
@@ -44,6 +46,7 @@ namespace His_Pos.NewClass.StoreOrder
             OrderType = OrderTypeEnum.PURCHASE;
             PatientData = row.Field<string>("CUS_DATA");
             PreOrderCustomer = row.Field<string>("StoOrd_CustomerName");
+            TargetPreOrderCustomer = row.Field<string>("StoOrd_TargetCustomerName");
             PlanArriveDate = row.Field<DateTime?>("StoOrd_PlanArrivalDate");
         }
 
@@ -61,6 +64,12 @@ namespace His_Pos.NewClass.StoreOrder
             if (OrderProducts.Count == 0)
             {
                 MessageWindow.ShowMessage("進貨單中不可以沒有商品!", MessageType.ERROR);
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(TargetPreOrderCustomer) && OrderManufactory.ID.Equals("0"))
+            {
+                MessageWindow.ShowMessage("進貨單必須指定顧客!", MessageType.ERROR);
                 return false;
             }
 

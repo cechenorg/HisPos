@@ -4,10 +4,13 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 {
-    public class SingdeTotalOrder
+    public class SingdeTotalOrder : ObservableObject
     {
         #region ----- Define Variables -----
         public string Date { get; set; }
@@ -25,21 +28,85 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                 return StoreOrders.Count(s => s.Status == OrderStatusEnum.SINGDE_PROCESSING) == 0;
             }
         }
+        public double Total
+        {
+            get
+            {
+                return PurchasePrice - ReturnPrice;
+            }
+        }
         #endregion
 
         public SingdeTotalOrder(DataRow dataRow)
         {
-            Date = dataRow.Field<string>("");
-            PurchaseCount = dataRow.Field<int>("");
-            ReturnCount = dataRow.Field<int>("");
-            PurchasePrice = dataRow.Field<double>("");
-            ReturnPrice = dataRow.Field<double>("");
+            Date = dataRow.Field<string>("DATE");
+            PurchaseCount = dataRow.Field<int>("P_COUNT");
+            ReturnCount = dataRow.Field<int>("R_COUNT");
+            PurchasePrice = (double)dataRow.Field<decimal>("P_TOTAL");
+            ReturnPrice = (double)dataRow.Field<decimal>("R_TOTAL");
         }
+
 
         #region ----- Define Functions -----
         internal void GetProcessingOrders()
         {
             StoreOrders = ProcessingStoreOrders.GetProcessingStoreOrdersByDate(Date);
+        }
+        internal void OrderToDone(string id)
+        {
+            foreach (var order in StoreOrders)
+            {
+                if (order.ID == id)
+                {
+                    order.Status = OrderStatusEnum.DONE;
+
+                    DataTable result = new DataTable();
+
+                    switch (order.Type)
+                    {
+                        case OrderTypeEnum.PURCHASE:
+                            result = StoreOrderDB.PurchaseStoreOrderToDone(id);
+                            break;
+                        case OrderTypeEnum.RETURN:
+                            result = StoreOrderDB.ReturnStoreOrderToDone(id);
+                            break;
+                    }
+
+                    if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                        MessageWindow.ShowMessage((order.Type == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+                    break;
+                }
+            }
+
+            RaisePropertyChanged(nameof(IsAllDone));
+        }
+
+        internal void AllOrderToDone()
+        {
+            foreach (var order in StoreOrders)
+            {
+                if (order.Status == OrderStatusEnum.SINGDE_PROCESSING)
+                {
+                    order.Status = OrderStatusEnum.DONE;
+
+                    DataTable result = new DataTable();
+
+                    switch (order.Type)
+                    {
+                        case OrderTypeEnum.PURCHASE:
+                            result = StoreOrderDB.PurchaseStoreOrderToDone(order.ID);
+                            break;
+                        case OrderTypeEnum.RETURN:
+                            result = StoreOrderDB.ReturnStoreOrderToDone(order.ID);
+                            break;
+                    }
+
+                    if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                        MessageWindow.ShowMessage((order.Type == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+                }
+            }
+
+            RaisePropertyChanged(nameof(IsAllDone));
         }
         #endregion
     }

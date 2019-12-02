@@ -282,6 +282,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #region ----- Define Functions -----
         public void InitData(StoreOrders storeOrders)
         {
+            storeOrderCollection = storeOrders;
             StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrders);
             StoreOrderCollectionView.Filter += OrderFilter;
 

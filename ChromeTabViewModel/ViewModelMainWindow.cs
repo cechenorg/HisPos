@@ -197,12 +197,10 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = "取得員工";
                 EmployeeCollection = new Employees();
                 EmployeeCollection.Init();
-                int i = 100;
                 BusyContent = "準備回傳骨科拋轉資料";
                 while (WebApi.SendToCooperClinicLoop100())
                 { 
-                    BusyContent = "回傳合作診所處方中 " + i.ToString() + "筆";
-                    i += 100;
+                    BusyContent = "回傳合作診所處方中...";
                 } //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
@@ -403,31 +401,6 @@ namespace His_Pos.ChromeTabViewModel
             report.Render("Image", deviceInfo, CreateStream, out warnings);
             foreach (Stream stream in mStreams)
                 stream.Position = 0;
-            //try
-            //{
-            //    string deviceInfo =
-            //        @"<DeviceInfo>
-            //    <OutputFormat>EMF</OutputFormat>" +
-            //        "  <PageWidth>" + width + "cm</PageWidth>" +
-            //        "  <PageHeight>" + height + "cm</PageHeight>" +
-            //        "  <MarginTop>0cm</MarginTop>" +
-            //        "  <MarginLeft>0cm</MarginLeft>" +
-            //        "  <MarginRight>0cm</MarginRight>" +
-            //        "  <MarginBottom>0cm</MarginBottom>" +
-            //        "</DeviceInfo>";
-            //    Warning[] warnings;
-            //    m_streams = new List<Stream>();
-            //    report.Render("Image", deviceInfo, CreateStream, out warnings);
-            //    foreach (Stream stream in m_streams)
-            //        stream.Position = 0;
-            //}
-            //catch (Exception ex)
-            //{
-            //    Application.Current.Dispatcher.Invoke((Action)delegate
-            //    {
-            //        MessageWindow.ShowMessage("Export:" + ex.Message, MessageType.ERROR);
-            //    });
-            //}
         }
 
         private void ReportPrint(string printer)
@@ -443,24 +416,6 @@ namespace His_Pos.ChromeTabViewModel
             catch (Exception ex) {
                 FunctionWindow.MessageWindow.ShowMessage(ex.Message,Class.MessageType.ERROR);
             }
-            //if (m_streams == null || m_streams.Count == 0)
-            //{
-            //    return;
-            //}
-            //try
-            //{
-            //    PrintDocument printDoc = new PrintDocument();
-            //    printDoc.PrinterSettings.PrinterName = printer;
-            //    printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
-            //    m_currentPageIndex = 0;
-            //    printDoc.Print();
-            //}
-            //catch (Exception ex)
-            //{
-            //    Application.Current.Dispatcher.Invoke((Action)delegate {
-            //        MessageWindow.ShowMessage("ReportPrint:" + ex.Message, MessageType.ERROR);
-            //    });
-            //}
         }
         private Stream CreateStream(string name, string fileNameExtension, Encoding encoding,
             string mimeType, bool willSeek)
@@ -477,50 +432,18 @@ namespace His_Pos.ChromeTabViewModel
             Metafile pageImage = new
                 Metafile(mStreams[mCurrentPageIndex]);
 
-            // Adjust rectangular area with printer margins.
             Rectangle adjustedRect = new Rectangle(
                 ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
                 ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
                 ev.PageBounds.Width,
                 ev.PageBounds.Height);
 
-            // Draw a white background for the report
             ev.Graphics.FillRectangle(Brushes.White, adjustedRect);
 
-            // Draw the report content
             ev.Graphics.DrawImage(pageImage, adjustedRect);
 
-            // Prepare for the next page. Make sure we haven't hit the end.
             mCurrentPageIndex++;
             ev.HasMorePages = (mCurrentPageIndex < mStreams.Count);
-            //try
-            //{
-            //    Metafile pageImage = new
-            //        Metafile(m_streams[m_currentPageIndex]);
-
-            //    // Adjust rectangular area with printer margins.
-            //    Rectangle adjustedRect = new Rectangle(
-            //        ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
-            //        ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
-            //        ev.PageBounds.Width,
-            //        ev.PageBounds.Height);
-
-            //    // Draw a white background for the report
-            //    ev.Graphics.FillRectangle(Brushes.White, adjustedRect);
-
-            //    // Draw the report content
-            //    ev.Graphics.DrawImage(pageImage, adjustedRect);
-
-            //    // Prepare for the next page. Make sure we haven't hit the end.
-            //    m_currentPageIndex++;
-            //    ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Application.Current.Dispatcher.Invoke((Action)delegate {
-            //        MessageWindow.ShowMessage("printDoc_PrintPage" + ex.Message, MessageType.ERROR);
-            //    });
-            //}
         }
     }
 }

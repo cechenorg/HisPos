@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow
@@ -37,6 +39,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             DataContext = customerSearchViewModel;
             if (customerSearchViewModel.ShowDialog)
                 ShowDialog();
+        }
+
+        private void UIElement_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            FocusSearchTextBox();
+        }
+
+        private void UIElement_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            FocusSearchTextBox();
+        }
+
+        private void FocusSearchTextBox()
+        {
+            if (!SearchStringTextBox.IsFocused)
+                SearchStringTextBox.Focus();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            FocusSearchTextBox();
         }
     }
 }

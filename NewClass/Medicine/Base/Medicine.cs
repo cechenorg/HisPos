@@ -354,7 +354,21 @@ namespace His_Pos.NewClass.Medicine.Base
             get => buckleAmount;
             set
             {
+                if (AdjustNoBuckle)
+                    value = 0;
                 Set(() => BuckleAmount, ref buckleAmount, value);
+                NotEnough = BuckleAmount < Amount;
+            }
+        }
+
+        private bool notEnough;
+
+        public bool NotEnough
+        {
+            get => notEnough;
+            set
+            {
+                Set(() => NotEnough, ref notEnough, value);
             }
         }
 
@@ -636,6 +650,11 @@ namespace His_Pos.NewClass.Medicine.Base
             }
             Order = r.Field<int>("OrderNumber");
             SendAmount = r.Field<double>("SendAmount");
+        }
+
+        public void ResetBuckleAmount()
+        {
+            BuckleAmount = Amount;
         }
     }
 }

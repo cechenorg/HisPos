@@ -22,8 +22,8 @@ namespace His_Pos.Database
             {
                 System.Windows.Application.Current.Dispatcher.Invoke((Action) delegate
                 {
+                    NewFunction.ExceptionLog(e.Message);
                     MessageWindow.ShowMessage("網路異常 無法連線到杏德倉庫", MessageType.ERROR);
-                        
                 });
             }
         }

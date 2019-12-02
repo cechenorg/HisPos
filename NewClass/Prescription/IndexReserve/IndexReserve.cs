@@ -13,6 +13,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
 using His_Pos.NewClass.Medicine.ReserveMedicine;
 
 namespace His_Pos.NewClass.Prescription.IndexReserve
@@ -87,13 +89,18 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             get => isNoSend;
             set
             {
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
                 if (value)
                 {
                     if (PrepareMedStatus == IndexPrepareMedType.Prepare)
                     {
-                        var confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (已備藥訂單不會取消)", "預約處方通知");
-                        if ((bool)confirmWindow.DialogResult)
+                        var confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (如訂單已出貨不會取消)", "預約處方通知");
+                        if ((bool) confirmWindow.DialogResult)
+                        {
                             PrepareMedStatus = IndexPrepareMedType.UnPrepare;
+                            DeleteOrder();
+                        }
                         else
                             value = false;
                     }
@@ -105,7 +112,10 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     PrepareMedStatus = IndexPrepareMedType.Unprocess;
                 }
                 SaveStatus();
+                MainWindow.ServerConnection.CloseConnection();
+                MainWindow.SingdeConnection.CloseConnection();
                 Set(() => IsNoSend, ref isNoSend, value);
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("ReloadIndexReserves"));
             }
         }
 
@@ -255,6 +265,30 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 new ReportParameter("AdjustEnd", $"{adjustEnd:yyy-MM-dd}"),
                 new ReportParameter("AdjustDay", AdjustDate.Day.ToString())
             };
+        }
+
+        private void DeleteOrder()
+        {
+            var orderIDTable = IndexReserveDb.GetOrderIDByResMasID(Id);
+            if (orderIDTable.Rows.Count > 0)
+            {
+                var orderID = orderIDTable.Rows[0].Field<string>("StoOrd_ID");
+                if (!string.IsNullOrEmpty(orderID))
+                {
+                    var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(orderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+                    if (!removeSingdeOrder)
+                        MessageWindow.ShowMessage("處方訂單已出貨或網路異常，訂單刪除失敗", MessageType.ERROR);
+                    else
+                    {
+                        var dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(orderID);
+                        var removeLocalOrder = dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+                        if (!removeLocalOrder)
+                            MessageWindow.ShowMessage("處方訂單刪除失敗，請至進退貨管理確認。", MessageType.ERROR);
+                        else
+                            StoreOrderDB.UpdateProductOnTheWay();
+                    }
+                }
+            }
         }
     }
 }

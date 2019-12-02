@@ -615,6 +615,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddColumnValue(newRow, "PreMas_ChronicTotal", p.ChronicTotal);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceID", p.MedicalServiceCode);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServicePoint", p.PrescriptionPoint.MedicalServicePoint);
+            DataBaseFunction.AddColumnValue(newRow, "PreMas_MedicalServiceEstimate", p.PrescriptionPoint.MedicalServicePoint);
             DataBaseFunction.AddColumnValue(newRow, "PreMas_OldMedicalNumber", p.OriginalMedicalNumber);
             if (string.IsNullOrEmpty(XmlService.ToXmlDocument(p.DeclareContent).InnerXml))
                 newRow["PreMas_DeclareContent"] = DBNull.Value;
@@ -702,6 +703,7 @@ namespace His_Pos.NewClass.Prescription
             masterTable.Columns.Add("PreMas_ChronicTotal", typeof(short));
             masterTable.Columns.Add("PreMas_MedicalServiceID", typeof(string));
             masterTable.Columns.Add("PreMas_MedicalServicePoint", typeof(int));
+            masterTable.Columns.Add("PreMas_MedicalServiceEstimate", typeof(int));
             masterTable.Columns.Add("PreMas_OldMedicalNumber", typeof(string));
             masterTable.Columns.Add("PreMas_DeclareContent", typeof(SqlXml));
             masterTable.Columns.Add("PreMas_IsSendToServer", typeof(bool));
