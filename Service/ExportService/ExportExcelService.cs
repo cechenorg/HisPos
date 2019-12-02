@@ -40,7 +40,9 @@ namespace His_Pos.Service.ExportService
                 foreach (var data in DataSource)
                 {
                     Template.Source = data;
-                    excel.Workbook.Worksheets.Add(Template.GetSheetName());
+
+                    if (String.IsNullOrEmpty(ExcelBasePath))
+                        excel.Workbook.Worksheets.Add(Template.GetSheetName());
 
                     var worksheet = excel.Workbook.Worksheets[Template.GetSheetName()];
                     Template.SetSheetData(worksheet);
