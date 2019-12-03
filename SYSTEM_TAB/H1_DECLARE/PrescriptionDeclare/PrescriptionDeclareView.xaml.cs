@@ -600,7 +600,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             for (var i = 0; i < PrescriptionMedicines.Items.Count; i++)
             {
                 var itm = GetDataGridRowItem(i);
-                if (IsTheMouseOnTargetRow(itm, pos))
+                if (itm != null && IsTheMouseOnTargetRow(itm, pos))
                 {
                     curIndex = i;
                     break;
