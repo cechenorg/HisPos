@@ -61,8 +61,8 @@
             <Setter Property="Background" Value="RoyalBlue" />
         </Style>
         <ContextMenu x:Key="AdjustNoBuckleContextMenu" TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-            <MenuItem Header="調劑不扣庫" Command="{Binding AdjustNoBuckle}" Visibility="{Binding CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"/>
-            <MenuItem Header="調劑扣庫" Command="{Binding AdjustNoBuckle}" Visibility="{Binding CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <MenuItem Header="調劑不扣庫" Command="{Binding AdjustNoBuckle}" Visibility="{Binding DataContext.CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+            <MenuItem Header="調劑扣庫" Command="{Binding AdjustNoBuckle}" Visibility="{Binding DataContext.CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </ContextMenu>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
