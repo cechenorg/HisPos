@@ -21,6 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Label Content="處方用量" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0"/>
@@ -114,5 +115,6 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Button Content="匯出歷史用量" BorderThickness="0" Grid.Row="2" Foreground="{StaticResource ForeGround}" FontSize="15" Width="285" FontFamily="Segoe UI Semi" Height="36" Background="{StaticResource Shadow}" Command="{Binding ExportCommand}"/>
     </Grid>
 </UserControl>
