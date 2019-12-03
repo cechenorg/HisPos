@@ -465,6 +465,7 @@
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProduct.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProducts.cs" />
     <Compile Include="NewClass\Product\ExportProductRecord\ExportProductRecordTemplate.cs" />
+    <Compile Include="NewClass\Product\ExportProductUsageTemplate\ExportProductUsageTemplate.cs" />
     <Compile Include="NewClass\Product\Inventory.cs" />
     <Compile Include="NewClass\Product\Inventorys.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
@@ -841,6 +842,9 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\ExportPresHistoryWindow.xaml.cs">
+      <DependentUpon>ExportPresHistoryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\MedicineStockViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\NHIMedicineHistoryPriceWindow.xaml.cs">
       <DependentUpon>NHIMedicineHistoryPriceWindow.xaml</DependentUpon>
@@ -1543,6 +1547,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\NHIMedicineHistoryPriceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\ExportPresHistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
