@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -563,9 +564,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrescriptionMedicines_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
             prevRowIndex = GetDataGridItemCurrentRowIndex(e.GetPosition);
 
-            if (prevRowIndex < 0)
+            if (prevRowIndex < 0 || prevRowIndex >= PrescriptionMedicines.Items.Count-1)
                 return;
             PrescriptionMedicines.SelectedIndex = prevRowIndex;
 
@@ -645,6 +647,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (textBox.SelectedText.Length.Equals(textBox.Text.Length))
                 ((PrescriptionDeclareViewModel)DataContext).ResetBuckleAmount.Execute(null);
             textBox.Focus();
+        }
+
+        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
+        {
+            if (!((sender as DataGridRow).DataContext is Medicine))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void NoBuckleClick(object sender, RoutedEventArgs e)
+        {
+            if (PrescriptionMedicines.CurrentCell.Item is Medicine med)
+            {
+                PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
+                
+            }
+            
         }
     }
 }
