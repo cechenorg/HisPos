@@ -235,7 +235,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
 
         private List<ReportParameter> CreateReserveMedicinesSheetParameters() 
         {
-            var adjustEnd = ChronicSequence == 1 ? AdjustDate.AddYears(-1911).AddDays(10) : AdjustDate.AddYears(-1911).AddDays(20);
+            var adjustEnd = AdjustDate.AddYears(-1911).AddDays(20);
             return new List<ReportParameter>
             {
                 new ReportParameter("Type","預約"),
@@ -252,7 +252,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
 
         private List<ReportParameter> CreateReserveMedicinesSheetParametersA5()
         {
-            var adjustEnd = ChronicSequence == 1 ? AdjustDate.AddYears(-1911).AddDays(10) : AdjustDate.AddYears(-1911).AddDays(20);
+            var adjustEnd = AdjustDate.AddYears(-1911).AddDays(20);
             return new List<ReportParameter>
             {
                 new ReportParameter("Type","預約"),
