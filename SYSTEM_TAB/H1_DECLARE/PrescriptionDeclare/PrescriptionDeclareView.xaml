@@ -60,10 +60,6 @@
             <Setter Property="Margin" Value="10,0,10,0" />
             <Setter Property="Background" Value="RoyalBlue" />
         </Style>
-        <ContextMenu x:Key="AdjustNoBuckleContextMenu" TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-            <MenuItem Header="調劑不扣庫" Command="{Binding AdjustNoBuckle}" Visibility="{Binding DataContext.CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-            <MenuItem Header="調劑扣庫" Command="{Binding AdjustNoBuckle}" Visibility="{Binding DataContext.CurrentPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
-        </ContextMenu>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1365" Height="870">
@@ -320,7 +316,7 @@
                         <Setter Property="BorderBrush" Value="Transparent"/>
                         <Setter Property="FontSize" Value="17" />
                         <Setter Property="Height" Value="40" />
-                        <Setter Property="ContextMenu" Value="{StaticResource AdjustNoBuckleContextMenu}" />
+                        <EventSetter Event="PreviewMouseRightButtonDown" Handler="EventSetter_OnHandler"/>
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
@@ -530,6 +526,19 @@
                                         </Style>
                                     </ContentControl.Style>
                                 </ContentControl>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox x:Name="AdjustNoBuckle" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding AdjustNoBuckle,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.AdjustNoBuckle,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -1711,6 +1711,7 @@ namespace His_Pos.NewClass.Prescription
             OrderContent = string.Empty;
             foreach (var m in Medicines)
             {
+                m.AdjustNoBuckle = false;
                 m.BuckleAmount = m.Amount;
                 m.SendAmount = -1;
             }

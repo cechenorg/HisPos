@@ -44,7 +44,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             Pharmacist.IDNumber = r.Field<string>("PreMas_PharmacistIDNumber");
             Pharmacist.Name = r.Field<string>("Emp_Name");
             MedicinePoint = r.Field<int>("PreMas_MedicinePoint");
-            MedicalServicePoint = r.Field<int?>("MedicalServicePoint") is null ? 0 : r.Field<int>("MedicalServicePoint");
+            MedicalServicePoint = r.Field<int?>("PreMas_MedicalServicePoint") is null ? 0 : r.Field<int>("PreMas_MedicalServicePoint");
             TotalPoint = r.Field<int>("PreMas_TotalPoint");
             PharmacyID = r.Field<string>("PreMas_PharmacyID");
             AdjustCase = new AdjustCase();
