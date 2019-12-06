@@ -117,5 +117,12 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             return false;
         }
+
+        public override bool CheckCustomerSelected()
+        {
+            if (!CheckAnonymousPatient()) return false;
+            if (!CheckValidCustomer()) return false;
+            return true;
+        }
     }
 }

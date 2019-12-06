@@ -327,6 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             Delete = new RelayCommand(DeleteAction,() => CanEdit);
             RedoEdit = new RelayCommand(RedoEditAction);
             EditComplete = new RelayCommand(EditCompleteAction);
+            AdjustDateLostFocus = new RelayCommand(AdjustDateLostFocusAction);
         }
 
         private void DataChangedAction()
@@ -645,6 +646,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
             Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
+        }
+
+        private void AdjustDateLostFocusAction()
+        {
+            if (EditedPrescription.AdjustDate != null)
+                EditedPrescription.UpdateMedicines();
         }
 
         private void DiseaseFocusNext(string elementName)

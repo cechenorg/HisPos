@@ -844,12 +844,13 @@ namespace His_Pos.NewClass.StoreOrder
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
         }
         
-        public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicines purchaseList,string note)
+        public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicines purchaseList,string note,string cusName)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionNotEnoughOrderDetail(purchaseList));
             DataBaseFunction.AddSqlParameter(parameterList, "EMP_ID", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "NOTE", note);
+            DataBaseFunction.AddSqlParameter(parameterList, "CUS_NAME", cusName);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
         }
 
