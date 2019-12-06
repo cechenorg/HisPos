@@ -1088,6 +1088,7 @@ namespace His_Pos.NewClass.Prescription
         {
             if (AdjustCase is null) return;
             if (!(AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3"))) return;
+            if(division is null) return;
             switch (division.ID)
             {
                 case "40":
