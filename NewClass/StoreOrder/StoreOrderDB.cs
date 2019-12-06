@@ -564,7 +564,8 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", row.Field<string>("sht_no")));
             parameters.Add(new SqlParameter("NOTE", row.Field<string>("sht_memo")));
             parameters.Add(new SqlParameter("CREATE_DATE", row.Field<DateTime>("upload_date")));
-            parameters.Add(new SqlParameter("STOORD_TYPE", row.Field<string>("drug_list").Contains("-") ? "R" : "P"));
+            double num = Double.Parse(row.Field<string>("drug_list").Substring(12, 10).Trim());
+            parameters.Add(new SqlParameter("STOORD_TYPE", num < 0 ? "R" : "P"));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(row.Field<string>("drug_list"), row.Field<string>("sht_no"), false)));
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
