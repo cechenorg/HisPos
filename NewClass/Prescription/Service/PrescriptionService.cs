@@ -39,6 +39,7 @@ namespace His_Pos.NewClass.Prescription.Service
         public abstract bool DepositAdjust();
         public abstract bool Register();
         public abstract bool PrescribeAdjust();
+        public abstract bool CheckCustomerSelected();
         #endregion
         public PrescriptionService()
         {

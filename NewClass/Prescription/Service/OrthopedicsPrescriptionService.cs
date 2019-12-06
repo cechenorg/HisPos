@@ -143,5 +143,12 @@ namespace His_Pos.NewClass.Prescription.Service
             if (!Current.AdjustCase.IsChronic())
                 UpdateOrthopedicsStatus();
         }
+
+        public override bool CheckCustomerSelected()
+        {
+            if (!CheckAnonymousPatient()) return false;
+            if (!CheckValidCustomer()) return false;
+            return true;
+        }
     }
 }

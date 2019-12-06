@@ -42,9 +42,9 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
-        public void CreateOrder(string note)
+        public void CreateOrder(string note,string cusName)
         {
-            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(this, note);
+            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(this, note, cusName);
             if (result.Rows.Count <= 0) return;
             StoreOrderID = result.Rows[0].Field<string>("newStoordId");
             ToWaitingStatus(note);

@@ -27,10 +27,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             InitializeComponent();
         }
 
-        public NotEnoughMedicinePurchaseWindow(string note,NotEnoughMedicines purchaseList)
+        public NotEnoughMedicinePurchaseWindow(string note,string cusName,NotEnoughMedicines purchaseList)
         {
             InitializeComponent();
-            DataContext = new NotEnoughMedicinePurchaseViewModel(note,purchaseList);
+            DataContext = new NotEnoughMedicinePurchaseViewModel(note, cusName, purchaseList);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 switch (notificationMessage.Notification)
