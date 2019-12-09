@@ -574,7 +574,7 @@
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReport.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReportDb.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReports.cs" />
-    <Compile Include="NewClass\Report\CashFlow\CashFlowType.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowAccount.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReport.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReportDb.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReports.cs" />

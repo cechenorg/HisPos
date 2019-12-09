@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using His_Pos.Class;
+using His_Pos.NewClass.Report.CashFlow;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
@@ -18,7 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public override TabBase getTab() {
             return this;
         }
-        public Collection<string> CashFlowType => new Collection<string> {"雜支"};
+        public Collection<CashFlowAccount> CashFlowAccounts => new Collection<CashFlowAccount> {new CashFlowAccount(CashFlowType.Expenses, "雜支"),new CashFlowAccount(CashFlowType.Income, "額外收入") };
         private DateTime? startDate;
         public DateTime? StartDate
         {
