@@ -575,6 +575,11 @@
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReportDb.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReports.cs" />
     <Compile Include="NewClass\Report\CashFlow\CashFlowAccount.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowDb.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowRecords\CashFlowRecord.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowRecordDetails\CashFlowRecordDetail.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowRecordDetails\CashFlowRecordDetails.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowRecords\CashFlowRecords.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReport.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReportDb.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReports.cs" />
