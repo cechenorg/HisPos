@@ -1,15 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Prescription;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using His_Pos.Class;
 using His_Pos.NewClass.Report.CashFlow;
 using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
@@ -22,7 +17,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public override TabBase getTab() {
             return this;
         }
-        public List<CashFlowAccount> CashFlowAccountsSource => new List<CashFlowAccount> {new CashFlowAccount(CashFlowType.Expenses, "雜支"),new CashFlowAccount(CashFlowType.Income, "額外收入") };
+
+        private List<CashFlowAccount> CashFlowAccountsSource => new List<CashFlowAccount> { new CashFlowAccount(CashFlowType.Expenses, "雜支"), new CashFlowAccount(CashFlowType.Income, "額外收入") };
 
         private List<CashFlowAccount> cashFlowAccounts;
         public List<CashFlowAccount> CashFlowAccounts
@@ -42,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => SelectedCashFlowAccounts, ref selectedCashFlowAccounts, value);
             }
         }
+
         private CashFlowRecords cashFlowRecords;
         public CashFlowRecords CashFlowRecords
         {
@@ -49,6 +46,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             set
             {
                 Set(() => CashFlowRecords, ref cashFlowRecords, value);
+            }
+        }
+
+        private CashFlowRecord selectedCashFlowRecords;
+        public CashFlowRecord SelectedCashFlowRecords
+        {
+            get => selectedCashFlowRecords;
+            set
+            {
+                Set(() => SelectedCashFlowRecords, ref selectedCashFlowRecords, value);
             }
         }
 
@@ -120,6 +127,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public AdditionalCashFlowManageViewModel()
         {
             InitCommand();
+            CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
+            CashFlowRecords = new CashFlowRecords();
         }
 
         private void InitCommand()
@@ -159,16 +168,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 MessageWindow.ShowMessage("請填寫結束日期",MessageType.ERROR);
                 return;
             }
+            CashFlowRecords.Clear();
             GetCashFlowRecordsByDate();
         }
 
-        public void GetCashFlowRecordsByDate()
+        private void GetCashFlowRecordsByDate()
         {
             var table = CashFlowDb.GetDataByDate((DateTime)startDate, (DateTime)endDate);
             var tempDetails = new CashFlowRecordDetails();
             foreach (DataRow r in table.Rows)
             {
                 tempDetails.Add(new CashFlowRecordDetail(r));
+            }
+            GroupCashFlowByDate(tempDetails);
+        }
+
+        private void GroupCashFlowByDate(CashFlowRecordDetails tempDetails)
+        {
+            var result = tempDetails.GroupBy(x => x.Date.Date);
+            foreach (var group in result)
+            {
+                var rec = new CashFlowRecord {Date = @group.Key};
+                foreach (var det in group)
+                {
+                    rec.Details.Add(det);
+                }
+                rec.CountTotalValue();
+                CashFlowRecords.Add(rec);
             }
         }
     }

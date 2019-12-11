@@ -15,10 +15,10 @@ namespace His_Pos.NewClass.Report.CashFlow
     {
         public static DataTable GetDataByDate(DateTime sDate, DateTime eDate)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
+            var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CashDetailReportByDate]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CashFlowRecordDetailsByDate]", parameterList);
         }
 
         public static void InsertCashFlowRecordDetail(CashFlowAccount account, string source, double value)
@@ -28,7 +28,7 @@ namespace His_Pos.NewClass.Report.CashFlow
                 cashFlowValue = value * -1;
             else
                 cashFlowValue = value;
-            List<SqlParameter> parameterList = new List<SqlParameter>();
+            var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Name", account.AccountName);
             DataBaseFunction.AddSqlParameter(parameterList, "Value", cashFlowValue);
             DataBaseFunction.AddSqlParameter(parameterList, "Source", source);

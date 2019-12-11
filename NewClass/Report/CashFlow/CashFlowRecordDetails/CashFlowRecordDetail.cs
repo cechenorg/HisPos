@@ -12,56 +12,69 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
         }
         public CashFlowRecordDetail(DataRow r)
         {
-
+            ID = r.Field<int>("CashFlow_ID");
+            Name = r.Field<string>("CashFlow_Name");
+            Note = r.Field<string>("CashFlow_Source");
+            Value = r.Field<decimal>("CashFlow_Value");
+            Date = r.Field<DateTime>("CashFlow_Time");
+            EmpName = r.Field<string>("Emp_Name");
         }
 
-        private string cashRecDetName;
-        public string CashRecDetName
+        private int id;
+        public int ID
         {
-            get => cashRecDetName;
+            get => id;
             set
             {
-                Set(() => CashRecDetName, ref cashRecDetName, value);
+                Set(() => ID, ref id, value);
             }
         }
 
-        private int cashRecDetValue;
-        public int CashRecDetValue
+        private string name;
+        public string Name
         {
-            get => cashRecDetValue;
+            get => name;
             set
             {
-                Set(() => CashRecDetValue, ref cashRecDetValue, value);
+                Set(() => Name, ref name, value);
+            }
+        }
+        private string note;
+        public string Note
+        {
+            get => note;
+            set
+            {
+                Set(() => Note, ref note, value);
+            }
+        }
+        private decimal value;
+        public decimal Value
+        {
+            get => value;
+            set
+            {
+                Set(() => Value, ref this.value, value);
             }
         }
 
-        private DateTime? cashRecDate;
-        public DateTime? CashRecDate
+        private DateTime date;
+        public DateTime Date
         {
-            get => cashRecDate;
+            get => date;
             set
             {
-                Set(() => CashRecDate, ref cashRecDate, value);
+                Set(() => Date, ref date, value);
             }
         }
 
-        private int cashRecDetEmpName;
-        public int CashRecDetEmpName
+        private string empName;
+        public string EmpName
         {
-            get => cashRecDetEmpName;
+            get => empName;
             set
             {
-                Set(() => CashRecDetEmpName, ref cashRecDetEmpName, value);
-            }
-        }
-
-        private string cashRecDetNote;
-        public string CashRecDetNote
-        {
-            get => cashRecDetNote;
-            set
-            {
-                Set(() => CashRecDetNote, ref cashRecDetNote, value);
+                Set(() => EmpName, ref empName, value);
             }
         }
     }
