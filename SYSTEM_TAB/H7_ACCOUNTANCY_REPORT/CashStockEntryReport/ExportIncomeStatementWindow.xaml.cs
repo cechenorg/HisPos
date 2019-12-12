@@ -28,7 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
     /// </summary>
     public partial class ExportIncomeStatementWindow : Window, INotifyPropertyChanged
     {
-        private string templateFile;
+        private string templateFile = "";
         public string TemplateFile
         {
             get { return templateFile; }
@@ -68,8 +68,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
         {
             Collection<object> tempCollection = new Collection<object>() { new List<object> { "" } };
 
+            if (TemplateFile.Equals(""))
+                templateFile = @"NewClass\AccountReport\年度損益表.xlsx"; 
+
             MainWindow.ServerConnection.OpenConnection();
-            ExportExcelService service = new ExportExcelService(tempCollection, new ExportIncomeStatementTemplate(), TemplateFile);
+            ExportExcelService service = new ExportExcelService(tempCollection, new ExportIncomeStatementTemplate(), templateFile);
             bool isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\損益表{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
             MainWindow.ServerConnection.CloseConnection();
 

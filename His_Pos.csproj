@@ -2185,6 +2185,9 @@
     <Content Include="RDLC\ReserveSheet.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="NewClass\AccountReport\年度損益表.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="RDLC\MedicineTagDataSet.xsc">
       <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
