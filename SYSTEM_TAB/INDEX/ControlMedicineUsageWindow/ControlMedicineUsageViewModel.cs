@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.ControlMedicineDeclare;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
 {
@@ -79,22 +82,46 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         #region Commands
 
         public RelayCommand GetData { get; set; }
-        
+        public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
 
         #endregion
         public ControlMedicineUsageViewModel()
         {
             InitSearchDate();
             GetData = new RelayCommand(GetDataAction);
+            DateMouseDoubleClick = new RelayCommand<MaskedTextBox>(DateMouseDoubleClickAction);
             GetDataAction();
         }
 
         private void GetDataAction()
         {
+            if (StartDate is null)
+            {
+                MessageWindow.ShowMessage("起始日期格式錯誤。",MessageType.ERROR);
+                return;
+            }
+            if (EndDate is null)
+            {
+                MessageWindow.ShowMessage("結束日期格式錯誤。",MessageType.ERROR);
+                return;
+            }
             ControlMedicineDeclares = new ControlMedicineDeclares();
             ControlMedicineDeclares.GetUsageData((DateTime)StartDate, (DateTime)EndDate);
             ControlCollectionViewSource = new CollectionViewSource {Source = ControlMedicineDeclares};
             ControlCollectionView = ControlCollectionViewSource.View;
+        }
+
+        private void DateMouseDoubleClickAction(MaskedTextBox sender)
+        {
+            switch (sender.Name)
+            {
+                case "StartDate":
+                    StartDate = DateTime.Today;
+                    break;
+                case "EndDate":
+                    EndDate = DateTime.Today;
+                    break;
+            }
         }
 
         private void InitSearchDate()

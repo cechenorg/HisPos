@@ -589,7 +589,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList,string note = null)
+        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList,string cusName,string note = null)
         {
             var inventoryIDList = new List<int>();
             foreach (var med in this)
@@ -641,7 +641,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
             if (notEnoughMedicines.Count > 0 && warID.Equals("0"))
             {
-                var purchaseWindow = new NotEnoughMedicinePurchaseWindow(note,notEnoughMedicines);
+                var purchaseWindow = new NotEnoughMedicinePurchaseWindow(note, cusName, notEnoughMedicines);
                 if (purchaseWindow.DialogResult is null || !(bool)purchaseWindow.DialogResult)
                 {
                     negativeStock = "欠藥採購取消。";

@@ -39,6 +39,7 @@ namespace His_Pos.NewClass.Prescription.Service
         public abstract bool DepositAdjust();
         public abstract bool Register();
         public abstract bool PrescribeAdjust();
+        public abstract bool CheckCustomerSelected();
         #endregion
         public PrescriptionService()
         {
@@ -237,6 +238,11 @@ namespace His_Pos.NewClass.Prescription.Service
                 return false;
             }
             if (Current.AdjustCase.IsChronic()) return true;
+            if (DateTime.Compare((DateTime) Current.AdjustDate, DateTime.Today) > 0)
+            {
+                MessageWindow.ShowMessage("非登錄慢箋調劑日不可超過今天", MessageType.WARNING);
+                return false;
+            }
             Debug.Assert(Current.TreatDate != null, "Current.TreatDate != null");
             var startDate = (DateTime)Current.TreatDate;
             var endDate = (DateTime)Current.AdjustDate;

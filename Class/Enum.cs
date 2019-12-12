@@ -617,4 +617,9 @@ namespace His_Pos.Class
         ReservedPrescription = 2
     }
 
+    public enum CashFlowType
+    {
+        Expenses = 0,
+        Income = 1
+    }
 }

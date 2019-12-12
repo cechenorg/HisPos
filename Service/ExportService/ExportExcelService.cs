@@ -10,12 +10,14 @@ namespace His_Pos.Service.ExportService
         #region ----- Define Variables -----
         private Collection<object> DataSource { get; }
         private ExportExcelTemplate Template { get; }
+        private string ExcelBasePath { get; }
         #endregion
 
-        public ExportExcelService(Collection<object> dataSource, ExportExcelTemplate template)
+        public ExportExcelService(Collection<object> dataSource, ExportExcelTemplate template, string excelBasePath = "")
         {
             DataSource = dataSource;
             Template = template;
+            ExcelBasePath = excelBasePath;
         }
 
         #region ----- Define Functions -----
@@ -23,20 +25,30 @@ namespace His_Pos.Service.ExportService
         {
             try
             {
-                using (ExcelPackage excel = new ExcelPackage())
+                ExcelPackage excel;
+                FileInfo excelFile = new FileInfo(exportPath);
+                
+
+                if (String.IsNullOrEmpty(ExcelBasePath))
+                    excel = new ExcelPackage(excelFile);
+                else
                 {
-                    foreach (var data in DataSource)
-                    {
-                        Template.Source = data;
+                    FileInfo excelBaseFile = new FileInfo(ExcelBasePath);
+                    excel = new ExcelPackage(excelFile, excelBaseFile);
+                }
+
+                foreach (var data in DataSource)
+                {
+                    Template.Source = data;
+
+                    if (String.IsNullOrEmpty(ExcelBasePath))
                         excel.Workbook.Worksheets.Add(Template.GetSheetName());
 
-                        var worksheet = excel.Workbook.Worksheets[Template.GetSheetName()];
-                        Template.SetSheetData(worksheet);
-                    }
-
-                    FileInfo excelFile = new FileInfo(exportPath);
-                    excel.SaveAs(excelFile);
+                    var worksheet = excel.Workbook.Worksheets[Template.GetSheetName()];
+                    Template.SetSheetData(worksheet);
                 }
+                
+                excel.Save();
 
                 return true;
             }

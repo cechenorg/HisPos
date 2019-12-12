@@ -1088,7 +1088,7 @@ namespace His_Pos.NewClass.Prescription
         {
             if (AdjustCase is null) return;
             if (!(AdjustCase.ID.Equals("1") || AdjustCase.ID.Equals("3"))) return;
-            switch (division.ID)
+            switch (division?.ID)
             {
                 case "40":
                     PrescriptionCase = VM.GetPrescriptionCases("19");
@@ -1630,7 +1630,7 @@ namespace His_Pos.NewClass.Prescription
             var usableAmountList = CheckUsableMedicinesByType();
             MainWindow.ServerConnection.CloseConnection();
             Medicines.CheckUsableAmount(usableAmountList);
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList, $"{Patient.Name} {DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(AdjustDate,true)} 欠藥採購");
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList, Patient.Name, $"{Patient.Name} {DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(AdjustDate,true)} 欠藥採購");
         }
 
         public void CountSelfPay()
@@ -1711,6 +1711,7 @@ namespace His_Pos.NewClass.Prescription
             OrderContent = string.Empty;
             foreach (var m in Medicines)
             {
+                m.AdjustNoBuckle = false;
                 m.BuckleAmount = m.Amount;
                 m.SendAmount = -1;
             }

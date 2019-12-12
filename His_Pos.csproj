@@ -25,12 +25,13 @@
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
+    <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
+    <MinimumRequiredVersion>2.0.12.22</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>18</ApplicationRevision>
+    <ApplicationRevision>27</ApplicationRevision>
     <ApplicationVersion>2.0.12.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -465,6 +466,7 @@
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProduct.cs" />
     <Compile Include="NewClass\Product\CustomerHistoryProduct\CustomerHistoryProducts.cs" />
     <Compile Include="NewClass\Product\ExportProductRecord\ExportProductRecordTemplate.cs" />
+    <Compile Include="NewClass\Product\ExportProductUsageTemplate\ExportProductUsageTemplate.cs" />
     <Compile Include="NewClass\Product\Inventory.cs" />
     <Compile Include="NewClass\Product\Inventorys.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineDeclare\ControlMedicineDeclare.cs" />
@@ -573,6 +575,12 @@
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReport.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReportDb.cs" />
     <Compile Include="NewClass\Report\CashDetailReport\CashDetailReports.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowAccount.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowDb.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowRecords\CashFlowRecord.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowRecordDetails\CashFlowRecordDetail.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowRecordDetails\CashFlowRecordDetails.cs" />
+    <Compile Include="NewClass\Report\CashFlow\CashFlowRecords\CashFlowRecords.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReport.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReportDb.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReports.cs" />
@@ -841,6 +849,9 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\ExportPresHistoryWindow.xaml.cs">
+      <DependentUpon>ExportPresHistoryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\MedicineStockViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\NHIMedicineHistoryPriceWindow.xaml.cs">
       <DependentUpon>NHIMedicineHistoryPriceWindow.xaml</DependentUpon>
@@ -1549,6 +1560,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\ExportPresHistoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\PrescriptionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2151,6 +2166,7 @@
     <Resource Include="Images\ban.png" />
     <Resource Include="Images\add-user.png" />
     <Resource Include="Images\ClearButton.png" />
+    <Resource Include="Images\IDcardValid.png" />
     <Content Include="RDLC\DepositSheet_A5.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
