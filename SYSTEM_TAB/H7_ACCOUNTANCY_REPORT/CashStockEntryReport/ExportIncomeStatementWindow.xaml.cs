@@ -57,6 +57,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.FileName))
                 {
                     TemplateFile = dialog.FileName;
+                    return;
                 }
             }
 
@@ -68,7 +69,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             Collection<object> tempCollection = new Collection<object>() { new List<object> { "" } };
 
             MainWindow.ServerConnection.OpenConnection();
-            ExportExcelService service = new ExportExcelService(tempCollection, new ExportIncomeStatementTemplate());
+            ExportExcelService service = new ExportExcelService(tempCollection, new ExportIncomeStatementTemplate(), TemplateFile);
             bool isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\損益表{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
             MainWindow.ServerConnection.CloseConnection();
 

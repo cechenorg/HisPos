@@ -13,19 +13,19 @@ namespace His_Pos.NewClass.AccountReport
     {
         public override string GetSheetName()
         {
-            return "年損益";
+            return "年度規劃";
         }
 
         protected override void CreateExcelSettings()
         {
             DataSet dataSet = CashReportDb.GetYearIncomeStatementForExport();
 
-            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[0], 2, 2));
-            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[1], 10, 2));
-            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[2], 22, 2));
-            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[3], 28, 2));
-            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[4], 30, 2));
-            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[5], 33, 2));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[0], 2, 2).SetHasHeader(false));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[1], 10, 2).SetHasHeader(false));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[2], 22, 2).SetHasHeader(false));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[3], 28, 2).SetHasHeader(false));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[4], 30, 2).SetHasHeader(false));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[5], 33, 2).SetHasHeader(false));
         }
     }
 }
