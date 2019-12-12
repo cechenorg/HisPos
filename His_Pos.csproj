@@ -306,6 +306,7 @@
     <Compile Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml.cs">
       <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewClass\AccountReport\ExportIncomeStatementTemplate.cs" />
     <Compile Include="NewClass\Manufactory\ControlManufactory.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
@@ -1127,6 +1128,9 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\PrescriptionDetailControl.xaml.cs">
       <DependentUpon>PrescriptionDetailControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\ExportIncomeStatementWindow.xaml.cs">
+      <DependentUpon>ExportIncomeStatementWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\ControlMedicineDeclare\ControlMedicineDeclare.xaml.cs">
       <DependentUpon>ControlMedicineDeclare.xaml</DependentUpon>
     </Compile>
@@ -1882,6 +1886,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\PrescriptionDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\ExportIncomeStatementWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

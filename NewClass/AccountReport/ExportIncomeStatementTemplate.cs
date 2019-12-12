@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using His_Pos.NewClass.Report.CashReport;
+using His_Pos.Service.ExportService;
+
+namespace His_Pos.NewClass.AccountReport
+{
+    public class ExportIncomeStatementTemplate : ExportExcelTemplate
+    {
+        public override string GetSheetName()
+        {
+            return "年損益";
+        }
+
+        protected override void CreateExcelSettings()
+        {
+            DataSet dataSet = CashReportDb.GetYearIncomeStatementForExport();
+
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[0], 2, 2));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[1], 10, 2));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[2], 22, 2));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[3], 28, 2));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[4], 30, 2));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[5], 33, 2));
+        }
+    }
+}
