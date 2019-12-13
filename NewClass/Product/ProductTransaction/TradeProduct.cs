@@ -29,6 +29,8 @@ namespace His_Pos.NewClass.Product.ProductTransaction
         }
         #endregion
 
+        public TradeProduct() { }
+
         public TradeProduct(DataRow row) : base(row)
         {
 

@@ -213,6 +213,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
+        public RelayCommand ResetBuckleAmount { get; set; }
         public RelayCommand CustomerDetailEdited { get; set; }
         public RelayCommand CustomerRedoEdited { get; set; }
         public RelayCommand SavePatientData { get; set; }
@@ -319,12 +320,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
+            ResetBuckleAmount = new RelayCommand(ResetBuckleAmountAction);
             CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
             CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
             SavePatientData = new RelayCommand(SavePatientDataAction);
             Delete = new RelayCommand(DeleteAction,() => CanEdit);
             RedoEdit = new RelayCommand(RedoEditAction);
             EditComplete = new RelayCommand(EditCompleteAction);
+            AdjustDateLostFocus = new RelayCommand(AdjustDateLostFocusAction);
         }
 
         private void DataChangedAction()
@@ -555,6 +558,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DataChangedAction();
         }
 
+        private void ResetBuckleAmountAction()
+        {
+            EditedPrescription.SelectedMedicine?.ResetBuckleAmount();
+            IsEdit = true;
+        }
+
         private void CustomerDetailEditedAction()
         {
             CustomerEdited = true;
@@ -637,6 +646,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
             Messenger.Default.Send(new NotificationMessage("PrescriptionEdited"));
             Messenger.Default.Send(new NotificationMessage("ClosePrescriptionEditWindow"));
+        }
+
+        private void AdjustDateLostFocusAction()
+        {
+            if (EditedPrescription.AdjustDate != null)
+                EditedPrescription.UpdateMedicines();
         }
 
         private void DiseaseFocusNext(string elementName)

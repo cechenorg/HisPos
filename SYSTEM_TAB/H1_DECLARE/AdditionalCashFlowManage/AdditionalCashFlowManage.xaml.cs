@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
 {
@@ -23,6 +25,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public AdditionalCashFlowManage()
         {
             InitializeComponent();
+        }
+
+        private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+                EndDate.Focus();
+                EndDate.SelectionStart = 0;
+            }
+        }
+
+        private void EndDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+
+            }
         }
     }
 }

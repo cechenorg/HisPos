@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
+﻿using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
@@ -32,6 +30,12 @@ namespace His_Pos.NewClass.Prescription.Service
             return PrintConfirm();
         }
 
+        public void CheckPrescriptionFromAutoRegister()
+        {
+            CheckSendOrderFromAutoRegister();
+            PrintConfirm();
+        }
+
         private bool CheckSendOrder()
         {
             if (string.IsNullOrEmpty(Current.PrescriptionStatus.OrderStatus))
@@ -45,7 +49,20 @@ namespace His_Pos.NewClass.Prescription.Service
             return true;
         }
 
-        public override bool CheckEditPrescription(bool noCard)
+        private bool CheckSendOrderFromAutoRegister()
+        {
+            if (string.IsNullOrEmpty(Current.PrescriptionStatus.OrderStatus))
+                Current.PrescriptionStatus.OrderStatus = "訂單狀態:無訂單";
+            if (Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
+            {
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current,true);
+                vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
+                return !((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn;
+            }
+            return true;
+        }
+
+        public override bool CheckEditPrescription(bool hasCard)
         {
             if (!CheckAnonymousPatient()) return false;
             if (!CheckValidCustomer()) return false;
@@ -56,8 +73,8 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             else
             {
-                if (!CheckNhiRules(noCard)) return false;
-                if (!noCard)
+                if (!CheckNhiRules(!hasCard)) return false;
+                if (hasCard)
                     if (!CheckMedicalNumber()) return false;
             }
             return CheckMedicines();
@@ -99,6 +116,13 @@ namespace His_Pos.NewClass.Prescription.Service
                 return true;
             }
             return false;
+        }
+
+        public override bool CheckCustomerSelected()
+        {
+            if (!CheckAnonymousPatient()) return false;
+            if (!CheckValidCustomer()) return false;
+            return true;
         }
     }
 }

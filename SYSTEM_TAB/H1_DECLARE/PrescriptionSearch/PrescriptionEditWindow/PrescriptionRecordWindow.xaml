@@ -62,7 +62,7 @@
             </DataTemplate.Resources>
             <DataGrid x:Name="EditRecord" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding DataContext.EditRecords,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                       CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserResizeColumns="False" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" 
-                      CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=Window}}" Height="255" Width="955">
+                      CanUserAddRows="False" SelectedItem="{Binding DataContext.SelectedRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=Window}}" Height="200" Width="955">
                 <DataGrid.Resources>
                     <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
                 </DataGrid.Resources>
@@ -678,12 +678,6 @@
                         </Style.Triggers>
                     </Style>
                 </DataGrid.RowStyle>
-                <DataGrid.ContextMenu>
-                    <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="調劑不扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding Source={StaticResource proxy}, Path=Data.EditedPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                        <MenuItem Header="調劑扣庫" Command="{Binding Source={StaticResource proxy}, Path=Data.AdjustNoBuckle}" Visibility="{Binding Source={StaticResource proxy}, Path=Data.EditedPrescription.SelectedMedicine.AdjustNoBuckle, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}"/>
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn MinWidth="20" FontSize="16" FontWeight="Bold" IsReadOnly="True" Binding="{Binding Order,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
@@ -702,7 +696,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="400" MaxWidth="400" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn MinWidth="380" MaxWidth="380" Header="藥品名稱" IsReadOnly="True" CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
@@ -814,8 +808,18 @@
                                 <DataTemplate.Resources>
                                     <DataTemplate x:Key="AdjustBuckle">
                                         <TextBox x:Name="BuckleAmount" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputScope="AlphanumericHalfWidth" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown"
-                                                     FontSize="16" FontWeight="Bold" CaretBrush="Black" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}"
+                                                     FontSize="16" FontWeight="Bold" CaretBrush="Black" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="BuckleAmount_PreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}"
                                                      Text="{Binding BuckleAmount,StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+                                                    <Setter Property= "Foreground" Value="Black"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding ="{Binding NotEnough, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                            <Setter Property= "Foreground" Value="IndianRed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="TextChanged">
                                                     <command:EventToCommand Command="{Binding DataContext.DataChanged,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
@@ -842,6 +846,19 @@
                                         </Style>
                                     </ContentControl.Style>
                                 </ContentControl>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox x:Name="AdjustNoBuckle" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding AdjustNoBuckle,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.AdjustNoBuckle,RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

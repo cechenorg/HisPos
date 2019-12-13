@@ -772,20 +772,22 @@
                     <Value> 實收:</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>12pt</FontSize>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>5.46472cm</Top>
+            <Top>5.5cm</Top>
             <Left>2.35391cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.08845cm</Width>
+            <Height>0.7cm</Height>
+            <Width>1.54485cm</Width>
             <ZIndex>30</ZIndex>
             <Style>
               <Border />
+              <VerticalAlign>Middle</VerticalAlign>
             </Style>
           </Textbox>
           <Textbox Name="ActualReceive">
@@ -797,17 +799,18 @@
                     <Value>=Parameters!ActualReceive.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>11pt</FontSize>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>5.46472cm</Top>
-            <Left>3.44236cm</Left>
-            <Height>0.5cm</Height>
-            <Width>1.332cm</Width>
+            <Top>5.5cm</Top>
+            <Left>4.07515cm</Left>
+            <Height>0.7cm</Height>
+            <Width>2.45783cm</Width>
             <ZIndex>31</ZIndex>
             <Style>
               <Border />
@@ -815,40 +818,9 @@
             </Style>
           </Textbox>
           <Rectangle Name="Rectangle1">
-            <ReportItems>
-              <Textbox Name="Textbox35">
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>=Parameters!ActualReceiveChinese.Value</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>11pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Center</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox35</rd:DefaultName>
-                <Left>0.1cm</Left>
-                <Height>0.5cm</Height>
-                <Width>5.81885cm</Width>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Middle</VerticalAlign>
-                </Style>
-              </Textbox>
-            </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>5.46472cm</Top>
-            <Left>5.47715cm</Left>
+            <Top>5.6cm</Top>
+            <Left>6.82351cm</Left>
             <Height>0.5cm</Height>
             <Width>5.91885cm</Width>
             <ZIndex>32</ZIndex>
@@ -916,7 +888,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox37</rd:DefaultName>
-            <Top>6.3cm</Top>
+            <Top>6.56458cm</Top>
             <Left>2.37676cm</Left>
             <Height>0.6cm</Height>
             <Width>11.01096cm</Width>
@@ -929,6 +901,37 @@
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
               <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox35">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ActualReceiveChinese.Value</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>11pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox35</rd:DefaultName>
+            <Top>5.6cm</Top>
+            <Left>6.92351cm</Left>
+            <Height>0.5cm</Height>
+            <Width>5.81885cm</Width>
+            <ZIndex>35</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
             </Style>
           </Textbox>
         </ReportItems>

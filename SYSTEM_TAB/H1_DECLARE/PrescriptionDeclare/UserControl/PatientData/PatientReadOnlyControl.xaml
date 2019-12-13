@@ -10,9 +10,10 @@
              d:DesignHeight="55" d:DesignWidth="915">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <Image x:Key="CustomerManage" Width="30" Height="30" Source="/Images/IDcardValid.png" Margin="10,0,10,0"/>
     </UserControl.Resources>
     <StackPanel Margin="0,0,10,0" Orientation="Horizontal">
-        <Image Width="30" Height="30" Source="/Images/IDcard.png" Margin="10,0,10,0"/>
+        <Button Background="Transparent" BorderBrush="Transparent" Content="{StaticResource CustomerManage}" Command="{Binding OpenCustomerManage}" Width="50" Height="50" Padding="0"/>
         <Label Name="PatientIDNumber" Width="130" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"
                Content="{Binding CurrentPrescription.Patient.IDNumber, UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Triggers>

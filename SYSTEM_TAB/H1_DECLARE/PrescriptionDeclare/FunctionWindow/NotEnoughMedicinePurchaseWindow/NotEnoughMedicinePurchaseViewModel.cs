@@ -44,6 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             }
         }
         private string Note { get; set; }
+        private string CusName { get; set; }
         #endregion
 
         #region Commands
@@ -52,10 +53,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         public RelayCommand Cancel { get; set; }
         #endregion
 
-        public NotEnoughMedicinePurchaseViewModel(string note,NotEnoughMedicines purchaseList)
+        public NotEnoughMedicinePurchaseViewModel(string note,string cusName,NotEnoughMedicines purchaseList)
         {
             PurchaseList = purchaseList;
             Note = note;
+            CusName = cusName;
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CreateStoreOrder = new RelayCommand(CreateStoreOrderAction);
             Cancel = new RelayCommand(CancelAction);
@@ -71,11 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         {
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(PurchaseList, Note);
-            if (result.Rows.Count > 0)
-            {
-                PurchaseList.ToWaitingStatus(Note);
-            }
+            PurchaseList.CreateOrder(Note, CusName);
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowPurchase"));

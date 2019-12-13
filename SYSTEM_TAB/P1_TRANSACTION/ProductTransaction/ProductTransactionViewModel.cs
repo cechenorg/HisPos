@@ -73,18 +73,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
 
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = 1;
+            var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, AddProductEnum.Trade );
             MainWindow.ServerConnection.CloseConnection();
             if (productCount > 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                
+                TradeAddProductWindow tradeAddProductWindow = new TradeAddProductWindow(searchString);
+                tradeAddProductWindow.ShowDialog();
                 Messenger.Default.Unregister(this);
             }
             else if (productCount == 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                
+                TradeAddProductWindow tradeAddProductWindow = new TradeAddProductWindow(searchString);
                 Messenger.Default.Unregister(this);
             }
             else
