@@ -420,6 +420,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 損益報表 的當地語系化字串。
+        /// </summary>
+        internal static string IncomeStatement {
+            get {
+                return ResourceManager.GetString("IncomeStatement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 處方登錄成功 的當地語系化字串。
         /// </summary>
         internal static string InsertPrescriptionSuccess {
