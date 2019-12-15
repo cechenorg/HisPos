@@ -694,6 +694,10 @@
       <DependentUpon>AdditionalCashFlowManage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\CashFlowRecordEditWindow\CashFlowRecordDetailEditViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\CashFlowRecordEditWindow\CashFlowRecordEditWindow.xaml.cs">
+      <DependentUpon>CashFlowRecordEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AddPharmacistScheduleItemViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\DeclareFileManage\AdjustPharmacistSetting\AddPharmacistScheduleItemWindow.xaml.cs">
       <DependentUpon>AddPharmacistScheduleItemWindow.xaml</DependentUpon>
@@ -1433,6 +1437,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\AdditionalCashFlowManage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\AdditionalCashFlowManage\CashFlowRecordEditWindow\CashFlowRecordEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

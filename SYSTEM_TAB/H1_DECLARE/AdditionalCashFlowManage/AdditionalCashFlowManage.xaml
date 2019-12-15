@@ -173,6 +173,20 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="EditCashFlowRecordButton" Content="編輯" Background="RoyalBlue" BorderBrush="Transparent" Command="{Binding DataContext.EditCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="DeleteCashFlowRecordButton" Content="刪除" Background="Red" BorderBrush="Transparent" Command="{Binding DataContext.DeleteCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

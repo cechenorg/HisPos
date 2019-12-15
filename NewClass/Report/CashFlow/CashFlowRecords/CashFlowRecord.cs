@@ -43,7 +43,14 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
             get => selectedDetail;
             set
             {
+                if (selectedDetail != null)
+                    (selectedDetail).IsSelected = false;
+
                 Set(() => SelectedDetail, ref selectedDetail, value);
+
+                if (selectedDetail != null)
+                    (selectedDetail).IsSelected = true;
+                
             }
         }
 

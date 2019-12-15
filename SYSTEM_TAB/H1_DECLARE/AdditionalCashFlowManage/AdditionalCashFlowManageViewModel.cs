@@ -9,6 +9,7 @@ using His_Pos.Class;
 using His_Pos.NewClass.Report.CashFlow;
 using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
 using His_Pos.NewClass.Report.CashFlow.CashFlowRecords;
+using MaterialDesignThemes.Wpf;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
@@ -121,7 +122,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
         public RelayCommand Search { get; set; }
-
+        public RelayCommand EditCashFlowRecord { get; set; }
+        public RelayCommand DeleteCashFlowRecord { get; set; }
         #endregion
 
         public AdditionalCashFlowManageViewModel()
@@ -136,7 +138,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             SubmitCommand = new RelayCommand(SubmitAction);
             DateMouseDoubleClick = new RelayCommand<MaskedTextBox>(DateMouseDoubleClickAction);
             Search = new RelayCommand(SearchAction);
-            
+            EditCashFlowRecord = new RelayCommand(EditCashFlowRecordAction);
+            DeleteCashFlowRecord = new RelayCommand(DeleteCashFlowRecordAction);
         }
 
         private void SubmitAction() {
@@ -172,14 +175,34 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             GetCashFlowRecordsByDate();
         }
 
+        private void EditCashFlowRecordAction()
+        {
+            var editWindow = new CashFlowRecordEditWindow.CashFlowRecordEditWindow(SelectedCashFlowRecords.SelectedDetail);
+            editWindow.ShowDialog();
+            var result = editWindow.EditResult;
+            if(!result) 
+                return;
+            SearchAction();
+        }
+
+        private void DeleteCashFlowRecordAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            CashFlowDb.DeleteCashFlow(SelectedCashFlowRecords.SelectedDetail);
+            MainWindow.ServerConnection.CloseConnection();
+            SearchAction();
+        }
+
         private void GetCashFlowRecordsByDate()
         {
+            MainWindow.ServerConnection.OpenConnection();
             var table = CashFlowDb.GetDataByDate((DateTime)startDate, (DateTime)endDate);
             var tempDetails = new CashFlowRecordDetails();
             foreach (DataRow r in table.Rows)
             {
                 tempDetails.Add(new CashFlowRecordDetail(r));
             }
+            MainWindow.ServerConnection.CloseConnection();
             GroupCashFlowByDate(tempDetails);
         }
 
