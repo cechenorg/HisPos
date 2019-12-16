@@ -26,6 +26,9 @@ namespace His_Pos.NewClass.AccountReport
             Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[3], 28, 2).SetHasHeader(false));
             Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[4], 30, 2).SetHasHeader(false));
             Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[5], 33, 2).SetHasHeader(false));
+
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[6], 4, 1).SetHasHeader(false).SetDataIsBold(true).SetDataFontSize(14));
+            Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[7], 13, 1).SetHasHeader(false));
         }
     }
 }
