@@ -76,7 +76,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
 
         public void CountTotalValue()
         {
-            TotalValue = Details.Sum(d => d.Value);
+            TotalValue = Details.Sum(d => d.CashFlowValue);
         }
     }
 }

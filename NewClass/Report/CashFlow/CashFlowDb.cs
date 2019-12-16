@@ -41,10 +41,10 @@ namespace His_Pos.NewClass.Report.CashFlow
         public static void UpdateCashFlowRecordDetail(CashFlowAccount account,CashFlowRecordDetail editedDetail)
         {
             decimal cashFlowValue;
-            if (account.Type == CashFlowType.Expenses && editedDetail.Value > 0)
-                cashFlowValue = editedDetail.Value * -1;
+            if (account.Type == CashFlowType.Expenses && editedDetail.CashFlowValue > 0)
+                cashFlowValue = editedDetail.CashFlowValue * -1;
             else
-                cashFlowValue = editedDetail.Value;
+                cashFlowValue = editedDetail.CashFlowValue;
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowId", editedDetail.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowName", account.AccountName);

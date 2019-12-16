@@ -25,11 +25,11 @@
             <RadioButton Content="收入" Tag="3" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding GainCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>  
             <RadioButton Content="支出" Tag="4" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding PayCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="科目" FontSize="18" VerticalAlignment="Center"/>
-            <ComboBox Width="100" Margin="10,0,0,0" FontSize="16" ItemsSource="{Binding CashFlowAccounts,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="AccountName" SelectedItem="{Binding SelectedCashFlowAccounts,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Width="100" Margin="10,0,0,0" FontSize="16" ItemsSource="{Binding CashFlowAccounts,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="AccountName" SelectedItem="{Binding SelectedCashFlowAccount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="金額" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <TextBox Width="80" Text="{Binding CashFlowValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center"/>
             <Label Content="備註" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Width="400" Text="{Binding CashFlowNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center"/>
+            <TextBox Width="400" Text="{Binding CashFlowNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
             <Button   Command="{Binding SubmitCommand}" Width="80" Content="新增" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1">
@@ -71,7 +71,7 @@
                     <ColumnDefinition Width="250"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <DataGrid Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecords,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"              
+                <DataGrid Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"              
                       ItemsSource="{Binding CashFlowRecords,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
@@ -110,8 +110,8 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecords.SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760"       
-                          ItemsSource="{Binding SelectedCashFlowRecords.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0,10,10,0" HorizontalScrollBarVisibility="Disabled">
+                <DataGrid Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760"       
+                          ItemsSource="{Binding SelectedCashFlowRecord.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0,10,10,0" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -140,7 +140,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="80" Header="金額" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Value,StringFormat='{}{0:C}',UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="80" Header="金額" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding CashFlowValue,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>

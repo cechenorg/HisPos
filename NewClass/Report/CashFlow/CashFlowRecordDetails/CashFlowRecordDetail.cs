@@ -16,7 +16,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
             ID = r.Field<int>("CashFlow_ID");
             Name = r.Field<string>("CashFlow_Name");
             Note = r.Field<string>("CashFlow_Note");
-            Value = r.Field<decimal>("CashFlow_Value");
+            CashFlowValue = decimal.ToInt32(r.Field<decimal>("CashFlow_Value"));
             Date = r.Field<DateTime>("CashFlow_Time");
             EmpName = r.Field<string>("Emp_Name");
             CanEdit = DateTime.Compare(Date, DateTime.Today) >= 0 || ViewModelMainWindow.CurrentUser.ID == 1;
@@ -50,13 +50,13 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
                 Set(() => Note, ref note, value);
             }
         }
-        private decimal value;
-        public decimal Value
+        private int cashFlowValue;
+        public int CashFlowValue
         {
-            get => value;
+            get => cashFlowValue;
             set
             {
-                Set(() => Value, ref this.value, value);
+                Set(() => CashFlowValue, ref this.cashFlowValue, value);
             }
         }
 
