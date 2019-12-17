@@ -18,6 +18,14 @@ namespace His_Pos.NewClass.Report.CashReport
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate); 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CashReportByDate]", parameterList);
         }
+
+        internal static DataSet GetYearIncomeStatementForExport(int year)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "YEAR", year);
+            return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[YearIncomeStatementForExport]");
+        }
+
         public static DataTable GetPerDayDataByDate(DateTime sDate, DateTime eDate,string insID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);

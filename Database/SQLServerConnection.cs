@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -143,6 +144,50 @@ namespace His_Pos.Database
             isBusy = false;
 
             return table;
+        }
+        public DataSet ExecuteProcReturnDataSet(string procName, List<SqlParameter> parameterList = null)
+        {
+            while (isBusy)
+                Thread.Sleep(500);
+
+            isBusy = true;
+
+            DataSet dataSet = new DataSet();
+            try
+            {
+                SqlCommand myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." + procName, connection);
+
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandTimeout = 120;
+                if (parameterList != null)
+                    foreach (var param in parameterList)
+                    {
+                        myCommand.Parameters.Add(param);
+                    }
+
+                var sqlDapter = new SqlDataAdapter(myCommand);
+                sqlDapter.Fill(dataSet);
+            }
+            catch (SqlException sqlException)
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    MessageWindow.ShowMessage(procName + sqlException.Message, MessageType.ERROR);
+                });
+                NewFunction.ExceptionLog(sqlException.Message);
+            }
+            catch (Exception ex)
+            {
+                NewFunction.ExceptionLog(ex.Message);
+
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
+                    MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
+                });
+            }
+
+            isBusy = false;
+
+            return dataSet;
         }
         private void LogError(string procName, string parameters, string error)
         {
