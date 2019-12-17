@@ -36,9 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
 
         public IncomeStatementViewModel()
         {
-
+            IncomeStatementMatrix = new IncomeStatementMatrix(2019);
         }
-
-
     }
 }

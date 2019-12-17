@@ -12,7 +12,8 @@ namespace His_Pos.NewClass.Report.IncomeStatement
     {
         public IncomeStatement()
         {
-
+            PrescriptionCount = new List<int>();
+            CooperativeInstitutionsIncome = new List<CooperativeInstitutionIncome>();
         }
 
         private List<int> prescriptionCount;
@@ -26,9 +27,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int chronicIncome;
+        private decimal chronicIncome;
 
-        public int ChronicIncome
+        public decimal ChronicIncome
         {
             get => chronicIncome;
             set
@@ -37,9 +38,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int normalIncome;
+        private decimal normalIncome;
 
-        public int NormalIncome
+        public decimal NormalIncome
         {
             get => normalIncome;
             set
@@ -48,9 +49,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int otherIncome;
+        private decimal otherIncome;
 
-        public int OtherIncome
+        public decimal OtherIncome
         {
             get => otherIncome;
             set
@@ -70,9 +71,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int chronicCost;
+        private decimal chronicCost;
 
-        public int ChronicCost
+        public decimal ChronicCost
         {
             get => chronicCost;
             set
@@ -81,9 +82,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int normalCost;
+        private decimal normalCost;
 
-        public int NormalCost
+        public decimal NormalCost
         {
             get => normalCost;
             set
@@ -92,9 +93,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int prescribeIncome;
+        private decimal prescribeIncome;
 
-        public int PrescribeIncome
+        public decimal PrescribeIncome
         {
             get => prescribeIncome;
             set
@@ -103,9 +104,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int additionalIncome;
+        private decimal additionalIncome;
 
-        public int AdditionalIncome
+        public decimal AdditionalIncome
         {
             get => additionalIncome;
             set
@@ -114,9 +115,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int prescribeCost;
+        private decimal prescribeCost;
 
-        public int PrescribeCost
+        public decimal PrescribeCost
         {
             get => prescribeCost;
             set
@@ -125,8 +126,8 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int expense;
-        public int Expense
+        private decimal expense;
+        public decimal Expense
         {
             get => expense;
             set
@@ -135,8 +136,8 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int inventoryShortage;
-        public int InventoryShortage
+        private decimal inventoryShortage;
+        public decimal InventoryShortage
         {
             get => inventoryShortage;
             set
@@ -145,8 +146,8 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int inventoryOverage;
-        public int InventoryOverage
+        private decimal inventoryOverage;
+        public decimal InventoryOverage
         {
             get => inventoryOverage;
             set
@@ -155,8 +156,8 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private int inventoryScrapped;
-        public int InventoryScrapped
+        private decimal inventoryScrapped;
+        public decimal InventoryScrapped
         {
             get => inventoryScrapped;
             set
@@ -165,36 +166,36 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        public int ChronicProfit => CountDeclareIncome() - CountDeclareCost();
-        public int AdjustProfit => CountAdjustIncome() - CountAdjustCost();
-        public int HISProfit => CountHISIncome() - CountHISCost();
+        public decimal ChronicProfit => CountDeclareIncome() - CountDeclareCost();
+        public decimal AdjustProfit => CountAdjustIncome() - CountAdjustCost();
+        public decimal HISProfit => CountHISIncome() - CountHISCost();
 
-        private int CountHISIncome()
+        private decimal CountHISIncome()
         {
             return ChronicProfit + AdjustProfit + InventoryOverage;
         }
 
-        private int CountHISCost()
+        private decimal CountHISCost()
         {
             return Expense + InventoryShortage + InventoryScrapped;
         }
 
-        private int CountDeclareIncome()
+        private decimal CountDeclareIncome()
         {
             return ChronicIncome + NormalIncome + CooperativeInstitutionsIncome.Sum(c => c.TotalIncome);
         }
 
-        private int CountDeclareCost()
+        private decimal CountDeclareCost()
         {
             return ChronicCost + NormalCost;
         }
 
-        private int CountAdjustIncome()
+        private decimal CountAdjustIncome()
         {
             return PrescribeIncome + AdditionalIncome;
         }
 
-        private int CountAdjustCost()
+        private decimal CountAdjustCost()
         {
             return PrescribeCost;
         }

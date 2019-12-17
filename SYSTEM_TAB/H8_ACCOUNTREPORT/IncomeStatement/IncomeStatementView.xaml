@@ -4,9 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
+             xmlns:matrix="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib"
              mc:Ignorable="d" 
              d:DesignHeight="870" d:DesignWidth="1365">
     <Grid>
-            
+        <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding IncomeStatementMatrix}">
+            <matrix:MatrixControl.Resources>
+                <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
+            </matrix:MatrixControl.Resources>
+        </matrix:MatrixControl>
     </Grid>
 </UserControl>

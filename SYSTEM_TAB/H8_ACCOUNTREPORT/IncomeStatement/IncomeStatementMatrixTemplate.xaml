@@ -1,0 +1,61 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
+                    xmlns:mx="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib">
+    <!-- Shared Resources -->
+    <SolidColorBrush x:Key="BackBrush" Color="LightBlue" />
+    <SolidColorBrush x:Key="BorderBrush" Color="LightBlue" />
+    <Thickness x:Key="BorderThickness" Left="0" Top="0" Right="0.5" Bottom="0.5" />
+    <SolidColorBrush x:Key="HeaderForeground" Color="DarkBlue" />
+
+    <!-- MatrixEmptyHeaderItem -->
+    <DataTemplate DataType="{x:Type mx:MatrixEmptyHeaderItem}">
+        <Border Background="SteelBlue" />
+    </DataTemplate>
+
+    <!-- MatrixColumnHeaderItem -->
+    <DataTemplate DataType="{x:Type mx:MatrixColumnHeaderItem}">
+        <Border 
+            Background="{StaticResource BackBrush}" 
+            BorderBrush="{StaticResource BorderBrush}" 
+            BorderThickness="{StaticResource BorderThickness}" 
+            Padding="0,4">
+            <DockPanel>
+                <TextBlock
+                    FontWeight="Bold"
+                    Foreground="{StaticResource HeaderForeground}"
+                    Text="{Binding Path=ColumnHeader.Name}" 
+                    TextAlignment="Center"/>
+            </DockPanel>
+        </Border>
+    </DataTemplate>
+
+    <!-- MatrixRowHeaderItem -->
+    <DataTemplate DataType="{x:Type mx:MatrixRowHeaderItem}">
+        <Border 
+            Background="{StaticResource BackBrush}" 
+            BorderBrush="{StaticResource BorderBrush}" 
+            BorderThickness="{StaticResource BorderThickness}"  
+            Padding="4,0">
+            <TextBlock 
+                FontWeight="Bold"
+                Foreground="{StaticResource HeaderForeground}"
+                HorizontalAlignment="Right" 
+                Text="{Binding Path=RowHeader}" 
+                VerticalAlignment="Center"/>
+        </Border>
+    </DataTemplate>
+
+    <!-- MatrixCellItem -->
+    <DataTemplate DataType="{x:Type mx:MatrixCellItem}">
+        <Border 
+            BorderBrush="{StaticResource BorderBrush}" 
+            BorderThickness="{StaticResource BorderThickness}" >
+            <TextBlock 
+                HorizontalAlignment="Right"
+                Margin="0,0,4,0"
+                Text="{Binding Path=Value}"  
+                VerticalAlignment="Center" />
+        </Border>
+    </DataTemplate>
+</ResourceDictionary>

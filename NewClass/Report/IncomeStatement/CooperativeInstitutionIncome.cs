@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
 
         }
 
-        public CooperativeInstitutionIncome(int medicalService,int medicine,int other)
+        public CooperativeInstitutionIncome(decimal medicalService,decimal medicine,decimal other)
         {
             MedicalServiceIncome = medicalService;
             MedicineIncome = medicine;
@@ -21,9 +21,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             TotalIncome = MedicalServiceIncome + MedicineIncome + OtherIncome;
         }
 
-        public int MedicalServiceIncome { get; set; }
-        public int MedicineIncome { get; set; }
-        public int OtherIncome { get; set; }
-        public int TotalIncome { get; set; }
+        public decimal MedicalServiceIncome { get; set; }
+        public decimal MedicineIncome { get; set; }
+        public decimal OtherIncome { get; set; }
+        public decimal TotalIncome { get; set; }
     }
 }

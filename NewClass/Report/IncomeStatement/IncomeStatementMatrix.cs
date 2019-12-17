@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.NewClass.Report.CashFlow;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
@@ -18,6 +13,8 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public IncomeStatementMatrix(int year)
         {
             var incomeStatementDataSet = CashReport.CashReportDb.GetYearIncomeStatementForExport(year);
+            rowHeaderToValueProviderMap = new Dictionary<string, CellValueProvider>();
+            PopulateCellValueProviderMap();
             var prescriptionCountTable = incomeStatementDataSet.Tables[0];
             var declareIncomeTable = incomeStatementDataSet.Tables[1];
             var pharmacyCostTable = incomeStatementDataSet.Tables[2];
@@ -128,13 +125,13 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             switch (rowCount)
             {
                 case 0:
-                    income.ChronicIncome = row.Field<int>($"{month}");
+                    income.ChronicIncome = row.Field<decimal>($"{month}");
                     break;
                 case 1:
-                    income.NormalIncome = row.Field<int>($"{month}");
+                    income.NormalIncome = row.Field<decimal>($"{month}");
                     break;
                 case 2:
-                    income.OtherIncome = row.Field<int>($"{month}");
+                    income.OtherIncome = row.Field<decimal>($"{month}");
                     break;
                 default:
                     SetCooperativeDeclareIncome(income, row, rowCount, month);
@@ -147,10 +144,10 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             switch (rowCount)
             {
                 case 0:
-                    income.ChronicCost = row.Field<int>($"{month}");
+                    income.ChronicCost = row.Field<decimal>($"{month}");
                     break;
                 case 1:
-                    income.NormalCost = row.Field<int>($"{month}");
+                    income.NormalCost = row.Field<decimal>($"{month}");
                     break;
             }
         }
@@ -163,14 +160,14 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             {
                 case 0:
                     var c = new CooperativeInstitutionIncome();
-                    c.MedicalServiceIncome = row.Field<int>($"{month}");
+                    c.MedicalServiceIncome = row.Field<decimal>($"{month}");
                     income.CooperativeInstitutionsIncome.Add(c);
                     break;
                 case 1:
-                    income.CooperativeInstitutionsIncome[insIndex].MedicineIncome = row.Field<int>($"{month}");
+                    income.CooperativeInstitutionsIncome[insIndex].MedicineIncome = row.Field<decimal>($"{month}");
                     break;
                 case 2:
-                    income.CooperativeInstitutionsIncome[insIndex].OtherIncome = row.Field<int>($"{month}");
+                    income.CooperativeInstitutionsIncome[insIndex].OtherIncome = row.Field<decimal>($"{month}");
                     break;
             }
         }
@@ -180,10 +177,10 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             switch (rowCount)
             {
                 case 0:
-                    income.AdditionalIncome = row.Field<int>($"{month}");
+                    income.AdditionalIncome = row.Field<decimal>($"{month}");
                     break;
                 case 1:
-                    income.PrescribeCost = row.Field<int>($"{month}");
+                    income.PrescribeCost = row.Field<decimal>($"{month}");
                     break;
             }
         }
@@ -193,16 +190,16 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             switch (rowCount)
             {
                 case 0:
-                    income.Expense = row.Field<int>($"{month}");
+                    income.Expense = row.Field<decimal>($"{month}");
                     break;
                 case 1:
-                    income.InventoryOverage = row.Field<int>($"{month}");
+                    income.InventoryOverage = row.Field<decimal>($"{month}");
                     break;
                 case 2:
-                    income.InventoryShortage = row.Field<int>($"{month}");
+                    income.InventoryShortage = row.Field<decimal>($"{month}");
                     break;
                 default:
-                    income.InventoryScrapped = row.Field<int>($"{month}");
+                    income.InventoryScrapped = row.Field<decimal>($"{month}");
                     break;
             }
         }
