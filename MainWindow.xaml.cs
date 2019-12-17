@@ -87,10 +87,10 @@ namespace His_Pos
                             new[] { StringRes.ClockIn, StringRes.WorkScheduleManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
-                            new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport }));
+                            new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare, StringRes.CashStockEntryReport }));
             
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.AccountReportSystem,
-                            new[] { StringRes.InstitutionDeclarePointReport ,StringRes.IncomeStatement })); 
+                            new[] { StringRes.InstitutionDeclarePointReport ,StringRes.IncomeStatement, StringRes.BalanceSheet })); 
             HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", StringRes.AdminManage,
                             new[] { StringRes.AdminManage }));
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.SystemTutorial,
