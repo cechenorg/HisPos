@@ -18,7 +18,7 @@ namespace His_Pos.NewClass.AccountReport
 
         protected override void CreateExcelSettings()
         {
-            DataSet dataSet = CashReportDb.GetYearIncomeStatementForExport();
+            DataSet dataSet = CashReportDb.GetYearIncomeStatementForExport(DateTime.Now.Year);
 
             Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[0], 2, 2).SetHasHeader(false));
             Settings.Add(new ExportDataTableExcelSetting(dataSet.Tables[1], 10, 2).SetHasHeader(false));

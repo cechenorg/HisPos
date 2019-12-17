@@ -19,8 +19,10 @@ namespace His_Pos.NewClass.Report.CashReport
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CashReportByDate]", parameterList);
         }
 
-        internal static DataSet GetYearIncomeStatementForExport()
+        internal static DataSet GetYearIncomeStatementForExport(int year)
         {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "YEAR", year);
             return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[YearIncomeStatementForExport]");
         }
 
