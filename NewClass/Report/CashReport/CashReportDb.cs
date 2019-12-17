@@ -23,7 +23,7 @@ namespace His_Pos.NewClass.Report.CashReport
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "YEAR", year);
-            return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[YearIncomeStatementForExport]");
+            return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[YearIncomeStatementForExport]",parameterList);
         }
 
         public static DataTable GetPerDayDataByDate(DateTime sDate, DateTime eDate,string insID) {

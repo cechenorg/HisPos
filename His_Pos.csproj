@@ -588,6 +588,7 @@
     <Compile Include="NewClass\Report\CashReport\CashReportDb.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReports.cs" />
     <Compile Include="NewClass\Report\CashStockEntryReportEnum.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\CooperativeInstitutionIncome.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\IncomeStatement.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\IncomeStatementMatrix.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepot.cs" />
