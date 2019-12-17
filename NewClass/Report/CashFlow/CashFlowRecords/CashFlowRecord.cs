@@ -43,7 +43,14 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
             get => selectedDetail;
             set
             {
+                if (selectedDetail != null)
+                    (selectedDetail).IsSelected = false;
+
                 Set(() => SelectedDetail, ref selectedDetail, value);
+
+                if (selectedDetail != null)
+                    (selectedDetail).IsSelected = true;
+                
             }
         }
 
@@ -69,7 +76,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
 
         public void CountTotalValue()
         {
-            TotalValue = Details.Sum(d => d.Value);
+            TotalValue = Details.Sum(d => d.CashFlowValue);
         }
     }
 }

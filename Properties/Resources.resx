@@ -608,4 +608,7 @@
   <data name="Web" xml:space="preserve">
     <value>網頁連結</value>
   </data>
+  <data name="IncomeStatement" xml:space="preserve">
+    <value>損益報表</value>
+  </data>
 </root>

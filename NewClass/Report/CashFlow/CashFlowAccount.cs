@@ -7,7 +7,7 @@ using His_Pos.Class;
 
 namespace His_Pos.NewClass.Report.CashFlow
 {
-    public struct CashFlowAccount
+    public class CashFlowAccount
     {
         public CashFlowAccount(CashFlowType type,string accountName)
         {

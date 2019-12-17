@@ -29,13 +29,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => CashFlowAccounts, ref cashFlowAccounts, value);
             }
         }
-        private CashFlowAccount selectedCashFlowAccounts;
-        public CashFlowAccount SelectedCashFlowAccounts
+
+        private CashFlowAccount selectedCashFlowAccount;
+        public CashFlowAccount SelectedCashFlowAccount
         {
-            get => selectedCashFlowAccounts;
+            get => selectedCashFlowAccount;
             set
             {
-                Set(() => SelectedCashFlowAccounts, ref selectedCashFlowAccounts, value);
+                Set(() => SelectedCashFlowAccount, ref selectedCashFlowAccount, value);
             }
         }
 
@@ -49,13 +50,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             }
         }
 
-        private CashFlowRecord selectedCashFlowRecords;
-        public CashFlowRecord SelectedCashFlowRecords
+        private CashFlowRecord selectedCashFlowRecord;
+        public CashFlowRecord SelectedCashFlowRecord
         {
-            get => selectedCashFlowRecords;
+            get => selectedCashFlowRecord;
             set
             {
-                Set(() => SelectedCashFlowRecords, ref selectedCashFlowRecords, value);
+                Set(() => SelectedCashFlowRecord, ref selectedCashFlowRecord, value);
             }
         }
 
@@ -77,14 +78,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => EndDate, ref endDate, value);
             }
         }
-        private bool payCheck = false;
+        private bool payCheck;
         public bool PayCheck
         {
             get => payCheck;
             set
             {
                 if (value)
+                {
                     CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Expenses).ToList();
+                    SelectedCashFlowAccount = CashFlowAccounts[0];
+                }
                 Set(() => PayCheck, ref payCheck, value);
             }
         }
@@ -95,7 +99,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             set
             {
                 if (value)
+                {
                     CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
+                    SelectedCashFlowAccount = CashFlowAccounts[0];
+                }
                 Set(() => GainCheck, ref gainCheck, value);
             }
         }
@@ -110,8 +117,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             get => cashFlowNote;
             set { Set(() => CashFlowNote,ref cashFlowNote,value); }
         }
-        private double cashFlowValue;
-        public double CashFlowValue
+        private int cashFlowValue;
+        public int CashFlowValue
         {
             get => cashFlowValue;
             set { Set(() => CashFlowValue, ref cashFlowValue, value); }
@@ -121,14 +128,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
         public RelayCommand Search { get; set; }
-
+        public RelayCommand EditCashFlowRecord { get; set; }
+        public RelayCommand DeleteCashFlowRecord { get; set; }
         #endregion
 
         public AdditionalCashFlowManageViewModel()
         {
             InitCommand();
             CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
+            SelectedCashFlowAccount = CashFlowAccounts[0];
             CashFlowRecords = new CashFlowRecords();
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today;
+            SearchAction();
         }
 
         private void InitCommand()
@@ -136,11 +148,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             SubmitCommand = new RelayCommand(SubmitAction);
             DateMouseDoubleClick = new RelayCommand<MaskedTextBox>(DateMouseDoubleClickAction);
             Search = new RelayCommand(SearchAction);
-            
+            EditCashFlowRecord = new RelayCommand(EditCashFlowRecordAction);
+            DeleteCashFlowRecord = new RelayCommand(DeleteCashFlowRecordAction);
         }
 
         private void SubmitAction() {
-            CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccounts, CashFlowNote, CashFlowValue);
+            CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue);
         }
 
         private void DateMouseDoubleClickAction(MaskedTextBox sender)
@@ -172,14 +185,43 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             GetCashFlowRecordsByDate();
         }
 
+        private void EditCashFlowRecordAction()
+        {
+            var selectedId = SelectedCashFlowRecord.SelectedDetail.ID;
+            var editWindow = new CashFlowRecordEditWindow.CashFlowRecordEditWindow(SelectedCashFlowRecord.SelectedDetail);
+            editWindow.ShowDialog();
+            var result = editWindow.EditResult;
+            if(!result) 
+                return;
+            SearchAction();
+            foreach (var rec in CashFlowRecords)
+            {
+                if (rec.Details.SingleOrDefault(det => det.ID.Equals(selectedId)) is null) 
+                    continue;
+                SelectedCashFlowRecord = rec;
+                SelectedCashFlowRecord.SelectedDetail = SelectedCashFlowRecord.Details.Single(det => det.ID.Equals(selectedId));
+                break;
+            }
+        }
+
+        private void DeleteCashFlowRecordAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            CashFlowDb.DeleteCashFlow(SelectedCashFlowRecord.SelectedDetail);
+            MainWindow.ServerConnection.CloseConnection();
+            SearchAction();
+        }
+
         private void GetCashFlowRecordsByDate()
         {
+            MainWindow.ServerConnection.OpenConnection();
             var table = CashFlowDb.GetDataByDate((DateTime)startDate, (DateTime)endDate);
             var tempDetails = new CashFlowRecordDetails();
             foreach (DataRow r in table.Rows)
             {
                 tempDetails.Add(new CashFlowRecordDetail(r));
             }
+            MainWindow.ServerConnection.CloseConnection();
             GroupCashFlowByDate(tempDetails);
         }
 

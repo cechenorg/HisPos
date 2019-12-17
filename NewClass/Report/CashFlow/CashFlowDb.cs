@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Database;
+using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
 
 namespace His_Pos.NewClass.Report.CashFlow
 {
@@ -35,6 +36,29 @@ namespace His_Pos.NewClass.Report.CashFlow
             DataBaseFunction.AddSqlParameter(parameterList, "SourceId", 0);
             DataBaseFunction.AddSqlParameter(parameterList, "CurrentUserId", ViewModelMainWindow.CurrentUser.ID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCashFlowRecordDetail]", parameterList);
+        }
+
+        public static void UpdateCashFlowRecordDetail(CashFlowAccount account,CashFlowRecordDetail editedDetail)
+        {
+            decimal cashFlowValue;
+            if (account.Type == CashFlowType.Expenses && editedDetail.CashFlowValue > 0)
+                cashFlowValue = editedDetail.CashFlowValue * -1;
+            else
+                cashFlowValue = editedDetail.CashFlowValue;
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowId", editedDetail.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowName", account.AccountName);
+            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowValue", cashFlowValue);
+            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowNote", editedDetail.Note);
+            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowEmpId", ViewModelMainWindow.CurrentUser.ID);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCashFlowRecord]", parameterList);
+        }
+
+        public static void DeleteCashFlow(CashFlowRecordDetail selectedDetail)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowId", selectedDetail.ID);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteCashFlowRecord]", parameterList);
         }
     }
 }

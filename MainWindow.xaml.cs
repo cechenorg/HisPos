@@ -90,7 +90,7 @@ namespace His_Pos
                             new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare,StringRes.CashStockEntryReport }));
             
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.AccountReportSystem,
-                            new[] { StringRes.InstitutionDeclarePointReport })); 
+                            new[] { StringRes.InstitutionDeclarePointReport ,StringRes.IncomeStatement })); 
             HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", StringRes.AdminManage,
                             new[] { StringRes.AdminManage }));
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.SystemTutorial,
