@@ -591,6 +591,10 @@
     <Compile Include="NewClass\Report\IncomeStatement\CooperativeInstitutionIncome.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\IncomeStatement.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\IncomeStatementMatrix.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\PharmacyIncome.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\PharmacyIncomeMatrix.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\PrescriptionCount.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\PrescriptionCountMatrix.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepot.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepotDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepots.cs" />
@@ -1987,6 +1991,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\IncomeStatement\IncomeStatementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\IncomeStatement\PrescripCountMatrixTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

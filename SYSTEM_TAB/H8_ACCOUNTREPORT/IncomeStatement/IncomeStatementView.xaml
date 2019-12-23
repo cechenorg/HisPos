@@ -5,10 +5,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
              xmlns:matrix="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" FontFamily="Segoe UI Semibold"
              d:DesignHeight="870" d:DesignWidth="1365">
     <Grid>
-        <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding IncomeStatementMatrix}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Left" Width="800">
+            <Label Content="處方張數:" FontSize="18"/>
+            <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PrescriptionCountMatrix}" Width="800">
+                <matrix:MatrixControl.Resources>
+                    <ResourceDictionary Source="PrescripCountMatrixTemplate.xaml" />
+                </matrix:MatrixControl.Resources>
+            </matrix:MatrixControl>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="1" HorizontalAlignment="Left" >
+            <Label Content="慢箋營業毛利:" FontSize="18"/>
+            <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PharmacyIncomeMatrix}" Height="500" Width="1365">
+                <matrix:MatrixControl.Resources>
+                    <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
+                </matrix:MatrixControl.Resources>
+            </matrix:MatrixControl>
+        </StackPanel>
+        <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding IncomeStatementMatrix}" Grid.Row="2">
             <matrix:MatrixControl.Resources>
                 <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
             </matrix:MatrixControl.Resources>

@@ -3,14 +3,14 @@
                     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
                     xmlns:mx="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib">
     <!-- Shared Resources -->
-    <SolidColorBrush x:Key="BackBrush" Color="LightBlue" />
-    <SolidColorBrush x:Key="BorderBrush" Color="LightBlue" />
+    <SolidColorBrush x:Key="BackBrush" Color="LightGray" />
+    <SolidColorBrush x:Key="BorderBrush" Color="LightGray" />
     <Thickness x:Key="BorderThickness" Left="0" Top="0" Right="0.5" Bottom="0.5" />
-    <SolidColorBrush x:Key="HeaderForeground" Color="DarkBlue" />
+    <SolidColorBrush x:Key="HeaderForeground" Color="Black" />
 
     <!-- MatrixEmptyHeaderItem -->
     <DataTemplate DataType="{x:Type mx:MatrixEmptyHeaderItem}">
-        <Border Background="SteelBlue" />
+        <Border Background="WhiteSmoke" />
     </DataTemplate>
 
     <!-- MatrixColumnHeaderItem -->
@@ -26,7 +26,8 @@
                     Foreground="{StaticResource HeaderForeground}"
                     Text="{Binding Path=ColumnHeader.Month}" 
                     TextAlignment="Center"
-                    FontSize="16"/>
+                    FontFamily="Segoe UI Semi"
+                    FontSize="14"/>
             </DockPanel>
         </Border>
     </DataTemplate>
@@ -37,24 +38,15 @@
             Background="{StaticResource BackBrush}" 
             BorderBrush="{StaticResource BorderBrush}" 
             BorderThickness="{StaticResource BorderThickness}"  
-            Padding="4,0">
+            Padding="10,0">
             <TextBlock 
                 FontWeight="Bold"
                 Foreground="{StaticResource HeaderForeground}"
                 HorizontalAlignment="Right" 
+                Text="{Binding Path=RowHeader}" 
                 VerticalAlignment="Center"
-                FontSize="16">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Text" Value="{Binding Path=RowHeader}" />
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="慢箋營業毛利">
-                                <Setter Property="Foreground" Value="Red" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style> 
-                </TextBlock.Style>
-            </TextBlock>
+                FontFamily="Segoe UI Semi"
+                FontSize="14"/>
         </Border>
     </DataTemplate>
 
@@ -66,10 +58,10 @@
             <TextBlock 
                 HorizontalAlignment="Right"
                 Margin="0,0,4,0"
-                Text="{Binding Path=Value,StringFormat='{}{0:N2}'}"  
+                Text="{Binding Path=Value}"  
                 VerticalAlignment="Center" 
-                FontSize="15"
-                />
+                FontFamily="Segoe UI Semi"
+                FontSize="14"/>
         </Border>
     </DataTemplate>
 </ResourceDictionary>

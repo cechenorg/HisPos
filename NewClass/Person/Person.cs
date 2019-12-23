@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight;
 using ZeroFormatter;
 
@@ -87,6 +88,23 @@ namespace His_Pos.NewClass.Person
                 Set(() => CellPhone, ref cellPhone, value);
             }
         }//手機
+        [IgnoreFormat]
+        public virtual string FormattedPhoneNumber
+        {
+            get
+            {
+                if (CellPhone == null)
+                    return string.Empty;
+
+                switch (CellPhone.Length)
+                {
+                    case 10:
+                        return Regex.Replace(CellPhone, @"(\d{4})(\d{3})(\d{3})", "$1-$2-$3");
+                    default:
+                        return CellPhone;
+                }
+            }
+        }
         [IgnoreFormat]
         public string Address { get; set; }//地址
         [IgnoreFormat]

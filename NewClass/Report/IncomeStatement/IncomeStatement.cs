@@ -12,19 +12,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
     {
         public IncomeStatement()
         {
-            PrescriptionCount = new List<int>();
             CooperativeInstitutionsIncome = new List<CooperativeInstitutionIncome>();
-        }
-
-        private List<int> prescriptionCount;
-
-        public List<int> PrescriptionCount
-        {
-            get => prescriptionCount;
-            set 
-            {
-                Set(() => PrescriptionCount, ref prescriptionCount, value);
-            }
         }
 
         private decimal chronicIncome;

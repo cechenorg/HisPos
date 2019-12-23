@@ -640,6 +640,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     return;
                 currentService.SendOrder(vm);
             }
+            else if (result && EditedPrescription.Type.Equals(PrescriptionType.Normal))
+            {
+                var pointDiff = EditedPrescription.PrescriptionPoint.ApplyPoint -
+                                OriginalPrescription.PrescriptionPoint.ApplyPoint;
+                PrescriptionDb.InsertPrescriptionPointEditRecord(EditedPrescription.ID, pointDiff);
+            }
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             if (result)

@@ -19,6 +19,25 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => Year, ref year, value);
             }
         }
+        private PrescriptionCountMatrix prescriptionCountMatrix;
+        public PrescriptionCountMatrix PrescriptionCountMatrix
+        {
+            get => prescriptionCountMatrix;
+            set
+            {
+                Set(() => PrescriptionCountMatrix, ref prescriptionCountMatrix, value);
+            }
+        }
+
+        private PharmacyIncomeMatrix pharmacyIncomeMatrix;
+        public PharmacyIncomeMatrix PharmacyIncomeMatrix
+        {
+            get => pharmacyIncomeMatrix;
+            set
+            {
+                Set(() => PharmacyIncomeMatrix, ref pharmacyIncomeMatrix, value);
+            }
+        }
 
         private IncomeStatementMatrix incomeStatementMatrix;
         public IncomeStatementMatrix IncomeStatementMatrix
@@ -36,7 +55,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
 
         public IncomeStatementViewModel()
         {
-            IncomeStatementMatrix = new IncomeStatementMatrix(2019);
+            var incomeStatementDataSet = NewClass.Report.CashReport.CashReportDb.GetYearIncomeStatementForExport(DateTime.Today.Year);
+            PrescriptionCountMatrix = new PrescriptionCountMatrix(incomeStatementDataSet.Tables[6], incomeStatementDataSet.Tables[0]);
+            PharmacyIncomeMatrix = new PharmacyIncomeMatrix(incomeStatementDataSet.Tables[1], incomeStatementDataSet.Tables[2], incomeStatementDataSet.Tables[7]);
+            IncomeStatementMatrix = new IncomeStatementMatrix(incomeStatementDataSet);
         }
     }
 }
