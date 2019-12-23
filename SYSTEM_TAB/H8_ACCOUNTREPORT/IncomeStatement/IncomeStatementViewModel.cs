@@ -39,6 +39,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
             }
         }
 
+        private ChronicProfitMatrix chronicProfitMatrix;
+        public ChronicProfitMatrix ChronicProfitMatrix
+        {
+            get => chronicProfitMatrix;
+            set
+            {
+                Set(() => ChronicProfitMatrix, ref chronicProfitMatrix, value);
+            }
+        }
+
         private IncomeStatementMatrix incomeStatementMatrix;
         public IncomeStatementMatrix IncomeStatementMatrix
         {
@@ -58,6 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
             var incomeStatementDataSet = NewClass.Report.CashReport.CashReportDb.GetYearIncomeStatementForExport(DateTime.Today.Year);
             PrescriptionCountMatrix = new PrescriptionCountMatrix(incomeStatementDataSet.Tables[6], incomeStatementDataSet.Tables[0]);
             PharmacyIncomeMatrix = new PharmacyIncomeMatrix(incomeStatementDataSet.Tables[1], incomeStatementDataSet.Tables[2], incomeStatementDataSet.Tables[7]);
+            ChronicProfitMatrix = new ChronicProfitMatrix(PharmacyIncomeMatrix.GetChronicProfits());
             IncomeStatementMatrix = new IncomeStatementMatrix(incomeStatementDataSet);
         }
     }

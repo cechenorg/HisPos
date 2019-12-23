@@ -10,9 +10,18 @@ namespace His_Pos.NewClass.Report.IncomeStatement
 {
     public class IncomeStatement : ObservableObject
     {
-        public IncomeStatement()
+        public IncomeStatement(int month)
         {
+            Month = $"{month}月";
             CooperativeInstitutionsIncome = new List<CooperativeInstitutionIncome>();
+        }
+
+        private string month;
+
+        public string Month
+        {
+            get => month;
+            set { Set(() => Month, ref month, value); }
         }
 
         private decimal chronicIncome;

@@ -22,9 +22,9 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             cooperativeInstitutionIncomeHeaderTable = incomeSet.Tables[7];
             incomeStatement = new IncomeStatement[12];
             for (var i = 0; i < incomeStatement.Length; i++)
-                incomeStatement[i] = new IncomeStatement();
-            //SetDeclareIncome(declareIncomeTable);
-            //SetPharmacyCost(pharmacyCostTable);
+                incomeStatement[i] = new IncomeStatement(i+1);
+            SetDeclareIncome(declareIncomeTable);
+            SetPharmacyCost(pharmacyCostTable);
             SetPrescribeIncome(prescribeIncomeTable);
             SetPrescribeOtherIncomeAndCost(prescribeOtherIncomeAndCostTable);
             SetExpenseAndInventory(expenseAndInventoryTable);

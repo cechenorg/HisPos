@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
@@ -80,7 +81,6 @@ namespace His_Pos.NewClass.Report.IncomeStatement
 
             rowHeaderToValueProviderMap.Add("慢箋銷貨成本", income => income.ChronicCost);
             rowHeaderToValueProviderMap.Add("一般銷貨成本", income => income.NormalCost);
-            rowHeaderToValueProviderMap.Add("慢箋營業毛利", income => income.ChronicProfit);
         }
 
         private void SetDeclareIncome(DataTable declareIncomeTable)
@@ -163,6 +163,11 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                     income.CooperativeInstitutionsIncome[insIndex].OtherIncome = row.Field<decimal>($"{month}");
                     break;
             }
+        }
+
+        public List<decimal> GetChronicProfits()
+        {
+            return pharmacyIncomes.Select(income => income.ChronicProfit).ToList();
         }
     }
 }

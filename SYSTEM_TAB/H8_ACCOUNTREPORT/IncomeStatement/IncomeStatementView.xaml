@@ -6,33 +6,38 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
              xmlns:matrix="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib"
              mc:Ignorable="d" FontFamily="Segoe UI Semibold"
-             d:DesignHeight="870" d:DesignWidth="1365">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"/>
-            <RowDefinition Height="0.8*"/>
-            <RowDefinition Height="0.2*"/>
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Left" Width="800">
-            <Label Content="處方張數:" FontSize="18"/>
-            <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PrescriptionCountMatrix}" Width="800">
-                <matrix:MatrixControl.Resources>
-                    <ResourceDictionary Source="PrescripCountMatrixTemplate.xaml" />
-                </matrix:MatrixControl.Resources>
-            </matrix:MatrixControl>
+             d:DesignWidth="1365">
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical" Margin="10">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="1365">
+                <Label Content="處方張數:" FontSize="18"/>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PrescriptionCountMatrix}" Width="1325" HorizontalAlignment="Left">
+                    <matrix:MatrixControl.Resources>
+                        <ResourceDictionary Source="PrescripCountMatrixTemplate.xaml" />
+                    </matrix:MatrixControl.Resources>
+                </matrix:MatrixControl>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
+                <Label Content="健保收入:" FontSize="18"/>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PharmacyIncomeMatrix}" Height="500" Width="1325">
+                    <matrix:MatrixControl.Resources>
+                        <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
+                    </matrix:MatrixControl.Resources>
+                </matrix:MatrixControl>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding ChronicProfitMatrix}" Height="50" Width="1325">
+                    <matrix:MatrixControl.Resources>
+                        <ResourceDictionary Source="ChronicProfitMatrixTemplate.xaml" />
+                    </matrix:MatrixControl.Resources>
+                </matrix:MatrixControl>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
+                <Label Content="其他:" FontSize="18"/>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding IncomeStatementMatrix}" Height="350" Width="1325">
+                    <matrix:MatrixControl.Resources>
+                        <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
+                    </matrix:MatrixControl.Resources>
+                </matrix:MatrixControl>
+            </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="1" HorizontalAlignment="Left" >
-            <Label Content="慢箋營業毛利:" FontSize="18"/>
-            <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PharmacyIncomeMatrix}" Height="500" Width="1365">
-                <matrix:MatrixControl.Resources>
-                    <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
-                </matrix:MatrixControl.Resources>
-            </matrix:MatrixControl>
-        </StackPanel>
-        <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding IncomeStatementMatrix}" Grid.Row="2">
-            <matrix:MatrixControl.Resources>
-                <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
-            </matrix:MatrixControl.Resources>
-        </matrix:MatrixControl>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

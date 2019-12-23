@@ -41,20 +41,10 @@
             <TextBlock 
                 FontWeight="Bold"
                 Foreground="{StaticResource HeaderForeground}"
+                Text="{Binding Path=RowHeader}"
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Center"
-                FontSize="16">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Text" Value="{Binding Path=RowHeader}" />
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="慢箋營業毛利">
-                                <Setter Property="Foreground" Value="Red" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style> 
-                </TextBlock.Style>
-            </TextBlock>
+                FontSize="16"/>
         </Border>
     </DataTemplate>
 

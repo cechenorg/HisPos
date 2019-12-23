@@ -588,6 +588,8 @@
     <Compile Include="NewClass\Report\CashReport\CashReportDb.cs" />
     <Compile Include="NewClass\Report\CashReport\CashReports.cs" />
     <Compile Include="NewClass\Report\CashStockEntryReportEnum.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\ChronicProfit.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\ChronicProfitMatrix.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\CooperativeInstitutionIncome.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\IncomeStatement.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\IncomeStatementMatrix.cs" />
@@ -1983,6 +1985,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceSheetView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\IncomeStatement\ChronicProfitMatrixTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
