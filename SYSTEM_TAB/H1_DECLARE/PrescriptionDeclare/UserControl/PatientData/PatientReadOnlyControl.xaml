@@ -42,7 +42,7 @@
         </Label>
         <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
         <Label Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"
-               Content="{Binding CurrentPrescription.Patient.CellPhone,UpdateSourceTrigger=PropertyChanged}">
+               Content="{Binding CurrentPrescription.Patient.CellPhone,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:####-######}}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientCellPhone}"/>

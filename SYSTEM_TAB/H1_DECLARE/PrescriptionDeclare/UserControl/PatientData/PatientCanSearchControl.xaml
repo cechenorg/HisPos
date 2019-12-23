@@ -44,7 +44,7 @@
         </xctk:MaskedTextBox>
         <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
         <TextBox Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                         Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
+                         Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:####-######}}" CaretBrush="Black">
             <TextBox.InputBindings>
                 <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientCellPhone}"/>
             </TextBox.InputBindings>

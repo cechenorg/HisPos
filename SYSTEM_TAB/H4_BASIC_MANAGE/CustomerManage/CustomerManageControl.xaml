@@ -98,7 +98,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="4" Margin="8">
             <Label  Content="手機" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBox  Width="140" Text="{Binding Customer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
+            <TextBox  Width="140" Text="{Binding Customer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:####-######}}"   FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}"/>
