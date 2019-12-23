@@ -23,7 +23,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
         public IncomeStatementView()
         {
             InitializeComponent();
-            DataContext = new IncomeStatementViewModel();
         }
     }
 }
