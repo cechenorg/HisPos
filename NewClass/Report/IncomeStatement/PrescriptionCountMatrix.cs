@@ -9,6 +9,11 @@ namespace His_Pos.NewClass.Report.IncomeStatement
 {
     public class PrescriptionCountMatrix : MatrixLib.Matrix.MatrixBase<string, PrescriptionCount>
     {
+        public PrescriptionCountMatrix()
+        {
+            
+        }
+
         public PrescriptionCountMatrix(DataTable cooperativeTable, DataTable prescriptionCountTable)
         {
             rowHeaderToValueProviderMap = new Dictionary<string, CellValueProvider>();
@@ -47,11 +52,11 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         {
             rowHeaderToValueProviderMap.Add("一般箋", c => c.Count[0]);
             rowHeaderToValueProviderMap.Add("慢箋", c => c.Count[1]);
-            int i = 0;
+            
             foreach (DataRow row in cooperativeInstitutionNameTable.Rows)
             {
-                rowHeaderToValueProviderMap.Add(
-                    row.Field<string>("InstitutionName"), c => c.Count[i+2]);
+                var index = cooperativeInstitutionNameTable.Rows.IndexOf(row) + 2;
+                rowHeaderToValueProviderMap.Add(row.Field<string>("InstitutionName"), c => c.Count[index]);
             }
         }
 

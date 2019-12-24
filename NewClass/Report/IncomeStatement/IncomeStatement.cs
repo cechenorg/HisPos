@@ -164,12 +164,12 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         }
 
         public decimal ChronicProfit => CountDeclareIncome() - CountDeclareCost();
-        public decimal AdjustProfit => CountAdjustIncome() - CountAdjustCost();
+        public decimal PrescribeProfit => CountAdjustIncome() - CountAdjustCost();
         public decimal HISProfit => CountHISIncome() - CountHISCost();
 
         private decimal CountHISIncome()
         {
-            return ChronicProfit + AdjustProfit + InventoryOverage;
+            return ChronicProfit + PrescribeProfit + InventoryOverage;
         }
 
         private decimal CountHISCost()

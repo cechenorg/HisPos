@@ -3,14 +3,14 @@
                     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
                     xmlns:mx="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib">
     <!-- Shared Resources -->
-    <SolidColorBrush x:Key="BackBrush" Color="LightBlue" />
+    <SolidColorBrush x:Key="BackBrush" Color="LightGray" />
     <SolidColorBrush x:Key="BorderBrush" Color="Black" />
     <Thickness x:Key="BorderThickness" Left="0" Top="0" Right="0.7" Bottom="0.7" />
-    <SolidColorBrush x:Key="HeaderForeground" Color="DarkBlue" />
+    <SolidColorBrush x:Key="HeaderForeground" Color="Black" />
 
     <!-- MatrixEmptyHeaderItem -->
     <DataTemplate DataType="{x:Type mx:MatrixEmptyHeaderItem}">
-        <Border Background="SteelBlue" />
+        <Border Background="WhiteSmoke" BorderBrush="{StaticResource BorderBrush}" />
     </DataTemplate>
 
     <!-- MatrixColumnHeaderItem -->
@@ -22,10 +22,10 @@
             Padding="0,4">
             <DockPanel>
                 <TextBlock
-                    FontWeight="Bold"
                     Foreground="{StaticResource HeaderForeground}"
                     Text="{Binding Path=ColumnHeader.Month}" 
                     TextAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
                     FontSize="16"/>
             </DockPanel>
         </Border>
@@ -37,13 +37,13 @@
             Background="{StaticResource BackBrush}" 
             BorderBrush="{StaticResource BorderBrush}" 
             BorderThickness="{StaticResource BorderThickness}"  
-            Padding="4,0">
+            Padding="10,5">
             <TextBlock 
-                FontWeight="Bold"
                 Foreground="{StaticResource HeaderForeground}"
-                Text="{Binding Path=RowHeader}"
                 HorizontalAlignment="Right" 
+                Text="{Binding Path=RowHeader}" 
                 VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
                 FontSize="16"/>
         </Border>
     </DataTemplate>
@@ -56,10 +56,10 @@
             <TextBlock 
                 HorizontalAlignment="Right"
                 Margin="0,0,4,0"
-                Text="{Binding Path=Value,StringFormat='{}{0:N2}'}"  
+                Text="{Binding Path=Value}"  
                 VerticalAlignment="Center" 
-                FontSize="15"
-                />
+                FontFamily="Segoe UI Semibold"
+                FontSize="15"/>
         </Border>
     </DataTemplate>
 </ResourceDictionary>

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Report.IncomeStatement;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
@@ -17,6 +20,17 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
             set
             {
                 Set(() => Year, ref year, value);
+            }
+        }
+        private string yearString;
+        public string YearString
+        {
+            get => yearString;
+            set
+            {
+                Set(() => YearString, ref yearString, value);
+                var result = int.TryParse(value, out var parsedYear);
+                Year = result ? parsedYear : -1;
             }
         }
         private PrescriptionCountMatrix prescriptionCountMatrix;
@@ -39,8 +53,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
             }
         }
 
-        private ChronicProfitMatrix chronicProfitMatrix;
-        public ChronicProfitMatrix ChronicProfitMatrix
+        private ProfitSummaryMatrix chronicProfitMatrix;
+        public ProfitSummaryMatrix ChronicProfitMatrix
         {
             get => chronicProfitMatrix;
             set
@@ -48,7 +62,24 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => ChronicProfitMatrix, ref chronicProfitMatrix, value);
             }
         }
-
+        private ProfitSummaryMatrix prescribeProfitMatrix;
+        public ProfitSummaryMatrix PrescribeProfitMatrix
+        {
+            get => prescribeProfitMatrix;
+            set
+            {
+                Set(() => PrescribeProfitMatrix, ref prescribeProfitMatrix, value);
+            }
+        }
+        private ProfitSummaryMatrix hisProfitMatrix;
+        public ProfitSummaryMatrix HISProfitMatrix
+        {
+            get => hisProfitMatrix;
+            set
+            {
+                Set(() => HISProfitMatrix, ref hisProfitMatrix, value);
+            }
+        }
         private IncomeStatementMatrix incomeStatementMatrix;
         public IncomeStatementMatrix IncomeStatementMatrix
         {
@@ -58,18 +89,47 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => IncomeStatementMatrix, ref incomeStatementMatrix, value);
             }
         }
+        private CostAndInventoryMatrix costAndInventoryMatrix;
+        public CostAndInventoryMatrix CostAndInventoryMatrix
+        {
+            get => costAndInventoryMatrix;
+            set
+            {
+                Set(() => CostAndInventoryMatrix, ref costAndInventoryMatrix, value);
+            }
+        }
         public override TabBase getTab()
         {
             return this;
         }
 
+        public RelayCommand Search { get; set; }
+
         public IncomeStatementViewModel()
         {
-            var incomeStatementDataSet = NewClass.Report.CashReport.CashReportDb.GetYearIncomeStatementForExport(DateTime.Today.Year);
-            PrescriptionCountMatrix = new PrescriptionCountMatrix(incomeStatementDataSet.Tables[6], incomeStatementDataSet.Tables[0]);
-            PharmacyIncomeMatrix = new PharmacyIncomeMatrix(incomeStatementDataSet.Tables[1], incomeStatementDataSet.Tables[2], incomeStatementDataSet.Tables[7]);
-            ChronicProfitMatrix = new ChronicProfitMatrix(PharmacyIncomeMatrix.GetChronicProfits());
-            IncomeStatementMatrix = new IncomeStatementMatrix(incomeStatementDataSet);
+            Year = DateTime.Today.Year;
+            YearString = Year.ToString();
+            Search = new RelayCommand(SearchAction);
+            SearchAction();
+        }
+
+        private void SearchAction()
+        {
+            if (Year >= 2019)
+            {
+                var incomeStatementDataSet = NewClass.Report.CashReport.CashReportDb.GetYearIncomeStatementForExport(Year);
+                PrescriptionCountMatrix = new PrescriptionCountMatrix(incomeStatementDataSet.Tables[6], incomeStatementDataSet.Tables[0]);
+                PharmacyIncomeMatrix = new PharmacyIncomeMatrix(incomeStatementDataSet.Tables[1], incomeStatementDataSet.Tables[2], incomeStatementDataSet.Tables[7]);
+                ChronicProfitMatrix = new ProfitSummaryMatrix("慢箋營業毛利", PharmacyIncomeMatrix.GetChronicProfits());
+                IncomeStatementMatrix = new IncomeStatementMatrix(incomeStatementDataSet);
+                PrescribeProfitMatrix = new ProfitSummaryMatrix("調劑營業毛利", IncomeStatementMatrix.GetPrescribeProfits());
+                CostAndInventoryMatrix = new CostAndInventoryMatrix(incomeStatementDataSet.Tables[5]);
+                HISProfitMatrix = new ProfitSummaryMatrix("調劑台營業毛利", IncomeStatementMatrix.GetHISProfits());
+            }
+            else
+            {
+                MessageWindow.ShowMessage("年份超出範圍或格式錯誤",MessageType.ERROR);
+            }
         }
     }
 }

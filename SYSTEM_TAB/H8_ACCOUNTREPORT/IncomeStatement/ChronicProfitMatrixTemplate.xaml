@@ -4,8 +4,8 @@
                     xmlns:mx="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib">
     <!-- Shared Resources -->
     <SolidColorBrush x:Key="BackBrush" Color="Yellow" />
-    <SolidColorBrush x:Key="BorderBrush" Color="Yellow" />
-    <Thickness x:Key="BorderThickness" Left="0" Top="0" Right="0.5" Bottom="0.5" />
+    <SolidColorBrush x:Key="BorderBrush" Color="Black" />
+    <Thickness x:Key="BorderThickness" Left="0" Top="0" Right="0.7" Bottom="0.7" />
     <SolidColorBrush x:Key="HeaderForeground" Color="Black" />
 
     <!-- MatrixEmptyHeaderItem -->

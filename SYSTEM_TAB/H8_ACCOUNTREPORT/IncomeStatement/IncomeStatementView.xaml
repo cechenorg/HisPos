@@ -9,17 +9,22 @@
              d:DesignWidth="1365">
     <ScrollViewer>
         <StackPanel Orientation="Vertical" Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="1365">
+                <Label Content="查詢年分:" FontSize="18"/>
+                <TextBox Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Black" Text="{Binding YearString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" PreviewKeyDown="Search_OnPreviewKeyDown" InputScope="Number" GotFocus="TextBox_SelectAll" MaxLength="4"/>
+                <Button Command="{Binding Search}" Width="96" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16"/>
+            </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="1365">
                 <Label Content="處方張數:" FontSize="18"/>
                 <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PrescriptionCountMatrix}" Width="1325" HorizontalAlignment="Left">
-                    <matrix:MatrixControl.Resources>
-                        <ResourceDictionary Source="PrescripCountMatrixTemplate.xaml" />
+                    <matrix:MatrixControl.Resources> 
+                        <ResourceDictionary Source="PrescriptionCountMatrixTemplate.xaml" />
                     </matrix:MatrixControl.Resources>
                 </matrix:MatrixControl>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
-                <Label Content="健保收入:" FontSize="18"/>
-                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PharmacyIncomeMatrix}" Height="500" Width="1325">
+                <Label Content="處方收入.成本:" FontSize="18"/>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PharmacyIncomeMatrix}" Height="600" Width="1325">
                     <matrix:MatrixControl.Resources>
                         <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
                     </matrix:MatrixControl.Resources>
@@ -31,10 +36,28 @@
                 </matrix:MatrixControl>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
-                <Label Content="其他:" FontSize="18"/>
-                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding IncomeStatementMatrix}" Height="350" Width="1325">
+                <Label Content="配藥收入.成本:" FontSize="18"/>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding IncomeStatementMatrix}" Height="200" Width="1325">
                     <matrix:MatrixControl.Resources>
-                        <ResourceDictionary Source="IncomeStatementMatrixTemplate.xaml" />
+                        <ResourceDictionary Source="PrescribeIncomeTemplate.xaml" />
+                    </matrix:MatrixControl.Resources>
+                </matrix:MatrixControl>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding PrescribeProfitMatrix}" Height="50" Width="1325">
+                    <matrix:MatrixControl.Resources>
+                        <ResourceDictionary Source="PrescribeProfitMatrixTemplate.xaml" />
+                    </matrix:MatrixControl.Resources>
+                </matrix:MatrixControl>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" >
+                <Label Content="費用.庫存異動:" FontSize="18"/>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding CostAndInventoryMatrix}" Height="250" Width="1325">
+                    <matrix:MatrixControl.Resources>
+                        <ResourceDictionary Source="CostAndInventoryMatrixTemplate.xaml" />
+                    </matrix:MatrixControl.Resources>
+                </matrix:MatrixControl>
+                <matrix:MatrixControl ItemsSource="{Binding Path=MatrixItems}" DataContext="{Binding HISProfitMatrix}" Height="50" Width="1325">
+                    <matrix:MatrixControl.Resources>
+                        <ResourceDictionary Source="HISProfitMatrixTemplate.xaml" />
                     </matrix:MatrixControl.Resources>
                 </matrix:MatrixControl>
             </StackPanel>

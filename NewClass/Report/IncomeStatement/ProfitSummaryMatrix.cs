@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
-    public class ChronicProfitMatrix : MatrixLib.Matrix.MatrixBase<string, decimal>
+    public class ProfitSummaryMatrix : MatrixLib.Matrix.MatrixBase<string, decimal>
     {
-        public ChronicProfitMatrix(List<decimal> profitList)
+        public ProfitSummaryMatrix(string header,IReadOnlyList<decimal> profitList)
         {
+            rowHeader = header;
             rowHeaderToValueProviderMap = new Dictionary<string, CellValueProvider>();
-            chronicProfits = new decimal[12];
+            profits = new decimal[12];
             for (var i = 0; i < 12; i++)
             {
-                chronicProfits[i] = profitList[i];
+                profits[i] = profitList[i];
             }
             PopulateCellValueProviderMap();
         }
 
         #region Fields
-        private readonly decimal[] chronicProfits;
-        readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
+        private readonly decimal[] profits;
+        private readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
         private delegate object CellValueProvider(decimal chronicProfit);
+        private readonly string rowHeader;
         #endregion
         protected override IEnumerable<decimal> GetColumnHeaderValues()
         {
-            return chronicProfits;
+            return profits;
         }
 
         protected override IEnumerable<string> GetRowHeaderValues()
@@ -42,7 +43,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
 
         void PopulateCellValueProviderMap()
         {
-            rowHeaderToValueProviderMap.Add("慢箋營業毛利", chronicProfit => chronicProfit);
+            rowHeaderToValueProviderMap.Add(rowHeader, profit => profit);
         }
     }
 }

@@ -3,31 +3,22 @@
                     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
                     xmlns:mx="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib">
     <!-- Shared Resources -->
-    <SolidColorBrush x:Key="BackBrush" Color="LightGray" />
-    <SolidColorBrush x:Key="BorderBrush" Color="LightGray" />
-    <Thickness x:Key="BorderThickness" Left="0" Top="0" Right="0.5" Bottom="0.5" />
+    <SolidColorBrush x:Key="BackBrush" Color="Yellow" />
+    <SolidColorBrush x:Key="BorderBrush" Color="Black" />
+    <Thickness x:Key="BorderThickness" Left="0" Top="0" Right="0.7" Bottom="0.7" />
     <SolidColorBrush x:Key="HeaderForeground" Color="Black" />
 
     <!-- MatrixEmptyHeaderItem -->
     <DataTemplate DataType="{x:Type mx:MatrixEmptyHeaderItem}">
-        <Border Background="WhiteSmoke" />
+        <Border Background="Transparent" Height="0"/>
     </DataTemplate>
 
     <!-- MatrixColumnHeaderItem -->
     <DataTemplate DataType="{x:Type mx:MatrixColumnHeaderItem}">
         <Border 
-            Background="{StaticResource BackBrush}" 
-            BorderBrush="{StaticResource BorderBrush}" 
-            BorderThickness="{StaticResource BorderThickness}" 
-            Padding="0,4">
-            <DockPanel>
-                <TextBlock
-                    Foreground="{StaticResource HeaderForeground}"
-                    Text="{Binding Path=ColumnHeader.Month}" 
-                    TextAlignment="Center"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="16"/>
-            </DockPanel>
+            Background="Transparent" 
+            BorderBrush="Transparent" 
+            BorderThickness="0">
         </Border>
     </DataTemplate>
 
@@ -37,14 +28,17 @@
             Background="{StaticResource BackBrush}" 
             BorderBrush="{StaticResource BorderBrush}" 
             BorderThickness="{StaticResource BorderThickness}"  
-            Padding="10,5">
+            Padding="4,0">
             <TextBlock 
-                Foreground="{StaticResource HeaderForeground}"
+                FontWeight="Bold"
+                Foreground="Red"
                 HorizontalAlignment="Right" 
-                Text="{Binding Path=RowHeader}" 
+                TextAlignment="Right"
                 VerticalAlignment="Center"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16"/>
+                Text="{Binding Path=RowHeader}"
+                FontSize="16"
+                Width="100">
+            </TextBlock>
         </Border>
     </DataTemplate>
 
@@ -52,14 +46,17 @@
     <DataTemplate DataType="{x:Type mx:MatrixCellItem}">
         <Border 
             BorderBrush="{StaticResource BorderBrush}" 
-            BorderThickness="{StaticResource BorderThickness}" >
+            BorderThickness="{StaticResource BorderThickness}"
+            Background="Yellow">
             <TextBlock 
                 HorizontalAlignment="Right"
                 Margin="0,0,4,0"
-                Text="{Binding Path=Value}"  
+                Text="{Binding Path=Value,StringFormat='{}{0:N2}'}"  
                 VerticalAlignment="Center" 
                 FontFamily="Segoe UI Semibold"
-                FontSize="15"/>
+                FontSize="14"
+                Foreground="Red"
+                Background="Yellow"/>
         </Border>
     </DataTemplate>
 </ResourceDictionary>

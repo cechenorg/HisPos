@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using MySqlX.XDevAPI.Relational;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
@@ -213,45 +214,19 @@ namespace His_Pos.NewClass.Report.IncomeStatement
 
         void PopulateCellValueProviderMap()
         {
-            //rowHeaderToValueProviderMap.Add("慢箋健保收入",income => income.ChronicIncome);
-            //rowHeaderToValueProviderMap.Add("一般箋健保收入", income => income.NormalIncome);
-            //rowHeaderToValueProviderMap.Add("其他收入", income => income.OtherIncome);
-
-            //for (var i = 0; i < cooperativeInstitutionIncomeHeaderTable.Rows.Count; i++)
-            //{
-            //    var index = 0;
-            //    var headerName = cooperativeInstitutionIncomeHeaderTable.Rows[i].Field<string>("IncomeName");
-            //    if (headerName.Contains("合作藥服"))
-            //    {
-            //        rowHeaderToValueProviderMap.Add(
-            //            cooperativeInstitutionIncomeHeaderTable.Rows[i].Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].MedicalServiceIncome);
-            //    }
-            //    else if (headerName.Contains("合作藥品"))
-            //    {
-            //        rowHeaderToValueProviderMap.Add(
-            //            cooperativeInstitutionIncomeHeaderTable.Rows[i].Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].MedicineIncome);
-            //    }
-            //    else if (headerName.Contains("合作其他"))
-            //    {
-            //        rowHeaderToValueProviderMap.Add(
-            //            cooperativeInstitutionIncomeHeaderTable.Rows[i].Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].OtherIncome);
-            //    }
-            //    if(i % 3 == 0)
-            //        index++;
-            //}
-
-            //rowHeaderToValueProviderMap.Add("慢箋銷貨成本",income => income.ChronicCost);
-            //rowHeaderToValueProviderMap.Add("一般銷貨成本", income => income.NormalCost);
-            //rowHeaderToValueProviderMap.Add("慢箋營業毛利", income => income.ChronicProfit);
             rowHeaderToValueProviderMap.Add("配藥收入", income => income.PrescribeIncome);
             rowHeaderToValueProviderMap.Add("額外收入", income => income.OtherIncome);
             rowHeaderToValueProviderMap.Add("配藥成本", income => income.PrescribeCost);
-            rowHeaderToValueProviderMap.Add("調劑營業毛利", income => income.AdjustProfit);
-            rowHeaderToValueProviderMap.Add("費用", income => income.Expense);
-            rowHeaderToValueProviderMap.Add("庫存盤盈", income => income.InventoryOverage);
-            rowHeaderToValueProviderMap.Add("庫存盤虧", income => income.InventoryShortage);
-            rowHeaderToValueProviderMap.Add("庫存報廢", income => income.InventoryScrapped);
-            rowHeaderToValueProviderMap.Add("調劑台營業毛利", income => income.HISProfit);
+        }
+
+        public List<decimal> GetPrescribeProfits()
+        {
+            return incomeStatement.Select(income => income.PrescribeProfit).ToList();
+        }
+
+        public List<decimal> GetHISProfits()
+        {
+            return incomeStatement.Select(income => income.HISProfit).ToList();
         }
     }
 }
