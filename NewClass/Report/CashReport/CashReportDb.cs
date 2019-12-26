@@ -32,6 +32,11 @@ namespace His_Pos.NewClass.Report.CashReport
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             DataBaseFunction.AddSqlParameter(parameterList, "InsID", insID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CashReportPerDayByID]", parameterList);
-        } 
+        }
+
+        internal static DataSet GetBalanceSheet()
+        {
+            return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[BalanceSheet]");
+        }
     }
 }
