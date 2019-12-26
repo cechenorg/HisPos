@@ -130,7 +130,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             MainWindow.ServerConnection.OpenConnection();
             DataSet dataSet = CashReportDb.GetBalanceSheet();
 
-            if (dataSet.Tables.Count != 5)
+            if (dataSet.Tables.Count != 6)
             {
                 MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
                 return;
@@ -142,9 +142,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("RIGHT_TOTAL");
 
             PayableViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[4]);
+            PayViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[5]);
 
             MainWindow.ServerConnection.CloseConnection();
 
+            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
             ChangeDetail();
         }
         #endregion
@@ -176,7 +178,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 if (RightSelectedData.Name.Contains("應付帳款"))
                     BalanceSheetType = BalanceSheetTypeEnum.Payable;
                 else if (RightSelectedData.Name.Contains("代付"))
+                {
+                    var ins = ViewModelMainWindow.Institutions.Single(i => i.ID.Equals(RightSelectedData.ID));
+
                     BalanceSheetType = BalanceSheetTypeEnum.Pay;
+                    PayViewModel.Target = ins;
+                }
                 else
                     BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
             }

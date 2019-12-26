@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Report.CashReport;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
@@ -20,6 +23,48 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #endregion
 
         #region ----- Define Variables -----
+        private StrikeDatas strikeDatas;
+        private StrikeData selectedData;
+        private Institution target;
+        private ICollectionView strikeDataCollectionView;
+
+        public Institution Target
+        {
+            get { return target; }
+            set
+            {
+                target = value;
+                RaisePropertyChanged(nameof(Target));
+
+                FilterData();
+            }
+        }
+        public StrikeDatas StrikeDatas
+        {
+            get { return strikeDatas; }
+            set
+            {
+                strikeDatas = value;
+                RaisePropertyChanged(nameof(StrikeDatas));
+            }
+        }
+        public StrikeData SelectedData
+        {
+            get { return selectedData; }
+            set
+            {
+                selectedData = value;
+                RaisePropertyChanged(nameof(SelectedData));
+            }
+        }
+        public ICollectionView StrikeDataCollectionView
+        {
+            get => strikeDataCollectionView;
+            set
+            {
+                Set(() => StrikeDataCollectionView, ref strikeDataCollectionView, value);
+            }
+        }
         #endregion
 
         public PayViewModel()
@@ -33,7 +78,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             if (!StrikeValueIsValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CashReportDb.StrikeBalanceSheet(StrikeTypeEnum.Bank, BalanceSheetTypeEnum.Transfer, 0, "");
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.Type, BalanceSheetTypeEnum.Pay, SelectedData.StrikeValue, SelectedData.Name, SelectedData.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -52,7 +97,32 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #region ----- Define Functions -----
         private bool StrikeValueIsValid()
         {
-            return false;
+            if (SelectedData.StrikeValue <= 0)
+            {
+                MessageWindow.ShowMessage("不可小於等於0!", MessageType.ERROR);
+                return false;
+            }
+
+            if (SelectedData.StrikeValue > SelectedData.Value)
+            {
+                MessageWindow.ShowMessage("不可大於原金額!", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
+        }
+        private void FilterData()
+        {
+            StrikeDataCollectionView = CollectionViewSource.GetDefaultView(StrikeDatas);
+            StrikeDataCollectionView.Filter += DataFilter;
+
+            RaisePropertyChanged(nameof(StrikeDataCollectionView));
+        }
+        private bool DataFilter(object data)
+        {
+            StrikeData d = data as StrikeData;
+
+            return d.ID.Equals(Target.ID);
         }
         #endregion
     }

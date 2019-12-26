@@ -22,6 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #region ----- Define Variables -----
         private double transferValue;
         private string target;
+
         public double MaxValue { get; set; } = 0;
         public string Target
         {
