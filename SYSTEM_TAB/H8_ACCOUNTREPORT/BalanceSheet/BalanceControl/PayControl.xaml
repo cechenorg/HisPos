@@ -13,7 +13,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="代付" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <Label Content="{Binding Target.Name, UpdateSourceTrigger=PropertyChanged}" Width="320" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
-            <Button Width="150" Content="沖帳歷程" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ToNextStatusCommand}"/>
+            <Button Width="150" Content="沖帳歷程" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ShowHistoryCommand}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         </StackPanel>
         <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
                   AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StrikeDataCollectionView, UpdateSourceTrigger=PropertyChanged}"
