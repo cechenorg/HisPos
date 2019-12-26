@@ -642,9 +642,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             else if (result && EditedPrescription.Type.Equals(PrescriptionType.Normal))
             {
-                var pointDiff = EditedPrescription.PrescriptionPoint.ApplyPoint -
-                                OriginalPrescription.PrescriptionPoint.ApplyPoint;
-                PrescriptionDb.InsertPrescriptionPointEditRecord(EditedPrescription.ID, pointDiff);
+                var medicalServiceDiff = EditedPrescription.PrescriptionPoint.MedicalServicePoint -
+                                OriginalPrescription.PrescriptionPoint.MedicalServicePoint;
+                var medicineDiff= EditedPrescription.PrescriptionPoint.MedicinePoint -
+                                  OriginalPrescription.PrescriptionPoint.MedicinePoint;
+                var originPaySelf = OriginalPrescription.PrescriptionPoint.AmountSelfPay ?? 0;
+                var editedPaySelf= EditedPrescription.PrescriptionPoint.AmountSelfPay ?? 0;
+                var paySelfDiff= editedPaySelf - originPaySelf;
+                PrescriptionDb.InsertPrescriptionPointEditRecord(EditedPrescription.ID, medicalServiceDiff,medicineDiff,paySelfDiff);
             }
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();

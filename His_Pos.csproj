@@ -604,6 +604,8 @@
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReports.cs" />
+    <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionPointEditRecord.cs" />
+    <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionPointEditRecords.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReports.cs" />
