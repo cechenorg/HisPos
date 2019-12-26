@@ -35,7 +35,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
         #region ----- Define Variables -----
         private BalanceSheetTypeEnum balanceSheetType = BalanceSheetTypeEnum.NoDetail;
-        private BalanceSheetData selectedData;
+        private BalanceSheetData leftSelectedData;
+        private BalanceSheetData rightSelectedData;
         private BalanceSheetDatas leftBalanceSheetDatas;
         private BalanceSheetDatas rightBalanceSheetDatas;
         private double rightTotal;
@@ -50,13 +51,26 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 RaisePropertyChanged(nameof(BalanceSheetType));
             }
         }
-        public BalanceSheetData SelectedData
+        public BalanceSheetData LeftSelectedData
         {
-            get { return selectedData; }
+            get { return leftSelectedData; }
             set
             {
-                selectedData = value;
-                RaisePropertyChanged(nameof(SelectedData));
+                leftSelectedData = value;
+                rightSelectedData = null;
+                RaisePropertyChanged(nameof(LeftSelectedData));
+                RaisePropertyChanged(nameof(RightSelectedData));
+            }
+        }
+        public BalanceSheetData RightSelectedData
+        {
+            get { return rightSelectedData; }
+            set
+            {
+                rightSelectedData = value;
+                leftSelectedData = null;
+                RaisePropertyChanged(nameof(LeftSelectedData));
+                RaisePropertyChanged(nameof(RightSelectedData));
             }
         }
         public BalanceSheetDatas LeftBalanceSheetDatas

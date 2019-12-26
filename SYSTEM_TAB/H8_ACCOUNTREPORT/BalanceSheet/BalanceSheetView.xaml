@@ -46,7 +46,7 @@
                 </StackPanel>
                 <DataGrid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding LeftBalanceSheetDatas, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding SelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                          SelectedItem="{Binding LeftSelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -70,7 +70,7 @@
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
                                 <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource Shadow}"/>
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                                 </Trigger>
                             </Style.Triggers>
                             <Setter Property="Background" Value="Transparent"/>
@@ -109,7 +109,7 @@
                 </DataGrid>
                 <DataGrid Grid.Row="1" Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding RightBalanceSheetDatas, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding SelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                          SelectedItem="{Binding RightSelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -133,7 +133,7 @@
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
                                 <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource Shadow}"/>
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                                 </Trigger>
                             </Style.Triggers>
                             <Setter Property="Background" Value="Transparent"/>
