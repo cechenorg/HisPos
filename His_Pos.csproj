@@ -311,6 +311,8 @@
     <Compile Include="NewClass\BalanceSheet\BalanceSheetData.cs" />
     <Compile Include="NewClass\BalanceSheet\BalanceSheetDatas.cs" />
     <Compile Include="NewClass\BalanceSheet\BalanceSheetTypeEnum.cs" />
+    <Compile Include="NewClass\BalanceSheet\StrikeData.cs" />
+    <Compile Include="NewClass\BalanceSheet\StrikeDatas.cs" />
     <Compile Include="NewClass\BalanceSheet\StrikeTypeEnum.cs" />
     <Compile Include="NewClass\Manufactory\ControlManufactory.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />

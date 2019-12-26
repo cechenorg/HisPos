@@ -5,18 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
              mc:Ignorable="d">
-    <Grid>
+    <Grid DataContext="{Binding PayableViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
-            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="應付帳款" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            <Button Width="150" Content="沖帳歷程" Margin="250,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ToNextStatusCommand}"/>
+            <Button Width="150" Content="沖帳歷程" Margin="250,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ShowHistoryCommand}"/>
         </StackPanel>
         <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding CurrentStoreOrder.OrderProducts}">
+                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StrikeDatas}"
+                  SelectedItem="{Binding SelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -50,7 +50,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="供應商" Width="175" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ID}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                <DataGridTextColumn Header="供應商" Width="160" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -58,40 +58,36 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="金額" Width="50" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding LastPrice}">
+                <DataGridTextColumn Header="金額" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value, StringFormat=N2}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="70" Header="沖帳金額" IsReadOnly="True">
+                <DataGridTemplateColumn MinWidth="110" Header="沖帳金額" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Amount" Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            <TextBox x:Name="Amount" Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="100" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="70" Header="沖帳來源" IsReadOnly="True">
+                <DataGridTemplateColumn Width="90" Header="沖帳來源" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Amount" Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            <ComboBox HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding StrikeTypes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="70" IsReadOnly="True">
+                <DataGridTemplateColumn Width="80" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="沖帳"></Button>
+                            <Button Content="沖帳" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" Command="{Binding DataContext.PayableViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="未沖帳金額 $" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            <Label Width="120" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
-        </StackPanel>
     </Grid>
 </UserControl>
