@@ -12,7 +12,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="未沖帳訂單" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <Label Content="應付帳款" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <Button Width="150" Content="沖帳歷程" Margin="250,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ToNextStatusCommand}"/>
         </StackPanel>
         <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
@@ -50,7 +50,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="單號" Width="175" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ID}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                <DataGridTextColumn Header="供應商" Width="175" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ID}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -90,8 +90,6 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="未沖帳張數" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            <Label Width="120" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <Label Content="未沖帳金額 $" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <Label Width="120" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
         </StackPanel>

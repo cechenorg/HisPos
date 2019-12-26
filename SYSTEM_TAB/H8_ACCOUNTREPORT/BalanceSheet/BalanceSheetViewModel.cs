@@ -29,7 +29,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         #endregion
 
         #region ----- Define Commands -----
-        public RelayCommand ChangeDetailCommand { get; set; }
         public RelayCommand ReloadCommand { get; set; }
         #endregion
 
@@ -60,6 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 rightSelectedData = null;
                 RaisePropertyChanged(nameof(LeftSelectedData));
                 RaisePropertyChanged(nameof(RightSelectedData));
+                ChangeDetail();
             }
         }
         public BalanceSheetData RightSelectedData
@@ -71,6 +71,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 leftSelectedData = null;
                 RaisePropertyChanged(nameof(LeftSelectedData));
                 RaisePropertyChanged(nameof(RightSelectedData));
+                ChangeDetail();
             }
         }
         public BalanceSheetDatas LeftBalanceSheetDatas
@@ -118,27 +119,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             PayableViewModel = new PayableViewModel();
             PayViewModel = new PayViewModel();
 
-            ChangeDetailCommand = new RelayCommand(ChangeDetailAction);
             ReloadCommand = new RelayCommand(ReloadAction);
 
             ReloadAction();
         }
 
         #region ----- Define Actions -----
-        private void ChangeDetailAction()
-        {
-            switch (BalanceSheetType)
-            {
-                case BalanceSheetTypeEnum.MedPoint:
-                    break;
-                case BalanceSheetTypeEnum.Pay:
-                    break;
-                case BalanceSheetTypeEnum.Payable:
-                    break;
-                case BalanceSheetTypeEnum.Transfer:
-                    break;
-            }
-        }
         private void ReloadAction()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -157,11 +143,32 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
             MainWindow.ServerConnection.CloseConnection();
 
-            ChangeDetailAction();
+            ChangeDetail();
         }
         #endregion
 
         #region ----- Define Functions -----
+        private void ChangeDetail()
+        {
+            if (LeftSelectedData != null)
+            {
+                if (LeftSelectedData.Name.Contains("現金") || LeftSelectedData.Name.Contains("銀行"))
+                    BalanceSheetType = BalanceSheetTypeEnum.Transfer;
+                else if (LeftSelectedData.Name.Contains("申報應收帳款"))
+                    BalanceSheetType = BalanceSheetTypeEnum.MedPoint;
+                else
+                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            }
+            else if (RightSelectedData != null)
+            {
+                if (RightSelectedData.Name.Contains("應付帳款"))
+                    BalanceSheetType = BalanceSheetTypeEnum.Payable;
+                else if (RightSelectedData.Name.Contains("代付"))
+                    BalanceSheetType = BalanceSheetTypeEnum.Pay;
+                else
+                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+            }
+        }
         #endregion
     }
 }

@@ -4,9 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" >
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
+            <Label Content="轉至" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <Button Width="150" Content="轉帳" Margin="250,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ToNextStatusCommand}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Background="{StaticResource GridDarkerBackGround}"/>
     </Grid>
 </UserControl>
