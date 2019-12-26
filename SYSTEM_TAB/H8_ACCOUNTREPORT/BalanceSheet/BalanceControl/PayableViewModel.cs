@@ -62,11 +62,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
-                MessageWindow.ShowMessage("轉帳成功", MessageType.SUCCESS);
+                MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
             }
             else
             {
-                MessageWindow.ShowMessage("轉帳失敗", MessageType.ERROR);
+                MessageWindow.ShowMessage("沖帳失敗", MessageType.ERROR);
             }
 
             command.Execute(null);
@@ -82,7 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         {
             if (SelectedData.StrikeValue <= 0)
             {
-                MessageWindow.ShowMessage("不可為負值!", MessageType.ERROR);
+                MessageWindow.ShowMessage("不可小於等於0!", MessageType.ERROR);
                 return false;
             }
 
