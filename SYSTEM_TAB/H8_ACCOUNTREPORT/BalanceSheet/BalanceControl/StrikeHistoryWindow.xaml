@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="StrikeHistoryWindow" Height="450" Width="800">
+        Title="歷史資料" Height="450" Width="800">
     <Grid>
         <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StrikeHistories, UpdateSourceTrigger=PropertyChanged}"
@@ -43,7 +43,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="科目名稱" Width="180" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding StrikeName}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                <DataGridTextColumn Header="科目名稱" Width="120" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding StrikeName}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -60,7 +60,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="120" Header="時間" IsReadOnly="True" Binding="{Binding StrikeTime,StringFormat='{}{0:MM/dd HH:mm}',UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Width="250" Header="時間" IsReadOnly="True" Binding="{Binding StrikeTime, UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -68,7 +68,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="120" Header="備註" IsReadOnly="True" Binding="{Binding StrikeNote,UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Width="170" Header="備註" IsReadOnly="True" Binding="{Binding StrikeNote,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -76,7 +76,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                <DataGridTemplateColumn Width="80" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button x:Name="DeleteCashFlowRecordButton" Content="刪除" Background="Red" BorderBrush="Transparent" Command="{Binding DataContext.DeleteStrikeHistory,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}"/>
