@@ -17,14 +17,37 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
     {
         #region ----- Define Commands -----
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
+        public RelayCommand<RelayCommand> StrikeFinalCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
+        private StrikeDatas strikeDatas;
+        private StrikeData selectedData;
+
+        public StrikeDatas StrikeDatas
+        {
+            get { return strikeDatas; }
+            set
+            {
+                strikeDatas = value;
+                RaisePropertyChanged(nameof(StrikeDatas));
+            }
+        }
+        public StrikeData SelectedData
+        {
+            get { return selectedData; }
+            set
+            {
+                selectedData = value;
+                RaisePropertyChanged(nameof(SelectedData));
+            }
+        }
         #endregion
 
         public MedPointViewModel()
         {
             StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
+            StrikeFinalCommand = new RelayCommand<RelayCommand>(StrikeFinalAction);
         }
 
         #region ----- Define Actions -----
@@ -46,6 +69,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
 
             command.Execute(null);
+        }
+        private void StrikeFinalAction(RelayCommand command)
+        {
+
         }
         #endregion
 
