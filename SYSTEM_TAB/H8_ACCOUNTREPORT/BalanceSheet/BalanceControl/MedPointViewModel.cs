@@ -56,30 +56,62 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             if (!StrikeValueIsValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CashReportDb.StrikeBalanceSheet(StrikeTypeEnum.Bank, BalanceSheetTypeEnum.Transfer, 0, "");
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.Type, BalanceSheetTypeEnum.MedPoint, SelectedData.StrikeValue, SelectedData.Name);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
-                MessageWindow.ShowMessage("轉帳成功", MessageType.SUCCESS);
+                MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
             }
             else
             {
-                MessageWindow.ShowMessage("轉帳失敗", MessageType.ERROR);
+                MessageWindow.ShowMessage("沖帳失敗", MessageType.ERROR);
             }
 
             command.Execute(null);
         }
         private void StrikeFinalAction(RelayCommand command)
         {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認結案\r\n(此月份前的所有金額將會結案)", "", false);
 
+            if (!(bool)confirmWindow.DialogResult) return;
+
+            DateTime dateTime = new DateTime(Convert.ToInt32(SelectedData.Name.Substring(0, 4)), Convert.ToInt32(SelectedData.Name.Substring(4)), 01);
+            dateTime = dateTime.AddMonths(1).AddDays(-1);
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = CashReportDb.SetDeclareDoneMonth(dateTime);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            {
+                MessageWindow.ShowMessage("結案成功", MessageType.SUCCESS);
+            }
+            else
+            {
+                MessageWindow.ShowMessage("結案失敗", MessageType.ERROR);
+            }
+
+            command.Execute(null);
         }
         #endregion
 
         #region ----- Define Functions -----
         private bool StrikeValueIsValid()
         {
-            return false;
+            if (SelectedData.StrikeValue <= 0)
+            {
+                MessageWindow.ShowMessage("不可小於等於0!", MessageType.ERROR);
+                return false;
+            }
+
+            if (SelectedData.StrikeValue > SelectedData.Value)
+            {
+                MessageWindow.ShowMessage("不可大於原金額!", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
         }
         #endregion
     }

@@ -130,7 +130,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             MainWindow.ServerConnection.OpenConnection();
             DataSet dataSet = CashReportDb.GetBalanceSheet();
 
-            if (dataSet.Tables.Count != 6)
+            if (dataSet.Tables.Count != 7)
             {
                 MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
                 return;
@@ -143,6 +143,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
             PayableViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[4]);
             PayViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[5]);
+            MedPointViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[6]);
 
             MainWindow.ServerConnection.CloseConnection();
 

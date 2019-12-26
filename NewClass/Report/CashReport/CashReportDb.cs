@@ -53,5 +53,12 @@ namespace His_Pos.NewClass.Report.CashReport
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
         }
+        internal static DataTable SetDeclareDoneMonth(DateTime dateTime)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DATE", dateTime));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeclareDoneMonth]", parameters);
+        }
     }
 }
