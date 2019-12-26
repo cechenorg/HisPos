@@ -53,5 +53,20 @@ namespace His_Pos.NewClass.Report.CashReport
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
         }
+
+        internal static DataTable GetStrikeHistories(string source)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Source", source));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StrikeHistoriesBySource]",parameters);
+        }
+
+        public static void DeleteStrikeHistory(StrikeHistory selectedHistory)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("StrikeID", selectedHistory.StrikeID));
+            parameters.Add(new SqlParameter("Source", selectedHistory.StrikeType));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStrikeHistory]",parameters);
+        }
     }
 }

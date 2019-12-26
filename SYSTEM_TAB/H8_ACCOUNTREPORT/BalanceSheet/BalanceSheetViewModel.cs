@@ -130,11 +130,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             MainWindow.ServerConnection.OpenConnection();
             DataSet dataSet = CashReportDb.GetBalanceSheet();
 
-            if (dataSet.Tables.Count != 6)
-            {
-                MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
-                return;
-            }
+            //if (dataSet.Tables.Count != 6)
+            //{
+            //    MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
+            //    return;
+            //}
             
             LeftBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[0]);
             RightBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[1]);
