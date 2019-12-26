@@ -73,7 +73,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
         private void ShowHistoryAction()
         {
-
+            var historyWindow = new StrikeHistoryWindow("Payable");
+            historyWindow.ShowDialog();
         }
         #endregion
 
