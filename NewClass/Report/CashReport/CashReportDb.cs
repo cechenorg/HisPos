@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.BalanceSheet;
 
 namespace His_Pos.NewClass.Report.CashReport
 {
@@ -37,6 +39,19 @@ namespace His_Pos.NewClass.Report.CashReport
         internal static DataSet GetBalanceSheet()
         {
             return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[BalanceSheet]");
+        }
+
+        internal static DataTable StrikeBalanceSheet(StrikeTypeEnum strikeType, BalanceSheetTypeEnum sheetType, double value, string sourceID, string note = "")
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("VALUE", value));
+            parameters.Add(new SqlParameter("TYPE", sheetType.ToString()));
+            parameters.Add(new SqlParameter("NOTE", note));
+            parameters.Add(new SqlParameter("TARGET", (strikeType == StrikeTypeEnum.Bank)? "B" : "C"));
+            parameters.Add(new SqlParameter("SOURCE_ID", sourceID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
         }
     }
 }

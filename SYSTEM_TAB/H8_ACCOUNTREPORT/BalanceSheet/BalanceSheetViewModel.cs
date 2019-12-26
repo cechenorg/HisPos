@@ -152,8 +152,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             if (LeftSelectedData != null)
             {
-                if (LeftSelectedData.Name.Contains("現金") || LeftSelectedData.Name.Contains("銀行"))
+                if (LeftSelectedData.Name.Contains("現金"))
+                {
                     BalanceSheetType = BalanceSheetTypeEnum.Transfer;
+                    TransferViewModel.Target = "銀行";
+                    TransferViewModel.MaxValue = LeftSelectedData.Value;
+                }
+                else if (LeftSelectedData.Name.Contains("銀行"))
+                {
+                    BalanceSheetType = BalanceSheetTypeEnum.Transfer;
+                    TransferViewModel.Target = "現金";
+                    TransferViewModel.MaxValue = LeftSelectedData.Value;
+                }
                 else if (LeftSelectedData.Name.Contains("申報應收帳款"))
                     BalanceSheetType = BalanceSheetTypeEnum.MedPoint;
                 else
