@@ -58,7 +58,7 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Button x:Name="SearchButton" Width="120" Command="{Binding SearchCommand}" Margin="700,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+                <Button x:Name="SearchButton" Width="120" Command="{Binding SearchCommand}" Margin="855,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
             </StackPanel>
             <ScrollViewer Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Height="780">
                 <Grid>
