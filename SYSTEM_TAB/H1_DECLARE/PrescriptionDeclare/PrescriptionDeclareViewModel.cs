@@ -952,7 +952,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void PrescribeAdjustAction()
         {
-            CheckCustomerValid();
             currentService = PrescriptionService.CreateService(CurrentPrescription);
             if (!currentService.CheckCustomerSelected())
                 return;
