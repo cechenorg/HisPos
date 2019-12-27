@@ -13,6 +13,7 @@
                 <Label Content="查詢年分:" FontSize="18"/>
                 <TextBox Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Black" Text="{Binding YearString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" PreviewKeyDown="Search_OnPreviewKeyDown" InputScope="Number" GotFocus="TextBox_SelectAll" MaxLength="4"/>
                 <Button Command="{Binding Search}" Width="96" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16"/>
+                <Button Width="145" Command="{Binding ExportIncomeStatementCommand}" Margin="10,0,0,0" Content="匯出損益表" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="DimGray" BorderThickness="0" />
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="1365">
                 <Label Content="處方張數:" FontSize="18"/>

@@ -38,10 +38,26 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 OnPropertyChanged(nameof(TemplateFile));
             }
         }
+        private int year;
+        public int Year
+        {
+            get => year;
+            set
+            {
+                year = value;
+                OnPropertyChanged(nameof(Year));
+            }
+        }
         public ExportIncomeStatementWindow()
         {
             InitializeComponent();
+        }
+
+        public ExportIncomeStatementWindow(int year)
+        {
+            InitializeComponent();
             DataContext = this;
+            Year = year;
         }
 
         private void ChooseFile_OnClick(object sender, RoutedEventArgs e)
@@ -66,7 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
 
         private void Export_OnClick(object sender, RoutedEventArgs e)
         {
-            Collection<object> tempCollection = new Collection<object>() { new List<object> { "" } };
+            Collection<object> tempCollection = new Collection<object> { Year };
 
             if (TemplateFile.Equals(""))
                 templateFile = @"NewClass\AccountReport\年度損益表.xlsx"; 

@@ -292,7 +292,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
         public RelayCommand PrintCashPerDayCommand { get; set; }
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
-        public RelayCommand ExportIncomeStatementCommand { get; set; }
+        
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
@@ -305,16 +305,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
             PrintCashPerDayCommand = new RelayCommand(PrintCashPerDayAction);
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
-            ExportIncomeStatementCommand = new RelayCommand(ExportIncomeStatementAction);
             GetData();
             InitCollection();
         }
         #region Action
-        private void ExportIncomeStatementAction()
-        {
-            ExportIncomeStatementWindow exportIncomeStatementWindow = new ExportIncomeStatementWindow();
-            exportIncomeStatementWindow.ShowDialog();
-        }
         private void PrintPrescriptionProfitDetailAction()
         {
             if (PrescriptionDetailReportView is null) return;

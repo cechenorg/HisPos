@@ -56,27 +56,26 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             rowHeaderToValueProviderMap.Add("一般箋健保收入", income => income.NormalIncome);
             rowHeaderToValueProviderMap.Add("其他收入", income => income.OtherIncome);
 
-            for (var i = 0; i < cooperativeInstitutionIncomeHeaderTable.Rows.Count; i++)
+            foreach (DataRow row in cooperativeInstitutionIncomeHeaderTable.Rows)
             {
-                var index = 0;
-                var headerName = cooperativeInstitutionIncomeHeaderTable.Rows[i].Field<string>("IncomeName");
+                var index = cooperativeInstitutionIncomeHeaderTable.Rows.IndexOf(row) / 3;
+                var headerName = row.Field<string>("IncomeName");
                 if (headerName.Contains("合作藥服"))
                 {
+                    
                     rowHeaderToValueProviderMap.Add(
-                        cooperativeInstitutionIncomeHeaderTable.Rows[i].Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].MedicalServiceIncome);
+                        row.Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].MedicalServiceIncome);
                 }
                 else if (headerName.Contains("合作藥品"))
                 {
                     rowHeaderToValueProviderMap.Add(
-                        cooperativeInstitutionIncomeHeaderTable.Rows[i].Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].MedicineIncome);
+                        row.Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].MedicineIncome);
                 }
                 else if (headerName.Contains("合作其他"))
                 {
                     rowHeaderToValueProviderMap.Add(
-                        cooperativeInstitutionIncomeHeaderTable.Rows[i].Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].OtherIncome);
+                        row.Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].OtherIncome);
                 }
-                if (i % 3 == 0)
-                    index++;
             }
 
             rowHeaderToValueProviderMap.Add("慢箋銷貨成本", income => income.ChronicCost);

@@ -8,6 +8,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Report.IncomeStatement;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
 {
@@ -104,12 +105,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
         }
 
         public RelayCommand Search { get; set; }
-
+        public RelayCommand ExportIncomeStatementCommand { get; set; }
         public IncomeStatementViewModel()
         {
             Year = DateTime.Today.Year;
             YearString = Year.ToString();
             Search = new RelayCommand(SearchAction);
+            ExportIncomeStatementCommand = new RelayCommand(ExportIncomeStatementAction);
             SearchAction();
         }
 
@@ -117,19 +119,54 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
         {
             if (Year >= 2019)
             {
-                var incomeStatementDataSet = NewClass.Report.CashReport.CashReportDb.GetYearIncomeStatementForExport(Year);
-                PrescriptionCountMatrix = new PrescriptionCountMatrix(incomeStatementDataSet.Tables[6], incomeStatementDataSet.Tables[0]);
-                PharmacyIncomeMatrix = new PharmacyIncomeMatrix(incomeStatementDataSet.Tables[1], incomeStatementDataSet.Tables[2], incomeStatementDataSet.Tables[7]);
-                ChronicProfitMatrix = new ProfitSummaryMatrix("慢箋營業毛利", PharmacyIncomeMatrix.GetChronicProfits());
-                IncomeStatementMatrix = new IncomeStatementMatrix(incomeStatementDataSet);
-                PrescribeProfitMatrix = new ProfitSummaryMatrix("調劑營業毛利", IncomeStatementMatrix.GetPrescribeProfits());
-                CostAndInventoryMatrix = new CostAndInventoryMatrix(incomeStatementDataSet.Tables[5]);
-                HISProfitMatrix = new ProfitSummaryMatrix("調劑台營業毛利", IncomeStatementMatrix.GetHISProfits());
+                GetData();
+            }
+            else if (Year >= 108 && Year <= 200)
+            {
+                Year += 1911;
+                GetData();
             }
             else
             {
                 MessageWindow.ShowMessage("年份超出範圍或格式錯誤",MessageType.ERROR);
             }
+        }
+
+        private void GetData()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            var incomeStatementDataSet = NewClass.Report.CashReport.CashReportDb.GetYearIncomeStatementForExport(Year);
+            PrescriptionCountMatrix = new PrescriptionCountMatrix(incomeStatementDataSet.Tables[6], incomeStatementDataSet.Tables[0]);
+            PharmacyIncomeMatrix = new PharmacyIncomeMatrix(incomeStatementDataSet.Tables[1], incomeStatementDataSet.Tables[2], incomeStatementDataSet.Tables[7]);
+            ChronicProfitMatrix = new ProfitSummaryMatrix("慢箋營業毛利", PharmacyIncomeMatrix.GetChronicProfits());
+            IncomeStatementMatrix = new IncomeStatementMatrix(incomeStatementDataSet);
+            PrescribeProfitMatrix = new ProfitSummaryMatrix("調劑營業毛利", IncomeStatementMatrix.GetPrescribeProfits());
+            CostAndInventoryMatrix = new CostAndInventoryMatrix(incomeStatementDataSet.Tables[5]);
+            HISProfitMatrix = new ProfitSummaryMatrix("調劑台營業毛利", IncomeStatementMatrix.GetHISProfits());
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
+        private void ExportIncomeStatementAction()
+        {
+            if (Year >= 2019)
+            {
+                ExportIncomeStatementSheet();
+            }
+            else if (Year >= 108 && Year <= 200)
+            {
+                Year += 1911;
+                ExportIncomeStatementSheet();
+            }
+            else
+            {
+                MessageWindow.ShowMessage("年份超出範圍或格式錯誤", MessageType.ERROR);
+            }
+        }
+
+        private void ExportIncomeStatementSheet()
+        {
+            ExportIncomeStatementWindow exportIncomeStatementWindow = new ExportIncomeStatementWindow(Year);
+            exportIncomeStatementWindow.ShowDialog();
         }
     }
 }
