@@ -55,7 +55,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             if (!StrikeValueIsValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.Type, BalanceSheetTypeEnum.Payable, SelectedData.StrikeValue, SelectedData.ID);
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.Type, BalanceSheetTypeEnum.Payable, Double.Parse(SelectedData.StrikeValue), SelectedData.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -74,11 +74,22 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #region ----- Define Functions -----
         private bool StrikeValueIsValid()
         {
-            if (SelectedData.StrikeValue <= 0)
+            double temp;
+            if (double.TryParse(SelectedData.StrikeValue, out temp))
             {
-                MessageWindow.ShowMessage("不可小於等於0!", MessageType.ERROR);
+                if (temp <= 0)
+                {
+                    MessageWindow.ShowMessage("不可小於等於0!", MessageType.ERROR);
+                    return false;
+                }
+            }
+            else
+            {
+                MessageWindow.ShowMessage("輸入金額非數字", MessageType.ERROR);
                 return false;
             }
+
+            return true;
 
             return true;
         }

@@ -27,7 +27,7 @@ namespace His_Pos.NewClass.BalanceSheet
         public string Name { get; set; }
         public StrikeTypeEnum Type { get{ return SelectedType.Equals("銀行")? StrikeTypeEnum.Bank : StrikeTypeEnum.Cash;} }
         public double Value { get; set; }
-        public double StrikeValue { get; set; }
+        public string StrikeValue { get; set; }
 
         public string[] StrikeTypes { get; } = {"銀行", "現金"};
         #endregion

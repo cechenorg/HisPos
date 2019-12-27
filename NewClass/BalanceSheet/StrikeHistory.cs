@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.BalanceSheet
             StrikeSourceID = r.Field<string>("StrikeSourceID");
             StrikeTime = r.Field<DateTime>("StrikeTime");
             StrikeNote = r.Field<string>("StrikeNote");
+            CanDelete = r.Field<bool>("CAN_DELETE");
         }
 
         private int strikeID;
@@ -120,7 +121,9 @@ namespace His_Pos.NewClass.BalanceSheet
         
         public bool CanEdit
         {
-            get => StrikeTime >= DateTime.Today || ViewModelMainWindow.CurrentUser.ID == 1;
+            get => (StrikeTime >= DateTime.Today || ViewModelMainWindow.CurrentUser.ID == 1) && CanDelete;
         }
+
+        private bool CanDelete { get; set; }
     }
 }
