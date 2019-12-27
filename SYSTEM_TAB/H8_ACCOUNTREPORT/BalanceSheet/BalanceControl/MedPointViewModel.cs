@@ -18,7 +18,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #region ----- Define Commands -----
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
         public RelayCommand<RelayCommand> StrikeFinalCommand { get; set; }
-        public RelayCommand<RelayCommand> ShowHistoryCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -49,7 +48,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         {
             StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
             StrikeFinalCommand = new RelayCommand<RelayCommand>(StrikeFinalAction);
-            ShowHistoryCommand = new RelayCommand<RelayCommand>(ShowHistoryAction);
         }
 
         #region ----- Define Actions -----
@@ -93,11 +91,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             {
                 MessageWindow.ShowMessage("結案失敗", MessageType.ERROR);
             }
-
-            command.Execute(null);
-        }
-        private void ShowHistoryAction(RelayCommand command)
-        {
 
             command.Execute(null);
         }

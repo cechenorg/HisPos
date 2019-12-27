@@ -30,6 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
         #region ----- Define Commands -----
         public RelayCommand ReloadCommand { get; set; }
+        public RelayCommand ShowHistoryCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -120,6 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             PayViewModel = new PayViewModel();
 
             ReloadCommand = new RelayCommand(ReloadAction);
+            ShowHistoryCommand = new RelayCommand(ShowHistoryAction);
 
             ReloadAction();
         }
@@ -149,6 +151,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
             BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
             ChangeDetail();
+        }
+        private void ShowHistoryAction()
+        {
+            var historyWindow = new StrikeHistoryWindow();
+            historyWindow.ShowDialog();
+
+            ReloadAction();
         }
         #endregion
 

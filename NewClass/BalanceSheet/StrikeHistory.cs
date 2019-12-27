@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.BalanceSheet
 {
@@ -43,6 +44,8 @@ namespace His_Pos.NewClass.BalanceSheet
                 Set(() => StrikeType, ref strikeType, value);
             }
         }
+
+        public string StrikeTypeName => (StrikeType.Equals("Bank"))? "銀行" : "現金";
 
         private string strikeName;
         public string StrikeName
@@ -111,7 +114,13 @@ namespace His_Pos.NewClass.BalanceSheet
             set
             {
                 Set(() => IsSelected, ref isSelected, value);
+                RaisePropertyChanged(nameof(CanEdit));
             }
+        }
+        
+        public bool CanEdit
+        {
+            get => StrikeTime >= DateTime.Today || ViewModelMainWindow.CurrentUser.ID == 1;
         }
     }
 }

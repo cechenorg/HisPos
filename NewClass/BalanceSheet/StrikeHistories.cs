@@ -16,9 +16,9 @@ namespace His_Pos.NewClass.BalanceSheet
 
         }
 
-        public void GetData(string source)
+        public void GetData()
         {
-            var historiesTable = CashReportDb.GetStrikeHistories(source);
+            var historiesTable = CashReportDb.GetStrikeHistories();
             foreach (DataRow r in historiesTable.Rows)
             {
                 Add(new StrikeHistory(r));

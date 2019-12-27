@@ -44,7 +44,8 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                     <Label Content="資產負債表" FontFamily="Segoe UI Semibold" FontSize="35" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    <Button Width="150" Content="重新整理" Margin="420,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}"/>
+                    <Button Width="150" Content="重新整理" Margin="260,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}"/>
+                    <Button Width="150" Content="沖帳歷程" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ShowHistoryCommand}"/>
                 </StackPanel>
                 <DataGrid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding LeftBalanceSheetDatas, UpdateSourceTrigger=PropertyChanged}"

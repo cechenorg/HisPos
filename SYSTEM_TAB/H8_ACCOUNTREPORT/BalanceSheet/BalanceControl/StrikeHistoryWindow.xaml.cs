@@ -22,12 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         public StrikeHistoryWindow()
         {
             InitializeComponent();
-        }
-
-        public StrikeHistoryWindow(string source)
-        {
-            InitializeComponent();
-            DataContext = new StrikeHistoryViewModel(source);
+            DataContext = new StrikeHistoryViewModel();
         }
     }
 }

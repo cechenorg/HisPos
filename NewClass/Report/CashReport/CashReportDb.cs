@@ -61,11 +61,9 @@ namespace His_Pos.NewClass.Report.CashReport
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeclareDoneMonth]", parameters);
         }
 
-        internal static DataTable GetStrikeHistories(string source)
+        internal static DataTable GetStrikeHistories()
         {
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("Source", source));
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[StrikeHistoriesBySource]",parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StrikeHistoriesBySource]");
         }
 
         public static void DeleteStrikeHistory(StrikeHistory selectedHistory)

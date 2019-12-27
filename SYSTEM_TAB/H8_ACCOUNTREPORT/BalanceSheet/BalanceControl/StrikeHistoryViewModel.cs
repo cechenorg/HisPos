@@ -43,25 +43,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeHistories));
             }
         }
-        private string source;
         public RelayCommand DeleteStrikeHistory { get; set; }
         public StrikeHistoryViewModel()
         {
-            
-        }
-
-        public StrikeHistoryViewModel(string source)
-        {
             DeleteStrikeHistory = new RelayCommand(DeleteStrikeHistoryAction);
-            this.source = source;
             Init();
         }
-
+        
         private void Init()
         {
             MainWindow.ServerConnection.OpenConnection();
             StrikeHistories = new StrikeHistories();
-            StrikeHistories.GetData(source);
+            StrikeHistories.GetData();
             MainWindow.ServerConnection.CloseConnection();
         }
 
