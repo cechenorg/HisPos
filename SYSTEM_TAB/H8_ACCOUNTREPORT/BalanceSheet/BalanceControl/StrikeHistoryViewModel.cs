@@ -47,13 +47,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         public StrikeHistoryViewModel()
         {
             DeleteStrikeHistory = new RelayCommand(DeleteStrikeHistoryAction);
+            StrikeHistories = new StrikeHistories();
             Init();
         }
         
         private void Init()
         {
             MainWindow.ServerConnection.OpenConnection();
-            StrikeHistories = new StrikeHistories();
             StrikeHistories.GetData();
             MainWindow.ServerConnection.CloseConnection();
         }
