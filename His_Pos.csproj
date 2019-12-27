@@ -606,6 +606,7 @@
     <Compile Include="NewClass\Report\IncomeStatement\PrescriptionCount.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\PrescriptionCountMatrix.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\ProfitSummaryMatrix.cs" />
+    <Compile Include="NewClass\Report\InventoryDifference.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepot.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepotDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepots.cs" />

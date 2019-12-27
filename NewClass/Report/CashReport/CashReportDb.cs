@@ -73,5 +73,13 @@ namespace His_Pos.NewClass.Report.CashReport
             parameters.Add(new SqlParameter("Source", selectedHistory.StrikeType));
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStrikeHistory]",parameters);
         }
+
+        public static DataTable GetInventoryDifferenceByDate(DateTime sDate, DateTime eDate)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "SDATE", sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "EDATE", eDate);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[InventoryDifferanceByDate]", parameterList);
+        }
     }
 }

@@ -113,15 +113,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             set { Set(() => TypeName, ref typeName, value); }
         }
         private string cashFlowNote;
-        public string CashFlowNote {
+        public string CashFlowNote 
+        {
             get => cashFlowNote;
-            set { Set(() => CashFlowNote,ref cashFlowNote,value); }
+            set
+            {
+                Set(() => CashFlowNote,ref cashFlowNote,value);
+            }
         }
         private int cashFlowValue;
         public int CashFlowValue
         {
             get => cashFlowValue;
-            set { Set(() => CashFlowValue, ref cashFlowValue, value); }
+            set
+            {
+                Set(() => CashFlowValue, ref cashFlowValue, value);
+            }
         }
 
         #region Commands
@@ -153,7 +160,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         }
 
         private void SubmitAction() {
+            MainWindow.ServerConnection.OpenConnection();
             CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue);
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void DateMouseDoubleClickAction(MaskedTextBox sender)

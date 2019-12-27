@@ -27,9 +27,9 @@
             <Label Content="科目" FontSize="18" VerticalAlignment="Center"/>
             <ComboBox Width="100" Margin="10,0,0,0" FontSize="16" ItemsSource="{Binding CashFlowAccounts,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="AccountName" SelectedItem="{Binding SelectedCashFlowAccount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="金額" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Width="80" Text="{Binding CashFlowValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center"/>
+            <TextBox Width="80" Text="{Binding CashFlowValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
             <Label Content="備註" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Width="400" Text="{Binding CashFlowNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
+            <TextBox Width="400" Text="{Binding CashFlowNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center"/>
             <Button   Command="{Binding SubmitCommand}" Width="80" Content="新增" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1">

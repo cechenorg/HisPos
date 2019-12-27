@@ -280,6 +280,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => BusyContent, ref _busyContent, value);
             }
         }
+
+        private InventoryDifference inventoryDifference;
+
+        public InventoryDifference InventoryDifference
+        {
+            get => inventoryDifference;
+            set
+            {
+                Set(() => InventoryDifference, ref inventoryDifference, value);
+            }
+        }
         #endregion
         #region Command
         public RelayCommand SelfPrescriptionSelectionChangedCommand { get; set; }
@@ -549,6 +560,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 BusyContent = "報表查詢中";
                 CashflowCollection = new CashReports(StartDate,EndDate);
                 TotalPrescriptionProfitReportCollection.GetDataByDate(StartDate, EndDate);
+                GetInventoryDifference();
                 //PrescriptionPointEditRecords.GetEditRecords(StartDate, EndDate);
                 MainWindow.ServerConnection.CloseConnection();
             };
@@ -571,6 +583,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             IsBusy = true;
             worker.RunWorkerAsync();
              
+        }
+
+        private void GetInventoryDifference()
+        {
+            var table = CashReportDb.GetInventoryDifferenceByDate(StartDate, EndDate);
+            if (table.Rows.Count > 0)
+            {
+                InventoryDifference = new InventoryDifference(table.Rows[0]);
+            }
         }
 
         private void RevertSelfPrescriptionProfitByEditRecords()
