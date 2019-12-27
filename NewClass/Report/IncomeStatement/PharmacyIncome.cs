@@ -93,7 +93,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         public decimal ChronicProfit => CountDeclareIncome() - CountDeclareCost();
         private decimal CountDeclareIncome()
         {
-            return ChronicIncome + NormalIncome + CooperativeInstitutionsIncome.Sum(c => c.TotalIncome);
+            return ChronicIncome + NormalIncome + OtherIncome + CooperativeInstitutionsIncome.Sum(c => c.TotalIncome);
         }
 
         private decimal CountDeclareCost()

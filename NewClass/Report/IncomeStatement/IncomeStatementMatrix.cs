@@ -215,7 +215,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         void PopulateCellValueProviderMap()
         {
             rowHeaderToValueProviderMap.Add("配藥收入", income => income.PrescribeIncome);
-            rowHeaderToValueProviderMap.Add("額外收入", income => income.OtherIncome);
+            rowHeaderToValueProviderMap.Add("額外收入", income => income.AdditionalIncome);
             rowHeaderToValueProviderMap.Add("配藥成本", income => income.PrescribeCost);
         }
 

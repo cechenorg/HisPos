@@ -18,12 +18,11 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             MedicalServiceIncome = medicalService;
             MedicineIncome = medicine;
             OtherIncome = other;
-            TotalIncome = MedicalServiceIncome + MedicineIncome + OtherIncome;
         }
 
         public decimal MedicalServiceIncome { get; set; }
         public decimal MedicineIncome { get; set; }
         public decimal OtherIncome { get; set; }
-        public decimal TotalIncome { get; set; }
+        public decimal TotalIncome => MedicalServiceIncome + MedicineIncome + OtherIncome;
     }
 }

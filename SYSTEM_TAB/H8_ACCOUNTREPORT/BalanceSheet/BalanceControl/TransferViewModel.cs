@@ -20,7 +20,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #endregion
 
         #region ----- Define Variables -----
-        private double transferValue;
+        private string transferValue;
         private string target;
 
         public double MaxValue { get; set; } = 0;
@@ -33,7 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(Target));
             }
         }
-        public double TransferValue
+        public string TransferValue
         {
             get { return transferValue; }
             set
@@ -55,7 +55,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             if(!TransferValueIsValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CashReportDb.StrikeBalanceSheet(Target.Equals("銀行")? StrikeTypeEnum.Bank : StrikeTypeEnum.Cash, BalanceSheetTypeEnum.Transfer, transferValue, "");
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(Target.Equals("銀行")? StrikeTypeEnum.Bank : StrikeTypeEnum.Cash, BalanceSheetTypeEnum.Transfer, Double.Parse(transferValue), "");
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -67,7 +67,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("轉帳失敗", MessageType.ERROR);
             }
 
-            TransferValue = 0;
+            TransferValue = "";
             command.Execute(null);
         }
 
@@ -76,18 +76,27 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #region ----- Define Functions -----
         private bool TransferValueIsValid()
         {
-            if (Math.Abs(TransferValue) <= 0)
+            double temp;
+            if (double.TryParse(TransferValue, out temp))
             {
-                MessageWindow.ShowMessage("轉帳金額不可小於等於0", MessageType.ERROR);
+                if (temp <= 0)
+                {
+                    MessageWindow.ShowMessage("轉帳金額不可小於等於0", MessageType.ERROR);
+                    return false;
+                }
+
+                if (temp > MaxValue)
+                {
+                    MessageWindow.ShowMessage("轉帳金額超過餘額", MessageType.ERROR);
+                    return false;
+                }
+            }
+            else
+            {
+                MessageWindow.ShowMessage("輸入金額非數字", MessageType.ERROR);
                 return false;
             }
-
-            if (TransferValue > MaxValue)
-            {
-                MessageWindow.ShowMessage("轉帳金額超過餘額", MessageType.ERROR);
-                return false;
-            }
-
+            
             return true;
         }
         #endregion
