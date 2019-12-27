@@ -132,7 +132,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             }
         }
         public PrescriptionProfitReports TotalPrescriptionProfitReportCollection { get; set; } = new PrescriptionProfitReports();
-
+        private PrescriptionPointEditRecords PrescriptionPointEditRecords{ get; set; } = new PrescriptionPointEditRecords();
         private PrescriptionProfitReport selfPrescriptionProfitReport = new PrescriptionProfitReport();
         public PrescriptionProfitReport SelfPrescriptionProfitReport
         {
@@ -142,6 +142,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => SelfPrescriptionProfitReport, ref selfPrescriptionProfitReport, value);
             }
         }
+
         private PrescriptionProfitReport cooperativePrescriptionProfitReport = new PrescriptionProfitReport();
         public PrescriptionProfitReport CooperativePrescriptionProfitReport
         {
@@ -279,6 +280,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => BusyContent, ref _busyContent, value);
             }
         }
+
+        private InventoryDifference inventoryDifference;
+
+        public InventoryDifference InventoryDifference
+        {
+            get => inventoryDifference;
+            set
+            {
+                Set(() => InventoryDifference, ref inventoryDifference, value);
+            }
+        }
         #endregion
         #region Command
         public RelayCommand SelfPrescriptionSelectionChangedCommand { get; set; }
@@ -291,6 +303,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
         public RelayCommand PrintCashPerDayCommand { get; set; }
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
+        
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
@@ -503,11 +516,25 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
                 PrescriptionDetailReportCollection = new PrescriptionDetailReports(SelfPrescriptionSelectedItem.TypeId, StartDate, EndDate);
-                  
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
+                //if (SelfPrescriptionSelectedItem.TypeId.Equals("5"))
+                //{
+                //    foreach (var r in PrescriptionDetailReportCollection)
+                //    {
+                //        var editRecords = PrescriptionPointEditRecords.Where(e => e.ID.Equals(r.Id));
+                //        var medicalServicePoint = editRecords.Sum(e => e.MedicalServiceDifference);
+                //        var medicinePoint = editRecords.Sum(e => e.MedicineDifference);
+                //        var paySelfPoint = editRecords.Sum(e => e.PaySelfDifference);
+                //        var profit = editRecords.Sum(e => e.ProfitDifference);
+                //        r.MedicalServicePoint += medicalServicePoint;
+                //        r.MedicalPoint += medicinePoint;
+                //        r.PaySelfPoint += paySelfPoint;
+                //        r.Profit += profit;
+                //    }
+                //}
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
                 PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
                 PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
@@ -533,7 +560,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 BusyContent = "報表查詢中";
                 CashflowCollection = new CashReports(StartDate,EndDate);
                 TotalPrescriptionProfitReportCollection.GetDataByDate(StartDate, EndDate);
-               
+                GetInventoryDifference();
+                //PrescriptionPointEditRecords.GetEditRecords(StartDate, EndDate);
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -545,16 +573,46 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                     else
                         CooperativePrescriptionProfitReportCollection.Add(r);
                 }
-                CaculateTotalCashFlow();
-                CaculateTotalPrescriptionProfit();
-                CaculateSelfPrescriptionProfit();
-                CaculateCooperativePrescriptionProfit();
+                //RevertSelfPrescriptionProfitByEditRecords();
+                CalculateTotalCashFlow();
+                CalculateTotalPrescriptionProfit();
+                CalculateSelfPrescriptionProfit();
+                CalculateCooperativePrescriptionProfit();
                 IsBusy = false;
             };
             IsBusy = true;
             worker.RunWorkerAsync();
              
         }
+
+        private void GetInventoryDifference()
+        {
+            var table = CashReportDb.GetInventoryDifferenceByDate(StartDate, EndDate);
+            if (table.Rows.Count > 0)
+            {
+                InventoryDifference = new InventoryDifference(table.Rows[0]);
+            }
+        }
+
+        private void RevertSelfPrescriptionProfitByEditRecords()
+        {
+            foreach (var s in SelfPrescriptionProfitReportCollection)
+            {
+                var editRecords = PrescriptionPointEditRecords.Where(r => r.TypeID.EndsWith(s.TypeId));
+                if (editRecords.Any())
+                {
+                    var medicalServicePoint = editRecords.Sum(e => e.MedicalServiceDifference) * -1;
+                    var medicinePoint = editRecords.Sum(e => e.MedicineDifference) * -1;
+                    var paySelfPoint = editRecords.Sum(e => e.PaySelfDifference) * -1;
+                    var profit = editRecords.Sum(e => e.ProfitDifference) * -1;
+                    s.MedicalServicePoint += medicalServicePoint;
+                    s.MedicinePoint += medicinePoint;
+                    s.PaySelfPoint += paySelfPoint;
+                    s.Profit += profit;
+                }
+            }
+        }
+
         private void SumPrescriptionDetailReport() {
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
             PrescriptionDetailReportSum.InsName = "總計"; 
@@ -576,7 +634,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
             PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
         }
-        private void CaculateTotalCashFlow() {
+        private void CalculateTotalCashFlow() {
             
             TotalCashFlow.CopayMentPrice = CashflowCollection.Sum(c => c.CopayMentPrice);
             TotalCashFlow.PaySelfPrice = CashflowCollection.Sum(c => c.PaySelfPrice);
@@ -585,7 +643,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             TotalCashFlow.OtherPrice = CashflowCollection.Sum(c => c.OtherPrice);
             TotalCashFlow.TotalPrice = CashflowCollection.Sum(c => c.TotalPrice); 
         }
-        private void CaculateTotalPrescriptionProfit() {
+        private void CalculateTotalPrescriptionProfit() {
             TotalPrescriptionProfitReport = new PrescriptionProfitReport();
             foreach (var r in TotalPrescriptionProfitReportCollection)
             {
@@ -597,7 +655,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 TotalPrescriptionProfitReport.Profit += r.Profit;
             } 
         }
-        private void CaculateSelfPrescriptionProfit()
+        private void CalculateSelfPrescriptionProfit()
         {
             SelfPrescriptionProfitReport = new PrescriptionProfitReport();
             foreach (var r in SelfPrescriptionProfitReportCollection) {
@@ -610,7 +668,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             }
             
         }
-        private void CaculateCooperativePrescriptionProfit()
+        private void CalculateCooperativePrescriptionProfit()
         {
             CooperativePrescriptionProfitReport = new PrescriptionProfitReport();
             foreach (var r in CooperativePrescriptionProfitReportCollection)

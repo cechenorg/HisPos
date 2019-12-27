@@ -29,7 +29,7 @@
             </TextBox.InputBindings>
         </TextBox>
         <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
-        <xctk:MaskedTextBox x:Name="PatientBirthday" Width="95" Height="35" Margin="0,0,10,0"  HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
+        <xctk:MaskedTextBox x:Name="PatientBirthday" Width="90" Height="35" Margin="0,0,10,0"  HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
                                     Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Default" GotFocus="DateControl_GotFocus"
                                     CaretBrush="Black" PreviewKeyDown="PatientBirthday_OnKeyDown">
             <xctk:MaskedTextBox.InputBindings>
@@ -43,7 +43,7 @@
             </Binding>
         </xctk:MaskedTextBox>
         <Image Width="30" Height="30" Source="/Images/Phone.png" Margin="10,0,10,0"/>
-        <TextBox Name="PatientCellPhone" Width="120" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
+        <TextBox Name="PatientCellPhone" Width="125" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="18" Foreground="{StaticResource ForeGround}" 
                          Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CaretBrush="Black">
             <TextBox.InputBindings>
                 <KeyBinding Command="{Binding GetCustomers}" Key="Enter" CommandParameter="{Binding ElementName=PatientCellPhone}"/>

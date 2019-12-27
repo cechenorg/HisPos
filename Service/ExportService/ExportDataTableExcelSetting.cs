@@ -20,6 +20,7 @@ namespace His_Pos.Service.ExportService
         private Color headerFontColor = Color.Black;
         private Color headerBackGroundColor = Color.LightBlue;
         private bool headerIsBold = true;
+        private bool hasHeader = true;
         #endregion
 
         #region ///// Data Variables /////
@@ -39,6 +40,12 @@ namespace His_Pos.Service.ExportService
         }
 
         #region ----- Define Fluent Interface Functions -----
+
+        public ExportDataTableExcelSetting SetHasHeader(bool _hasHeader)
+        {
+            hasHeader = _hasHeader;
+            return this;
+        }
         public ExportDataTableExcelSetting SetHeaderFontSize(int _fontSize)
         {
             headerFontSize = _fontSize;
@@ -89,7 +96,11 @@ namespace His_Pos.Service.ExportService
         #region ----- Define Functions -----
         public override void InsertDataToSheet(ExcelWorksheet worksheet)
         {
-            SetHeader(worksheet);
+            if (hasHeader)
+                SetHeader(worksheet);
+            else
+                Row--;
+
             SetData(worksheet);
         }
         private void SetData(ExcelWorksheet worksheet)

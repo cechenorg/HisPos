@@ -19,6 +19,13 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
             {
                 Add(new PrescriptionProfitReport(r));
             }
+            //DataTable pointEditTable = PrescriptionProfitReportDb.GetPrescriptionPointEditRecordByDates(sDate, eDate);
+            //if (pointEditTable.Rows.Count > 0)
+            //{
+            //    var editDataRow = pointEditTable.Rows[0];
+            //    var editProfit = this.SingleOrDefault(p => p.TypeId.Equals("5"));
+            //    editProfit?.CountEditPoint(editDataRow);
+            //}
         }
     }
 }

@@ -1083,5 +1083,15 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "ChronicSequence", p.ChronicSeq);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReserveByPrescription]", parameterList);
         }
+
+        public static void InsertPrescriptionPointEditRecord(int preID, int medicalServiceDiff, int medicineDiff, int paySelfDiff)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "PreMasID", preID);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedicalServiceDiff", medicalServiceDiff);
+            DataBaseFunction.AddSqlParameter(parameterList, "MedicineDiff", medicineDiff);
+            DataBaseFunction.AddSqlParameter(parameterList, "PaySelfDiff", paySelfDiff);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionPointEditRecord]", parameterList);
+        }
     }
 }

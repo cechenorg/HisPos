@@ -22,12 +22,12 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Profit = r.Field<double>("Profit");
             PaySelfPoint = r.Field<double>("PaySelfPoint");
         }
-        public string insName;
-        public double medicalServicePoint;
-        public double medicalPoint;
-        public double paySelfPoint;
-        public double meduse;
-        public double profit;
+        private string insName;
+        private double medicalServicePoint;
+        private double medicalPoint;
+        private double paySelfPoint;
+        private double meduse;
+        private double profit;
         public int Id { get; set; }
         public string AdjustCaseID { get; set; }
         public string CusName { get; set; }

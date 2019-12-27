@@ -252,6 +252,10 @@ namespace His_Pos.NewClass.Prescription.Service
                 Debug.Assert(adjustDateOutOfRange.DialogResult != null, "adjustDateOutOfRange.DialogResult != null");
                 return (bool)adjustDateOutOfRange.DialogResult;
             }
+            if (Current.ChronicSeq != null)
+            {
+                bool result = Current.CheckChronicAdjustDateValid();
+            }
             return true;
         }
 

@@ -61,7 +61,9 @@ namespace His_Pos.Class
         促銷管理 = 34,
         藥袋查詢 = 35,
         藥健康網頁 = 36,
-        系統教學文件 = 37
+        系統教學文件 = 37,
+        損益報表 = 38,
+        資產負債表 = 39
     }
 
     public enum StoreOrderProductType
@@ -617,4 +619,9 @@ namespace His_Pos.Class
         ReservedPrescription = 2
     }
 
+    public enum CashFlowType
+    {
+        Expenses = 0,
+        Income = 1
+    }
 }

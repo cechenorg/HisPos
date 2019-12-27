@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
         public PrescriptionProfitReport()
         {
         }
-            public PrescriptionProfitReport(DataRow r) {
+        public PrescriptionProfitReport(DataRow r) {
             TypeId = r.Field<string>("TypeId");
             TypeName = r.Field<string>("TypeName");
             Count = r.Field<int>("Count");
@@ -31,7 +31,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => TypeId, ref typeId, value);
             }
         }
-        public string typeName;
+        private string typeName;
         public string TypeName
         {
             get => typeName;
@@ -40,7 +40,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => TypeName, ref typeName, value);
             }
         }
-        public int count;
+        private int count;
         public int Count
         {
             get => count;
@@ -49,7 +49,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => Count, ref count, value);
             }
         }
-        public int medicalServicePoint;
+        private int medicalServicePoint;
         public int MedicalServicePoint
         {
             get => medicalServicePoint;
@@ -58,7 +58,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => MedicalServicePoint, ref medicalServicePoint, value);
             }
         }
-        public int medicinePoint;
+        private int medicinePoint;
         public int MedicinePoint
         {
             get => medicinePoint;
@@ -67,7 +67,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => MedicinePoint, ref medicinePoint, value);
             }
         }
-        public int paySelfPoint;
+        private int paySelfPoint;
         public int PaySelfPoint
         {
             get => paySelfPoint;
@@ -76,7 +76,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => PaySelfPoint, ref paySelfPoint, value);
             }
         }
-        public int medUse;
+        private int medUse;
         public int MedUse
         {
             get => medUse;
@@ -85,7 +85,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => MedUse, ref medUse, value);
             }
         }
-        public int profit;
+        private int profit;
         public int Profit
         {
             get => profit;
@@ -93,6 +93,15 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
             {
                 Set(() => Profit, ref profit, value);
             }
+        }
+
+        public void CountEditPoint(DataRow editDataRow)
+        {
+            Count += editDataRow.Field<int>("Count");
+            MedicalServicePoint += editDataRow.Field<int>("MedicalServicePoint");
+            MedicinePoint += editDataRow.Field<int>("MedicinePoint");
+            PaySelfPoint += editDataRow.Field<int>("PaySelfPoint");
+            Profit += editDataRow.Field<int>("Profit");
         }
     }
 }

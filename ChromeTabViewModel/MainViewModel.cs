@@ -33,6 +33,8 @@ using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
+using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet;
+using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport;
 using His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial;
 using His_Pos.SYSTEM_TAB.INDEX;
@@ -225,6 +227,10 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.結帳作業):
                     break;
+                case nameof(FeatureItem.損益報表):
+                    break;
+                case nameof(FeatureItem.資產負債表):
+                    break;
                 default:
                     return;
             }
@@ -353,6 +359,13 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.申報院所點數總表):
                     newTab = new InstitutionDeclarePointReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[0], Icon = MainWindow.HisFeatures[7].Icon };
                     break;
+                case nameof(FeatureItem.損益報表):
+                    newTab = new IncomeStatementViewModel() { TabName = MainWindow.HisFeatures[7].Functions[1], Icon = MainWindow.HisFeatures[7].Icon };
+                    break;
+                case nameof(FeatureItem.資產負債表):
+                    newTab = new BalanceSheetViewModel() { TabName = MainWindow.HisFeatures[7].Functions[2], Icon = MainWindow.HisFeatures[7].Icon };
+                    break;
+
                 //系統教學
                 case nameof(FeatureItem.系統教學文件): 
                     newTab = new TutorialViewModel() { TabName = MainWindow.HisFeatures[9].Functions[0], Icon = MainWindow.HisFeatures[9].Icon };
