@@ -9,7 +9,7 @@ using His_Pos.NewClass.Report.CashReport;
 
 namespace His_Pos.NewClass.BalanceSheet
 {
-    public class StrikeHistories : Collection<StrikeHistory>
+    public class StrikeHistories : ObservableCollection<StrikeHistory>
     {
         public StrikeHistories()
         {
@@ -18,6 +18,7 @@ namespace His_Pos.NewClass.BalanceSheet
 
         public void GetData()
         {
+            Clear();
             var historiesTable = CashReportDb.GetStrikeHistories();
             foreach (DataRow r in historiesTable.Rows)
             {
