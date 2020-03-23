@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -89,16 +90,30 @@ namespace His_Pos.NewClass.Person.Customer
         {
             if (ID == 0 || IDNumber.Equals("A111111111") || Name.Equals("匿名"))
             {
-                MessageWindow.ShowMessage("匿名資料不可編輯",MessageType.ERROR);
+                MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.ERROR);
                 return;
             }
-            CustomerDb.Save(this);
+            else if (!CheckCellFormat())
+            {
+                MessageWindow.ShowMessage("手機號碼位數錯誤，請確認", MessageType.ERROR);
+                return;
+            }
+            else {
+                CustomerDb.Save(this);
+                MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
+            }
+            
         }
 
         public static Customer GetCustomerByCusId(int cusId)
         {
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            /* 格式化手機 */
+            if (!string.IsNullOrEmpty(customer.CellPhone) && customer.CellPhone.Length == 10) {
+                string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
+                customer.CellPhone = FormatCell;
+            }            
             return customer;
         }
         public Customers Check() {
@@ -269,5 +284,16 @@ namespace His_Pos.NewClass.Person.Customer
                 return false;
             return Name.Equals("匿名") && IDNumber.Equals("A111111111");
         }
+
+        public bool CheckCellFormat() {
+            var cleared = Regex.Replace(CellPhone, "[^0-9]", "");
+            return cleared.Length == 10;
+        }
+
+        public bool CheckTelFormat() {
+            return true;
+        }
+
+
     }
 }

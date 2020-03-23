@@ -62,7 +62,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         private bool CheckFormat()
         {
             var errorString = string.Empty;
-            if (string.IsNullOrEmpty(NewCustomer.Name.Trim()))
+            if (string.IsNullOrEmpty(NewCustomer.Name))
                 errorString += "姓名未填寫\r\n";
             if (NewCustomer.Birthday is null)
                 errorString += "生日未填寫\r\n";

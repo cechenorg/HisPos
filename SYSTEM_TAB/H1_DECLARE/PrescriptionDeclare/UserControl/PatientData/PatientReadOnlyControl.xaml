@@ -23,7 +23,7 @@
             </i:Interaction.Triggers>
         </Label>
         <Image Source="../../../../../Images/User_48px.png" Margin="10,0,10,0" Height="30" Width="30"/>
-        <Label Name="PatientName" Width="140" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"
+        <Label Name="PatientName" Width="120" Height="35" Margin="0,0,10,0" Style="{StaticResource BoldLabelContent18}"
                Content="{Binding CurrentPrescription.Patient.Name,UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
@@ -32,7 +32,7 @@
             </i:Interaction.Triggers>
         </Label>
         <Image Width="30" Height="30" Source="/Images/birthday.png" Margin="10,0,10,0"/>
-        <Label Name="PatientBirthday" Width="90" Height="35" Margin="0,0,10,0"  HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"
+        <Label Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0"  HorizontalContentAlignment="Center" Style="{StaticResource BoldLabelContent18}"
                Content="{Binding CurrentPrescription.Patient.Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

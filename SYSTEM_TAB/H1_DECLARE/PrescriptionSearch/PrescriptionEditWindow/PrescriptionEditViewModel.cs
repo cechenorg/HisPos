@@ -582,7 +582,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MainWindow.ServerConnection.OpenConnection();
             EditedPrescription.Patient.Save();
             MainWindow.ServerConnection.CloseConnection();
-            MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
             CustomerEdited = false;
         }
 
