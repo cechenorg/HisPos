@@ -1,4 +1,15 @@
 System.Windows.MessageBox.Show("123");
 
 03/23
+
+ADD:
+新增顧客時手機電話格式驗證
+格式化手機顯示XXXX-XXX-XXX
+格式化電話顯示XXX-XXXX或XXXX-XXXX
+
+
+
+BUG:
+新增顧客什麼都沒輸入就送出會crash(FIXED)
 每日作業顧客資料修改儲存沒有反應
+顧客管理修改時有錯誤依然顯示"更新成功"

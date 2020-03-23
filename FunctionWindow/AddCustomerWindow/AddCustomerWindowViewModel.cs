@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -62,13 +63,19 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         private bool CheckFormat()
         {
             var errorString = string.Empty;
+            var clearedCell = Regex.Replace(NewCustomer.CellPhone, "[^0-9]", "");
+            // var clearedTel = Regex.Replace(NewCustomer.Tel, "[^0-9]", "");
             if (string.IsNullOrEmpty(NewCustomer.Name))
                 errorString += "姓名未填寫\r\n";
             if (NewCustomer.Birthday is null)
                 errorString += "生日未填寫\r\n";
             if (string.IsNullOrEmpty(NewCustomer.IDNumber) || !VerifyService.VerifyIDNumber(NewCustomer.IDNumber))
                 errorString += "身分證格式錯誤\r\n";
-            if(!string.IsNullOrEmpty(errorString))
+            if (!string.IsNullOrEmpty(NewCustomer.CellPhone) && clearedCell.Length != 10)
+                errorString += "手機格式錯誤\r\n";
+            /*if (!string.IsNullOrEmpty(NewCustomer.Tel) && (clearedTel.Length != 7 && clearedTel.Length != 9))
+                errorString += "電話格式錯誤\r\n";*/
+            if (!string.IsNullOrEmpty(errorString))
                 MessageWindow.ShowMessage(errorString,MessageType.ERROR);
             return string.IsNullOrEmpty(errorString);
         }

@@ -113,7 +113,18 @@ namespace His_Pos.NewClass.Person.Customer
             if (!string.IsNullOrEmpty(customer.CellPhone) && customer.CellPhone.Length == 10) {
                 string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
                 customer.CellPhone = FormatCell;
-            }            
+            }
+            /* 格式化電話 */
+            if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 7)
+            {
+                string FormatTel = customer.Tel.Insert(3, "-");
+                customer.Tel = FormatTel;
+            }
+            if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 8)
+            {
+                string FormatTel = customer.Tel.Insert(4, "-");
+                customer.Tel = FormatTel;
+            }
             return customer;
         }
         public Customers Check() {
@@ -290,9 +301,10 @@ namespace His_Pos.NewClass.Person.Customer
             return cleared.Length == 10;
         }
 
-        public bool CheckTelFormat() {
-            return true;
-        }
+        /*public bool CheckTelFormat() {
+            var cleared = Regex.Replace(Tel, "[^0-9]", "");
+            return cleared.Length == 7 || cleared.Length == 9;
+        }*/
 
 
     }
