@@ -22,13 +22,14 @@
             <StackPanel Orientation="Horizontal">
                 <ComboBox Width="150"  FontFamily="Segoe UI Semi" FontSize="18" Text="{Binding ProTypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                  SelectedValuePath="content"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
-                    <ComboBoxItem>OTC藥品</ComboBoxItem>
+                    <ComboBoxItem>健保品</ComboBoxItem>
+                    <ComboBoxItem>非健保品</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label Content="商品代碼" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <Label Width="150" Content="{Binding ProID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox Width="150" Text="{Binding ProID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="中文名稱" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>

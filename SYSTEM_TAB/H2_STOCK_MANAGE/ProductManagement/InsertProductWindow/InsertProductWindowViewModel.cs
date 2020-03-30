@@ -64,15 +64,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
             string typeID = "";
             switch (ProTypeName)
             {
-                case "OTC藥品":
+                case "健保品":
+                    typeID = "1";
+                    break;
+                case "非健保品":
                     typeID = "2";
                     break;
             }
-            if (!string.IsNullOrEmpty(typeID)) {
+            if (!string.IsNullOrEmpty(typeID))
+            {
                 ProductDB.InsertProduct(typeID, ProID, ProChineseName, ProEnglishName);
-                MessageWindow.ShowMessage("新增成功",Class.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseInsertProductWindow"));
-            } 
+            }
+            else {
+                MessageWindow.ShowMessage("新增失敗", Class.MessageType.ERROR);
+            }
         }
         #endregion
     }
