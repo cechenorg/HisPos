@@ -21,26 +21,26 @@
             <Label Content="商品類別" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <StackPanel Orientation="Horizontal">
                 <ComboBox Width="150"  FontFamily="Segoe UI Semi" FontSize="18" Text="{Binding ProTypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                 SelectedValuePath="content"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" >
+                                 SelectedValuePath="content"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedIndex="1" IsEnabled="False" >
                     <ComboBoxItem>健保品</ComboBoxItem>
-                    <ComboBoxItem>非健保品</ComboBoxItem>
+                    <ComboBoxItem>OTC商品</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Content="商品代碼" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <TextBox Width="150" Text="{Binding ProID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <Label Content="商品條碼" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox Width="150" Text="{Binding ProID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="15,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="中文名稱" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <TextBox Width="150"  Text="{Binding ProChineseName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox Width="150"  Text="{Binding ProChineseName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="15,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="3">
+        <!--<StackPanel Orientation="Horizontal" Grid.Row="3">
             <Label Content="英文名稱" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <TextBox Width="150"  Text="{Binding ProEnglishName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-        </StackPanel> 
+        </StackPanel>--> 
         <StackPanel Orientation="Horizontal" Grid.Row="4">
-            <Button Width="100"  Content="新增" Background="RoyalBlue" Margin="150,0,0,0" Height="30" FontSize="18" FontWeight="Bold"   BorderThickness="0" Command="{Binding InsertProductCommand}" />
+            <Button Width="100"  Content="新增" Background="RoyalBlue" Margin="100,-10,0,0" Height="30" FontSize="18" FontWeight="Bold"   BorderThickness="0" Command="{Binding InsertProductCommand}" />
         </StackPanel>
     </Grid>
 </Window>

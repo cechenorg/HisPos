@@ -31,6 +31,9 @@
                 <priceControl1:SingdePriceControl/>
             </StackPanel>
         </DataTemplate>
+        <DataTemplate x:Key="OTCPriceControl" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <priceControl1:OTCPriceControl/>
+        </DataTemplate>
         <DataTemplate x:Key="NHIMedicineFlag" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <Grid DataContext="{Binding PriceViewModel}">
                 <Grid.RowDefinitions>
@@ -147,7 +150,7 @@
                     </TextBox>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
+            <!--<StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
                 <Label Content="自費價" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 <RadioButton Content="自訂" VerticalContentAlignment="Center" Margin="15,0,0,0" FontFamily="Segoe UI Semibold" FontSize="18" IsChecked="{Binding IsSelfPayTypeDefault, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertBoolConverter}}">
                     <i:Interaction.Triggers>
@@ -176,7 +179,7 @@
                         <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SetSelfPayMultiplierCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
                     </Image.InputBindings>
                 </Image>
-            </StackPanel>
+            </StackPanel>-->
             <Grid Grid.Row="3" Grid.Column="0" Margin="0,10,10,10" Background="{StaticResource GridBackGround}" DataContext="{Binding Medicine, UpdateSourceTrigger=PropertyChanged}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
@@ -263,7 +266,7 @@
             <ContentControl Margin="0,10,10,0" Content="{Binding PriceViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource OTCMedicinePriceControl}"/>
+                        <Setter Property="ContentTemplate" Value="{StaticResource OTCPriceControl}"/>
                     </Style>
                 </ContentControl.Style>
             </ContentControl>

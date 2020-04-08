@@ -67,7 +67,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                 case "健保品":
                     typeID = "1";
                     break;
-                case "非健保品":
+                case "OTC商品":
                     typeID = "2";
                     break;
             }
