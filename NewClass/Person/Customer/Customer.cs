@@ -119,18 +119,15 @@ namespace His_Pos.NewClass.Person.Customer
             {
                 string FormatTel = customer.Tel.Insert(3, "-");
                 customer.Tel = FormatTel;
-            }
-            if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 8)
+            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 8)
             {
                 string FormatTel = customer.Tel.Insert(4, "-");
                 customer.Tel = FormatTel;
-            }
-            if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 9)
+            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 9)
             {
                 string FormatTel = customer.Tel.Insert(2, "-").Insert(6, "-");
                 customer.Tel = FormatTel;
-            }
-            if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 10)
+            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 10)
             {
                 string FormatTel = customer.Tel.Insert(2, "-").Insert(7, "-");
                 customer.Tel = FormatTel;
