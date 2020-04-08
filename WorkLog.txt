@@ -3,6 +3,10 @@ System.Windows.MessageBox.Show("123");
 SD_YODONG
 HISPOS_DEVELOP
 
+http://kaokaodepon.singde.com.tw:60000/
+
+http://www.coolpc.com.tw/tmp/1586082294334828.htm
+
 03/23
 
 ADD:

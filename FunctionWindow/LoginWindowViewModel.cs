@@ -28,6 +28,7 @@ namespace His_Pos.FunctionWindow
             get { return isAccountValid; }
             set { Set(() => IsAccountWrong, ref isAccountValid, value); }
         }
+        public string Version => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         #endregion
 
         public LoginWindowViewModel()
