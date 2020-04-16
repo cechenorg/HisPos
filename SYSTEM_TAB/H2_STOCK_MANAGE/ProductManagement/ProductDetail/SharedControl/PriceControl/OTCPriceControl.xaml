@@ -23,7 +23,7 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource Shadow}">
             <Image Source="../../../../../../Images/Settings.png" Width="25" Margin="50,0,0,0">
                 <Image.InputBindings>
-                    <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SetSelfPayMultiplierCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
+                    <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.SetPricesCommand, RelativeSource={ RelativeSource AncestorType=UserControl}}"/>
                 </Image.InputBindings>
             </Image>
             <Label Content="員工價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="55,0,0,0"/>

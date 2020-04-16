@@ -17,6 +17,8 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Medicin
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetPrices;
+
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl
 {
     public class SingdePriceControlViewModel : ViewModelBase
@@ -39,7 +41,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             ViewHistoryPriceCommand = new RelayCommand(ViewHistoryPriceAction);
             PrintMedicineLabelCommand = new RelayCommand(PrintMedicineLabelAction);
             SetPricesCommand = new RelayCommand(SetPricesAction);
-
         }
 
         #region ----- Define Actions -----
@@ -63,13 +64,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
         private void SetPricesAction()
         {
-            SetPricesWindow setPricesWindow = new SetPricesWindow(Medicine.SetPrices);
+            SetPricesWindow setPricesWindow = new SetPricesWindow();
             setPricesWindow.ShowDialog();
 
-            if ((bool)setPricesWindow.DialogResult)
-            {
-                Medicine.SetPrices = setPricesWindow.SetPrices;
-            }
         }
         #endregion
 

@@ -22,6 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         public SetPricesWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
     }
 }

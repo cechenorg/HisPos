@@ -25,6 +25,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand SyncDataCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand SetSelfPayMultiplierCommand { get; set; }
+        public RelayCommand SetPricesCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -115,6 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 Medicine.SelfPayMultiplier = selfPayMultiplierWindow.SelfPayMultiplier;
             }
         }
+        
         //private void ShowConsumeRecordAction()
         //{
         //    ProductConsumeRecordWindow productConsumeRecordWindow = new ProductConsumeRecordWindow(Medicine.ID, SelectedWareHouse);
