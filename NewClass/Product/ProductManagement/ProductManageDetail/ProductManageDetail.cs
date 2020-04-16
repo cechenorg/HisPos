@@ -16,10 +16,14 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
             SindePrice = (double)row.Field<decimal>("SinData_SinglePrice");
             SindeStock = row.Field<int>("SinData_Stock");
 
-            RetailPrice = row.Field<double>("Pro_RetailPrice");
-            MemberPrice = row.Field<double>("Pro_MemberPrice");
-            EmployeePrice = row.Field<double>("Pro_EmployeePrice");
-            SpecialPrice = row.Field<double>("Pro_SpecialPrice");
+            if (row.Table.Columns.Contains("Pro_RetailPrice"))
+                RetailPrice = row.Field<double>("Pro_RetailPrice");
+            if (row.Table.Columns.Contains("Pro_MemberPrice"))
+                MemberPrice = row.Field<double>("Pro_MemberPrice");
+            if (row.Table.Columns.Contains("Pro_EmployeePrice"))
+                EmployeePrice = row.Field<double>("Pro_EmployeePrice");
+            if (row.Table.Columns.Contains("Pro_SpecialPrice"))
+                SpecialPrice = row.Field<double>("Pro_SpecialPrice");
         }
 
         public double SingdePackagePrice { get; }
@@ -27,9 +31,9 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
         public double SindePrice { get; }
         public int SindeStock { get; }
 
-        public double RetailPrice { get; }
-        public double MemberPrice { get; }
-        public double EmployeePrice { get; }
-        public double SpecialPrice { get; }
+        public double RetailPrice { get; set; }
+        public double MemberPrice { get; set; }
+        public double EmployeePrice { get; set; }
+        public double SpecialPrice { get; set; }
     }
 }

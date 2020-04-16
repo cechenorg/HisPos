@@ -942,6 +942,9 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\StockTakingWindow.xaml.cs">
       <DependentUpon>StockTakingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\SetPrices\SetPricesWindow.xaml.cs">
+      <DependentUpon>SetPricesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\SetSelfPayMultiplierWindow\SetSelfPayMultiplierWindow.xaml.cs">
       <DependentUpon>SetSelfPayMultiplierWindow.xaml</DependentUpon>
     </Compile>
@@ -1692,6 +1695,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\StockTakingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\SetPrices\SetPricesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

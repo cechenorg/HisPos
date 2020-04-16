@@ -24,6 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Commands -----
         public RelayCommand ViewHistoryPriceCommand { get; set; }
         public RelayCommand PrintMedicineLabelCommand { get; set; }
+        public RelayCommand SetPricesCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -37,6 +38,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             ViewHistoryPriceCommand = new RelayCommand(ViewHistoryPriceAction);
             PrintMedicineLabelCommand = new RelayCommand(PrintMedicineLabelAction);
+            SetPricesCommand = new RelayCommand(SetPricesAction);
+
         }
 
         #region ----- Define Actions -----
@@ -57,6 +60,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 MessageWindow.ShowMessage("列印失敗 請稍後再試", MessageType.ERROR);
             else
                 PrintMedBagSingleMode(medicineTagStruct);
+        }
+        private void SetPricesAction()
+        {
+            SetPricesWindow setPricesWindow = new SetPricesWindow(Medicine.SetPrices);
+            setPricesWindow.ShowDialog();
+
+            if ((bool)setPricesWindow.DialogResult)
+            {
+                Medicine.SetPrices = setPricesWindow.SetPrices;
+            }
         }
         #endregion
 
