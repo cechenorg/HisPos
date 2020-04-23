@@ -1,13 +1,14 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow {
     public class InsertProductWindowViewModel : ViewModelBase{
@@ -76,6 +77,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                 ProductDB.InsertProduct(typeID, ProID, ProChineseName, ProEnglishName);
                 MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseInsertProductWindow"));
+                ProductDetailWindow.ShowProductDetailWindow();
+                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
             }
             else {
                 MessageWindow.ShowMessage("新增失敗", Class.MessageType.ERROR);

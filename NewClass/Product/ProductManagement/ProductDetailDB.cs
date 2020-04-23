@@ -75,6 +75,18 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSystemParameters]", parameters);
         }
 
+        internal static DataTable SetPrices(string proid, double retailprice, double memberprice, double employeeprice, double specialprice)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Pro_ID", proid));
+            parameters.Add(new SqlParameter("Pro_RetailPrice", retailprice));
+            parameters.Add(new SqlParameter("Pro_MemberPrice", memberprice));
+            parameters.Add(new SqlParameter("Pro_EmployeePrice", employeeprice));
+            parameters.Add(new SqlParameter("Pro_SpecialPrice", specialprice));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateOTCPrice]", parameters);
+        }
+
         internal static DataTable GetMedBagDetailByID(string proID, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

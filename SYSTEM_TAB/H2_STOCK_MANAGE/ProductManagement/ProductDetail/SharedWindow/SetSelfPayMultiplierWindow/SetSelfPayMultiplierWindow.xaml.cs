@@ -85,7 +85,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             {
                 MessageWindow.ShowMessage("更新倍率失敗 請稍後再試", MessageType.ERROR);
             }
-
             Close();
         }
         #endregion

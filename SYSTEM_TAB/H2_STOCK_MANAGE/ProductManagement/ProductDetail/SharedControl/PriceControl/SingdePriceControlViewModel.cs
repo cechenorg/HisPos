@@ -33,7 +33,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         private string productID;
         private string wareHouseID;
 
-        public ProductManageDetail MedicineDetail { get; set; }
+        private ProductManageDetail medicineDetail;
+
+        public ProductManageDetail MedicineDetail {
+            get { return medicineDetail; }
+            set { Set(() => MedicineDetail, ref medicineDetail, value); }
+        }
         #endregion
 
         public SingdePriceControlViewModel()
@@ -64,8 +69,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
         private void SetPricesAction()
         {
-            SetPricesWindow setPricesWindow = new SetPricesWindow();
+            SetPricesWindow setPricesWindow = new SetPricesWindow(productID, MedicineDetail.RetailPrice,MedicineDetail.MemberPrice,MedicineDetail.EmployeePrice,MedicineDetail.SpecialPrice);
             setPricesWindow.ShowDialog();
+
+            if ((bool)setPricesWindow.DialogResult)
+            {
+                ReloadData(productID, wareHouseID, ProductTypeEnum.OTCMedicine);
+            }
 
         }
         #endregion

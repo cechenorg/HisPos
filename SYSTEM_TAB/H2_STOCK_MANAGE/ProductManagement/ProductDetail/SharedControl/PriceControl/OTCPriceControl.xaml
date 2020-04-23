@@ -14,10 +14,10 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource Shadow}">
             <Label Content="商品價格" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <Label Content="售價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="30,0,0,0"/>
-            <TextBlock Text="{Binding MedicineDetail.RetailPrice, StringFormat=N2}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBlock Text="{Binding MedicineDetail.RetailPrice, Mode=TwoWay, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
             </TextBlock>
             <Label Content="會員價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBlock Text="{Binding MedicineDetail.MemberPrice, StringFormat=N2}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBlock Text="{Binding MedicineDetail.MemberPrice, Mode=TwoWay, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
             </TextBlock>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource Shadow}">
@@ -27,10 +27,10 @@
                 </Image.InputBindings>
             </Image>
             <Label Content="員工價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="55,0,0,0"/>
-            <TextBlock Text="{Binding MedicineDetail.EmployeePrice, StringFormat=N2}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBlock Text="{Binding MedicineDetail.EmployeePrice, Mode=TwoWay, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
             </TextBlock>
             <Label Content="特殊價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="11,0,0,0"/>
-            <TextBlock Text="{Binding MedicineDetail.SpecialPrice, StringFormat=N2}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBlock Text="{Binding MedicineDetail.SpecialPrice, Mode=TwoWay, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
             </TextBlock>
         </StackPanel>
     </Grid>

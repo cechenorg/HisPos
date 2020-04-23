@@ -14,20 +14,20 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">            
             <Label Content="售價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="30,0,0,0"/>
-            <TextBox Text="{Binding MedicineDetail.RetailPrice, StringFormat=N2, Mode=TwoWay}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBox Text="{Binding RetailPrice, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
             </TextBox>
             <Label Content="會員價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Text="{Binding MedicineDetail.MemberPrice, StringFormat=N2, Mode=TwoWay}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBox Text="{Binding MemberPrice, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
             </TextBox>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">            
             <Label Content="員工價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Text="{Binding MedicineDetail.EmployeePrice, StringFormat=N2, Mode=TwoWay}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBox Text="{Binding EmployeePrice, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
             </TextBox>
             <Label Content="特殊價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Text="{Binding MedicineDetail.SpecialPrice, StringFormat=N2, Mode=TwoWay}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBox Text="{Binding SpecialPrice, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0">
             </TextBox>
-        </StackPanel>        
-        <Button Width="120" Content="確認" Grid.Row="2" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue"/>
+        </StackPanel>
+        <Button Width="120" Content="確認" Grid.Row="2" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue" Click="Confirm_OnClick"/>
     </Grid>
 </Window>

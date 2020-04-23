@@ -32,7 +32,7 @@ View Define:
 ProductManagementView = 商品查詢介面
 MedicineControlView = 商品詳細資料
 
-Product.OTADetail
+//Product.OTADetail
 
 Pro_ID 品號(店內碼)
 Pro_Code
@@ -44,6 +44,3 @@ Pro_SpecialPrice
 
 
 Visibility="{Binding DataContext.IsNHIProduct, RelativeSource={ RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}"
-
-
-
