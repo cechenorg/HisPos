@@ -32,7 +32,7 @@ View Define:
 ProductManagementView = 商品查詢介面
 MedicineControlView = 商品詳細資料
 
-//Product.OTADetail
+Product.OTADetail
 
 Pro_ID 品號(店內碼)
 Pro_Code
@@ -42,5 +42,9 @@ Pro_MemberPrice
 Pro_EmployeePrice
 Pro_SpecialPrice
 
+Set.UpdateOTCPrice
+Set.InsertProduct
+Get.ProductManageOTCMedicineDetailByID
+Get.OTCdetail
 
-Visibility="{Binding DataContext.IsNHIProduct, RelativeSource={ RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}"
+新增商品時檢查重複編號

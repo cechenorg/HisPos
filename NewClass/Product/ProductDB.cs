@@ -86,7 +86,7 @@ namespace His_Pos.NewClass.Product
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataTable result = new DataTable();
 
-            if (!string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+            /*if (!string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
             {
                 DataTable table = PharmacyDb.GroupPharmacySchemaList();
                 foreach (DataRow r in table.Rows)
@@ -106,8 +106,14 @@ namespace His_Pos.NewClass.Product
                 DataBaseFunction.AddSqlParameter(parameterList, "Pro_Chinese", proChinese);
                 DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish); 
                 return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertProduct]", parameterList);
-            }
-             
+            }*/
+
+            DataBaseFunction.AddSqlParameter(parameterList, "TypeID", typeID);
+            DataBaseFunction.AddSqlParameter(parameterList, "Pro_ID", proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "Pro_Chinese", proChinese);
+            DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertProduct]", parameterList);
+
         }
         internal static DataTable GetAllInventoryByProIDs(List<string> MedicineIds,string warID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
