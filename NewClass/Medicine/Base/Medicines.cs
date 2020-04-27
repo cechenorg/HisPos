@@ -12,6 +12,8 @@ using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 using His_Pos.Properties;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEnoughMedicinePurchaseWindow;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
@@ -275,7 +277,7 @@ namespace His_Pos.NewClass.Medicine.Base
             if (medicine.ID.EndsWith("00") || medicine.ID.EndsWith("G0"))
                 medicine.PositionID = "PO";
             medicine.IsBuckle = !string.IsNullOrEmpty(wareHouseId);
-            medicine.UsableAmount = medicine.OnTheFrameAmount;
+            medicine.UsableAmount = medicine.OnTheFrameAmount;            
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex >= 0)
@@ -305,8 +307,14 @@ namespace His_Pos.NewClass.Medicine.Base
                         medicine = new MedicineNHI(r);
                         break;
                     case 2:
-                        medicine = new MedicineOTC(r);
+                        medicine = new MedicineOTC(r);                        
                         medicine.PaySelf = true;
+
+                        /* Retail Price */
+                        var detailtable = ProductDetailDB.GetProductManageOTCMedicineDetailByID(medicine.ID);
+                        var detail = new ProductManageDetail(detailtable.Rows[0]);
+                        medicine.Price = detail.RetailPrice;
+
                         break;
                     case 3:
                         medicine = new MedicineSpecialMaterial(r);

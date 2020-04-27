@@ -109,6 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             productID = proID;
             wareHouseID = wareID;
+            
 
             DataTable manageMedicineDetailDataTable = null;
 

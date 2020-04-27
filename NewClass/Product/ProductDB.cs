@@ -82,8 +82,9 @@ namespace His_Pos.NewClass.Product
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[ProductNewIDByType]", parameterList);
             return  table.Rows[0].Field<string>("NewID"); 
         }
-        public static void InsertProduct(string typeID,string proID,string proChinese,string proEnglish) {
-            List<SqlParameter> parameterList = new List<SqlParameter>(); 
+        public static DataTable InsertProduct(string typeID,string proID,string proChinese,string proEnglish) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataTable result = new DataTable();
 
             if (!string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
             {
@@ -95,15 +96,16 @@ namespace His_Pos.NewClass.Product
                     DataBaseFunction.AddSqlParameter(parameterList, "Pro_ID", proID);
                     DataBaseFunction.AddSqlParameter(parameterList, "Pro_Chinese", proChinese);
                     DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish); 
-                    MainWindow.ServerConnection.ExecuteProcBySchema(r.Field<string>("SchemaList"), "[Set].[InsertProduct]", parameterList);
+                    result = MainWindow.ServerConnection.ExecuteProcBySchema(r.Field<string>("SchemaList"), "[Set].[InsertProduct]", parameterList);
                 }
+                return result;
             }
             else {
                 DataBaseFunction.AddSqlParameter(parameterList, "TypeID", typeID);
                 DataBaseFunction.AddSqlParameter(parameterList, "Pro_ID", proID);
                 DataBaseFunction.AddSqlParameter(parameterList, "Pro_Chinese", proChinese);
                 DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish); 
-                MainWindow.ServerConnection.ExecuteProc("[Set].[InsertProduct]", parameterList);
+                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertProduct]", parameterList);
             }
              
         }

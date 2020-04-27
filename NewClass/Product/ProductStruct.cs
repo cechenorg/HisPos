@@ -22,6 +22,9 @@ namespace His_Pos.NewClass.Product
             IsFrozen = row.Field<bool>("Med_IsFrozen");
             ControlLevel = row.Field<byte?>("Med_Control");
             IsEnable = row.Field<bool>("Pro_IsEnable");
+
+            /*if (Type == ProductTypeEnum.OTCMedicine)
+                SellPrice = 0;*/
         }
 
         public ProductTypeEnum Type { get; set; }

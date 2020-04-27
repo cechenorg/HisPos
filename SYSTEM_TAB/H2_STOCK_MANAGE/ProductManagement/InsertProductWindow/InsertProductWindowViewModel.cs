@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow {
     public class InsertProductWindowViewModel : ViewModelBase{
@@ -74,11 +75,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
             }
             if (!string.IsNullOrEmpty(typeID))
             {
-                ProductDB.InsertProduct(typeID, ProID, ProChineseName, ProEnglishName);
-                MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
-                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseInsertProductWindow"));
-                ProductDetailWindow.ShowProductDetailWindow();
-                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
+                DataTable dataTable = ProductDB.InsertProduct(typeID, ProID, ProChineseName, ProEnglishName);
+                if (dataTable != null && dataTable.Rows.Count > 0)
+                {
+                    if (dataTable.Rows[0].Field<string>("RESULT") == "SUCCESS") {
+                        MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
+                        Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseInsertProductWindow"));
+                        ProductDetailWindow.ShowProductDetailWindow();
+                        Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
+                    }
+                    else if (dataTable.Rows[0].Field<string>("RESULT") == "EXISTED")
+                    {
+                        MessageWindow.ShowMessage($"商品條碼{ProID}已存在，新增失敗", Class.MessageType.ERROR);
+                    }
+                }                
             }
             else {
                 MessageWindow.ShowMessage("新增失敗", Class.MessageType.ERROR);
