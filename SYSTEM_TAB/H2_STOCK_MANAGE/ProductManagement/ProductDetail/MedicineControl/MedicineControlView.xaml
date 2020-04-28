@@ -67,7 +67,7 @@
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="310"/>
+                <ColumnDefinition Width="410"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBox Text="{Binding Medicine.ID}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Foreground="DimGray" BorderThickness="0"  FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" VerticalAlignment="Center" Padding="0" IsReadOnly="True"/>
