@@ -435,16 +435,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetPatientDataAction()
         {
-            MessageWindow.ShowMessage("1", MessageType.WARNING);
             //取得病患資料(讀卡)
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) => { ReadCard(); };
-            MessageWindow.ShowMessage("2", MessageType.WARNING);
             worker.RunWorkerCompleted += (o, ea) => { GetPatientDataComplete(); };
-            MessageWindow.ShowMessage("3", MessageType.WARNING);
             IsBusy = true;
             worker.RunWorkerAsync();
-            MessageWindow.ShowMessage("4", MessageType.WARNING);
         }
 
         private void AddCustomerAction()
@@ -1108,7 +1104,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             catch (Exception e)
             {
                 NewFunction.ExceptionLog(e.Message);
-                NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
+                NewFunction.ShowMessageFromDispatcher(e.Message, MessageType.WARNING);
             }
         }
         private bool AskErrorUpload()
