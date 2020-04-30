@@ -45,6 +45,10 @@ Pro_SpecialPrice
 Set.UpdateOTCPrice
 Set.InsertProduct
 Get.ProductManageOTCMedicineDetailByID
-Get.OTCdetail
 
 新增商品時檢查重複編號
+
+B022383100
+
+Visibility="{Binding DataContext.IsNHIProduct, RelativeSource={ RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}"
+
