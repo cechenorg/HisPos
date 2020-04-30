@@ -1098,8 +1098,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             BusyContent = Resources.讀取健保卡;
             try
             {
-                currentCard = new IcCard();
-                currentCard.Read();
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    currentCard = new IcCard();
+                    currentCard.Read();
+                });                
             }
             catch (Exception e)
             {
