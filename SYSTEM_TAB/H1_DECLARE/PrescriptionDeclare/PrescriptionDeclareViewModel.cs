@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -1098,10 +1099,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             BusyContent = Resources.讀取健保卡;
             try
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate {
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
+                    // your code or function here.
+                    MessageWindow.ShowMessage("1", MessageType.WARNING);
                     currentCard = new IcCard();
+                    MessageWindow.ShowMessage("2", MessageType.WARNING);
                     currentCard.Read();
-                });                
+                }));
+                
             }
             catch (Exception e)
             {
