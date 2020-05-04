@@ -51,16 +51,16 @@ namespace His_Pos.NewClass.Prescription.ICCard
         public virtual bool IsRead { get; set; }
         public bool Read()
         {
-            MessageWindow.ShowMessage("10", MessageType.WARNING);
+            MessageWindow.ShowMessage("1", MessageType.WARNING);
             if (HisApiFunction.OpenCom())
             {
-                MessageWindow.ShowMessage("20", MessageType.WARNING);
+                MessageWindow.ShowMessage("2", MessageType.WARNING);
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
-                MessageWindow.ShowMessage("30", MessageType.WARNING);
+                MessageWindow.ShowMessage("3", MessageType.WARNING);
                 CheckCardStatus();
-                MessageWindow.ShowMessage("40", MessageType.WARNING);
+                MessageWindow.ShowMessage("4", MessageType.WARNING);
                 IsRead = GetBasicData();
-                MessageWindow.ShowMessage("50", MessageType.WARNING);
+                MessageWindow.ShowMessage("5", MessageType.WARNING);
                 return true;
             }
             return false;
