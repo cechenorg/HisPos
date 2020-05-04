@@ -1102,10 +1102,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
                     // Added Dispatcher
                     currentCard = new IcCard();
-                    
+                    currentCard.Read();
                 }));
-                currentCard.Read();
-
+                
             }
             catch (Exception e)
             {

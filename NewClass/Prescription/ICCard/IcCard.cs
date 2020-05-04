@@ -53,7 +53,6 @@ namespace His_Pos.NewClass.Prescription.ICCard
         {
             if (HisApiFunction.OpenCom())
             {
-                MessageWindow.ShowMessage("1", MessageType.WARNING);
                 MainWindow.Instance.SetCardReaderStatus(StringRes.讀取健保卡);
                 CheckCardStatus();
                 IsRead = GetBasicData();
