@@ -1100,8 +1100,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             try
             {
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
-                    // Added Dispatcher
+                    // your code or function here.
+                    MessageWindow.ShowMessage("1", MessageType.WARNING);
                     currentCard = new IcCard();
+                    MessageWindow.ShowMessage("2", MessageType.WARNING);
                     currentCard.Read();
                 }));
                 
