@@ -435,16 +435,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void GetPatientDataAction()
         {
-            MessageWindow.ShowMessage("1", MessageType.WARNING);
             //取得病患資料(讀卡)
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) => { ReadCard(); };
-            MessageWindow.ShowMessage("2", MessageType.WARNING);
             worker.RunWorkerCompleted += (o, ea) => { GetPatientDataComplete(); };
-            MessageWindow.ShowMessage("3", MessageType.WARNING);
             IsBusy = true;
             worker.RunWorkerAsync();
-            MessageWindow.ShowMessage("4", MessageType.WARNING);
         }
 
         private void AddCustomerAction()
