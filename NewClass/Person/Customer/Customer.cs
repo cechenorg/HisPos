@@ -93,16 +93,7 @@ namespace His_Pos.NewClass.Person.Customer
                 MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.ERROR);
                 return;
             }
-            else if (!CheckCellFormat())
-            {
-                MessageWindow.ShowMessage("手機號碼位數錯誤，請確認", MessageType.ERROR);
-                return;
-            }
-            else {
-                CustomerDb.Save(this);
-                MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
-            }
-            
+            CustomerDb.Save(this);
         }
 
         public static Customer GetCustomerByCusId(int cusId)
@@ -303,8 +294,9 @@ namespace His_Pos.NewClass.Person.Customer
             return Name.Equals("匿名") && IDNumber.Equals("A111111111");
         }
 
-        public bool CheckCellFormat() {
+        public bool CheckCellFormat() {            
             var cleared = Regex.Replace(CellPhone, "[^0-9]", "");
+            //System.Windows.MessageBox.Show(cleared.Length.ToString());
             return cleared.Length == 10;
         }
 
