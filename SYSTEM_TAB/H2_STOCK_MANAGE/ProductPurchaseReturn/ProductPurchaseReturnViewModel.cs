@@ -128,7 +128,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
-                    string qDate = DateTime.Now.AddDays(-1).ToString("yyyyMMdd");
+                    string qDate = DateTime.Now.AddDays(-30).ToString("yyyyMMdd");
 
                     if (storeOrders.Count > 0)
                         dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
