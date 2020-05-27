@@ -128,13 +128,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
-                    string qDate = DateTime.Now.AddDays(-30).ToString("yyyyMMdd");
 
                     if (storeOrders.Count > 0)
-                        dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
+                        dateTime = storeOrders[0].CreateDateTime.AddDays(-1).ToString("yyyyMMdd");
 
                     BusyContent = "取得杏德訂單最新狀態...";
-                    dataTable = StoreOrderDB.GetSingdeOrderNewStatus(qDate);
+                    dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
+
+                    string res = string.Join(Environment.NewLine, dataTable.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
+                    System.Windows.MessageBox.Show(res);
+
                     if (dataTable.Rows.Count > 0)
                     {
                         storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
