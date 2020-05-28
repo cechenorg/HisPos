@@ -135,8 +135,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     BusyContent = "取得杏德訂單最新狀態...";
                     dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
 
-                    string res = string.Join(Environment.NewLine, dataTable.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
-                    System.Windows.MessageBox.Show(res);
+                    //System.Windows.MessageBox.Show(dateTime);
 
                     if (dataTable.Rows.Count > 0)
                     {
