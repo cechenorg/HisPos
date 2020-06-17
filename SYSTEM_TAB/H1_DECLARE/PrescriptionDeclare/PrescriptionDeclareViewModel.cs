@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -626,7 +627,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckDeclareStatus();
         }
 
-        private void GetDiseaseCodeAction(object sender)
+
+        private void GetDiseaseCodeCheck(object sender)
         {
             var parameters = sender.ConvertTo<List<string>>();
             var elementName = parameters[0];
@@ -635,6 +637,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 DiseaseFocusNext(elementName);
                 return;
+            }
+            else if (!string.IsNullOrEmpty(diseaseID))
+
+
+            {
+                switch (elementName)
+                {
+                    case "MainDiagnosis":
+                        CurrentPrescription.MainDisease = new DiseaseCode();
+                        break;
+                    case "SecondDiagnosis":
+                        CurrentPrescription.SubDisease = new DiseaseCode();
+                        break;
+                }
             }
             //診斷碼查詢
             switch (elementName)
@@ -648,23 +664,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+
+        private void GetDiseaseCodeAction(object sender)
+        {
+            GetDiseaseCodeCheck(sender);
+        }
+
         private void CheckClearDiseaseAction(object sender)
         {
-            var parameters = sender.ConvertTo<List<string>>();
-            var elementName = parameters[0];
-            var diseaseID = parameters[1];
-            if (string.IsNullOrEmpty(diseaseID))
-            {
-                switch (elementName)
-                {
-                    case "MainDiagnosis":
-                        CurrentPrescription.MainDisease = new DiseaseCode();
-                        break;
-                    case "SecondDiagnosis":
-                        CurrentPrescription.SubDisease = new DiseaseCode();
-                        break;
-                }
-            }
+            //LostFocus()
+            GetDiseaseCodeCheck(sender);
         }
 
         private void DiseaseFocusNext(string elementName)
