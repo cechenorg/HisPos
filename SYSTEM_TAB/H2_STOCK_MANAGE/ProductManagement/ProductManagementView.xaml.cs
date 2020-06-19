@@ -32,7 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
             if (textBox is null) return;
 
-            e.Handled = true;
+            //e.Handled = true;
             textBox.Focus();
         }
     }

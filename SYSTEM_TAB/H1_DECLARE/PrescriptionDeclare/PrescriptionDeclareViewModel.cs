@@ -653,13 +653,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
             //診斷碼查詢
+            
             switch (elementName)
             {
+                
                 case "MainDiagnosis":
+
+         
                     CurrentPrescription.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    if (CurrentPrescription.MainDisease == null)
+                    {
+                        Messenger.Default.Send(new NotificationMessage(this, "FocusMainDisease"));
+                        
+                        return;
+                    }
                     break;
                 case "SecondDiagnosis":
                     CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    if (CurrentPrescription.SubDisease == null)
+                    {
+                        Messenger.Default.Send(new NotificationMessage(this, "FocusSubDisease"));
+                       
+                        return;
+                    }
                     break;
             }
         }
@@ -673,7 +689,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckClearDiseaseAction(object sender)
         {
             //LostFocus()
+            
             GetDiseaseCodeCheck(sender);
+            
         }
 
         private void DiseaseFocusNext(string elementName)

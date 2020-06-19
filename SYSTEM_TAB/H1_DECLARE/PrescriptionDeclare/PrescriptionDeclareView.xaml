@@ -450,7 +450,7 @@
                     <DataGridTemplateColumn MinWidth="60" Header="自費價" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="MedicinePrice" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown" CaretBrush="Black" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
+                                <TextBox x:Name="MedicinePrice" MinWidth="40" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown" CaretBrush="Black" PreviewKeyDown="MedicinePrice_PreviewKeyDown"
                                          FontSize="16" FontWeight="Bold" InputScope="AlphanumericHalfWidth" GotFocus="InputTextBox_OnGotFocus" PreviewMouseLeftButtonDown="InputTextBox_OnPreviewMouseLeftButtonDown" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged,FallbackValue=false}"
                                          Text="{Binding Price, Mode=TwoWay,StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding PaySelf, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource InverseBooleanConverter}}"/>
                             </DataTemplate>
