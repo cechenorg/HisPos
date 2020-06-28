@@ -130,7 +130,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
 
                     if (storeOrders.Count > 0)
-                        dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
+                        dateTime = storeOrders[0].CreateDateTime.AddDays(-1).ToString("yyyyMMdd");
 
                     BusyContent = "取得杏德訂單最新狀態...";
                     dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
