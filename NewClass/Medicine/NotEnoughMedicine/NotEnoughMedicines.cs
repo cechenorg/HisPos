@@ -27,6 +27,7 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
         public void ToWaitingStatus(string note)
         {
             var isSuccess = SendOrderToSingde(note);
+            
             if (isSuccess)
             {
                 StoreOrderDB.StoreOrderToWaiting(StoreOrderID);

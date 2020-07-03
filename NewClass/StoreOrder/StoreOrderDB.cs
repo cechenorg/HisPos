@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Windows.Forms;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
@@ -588,6 +589,10 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
         }
 
+       
+
+
+
         internal static void SaveReturnOrder(ReturnOrder returnOrder)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -595,6 +600,7 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
+            
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
 
@@ -607,7 +613,10 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", purchaseOrder.PreOrderCustomer);
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", purchaseOrder.TargetPreOrderCustomer);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", purchaseOrder.PlanArriveDate);
+          
+
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
+
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
 
             new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
@@ -620,6 +629,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve)
         {
+            
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(indexReserve));
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserve));
@@ -765,7 +775,7 @@ namespace His_Pos.NewClass.StoreOrder
             string orderMedicines = "";
             string cusName = "";
             string planDate = "";
-
+           
             foreach (var product in purchaseList)
             {
                 if (product.ID.Length > 12)
@@ -847,6 +857,7 @@ namespace His_Pos.NewClass.StoreOrder
         
         public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicines purchaseList,string note,string cusName)
         {
+           
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionNotEnoughOrderDetail(purchaseList));
             DataBaseFunction.AddSqlParameter(parameterList, "EMP_ID", ViewModelMainWindow.CurrentUser.ID);

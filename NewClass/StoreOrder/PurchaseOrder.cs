@@ -12,6 +12,7 @@ using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
 
+
 namespace His_Pos.NewClass.StoreOrder
 {
     public class PurchaseOrder: StoreOrder
@@ -21,10 +22,12 @@ namespace His_Pos.NewClass.StoreOrder
 
         public string PreOrderCustomer { get; set; }
         public string TargetPreOrderCustomer { get; set; }
+        
         public DateTime? PlanArriveDate { get; set; }
         public string PatientData { get; set; }
         public bool HasPatient => !string.IsNullOrEmpty(PatientData);
         public bool HasCustomer => !string.IsNullOrEmpty(PreOrderCustomer);
+        public DateTime Day { get; set; }
         public PurchaseProducts OrderProducts
         {
             get { return orderProducts; }
@@ -48,6 +51,7 @@ namespace His_Pos.NewClass.StoreOrder
             PreOrderCustomer = row.Field<string>("StoOrd_CustomerName");
             TargetPreOrderCustomer = row.Field<string>("StoOrd_TargetCustomerName");
             PlanArriveDate = row.Field<DateTime?>("StoOrd_PlanArrivalDate");
+            
         }
 
         #region ----- Override Function -----
@@ -243,7 +247,25 @@ namespace His_Pos.NewClass.StoreOrder
 
             //backgroundWorker.DoWork += (sender, args) =>
             //{
-                StoreOrderDB.SavePurchaseOrder(this);
+
+            PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
+
+            string note;
+            DateTime dt = Day;
+            if (dt == default(DateTime))
+            {
+                saveStoreOrder.Note = TargetPreOrderCustomer + " " + saveStoreOrder.Note;
+                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+                
+            }
+            else
+            {
+                saveStoreOrder.Note = TargetPreOrderCustomer + " " + dt.ToString("yyyy年MM月dd日") + " " + saveStoreOrder.Note;
+                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+
+            }
+           
+
             //};
 
             //backgroundWorker.RunWorkerAsync();

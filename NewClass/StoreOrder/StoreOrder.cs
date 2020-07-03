@@ -46,6 +46,14 @@ namespace His_Pos.NewClass.StoreOrder
         public DateTime CreateDateTime { get; set; }
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
+
+        public string TargetPreOrderCustomer { get; set; }
+        public DateTime Day { get; set; }
+
+
+
+
+
         public double TotalPrice
         {
             get { return totalPrice; }
@@ -95,6 +103,8 @@ namespace His_Pos.NewClass.StoreOrder
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
 
             initProductCount = row.Field<int>("ProductCount");
+
+
         }
         
         #region ----- Define Functions -----
@@ -112,7 +122,11 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Status Function /////
         public void MoveToNextStatus()
         {
+            
             SaveOrder();
+
+            
+
 
             switch (OrderStatus)
             {
@@ -324,11 +338,16 @@ namespace His_Pos.NewClass.StoreOrder
             ReceiveEmployeeName = storeOrder.ReceiveEmployeeName;
             CreateDateTime = storeOrder.CreateDateTime;
             DoneDateTime = storeOrder.DoneDateTime;
+            Day = storeOrder.Day;
+            TargetPreOrderCustomer = storeOrder.TargetPreOrderCustomer;
             Note = storeOrder.Note;
             TotalPrice = storeOrder.TotalPrice;
-
+            
             initProductCount = storeOrder.initProductCount;
+
+           
         }
+
         #endregion
     }
 }

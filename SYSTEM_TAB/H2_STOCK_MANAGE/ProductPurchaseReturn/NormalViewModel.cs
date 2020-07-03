@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -51,6 +52,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private string searchString;
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
         private BackgroundWorker initBackgroundWorker;
+        private int i_index;
+        List<StoreOrder> storeOrdersBaks;
+
+        public SingdeTotalViewModel SingdeTotalViewModel { get; set; }
+        
+   
 
         public bool IsBusy
         {
@@ -76,6 +83,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             set
             {
                 MainWindow.ServerConnection.OpenConnection();
+                
                 currentStoreOrder?.SaveOrder();
                 value?.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
@@ -91,6 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public NormalViewModel()
         {
+            InitBackgroundWorker();
             RegisterCommand();
             RegisterMessengers();
         }
@@ -164,10 +173,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
+
                 CurrentStoreOrder.MoveToNextStatus();
+                
+
+
+
+
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
+
+                ReloadAction();
+                
+
+
+
             }
         }
         private void ReloadAction()
@@ -236,7 +257,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void CloseTabAction()
         {
+           
             if (CurrentStoreOrder != null)
+                
                 CurrentStoreOrder.SaveOrder();
         }
         private void ExportOrderDataAction()
@@ -259,6 +282,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Collection<object> tempCollection = new Collection<object>() { CurrentStoreOrder };
 
                 MainWindow.ServerConnection.OpenConnection();
+                
                 CurrentStoreOrder.SaveOrder();
                 ExportExcelService service = new ExportExcelService(tempCollection, new ExportOrderRecordTemplate());
                 isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\進退貨資料{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
@@ -280,6 +304,135 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #endregion
 
         #region ----- Define Functions -----
+
+
+        private void InitBackgroundWorker()
+        {
+           
+            
+
+            initBackgroundWorker = new BackgroundWorker();
+            
+            initBackgroundWorker.DoWork += (sender, args) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
+
+
+                DataTable dataTable;
+                if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
+                {
+                    BusyContent = "取得杏德新訂單...";
+                    dataTable = StoreOrderDB.GetNewSingdeOrders();
+                    if (dataTable.Rows.Count > 0)
+                        StoreOrders.AddNewOrdersFromSingde(dataTable);
+
+                    dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
+                    if (dataTable.Rows.Count > 0)
+                        StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
+                    
+
+
+                }
+
+                BusyContent = "取得訂單資料...";
+                storeOrderCollection = StoreOrders.GetOrdersNotDone();
+
+                if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
+                {
+                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
+                    string dateTime = DateTime.Now.ToString("yyyyMMdd");
+
+                    if (storeOrders.Count > 0)
+                        dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
+
+                    BusyContent = "取得杏德訂單最新狀態...";
+                    dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
+                    if (dataTable.Rows.Count > 0)
+                    {
+
+                        storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
+                        storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                    }
+
+                    storeOrdersBaks = storeOrders;
+
+
+
+
+
+
+                }
+
+                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
+
+               
+            };
+
+            initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+
+
+                string CurrentStoreOrderID = CurrentStoreOrder.ID;
+                //InitData(storeOrderCollection);
+                //storeOrderCollection = storeOrderCollection;
+                StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrderCollection);
+
+                //StoreOrderCollectionView.Filter += OrderFilter;
+
+                int rowindex = 0;
+                foreach (StoreOrder storeOrderCollections in storeOrderCollection)
+                {
+
+
+
+                    if (storeOrderCollections.ID.ToString() == CurrentStoreOrderID)
+                    {
+
+                        MessageBox.Show(storeOrderCollections.ID.ToString());
+                        MessageBox.Show(rowindex.ToString());
+                        i_index = rowindex;
+                    }
+
+                    rowindex++;
+
+
+
+
+
+                }
+                /* foreach (DataRow dr in dataTable.Rows)
+                 {
+
+                     if (dr["ORDER_ID"].ToString() == CurrentStoreOrderID)
+                     {
+
+                         MessageBox.Show(storeOrdersBak[0].CreateDateTime.ToString("yyyyMMdd"));
+                         MessageBox.Show(dr["ORDER_ID"].ToString());
+                         MessageBox.Show(CurrentStoreOrderID);
+                         MessageBox.Show(dr.Table.Rows.IndexOf(dr).ToString());
+                         MessageBox.Show(dataTable.Rows.IndexOf(dr).ToString());
+
+                         iTest = rowindex;
+
+
+                     }
+                     rowindex++;
+
+                 }*/
+
+
+                //if (!StoreOrderCollectionView.IsEmpty)
+                //{
+                StoreOrderCollectionView.MoveCurrentToPosition(i_index);
+                CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
+                //}
+                IsBusy = false;
+            };
+
+
+        }
         public void InitData(StoreOrders storeOrders)
         {
             storeOrderCollection = storeOrders;
@@ -357,11 +510,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (notificationMessage.Notification == "UpdateUsableAmountMessage")
             {
                 MainWindow.ServerConnection.OpenConnection();
+                
                 CurrentStoreOrder.SaveOrder();
                 CurrentStoreOrder.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
             }
         }
+        
+
+
+
         #endregion
 
         #region ///// Filter Functions /////
