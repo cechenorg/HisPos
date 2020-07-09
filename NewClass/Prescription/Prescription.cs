@@ -47,7 +47,6 @@ namespace His_Pos.NewClass.Prescription
         ChronicRegister = 3,
         ChronicReserve = 4
     }
-
     public class Prescription : ObservableObject, ICloneable
     {
         #region Constructors
@@ -1114,6 +1113,55 @@ namespace His_Pos.NewClass.Prescription
             return ChronicSeq != null && ChronicSeq > 0;
         }
 
+        public object PrintClone()
+        {
+            var clone = new Prescription
+            {
+                Patient = (Customer)Patient.Clone(),
+                Institution = VM.GetInstitution(Institution?.ID),
+                Division = (Division)Division.Clone(),
+                Pharmacist = Pharmacist.DeepCloneViaJson(),
+                TempMedicalNumber = TempMedicalNumber,
+                TreatDate = TreatDate,
+                AdjustDate = AdjustDate,
+                MainDisease = MainDisease.DeepCloneViaJson(),
+                SubDisease = SubDisease?.DeepCloneViaJson(),
+                ChronicSeq = ChronicSeq,
+                ChronicTotal = ChronicTotal,
+                AdjustCase = VM.GetAdjustCase(AdjustCase?.ID),
+                PrescriptionCase = VM.GetPrescriptionCases(PrescriptionCase?.ID),
+                Copayment = VM.GetCopayment(Copayment?.Id),
+                PaymentCategory = VM.GetPaymentCategory(PaymentCategory?.ID),
+                SpecialTreat = VM.GetSpecialTreat(SpecialTreat?.ID),
+                PrescriptionPoint = PrescriptionPoint.DeepCloneViaJson(),
+                PrescriptionStatus = PrescriptionStatus.DeepCloneViaJson(),
+                InsertTime = InsertTime,
+                Type = Type,
+                OrderContent = OrderContent,
+                OrderID = OrderID,
+                Medicines = new Medicines()
+            };
+            foreach (var m in Medicines)
+            {
+                switch (m)
+                {
+                    case MedicineNHI _:
+                        clone.Medicines.Add((MedicineNHI)m.Clone());
+                        break;
+                    case MedicineSpecialMaterial _:
+                        clone.Medicines.Add((MedicineSpecialMaterial)m.Clone());
+                        break;
+                    case MedicineOTC _:
+                        clone.Medicines.Add((MedicineOTC)m.Clone());
+                        break;
+                    default:
+                        clone.Medicines.Add((MedicineVirtual)m.Clone());
+                        break;
+                }
+            }
+            return clone;
+
+        }
         public object Clone()
         {
             var clone = new Prescription

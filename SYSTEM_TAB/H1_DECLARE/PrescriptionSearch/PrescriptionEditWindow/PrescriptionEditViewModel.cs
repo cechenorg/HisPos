@@ -378,9 +378,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void PrintMedBagAction()
         {
-            if (EditedPrescription.Institution.ID == "3532082753")
+            Prescription PrintEditedPrescription = OriginalPrescription.PrintClone() as Prescription;
+            if (PrintEditedPrescription.Institution.ID == "3532082753")
             {
-                EditedPrescription.Division.Name = "";
+                PrintEditedPrescription.Division.Name = "";
             }
             var printConfirmResult = NewFunction.CheckPrint(EditedPrescription);
             var printMedBag = printConfirmResult[0];
@@ -399,10 +400,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                     switch (printSingle != null && (bool)printSingle)
                     {
                         case false:
-                            EditedPrescription.PrintMedBagMultiMode();
+                            PrintEditedPrescription.PrintMedBagMultiMode();
                             break;
                         case true:
-                            EditedPrescription.PrintMedBagSingleMode();
+                            PrintEditedPrescription.PrintMedBagSingleMode();
                             break;
                     }
                 }

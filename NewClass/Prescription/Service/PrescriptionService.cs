@@ -579,16 +579,16 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
-            if (TempPre.Institution.ID == "3532082753")
+            Prescription TempPrint = Current.PrintClone() as Prescription;
+            if (TempPrint.Institution.ID == "3532082753")
             {
-                TempPre.Division.Name = "";
+                TempPrint.Division.Name = "";
             }
-            
             var singleMode = (bool)PrintResult[1];
             if (singleMode)
-                TempPre.PrintMedBagSingleMode();
+                TempPrint.PrintMedBagSingleMode();
             else
-                TempPre.PrintMedBagMultiMode();
+                TempPrint.PrintMedBagMultiMode();
         }
 
         protected bool CheckChronicRegister()

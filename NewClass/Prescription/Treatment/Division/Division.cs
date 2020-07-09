@@ -56,5 +56,15 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
         {
             return ID.Equals("40");
         }
+
+        public object Clone()
+        {
+            var copy = new Division();
+            copy.ID = this.ID;
+            copy.Name = (string)this.Name.Clone();
+            copy.FullName = this.ID;
+            return copy;
+        }
+
     }
 }
