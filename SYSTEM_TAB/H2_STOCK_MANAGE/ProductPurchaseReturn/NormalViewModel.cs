@@ -175,10 +175,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.SingdeConnection.OpenConnection();
 
                 CurrentStoreOrder.MoveToNextStatus();
-                
-
-
-
 
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
@@ -389,9 +385,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                     if (storeOrderCollections.ID.ToString() == CurrentStoreOrderID)
                     {
-
-                        MessageBox.Show(storeOrderCollections.ID.ToString());
-                        MessageBox.Show(rowindex.ToString());
                         i_index = rowindex;
                     }
 
@@ -402,26 +395,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
 
                 }
-                /* foreach (DataRow dr in dataTable.Rows)
-                 {
-
-                     if (dr["ORDER_ID"].ToString() == CurrentStoreOrderID)
-                     {
-
-                         MessageBox.Show(storeOrdersBak[0].CreateDateTime.ToString("yyyyMMdd"));
-                         MessageBox.Show(dr["ORDER_ID"].ToString());
-                         MessageBox.Show(CurrentStoreOrderID);
-                         MessageBox.Show(dr.Table.Rows.IndexOf(dr).ToString());
-                         MessageBox.Show(dataTable.Rows.IndexOf(dr).ToString());
-
-                         iTest = rowindex;
-
-
-                     }
-                     rowindex++;
-
-                 }*/
-
+              
 
                 //if (!StoreOrderCollectionView.IsEmpty)
                 //{
