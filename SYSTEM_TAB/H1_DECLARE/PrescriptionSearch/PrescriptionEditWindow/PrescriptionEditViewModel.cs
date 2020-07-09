@@ -163,6 +163,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => EditedPrescription, ref editedPrescription, value);
             }
         }
+        public Prescription PrintEditedPrescription{ get; set; }
 
         private bool chronicTimesCanEdit;
         public bool ChronicTimesCanEdit
@@ -231,6 +232,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             OriginalPrescription = p;
             ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
+            if (EditedPrescription.Institution.ID == "3532082753")
+            {
+                PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
+            }
+            
             EditedPrescription.ID = p.ID;
             EditedPrescription.SourceId = p.SourceId;
             InitialItemsSources();
@@ -378,8 +384,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void PrintMedBagAction()
         {
-            Prescription PrintEditedPrescription = OriginalPrescription.PrintClone() as Prescription;
-            if (PrintEditedPrescription.Institution.ID == "3532082753")
+            if (EditedPrescription.Institution.ID == "3532082753")
             {
                 PrintEditedPrescription.Division.Name = "";
             }
@@ -394,18 +399,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                if ((bool)printMedBag)
+                if (EditedPrescription.Institution.ID == "3532082753")
                 {
-                    BusyContent = Resources.藥袋列印;
-                    switch (printSingle != null && (bool)printSingle)
+                    if ((bool)printMedBag)
                     {
-                        case false:
-                            PrintEditedPrescription.PrintMedBagMultiMode();
-                            break;
-                        case true:
-                            PrintEditedPrescription.PrintMedBagSingleMode();
-                            break;
+                        BusyContent = Resources.藥袋列印;
+                        switch (printSingle != null && (bool)printSingle)
+                        {
+                            case false:
+                                PrintEditedPrescription.PrintMedBagMultiMode();
+                                break;
+                            case true:
+                                PrintEditedPrescription.PrintMedBagSingleMode();
+                                break;
+                        }
                     }
+                }
+                else {
+                    if ((bool)printMedBag)
+                    {
+                        BusyContent = Resources.藥袋列印;
+                        switch (printSingle != null && (bool)printSingle)
+                        {
+                            case false:
+                                EditedPrescription.PrintMedBagMultiMode();
+                                break;
+                            case true:
+                                EditedPrescription.PrintMedBagSingleMode();
+                                break;
+                        }
+                    }
+
                 }
                 if ((bool)printReceipt)
                 {
@@ -620,6 +644,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RedoEditAction()
         {
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
+            if (EditedPrescription.Institution.ID == "3532082753")
+            {
+                PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
+            }
             EditedPrescription.ID = OriginalPrescription.ID;
             EditedPrescription.SourceId = OriginalPrescription.SourceId;
             InitPrescription();

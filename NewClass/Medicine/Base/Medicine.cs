@@ -502,7 +502,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     TotalPrice = 0;
                     break;
                 case "*":
-                    TotalPrice = priceValue;
+                    TotalPrice = Amount * Price;
                     break;
             }
         }

@@ -148,9 +148,6 @@ namespace His_Pos.NewClass.Medicine.Base
                     }
                     
                     medicine.SetValueByCooperativeMedicine(item);
-                    if (medicine.PaySelf==true) {
-                        medicine.TotalPrice = medicine.Amount * medicine.Price;
-                    }
                     tempList.Add(medicine);
                 }
             }
