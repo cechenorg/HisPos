@@ -122,11 +122,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Status Function /////
         public void MoveToNextStatus()
         {
-            
             SaveOrder();
-
-            
-
 
             switch (OrderStatus)
             {

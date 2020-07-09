@@ -27,7 +27,6 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
         public void ToWaitingStatus(string note)
         {
             var isSuccess = SendOrderToSingde(note);
-            
             if (isSuccess)
             {
                 StoreOrderDB.StoreOrderToWaiting(StoreOrderID);
@@ -43,7 +42,7 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
-        public void CreateOrder(string note,string cusName)
+        public void CreateOrder(string note,string cusName,int preId)
         {
             var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(this, note, cusName);
             if (result.Rows.Count <= 0) return;
