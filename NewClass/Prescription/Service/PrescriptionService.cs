@@ -581,11 +581,9 @@ namespace His_Pos.NewClass.Prescription.Service
         {
             if (TempPre.Institution.ID == "3532082753")
             {
-                TempPre.Division.ID = "";
                 TempPre.Division.Name = "";
             }
-            MessageBox.Show(TempPre.Institution.Name.ToString());
-            MessageBox.Show(TempPre.Division.Name.ToString());
+            
             var singleMode = (bool)PrintResult[1];
             if (singleMode)
                 TempPre.PrintMedBagSingleMode();

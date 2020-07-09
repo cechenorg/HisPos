@@ -380,7 +380,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (EditedPrescription.Institution.ID == "3532082753")
             {
-                EditedPrescription.Division.ID = "";
                 EditedPrescription.Division.Name = "";
             }
             var printConfirmResult = NewFunction.CheckPrint(EditedPrescription);
