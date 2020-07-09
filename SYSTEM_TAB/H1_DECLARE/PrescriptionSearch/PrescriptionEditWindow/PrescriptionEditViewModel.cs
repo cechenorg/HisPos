@@ -378,6 +378,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void PrintMedBagAction()
         {
+            if (EditedPrescription.Institution.ID == "3532082753")
+            {
+                EditedPrescription.Division.ID = "";
+                EditedPrescription.Division.Name = "";
+            }
             var printConfirmResult = NewFunction.CheckPrint(EditedPrescription);
             var printMedBag = printConfirmResult[0];
             var printSingle = printConfirmResult[1];

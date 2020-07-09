@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Windows;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
 using His_Pos.NewClass.Medicine.MedBag;
@@ -484,6 +485,7 @@ namespace His_Pos.NewClass.Medicine.Base
             Days = Convert.ToInt32(setItem.Days.Contains(".") ? setItem.Days.Substring(0, setItem.Days.IndexOf('.')) : setItem.Days);
             Amount = Convert.ToDouble(setItem.Total_dose);
             PaySelf = !string.IsNullOrEmpty(setItem.Remark) && (setItem.Remark.Equals("*") || setItem.Remark.Equals("-"));
+            
             SetPriceByRemark(setItem.Remark, setItem.Price);
         }
 
