@@ -75,7 +75,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         {
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            PurchaseList.CreateOrder(Note, CusName,PreId);
+            PurchaseList.CreateOrder(Note, CusName);
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowPurchase"));

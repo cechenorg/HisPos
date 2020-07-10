@@ -42,7 +42,7 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
-        public void CreateOrder(string note,string cusName,int preId)
+        public void CreateOrder(string note,string cusName)
         {
             var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(this, note, cusName);
             if (result.Rows.Count <= 0) return;
