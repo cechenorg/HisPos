@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Database;
-
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Product.PrescriptionSendData;
@@ -18,25 +14,6 @@ namespace His_Pos.NewClass.StoreOrder
 {
     public class StoreOrderDB
     {
-        public static string ReadSettingFilePharmacyName()
-        {
-            var filePath = "C:\\Program Files\\HISPOS\\settings.singde";
-
-            using (var fileReader = new StreamReader(filePath))
-            {
-                var medReg = new Regex(@"M (.*)");
-                var recReg = new Regex(@"Rc (.*)");
-                var recRegWithForm = new Regex(@"Rc (.*)[$](.*)");
-                var repReg = new Regex(@"Rp (.*)");
-                var verifyKey = fileReader.ReadLine();
-                verifyKey = verifyKey.Substring(2, verifyKey.Length - 2);
-                var xml = WebApi.GetPharmacyInfoByVerify(verifyKey);
-                var PharmacyName = xml.SelectSingleNode("CurrentPharmacyInfo/Name").InnerText;
-                return PharmacyName;
-            }
-
-        }
-
         #region ----- Define DataTable -----
         public static DataTable StoreOrderMasterTable()
         {
@@ -55,6 +32,7 @@ namespace His_Pos.NewClass.StoreOrder
             masterTable.Columns.Add("StoOrd_IsEnable", typeof(bool));
             return masterTable;
         }
+
         public static DataTable StoreOrderDetailTable()
         {
             DataTable detailTable = new DataTable();
@@ -137,7 +115,7 @@ namespace His_Pos.NewClass.StoreOrder
         public static DataTable SetPrescriptionOrderMaster(IndexReserve indexReserve)
         {
             DataTable storeOrderMasterTable = StoreOrderMasterTable();
-
+            
             DataRow newRow = storeOrderMasterTable.NewRow();
             newRow["StoOrd_ID"] = indexReserve.StoOrdID;
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_OrderEmployeeID", ViewModelMainWindow.CurrentUser.ID);
@@ -148,11 +126,11 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Status", "U");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_Type", "P");
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_WarehouseID", "0");
-            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note", "");
-            DataBaseFunction.AddColumnValue(newRow, "StoOrd_PrescriptionID", null);
-            DataBaseFunction.AddColumnValue(newRow, "StoOrd_IsEnable", true);
-            storeOrderMasterTable.Rows.Add(newRow);
-
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_Note","");
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_PrescriptionID",null);
+            DataBaseFunction.AddColumnValue(newRow, "StoOrd_IsEnable", true); 
+            storeOrderMasterTable.Rows.Add(newRow); 
+           
             return storeOrderMasterTable;
         }
         public static DataTable SetPrescriptionOrderMaster(Prescription.Prescription p)
@@ -172,9 +150,6 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_PrescriptionID", p.ID);
             DataBaseFunction.AddColumnValue(newRow, "StoOrd_IsEnable", true);
 
-
-
-
             storeOrderMasterTable.Rows.Add(newRow);
             return storeOrderMasterTable;
         }
@@ -182,11 +157,10 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ///// StoreOrderDetailTable /////
         public static DataTable SetPrescriptionOrderDetail(IndexReserve indexReserves)
-        {
-            DataTable storeOrderDetailTable = StoreOrderDetailTable();
+        { 
+            DataTable storeOrderDetailTable = StoreOrderDetailTable(); 
             int detailId = 1;
-            foreach (var pro in indexReserves.IndexReserveDetailCollection)
-            {
+            foreach (var pro in indexReserves.IndexReserveDetailCollection) {
                 if (pro.SendAmount == 0) continue;
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", pro.StoOrdID);
@@ -204,10 +178,10 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", 0);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", null);
                 storeOrderDetailTable.Rows.Add(newRow);
-                detailId++;
-            }
+                detailId++;  
+            }  
             return storeOrderDetailTable;
-        }
+        } 
         public static DataTable SetPrescriptionOrderDetail(PrescriptionSendDatas datas)
         {
             int detailId = 1;
@@ -447,7 +421,7 @@ namespace His_Pos.NewClass.StoreOrder
                     detailId++;
                 }
             }
-
+            
             return storeOrderDetailTable;
         }
         private static DataTable SetPurchaseOrderDetail(PurchaseProducts orderProducts)
@@ -456,13 +430,13 @@ namespace His_Pos.NewClass.StoreOrder
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
 
             var productsAmount = orderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
-
+            
             foreach (var pro in productsAmount)
             {
                 double newOrderAmount = pro.OrderAmount - pro.RealAmount;
 
-                if (newOrderAmount <= 0) continue;
-
+                if(newOrderAmount <= 0) continue;
+                    
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", "");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ProductID);
@@ -490,46 +464,14 @@ namespace His_Pos.NewClass.StoreOrder
 
         internal static DataTable GetSingdeTotalOrders()
         {
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrdersNotDone]");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetSingdeTotalOrders"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-
-
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrdersNotDone]");
-
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrdersNotDone]");
         }
         internal static DataTable GetProcessingStoreOrdersByDate(string date)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DATE_STRING", date));
 
-
-
-
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrderProcessingOrders]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetProcessingStoreOrdersByDate"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-
-
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrderProcessingOrders]", parameters);
-
-            }
-            //return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrderProcessingOrders]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SingdeTotalOrderProcessingOrders]", parameters);
         }
         internal static DataTable ReturnOrderRePurchase(string storeOrderID)
         {
@@ -537,47 +479,14 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
-
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReturnOrderRePurchase]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "ReturnOrderRePurchase"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-
-
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReturnOrderRePurchase]", parameters);
-
-            }
-            //return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReturnOrderRePurchase]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReturnOrderRePurchase]", parameters);
         }
         internal static DataTable RemoveStoreOrderByID(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
 
-
-
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "RemoveStoreOrderByID"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-
-
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
-
-            }
-            //return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
         }
         internal static DataTable RemoveStoreOrderToSingdeByID(string storeOrderID)
         {
@@ -585,18 +494,7 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
 
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderToSingde]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "RemoveStoreOrderToSingdeByID"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderToSingde]", parameters);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderToSingde]", parameters);
         }
 
         internal static DataTable CheckReturnProductValid(ReturnOrder order)
@@ -604,18 +502,7 @@ namespace His_Pos.NewClass.StoreOrder
             List<SqlParameter> parameters = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetReturnInventoryDetail(order.ReturnProducts));
 
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckReturnStoreOrderValid]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "CheckReturnProductValid"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckReturnStoreOrderValid]", parameters);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckReturnStoreOrderValid]", parameters);
         }
         internal static DataTable ReturnOrderToProccessing(ReturnOrder order)
         {
@@ -623,19 +510,7 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", order.ID));
             DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetReturnInventoryDetail(order.ReturnProducts));
 
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToProcessing]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "ReturnOrderToProccessing"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToProcessing]", parameters);
-            }
-            //return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToProcessing]", parameters);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToProcessing]", parameters);
         }
         internal static DataTable AddStoreOrderLowerThenOrderAmount(string storeOrderID, string manufactoryID, string warehouseID, PurchaseProducts orderProducts)
         {
@@ -645,18 +520,8 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
             parameters.Add(new SqlParameter("WARE_ID", warehouseID));
             parameters.Add(new SqlParameter("PRODUCTS", SetPurchaseOrderDetail(orderProducts)));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddLowerThenOrderAmount]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "AddStoreOrderLowerThenOrderAmount"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddLowerThenOrderAmount]", parameters);
-            }
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddLowerThenOrderAmount]", parameters);
         }
 
         internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID, int wareHouseID)
@@ -666,18 +531,8 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("MANUFACTORY", orderManufactory.ID));
             parameters.Add(new SqlParameter("EMPLOYEE", employeeID));
             parameters.Add(new SqlParameter("WARE_ID", wareHouseID));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "AddNewStoreOrder"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
-            }
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
         }
 
         internal static DataTable GetDoneStoreOrders(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID, string searchWareName)
@@ -689,18 +544,8 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("MANUFACTORY", searchManufactoryID));
             parameters.Add(new SqlParameter("PRODUCT", searchProductID));
             parameters.Add(new SqlParameter("WAREHOUSE", searchWareName));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetDoneStoreOrders"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
-            }
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
         }
 
         internal static DataTable UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID, string receiveID)
@@ -709,18 +554,8 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", orederID));
             parameters.Add(new SqlParameter("RECSTOORD_ID", receiveID));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(dataTable, orederID)));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "UpdateSingdeProductsByStoreOrderID"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
-            }
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
         }
 
         internal static DataTable AddNewStoreOrderFromSingde(DataRow row)
@@ -732,18 +567,8 @@ namespace His_Pos.NewClass.StoreOrder
             double num = Double.Parse(row.Field<string>("drug_list").Substring(12, 10).Trim());
             parameters.Add(new SqlParameter("STOORD_TYPE", num < 0 ? "R" : "P"));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(row.Field<string>("drug_list"), row.Field<string>("sht_no"), false)));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "AddNewStoreOrderFromSingde"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
-            }
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
         }
 
         internal static DataTable AddNewPrescriptionOrderFromSingde(DataRow row)
@@ -754,39 +579,14 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("CREATE_DATE", row.Field<DateTime>("upload_date")));
             parameters.Add(new SqlParameter("STOORD_TYPE", "P"));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(row.Field<string>("dtl_data"), row.Field<string>("rx_order"), true)));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "AddNewPrescriptionOrderFromSingde"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
-            }
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
         }
 
         internal static DataTable GetNotDoneStoreOrders()
         {
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetNotDoneStoreOrders"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
         }
-
-
-
-
 
         internal static void SaveReturnOrder(ReturnOrder returnOrder)
         {
@@ -797,18 +597,8 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
-            try
-            {
-                MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "SaveReturnOrder"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
-            }
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
         internal static void SavePurchaseOrder(PurchaseOrder purchaseOrder)
         {
@@ -819,36 +609,14 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", purchaseOrder.PlanArriveDate);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
-            try
-            {
-                new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "SavePurchaseOrder"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
-            }
+
+            new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
-        public static DataTable InsertPrescriptionOrder(PrescriptionSendDatas prescriptionSendDatas, Prescription.Prescription p)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
+        public static DataTable InsertPrescriptionOrder(PrescriptionSendDatas prescriptionSendDatas,Prescription.Prescription p) {
+            List<SqlParameter> parameterList = new List<SqlParameter>(); 
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderMaster", SetPrescriptionOrderMaster(p));
-            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "InsertPrescriptionOrder"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList);
-            }
+            DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(prescriptionSendDatas)); 
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionStoreOrder]", parameterList); 
         }
         public static DataTable InsertIndexReserveOrder(IndexReserve indexReserve)
         {
@@ -857,193 +625,71 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionOrderDetail(indexReserve));
             DataBaseFunction.AddSqlParameter(parameterList, "CusName", indexReserve.CusName);
             DataBaseFunction.AddSqlParameter(parameterList, "RESERVE_ID", indexReserve.Id);
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "InsertIndexReserveOrder"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertIndexReservesStoreOrder]", parameterList);
         }
-        internal static DataTable GetStoOrdMasterCountByDate()
+        internal static DataTable GetStoOrdMasterCountByDate( )
         {
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoOrdMasterCountByDate]");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetStoOrdMasterCountByDate"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoOrdMasterCountByDate]");
-            }
-        }
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoOrdMasterCountByDate]");
+        } 
         internal static DataTable GetSingdeOrderNewStatus(string dateTime)
         {
-            try
-            {
-                return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}')");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetSingdeOrderNewStatus"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}')");
-            }
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}')");
         }
         public static DataTable RemoveSingdeStoreOrderByID(string storeOrderID)
         {
-            try
-            {
-                return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.ID}', '{storeOrderID}')");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "RemoveSingdeStoreOrderByID"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.ID}', '{storeOrderID}')");
-            }
+            return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.ID}', '{storeOrderID}')");
         }
-        public static DataTable UpdateSingdeStoreOrderSyncFlagByID(string storeOrderID)
-        {
-            try
-            {
-                return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "UpdateSingdeStoreOrderSyncFlagByID"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
-            }
+        public static DataTable UpdateSingdeStoreOrderSyncFlagByID(string storeOrderID) {
+            return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
         internal static DataTable PurchaseStoreOrderToDone(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
 
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "PurchaseStoreOrderToDone"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
         }
         internal static void StoreOrderToNormalProcessing(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
-            try
-            {
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToNormalProcessing]", parameters);
 
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "StoreOrderToNormalProcessing"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToNormalProcessing]", parameters);
-            }
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToNormalProcessing]", parameters);
         }
         internal static DataTable ReturnStoreOrderToDone(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
 
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "ReturnStoreOrderToDone"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
         }
 
         internal static void StoreOrderToScrap(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
-            try
-            {
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
 
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "StoreOrderToScrap"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
-            }
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
         }
         internal static DataTable GetNewSingdePrescriptionOrders()
         {
-            try
-            {
-                return MainWindow.SingdeConnection.ExecuteProc($"call GetNewPrescriptionOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
-
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetNewSingdePrescriptionOrders"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.SingdeConnection.ExecuteProc($"call GetNewPrescriptionOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
-            }
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetNewPrescriptionOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
 
         internal static void StoreOrderToWaiting(string storeOrderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
-            try
-            {
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToWaiting]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "StoreOrderToWaiting"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToWaiting]", parameters);
-            }
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToWaiting]", parameters);
         }
-        internal static DataTable SendStoreOrderToSingde(IndexReserve indexReserve, string note)
+        internal static DataTable SendStoreOrderToSingde(IndexReserve indexReserve,string note)
         {
             string orderMedicines = "";
             string cusName = "";
-            string planDate = "";
+            string planDate = ""; 
             foreach (var product in indexReserve.IndexReserveDetailCollection)
             {
                 if (product.SendAmount == 0) continue;
@@ -1056,36 +702,25 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if (product.ID.Length > 12)
                     orderMedicines += product.ID.Substring(13);
-
-                orderMedicines += "\r\n";
-            }
-            cusName = indexReserve.CusName;
+                 
+                orderMedicines += "\r\n"; 
+            } 
+            cusName = indexReserve.CusName; 
             //planDate = (indexReserve.AdjustDate.Year - 1911) + indexReserve.AdjustDate.ToString("MMdd"); 
-
-            try
-            {
-                return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','','{note}', '{orderMedicines}')");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "SendStoreOrderToSingde"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','','{note}', '{orderMedicines}')");
-            }
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','','{note}', '{orderMedicines}')");
         }
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderMedicines = "";
             string cusName = "";
             string planDate = "";
+
             if (storeOrder is PurchaseOrder)
             {
                 foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
                 {
                     if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(0, 12);
+                        orderMedicines += product.ID.Substring(0,12);
                     else
                         orderMedicines += product.ID.PadRight(12, ' ');
 
@@ -1098,10 +733,10 @@ namespace His_Pos.NewClass.StoreOrder
                     orderMedicines += "\r\n";
                 }
 
-                cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
+                cusName = ((PurchaseOrder) storeOrder).PreOrderCustomer;
 
-                if (((PurchaseOrder)storeOrder).PlanArriveDate != null)
-                    planDate = (((PurchaseOrder)storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
+                if (((PurchaseOrder) storeOrder).PlanArriveDate != null)
+                    planDate = (((PurchaseOrder) storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
             }
             else
             {
@@ -1121,21 +756,11 @@ namespace His_Pos.NewClass.StoreOrder
                     orderMedicines += "\r\n";
                 }
             }
-            try
-            {
-                return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "SendStoreOrderToSingde"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
-            }
+
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
         }
 
-        internal static DataTable SendStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
+        internal static DataTable SendStoreOrderToSingde(NotEnoughMedicines purchaseList,string note)
         {
             string orderMedicines = "";
             string cusName = "";
@@ -1155,36 +780,15 @@ namespace His_Pos.NewClass.StoreOrder
 
                 orderMedicines += "\r\n";
             }
-            try
-            {
-                return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{purchaseList.StoreOrderID}','','','{note}', '{orderMedicines}')");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "SendStoreOrderToSingde"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{purchaseList.StoreOrderID}','','','{note}', '{orderMedicines}')");
-            }
+
+            return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{purchaseList.StoreOrderID}','','','{note}', '{orderMedicines}')");
         }
 
         internal static DataTable GetNewSingdeOrders()
         {
-            try
-            {
-                return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetNewSingdeOrders"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
-            }
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetNewStoreOrderBySingde('{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
-
+        
         internal static DataTable GetManufactoryOrdersBySearchCondition(DateTime? startDate, DateTime? endDate, string manufactoryName, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -1192,19 +796,8 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("EDATE", endDate));
             parameters.Add(new SqlParameter("MAN_NAME", manufactoryName));
             parameters.Add(new SqlParameter("WAREID", wareID));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrder]", parameters);
 
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetManufactoryOrdersBySearchCondition"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrder]", parameters);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrder]", parameters);
         }
         internal static DataTable GetManufactoryOrderDetails(int manufactoryID, DateTime searchStartDate, DateTime searchEndDate, string wareID)
         {
@@ -1213,145 +806,58 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("EDATE", searchEndDate));
             parameters.Add(new SqlParameter("MAN_ID", manufactoryID));
             parameters.Add(new SqlParameter("WAREID", wareID));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "GetManufactoryOrderDetails"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
-            }
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
         }
-        internal static DataTable StoreOrderReserveByResIDList(DateTime sDate, DateTime eDate)
+        internal static DataTable StoreOrderReserveByResIDList(DateTime sDate  , DateTime eDate )
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("sDate", sDate));
             parameters.Add(new SqlParameter("eDate", eDate));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReserveByResIDList]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "StoreOrderReserveByResIDList"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReserveByResIDList]", parameters);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReserveByResIDList]", parameters);
         }
-        internal static DataTable StoreOrderReturnReserve()
+        internal static DataTable StoreOrderReturnReserve ( )
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnReserve]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "StoreOrderReturnReserve"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnReserve]", parameters);
-            }
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID)); 
+           return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderReturnReserve]", parameters);
         }
         internal static DataTable StoreOrderCommonMedicine()
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderCommonMedicine]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "StoreOrderCommonMedicine"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderCommonMedicine]", parameters);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderCommonMedicine]", parameters);
         }
         internal static DataTable DeleteDoneOrder(string orderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDER_ID", orderID));
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderDoneOrderByID]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "DeleteDoneOrder"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderDoneOrderByID]", parameters);
-            }
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderDoneOrderByID]", parameters);
         }
-        internal static void UpdateDetailByStoOrdID(PrescriptionSendDatas prescriptionSendDatas, string storeOrderID)
+        internal static void UpdateDetailByStoOrdID(PrescriptionSendDatas prescriptionSendDatas,string storeOrderID)
         {
-            List<SqlParameter> parameters = new List<SqlParameter>();
+            List<SqlParameter> parameters = new List<SqlParameter>(); 
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_ID", storeOrderID);
             DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetPrescriptionOrderDetail(prescriptionSendDatas));
-            try
-            {
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "UpdateDetailByStoOrdID"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
-            }
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePrescriptionStoreOrder]", parameters);
         }
-
-        public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicines purchaseList, string note, string cusName)
+        
+        public static DataTable InsertNotEnoughPurchaseOrder(NotEnoughMedicines purchaseList,string note,string cusName)
         {
-
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "StoreOrderDetail", SetPrescriptionNotEnoughOrderDetail(purchaseList));
             DataBaseFunction.AddSqlParameter(parameterList, "EMP_ID", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "NOTE", note);
             DataBaseFunction.AddSqlParameter(parameterList, "CUS_NAME", cusName);
-            try
-            {
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "InsertNotEnoughPurchaseOrder"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
-            }
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionNotEnoughStoreOrder]", parameterList);
         }
 
         public static void UpdateProductOnTheWay()
         {
-            try
-            {
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductOnTheWay]");
-            }
-            catch
-            {
-                List<SqlParameter> errorparameters = new List<SqlParameter>();
-                errorparameters.Add(new SqlParameter("PharmacyName", ReadSettingFilePharmacyName().ToString()));
-                errorparameters.Add(new SqlParameter("ErrorLog", "UpdateProductOnTheWay"));
-                MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Set].[RecordErrorLog]", errorparameters);
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductOnTheWay]");
-            }
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductOnTheWay]");
         }
     }
 }
