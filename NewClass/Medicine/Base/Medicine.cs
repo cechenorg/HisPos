@@ -486,9 +486,6 @@ namespace His_Pos.NewClass.Medicine.Base
             Days = Convert.ToInt32(setItem.Days.Contains(".") ? setItem.Days.Substring(0, setItem.Days.IndexOf('.')) : setItem.Days);
             Amount = Convert.ToDouble(setItem.Total_dose);
             PaySelf = !string.IsNullOrEmpty(setItem.Remark) && (setItem.Remark.Equals("*") || setItem.Remark.Equals("-"));
-
-
-            
             if (LoginWindowViewModel.ReadSettingFilePharmacyName() == "宏昌藥局")
             {
 
@@ -498,8 +495,6 @@ namespace His_Pos.NewClass.Medicine.Base
             {
                 SetPriceByRemark(setItem.Remark, setItem.Price);
             }
-
-            
         }
 
         private void SetPriceByRemarkHONGCHANG(string remark, string itemPrice)
