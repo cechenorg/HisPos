@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.FunctionWindow;
 using His_Pos.Interface;
 using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.Service;
@@ -485,9 +486,41 @@ namespace His_Pos.NewClass.Medicine.Base
             Days = Convert.ToInt32(setItem.Days.Contains(".") ? setItem.Days.Substring(0, setItem.Days.IndexOf('.')) : setItem.Days);
             Amount = Convert.ToDouble(setItem.Total_dose);
             PaySelf = !string.IsNullOrEmpty(setItem.Remark) && (setItem.Remark.Equals("*") || setItem.Remark.Equals("-"));
+
+
             
-            SetPriceByRemark(setItem.Remark, setItem.Price);
+            if (LoginWindowViewModel.ReadSettingFilePharmacyName() == "宏昌藥局")
+            {
+
+                SetPriceByRemarkHONGCHANG(setItem.Remark, setItem.Price);
+            }
+            else
+            {
+                SetPriceByRemark(setItem.Remark, setItem.Price);
+            }
+
+            
         }
+
+        private void SetPriceByRemarkHONGCHANG(string remark, string itemPrice)
+        {
+            var priceValue = Convert.ToDouble(itemPrice);
+            if (priceValue < 0) priceValue *= -1;
+            switch (remark)
+            {
+                case "":
+                    TotalPrice = Amount * priceValue;
+                    break;
+                case "-":
+                    TotalPrice = 0;
+                    break;
+                case "*":
+                    TotalPrice = Amount * Price;
+                    break;
+            }
+        }
+
+
 
         private void SetPriceByRemark(string remark, string itemPrice)
         {
@@ -502,7 +535,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     TotalPrice = 0;
                     break;
                 case "*":
-                    TotalPrice = Amount * Price;
+                    TotalPrice = priceValue;
                     break;
             }
         }
