@@ -265,6 +265,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
             EditedPrescription.AdjustCase = VM.GetAdjustCase(OriginalPrescription.AdjustCase.ID);
             EditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
+            PrintEditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
             if (OriginalPrescription.PrescriptionCase != null)
                 EditedPrescription.PrescriptionCase = VM.GetPrescriptionCases(OriginalPrescription.PrescriptionCase?.ID);
             if (OriginalPrescription.PaymentCategory != null)
@@ -517,9 +518,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 case "I21" when EditedPrescription.PrescriptionPoint.MedicinePoint > 100:
                     EditedPrescription.Copayment = VM.GetCopayment("I20");
+                    PrintEditedPrescription.Copayment = VM.GetCopayment("I20");
                     break;
                 case "I20" when EditedPrescription.PrescriptionPoint.MedicinePoint <= 100:
                     EditedPrescription.Copayment = VM.GetCopayment("I21");
+                    PrintEditedPrescription.Copayment = VM.GetCopayment("I21");
                     break;
             }
             DataChangedAction();
@@ -650,6 +653,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             EditedPrescription.ID = OriginalPrescription.ID;
             EditedPrescription.SourceId = OriginalPrescription.SourceId;
+            PrintEditedPrescription.ID = OriginalPrescription.ID;
+            PrintEditedPrescription.SourceId = OriginalPrescription.SourceId;
             InitPrescription();
             IsEdit = false;
         }
