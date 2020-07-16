@@ -119,14 +119,14 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="170" Header="商品代碼" IsReadOnly="True">
+                    <DataGridTemplateColumn MinWidth="175" Header="商品代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox x:Name="ProductIDTextbox" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="170" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_OnKeyDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="300" MaxWidth="580" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn MinWidth="200" MaxWidth="580" Header="商品名稱" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -165,7 +165,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <!--<DataGridTemplateColumn MinWidth="80" Header="折扣金額">
+                    <DataGridTemplateColumn MinWidth="80" Header="折扣金額">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox x:Name="Amount" Text="{Binding DiscountPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
@@ -186,7 +186,7 @@
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn MinWidth="70" Header="小計">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -198,7 +198,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <!--<DataGridTemplateColumn MinWidth="70" Header="點數">
+                    <DataGridTemplateColumn MinWidth="70" Header="點數">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox x:Name="Amount" Text="{Binding Point, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
@@ -230,7 +230,7 @@
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="庫存" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
