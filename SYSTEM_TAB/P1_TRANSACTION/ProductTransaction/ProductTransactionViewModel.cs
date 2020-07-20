@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,7 +66,42 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
         private void AddProductByInputAction(string searchString)
         {
-            if (NewTransaction.SelectedItem != null && NewTransaction.SelectedItem.ID.Equals(searchString)) return;
+            if (string.IsNullOrEmpty(searchString)) return;
+            if (searchString.Length < 5)
+            {
+                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
+                return;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, AddProductEnum.Trade);
+            MainWindow.ServerConnection.CloseConnection();
+            //MessageWindow.ShowMessage(productCount.ToString(), MessageType.WARNING);
+            if (productCount == 0)
+                MessageWindow.ShowMessage("查無商品", MessageType.WARNING);
+            else
+            {
+                if (productCount > 0)
+                {
+                    int WareID = 0;
+                    MainWindow.ServerConnection.OpenConnection();
+                    var parameters = new List<SqlParameter>();
+                    parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
+                    parameters.Add(new SqlParameter("WAREHOUSE_ID", WareID));
+                    var result = MainWindow.ServerConnection.ExecuteProc("[Get].[SearchProductsByID]", parameters);
+                    string res = string.Join(Environment.NewLine, result.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
+                    MessageWindow.ShowMessage(result.Rows.Count.ToString(), MessageType.WARNING);
+                    MainWindow.ServerConnection.CloseConnection();
+
+                    TradeAddProductWindow tradeAddProductWindow = new TradeAddProductWindow(result);
+                    tradeAddProductWindow.ShowDialog();
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
+                }
+            }
+
+            /*if (NewTransaction.SelectedItem != null && NewTransaction.SelectedItem.ID.Equals(searchString)) return;
 
             if (searchString.Length < 5)
             {
@@ -91,7 +128,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             else
             {
                 MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
-            }
+            }*/
         }
         private void DeleteProductAction()
         {

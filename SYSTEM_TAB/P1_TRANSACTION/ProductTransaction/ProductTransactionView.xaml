@@ -63,10 +63,8 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <DataGrid Name="ProductDataGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True"
-                      ItemsSource="{Binding NewTransaction.ProductCollection}" FrozenColumnCount="3"
-                      SelectedItem="{Binding NewTransaction.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
+            <DataGrid x:Name="ProductDataGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True" FrozenColumnCount="3">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -119,19 +117,19 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="175" Header="商品代碼" IsReadOnly="True">
+                    <DataGridTemplateColumn MinWidth="150" Header="商品代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="ProductIDTextbox" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="170" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_OnKeyDown"/>
+                                <TextBox x:Name="ProductIDTextbox" Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="150" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_OnKeyDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="200" MaxWidth="580" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn MinWidth="400" MaxWidth="580" Header="商品名稱" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}"/>
-                                    <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                                    <Label FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="20,0,20,0"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -165,7 +163,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="80" Header="折扣金額">
+                    <!--<DataGridTemplateColumn MinWidth="80" Header="折扣金額">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox x:Name="Amount" Text="{Binding DiscountPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
@@ -186,7 +184,7 @@
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                     <DataGridTemplateColumn MinWidth="70" Header="小計">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -198,7 +196,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="70" Header="點數">
+                    <!--<DataGridTemplateColumn MinWidth="70" Header="點數">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox x:Name="Amount" Text="{Binding Point, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
@@ -230,7 +228,7 @@
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                     <DataGridTextColumn Header="庫存" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -317,15 +315,22 @@
                     <Label Content="{Binding TotalPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
                     <TextBox Text="{Binding DiscountPrice, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="點數折抵" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <!--<Label Content="點數折抵" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
                     <TextBox Text="{Binding DiscountPoint, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="-$" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
-                    <Label Content="{Binding DiscountPointPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
+                    <Label Content="{Binding DiscountPointPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>-->
                     <Label Content="打折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
                     <TextBox Text="{Binding DiscountPercent, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Label Content="-$" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
-                    <Label Content="{Binding DiscountPercentPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
+                    <!--<Label Content="-$" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
+                    <Label Content="{Binding DiscountPercentPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>-->
+                    <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <ComboBox x:Name="PriceCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="Name" SelectedValuePath="Name" IsEditable="False" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" SelectedIndex="0">
+                        <ComboBoxItem Name="零售價">零售價</ComboBoxItem>
+                        <ComboBoxItem Name="會員價">會員價</ComboBoxItem>
+                        <ComboBoxItem Name="員工價">員工價</ComboBoxItem>
+                        <ComboBoxItem Name="特殊價">特殊價</ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
                     <Label Content="現金 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>

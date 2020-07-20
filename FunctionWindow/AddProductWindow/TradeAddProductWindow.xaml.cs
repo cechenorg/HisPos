@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
 {
@@ -20,24 +22,35 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     /// </summary>
     public partial class TradeAddProductWindow : Window
     {
-        public TradeAddProductWindow(string searchString)
+        public DataRow SelectedProduct { get; set; }
+
+        public TradeAddProductWindow(DataTable dt)
         {
             InitializeComponent();
 
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            ResultGrid.ItemsSource = dt.DefaultView;
+
+
+            /*Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CloseAddProductView"))
                     Close();
             });
 
             if (searchString.Equals(""))
-                DataContext = new AddProductViewModel(AddProductEnum.Trade, "0");
+                DataContext = new AddProductViewModel(AddProductEnum.PrescriptionDeclare, "0");
             else
-                DataContext = new AddProductViewModel(searchString, AddProductEnum.Trade, "0");
+                DataContext = new AddProductViewModel(searchString, AddProductEnum.PrescriptionDeclare, "0");
 
             SearchStringTextBox.Focus();
 
-            Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+            Unloaded += (sender, e) => Messenger.Default.Unregister(this);*/
+        }
+
+        private void btnConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = (DataRowView)ResultGrid.SelectedItem;
+            SelectedProduct = drv.Row;
         }
     }
 }

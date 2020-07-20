@@ -89,7 +89,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBox Name="SearchStringTextBox" Width="300" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="20" Margin="5">
+            <!--<TextBox Name="SearchStringTextBox" Width="300" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="20" Margin="5">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding StartEditingCommand}"/>
@@ -100,12 +100,12 @@
                     <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Up" CommandParameter="UP"/>
                     <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
                 </TextBox.InputBindings>
-            </TextBox>
+            </TextBox>-->
             <!--<RadioButton Content="只有此供應商" Tag="0" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
             <RadioButton Content="所有商品" Tag="1" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
             <CheckBox  Content="過濾停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>-->
         </StackPanel>
-        <ContentControl Name="ResultGrid" Grid.Row="1" Content="{Binding}">
+        <!--<ContentControl Name="ResultGrid" Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
@@ -123,7 +123,66 @@
                 <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Up" CommandParameter="UP"/>
                 <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
             </ContentControl.InputBindings>
-        </ContentControl>
-        <Button Content="確認" Command="{Binding ProductSelected}" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold"/>
+        </ContentControl>-->
+        <DataGrid x:Name="ResultGrid" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="765" HorizontalAlignment="Left" AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" IsReadOnly="true" SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <behaviors:ScrollIntoView/>
+            </i:Interaction.Behaviors>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding ProductSelected}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Setter Property="Width" Value="100"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="18"/>
+                    <Setter Property="Height" Value="40"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="商品編號" Width="200" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Path=Pro_ID}" IsReadOnly="True"/>
+                <DataGridTemplateColumn Width="270" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}" CommonSafeAmount="{Binding SafeAmount}"/>
+                                <Label FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="庫存" Width="65" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Path=Inv_Inventory}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="載途量" Width="65" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Path=Inv_OnTheWay}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="售價" Width="65" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Path=Pro_RetailPrice}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="會員價" Width="65" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Path=Pro_MemberPrice}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="btnConfirm" Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="btnConfirm_Click"/>
     </Grid>
 </Window>
