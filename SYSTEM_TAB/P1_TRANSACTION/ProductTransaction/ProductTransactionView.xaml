@@ -324,12 +324,12 @@
                     <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
                     <!--<Label Content="-$" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
                     <Label Content="{Binding DiscountPercentPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>-->
-                    <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <ComboBox x:Name="PriceCombo" Width="170" Height="35" HorizontalContentAlignment="Center" DisplayMemberPath="Name" SelectedValuePath="Name" IsEditable="False" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" SelectedIndex="0">
-                        <ComboBoxItem Name="零售價">零售價</ComboBoxItem>
-                        <ComboBoxItem Name="會員價">會員價</ComboBoxItem>
-                        <ComboBoxItem Name="員工價">員工價</ComboBoxItem>
-                        <ComboBoxItem Name="特殊價">特殊價</ComboBoxItem>
+                    <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <ComboBox x:Name="PriceCombo" Width="120" Height="35" HorizontalContentAlignment="Center" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black">
+                        <ComboBoxItem Content="零售價" IsSelected="True"/>
+                        <ComboBoxItem Content="會員價"/>
+                        <ComboBoxItem Content="員工價"/>
+                        <ComboBoxItem Content="特殊價"/>
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
