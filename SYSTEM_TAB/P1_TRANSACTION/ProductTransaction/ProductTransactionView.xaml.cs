@@ -5,13 +5,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
-using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -21,6 +20,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     public partial class ProductTransactionView : UserControl
     {
         public DataTable ProductList;
+        public string AppliedPrice;
 
         public ProductTransactionView()
         {
@@ -33,14 +33,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void ProductIDTextbox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-
             if (textBox is null) return;
-
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
 
-                if (ProductDataGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
+                if (!textBox.Text.Equals(string.Empty)) 
+                {
+                    AddProductByInputAction(textBox.Text);
+                    foreach (DataRow dr in ProductList.Rows) 
+                    {
+                        dr["ID"] = ProductList.Rows.IndexOf(dr)+1;
+                    }
+                    textBox.Text = "";
+                }
+
+                /*if (ProductDataGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
                 {
                     int oldCount = ProductDataGrid.Items.Count;
 
@@ -70,10 +78,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
 
                 var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
-                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
-
-                if (firstChild is TextBox)
-                    firstChild.Focus();
+                if (focusedCell != null) 
+                {
+                    UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                    if (firstChild is TextBox)
+                        firstChild.Focus();
+                }*/      
             }
         }
 
@@ -88,7 +98,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             MainWindow.ServerConnection.OpenConnection();
             var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, AddProductEnum.Trade);
             MainWindow.ServerConnection.CloseConnection();
-            //MessageWindow.ShowMessage(productCount.ToString(), MessageType.WARNING);
             if (productCount == 0)
                 MessageWindow.ShowMessage("查無商品", MessageType.WARNING);
             else
@@ -102,11 +111,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("WAREHOUSE_ID", WareID));
                     var result = MainWindow.ServerConnection.ExecuteProc("[Get].[SearchProductsByID]", parameters);
                     string res = string.Join(Environment.NewLine, result.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
-                    MessageWindow.ShowMessage(result.Rows.Count.ToString(), MessageType.WARNING);
+                    //MessageWindow.ShowMessage(result.Rows.Count.ToString(), MessageType.WARNING);
                     MainWindow.ServerConnection.CloseConnection();
 
-                    if(ProductList.Rows.Count == 0)
+                    if (ProductList.Rows.Count == 0) 
+                    {
                         ProductList = result.Clone();
+                        ProductList.Columns.Add(new DataColumn("ID"));
+                        ProductList.Columns.Add(new DataColumn("Amount"));
+                        ProductList.Columns.Add(new DataColumn("Calc"));
+                    }
+                        
 
                     TradeAddProductWindow tapw = new TradeAddProductWindow(result);
                     tapw.ShowDialog();
@@ -119,35 +134,48 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
                 }
             }
+        }
 
-            /*if (NewTransaction.SelectedItem != null && NewTransaction.SelectedItem.ID.Equals(searchString)) return;
+        private void Calculate_Calc()
+        {
+            if (ProductDataGrid.Items.Count > 0)
+            {
+                foreach (DataRow dr in ProductList.Rows)
+                {
+                    dr["Calc"] = int.Parse(dr[AppliedPrice].ToString()) * int.Parse(dr["Amount"].ToString());
+                }
+            }
+        }
 
-            if (searchString.Length < 5)
+        private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Binding nb = new Binding();
+            switch (PriceCombo.SelectedIndex) 
             {
-                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
-                return;
+                case 0:
+                    AppliedPrice = "Pro_RetailPrice";
+                    break;
+                case 1:
+                    AppliedPrice = "Pro_MemberPrice";
+                    break;
+                case 2:
+                    AppliedPrice = "Pro_EmployeePrice";
+                    break;
+                case 3:
+                    AppliedPrice = "Pro_SpecialPrice";
+                    break;
+                default:
+                    AppliedPrice = "Pro_RetailPrice";
+                    break;
             }
-
-            MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, AddProductEnum.Trade );
-            MainWindow.ServerConnection.CloseConnection();
-            if (productCount > 1)
-            {
-                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                TradeAddProductWindow tradeAddProductWindow = new TradeAddProductWindow(searchString);
-                tradeAddProductWindow.ShowDialog();
-                Messenger.Default.Unregister(this);
-            }
-            else if (productCount == 1)
-            {
-                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                TradeAddProductWindow tradeAddProductWindow = new TradeAddProductWindow(searchString);
-                Messenger.Default.Unregister(this);
-            }
-            else
-            {
-                MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
-            }*/
+            nb.Path = new PropertyPath(AppliedPrice);
+            Price.Binding = nb;
+            Calculate_Calc();
+        }
+        
+        private void Amount_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Calculate_Calc();
         }
     }
 }
