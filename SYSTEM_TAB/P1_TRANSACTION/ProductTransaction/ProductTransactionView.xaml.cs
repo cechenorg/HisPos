@@ -22,12 +22,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public DataTable ProductList;
         public string AppliedPrice;
 
+        public string preTotal;
+        public string discountAmount;
+        public string discountPercent;
+        public string realTotal;
+
         public ProductTransactionView()
         {
             InitializeComponent();
-            DataTable dt = new DataTable();
-            ProductList = dt.Clone();
-            ProductDataGrid.ItemsSource = dt.DefaultView;
+            ProductList = new DataTable();
+            ProductDataGrid.ItemsSource = ProductList.DefaultView;            
         }
 
         private void ProductIDTextbox_OnKeyDown(object sender, KeyEventArgs e)
@@ -117,9 +121,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (ProductList.Rows.Count == 0) 
                     {
                         ProductList = result.Clone();
-                        ProductList.Columns.Add(new DataColumn("ID"));
-                        ProductList.Columns.Add(new DataColumn("Amount"));
-                        ProductList.Columns.Add(new DataColumn("Calc"));
+                        ProductList.Columns.Add("ID", typeof(int));
+                        ProductList.Columns.Add("Amount", typeof(int));
+                        ProductList.Columns.Add("Calc", typeof(double));
                     }
                         
 
@@ -144,6 +148,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     dr["Calc"] = int.Parse(dr[AppliedPrice].ToString()) * int.Parse(dr["Amount"].ToString());
                 }
+                preTotal = ProductList.Compute("SUM(Calc)", string.Empty).ToString();
+                lblPreTotal.Content = preTotal;
+            }
+        }
+
+        private void Calculate_Discount(string type)
+        {
+            double pt = double.Parse(preTotal);
+            if (type == "AMT" && tbDiscountAmt.Text != "")
+            {
+                double amt = double.Parse(tbDiscountAmt.Text);
+                tbDiscountPer.Text = ((pt - amt) / pt * 100).ToString().Replace("0", "");
+            }
+            else if (type == "PER" && tbDiscountPer.Text != "")
+            {
+                double per = double.Parse(tbDiscountPer.Text);
+                if (per > 10)
+                    tbDiscountAmt.Text = (pt - pt * per / 100).ToString();
+                else
+                    tbDiscountAmt.Text = (pt - pt * per / 10).ToString();
             }
         }
 
@@ -176,6 +200,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void Amount_LostFocus(object sender, RoutedEventArgs e)
         {
             Calculate_Calc();
+        }
+
+        private void tbDiscountAmt_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Calculate_Discount("AMT");
+        }
+
+        private void tbDiscountPer_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Calculate_Discount("PER");
         }
     }
 }
