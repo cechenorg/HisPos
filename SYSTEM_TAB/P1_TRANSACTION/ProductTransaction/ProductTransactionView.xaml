@@ -52,7 +52,7 @@
                 </ContentControl.Style>
             </ContentControl>
             <DataGrid x:Name="ProductDataGrid" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True" FrozenColumnCount="3">
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True" FrozenColumnCount="3" SelectionUnit="Cell">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -89,10 +89,10 @@
                     <DataGridTemplateColumn Width="30" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png">
-                                    <Image.InputBindings>
+                                <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown">
+                                    <!--<Image.InputBindings>
                                         <MouseBinding Command="{Binding Path=DataContext.DeleteProductCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
-                                    </Image.InputBindings>
+                                    </Image.InputBindings>-->
                                 </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -218,8 +218,8 @@
                     <Label Content="{Binding FinalTotalPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Black"/>
                     <Label Content="結帳人員" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="120,0,0,0"/>
                     <ComboBox Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Button Width="120" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Command="{Binding ClearTradeCommand}"/>
-                    <Button Width="150" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding TradeCommand}"/>
+                    <Button x:Name="btnClear" Width="120" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClear_Click"/>
+                    <Button x:Name="btnCheckout" Width="150" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnCheckout_Click"/>
                 </StackPanel> 
             </Grid>
         </Grid>

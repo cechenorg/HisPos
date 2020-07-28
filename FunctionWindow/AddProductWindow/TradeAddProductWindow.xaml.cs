@@ -13,24 +13,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         public TradeAddProductWindow(DataTable dt)
         {
             InitializeComponent();
-
             ResultGrid.ItemsSource = dt.DefaultView;
-
-
-            /*Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification.Equals("CloseAddProductView"))
-                    Close();
-            });
-
-            if (searchString.Equals(""))
-                DataContext = new AddProductViewModel(AddProductEnum.PrescriptionDeclare, "0");
-            else
-                DataContext = new AddProductViewModel(searchString, AddProductEnum.PrescriptionDeclare, "0");
-
-            SearchStringTextBox.Focus();
-
-            Unloaded += (sender, e) => Messenger.Default.Unregister(this);*/
         }
 
         private void btnConfirm_Click(object sender, RoutedEventArgs e)

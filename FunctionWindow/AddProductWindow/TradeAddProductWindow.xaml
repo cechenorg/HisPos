@@ -124,7 +124,7 @@
                 <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
             </ContentControl.InputBindings>
         </ContentControl>-->
-        <DataGrid x:Name="ResultGrid" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="765" HorizontalAlignment="Left" AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" IsReadOnly="true" SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid x:Name="ResultGrid" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="765" HorizontalAlignment="Left" AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" IsReadOnly="true" SelectedIndex="0">
             <i:Interaction.Behaviors>
                 <behaviors:ScrollIntoView/>
             </i:Interaction.Behaviors>
@@ -183,6 +183,6 @@
                 <DataGridTextColumn Header="會員價" Width="65" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Path=Pro_MemberPrice}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="btnConfirm" Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="btnConfirm_Click"/>
+        <Button x:Name="btnConfirm" Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="btnConfirm_Click" IsDefault="True"/>
     </Grid>
 </Window>

@@ -5,12 +5,15 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -22,7 +25,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public DataTable ProductList;
         public string AppliedPrice;
 
-        public string preTotal;
+        public string preTotal = "0";
         public string discountAmount;
         public string discountPercent;
         public string realTotal;
@@ -51,43 +54,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     }
                     textBox.Text = "";
                 }
-
-                /*if (ProductDataGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
-                {
-                    int oldCount = ProductDataGrid.Items.Count;
-
-                    AddProductByInputAction(textBox.Text);
-
-                    textBox.Text = "";
-
-                    if (ProductDataGrid.Items.Count != oldCount)
-                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[3]);
-                }
-                else if (ProductDataGrid.CurrentCell.Item is Product)
-                {
-                    if (!(ProductDataGrid.CurrentCell.Item as Product).ID.Equals(textBox.Text))
-                        AddProductByInputAction(textBox.Text);
-
-                    List<TextBox> textBoxs = new List<TextBox>();
-                    NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox", ref textBoxs);
-
-                    int index = textBoxs.IndexOf(sender as TextBox);
-
-                    if (!(ProductDataGrid.Items[index] as Product).ID.Equals(textBox.Text))
-                        textBox.Text = (ProductDataGrid.Items[index] as Product).ID;
-
-                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[3]);
-                }
-
-                ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
-
-                var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
-                if (focusedCell != null) 
-                {
-                    UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
-                    if (firstChild is TextBox)
-                        firstChild.Focus();
-                }*/      
             }
         }
 
@@ -109,29 +75,38 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (productCount > 0)
                 {
                     int WareID = 0;
+
                     MainWindow.ServerConnection.OpenConnection();
                     var parameters = new List<SqlParameter>();
                     parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
                     parameters.Add(new SqlParameter("WAREHOUSE_ID", WareID));
                     var result = MainWindow.ServerConnection.ExecuteProc("[Get].[SearchProductsByID]", parameters);
                     string res = string.Join(Environment.NewLine, result.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
-                    //MessageWindow.ShowMessage(result.Rows.Count.ToString(), MessageType.WARNING);
                     MainWindow.ServerConnection.CloseConnection();
-
-                    if (ProductList.Rows.Count == 0) 
-                    {
-                        ProductList = result.Clone();
-                        ProductList.Columns.Add("ID", typeof(int));
-                        ProductList.Columns.Add("Amount", typeof(int));
-                        ProductList.Columns.Add("Calc", typeof(double));
-                    }
-                        
 
                     TradeAddProductWindow tapw = new TradeAddProductWindow(result);
                     tapw.ShowDialog();
+
+                    if (ProductList.Rows.Count == 0)
+                    {
+                        ProductList = result.Clone();
+                        ProductList.Columns.Add("ID", typeof(int));
+                        DataColumn amt = new DataColumn("Amount", typeof(int));
+                        amt.DefaultValue = 1;
+                        ProductList.Columns.Add(amt);
+                        ProductList.Columns.Add("Calc", typeof(double));
+                    }
+
                     DataRow NewProduct = tapw.SelectedProduct;
                     ProductList.ImportRow(NewProduct);
                     ProductDataGrid.ItemsSource = ProductList.DefaultView;
+                    MessageBox.Show("123");
+                    //SelectCellByIndex(ProductDataGrid, ProductList.Rows.Count - 1, 5);
+                    DataGridRow row = ProductDataGrid.ItemContainerGenerator.ContainerFromIndex(0) as DataGridRow;
+                    TextBox ele = ((ContentPresenter)ProductDataGrid.Columns[5].GetCellContent(row)).Content as TextBox;
+                    ele.Focus();
+
+                    Calculate_Calc();
                 }
                 else
                 {
@@ -140,9 +115,85 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
+        public static void SelectCellByIndex(DataGrid dataGrid, int rowIndex, int columnIndex)
+        {
+            if (!dataGrid.SelectionUnit.Equals(DataGridSelectionUnit.Cell))
+                throw new ArgumentException("The SelectionUnit of the DataGrid must be set to Cell.");
+
+            if (rowIndex < 0 || rowIndex > (dataGrid.Items.Count - 1))
+                throw new ArgumentException(string.Format("{0} is an invalid row index.", rowIndex));
+
+            if (columnIndex < 0 || columnIndex > (dataGrid.Columns.Count - 1))
+                throw new ArgumentException(string.Format("{0} is an invalid column index.", columnIndex));
+
+            dataGrid.SelectedCells.Clear();
+
+            object item = dataGrid.Items[rowIndex]; //=Product X
+            DataGridRow row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            if (row == null)
+            {
+                dataGrid.ScrollIntoView(item);
+                row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            }
+            if (row != null)
+            {
+                DataGridCell cell = GetCell(dataGrid, row, columnIndex);
+                if (cell != null)
+                {
+                    DataGridCellInfo dataGridCellInfo = new DataGridCellInfo(cell);
+                    dataGrid.SelectedCells.Add(dataGridCellInfo);
+                    cell.Focus();
+                }
+            }
+        }
+        public static DataGridCell GetCell(DataGrid dataGrid, DataGridRow rowContainer, int column)
+        {
+            if (rowContainer != null)
+            {
+                DataGridCellsPresenter presenter = FindVisualChild<DataGridCellsPresenter>(rowContainer);
+                if (presenter == null)
+                {
+                    /* if the row has been virtualized away, call its ApplyTemplate() method
+                     * to build its visual tree in order for the DataGridCellsPresenter
+                     * and the DataGridCells to be created */
+                    rowContainer.ApplyTemplate();
+                    presenter = FindVisualChild<DataGridCellsPresenter>(rowContainer);
+                }
+                if (presenter != null)
+                {
+                    DataGridCell cell = presenter.ItemContainerGenerator.ContainerFromIndex(column) as DataGridCell;
+                    if (cell == null)
+                    {
+                        /* bring the column into view
+                         * in case it has been virtualized away */
+                        dataGrid.ScrollIntoView(rowContainer, dataGrid.Columns[column]);
+                        cell = presenter.ItemContainerGenerator.ContainerFromIndex(column) as DataGridCell;
+                    }
+                    return cell;
+                }
+            }
+            return null;
+        }
+        public static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is T)
+                    return (T)child;
+                else
+                {
+                    T childOfChild = FindVisualChild<T>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
+        }
+
         private void Calculate_Calc()
         {
-            if (ProductDataGrid.Items.Count > 0)
+            if (ProductList != null)
             {
                 foreach (DataRow dr in ProductList.Rows)
                 {
@@ -150,6 +201,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
                 preTotal = ProductList.Compute("SUM(Calc)", string.Empty).ToString();
                 lblPreTotal.Content = preTotal;
+                if (ProductList.Rows.Count == 0)
+                {
+                    preTotal = "0";
+                    lblPreTotal.Content = preTotal;
+                }
             }
         }
 
@@ -204,12 +260,43 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbDiscountAmt_LostFocus(object sender, RoutedEventArgs e)
         {
-            Calculate_Discount("AMT");
+            if (preTotal != "0")
+                Calculate_Discount("AMT");
         }
 
         private void tbDiscountPer_LostFocus(object sender, RoutedEventArgs e)
         {
-            Calculate_Discount("PER");
+            if (preTotal != "0")
+                Calculate_Discount("PER");
+        }
+
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow dgr = null;
+            var visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
+            while (dgr == null && visParent != null)
+            {
+                dgr = visParent as DataGridRow;
+                visParent = VisualTreeHelper.GetParent(visParent);
+            }
+            if (dgr == null) { return; }
+
+            var rowIdx = dgr.GetIndex();
+            if (ProductList.Rows.Count > 0)
+                ProductList.Rows.Remove(ProductList.Rows[rowIdx]);
+            Calculate_Calc();
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            ConfirmWindow cw = new ConfirmWindow("是否清除頁面資料?", "清除頁面確認");
+            if (!(bool)cw.DialogResult)
+                return;
+        }
+
+        private void btnCheckout_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
