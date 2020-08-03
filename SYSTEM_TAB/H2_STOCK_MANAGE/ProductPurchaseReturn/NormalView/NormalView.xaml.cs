@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Behaviours;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView
             if (dataGrid?.SelectedItem is null) return;
 
             dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+        }
+
+        public void Reload(object sender,int i)
+        {
+            
         }
     }
 }

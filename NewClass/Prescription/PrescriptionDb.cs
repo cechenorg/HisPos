@@ -40,6 +40,7 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionByType]", parameterList);
         }
 
+
         internal static DataTable GetMedBagPrescriptionStructsByType(string type)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -782,6 +783,8 @@ namespace His_Pos.NewClass.Prescription
             return reserveMasterTable;
         }
 
+  
+
         public static DataTable SetReserveDetail(List<Pdata> prescriptionDetails)
         { //一般藥費
 
@@ -985,6 +988,9 @@ namespace His_Pos.NewClass.Prescription
             }
             return table;
         }
+
+    
+
         public static DataTable PrescriptionDeclarePointAdjustTable()
         {
             DataTable detailTable = new DataTable();
@@ -1093,5 +1099,27 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PaySelfDiff", paySelfDiff);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertPrescriptionPointEditRecord]", parameterList);
         }
+
+        //寫入StoOrdPrescriptionID於[StoreOrder].[Master]
+        internal static void InsertStoOrdPrescriptionID(int iD)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "StoOrd_PrescriptionID", iD);
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoOrdPrescriptionID]", parameterList);
+
+
+        }
+
+
+
+        internal static void DeleteStoreOrder(int iD)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "StoOrd_PrescriptionID", iD);
+
+            MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderByPrescriptionID]", parameterList);
+        }
+
     }
 }

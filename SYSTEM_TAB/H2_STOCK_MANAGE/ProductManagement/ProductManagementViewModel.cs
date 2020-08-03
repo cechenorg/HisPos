@@ -230,6 +230,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                     return !tempProduct.IsEnable; 
                 case ProductManageFilterEnum.INV_ERROR:
                     return tempProduct.InventoryError;
+                case ProductManageFilterEnum.ZERO:
+                    return tempProduct.IsZero==0;
+                case ProductManageFilterEnum.OTCMedicine:
+                    return tempProduct.ProductType ==(ProductTypeEnum)2;
             }
 
             return false;

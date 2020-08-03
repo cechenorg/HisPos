@@ -25,6 +25,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             ShelfStockValue = row.Field<double>("SHELF_STOCK_VALUE");
             IsEnable = row.Field<bool>("Pro_IsEnable");
             InventoryError = row.Field<bool>("ERROR_FLAG");
+            IsZero = row.Field<decimal>("NHIMED_PRICE");
         }
 
         public ProductTypeEnum ProductType { get; set; }
@@ -56,5 +57,6 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public bool IsFrozen { get; set; }
         public bool IsEnable { get; set; }
         public bool InventoryError { get; set; }
+        public decimal IsZero { get; set; }
     }
 }

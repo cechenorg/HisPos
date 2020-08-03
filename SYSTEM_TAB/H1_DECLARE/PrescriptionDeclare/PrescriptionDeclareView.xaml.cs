@@ -28,10 +28,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage>("FocusMedicalNumber", FocusMedicalNumber);
             Messenger.Default.Register<NotificationMessage>("FocusSubDisease", FocusSubDisease);
             Messenger.Default.Register<NotificationMessage>("FocusChronicTotal", FocusChronicTotal);
+            Messenger.Default.Register<NotificationMessage>("FocusMainDisease", FocusMainDisease);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
             PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
         }
 
+        private void FocusMainDisease(NotificationMessage msg)
+        {
+
+            if (!(msg.Sender is PrescriptionDeclareViewModel) || !msg.Notification.Equals("FocusMainDisease")) return;
+            MainDiagnosis.Focus();
+            MainDiagnosis.SelectionStart = 0;
+
+        }
         private void FocusDivision(NotificationMessage msg)
         {
             if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusDivision"))
@@ -134,7 +143,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void FocusSubDisease(NotificationMessage msg)
         {
+
             if (!(msg.Sender is PrescriptionDeclareViewModel) || !msg.Notification.Equals("FocusSubDisease")) return;
+            
             SecondDiagnosis.Focus();
             SecondDiagnosis.SelectionStart = 0;
         }
@@ -268,7 +279,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //按 Enter 下一欄
-            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up) return;
+            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up && e.Key != Key.Left && e.Key != Key.Right ) return;
             e.Handled = true;
             if(sender is null) return;
             switch (e.Key)
@@ -281,6 +292,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
                 case Key.Down:
                     MoveFocusNext(sender,FocusNavigationDirection.Down);
+                    break;
+                case Key.Left:
+                    MoveFocusNext(sender, FocusNavigationDirection.Left);
+                    break;
+                case Key.Right:
+                    MoveFocusNext(sender, FocusNavigationDirection.Next);
+                    break;
+            }
+        }
+        private void MedicinePrice_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            //按 Enter 下一欄
+            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up  && e.Key != Key.Right) return;
+            e.Handled = true;
+            if (sender is null) return;
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    MoveFocusNext(sender, FocusNavigationDirection.Next);
+                    break;
+                case Key.Up:
+                    MoveFocusNext(sender, FocusNavigationDirection.Up);
+                    break;
+                case Key.Down:
+                    MoveFocusNext(sender, FocusNavigationDirection.Down);
+                    break;
+                
+                case Key.Right:
+                    MoveFocusNext(sender, FocusNavigationDirection.Next);
                     break;
             }
         }
@@ -295,6 +335,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                     else if(direction.Equals(FocusNavigationDirection.Up))
                         box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Up));
+                    else if (direction.Equals(FocusNavigationDirection.Left))
+                        box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Left));
                     else
                         box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
                     break;
@@ -344,6 +386,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 MoveFocusNext(sender,FocusNavigationDirection.Up);
             else if (e.Key == Key.Down)
                 MoveFocusNext(sender,FocusNavigationDirection.Down);
+            else if (e.Key == Key.Left)
+                MoveFocusNext(sender, FocusNavigationDirection.Left);
+            /*else if (e.Key == Key.Right)
+                MoveFocusNext(sender, FocusNavigationDirection.Next);*/
         }
         private int GetCurrentRowIndex(object sender)
         {
@@ -666,5 +712,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             
         }
+
     }
 }

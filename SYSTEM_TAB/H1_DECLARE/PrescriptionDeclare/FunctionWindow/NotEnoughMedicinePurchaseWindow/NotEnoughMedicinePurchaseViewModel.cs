@@ -45,6 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         }
         private string Note { get; set; }
         private string CusName { get; set; }
+        private int PreId { get; set; }
         #endregion
 
         #region Commands
@@ -58,6 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             PurchaseList = purchaseList;
             Note = note;
             CusName = cusName;
+           
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CreateStoreOrder = new RelayCommand(CreateStoreOrderAction);
             Cancel = new RelayCommand(CancelAction);

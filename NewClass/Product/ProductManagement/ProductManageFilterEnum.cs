@@ -13,6 +13,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
         CONTROL = 3,
         FROZE = 4,
         DISABLE = 5,
-        INV_ERROR = 6
+        INV_ERROR = 6,
+        ZERO=7,
+        OTCMedicine = 8
     }
 }
