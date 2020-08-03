@@ -77,6 +77,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => TotalCashFlow, ref totalCashFlow, value);
             }
         }
+
+
+
         private CashReports cashflowCollection;
         public CashReports CashflowCollection
         {
@@ -578,6 +581,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 CalculateTotalPrescriptionProfit();
                 CalculateSelfPrescriptionProfit();
                 CalculateCooperativePrescriptionProfit();
+                CalculateTotal();
                 IsBusy = false;
             };
             IsBusy = true;
@@ -681,6 +685,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 CooperativePrescriptionProfitReport.Profit += r.Profit;
             }
            
+        }
+        private void CalculateTotal()
+        {
+            TotalCashFlow.Total = (double)(TotalCashFlow.TotalPrice+ SelfPrescriptionProfitReport.Profit+CooperativePrescriptionProfitReport.Profit+ InventoryDifference.InventoryOverage+ InventoryDifference.InventoryShortage+ InventoryDifference.InventoryScrap);
         }
         private void AdjustCaseFilter(object sender, FilterEventArgs e)
         {

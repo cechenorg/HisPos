@@ -7,7 +7,9 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <service:NullableDateConverter x:Key="NullableDateConverter"/>
+        <service:DateValidationRule x:Key="DateValidationRule"/>
+        <service:DateTimeToMinuteConverter x:Key="DateTimeToMinuteConverter"/>
         <DataTemplate x:Key="NormalBackground" DataType="UserControl">
             <Rectangle Fill="{StaticResource Shadow}" Margin="10,0,5,10"/>
         </DataTemplate>
@@ -182,7 +184,7 @@
                     <EventSetter Event="MouseEnter" Handler="GetOnTheWayDetail"/>
                     <Setter Property="ToolTip">
                         <Setter.Value>
-                            <DataGrid Background="Transparent" ItemsSource="{Binding StockDetail.OnTheWayDetail, UpdateSourceTrigger=PropertyChanged}" Width="600" Height="Auto" GridLinesVisibility="None"
+                            <DataGrid Background="Transparent" ItemsSource="{Binding StockDetail.OnTheWayDetail, UpdateSourceTrigger=PropertyChanged}" Width="730" Height="Auto" GridLinesVisibility="None"
                                                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
                                                   CanUserResizeRows="False" FontFamily="Courier New" FontSize="18" Foreground="WhiteSmoke" HeadersVisibility="None" RowHeight="25">
                                 <DataGrid.CellStyle>
@@ -195,7 +197,7 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Width="90" Binding="{Binding Status}"/>
                                     <DataGridTextColumn Width="150" Binding="{Binding ID}"/>
-                                    <DataGridTextColumn Width="130" Binding="{Binding CreateDate, Converter={StaticResource NullableDateConverter}}"/>
+                                    <DataGridTextColumn Width="250" Binding="{Binding CreateDate, Converter={StaticResource DateTimeToMinuteConverter}}"/>
                                     <DataGridTextColumn Width="100" Binding="{Binding CusName}"/>
                                     <DataGridTextColumn Width="60" Binding="{Binding AmountHeader}"/>
                                     <DataGridTextColumn Width="60" Binding="{Binding Amount, StringFormat=N0}">

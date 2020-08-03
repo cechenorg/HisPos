@@ -96,6 +96,14 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalPrice, ref totalPrice, value);
             }
         }
-        
+        private double total;
+        public double Total
+        {
+            get => total;
+            set
+            {
+                Set(() => Total, ref total, value);
+            }
+        }
     }
 }
