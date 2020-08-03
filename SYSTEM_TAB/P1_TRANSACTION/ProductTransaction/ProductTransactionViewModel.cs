@@ -43,9 +43,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         public ProductTransactionViewModel()
         {
-            CustomerViewModel = new ProductTransactionCustomerViewModel();
+            /*CustomerViewModel = new ProductTransactionCustomerViewModel();
             RegisterCommands();
-            NewTransaction = new Transaction();
+            NewTransaction = new Transaction();*/
         }
 
         #region ----- Define Actions -----
