@@ -29,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Variables -----
         private string productID;
         private string wareHouseID;
-        private DateTime? startDate = DateTime.Today.AddMonths(-3);
+        private DateTime? startDate = DateTime.Today.AddMonths(-12);
         private DateTime? endDate = DateTime.Today;
         private ProductInventoryRecords inventoryRecordCollection;
         private ProductInventoryRecord currentInventoryRecord;
