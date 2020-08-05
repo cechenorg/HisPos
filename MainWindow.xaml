@@ -145,10 +145,10 @@
         <DataTemplate DataType="{x:Type medBagManage:MedBagViewModel}">
             <medBagManage:MedBagView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type  companyWeb:CompanyWebViewModel}">
+        <DataTemplate DataType="{x:Type companyWeb:CompanyWebViewModel}">
             <companyWeb:CompanyWeb/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type  systemtutorial:TutorialViewModel}">
+        <DataTemplate DataType="{x:Type systemtutorial:TutorialViewModel}">
             <systemtutorial:Tutorial/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type incomeStatement:IncomeStatementViewModel}">

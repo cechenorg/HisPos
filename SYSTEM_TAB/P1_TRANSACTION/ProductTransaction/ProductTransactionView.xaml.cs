@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
@@ -68,9 +69,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                             dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
                         }
                         tb.Text = "";
-                        
-                        /*dataGridTextBox[0].Focus();
-                        dataGridTextBox[0].SelectionStart = 0;*/
                     }
                 }
             }
@@ -176,6 +174,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }            
         }
 
+        private string getPayMethod() 
+        {
+            return "";
+        }
+
         private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Binding nb = new Binding();
@@ -257,17 +260,37 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnCheckout_Click(object sender, RoutedEventArgs e)
         {
+            string cusID = "";
+            DateTime chkoutTime = DateTime.Now;
+            string payMethod = getPayMethod();
+            // preTotal
+            // discountAmount
+            // realTotal
+            int cashAmt = int.Parse(tbCashAmt.Text);
+            int cardAmt = int.Parse(tbCardAmt.Text);
+            string cardNum = tbCardNum.Text;
+            string invoiceNum = tbInvoiceNum.Text;
+            string taxNum = tbTaxNum.Text;
+            string cashier = "";
+            string note = tbNote.Text;
+            DataTable detailDT = new DataTable();
+
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("CustomerID", ""));
-            parameters.Add(new SqlParameter("CheckoutTime", ""));
-            parameters.Add(new SqlParameter("CustomerID", ""));
-            parameters.Add(new SqlParameter("CustomerID", ""));
-            parameters.Add(new SqlParameter("CustomerID", ""));
-            parameters.Add(new SqlParameter("CustomerID", ""));
-            parameters.Add(new SqlParameter("CustomerID", ""));
-            parameters.Add(new SqlParameter("CustomerID", ""));
-            parameters.Add(new SqlParameter("CustomerID", ""));
+            parameters.Add(new SqlParameter("CustomerID", cusID));
+            parameters.Add(new SqlParameter("ChkoutTime", chkoutTime));
+            parameters.Add(new SqlParameter("PayMethod", payMethod));
+            parameters.Add(new SqlParameter("PreTotal", preTotal));
+            parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
+            parameters.Add(new SqlParameter("RealTotal", realTotal));
+            parameters.Add(new SqlParameter("CardNumber", cardNum));
+            parameters.Add(new SqlParameter("InvoiceNumber", invoiceNum));
+            parameters.Add(new SqlParameter("TaxNumber", taxNum));
+            parameters.Add(new SqlParameter("Cashier", cashier));
+            parameters.Add(new SqlParameter("Note", note));
+            parameters.Add(new SqlParameter("CashAmount", cashAmt));
+            parameters.Add(new SqlParameter("CardAmount", cardAmt));
+            parameters.Add(new SqlParameter("DETAILS", detailDT));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
             MainWindow.ServerConnection.CloseConnection();
         }
