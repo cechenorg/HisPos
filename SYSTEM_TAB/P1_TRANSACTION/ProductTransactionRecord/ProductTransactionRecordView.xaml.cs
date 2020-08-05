@@ -81,7 +81,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         private void AdjustCase_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Division.Focus();
         }
 
         private void Division_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

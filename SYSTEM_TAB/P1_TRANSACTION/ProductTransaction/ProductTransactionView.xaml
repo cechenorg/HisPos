@@ -51,7 +51,71 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <DataGrid Name="ProductDataGrid" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding TradeViewModel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,10,0,0">
+                    <Label Content="備註" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <TextBox x:Name="tbNote" VerticalScrollBarVisibility="Auto" Width="300" Margin="0,10,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+                    <Label Content="應收金額 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="34" Foreground="Black" Margin="10,0,0,0"/>
+                    <Label x:Name="lblRealTotal" Content="0" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="34" Foreground="Black"/>
+                    <Label Content="結帳人員" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="100,0,0,0"/>
+                    <ComboBox Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <Button x:Name="btnClear" Width="100" Height="40"  Content="清除" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClear_Click"/>
+                    <Button x:Name="btnCheckout" Width="150" Height="40" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnCheckout_Click"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+                    <Label Content="實收：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="26" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbPaid" Text="" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="22" Foreground="Black"/>
+                    <Label Content="應找：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="26" Foreground="Black" Margin="10,0,0,0"/>
+                    <Label x:Name="lblChange" Content="" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="26" Foreground="Black"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                    <Label Content="現金 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbCashAmt" Text="" Width="120" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <Label Content="統編" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="520,0,0,0"/>
+                    <TextBox x:Name="tbTaxNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                    <Label Content="刷卡 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbCardAmt" Text="" Width="120" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="45,0,0,0"/>
+                    <TextBox x:Name="tbCardNum" Width="250" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <Label Content="發票號碼" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="135,0,0,0"/>
+                    <TextBox x:Name="tbInvoiceNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+                    <Label Content="折扣前總計 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <Label x:Name="lblPreTotal" Content="0" Width="95" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <Label Content="折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbDiscountAmt" Text="0" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountAmt_LostFocus"/>
+                    <Label Content="元" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <Label Content="打折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbDiscountPer" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountPer_LostFocus"/>
+                    <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="90,0,0,0"/>
+                    <ComboBox x:Name="PriceCombo" Width="120" Height="35" HorizontalContentAlignment="Center" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}"  FontSize="20" Foreground="Black" SelectionChanged="PriceCombo_SelectionChanged">
+                        <ComboBoxItem Content="零售價" IsSelected="True"/>
+                        <ComboBoxItem Content="會員價"/>
+                        <ComboBoxItem Content="員工價"/>
+                        <ComboBoxItem Content="特殊價"/>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+            <DataGrid Name="ProductDataGrid" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True" SelectionUnit="Cell">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -97,7 +161,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="30" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=ID}">
+                    <DataGridTextColumn Header="序" Width="30" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=ID}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -105,19 +169,19 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="160" Header="商品代碼" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="160" Header="商品代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Name="ProductIDTextbox" Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="160" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_KeyDown" TextChanged="ProductIDTextbox_TextChanged"/>
+                                <TextBox Name="ProductIDTextbox" Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="140" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_KeyDown" TextChanged="ProductIDTextbox_TextChanged"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="400" MaxWidth="580" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="400" Header="商品名稱" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}"/>
-                                    <Label FontSize="20" FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="20,0,20,0"/>
+                                    <Label FontSize="20" FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="0,0,20,0"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -137,14 +201,30 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="60" Header="數量">
+                    <DataGridTemplateColumn Width="30" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Amount_LostFocus">
+                                <Image Name="back" Width="18" Source="/Images/back.png">
+                                </Image>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="50" Header="數量">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="Amount" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Amount_LostFocus">
                                     <i:Interaction.Behaviors>
                                         <behaviors:ToNextTextBoxBehavior/>
                                     </i:Interaction.Behaviors>
                                 </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="30" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Name="next" Width="18" Source="/Images/next.png">
+                                </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -156,7 +236,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="庫存" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Inv_Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                    <DataGridTextColumn Header="庫存" Width="50" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Inv_Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -166,63 +246,6 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding TradeViewModel}">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,10,0,0">
-                    <Label Content="備註" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <TextBox x:Name="tbNote" VerticalScrollBarVisibility="Auto" Width="300" Margin="0,10,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="2" Grid.Column="1" Margin="0,10,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
-                    <Label Content="總金額 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <Label x:Name="lblPreTotal" Content="0" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbDiscountAmt" Text="0" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountAmt_LostFocus"/>
-                    <Label Content="元" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Label Content="打折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbDiscountPer" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountPer_LostFocus"/>
-                    <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="135,0,0,0"/>
-                    <ComboBox x:Name="PriceCombo" Width="120" Height="35" HorizontalContentAlignment="Center" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}"  FontSize="20" Foreground="Black" SelectionChanged="PriceCombo_SelectionChanged">
-                        <ComboBoxItem Content="零售價" IsSelected="True"/>
-                        <ComboBoxItem Content="會員價"/>
-                        <ComboBoxItem Content="員工價"/>
-                        <ComboBoxItem Content="特殊價"/>
-                    </ComboBox>
-                </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                    <Label Content="現金 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbCashAmt" Text="0" Width="120" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="統編" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="520,0,0,0"/>
-                    <TextBox x:Name="tbTaxNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>                    
-                </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                    <Label Content="刷卡 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbCardAmt" Text="0" Width="120" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="45,0,0,0"/>
-                    <TextBox x:Name="tbCardNum" Width="250" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="發票號碼" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="135,0,0,0"/>
-                    <TextBox x:Name="tbInvoiceNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                </StackPanel>
-                <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
-                    <Label Content="實際售價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Black" Margin="10,0,0,0"/>
-                    <Label x:Name="lblRealTotal" Content="0" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Black"/>
-                    <Label Content="結帳人員" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="120,0,0,0"/>
-                    <ComboBox Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Button x:Name="btnClear" Width="120" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClear_Click"/>
-                    <Button x:Name="btnCheckout" Width="150" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnCheckout_Click"/>
-                </StackPanel> 
-            </Grid>
         </Grid>
     </xctk:BusyIndicator>
 </UserControl>

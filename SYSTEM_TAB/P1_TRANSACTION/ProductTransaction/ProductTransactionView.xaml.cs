@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
@@ -31,24 +32,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             InitializeComponent();
             ProductList = new DataTable();
-            ProductDataGrid.ItemsSource = ProductList.DefaultView;            
-        }
-
-        private void ProductIDTextbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox tb = (TextBox)sender;
-            if (tb.Text.Length == 13) 
-            {
-                Key key = Key.Enter;
-                IInputElement target = Keyboard.FocusedElement;
-                RoutedEvent routedEvent = Keyboard.KeyDownEvent;
-                target.RaiseEvent(
-                  new KeyEventArgs(
-                    Keyboard.PrimaryDevice,
-                    Keyboard.PrimaryDevice.ActiveSource, 0, key)
-                  { RoutedEvent = routedEvent }
-                );
-            }
+            ProductDataGrid.ItemsSource = ProductList.DefaultView;
         }
 
         private void ProductIDTextbox_KeyDown(object sender, KeyEventArgs e)
@@ -82,6 +66,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
             }
+            foreach (DataRow dr in ProductList.Rows) 
+            {
+                if (dr["Pro_ID"].ToString() == searchString) 
+                {
+                    dr["Amount"] = int.Parse(dr["Amount"].ToString()) + 1;
+                    return;
+                }
+            }
 
             MainWindow.ServerConnection.OpenConnection();
             int productCount = ProductStructs.GetProductStructCountBySearchString(searchString, AddProductEnum.Trade);
@@ -114,7 +106,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     {
                         DataRow NewProduct = result.Rows[0];
                         ProductList.ImportRow(NewProduct);
-                        ProductDataGrid.ItemsSource = ProductList.DefaultView;
+                        ProductDataGrid.ItemsSource = ProductList.DefaultView;                        
                     }
                     else if (result.Rows.Count > 1)
                     {
@@ -125,10 +117,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         ProductDataGrid.ItemsSource = ProductList.DefaultView;
                     }
 
-                    var dataGridTextBox = new List<TextBox>();
-                    NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
-                        ref dataGridTextBox);
-                    tbNote.Text = dataGridTextBox.Count.ToString();
+                    Dispatcher.InvokeAsync(() => {
+                        var ProductIDList = new List<TextBox>();
+                        NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
+                            ref ProductIDList);
+                        ProductIDList[ProductIDList.Count - 1].Focus();
+                    }, DispatcherPriority.ApplicationIdle);
+
                     Calculate_Total();
                 }
                 else { MessageWindow.ShowMessage("查無此商品", MessageType.WARNING); }
@@ -174,37 +169,28 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }            
         }
 
-        private string getPayMethod() 
+        private string GetPayMethod() 
         {
             return "";
         }
 
-        private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        #region ----- Events -----
+
+        private void ProductIDTextbox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Binding nb = new Binding();
-            switch (PriceCombo.SelectedIndex) 
+            TextBox tb = (TextBox)sender;
+            if (tb.Text.Length == 13)
             {
-                case 0:
-                    AppliedPrice = "Pro_RetailPrice";
-                    break;
-                case 1:
-                    AppliedPrice = "Pro_MemberPrice";
-                    break;
-                case 2:
-                    AppliedPrice = "Pro_EmployeePrice";
-                    break;
-                case 3:
-                    AppliedPrice = "Pro_SpecialPrice";
-                    break;
-                default:
-                    AppliedPrice = "Pro_RetailPrice";
-                    break;
+                Key key = Key.Enter;
+                IInputElement target = Keyboard.FocusedElement;
+                RoutedEvent routedEvent = Keyboard.KeyDownEvent;
+                target.RaiseEvent(new KeyEventArgs(
+                    Keyboard.PrimaryDevice,
+                    Keyboard.PrimaryDevice.ActiveSource, 0, key)
+                { RoutedEvent = routedEvent });
             }
-            nb.Path = new PropertyPath(AppliedPrice);
-            Price.Binding = nb;
-            Calculate_Total();
         }
-        
+
         private void Amount_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = (TextBox)sender;
@@ -240,6 +226,32 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             Calculate_Total();
         }
 
+        private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Binding nb = new Binding();
+            switch (PriceCombo.SelectedIndex)
+            {
+                case 0:
+                    AppliedPrice = "Pro_RetailPrice";
+                    break;
+                case 1:
+                    AppliedPrice = "Pro_MemberPrice";
+                    break;
+                case 2:
+                    AppliedPrice = "Pro_EmployeePrice";
+                    break;
+                case 3:
+                    AppliedPrice = "Pro_SpecialPrice";
+                    break;
+                default:
+                    AppliedPrice = "Pro_RetailPrice";
+                    break;
+            }
+            nb.Path = new PropertyPath(AppliedPrice);
+            if (Price != null) { Price.Binding = nb; }
+            Calculate_Total();
+        }
+
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             ConfirmWindow cw = new ConfirmWindow("是否清除頁面資料?", "清除頁面確認");
@@ -260,7 +272,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnCheckout_Click(object sender, RoutedEventArgs e)
         {
-            string cusID = "";
+            /*string cusID = "";
             DateTime chkoutTime = DateTime.Now;
             string payMethod = getPayMethod();
             // preTotal
@@ -273,9 +285,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             string taxNum = tbTaxNum.Text;
             string cashier = "";
             string note = tbNote.Text;
-            DataTable detailDT = new DataTable();
+            DataTable detailDT = new DataTable();*/
 
-            MainWindow.ServerConnection.OpenConnection();
+            /*MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("CustomerID", cusID));
             parameters.Add(new SqlParameter("ChkoutTime", chkoutTime));
@@ -292,9 +304,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             parameters.Add(new SqlParameter("CardAmount", cardAmt));
             parameters.Add(new SqlParameter("DETAILS", detailDT));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
+            MainWindow.ServerConnection.CloseConnection();*/
         }
 
-        
+        #endregion
     }
 }
