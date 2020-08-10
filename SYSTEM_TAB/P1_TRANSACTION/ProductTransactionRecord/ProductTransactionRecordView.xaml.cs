@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using His_Pos.Service;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 {
@@ -25,74 +20,56 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             InitializeComponent();
         }
 
-        private void MaskedTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void GetData() 
         {
-            if (e.Key == Key.Enter)
-            {
-                EndDate.Focus();
-                EndDate.SelectAll();
-            }
+            //DateTime? sDate = (DateTime?)StartDate.Value;
+            //DateTime? eDate = (DateTime?)EndDate.Value;
+            string sDate = "2020-08-10";
+            string eDate = "2020-08-10";
+            int flag = GetFlag();
+
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MasterID", DBNull.Value));
+            parameters.Add(new SqlParameter("sDate", sDate));
+            parameters.Add(new SqlParameter("eDate", eDate));
+            parameters.Add(new SqlParameter("flag", flag));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            RecordGrid.ItemsSource = result.DefaultView;
+        }
+
+        private int GetFlag() 
+        {
+            return 0;
         }
 
         private void ShowSelectedPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
         {
+
         }
 
         private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+                EndDate.Focus();
+                EndDate.SelectionStart = 0;
+            }
         }
 
         private void EndDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (sender is MaskedTextBox t && e.Key == Key.Enter)
+            {
+                t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
+            }
         }
 
-        private void PatientCondition_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void btnQuery_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            SearchPatientText.Focus();
-        }
-
-        private void PatientCondition_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                SearchPatientText.Focus();
-        }
-
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            StartDate.Focus();
-            StartDate.SelectionStart = 0;
-        }
-
-        private void UIElement_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                StartDate.Focus();
-        }
-
-        private void SearchPatientText_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                Birthday.Focus();
-        }
-
-        private void Birthday_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-        }
-
-        private void AdjustCase_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
-
-        private void Division_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
-
-        private void MedicineCondition_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
-
-        private void MedicineCondition_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
+            GetData();
         }
     }
 }

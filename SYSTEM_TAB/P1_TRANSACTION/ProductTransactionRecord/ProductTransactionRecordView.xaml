@@ -61,23 +61,10 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </xctk:MaskedTextBox>
-                    <ComboBox Name="PatientCondition" Margin="10" Height="35" Width="100" ItemsSource="{Binding PatientConditions,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatientCondition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" BorderThickness="0" SelectionChanged="PatientCondition_OnSelectionChanged" PreviewKeyDown="PatientCondition_OnPreviewKeyDown"/>
-                    <TextBox Name="SearchPatientText" Width="120" Height="35" HorizontalContentAlignment="Center" FontSize="16" CaretBrush="Black" Text="{Binding PatientCondition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" PreviewKeyDown="SearchPatientText_OnPreviewKeyDown"/>
-                    <Label Content="生日" Style="{StaticResource BoldLabelContent18}" Margin="10" Height="35"/>
-                    <xctk:MaskedTextBox x:Name="Birthday" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" PreviewKeyDown="Birthday_OnPreviewKeyDown">
-                        <Binding Path="PatientBirth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
-                            <Binding.ValidationRules>
-                                <service:DateValidationRule/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </xctk:MaskedTextBox>
                     <Button Command="{Binding Clear}" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="30,0,0,0" FontSize="16"/>
-                    <Button Command="{Binding Clear}" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16"/>
+                    <Button x:Name="btnQuery" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16" Click="btnQuery_Click"/>
                 </StackPanel>
-                <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"              
-                          ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
+                <DataGrid x:Name="RecordGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -98,7 +85,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="220" Header="結帳時間" IsReadOnly="True"  Binding="{Binding StoStatus,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="220" Header="結帳時間" IsReadOnly="True" Binding="{Binding Path=TraMas_ChkoutTime}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>

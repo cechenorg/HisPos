@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -28,34 +30,27 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public int discountAmount = 0;
         public int realTotal = 0;
 
+        private static readonly Regex _regex = new Regex("^[0-9]+$");
+
         public ProductTransactionView()
         {
             InitializeComponent();
+            GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
         }
 
-        private void ProductIDTextbox_KeyDown(object sender, KeyEventArgs e)
+        private static bool IsTextAllowed(string text)
         {
-            TextBox tb = (TextBox)sender;
-            int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
-            
-            if (e.Key == Key.Enter)
-            {
-                e.Handled = true;
-                if (ProductList.Rows.Count == currentRowIndex)
-                {
-                    if (!tb.Text.Equals(string.Empty))
-                    {
-                        AddProductByInputAction(tb.Text);
-                        foreach (DataRow dr in ProductList.Rows)
-                        {
-                            dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
-                        }
-                        tb.Text = "";
-                    }
-                }
-            }
+            return !_regex.IsMatch(text);
+        }
+
+        private void GetEmployeeList() 
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
+            MainWindow.ServerConnection.CloseConnection();
+            cbCashier.ItemsSource = result.DefaultView;
         }
 
         private void AddProductByInputAction(string searchString)
@@ -124,13 +119,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         ProductIDList[ProductIDList.Count - 1].Focus();
                     }, DispatcherPriority.ApplicationIdle);
 
-                    Calculate_Total();
+                    CalculateTotal("AMT");
                 }
                 else { MessageWindow.ShowMessage("查無此商品", MessageType.WARNING); }
             }
         }
 
-        private void Calculate_Total()
+        private void CalculateTotal(string type)
         {
             if (ProductList == null) { return; }
             if (ProductList.Rows.Count > 0)
@@ -147,13 +142,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 preTotal = 0;
                 lblPreTotal.Content = preTotal;
             }
-            Calculate_Discount("AMT");
-            discountAmount = int.Parse(tbDiscountAmt.Text);
-            realTotal = preTotal - discountAmount;
-            lblRealTotal.Content = realTotal;
+            CalculateDiscount(type);
         }
 
-        private void Calculate_Discount(string type)
+        private async void CalculateDiscount(string type)
         {
             if (type == "AMT" && tbDiscountAmt.Text != "")
             {
@@ -166,15 +158,123 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 double per = double.Parse(tbDiscountPer.Text);
                 if (per > 10) { tbDiscountAmt.Text = (preTotal - preTotal * per / 100).ToString("N0"); }
                 else { tbDiscountAmt.Text = (preTotal - preTotal * per / 10).ToString("N0"); }
-            }            
+            }
+            discountAmount = int.Parse(tbDiscountAmt.Text);
+            realTotal = preTotal - discountAmount;
+            lblRealTotal.Content = realTotal;
+
+            if (int.Parse(lblRealTotal.Content.ToString()) < 0) 
+            { 
+                MessageWindow.ShowMessage("折扣後金額小於0！", MessageType.ERROR);
+                tbDiscountAmt.Text = "0";
+                CalculateTotal(type);
+                switch (type) 
+                {
+                    case "AMT":
+                        await Task.Delay(20);
+                        tbDiscountAmt.Focus();
+                        break;
+                    case "PER":
+                        await Task.Delay(20);
+                        tbDiscountPer.Focus();
+                        break;
+                }
+            }
+        }
+
+        private int GetRowIndex(MouseButtonEventArgs e) 
+        {
+            DataGridRow dgr = null;
+            DependencyObject visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
+            while (dgr == null && visParent != null)
+            {
+                dgr = visParent as DataGridRow;
+                visParent = VisualTreeHelper.GetParent(visParent);
+            }
+            if (dgr == null) { return -1; }
+            int rowIdx = dgr.GetIndex();
+            return rowIdx;
         }
 
         private string GetPayMethod() 
         {
-            return "";
+            if (tbCashAmt.Text.Length == 0) { tbCashAmt.Text = "0"; }
+            if (tbCardAmt.Text.Length == 0) { tbCardAmt.Text = "0"; }
+            int cash = int.Parse(tbCashAmt.Text);
+            int card = int.Parse(tbCardAmt.Text);
+            if (cash > 0 && card > 0) { return "BOTH"; }
+            else if (card > 0) { return "CARD"; }
+            else { return "CASH"; }
+        }
+
+        private DataTable TransferDetailTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("TraDet_DetailID", typeof(int));
+            dt.Columns.Add("TraDet_ProductID", typeof(string));
+            dt.Columns.Add("TraDet_Amount", typeof(int));
+            dt.Columns.Add("TraDet_PriceType", typeof(string));
+            dt.Columns.Add("TraDet_Price", typeof(int));
+            dt.Columns.Add("TraDet_PriceSum", typeof(int));
+            foreach (DataRow dr in ProductList.Rows)
+            {
+                dt.Rows.Add(
+                    dr["ID"],
+                    dr["Pro_ID"],
+                    dr["Amount"],
+                    "",
+                    dr[AppliedPrice],
+                    dr["Calc"]);
+            }
+            return dt;
+        }
+
+        private void ClearPage() 
+        {
+            ProductList.Clear();
+            tbDiscountAmt.Text = "0";
+            tbNote.Text = "";
+            tbCashAmt.Text = "";
+            tbTaxNum.Text = "";
+            tbCardAmt.Text = "";
+            tbCardNum.Text = "";
+            tbInvoiceNum.Text = "";
+            AppliedPrice = "Pro_RetailPrice";
+            CalculateTotal("AMT");
         }
 
         #region ----- Events -----
+
+        private void ProductDataGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            var ProductIDList = new List<TextBox>();
+            NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
+                ref ProductIDList);
+            ProductIDList[ProductIDList.Count - 1].Focus();
+        }
+
+        private void ProductIDTextbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
+
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                if (ProductList.Rows.Count == currentRowIndex)
+                {
+                    if (!tb.Text.Equals(string.Empty))
+                    {
+                        AddProductByInputAction(tb.Text);
+                        foreach (DataRow dr in ProductList.Rows)
+                        {
+                            dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
+                        }
+                        tb.Text = "";
+                    }
+                }
+            }
+        }
 
         private void ProductIDTextbox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -195,35 +295,39 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             TextBox tb = (TextBox)sender;
             if (tb.Text == "") { tb.Text = "0"; }
-            Calculate_Total();
+            CalculateTotal("AMT");
         }
 
         private void tbDiscountAmt_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (preTotal != 0) { Calculate_Discount("AMT"); }
+            if (preTotal != 0 && int.Parse(tbDiscountAmt.Text) > 0) { CalculateTotal("AMT"); }
+            else { tbDiscountAmt.Text = "0"; }
         }
 
         private void tbDiscountPer_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (preTotal != 0) { Calculate_Discount("PER"); }
+            if (preTotal != 0 && int.Parse(tbDiscountPer.Text) > 0) { CalculateTotal("PER"); }
+            else { tbDiscountPer.Text = ""; }
+        }
+
+        private void tbDiscountAmt_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbPaid.Focus(); }
+        }
+
+        private void tbDiscountPer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbPaid.Focus(); }
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DataGridRow dgr = null;
-            DependencyObject visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
-            while (dgr == null && visParent != null)
+            int index = GetRowIndex(e);
+            if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count) 
             {
-                dgr = visParent as DataGridRow;
-                visParent = VisualTreeHelper.GetParent(visParent);
-            }
-            if (dgr == null) { return; }
-            int rowIdx = dgr.GetIndex();
-            if (ProductList.Rows.Count > 0 && rowIdx < ProductList.Rows.Count) 
-            {
-                ProductList.Rows.Remove(ProductList.Rows[rowIdx]);
+                ProductList.Rows.Remove(ProductList.Rows[index]);
             }                
-            Calculate_Total();
+            CalculateTotal("AMT");
         }
 
         private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -248,46 +352,84 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     break;
             }
             nb.Path = new PropertyPath(AppliedPrice);
-            if (Price != null) { Price.Binding = nb; }
-            Calculate_Total();
+            if (Price!=null) { Price.Binding = nb; } 
+            CalculateTotal("AMT");
+        }
+
+        private void next_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (ProductList.Rows.Count == 0) { return; }
+            int index = GetRowIndex(e);
+            int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
+            int stock = int.Parse(ProductList.Rows[index]["Inv_Inventory"].ToString());
+            if (original < stock) { ProductList.Rows[index]["Amount"] = original + 1; }
+        }
+
+        private void back_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (ProductList.Rows.Count == 0) { return; }
+            int index = GetRowIndex(e);
+            int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
+            if (original > 0) { ProductList.Rows[index]["Amount"] = original - 1; }
+        }
+
+        private void Amount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CalculateTotal("AMT");
+        }
+
+        private void tbPaid_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tbPaid.Text.Length > 0 && !IsTextAllowed(tbPaid.Text))
+            {
+                lblChange.Content = int.Parse(lblRealTotal.Content.ToString()) - int.Parse(tbPaid.Text);
+            }
+            else { lblChange.Content = string.Empty; }
+        }
+
+        private void tbPaid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbCashAmt.Focus(); }
+        }
+
+        private void tbCashAmt_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbCardAmt.Focus(); }
+        }
+
+        private void tbCardAmt_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbCardNum.Focus(); }
+        }
+
+        private void tbCardNum_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbTaxNum.Focus(); }
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             ConfirmWindow cw = new ConfirmWindow("是否清除頁面資料?", "清除頁面確認");
             if (!(bool)cw.DialogResult) { return; }
-            else 
-            {
-                ProductList.Clear();
-                tbDiscountAmt.Text = "0";
-                tbNote.Text = "";
-                tbCashAmt.Text = "";
-                tbTaxNum.Text = "";
-                tbCardAmt.Text = "";
-                tbCardNum.Text = "";
-                tbInvoiceNum.Text = "";
-                Calculate_Total();
-            }
+            else { ClearPage(); }
         }
 
         private void btnCheckout_Click(object sender, RoutedEventArgs e)
         {
-            /*string cusID = "";
+            if (tbCashAmt.Text.Length == 0) { tbCashAmt.Text = "0"; }
+            if (tbCardAmt.Text.Length == 0) { tbCardAmt.Text = "0"; }
+            string cusID = "0";
             DateTime chkoutTime = DateTime.Now;
-            string payMethod = getPayMethod();
-            // preTotal
-            // discountAmount
-            // realTotal
+            string payMethod = GetPayMethod();
             int cashAmt = int.Parse(tbCashAmt.Text);
             int cardAmt = int.Parse(tbCardAmt.Text);
             string cardNum = tbCardNum.Text;
             string invoiceNum = tbInvoiceNum.Text;
             string taxNum = tbTaxNum.Text;
-            string cashier = "";
+            string cashier = cbCashier.Text;
             string note = tbNote.Text;
-            DataTable detailDT = new DataTable();*/
 
-            /*MainWindow.ServerConnection.OpenConnection();
+            MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("CustomerID", cusID));
             parameters.Add(new SqlParameter("ChkoutTime", chkoutTime));
@@ -302,11 +444,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             parameters.Add(new SqlParameter("Note", note));
             parameters.Add(new SqlParameter("CashAmount", cashAmt));
             parameters.Add(new SqlParameter("CardAmount", cardAmt));
-            parameters.Add(new SqlParameter("DETAILS", detailDT));
+            parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
-            MainWindow.ServerConnection.CloseConnection();*/
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            {
+                ClearPage();
+                MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
+            }
+            else 
+            { 
+                MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR);
+            }
         }
 
+        
+
+
         #endregion
+
+        
     }
 }
