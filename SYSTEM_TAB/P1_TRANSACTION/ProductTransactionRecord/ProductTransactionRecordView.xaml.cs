@@ -26,22 +26,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             //DateTime? eDate = (DateTime?)EndDate.Value;
             string sDate = "2020-08-10";
             string eDate = "2020-08-10";
-            int flag = GetFlag();
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MasterID", DBNull.Value));
             parameters.Add(new SqlParameter("sDate", sDate));
             parameters.Add(new SqlParameter("eDate", eDate));
-            parameters.Add(new SqlParameter("flag", flag));
+            parameters.Add(new SqlParameter("flag", 0));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             RecordGrid.ItemsSource = result.DefaultView;
-        }
-
-        private int GetFlag() 
-        {
-            return 0;
         }
 
         private void ShowSelectedPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
