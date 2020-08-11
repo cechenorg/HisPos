@@ -33,6 +33,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public int realTotal = 0;
 
         private static readonly Regex _regex = new Regex("^[0-9]+$");
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
 
         public ProductTransactionView()
         {
@@ -42,17 +46,32 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
         }
 
-        private static bool IsTextAllowed(string text)
-        {
-            return !_regex.IsMatch(text);
-        }
-
         private void GetEmployeeList() 
         {
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
             MainWindow.ServerConnection.CloseConnection();
             cbCashier.ItemsSource = result.DefaultView;
+        }
+
+        private int GetRowIndex(MouseButtonEventArgs e)
+        {
+            DataGridRow dgr = null;
+            DependencyObject visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
+            while (dgr == null && visParent != null)
+            {
+                dgr = visParent as DataGridRow;
+                visParent = VisualTreeHelper.GetParent(visParent);
+            }
+            if (dgr == null) { return -1; }
+            int rowIdx = dgr.GetIndex();
+            return rowIdx;
+        }
+
+        private string GetPayMethod()
+        {
+            if (rbCash.IsChecked == true) { return "現金"; }
+            else { return "刷卡"; }
         }
 
         private void AddProductByInputAction(string searchString)
@@ -146,16 +165,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             CalculateDiscount(type);
             CalculateChange();
-        }
-
-        private void CalculateChange() 
-        {
-            if (tbPaid.Text.Length > 0 && !IsTextAllowed(tbPaid.Text))
-            {
-                lblChange.Content = int.Parse(tbPaid.Text) - int.Parse(lblRealTotal.Content.ToString());
-            }
-            else { lblChange.Content = string.Empty; }
-        }
+        }        
 
         private async void CalculateDiscount(string type)
         {
@@ -194,29 +204,21 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private int GetRowIndex(MouseButtonEventArgs e) 
+        private void CalculateChange()
         {
-            DataGridRow dgr = null;
-            DependencyObject visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
-            while (dgr == null && visParent != null)
+            if (tbPaid.Text.Length > 0 && !IsTextAllowed(tbPaid.Text))
             {
-                dgr = visParent as DataGridRow;
-                visParent = VisualTreeHelper.GetParent(visParent);
+                int change = int.Parse(tbPaid.Text) - int.Parse(lblRealTotal.Content.ToString());
+                if (change >= 0) { lblChange.Content = change; }
+                else 
+                {
+                    MessageWindow.ShowMessage("實收金額小於應收金額！", MessageType.ERROR);
+                    tbPaid.Text = "";
+                    CalculateChange();
+                    tbPaid.Focus();
+                }
             }
-            if (dgr == null) { return -1; }
-            int rowIdx = dgr.GetIndex();
-            return rowIdx;
-        }
-
-        private string GetPayMethod() 
-        {
-            if (tbCashAmt.Text.Length == 0) { tbCashAmt.Text = "0"; }
-            if (tbCardAmt.Text.Length == 0) { tbCardAmt.Text = "0"; }
-            int cash = int.Parse(tbCashAmt.Text);
-            int card = int.Parse(tbCardAmt.Text);
-            if (cash > 0 && card > 0) { return "現金&刷卡"; }
-            else if (card > 0) { return "刷卡"; }
-            else { return "現金"; }
+            else { lblChange.Content = "0"; }
         }
 
         private DataTable TransferDetailTable()
@@ -234,7 +236,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     dr["ID"],
                     dr["Pro_ID"],
                     dr["Amount"],
-                    "",
+                    AppliedPrice,
                     dr[AppliedPrice],
                     dr["Calc"]);
             }
@@ -246,11 +248,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ProductList.Clear();
             tbDiscountAmt.Text = "0";
             tbNote.Text = "";
-            tbCashAmt.Text = "";
             tbTaxNum.Text = "";
-            tbCardAmt.Text = "";
             tbCardNum.Text = "";
             tbInvoiceNum.Text = "";
+            tbPaid.Text = "";
             AppliedPrice = "Pro_RetailPrice";
             CalculateTotal("AMT");
         }
@@ -318,7 +319,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 CalculateTotal("AMT");
                 return;
             }
-            if (preTotal != 0 && int.Parse(tbDiscountAmt.Text) > 0) { CalculateTotal("AMT"); }
+            if (preTotal != 0 && int.Parse(tbDiscountAmt.Text) >= 0) { CalculateTotal("AMT"); }
             else { tbDiscountAmt.Text = "0"; }
         }
 
@@ -382,8 +383,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void next_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (ProductList.Rows.Count == 0) { return; }
             int index = GetRowIndex(e);
+            if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
+            
             int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
             int stock = int.Parse(ProductList.Rows[index]["Inv_Inventory"].ToString());
             if (original < stock) { ProductList.Rows[index]["Amount"] = original + 1; }
@@ -391,8 +393,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void back_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (ProductList.Rows.Count == 0) { return; }
             int index = GetRowIndex(e);
+            if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
+            
             int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
             if (original > 0) { ProductList.Rows[index]["Amount"] = original - 1; }
         }
@@ -402,24 +405,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal("AMT");
         }
 
-        private void tbPaid_TextChanged(object sender, TextChangedEventArgs e)
+        private void tbPaid_LostFocus(object sender, RoutedEventArgs e)
         {
             CalculateChange();
         }
 
         private void tbPaid_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) { tbCashAmt.Focus(); }
-        }
-
-        private void tbCashAmt_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) { tbCardAmt.Focus(); }
-        }
-
-        private void tbCardAmt_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) { tbCardNum.Focus(); }
+            if (e.Key == Key.Enter) { CalculateChange(); }
         }
 
         private void tbCardNum_KeyDown(object sender, KeyEventArgs e)
@@ -436,13 +429,27 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnCheckout_Click(object sender, RoutedEventArgs e)
         {
-            if (tbCashAmt.Text.Length == 0) { tbCashAmt.Text = "0"; }
-            if (tbCardAmt.Text.Length == 0) { tbCardAmt.Text = "0"; }
+            foreach (DataRow dr in ProductList.Rows) 
+            {
+                if (int.Parse(dr["Amount"].ToString()) == 0) 
+                {
+                    int index = ProductList.Rows.IndexOf(dr);
+                    ProductList.Rows[index].Delete();
+                }
+            }
+            ProductList.AcceptChanges();
+
+            if (ProductList.Rows.Count == 0) 
+            {
+                MessageWindow.ShowMessage("尚未新增售出商品項目！", MessageType.ERROR);
+                return;
+            }
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
+            if (!(bool)confirmWindow.DialogResult) { return; }
+
             string cusID = "0";
             DateTime chkoutTime = DateTime.Now;
             string payMethod = GetPayMethod();
-            int cashAmt = int.Parse(tbCashAmt.Text);
-            int cardAmt = int.Parse(tbCardAmt.Text);
             string cardNum = tbCardNum.Text;
             string invoiceNum = tbInvoiceNum.Text;
             string taxNum = tbTaxNum.Text;
@@ -462,8 +469,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             parameters.Add(new SqlParameter("TaxNumber", taxNum));
             parameters.Add(new SqlParameter("Cashier", cashier));
             parameters.Add(new SqlParameter("Note", note));
-            parameters.Add(new SqlParameter("CashAmount", cashAmt));
-            parameters.Add(new SqlParameter("CardAmount", cardAmt));
             parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
             MainWindow.ServerConnection.CloseConnection();
@@ -490,9 +495,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-
         #endregion
 
-
+        
     }
 }

@@ -6,7 +6,10 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Service;
-using Xceed.Wpf.Toolkit;
+using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
+
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 {
@@ -22,10 +25,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         private void GetData() 
         {
-            //DateTime? sDate = (DateTime?)StartDate.Value;
-            //DateTime? eDate = (DateTime?)EndDate.Value;
-            string sDate = "2020-08-10";
-            string eDate = "2020-08-10";
+            if (StartDate.Text.Contains("-") || EndDate.Text.Contains("-")) { return; }
+            string sDate = ConvertMaskedDate(StartDate.Text);
+            string eDate = ConvertMaskedDate(EndDate.Text);
+            
+            System.Windows.MessageBox.Show(sDate);
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -49,6 +53,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 string formatTransTime = dTime.ToString("yyyy-MM-dd HH:mm");
                 dr["TransTime_Format"] = formatTransTime;
             }
+        }
+
+        private string ConvertMaskedDate(string dateString) 
+        {
+            string[] strArr = dateString.Split('/');
+            string year = (int.Parse(strArr[0]) + 1911).ToString();
+            string month = string.Format("{0:D2}", strArr[1]);
+            string date = string.Format("{0:D2}", strArr[2]);
+            return year + "-" + month + "-" + date;
         }
 
         private void ShowSelectedPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
