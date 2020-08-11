@@ -79,7 +79,7 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal"  >
-
+                            
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
                                 <Label Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
@@ -255,6 +255,11 @@
                             <RowDefinition Height="100"/>
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="50"/>
+
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+
                             <RowDefinition Height="60"/>
                             <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
@@ -491,8 +496,24 @@
                             <TextBlock Text="{Binding TotalPrescriptionProfitReport.MedUse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Right" Width="100"/>
                             <TextBlock Text="{Binding TotalPrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Right" Width="100"/>
                         </StackPanel>
-                        <Label Content="庫存異動" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="110"/>
-                        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridDarkestBackGround}" >
+
+                        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"  >
+                            <Label  Content="銷售帳" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+
+
+                        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"  >
+
+                          
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}"  >
+                         
+
+                        </StackPanel>
+
+                        <Label Content="庫存異動" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="110"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridDarkestBackGround}" >
                             <Label Content="盤盈:"  FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                             <Label Content="{Binding InventoryDifference.InventoryOverage,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
                             <Label Content="盤損:"  FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>

@@ -1235,7 +1235,7 @@ namespace His_Pos.NewClass.StoreOrder
                 foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
                 {
                     if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(0,12);
+                        orderMedicines += product.ID.Substring(0,13);
                     else
                         orderMedicines += product.ID.PadRight(12, ' ');
 
