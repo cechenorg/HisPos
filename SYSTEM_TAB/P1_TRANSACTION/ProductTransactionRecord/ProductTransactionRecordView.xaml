@@ -80,12 +80,30 @@
                             </Style.Triggers>
                             <Setter Property="Background" Value="Transparent"/>
                             <EventSetter Event="MouseDoubleClick" Handler="ShowSelectedPrescriptionEditWindow"/>
-                            <Setter Property="FontSize" Value="15"/>
+                            <Setter Property="FontSize" Value="18"/>
                             <Setter Property="Height" Value="40"/>
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="220" Header="結帳時間" IsReadOnly="True" Binding="{Binding Path=TraMas_ChkoutTime}">
+                        <DataGridTextColumn Width="180" Header="結帳時間" IsReadOnly="True" Binding="{Binding Path=TransTime_Format}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="25,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="140" Header="顧客姓名" IsReadOnly="True"  Binding="{Binding Path=Cus_Name}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="35,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="140" Header="結帳金額" IsReadOnly="True"  Binding="{Binding Path=TraMas_RealTotal}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -93,7 +111,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="150" Header="顧客姓名" IsReadOnly="True"  Binding="{Binding Patient.Name,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="150" Header="付款方式" IsReadOnly="True"  Binding="{Binding Path=TraMas_PayMethod}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -101,7 +119,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="150" Header="結帳金額" IsReadOnly="True"  Binding="{Binding Patient.IDNumber,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="180" Header="統一編號" IsReadOnly="True" Binding="{Binding Path=TraMas_TaxNumber}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -109,7 +127,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="180" Header="統一編號" IsReadOnly="True" Binding="{Binding Patient.Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                        <DataGridTextColumn Width="180" Header="發票號碼" IsReadOnly="True"  Binding="{Binding Path=TraMas_InvoiceNumber}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -117,23 +135,15 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="180" Header="發票號碼" IsReadOnly="True"  Binding="{Binding MedicalNumber,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="150" Header="收銀員" IsReadOnly="True" Binding="{Binding Path=TraMas_Cashier}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="150" Header="收銀員" IsReadOnly="True" Binding="{Binding TreatDate,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="220" Header="最後編輯時間" IsReadOnly="True" Binding="{Binding InsertDate,UpdateSourceTrigger=PropertyChanged}" SortDirection="Descending">
+                        <DataGridTextColumn Width="220" Header="最後編輯時間" IsReadOnly="True" Binding="{Binding Path=TraMas_UpdateTime}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Left"/>

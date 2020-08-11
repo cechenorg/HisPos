@@ -32,10 +32,23 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parameters.Add(new SqlParameter("MasterID", DBNull.Value));
             parameters.Add(new SqlParameter("sDate", sDate));
             parameters.Add(new SqlParameter("eDate", eDate));
-            parameters.Add(new SqlParameter("flag", 0));
+            parameters.Add(new SqlParameter("flag", "0"));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
+            FormatData(result);
             RecordGrid.ItemsSource = result.DefaultView;
+        }
+
+        private void FormatData(DataTable result) 
+        {
+            result.Columns.Add("TransTime_Format", typeof(string));
+            foreach (DataRow dr in result.Rows) 
+            {                
+                string ogTransTime = dr["TraMas_ChkoutTime"].ToString();
+                DateTime dTime = DateTime.Parse(ogTransTime);
+                string formatTransTime = dTime.ToString("yyyy-MM-dd HH:mm");
+                dr["TransTime_Format"] = formatTransTime;
+            }
         }
 
         private void ShowSelectedPrescriptionEditWindow(object sender, MouseButtonEventArgs e)

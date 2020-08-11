@@ -1235,7 +1235,7 @@ namespace His_Pos.NewClass.StoreOrder
                 foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
                 {
                     if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(0,12);
+                        orderMedicines += product.ID.Substring(0,13); // FOR OTC 進貨
                     else
                         orderMedicines += product.ID.PadRight(12, ' ');
 
@@ -1258,7 +1258,7 @@ namespace His_Pos.NewClass.StoreOrder
                 foreach (var product in ((ReturnOrder)storeOrder).ReturnProducts)
                 {
                     if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(0, 12);
+                        orderMedicines += product.ID.Substring(0, 13); // FOR OTC 退貨
                     else
                         orderMedicines += product.ID.PadRight(12, ' ');
 
@@ -1302,7 +1302,7 @@ namespace His_Pos.NewClass.StoreOrder
             foreach (var product in purchaseList)
             {
                 if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(0, 12);
+                    orderMedicines += product.ID.Substring(0, 13); // FOR OTC
                 else
                     orderMedicines += product.ID.PadRight(12, ' ');
 

@@ -10,11 +10,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -143,6 +145,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 lblPreTotal.Content = preTotal;
             }
             CalculateDiscount(type);
+            CalculateChange();
+        }
+
+        private void CalculateChange() 
+        {
+            if (tbPaid.Text.Length > 0 && !IsTextAllowed(tbPaid.Text))
+            {
+                lblChange.Content = int.Parse(tbPaid.Text) - int.Parse(lblRealTotal.Content.ToString());
+            }
+            else { lblChange.Content = string.Empty; }
         }
 
         private async void CalculateDiscount(string type)
@@ -202,9 +214,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (tbCardAmt.Text.Length == 0) { tbCardAmt.Text = "0"; }
             int cash = int.Parse(tbCashAmt.Text);
             int card = int.Parse(tbCardAmt.Text);
-            if (cash > 0 && card > 0) { return "BOTH"; }
-            else if (card > 0) { return "CARD"; }
-            else { return "CASH"; }
+            if (cash > 0 && card > 0) { return "現金&刷卡"; }
+            else if (card > 0) { return "刷卡"; }
+            else { return "現金"; }
         }
 
         private DataTable TransferDetailTable()
@@ -300,12 +312,24 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbDiscountAmt_LostFocus(object sender, RoutedEventArgs e)
         {
+            if (tbDiscountAmt.Text == "")
+            {
+                tbDiscountAmt.Text = "0";
+                CalculateTotal("AMT");
+                return;
+            }
             if (preTotal != 0 && int.Parse(tbDiscountAmt.Text) > 0) { CalculateTotal("AMT"); }
             else { tbDiscountAmt.Text = "0"; }
         }
 
         private void tbDiscountPer_LostFocus(object sender, RoutedEventArgs e)
         {
+            if (tbDiscountPer.Text == "") 
+            { 
+                tbDiscountAmt.Text = "0";
+                CalculateTotal("AMT");
+                return;
+            }
             if (preTotal != 0 && int.Parse(tbDiscountPer.Text) > 0) { CalculateTotal("PER"); }
             else { tbDiscountPer.Text = ""; }
         }
@@ -380,11 +404,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbPaid_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (tbPaid.Text.Length > 0 && !IsTextAllowed(tbPaid.Text))
-            {
-                lblChange.Content = int.Parse(lblRealTotal.Content.ToString()) - int.Parse(tbPaid.Text);
-            }
-            else { lblChange.Content = string.Empty; }
+            CalculateChange();
         }
 
         private void tbPaid_KeyDown(object sender, KeyEventArgs e)
@@ -459,11 +479,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        
+        private void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            int index = GetRowIndex(e);
+            if (index < ProductList.Rows.Count)
+            {
+                string proID = ProductList.Rows[index]["Pro_ID"].ToString();
+                ProductDetailWindow.ShowProductDetailWindow();
+                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
+            }
+        }
 
 
         #endregion
 
-        
+
     }
 }
