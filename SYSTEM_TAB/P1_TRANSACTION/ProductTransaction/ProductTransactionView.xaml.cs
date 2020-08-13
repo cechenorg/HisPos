@@ -33,10 +33,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public int realTotal = 0;
 
         private static readonly Regex _regex = new Regex("^[0-9]+$");
-        private static bool IsTextAllowed(string text)
-        {
-            return !_regex.IsMatch(text);
-        }
+        private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
 
         public ProductTransactionView()
         {
@@ -66,12 +63,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (dgr == null) { return -1; }
             int rowIdx = dgr.GetIndex();
             return rowIdx;
-        }
-
-        private string GetPayMethod()
-        {
-            if (rbCash.IsChecked == true) { return "現金"; }
-            else { return "刷卡"; }
         }
 
         private void AddProductByInputAction(string searchString)
@@ -448,27 +439,21 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (!(bool)confirmWindow.DialogResult) { return; }
 
             string cusID = "0";
-            DateTime chkoutTime = DateTime.Now;
-            string payMethod = GetPayMethod();
-            string cardNum = tbCardNum.Text;
-            string invoiceNum = tbInvoiceNum.Text;
-            string taxNum = tbTaxNum.Text;
-            string cashier = cbCashier.Text;
-            string note = tbNote.Text;
+            string payMethod = (bool)rbCash.IsChecked ? "現金" : "信用卡";
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("CustomerID", cusID));
-            parameters.Add(new SqlParameter("ChkoutTime", chkoutTime));
+            parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
             parameters.Add(new SqlParameter("PayMethod", payMethod));
             parameters.Add(new SqlParameter("PreTotal", preTotal));
             parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
             parameters.Add(new SqlParameter("RealTotal", realTotal));
-            parameters.Add(new SqlParameter("CardNumber", cardNum));
-            parameters.Add(new SqlParameter("InvoiceNumber", invoiceNum));
-            parameters.Add(new SqlParameter("TaxNumber", taxNum));
-            parameters.Add(new SqlParameter("Cashier", cashier));
-            parameters.Add(new SqlParameter("Note", note));
+            parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
+            parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Text));
+            parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
+            parameters.Add(new SqlParameter("Cashier", cbCashier.Text));
+            parameters.Add(new SqlParameter("Note", tbNote.Text));
             parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
             MainWindow.ServerConnection.CloseConnection();
@@ -478,10 +463,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 ClearPage();
                 MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
             }
-            else 
-            { 
-                MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR);
-            }
+            else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
         }
 
         private void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -496,7 +478,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
 
         #endregion
-
         
     }
 }

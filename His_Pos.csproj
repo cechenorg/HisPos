@@ -1374,6 +1374,9 @@
       <DependentUpon>ActivityManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ActivityManage\ActivityManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionDetail\ProductTransactionDetail.xaml.cs">
+      <DependentUpon>ProductTransactionDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordView.xaml.cs">
       <DependentUpon>ProductTransactionRecordView.xaml</DependentUpon>
     </Compile>
@@ -2176,6 +2179,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ActivityManage\ActivityManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionDetail\ProductTransactionDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -64,7 +64,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             return year + "-" + month + "-" + date;
         }
 
-        private void ShowSelectedPrescriptionEditWindow(object sender, MouseButtonEventArgs e)
+        private void ShowSelectedDetailWindow(object sender, MouseButtonEventArgs e)
         {
 
         }
