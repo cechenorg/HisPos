@@ -288,10 +288,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 Key key = Key.Enter;
                 IInputElement target = Keyboard.FocusedElement;
                 RoutedEvent routedEvent = Keyboard.KeyDownEvent;
-                target.RaiseEvent(new KeyEventArgs(
+                if (target != null) 
+                {
+                    target.RaiseEvent(new KeyEventArgs(
                     Keyboard.PrimaryDevice,
                     Keyboard.PrimaryDevice.ActiveSource, 0, key)
-                { RoutedEvent = routedEvent });
+                    { RoutedEvent = routedEvent });
+                }
             }
         }
 

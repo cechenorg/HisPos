@@ -228,10 +228,8 @@
             <StackPanel x:Name="MenuStack" Grid.Column="0" Background="#FF2D2D30" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Image x:Name="SystemIcon" Width="60" Height="60" Margin="0,-2,0,5" Source="Images/LOGO_HISPOS.png" />
-                    <Label x:Name="HisSwitch" Margin="25,10,0,0" Content="調劑" FontFamily="Segoe UI Semi" FontSize="20" 
-                           Foreground="LightSkyBlue" MouseDown="Shortcut_OnMouseLeftButtonDown" />
-                    <Label
-                        x:Name="PosSwitch" Margin="25,10,0,0" Content="交易" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Orange" MouseDown="Shortcut_OnMouseLeftButtonDown" />
+                    <Label x:Name="HisSwitch" Margin="25,10,0,0" Content="調劑" FontFamily="Segoe UI Semi" FontSize="20" Foreground="LightSkyBlue" MouseDown="Shortcut_OnMouseLeftButtonDown" />
+                    <Label x:Name="PosSwitch" Margin="25,10,0,0" Content="交易" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Orange" MouseDown="Shortcut_OnMouseLeftButtonDown" />
                 </StackPanel>
                 <ScrollViewer x:Name="HisMenu" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="760">
                     <ScrollViewer.Resources>
