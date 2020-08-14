@@ -37,6 +37,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             set { Set(() => StartInputVariable, ref startInputVariable, value); }
         }
         public double Inventory { get; private set; }
+        public int Type { get;  set; }
         public int WareHouseID { get; set; }
         public string UnitName { get; set; }
         public double UnitAmount { get; set; }
@@ -120,6 +121,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public PurchaseProduct() : base() {}
         public PurchaseProduct(DataRow dataRow) : base(dataRow)
         {
+            Type = dataRow.Field<int>("Pro_TypeID");
             WareHouseID = dataRow.Field<int>("ProInv_WareHouseID");
             Inventory = dataRow.Field<double>("Inv_Inventory");
             SafeAmount = dataRow.Field<int>("Inv_SafeAmount");

@@ -19,6 +19,6 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public IndexView()
         {
             InitializeComponent(); 
-        } 
+        }
     }
 }
