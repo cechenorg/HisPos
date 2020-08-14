@@ -68,11 +68,21 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void AddProductByInputAction(string searchString, int rowIndex)
         {
             if (string.IsNullOrEmpty(searchString)) return;
+            if (searchString.Length == 0) 
+            {
+                return;
+                /*if (rowIndex < ProductList.Rows.Count) 
+                {
+                    ProductList.Rows.RemoveAt(rowIndex);
+                    CalculateTotal("AMT");
+                }*/
+            }
             if (searchString.Length < 5)
             {
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
             }
+
             foreach (DataRow dr in ProductList.Rows) 
             {
                 if (dr["Pro_ID"].ToString() == searchString) 
@@ -89,7 +99,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (productCount == 0) 
             {
                 MessageWindow.ShowMessage("查無商品", MessageType.WARNING);
-                if (rowIndex < ProductList.Rows.Count) { ProductList.Rows.RemoveAt(rowIndex); }
+                return;
+                /*if (rowIndex < ProductList.Rows.Count) 
+                {
+                    ProductList.Rows.RemoveAt(rowIndex);
+                    CalculateTotal("AMT");
+                }*/
             }
             else
             {
