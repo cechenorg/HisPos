@@ -17,6 +17,8 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Medicin
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetPrices;
+
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl
 {
     public class SingdePriceControlViewModel : ViewModelBase
@@ -24,19 +26,26 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         #region ----- Define Commands -----
         public RelayCommand ViewHistoryPriceCommand { get; set; }
         public RelayCommand PrintMedicineLabelCommand { get; set; }
+        public RelayCommand SetPricesCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
         private string productID;
         private string wareHouseID;
 
-        public ProductManageDetail MedicineDetail { get; set; }
+        private ProductManageDetail medicineDetail;
+
+        public ProductManageDetail MedicineDetail {
+            get { return medicineDetail; }
+            set { Set(() => MedicineDetail, ref medicineDetail, value); }
+        }
         #endregion
 
         public SingdePriceControlViewModel()
         {
             ViewHistoryPriceCommand = new RelayCommand(ViewHistoryPriceAction);
             PrintMedicineLabelCommand = new RelayCommand(PrintMedicineLabelAction);
+            SetPricesCommand = new RelayCommand(SetPricesAction);
         }
 
         #region ----- Define Actions -----
@@ -57,6 +66,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 MessageWindow.ShowMessage("列印失敗 請稍後再試", MessageType.ERROR);
             else
                 PrintMedBagSingleMode(medicineTagStruct);
+        }
+        private void SetPricesAction()
+        {
+            SetPricesWindow setPricesWindow = new SetPricesWindow(productID, MedicineDetail.RetailPrice,MedicineDetail.MemberPrice,MedicineDetail.EmployeePrice,MedicineDetail.SpecialPrice);
+            setPricesWindow.ShowDialog();
+
+            if ((bool)setPricesWindow.DialogResult)
+            {
+                ReloadData(productID, wareHouseID, ProductTypeEnum.OTCMedicine);
+            }
+
         }
         #endregion
 
@@ -89,6 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             productID = proID;
             wareHouseID = wareID;
+            
 
             DataTable manageMedicineDetailDataTable = null;
 

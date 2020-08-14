@@ -175,6 +175,7 @@ namespace His_Pos
                     AddNewTab(StringRes.hisPrescriptionDeclare);
                     break;
                 case "交易":
+                    AddNewTab(StringRes.ProductTransaction);
                     break;
             }
         }

@@ -20,6 +20,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using Microsoft.Reporting.WinForms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 using His_Pos.NewClass.Product.CommonProduct;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
 {
@@ -38,6 +39,15 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => MedPrepareStatusCollection, ref medPrepareStatusCollection, value); 
             }
         }
+        private List<string> productTypeCollection;
+        public List<string> ProductTypeCollection
+        {
+            get => productTypeCollection;
+            set
+            {
+                Set(() => ProductTypeCollection, ref productTypeCollection, value);
+            }
+        }
         private string medPrepareStatusSelectedItem = "未處理";
         public string MedPrepareStatusSelectedItem
         {
@@ -47,6 +57,16 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => MedPrepareStatusSelectedItem, ref medPrepareStatusSelectedItem, value);
                 ReserveCollectionViewSource.Filter += Filter;
                 SetPhoneCount();
+            }
+        }
+        private string productTypeStatusSelectedItem = "全選";
+        public string ProductTypeStatusSelectedItem
+        {
+            get => productTypeStatusSelectedItem;
+            set
+            {
+                Set(() => ProductTypeStatusSelectedItem, ref productTypeStatusSelectedItem, value);
+                ProductCollectionViewSource.Filter += ProductFilter;
             }
         }
         private CollectionViewSource reserveCollectionViewSource;
@@ -60,6 +80,15 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
         }
 
+        private CollectionViewSource productCollectionViewSource;
+        private CollectionViewSource ProductCollectionViewSource
+        {
+            get => productCollectionViewSource;
+            set
+            {
+                Set(() => ProductCollectionViewSource, ref productCollectionViewSource, value);
+            }
+        }
         private ICollectionView reserveCollectionView;
         public ICollectionView ReserveCollectionView
         {
@@ -67,6 +96,15 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             private set
             {
                 Set(() => ReserveCollectionView, ref reserveCollectionView, value); 
+            }
+        }
+        private ICollectionView productCollectionView;
+        public ICollectionView ProductCollectionView
+        {
+            get => productCollectionView;
+            private set
+            {
+                Set(() => ProductCollectionView, ref productCollectionView, value);
             }
         }
         private Inventorys inventoryCollection;
@@ -95,7 +133,17 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             {
                 Set(() => IndexReserveCount, ref indexReserveCount, value); 
             }
-        } 
+        }
+
+        private int productCount;
+        public int ProductCount
+        {
+            get => productCount;
+            set
+            {
+                Set(() => ProductCount, ref productCount, value);
+            }
+        }
         private bool isShowUnPhoneCall = false;
         public bool IsShowUnPhoneCall
         {
@@ -262,6 +310,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         public RelayCommand ShowReserveDetailCommand { get; set; }
         public RelayCommand ShowCommonProductDetailCommand { get; set; }
         public RelayCommand CommonProductGetDataCommand { get; set; }
+        public RelayCommand ProductActionCommand { get; set; }
         #endregion
         public Index() {
             InitStatusstring();
@@ -283,22 +332,33 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             PrintIndexReserveMedbagCommand = new RelayCommand(PrintPackageAction);
             ShowReserveDetailCommand = new RelayCommand(ShowReserveDetailAction);
             CommonProductGetDataCommand = new RelayCommand(CommonProductGetDataAcion);
+            ProductActionCommand = new RelayCommand(ProductAction);
             ReserveSearchAction();
             CommonProductGetDataAcion();
+            ProductAction();
         }
+
+       
         #region Action
         private void CommonProductGetDataAcion() {
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (o, ea) => {
-                BusyContent = "取得低於安全量商品..."; 
+                BusyContent = "取得低於安全量商品...";
                 CommonProductsCollection = CommonProducts.GetData();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
-                IsBusy = false; 
+                ProductAction();
+                IsBusy = false;
             };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+        private void ProductAction()
+        {
+            ProductCollectionViewSource = new CollectionViewSource { Source = CommonProductsCollection };
+            ProductCollectionView = ProductCollectionViewSource.View;
+            ProductCollectionViewSource.Filter += ProductFilter;
         }
         private void DataChangeAction() {
             IsDataChanged = true;
@@ -354,13 +414,17 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
             IndexReserveCount = filteredCount;
         }
+ 
+
+
         private void ShowCustomerDetailWindowAction() {
             if (IndexReserveSelectedItem is null) return; 
             CustomerDetailWindow.CustomerDetailWindow customerDetailWindow = new CustomerDetailWindow.CustomerDetailWindow(IndexReserveSelectedItem.CusId); 
         }
         private void InitStatusstring() {
             PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" };
-            MedPrepareStatusCollection = new List<string>() { "未處理","已備藥","不備藥" }; 
+            MedPrepareStatusCollection = new List<string>() { "未處理","已備藥","不備藥" };
+            ProductTypeCollection = new List<string>() { "全選", "藥品", "OTC藥" };
         }
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -444,6 +508,22 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 ReserveSearchAction();
         }
 
+
+        private void ProductFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is CommonProduct src))
+                e.Accepted = false;
+            e.Accepted = false;
+            CommonProduct commonProducts = ((CommonProduct)e.Item);
+            if (commonProducts.TypeID == 2 && ProductTypeStatusSelectedItem == "OTC藥")
+                e.Accepted = true;
+            else if (commonProducts.TypeID == 1 && ProductTypeStatusSelectedItem == "藥品")
+                e.Accepted = true;
+            else if (ProductTypeStatusSelectedItem == "全選")
+                e.Accepted = true;
+
+        }
         private void Filter(object sender, FilterEventArgs e) {
             if (e.Item is null) return;
             if (!(e.Item is IndexReserve src))
@@ -462,7 +542,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 e.Accepted = true;
             else if(MedPrepareStatusSelectedItem != "已備藥" && MedPrepareStatusSelectedItem != "不備藥" && !IsShowUnPhoneCall && !IsShowUnPhoneProcess && !IsExpensive && indexitem.PrepareMedStatus == IndexPrepareMedType.Unprocess)
                 e.Accepted = true;
-            
+
         }
         private IndexReserves CaculateReserveSendAmount() {
             IndexReserves indexReserves = new IndexReserves(); 

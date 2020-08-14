@@ -35,6 +35,7 @@ using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
 using Resources = His_Pos.Properties.Resources;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
+using System.Windows;
 // ReSharper disable ClassTooBig
 
 namespace His_Pos.NewClass.Prescription
@@ -1283,6 +1284,7 @@ namespace His_Pos.NewClass.Prescription
         {
             CreateDeclareFileContent();//產生申報資料
             var resultTable = PrescriptionDb.InsertPrescriptionByType(this, Details);
+            
             while (NewFunction.CheckTransaction(resultTable))
             {
                 var retry = new ConfirmWindow("處方登錄異常，是否重試?", "登錄異常", true);
@@ -1294,7 +1296,12 @@ namespace His_Pos.NewClass.Prescription
                     return false;
                 }
             }
+
+
             ID = resultTable.Rows[0].Field<int>("DecMasId");
+
+            PrescriptionDb.InsertStoOrdPrescriptionID(this.ID);
+
             return true;
         }
 
@@ -1679,7 +1686,9 @@ namespace His_Pos.NewClass.Prescription
             var usableAmountList = CheckUsableMedicinesByType();
             MainWindow.ServerConnection.CloseConnection();
             Medicines.CheckUsableAmount(usableAmountList);
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList, Patient.Name, $"{Patient.Name} {DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(AdjustDate,true)} 欠藥採購");
+
+            
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList, Patient.Name, $"{Patient.Name} {DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(AdjustDate,true)} 欠藥採購" );
         }
 
         public void CountSelfPay()
@@ -1705,6 +1714,12 @@ namespace His_Pos.NewClass.Prescription
             {
                 default:
                     var resultTable = PrescriptionDb.DeletePrescription(this);
+
+
+                    PrescriptionDb.DeleteStoreOrder(this.ID);
+                    
+
+
                     while (resultTable.Rows.Count == 0 || !resultTable.Rows[0].Field<bool>("Result"))
                     {
                         MessageWindow.ShowMessage("處方刪除異常，按下OK重試", MessageType.WARNING);

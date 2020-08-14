@@ -7,7 +7,7 @@
     <ProjectGuid>{E004A0E3-1D53-41BA-9D84-3C229D924996}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>His_Pos</RootNamespace>
-    <AssemblyName>His_Pos</AssemblyName>
+    <AssemblyName>His_Pos%28test%29</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -17,7 +17,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>C:\ClickOnce\</PublishUrl>
+    <PublishUrl>C:\HisPos_Test\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -27,11 +27,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
+    <InstallUrl>http://59.124.201.229:46046/</InstallUrl>
     <MinimumRequiredVersion>2.0.12.22</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>30</ApplicationRevision>
+    <ApplicationRevision>33</ApplicationRevision>
     <ApplicationVersion>2.0.12.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -118,7 +118,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>LOGO_HISPOS.ico</ApplicationIcon>
+    <ApplicationIcon>LOGO_HISPOS%28test%29.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>Internet</TargetZone>
@@ -618,6 +618,9 @@
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReports.cs" />
+    <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReport.cs" />
+    <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReportDb.cs" />
+    <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReports.cs" />
     <Compile Include="NewClass\Setting\SettingTabData.cs" />
     <Compile Include="NewClass\Setting\SettingTabDatas.cs" />
     <Compile Include="NewClass\Setting\SettingTabs.cs" />
@@ -878,6 +881,10 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\MedicineManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\OTCControlView.xaml.cs">
+      <DependentUpon>OTCControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\OTCControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\ExportPresHistoryWindow.xaml.cs">
       <DependentUpon>ExportPresHistoryWindow.xaml</DependentUpon>
     </Compile>
@@ -895,10 +902,6 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\NHISpecialMedicinePriceControl.xaml.cs">
       <DependentUpon>NHISpecialMedicinePriceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml.cs">
-      <DependentUpon>OTCControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml.cs">
       <DependentUpon>ProductDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -906,6 +909,9 @@
       <DependentUpon>GroupInventoryControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\GroupControl\GroupInventoryControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\OTCPriceControl.xaml.cs">
+      <DependentUpon>OTCPriceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\SingdePriceControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\RecordControl\ProductRecordDetailControl.xaml.cs">
       <DependentUpon>ProductRecordDetailControl.xaml</DependentUpon>
@@ -938,6 +944,9 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\StockTakingWindow.xaml.cs">
       <DependentUpon>StockTakingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\SetPrices\SetPricesWindow.xaml.cs">
+      <DependentUpon>SetPricesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\SetSelfPayMultiplierWindow\SetSelfPayMultiplierWindow.xaml.cs">
       <DependentUpon>SetSelfPayMultiplierWindow.xaml</DependentUpon>
@@ -1368,6 +1377,9 @@
       <DependentUpon>ActivityManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ActivityManage\ActivityManageViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionDetail\ProductTransactionDetail.xaml.cs">
+      <DependentUpon>ProductTransactionDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordView.xaml.cs">
       <DependentUpon>ProductTransactionRecordView.xaml</DependentUpon>
     </Compile>
@@ -1620,6 +1632,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\OTCControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\ExportPresHistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1636,15 +1652,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\OTCControl\OTCControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\GroupControl\GroupInventoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\OTCPriceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1685,6 +1701,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\StockTakingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\SetPrices\SetPricesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2165,6 +2185,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionDetail\ProductTransactionDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransactionRecord\ProductTransactionRecordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2281,6 +2305,9 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\minus.png" />
+    <Resource Include="Images\more.png" />
+    <Resource Include="LOGO_HISPOS%28test%29.ico" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

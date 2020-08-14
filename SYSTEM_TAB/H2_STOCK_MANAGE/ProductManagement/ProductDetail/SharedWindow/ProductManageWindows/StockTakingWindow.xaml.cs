@@ -133,6 +133,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             stockTaking.SingleStockTaking(productID, stockDetail.TotalInventory, finalInv, double.Parse(NewPrice), wareHouse);
             MainWindow.ServerConnection.CloseConnection();
 
+            ProductDetailDB.UpdateProductLastPrice(productID, double.Parse(NewPrice), wareHouse.ID);
+
             DialogResult = true;
             Close();
         }

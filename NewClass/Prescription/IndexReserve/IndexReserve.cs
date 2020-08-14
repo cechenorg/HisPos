@@ -194,6 +194,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             {
                 if (StoreOrderDB.SendStoreOrderToSingde(this, note).Rows[0][0].ToString() == "SUCCESS")
                 {
+
+                    
+
                     StoreOrderDB.StoreOrderToWaiting(StoOrdID);
                     PrepareMedStatus = IndexPrepareMedType.Prepare;
                     SaveStatus();

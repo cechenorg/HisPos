@@ -58,7 +58,7 @@ namespace His_Pos.NewClass.Trade
         {
             throw new NotImplementedException();
         }
-        internal void AddProductByID(string iD)
+        internal void AddProductByID(string productID)
         {
             throw new NotImplementedException();
         }

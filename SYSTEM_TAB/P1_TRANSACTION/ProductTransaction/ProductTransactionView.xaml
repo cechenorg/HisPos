@@ -9,8 +9,6 @@
              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:customerDataControl="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
              xmlns:customerDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl"
-             xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d">
     <UserControl.Resources>
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
@@ -36,7 +34,7 @@
                 <RowDefinition Height="260"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="400"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <ContentControl Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" Content="{Binding CustomerViewModel}">
@@ -51,22 +49,111 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <ContentControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" Content="{Binding CustomerViewModel}">
-                <ContentControl.Style>
-                    <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoCustomerDetailControl}"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasCustomer, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetailBase}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>
-            <DataGrid Name="ProductDataGrid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True"
-                      ItemsSource="{Binding NewTransaction.ProductCollection}" FrozenColumnCount="3"
-                      SelectedItem="{Binding NewTransaction.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
+            <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding TradeViewModel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,10,0,0">
+                    <Label Content="備註" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <TextBox x:Name="tbNote" VerticalScrollBarVisibility="Auto" Width="300" Margin="0,10,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+                    <Label Content="應收金額 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="34" Foreground="Black" Margin="10,0,0,0"/>
+                    <Label x:Name="lblRealTotal" Content="0" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="34" Foreground="Black"/>
+                    <Label Content="結帳人員：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="80,0,0,0"/>
+                    <ComboBox x:Name="cbCashier" Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_Name" SelectedIndex="0"/>
+                    <Button x:Name="btnClear" Width="100" Height="40"  Content="清除" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClear_Click"/>
+                    <Button x:Name="btnCheckout" Width="150" Height="40" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnCheckout_Click"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+                    <Label Content="實收 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbPaid" Text="" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="22" Foreground="Black" LostFocus="tbPaid_LostFocus" KeyDown="tbPaid_KeyDown">
+                        <TextBox.InputScope>
+                            <InputScope>
+                                <InputScope.Names>
+                                    <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                </InputScope.Names>
+                            </InputScope>
+                        </TextBox.InputScope>
+                    </TextBox>
+                    <Label Content="應找 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="Black" Margin="10,0,0,0"/>
+                    <Label x:Name="lblChange" Content="0" Width="100" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="26" Foreground="Black"/>
+                    <Label Content="發票號碼" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="310,0,0,0"/>
+                    <TextBox x:Name="tbInvoiceNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                    <Label Content="付款方式：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,0"/>
+                    <RadioButton x:Name="rbCash" GroupName="rbgPayMethod" Content="現金" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" IsChecked="True"/>
+                    <RadioButton x:Name="rbCard" GroupName="rbgPayMethod" Content="刷卡" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                    <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbCardNum" Width="250" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" KeyDown="tbCardNum_KeyDown">
+                        <TextBox.InputScope>
+                            <InputScope>
+                                <InputScope.Names>
+                                    <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                </InputScope.Names>
+                            </InputScope>
+                        </TextBox.InputScope>
+                    </TextBox>
+                    <Label Content="統編" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbTaxNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black">
+                        <TextBox.InputScope>
+                            <InputScope>
+                                <InputScope.Names>
+                                    <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                </InputScope.Names>
+                            </InputScope>
+                        </TextBox.InputScope>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
+                    <Label Content="折扣前總計 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <Label x:Name="lblPreTotal" Content="0" Width="95" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
+                    <Label Content="折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbDiscountAmt" Text="0" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountAmt_LostFocus" KeyDown="tbDiscountAmt_KeyDown">
+                        <TextBox.InputScope>
+                            <InputScope>
+                                <InputScope.Names>
+                                    <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                </InputScope.Names>
+                            </InputScope>
+                        </TextBox.InputScope>
+                    </TextBox>
+                    <Label Content="元" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <Label Content="打折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbDiscountPer" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountPer_LostFocus" KeyDown="tbDiscountPer_KeyDown">
+                        <TextBox.InputScope>
+                            <InputScope>
+                                <InputScope.Names>
+                                    <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                </InputScope.Names>
+                            </InputScope>
+                        </TextBox.InputScope>
+                    </TextBox>
+                    <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="90,0,0,0"/>
+                    <ComboBox x:Name="PriceCombo" Width="120" Height="35" HorizontalContentAlignment="Center" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}"  FontSize="20" Foreground="Black" SelectionChanged="PriceCombo_SelectionChanged">
+                        <ComboBoxItem Content="零售價" IsSelected="True"/>
+                        <ComboBoxItem Content="會員價"/>
+                        <ComboBoxItem Content="員工價"/>
+                        <ComboBoxItem Content="特殊價"/>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+            <DataGrid Name="ProductDataGrid" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True" SelectionUnit="Cell" Loaded="ProductDataGrid_Loaded">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -103,15 +190,12 @@
                     <DataGridTemplateColumn Width="30" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <Image.InputBindings>
-                                        <MouseBinding Command="{Binding Path=DataContext.DeleteProductCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
-                                    </Image.InputBindings>
+                                <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown">
                                 </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="50" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
+                    <DataGridTextColumn Header="序" Width="30" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=ID}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -119,19 +203,27 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="175" Header="商品代碼" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="160" Header="商品代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="ProductIDTextbox" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="170" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_OnKeyDown"/>
+                                <TextBox Name="ProductIDTextbox" Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="140" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_KeyDown" TextChanged="ProductIDTextbox_TextChanged">
+                                    <TextBox.InputScope>
+                                        <InputScope>
+                                            <InputScope.Names>
+                                                <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                            </InputScope.Names>
+                                        </InputScope>
+                                    </TextBox.InputScope>
+                                </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="200" MaxWidth="580" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="400" Header="商品名稱" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}"/>
-                                    <Label FontFamily="Segoe UI Semibold" Content="{Binding FullName}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                                    <Label x:Name="lblProductName" Width="400" FontSize="20" FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="0,0,20,0" MouseDoubleClick="lblProductName_MouseDoubleClick"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -143,95 +235,54 @@
                             </Style>
                         </DataGridTemplateColumn.CellStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="70" Header="售價">
+                    <DataGridTextColumn Header="售價" x:Name="Price" Width="100" FontSize="20" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Path=Pro_RetailPrice, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Width="20" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:ToNextTextBoxBehavior/>
-                                    </i:Interaction.Behaviors>
+                                <Image Name="back" Width="14" Source="/Images/minus.png" MouseLeftButtonDown="back_MouseLeftButtonDown">
+                                </Image>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="50" Header="數量">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="Amount" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Amount_LostFocus" TextChanged="Amount_TextChanged" PreviewKeyDown="Amount_KeyDown">
+                                    <TextBox.InputScope>
+                                        <InputScope>
+                                            <InputScope.Names>
+                                                <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                            </InputScope.Names>
+                                        </InputScope>
+                                    </TextBox.InputScope>
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="70" Header="數量">
+                    <DataGridTemplateColumn Width="20" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:ToNextTextBoxBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
+                                <Image Name="next" Width="14" Source="/Images/more.png" MouseLeftButtonDown="next_MouseLeftButtonDown">
+                                </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="80" Header="折扣金額">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding DiscountPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:ToNextTextBoxBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="80" Header="折扣趴數">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding DiscountPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:ToNextTextBoxBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="70" Header="小計">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:ToNextTextBoxBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="70" Header="點數">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding Point, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:ToNextTextBoxBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="100" Header="醫獎">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding Doctor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="90" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:ToNextTextBoxBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="70" Header="寄庫量">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding OrderNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:ToNextTextBoxBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="庫存" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                    <DataGridTextColumn Header="小計" Width="80" FontSize="20" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Path=Calc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="庫存" Width="50" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Inv_Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -241,123 +292,6 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Grid Grid.Row="2" Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding TradeViewModel}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="160"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <DataGrid Grid.Row="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentStoreOrder.ReturnProducts}" FrozenColumnCount="3" SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
-                    <DataGrid.Resources>
-                        <Style TargetType="{x:Type ScrollBar}">
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                            <Setter Property="OverridesDefaultStyle" Value="true"/>
-                            <Setter Property="Width" Value="100"/>
-                            <Style.Triggers>
-                                <Trigger Property="Orientation" Value="Horizontal">
-                                    <Setter Property="Width" Value="Auto" />
-                                    <Setter Property="Height" Value="15" />
-                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                                </Trigger>
-                                <Trigger Property="Orientation" Value="Vertical">
-                                    <Setter Property="Width" Value="15"/>
-                                    <Setter Property="Height" Value="Auto" />
-                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.Resources>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource Shadow}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="Height" Value="40"/>
-                        </Style>
-                    </DataGrid.RowStyle>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="活動名稱" Width="200" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="活動內容" Width="250" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,10,0,0">
-                    <Label Content="備註" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <TextBox Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Auto" Width="400" Margin="0,10,0,10" FontFamily="Segoe UI Semi" FontSize="18" TextWrapping="Wrap" BorderThickness="0" Background="{StaticResource GridBackGround}" VerticalContentAlignment="Top" AcceptsReturn="True"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" DataContext="{Binding TradeViewModel}">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="總金額 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <Label Content="{Binding TotalPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding DiscountPrice, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="點數折抵" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding DiscountPoint, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="-$" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
-                    <Label Content="{Binding DiscountPointPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
-                    <Label Content="打折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding DiscountPercent, UpdateSourceTrigger=PropertyChanged}" Width="50" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Label Content="-$" HorizontalContentAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
-                    <Label Content="{Binding DiscountPercentPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Red"/>
-                </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="現金 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding Cash, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="訂金" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0"/>
-                    <TextBox Text="{Binding OrderCash, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="發票號碼" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="290,0,0,0"/>
-                    <TextBox Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="刷卡 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding CardPrice, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0"/>
-                    <TextBox Text="{Binding CardNumber, UpdateSourceTrigger=PropertyChanged}" Width="250" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                </StackPanel>
-                <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding NewTransaction, UpdateSourceTrigger=PropertyChanged}">
-                    <Label Content="實際售價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Black" Margin="10,0,0,0"/>
-                    <Label Content="{Binding FinalTotalPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Black"/>
-                    <Label Content="已付 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Black" Margin="120,0,0,0"/>
-                    <Label Content="{Binding PayPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Black"/>
-                    <Label Content="餘 $" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Red"/>
-                    <Label Content="{Binding LeftPrice, FallbackValue = 0, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="30" Foreground="Red"/>
-                </StackPanel>
-                <StackPanel Grid.Row="4" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
-                    <Label Content="統編" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding TaxIDNumber, UpdateSourceTrigger=PropertyChanged}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
-                    <Label Content="結帳人員" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="125,0,0,0"/>
-                    <ComboBox Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Button Width="120" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Command="{Binding ClearTradeCommand}"/>
-                    <Button Width="150" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Command="{Binding TradeCommand}"/>
-                </StackPanel> 
-            </Grid>
         </Grid>
     </xctk:BusyIndicator>
 </UserControl>

@@ -10,7 +10,8 @@ using His_Pos.Class;
 using His_Pos.Database;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.Service; 
+using His_Pos.Service;
+using System.Deployment.Application;
 
 namespace His_Pos.FunctionWindow
 {
@@ -28,6 +29,7 @@ namespace His_Pos.FunctionWindow
             get { return isAccountValid; }
             set { Set(() => IsAccountWrong, ref isAccountValid, value); }
         }
+        public string Version => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         #endregion
 
         public LoginWindowViewModel()

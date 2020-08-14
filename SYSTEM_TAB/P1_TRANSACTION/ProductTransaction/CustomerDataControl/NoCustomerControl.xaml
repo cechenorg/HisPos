@@ -12,12 +12,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-            <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="匿名/流水客" Width="350" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Black" Margin="10,0,0,2">
+            <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="顧客手機" Width="250" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="30" Foreground="Black" Margin="10,0,0,2">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding GetCustomerCommand}"/>
                 </TextBox.InputBindings>
             </TextBox>
-            <Button Width="110" Content="新增客戶" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding AddCustomerCommand}"/>
+            <Button Width="110" Content="新增顧客" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding AddCustomerCommand}"/>
         </StackPanel>
         <Rectangle Grid.Row="1" Fill="{StaticResource GridDarkerBackGround}"/>
         <Label Content="無顧客資料" Style="{StaticResource BoldLabelHeader30}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" Grid.Row="1"/>

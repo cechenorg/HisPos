@@ -41,6 +41,7 @@
                     <Button Content="離開" Width="220" Height="40" BorderThickness="0" Background="Transparent" Margin="0,10,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Foreground="DimGray" Command="{Binding LeaveCommand}" />
                 </StackPanel>
             </StackPanel>
+            <Label x:Name="Version" Content="{Binding Version}" Margin="30,0,30,0" FontSize="20" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right"/>
             <Button Content="離線作業" Width="100" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right" Margin="10,30,10,10" Background="CornflowerBlue" BorderBrush="CornflowerBlue" Click="ButtonBase_OnClick" Visibility="Collapsed"/>
         </StackPanel>
     </Viewbox>

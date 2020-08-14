@@ -1,0 +1,54 @@
+System.Windows.MessageBox.Show("123");
+
+SD_YODONG
+HISPOS_DEVELOP
+
+http://kaokaodepon.singde.com.tw:60000/
+
+http://www.coolpc.com.tw/tmp/1586082294334828.htm
+
+03/23
+
+ADD:
+新增顧客時手機電話格式驗證
+格式化手機顯示XXXX-XXX-XXX
+格式化電話顯示XXX-XXXX或XXXX-XXXX
+
+
+
+BUG:
+新增顧客什麼都沒輸入就送出會crash(FIXED)
+每日作業顧客資料修改儲存沒有反應
+顧客管理修改時有錯誤依然顯示"更新成功"
+
+## SQL恢復[正在還原]資料庫 ##
+-- 切換資料庫的狀態為：ONLINE。
+RESTORE DATABASE [資料庫名稱]
+WITH RECOVERY
+GO
+
+View Define:
+
+ProductManagementView = 商品查詢介面
+MedicineControlView = 商品詳細資料
+
+Product.OTADetail
+
+Pro_ID 品號(店內碼)
+Pro_Code
+Pro_OldCode
+Pro_RetailPrice
+Pro_MemberPrice
+Pro_EmployeePrice
+Pro_SpecialPrice
+
+Set.UpdateOTCPrice
+Set.InsertProduct
+Get.ProductManageOTCMedicineDetailByID
+
+新增商品時檢查重複編號
+
+B022383100
+
+Visibility="{Binding DataContext.IsNHIProduct, RelativeSource={ RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}"
+

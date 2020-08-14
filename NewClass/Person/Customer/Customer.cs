@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -89,7 +90,7 @@ namespace His_Pos.NewClass.Person.Customer
         {
             if (ID == 0 || IDNumber.Equals("A111111111") || Name.Equals("匿名"))
             {
-                MessageWindow.ShowMessage("匿名資料不可編輯",MessageType.ERROR);
+                MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.ERROR);
                 return;
             }
             CustomerDb.Save(this);
@@ -99,6 +100,29 @@ namespace His_Pos.NewClass.Person.Customer
         {
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            /* 格式化手機 */
+            if (!string.IsNullOrEmpty(customer.CellPhone) && customer.CellPhone.Length == 10) {
+                string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
+                customer.CellPhone = FormatCell;
+            }
+            /* 格式化電話 */
+            if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 7)
+            {
+                string FormatTel = customer.Tel.Insert(3, "-");
+                customer.Tel = FormatTel;
+            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 8)
+            {
+                string FormatTel = customer.Tel.Insert(4, "-");
+                customer.Tel = FormatTel;
+            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 9)
+            {
+                string FormatTel = customer.Tel.Insert(2, "-").Insert(6, "-");
+                customer.Tel = FormatTel;
+            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 10)
+            {
+                string FormatTel = customer.Tel.Insert(2, "-").Insert(7, "-");
+                customer.Tel = FormatTel;
+            }
             return customer;
         }
         public Customers Check() {
@@ -269,5 +293,18 @@ namespace His_Pos.NewClass.Person.Customer
                 return false;
             return Name.Equals("匿名") && IDNumber.Equals("A111111111");
         }
+
+        public bool CheckCellFormat() {            
+            var cleared = Regex.Replace(CellPhone, "[^0-9]", "");
+            //System.Windows.MessageBox.Show(cleared.Length.ToString());
+            return cleared.Length == 10;
+        }
+
+        /*public bool CheckTelFormat() {
+            var cleared = Regex.Replace(Tel, "[^0-9]", "");
+            return cleared.Length == 7 || cleared.Length == 9;
+        }*/
+
+
     }
 }

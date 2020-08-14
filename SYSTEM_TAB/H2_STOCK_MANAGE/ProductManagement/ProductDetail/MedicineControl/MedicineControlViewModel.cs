@@ -25,6 +25,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand SyncDataCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand SetSelfPayMultiplierCommand { get; set; }
+        public RelayCommand SetPricesCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -46,6 +47,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
         private ProductManageMedicine medicine;
         private ProductTypeEnum productType;
+        private bool isNHIProduct;
 
         public ProductManageMedicine Medicine
         {
@@ -57,6 +59,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             get { return productType; }
             set { Set(() => ProductType, ref productType, value); }
         }
+        public bool IsNHIProduct
+        {
+            get { return isNHIProduct; }
+            set { Set(() => IsNHIProduct, ref isNHIProduct, value); }
+        }
         #endregion
 
         public MedicineControlViewModel(string proID, ProductTypeEnum type, string wareHouseID)
@@ -64,8 +71,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             ManageViewModel = new MedicineManageViewModel();
 
             RegisterCommand();
-            ProductType = type;
+            ProductType = type;            
             InitMedicineData(proID, wareHouseID);
+
+            IsNHIProduct = true;
+            if ((int)ProductType == 2) IsNHIProduct = false;
         }
         
         #region ----- Define Actions -----
@@ -106,6 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 Medicine.SelfPayMultiplier = selfPayMultiplierWindow.SelfPayMultiplier;
             }
         }
+        
         //private void ShowConsumeRecordAction()
         //{
         //    ProductConsumeRecordWindow productConsumeRecordWindow = new ProductConsumeRecordWindow(Medicine.ID, SelectedWareHouse);

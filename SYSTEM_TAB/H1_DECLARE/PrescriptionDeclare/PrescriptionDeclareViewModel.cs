@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -626,7 +627,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckDeclareStatus();
         }
 
-        private void GetDiseaseCodeAction(object sender)
+
+        private void GetDiseaseCodeCheck(object sender)
         {
             var parameters = sender.ConvertTo<List<string>>();
             var elementName = parameters[0];
@@ -636,24 +638,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 DiseaseFocusNext(elementName);
                 return;
             }
-            //診斷碼查詢
-            switch (elementName)
-            {
-                case "MainDiagnosis":
-                    CurrentPrescription.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
-                    break;
-                case "SecondDiagnosis":
-                    CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
-                    break;
-            }
-        }
+            else if (!string.IsNullOrEmpty(diseaseID))
 
-        private void CheckClearDiseaseAction(object sender)
-        {
-            var parameters = sender.ConvertTo<List<string>>();
-            var elementName = parameters[0];
-            var diseaseID = parameters[1];
-            if (string.IsNullOrEmpty(diseaseID))
+
             {
                 switch (elementName)
                 {
@@ -665,6 +652,46 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         break;
                 }
             }
+            //診斷碼查詢
+            
+            switch (elementName)
+            {
+                
+                case "MainDiagnosis":
+
+         
+                    CurrentPrescription.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    if (CurrentPrescription.MainDisease == null)
+                    {
+                        Messenger.Default.Send(new NotificationMessage(this, "FocusMainDisease"));
+                        
+                        return;
+                    }
+                    break;
+                case "SecondDiagnosis":
+                    CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
+                    if (CurrentPrescription.SubDisease == null)
+                    {
+                        Messenger.Default.Send(new NotificationMessage(this, "FocusSubDisease"));
+                       
+                        return;
+                    }
+                    break;
+            }
+        }
+
+
+        private void GetDiseaseCodeAction(object sender)
+        {
+            GetDiseaseCodeCheck(sender);
+        }
+
+        private void CheckClearDiseaseAction(object sender)
+        {
+            //LostFocus()
+            
+            GetDiseaseCodeCheck(sender);
+            
         }
 
         private void DiseaseFocusNext(string elementName)
@@ -1104,6 +1131,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             catch (Exception e)
             {
                 NewFunction.ExceptionLog(e.Message);
+                NewFunction.ShowMessageFromDispatcher(e.Message, MessageType.WARNING);
                 NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
             }
         }
