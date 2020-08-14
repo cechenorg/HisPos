@@ -70,12 +70,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (string.IsNullOrEmpty(searchString)) return;
             if (searchString.Length == 0) 
             {
-                return;
-                /*if (rowIndex < ProductList.Rows.Count) 
+                if (rowIndex < ProductList.Rows.Count) 
                 {
                     ProductList.Rows.RemoveAt(rowIndex);
                     CalculateTotal("AMT");
-                }*/
+                }
             }
             if (searchString.Length < 5)
             {
@@ -99,12 +98,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (productCount == 0) 
             {
                 MessageWindow.ShowMessage("查無商品", MessageType.WARNING);
-                return;
-                /*if (rowIndex < ProductList.Rows.Count) 
+                if (rowIndex < ProductList.Rows.Count) 
                 {
                     ProductList.Rows.RemoveAt(rowIndex);
                     CalculateTotal("AMT");
-                }*/
+                }
             }
             else
             {
