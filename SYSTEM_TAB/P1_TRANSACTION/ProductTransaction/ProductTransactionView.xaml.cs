@@ -86,7 +86,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int productCount = ProductStructs.GetProductStructCountBySearchString(searchString, AddProductEnum.Trade);
             MainWindow.ServerConnection.CloseConnection();
 
-            if (productCount == 0) { MessageWindow.ShowMessage("查無商品", MessageType.WARNING); }
+            if (productCount == 0) 
+            {
+                MessageWindow.ShowMessage("查無商品", MessageType.WARNING);
+                if (rowIndex < ProductList.Rows.Count) { ProductList.Rows.RemoveAt(rowIndex); }
+            }
             else
             {
                 if (productCount > 0)
@@ -260,6 +264,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbPaid.Text = "";
             AppliedPrice = "Pro_RetailPrice";
             CalculateTotal("AMT");
+            PriceCombo.SelectedIndex = 0; 
         }
 
         #region ----- Events -----
