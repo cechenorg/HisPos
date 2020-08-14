@@ -61,7 +61,7 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </xctk:MaskedTextBox>
-                    <Button Command="{Binding Clear}" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="30,0,0,0" FontSize="16"/>
+                    <Button x:Name="btnClear" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="30,0,0,0" FontSize="16" Click="btnClear_Click"/>
                     <Button x:Name="btnQuery" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16" Click="btnQuery_Click"/>
                 </StackPanel>
                 <DataGrid x:Name="RecordGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
@@ -155,9 +155,9 @@
                 </DataGrid>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,10,0,0" Background="{StaticResource GridBackGround}">
                     <Label Content="銷售筆數:" Height="35" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
-                    <Label Width="150" Height="35" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label x:Name="lblCount" Width="150" Height="35" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="銷售總額:" Height="35" Style="{StaticResource BoldLabelContent18}"/>
-                    <Label Width="150" Height="35" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Label x:Name="lblTotal" Width="150" Height="35" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>

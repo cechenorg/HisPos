@@ -1,4 +1,8 @@
-﻿using System.Data;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,9 +13,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
     /// </summary>
     public partial class ProductTransactionDetail : Window
     {
+        string masID;
+
         public ProductTransactionDetail(DataRow masterRow, DataTable detailTable)
         {
             InitializeComponent();
+            masID = masterRow["TraMas_ID"].ToString();
             string priceType = detailTable.Rows[0]["TraDet_PriceType"].ToString();
             AssignMasterValue(masterRow, priceType);
             ProductDataGrid.ItemsSource = detailTable.DefaultView;
@@ -48,6 +55,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lblPriceType.Content = PriceTypeConverted;
             if (masterRow["TraMas_PayMethod"].ToString() == "信用卡") { rbCard.IsChecked = true; }
             lblTradeTime.Content = masterRow["TransTime_Format"];
+            tbNote.Text = masterRow["TraMas_Note"].ToString();
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -73,7 +81,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MasterID", masID));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDelete]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
 
+            if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            {
+                MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
+                Close();
+            }
+            else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)

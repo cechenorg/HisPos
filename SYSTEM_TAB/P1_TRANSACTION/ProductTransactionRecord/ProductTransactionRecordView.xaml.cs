@@ -55,6 +55,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             FormatData(result);
             RecordList = result.Copy();
             RecordGrid.ItemsSource = RecordList.DefaultView;
+            lblCount.Content = RecordList.Rows.Count;
+            lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
         }
 
         private void FormatData(DataTable result) 
@@ -94,7 +96,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.CloseConnection();
 
             ProductTransactionDetail.ProductTransactionDetail ptd = new ProductTransactionDetail.ProductTransactionDetail(masterRow, result);
+
+            ptd.Closed += DetailWindowClosed;
             ptd.ShowDialog();
+        }
+
+        public void DetailWindowClosed(object sender, System.EventArgs e)
+        {
+            GetData();
         }
 
         private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -118,6 +127,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         private void btnQuery_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             GetData();
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            RecordList.Clear();
         }
     }
 }

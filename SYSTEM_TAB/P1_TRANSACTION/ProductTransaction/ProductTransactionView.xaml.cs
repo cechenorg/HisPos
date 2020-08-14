@@ -65,7 +65,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return rowIdx;
         }
 
-        private void AddProductByInputAction(string searchString)
+        private void AddProductByInputAction(string searchString, int rowIndex)
         {
             if (string.IsNullOrEmpty(searchString)) return;
             if (searchString.Length < 5)
@@ -99,6 +99,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[SearchProductsByID]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
 
+                    
                     if (ProductList.Rows.Count == 0)
                     {
                         ProductList = result.Clone();
@@ -109,21 +110,35 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         ProductList.Columns.Add("Calc", typeof(double));
                     }
 
+                    DataRow newRow = ProductList.NewRow();
                     if (result.Rows.Count == 1)
                     {
                         DataRow NewProduct = result.Rows[0];
-                        ProductList.ImportRow(NewProduct);
-                        ProductDataGrid.ItemsSource = ProductList.DefaultView;                        
+                        newRow.ItemArray = NewProduct.ItemArray;
+                        if (rowIndex < ProductList.Rows.Count)
+                        {
+                            ProductList.Rows.RemoveAt(rowIndex);
+                            ProductList.Rows.InsertAt(newRow, rowIndex);
+                        }
+                        else { ProductList.ImportRow(NewProduct); }
+                        ProductDataGrid.ItemsSource = ProductList.DefaultView;
                     }
                     else if (result.Rows.Count > 1)
                     {
                         TradeAddProductWindow tapw = new TradeAddProductWindow(result);
                         tapw.ShowDialog();
                         DataRow NewProduct = tapw.SelectedProduct;
-                        ProductList.ImportRow(NewProduct);
+                        newRow.ItemArray = NewProduct.ItemArray;
+                        if (rowIndex < ProductList.Rows.Count)
+                        {
+                            ProductList.Rows.RemoveAt(rowIndex);
+                            ProductList.Rows.InsertAt(newRow, rowIndex);
+                        }
+                        else { ProductList.ImportRow(NewProduct); }
                         ProductDataGrid.ItemsSource = ProductList.DefaultView;
                     }
 
+                    // Focus Next Row
                     Dispatcher.InvokeAsync(() => {
                         var ProductIDList = new List<TextBox>();
                         NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
@@ -265,17 +280,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
-                if (ProductList.Rows.Count == currentRowIndex)
+                if (!tb.Text.Equals(string.Empty))
                 {
-                    if (!tb.Text.Equals(string.Empty))
+                    AddProductByInputAction(tb.Text, currentRowIndex);
+                    foreach (DataRow dr in ProductList.Rows)
                     {
-                        AddProductByInputAction(tb.Text);
-                        foreach (DataRow dr in ProductList.Rows)
-                        {
-                            dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
-                        }
-                        tb.Text = "";
+                        dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
                     }
+                    if (currentRowIndex == ProductList.Rows.Count - 1) { tb.Text = ""; }
                 }
             }
         }
