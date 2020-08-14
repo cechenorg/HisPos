@@ -35,7 +35,7 @@
                 <Label Content="結帳人員：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="80,0,0,0"/>
                 <Label x:Name="lblCashier" Content="" Width="100" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
                 <Button x:Name="btnDelete" Width="100" Height="30"  Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="40,0,0,0" BorderThickness="0" Background="DimGray" Click="btnDelete_Click"/>
-                <Button x:Name="btnSubmit" Width="150" Height="30" Content="送出修改" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnSubmit_Click"/>
+                <Button x:Name="btnSubmit" Width="150" Height="30" Content="送出修改" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnSubmit_Click" IsEnabled="False"/>
             </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="付款方式：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>

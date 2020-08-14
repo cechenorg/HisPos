@@ -313,12 +313,24 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void Amount_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = (TextBox)sender;
+            if (!IsTextAllowed(tb.Text)) { tb.Text = ""; }
             if (tb.Text == "") { tb.Text = "0"; }
             CalculateTotal("AMT");
         }
 
+        private void Amount_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
+                MoveFocus(request);
+            }
+        }
+
         private void tbDiscountAmt_LostFocus(object sender, RoutedEventArgs e)
         {
+            TextBox tb = (TextBox)sender;
+            if (!IsTextAllowed(tb.Text)) { tb.Text = ""; }
             if (tbDiscountAmt.Text == "")
             {
                 tbDiscountAmt.Text = "0";
@@ -331,6 +343,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbDiscountPer_LostFocus(object sender, RoutedEventArgs e)
         {
+            TextBox tb = (TextBox)sender;
+            if (!IsTextAllowed(tb.Text)) { tb.Text = ""; }
             if (tbDiscountPer.Text == "") 
             { 
                 tbDiscountAmt.Text = "0";
@@ -493,6 +507,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
 
         #endregion
+
         
     }
 }

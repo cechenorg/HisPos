@@ -254,7 +254,7 @@
                     <DataGridTemplateColumn Width="50" Header="數量">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Amount_LostFocus" TextChanged="Amount_TextChanged">
+                                <TextBox x:Name="Amount" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Amount_LostFocus" TextChanged="Amount_TextChanged" PreviewKeyDown="Amount_KeyDown">
                                     <TextBox.InputScope>
                                         <InputScope>
                                             <InputScope.Names>
