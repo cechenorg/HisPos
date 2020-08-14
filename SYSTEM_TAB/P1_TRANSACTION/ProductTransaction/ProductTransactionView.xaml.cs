@@ -294,19 +294,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             TextBox tb = (TextBox)sender;
             int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
+            int preCount = ProductList.Rows.Count;
 
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
-                if (!tb.Text.Equals(string.Empty))
+                AddProductByInputAction(tb.Text, currentRowIndex);
+                int newCount = ProductList.Rows.Count;
+                foreach (DataRow dr in ProductList.Rows)
                 {
-                    AddProductByInputAction(tb.Text, currentRowIndex);
-                    foreach (DataRow dr in ProductList.Rows)
-                    {
-                        dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
-                    }
-                    if (currentRowIndex == ProductList.Rows.Count - 1) { tb.Text = ""; }
+                    dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
                 }
+                if (currentRowIndex == ProductList.Rows.Count - 1 && newCount > preCount) { tb.Text = ""; }
             }
         }
 
