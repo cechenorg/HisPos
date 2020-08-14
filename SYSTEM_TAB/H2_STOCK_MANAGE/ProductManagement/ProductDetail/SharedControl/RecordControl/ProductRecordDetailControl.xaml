@@ -28,6 +28,9 @@
         <DataTemplate x:Key="MergeSplitIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
             <Image Source="/Images/MergeSplit.png" Width="23" Margin="10,0,5,0"/>
         </DataTemplate>
+        <DataTemplate x:Key="TradeIcon" DataType="{x:Type medicineControl:MedicineControlViewModel}">
+            <Image Source="/Images/RedDot.png" Width="18" Margin="10,0,5,0"/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -73,7 +76,7 @@
             <RadioButton Content="調劑" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="3"/>
             <Image Source="/Images/OrangeDot.png" Width="15"/>
             <RadioButton Content="交易" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="4"/>
-            <Image Source="/Images/LightBlueDot.png" Width="15"/>
+            <Image Source="/Images/RedDot.png" Width="15"/>
             <RadioButton Content="庫存管理" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding FilterRecordCommand}" CommandParameter="2"/>
             <Image Source="/Images/GreenDot.png" Width="15"/>
         </StackPanel>
@@ -135,6 +138,9 @@
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Value="MergeSplit">
                                                 <Setter Property="ContentTemplate" Value="{StaticResource MergeSplitIcon}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Value="Trade">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource TradeIcon}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

@@ -12,7 +12,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
     {
         public double RangePurchaseReturnAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.PurchaseReturn).Sum(r => r.Amount);} }
 
-        public double RangePrescriptionAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.Prescription).Sum(r => r.Amount); } }
+        public double RangePrescriptionAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.Prescription|| r.Type == ProductInventoryRecordType.Transaction).Sum(r => r.Amount); } }
 
         public double RangeStockTakingAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.StockTaking).Sum(r => r.Amount); } }
 
