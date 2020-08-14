@@ -235,6 +235,13 @@ namespace His_Pos.ChromeTabViewModel
             var result = Divisions.SingleOrDefault(i => !string.IsNullOrEmpty(i.ID) && i.ID.Equals(id));
             return result;
         }
+
+        public static Division GetDivisionPrint(string id)
+        {
+            var Div = new Divisions();
+            var result=Div.SingleOrDefault(i => !string.IsNullOrEmpty(i.ID) && i.ID.Equals(id));
+            return result;
+        }
         public static PaymentCategory GetPaymentCategory(string id)
         {
             return PaymentCategories.SingleOrDefault(p => p.ID.Equals(id));

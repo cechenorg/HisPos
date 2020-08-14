@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Windows;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
@@ -147,6 +148,7 @@ namespace His_Pos.NewClass.Medicine.Base
                             medicine = new MedicineOTC(table.Rows[i]);
                             break;
                     }
+                    
                     medicine.SetValueByCooperativeMedicine(item);
                     tempList.Add(medicine);
                 }
@@ -597,8 +599,11 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList,string cusName,string note = null)
+        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList,string cusName,  string note = null)
         {
+
+
+           
             var inventoryIDList = new List<int>();
             foreach (var med in this)
             {

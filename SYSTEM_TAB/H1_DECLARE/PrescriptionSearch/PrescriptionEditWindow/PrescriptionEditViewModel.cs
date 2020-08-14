@@ -163,6 +163,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 Set(() => EditedPrescription, ref editedPrescription, value);
             }
         }
+        public Prescription PrintEditedPrescription{ get; set; }
 
         private bool chronicTimesCanEdit;
         public bool ChronicTimesCanEdit
@@ -231,6 +232,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             OriginalPrescription = p;
             ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
+            if (EditedPrescription.Institution.ID == "3532082753")
+            {
+                PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
+            }
+            
             EditedPrescription.ID = p.ID;
             EditedPrescription.SourceId = p.SourceId;
             InitialItemsSources();
@@ -259,6 +265,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
             EditedPrescription.AdjustCase = VM.GetAdjustCase(OriginalPrescription.AdjustCase.ID);
             EditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
+            if (EditedPrescription.Institution.ID == "3532082753")
+            {
+                PrintEditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
+            }
             if (OriginalPrescription.PrescriptionCase != null)
                 EditedPrescription.PrescriptionCase = VM.GetPrescriptionCases(OriginalPrescription.PrescriptionCase?.ID);
             if (OriginalPrescription.PaymentCategory != null)
@@ -378,6 +388,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void PrintMedBagAction()
         {
+            if (EditedPrescription.Institution.ID == "3532082753")
+            {
+                PrintEditedPrescription.Division.Name = "";
+            }
             var printConfirmResult = NewFunction.CheckPrint(EditedPrescription);
             var printMedBag = printConfirmResult[0];
             var printSingle = printConfirmResult[1];
@@ -389,18 +403,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                if ((bool)printMedBag)
+                if (EditedPrescription.Institution.ID == "3532082753")
                 {
-                    BusyContent = Resources.藥袋列印;
-                    switch (printSingle != null && (bool)printSingle)
+                    if ((bool)printMedBag)
                     {
-                        case false:
-                            EditedPrescription.PrintMedBagMultiMode();
-                            break;
-                        case true:
-                            EditedPrescription.PrintMedBagSingleMode();
-                            break;
+                        BusyContent = Resources.藥袋列印;
+                        switch (printSingle != null && (bool)printSingle)
+                        {
+                            case false:
+                                PrintEditedPrescription.PrintMedBagMultiMode();
+                                break;
+                            case true:
+                                PrintEditedPrescription.PrintMedBagSingleMode();
+                                break;
+                        }
                     }
+                }
+                else {
+                    if ((bool)printMedBag)
+                    {
+                        BusyContent = Resources.藥袋列印;
+                        switch (printSingle != null && (bool)printSingle)
+                        {
+                            case false:
+                                EditedPrescription.PrintMedBagMultiMode();
+                                break;
+                            case true:
+                                EditedPrescription.PrintMedBagSingleMode();
+                                break;
+                        }
+                    }
+
                 }
                 if ((bool)printReceipt)
                 {
@@ -488,9 +521,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 case "I21" when EditedPrescription.PrescriptionPoint.MedicinePoint > 100:
                     EditedPrescription.Copayment = VM.GetCopayment("I20");
+                    if (EditedPrescription.Institution.ID == "3532082753")
+                    {
+                        PrintEditedPrescription.Copayment = VM.GetCopayment("I20");
+                    }
                     break;
                 case "I20" when EditedPrescription.PrescriptionPoint.MedicinePoint <= 100:
                     EditedPrescription.Copayment = VM.GetCopayment("I21");
+                    if (EditedPrescription.Institution.ID == "3532082753")
+                    {
+                        PrintEditedPrescription.Copayment = VM.GetCopayment("I21");
+                    }
                     break;
             }
             DataChangedAction();
@@ -614,8 +655,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void RedoEditAction()
         {
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
+            if (EditedPrescription.Institution.ID == "3532082753")
+            {
+                PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
+            }
             EditedPrescription.ID = OriginalPrescription.ID;
             EditedPrescription.SourceId = OriginalPrescription.SourceId;
+            PrintEditedPrescription.ID = OriginalPrescription.ID;
+            PrintEditedPrescription.SourceId = OriginalPrescription.SourceId;
             InitPrescription();
             IsEdit = false;
         }

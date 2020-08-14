@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Medicine.PreviewMedicine;
 using His_Pos.NewClass.Prescription.Service;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 {
@@ -33,6 +35,8 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         {
             var pre = new NewClass.Prescription.Prescription(Content, TreatDate, SourceID, IsRead);
             PrescriptionDb.UpdateCooperativePrescriptionIsRead(pre.SourceId);
+            
+            pre.Medicines.CountSelfPay();
             pre.CountPrescriptionPoint();
             pre.CountSelfPay();
             pre.PrescriptionPoint.CountAmountsPay();
@@ -49,7 +53,9 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 var medList = tempList.Where(m => m.ID.Equals(setItem.ID));
                 foreach (var item in medList)
                 {
+                    
                     medicines.Add(item);
+
                 }
             }
             Medicines.Clear();

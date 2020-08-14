@@ -64,5 +64,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         {
             return !string.IsNullOrEmpty(ID) && ID.Equals(VM.CurrentPharmacy.ID);
         }
+      
     }
 }
