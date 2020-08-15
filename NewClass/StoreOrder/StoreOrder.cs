@@ -112,6 +112,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Abstract Function /////
         public abstract void GetOrderProducts();
         public abstract void SaveOrder();
+        public abstract void SaveOrderNote();
         public abstract void AddProductByID(string iD, bool isFromAddButton);
         public abstract void DeleteSelectedProduct();
         public abstract void CalculateTotalPrice();
@@ -130,6 +131,7 @@ namespace His_Pos.NewClass.StoreOrder
                     ToNormalProcessingStatus();
                     break;
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
+                    SaveOrderNote();
                     ToWaitingStatus();
                     break;
                 case OrderStatusEnum.NORMAL_PROCESSING:

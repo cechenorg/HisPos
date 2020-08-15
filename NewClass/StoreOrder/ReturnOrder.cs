@@ -285,6 +285,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             return returnOrder;
         }
+
+        public override void SaveOrderNote(){}
         #endregion
 
         #region ----- Define Function -----

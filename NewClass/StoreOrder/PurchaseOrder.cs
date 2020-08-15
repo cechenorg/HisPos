@@ -247,7 +247,14 @@ namespace His_Pos.NewClass.StoreOrder
 
             //backgroundWorker.DoWork += (sender, args) =>
             //{
+            StoreOrderDB.SavePurchaseOrder(this);
+            //};
 
+            //backgroundWorker.RunWorkerAsync();
+        }
+
+        public override void SaveOrderNote()
+        {
             PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
 
             string note;
@@ -256,20 +263,14 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 saveStoreOrder.Note = TargetPreOrderCustomer + " " + saveStoreOrder.Note;
                 StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-                
             }
             else
             {
                 saveStoreOrder.Note = TargetPreOrderCustomer + " " + dt.ToString("yyyy年MM月dd日") + " " + saveStoreOrder.Note;
                 StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-
             }
-           
-
-            //};
-
-            //backgroundWorker.RunWorkerAsync();
         }
+
         public override object Clone()
         {
             PurchaseOrder purchaseOrder = new PurchaseOrder();
