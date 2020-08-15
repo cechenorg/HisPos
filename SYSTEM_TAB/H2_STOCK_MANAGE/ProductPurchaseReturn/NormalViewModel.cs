@@ -304,9 +304,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         private void InitBackgroundWorker()
         {
-           
-            
-
             initBackgroundWorker = new BackgroundWorker();
             
             initBackgroundWorker.DoWork += (sender, args) =>
@@ -368,10 +365,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
-
+                InitData(storeOrderCollection);
 
                 string CurrentStoreOrderID = CurrentStoreOrder.ID;
-                //InitData(storeOrderCollection);
+               
                 //storeOrderCollection = storeOrderCollection;
                 StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrderCollection);
 
