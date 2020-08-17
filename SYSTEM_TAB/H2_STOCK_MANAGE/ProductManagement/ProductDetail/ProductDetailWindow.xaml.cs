@@ -15,6 +15,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
         {
             InitializeComponent();
             Show();
+            Activate();
         }
 
         public static void ShowProductDetailWindow()

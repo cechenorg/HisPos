@@ -18,10 +18,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
     {
         public DataTable RecordList;
 
+        public DateTime sDate { get; set; }
+
         public ProductTransactionRecordView()
         {
             InitializeComponent();
             RecordList = new DataTable();
+            sDate = DateTime.Today;
         }
 
         private int GetRowIndex(MouseButtonEventArgs e)
@@ -96,9 +99,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.CloseConnection();
 
             ProductTransactionDetail.ProductTransactionDetail ptd = new ProductTransactionDetail.ProductTransactionDetail(masterRow, result);
-
             ptd.Closed += DetailWindowClosed;
             ptd.ShowDialog();
+            ptd.Activate();
         }
 
         public void DetailWindowClosed(object sender, System.EventArgs e)
