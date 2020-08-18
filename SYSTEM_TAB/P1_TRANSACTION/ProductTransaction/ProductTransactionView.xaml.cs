@@ -512,7 +512,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
         }
 
-        private void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             int index = GetRowIndex(e);
             if (index < ProductList.Rows.Count)
@@ -520,6 +520,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 string proID = ProductList.Rows[index]["Pro_ID"].ToString();
                 ProductDetailWindow.ShowProductDetailWindow();
                 Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
+                await Task.Delay(20);
+                ProductDetailWindow.ActivateProductDetailWindow();
             }
         }
 

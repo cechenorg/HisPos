@@ -24,5 +24,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
         {
             InitializeComponent();
         }
+
+        private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            AddNewCustomerWindow acw = new AddNewCustomerWindow();
+            acw.ShowDialog();
+        }
     }
 }

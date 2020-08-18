@@ -15,7 +15,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
         {
             InitializeComponent();
             Show();
-            Activate();
         }
 
         public static void ShowProductDetailWindow()
@@ -29,6 +28,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
         {
             Instance = null;
             Messenger.Default.Send(new NotificationMessage(this, "CloseProductTabs"));
+        }
+        public static void ActivateProductDetailWindow() 
+        {
+            Instance.Activate();
         }
     }
 }

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
@@ -18,13 +21,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
     {
         public DataTable RecordList;
 
-        public DateTime sDate { get; set; }
-
         public ProductTransactionRecordView()
         {
             InitializeComponent();
+            StartDate.Value = GetDefaultDate();
+            EndDate.Value = GetDefaultDate();
             RecordList = new DataTable();
-            sDate = DateTime.Today;
         }
 
         private int GetRowIndex(MouseButtonEventArgs e)
@@ -41,8 +43,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             return rowIdx;
         }
 
+        private string GetDefaultDate() 
+        {
+            DateTime dt = DateTime.Today;
+            TaiwanCalendar tc = new TaiwanCalendar();
+            string dts = string.Format("{0}/{1}/{2}", 
+                tc.GetYear(dt),
+                dt.Month.ToString("d2"),
+                dt.Day.ToString("d2")
+                );
+            return dts;
+            //MessageBox.Show(dts);
+        }
+
         private void GetData() 
         {
+            GetDefaultDate();
             if (StartDate.Text.Contains("-") || EndDate.Text.Contains("-")) { return; }
             string sDate = ConvertMaskedDate(StartDate.Text);
             string eDate = ConvertMaskedDate(EndDate.Text);
@@ -60,6 +76,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             RecordGrid.ItemsSource = RecordList.DefaultView;
             lblCount.Content = RecordList.Rows.Count;
             lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
+            if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
         }
 
         private void FormatData(DataTable result) 

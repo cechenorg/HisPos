@@ -17,7 +17,7 @@
                     <KeyBinding Key="Enter" Command="{Binding GetCustomerCommand}"/>
                 </TextBox.InputBindings>
             </TextBox>
-            <Button Width="110" Content="新增顧客" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding AddCustomerCommand}"/>
+            <Button x:Name="btnAddCustomer" Width="110" Content="新增顧客" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Click="btnAddCustomer_Click"/>
         </StackPanel>
         <Rectangle Grid.Row="1" Fill="{StaticResource GridDarkerBackGround}"/>
         <Label Content="無顧客資料" Style="{StaticResource BoldLabelHeader30}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" Grid.Row="1"/>
