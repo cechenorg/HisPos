@@ -745,11 +745,11 @@ namespace His_Pos.NewClass.StoreOrder
                     else
                     {
                         if (product.ID.Length > 12)
-                            orderMedicines += product.ID.Substring(0, 13);
+                            orderMedicines += product.ID.Substring(0, 12);
                         else
                             orderMedicines += product.ID.PadRight(12, ' ');
 
-                        orderMedicines += product.OrderAmount.ToString("0.00").ToString().PadLeft(9, ' ');
+                        orderMedicines += product.OrderAmount.ToString("0.00").ToString().PadLeft(10, ' ');
 
                         if (product.ID.Length > 12)
                             orderMedicines += product.ID.Substring(13);

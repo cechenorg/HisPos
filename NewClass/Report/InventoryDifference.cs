@@ -52,6 +52,17 @@ namespace His_Pos.NewClass.Report
             }
         }
 
+        private double inventoryTotal;
+        public double InventoryTotal
+        {
+            get => inventoryTotal;
+            set
+            {
+                Set(() => InventoryTotal, ref inventoryTotal, value);
+            }
+        }
+
+
         public void GetInventoryDifference(DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();
