@@ -718,7 +718,6 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderMedicines = "";
-            string orderOTC = "";
             string cusName = "";
             string planDate = "";
 
@@ -726,37 +725,20 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
                 {
-                    if (product.Type == 2)
-                    {
+                   
                         if (product.ID.Length > 12)
-                            orderOTC += product.ID.Substring(0, 13);
-                        else
-                            orderOTC += product.ID.PadRight(12, ' ');
-
-                        orderOTC += product.OrderAmount.ToString("0.00").PadLeft(9, ' ');
-
-                        if (product.ID.Length > 12)
-                            orderOTC += product.ID.Substring(13);
-
-                        orderOTC += product.Note;
-                        orderOTC += "\r\n";
-
-                    }
-                    else
-                    {
-                        if (product.ID.Length > 12)
-                            orderMedicines += product.ID.Substring(0, 13);
+                            orderMedicines += product.ID.Substring(0, 12);
                         else
                             orderMedicines += product.ID.PadRight(12, ' ');
 
-                        orderMedicines += product.OrderAmount.ToString("0.00").ToString().PadLeft(9, ' ');
+                        orderMedicines += product.OrderAmount.ToString("0.00").ToString().PadLeft(10, ' ');
 
                         if (product.ID.Length > 12)
                             orderMedicines += product.ID.Substring(13);
 
                         orderMedicines += product.Note;
                         orderMedicines += "\r\n";
-                    }
+         
                 }
 
                 cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
@@ -782,7 +764,7 @@ namespace His_Pos.NewClass.StoreOrder
                     orderMedicines += "\r\n";
                 }
             }
-            DataTable tableOTC;
+  
             DataTable tableMedicines;
 
             //tableOTC = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOTCOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{storeOrder.Note}', '{orderOTC}')");
