@@ -326,9 +326,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
                     if (dataTable.Rows.Count > 0)
                         StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
-                    
-
-
                 }
 
                 BusyContent = "取得訂單資料...";
@@ -346,17 +343,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
                     if (dataTable.Rows.Count > 0)
                     {
-
                         storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
                         storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
                     }
 
                     storeOrdersBaks = storeOrders;
-
-
-
-
-
 
                 }
 
@@ -389,10 +380,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     }
 
                     rowindex++;
-
-
-
-
 
                 }
               
