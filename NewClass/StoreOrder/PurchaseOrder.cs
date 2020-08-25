@@ -271,7 +271,14 @@ namespace His_Pos.NewClass.StoreOrder
 
             //backgroundWorker.DoWork += (sender, args) =>
             //{
+            StoreOrderDB.SavePurchaseOrder(this);
+            //};
 
+            //backgroundWorker.RunWorkerAsync();
+        }
+
+        public override void SaveOrderNote()
+        {
             PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
 
             string note;
@@ -287,6 +294,7 @@ namespace His_Pos.NewClass.StoreOrder
                 StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
             }
         }
+
         public override object Clone()
         {
             PurchaseOrder purchaseOrder = new PurchaseOrder();

@@ -6,7 +6,6 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -52,12 +51,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private string searchString;
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
         private BackgroundWorker initBackgroundWorker;
-        private int i_index;
-        List<StoreOrder> storeOrdersBaks;
-
-        public SingdeTotalViewModel SingdeTotalViewModel { get; set; }
-        
-   
 
         public bool IsBusy
         {
@@ -83,7 +76,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             set
             {
                 MainWindow.ServerConnection.OpenConnection();
-                
                 currentStoreOrder?.SaveOrder();
                 value?.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
@@ -99,7 +91,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public NormalViewModel()
         {
-            InitBackgroundWorker();
             RegisterCommand();
             RegisterMessengers();
         }
@@ -173,18 +164,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
-
                 CurrentStoreOrder.MoveToNextStatus();
-
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
-
-                ReloadAction();
-                
-
-
-
             }
         }
         private void ReloadAction()
@@ -253,9 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void CloseTabAction()
         {
-           
             if (CurrentStoreOrder != null)
-                
                 CurrentStoreOrder.SaveOrder();
         }
         private void ExportOrderDataAction()
@@ -278,7 +259,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Collection<object> tempCollection = new Collection<object>() { CurrentStoreOrder };
 
                 MainWindow.ServerConnection.OpenConnection();
-                
                 CurrentStoreOrder.SaveOrder();
                 ExportExcelService service = new ExportExcelService(tempCollection, new ExportOrderRecordTemplate());
                 isSuccess = service.Export($@"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\進退貨資料{DateTime.Now:yyyyMMdd-hhmmss}.xlsx");
@@ -394,6 +374,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
 
         }
+        
         public void InitData(StoreOrders storeOrders)
         {
             storeOrderCollection = storeOrders;
@@ -471,16 +452,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (notificationMessage.Notification == "UpdateUsableAmountMessage")
             {
                 MainWindow.ServerConnection.OpenConnection();
-                
                 CurrentStoreOrder.SaveOrder();
                 CurrentStoreOrder.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
             }
         }
-        
-
-
-
         #endregion
 
         #region ///// Filter Functions /////

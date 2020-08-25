@@ -713,7 +713,6 @@ namespace His_Pos.NewClass.StoreOrder
         }
         internal static DataTable SendOTCStoreOrderToSingde(StoreOrder storeOrder)
         {
-            
             string orderOTC = "";
             //string cusName = "";
             //string planDate = "";
@@ -722,8 +721,7 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
                 {
-                    if (product.Type == 2)
-                    {
+                   
                         if (product.ID.Length > 12)
                             orderOTC += product.ID.Substring(0, 13);
                         else
@@ -796,7 +794,6 @@ namespace His_Pos.NewClass.StoreOrder
 
                         orderMedicines += product.Note;
                         orderMedicines += "\r\n";
-                    
                 }
 
                 cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
@@ -822,10 +819,10 @@ namespace His_Pos.NewClass.StoreOrder
                     orderMedicines += "\r\n";
                 }
             }
-         
+          
             DataTable tableMedicines;
-
             tableMedicines = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
+
             return tableMedicines;
         }
 

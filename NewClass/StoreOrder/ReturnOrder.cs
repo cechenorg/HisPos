@@ -305,8 +305,6 @@ namespace His_Pos.NewClass.StoreOrder
             return type;
         }
 
-
-
         #endregion
 
         #region ----- Define Function -----

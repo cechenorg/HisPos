@@ -135,6 +135,17 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
         }
 
+        private int commonProductsCount;
+        public int CommonProductsCount
+        {
+            get => commonProductsCount;
+            set
+            {
+                Set(() => CommonProductsCount, ref commonProductsCount, value);
+            }
+        }
+
+
         private int productCount;
         public int ProductCount
         {
@@ -414,7 +425,17 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
             IndexReserveCount = filteredCount;
         }
- 
+
+        private void SetCommonCount()
+        {
+            int filteredCount = 0;
+            foreach (var item in ReserveCollectionViewSource.View)
+            {
+                filteredCount++;
+            }
+            IndexReserveCount = filteredCount;
+        }
+
 
 
         private void ShowCustomerDetailWindowAction() {
