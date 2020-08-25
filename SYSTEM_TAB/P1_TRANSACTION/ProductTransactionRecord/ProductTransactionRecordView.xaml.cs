@@ -43,20 +43,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             return rowIdx;
         }
 
-        private string GetDefaultDate() 
+        private string GetDefaultDate()
         {
             DateTime dt = DateTime.Today;
             TaiwanCalendar tc = new TaiwanCalendar();
-            string dts = string.Format("{0}/{1}/{2}", 
+            string dts = string.Format("{0}/{1}/{2}",
                 tc.GetYear(dt),
                 dt.Month.ToString("d2"),
                 dt.Day.ToString("d2")
                 );
             return dts;
-            //MessageBox.Show(dts);
         }
 
-        private void GetData() 
+        private void GetData()
         {
             GetDefaultDate();
             if (StartDate.Text.Contains("-") || EndDate.Text.Contains("-")) { return; }
@@ -79,11 +78,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
         }
 
-        private void FormatData(DataTable result) 
+        private void FormatData(DataTable result)
         {
             result.Columns.Add("TransTime_Format", typeof(string));
-            foreach (DataRow dr in result.Rows) 
-            {                
+            foreach (DataRow dr in result.Rows)
+            {
                 string ogTransTime = dr["TraMas_ChkoutTime"].ToString();
                 DateTime dTime = DateTime.Parse(ogTransTime);
                 string formatTransTime = dTime.ToString("yyyy-MM-dd HH:mm");
@@ -91,7 +90,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             }
         }
 
-        private string ConvertMaskedDate(string dateString) 
+        private string ConvertMaskedDate(string dateString)
         {
             string[] strArr = dateString.Split('/');
             string year = (int.Parse(strArr[0]) + 1911).ToString();

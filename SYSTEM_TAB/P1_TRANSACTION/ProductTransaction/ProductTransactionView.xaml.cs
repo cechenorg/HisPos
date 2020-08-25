@@ -52,7 +52,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
         }
 
-        private void GetEmployeeList() 
+        private void GetEmployeeList()
         {
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
@@ -74,7 +74,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return rowIdx;
         }
 
-        private string GetPayMethod() 
+        private string GetPayMethod()
         {
             List<string> list = new List<string>();
             bool CashParse = int.TryParse(tbCash.Text, out int Cash);
@@ -82,7 +82,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 list.Add("現金");
             }
-            
+
             bool CardParse = int.TryParse(tbCard.Text, out int Card);
             if (CardParse && Card > 0)
             {
@@ -103,9 +103,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void AddProductByInputAction(string searchString, int rowIndex)
         {
             if (string.IsNullOrEmpty(searchString)) return;
-            if (searchString.Length == 0) 
+            if (searchString.Length == 0)
             {
-                if (rowIndex < ProductList.Rows.Count) 
+                if (rowIndex < ProductList.Rows.Count)
                 {
                     ProductList.Rows.RemoveAt(rowIndex);
                     CalculateTotal("AMT");
@@ -118,9 +118,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
 
             // 相同商品疊加
-            foreach (DataRow dr in ProductList.Rows) 
+            foreach (DataRow dr in ProductList.Rows)
             {
-                if (dr["Pro_ID"].ToString() == searchString && isGift == false) 
+                if (dr["Pro_ID"].ToString() == searchString && isGift == false)
                 {
                     dr["Amount"] = int.Parse(dr["Amount"].ToString()) + 1;
                     return;
@@ -131,10 +131,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int productCount = ProductStructs.GetProductStructCountBySearchString(searchString, AddProductEnum.Trade);
             MainWindow.ServerConnection.CloseConnection();
 
-            if (productCount == 0) 
+            if (productCount == 0)
             {
                 MessageWindow.ShowMessage("查無商品", MessageType.WARNING);
-                if (rowIndex < ProductList.Rows.Count) 
+                if (rowIndex < ProductList.Rows.Count)
                 {
                     ProductList.Rows.RemoveAt(rowIndex);
                     CalculateTotal("AMT");
@@ -152,7 +152,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[SearchProductsByID]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
 
-                    
+
                     if (ProductList.Rows.Count == 0)
                     {
                         ProductList = result.Clone();
@@ -177,8 +177,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         gift.DefaultValue = 0;
                         ProductList.Columns.Add(gift);
 
-                        DataColumn ptt = new DataColumn("PriceTooltip", typeof(int));
-                        ptt.DefaultValue = 0;
+                        DataColumn ptt = new DataColumn("PriceTooltip", typeof(string));
+                        ptt.DefaultValue = "";
                         ProductList.Columns.Add(ptt);
                     }
 
@@ -240,11 +240,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 foreach (DataRow dr in ProductList.Rows)
                 {
                     bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
-                    if (!tp || ig != 1) 
+                    if (!tp || ig != 1)
                     {
                         dr["CurrentPrice"] = dr[AppliedPrice];
                     }
-                }                
+                }
             }
         }
 
@@ -255,7 +255,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 foreach (DataRow dr in ProductList.Rows)
                 {
-                    if (dr["CurrentPrice"].ToString() != "" && dr["Amount"].ToString() != "") 
+                    if (dr["CurrentPrice"].ToString() != "" && dr["Amount"].ToString() != "")
                     {
                         dr["Calc"] = int.Parse(dr["CurrentPrice"].ToString()) * int.Parse(dr["Amount"].ToString());
                     }
@@ -270,7 +270,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             CalculateDiscount(type);
             CalculateChange();
-        }        
+        }
 
         private async void CalculateDiscount(string type)
         {
@@ -290,12 +290,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             realTotal = preTotal - discountAmount;
             lblRealTotal.Content = realTotal;
 
-            if (int.Parse(lblRealTotal.Content.ToString()) < 0) 
-            { 
+            if (int.Parse(lblRealTotal.Content.ToString()) < 0)
+            {
                 MessageWindow.ShowMessage("折扣後金額小於0！", MessageType.ERROR);
                 tbDiscountAmt.Text = "0";
                 CalculateTotal(type);
-                switch (type) 
+                switch (type)
                 {
                     case "AMT":
                         await Task.Delay(20);
@@ -315,7 +315,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 int change = int.Parse(tbPaid.Text) - int.Parse(lblRealTotal.Content.ToString());
                 if (change >= 0) { lblChange.Content = change; }
-                else 
+                else
                 {
                     MessageWindow.ShowMessage("實收金額小於應收金額！", MessageType.ERROR);
                     tbPaid.Text = "";
@@ -350,7 +350,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return dt;
         }
 
-        private void ClearPage() 
+        private void ClearPage()
         {
             ProductList.Clear();
             tbDiscountAmt.Text = "0";
@@ -359,10 +359,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbCardNum.Text = "";
             tbInvoiceNum.Text = "";
             tbPaid.Text = "";
+
+            tbCash.Text = "";
+            tbCard.Text = "";
+            tbVoucher.Text = "";
+
             AppliedPrice = "Pro_RetailPrice";
             CalculateTotal("AMT");
             PriceCombo.SelectedIndex = 0;
-            CustomerView.ClearView();
         }
 
         #region ----- Events -----
@@ -405,7 +409,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 Key key = Key.Enter;
                 IInputElement target = Keyboard.FocusedElement;
                 RoutedEvent routedEvent = Keyboard.KeyDownEvent;
-                if (target != null) 
+                if (target != null)
                 {
                     target.RaiseEvent(new KeyEventArgs(
                     Keyboard.PrimaryDevice,
@@ -456,6 +460,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void Price_TextChanged(object sender, TextChangedEventArgs e)
         {
             CalculateTotal("AMT");
+            foreach (DataRow dr in ProductList.Rows)
+            {
+                dr["PriceTooltip"] = string.Format("{0:F2}", dr["Inv_LastPrice"]) + "/" + (double.Parse(dr["CurrentPrice"].ToString()) - double.Parse(dr["Inv_LastPrice"].ToString())).ToString();
+            }
         }
 
         private void Price_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -489,8 +497,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             TextBox tb = (TextBox)sender;
             if (IsTextAllowed(tb.Text)) { tb.Text = ""; }
-            if (tbDiscountPer.Text == "") 
-            { 
+            if (tbDiscountPer.Text == "")
+            {
                 tbDiscountAmt.Text = "0";
                 CalculateTotal("AMT");
                 return;
@@ -514,10 +522,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int index = GetRowIndex(e);
-            if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count) 
+            if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count)
             {
                 ProductList.Rows.Remove(ProductList.Rows[index]);
-            }                
+            }
             CalculateTotal("AMT");
         }
 
@@ -550,7 +558,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             int index = GetRowIndex(e);
             if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
-            
+
             int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
             int stock = int.Parse(ProductList.Rows[index]["Inv_Inventory"].ToString());
             if (original < stock) { ProductList.Rows[index]["Amount"] = original + 1; }
@@ -560,7 +568,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             int index = GetRowIndex(e);
             if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
-            
+
             int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
             if (original > 0) { ProductList.Rows[index]["Amount"] = original - 1; }
         }
@@ -589,9 +597,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnCheckout_Click(object sender, RoutedEventArgs e)
         {
-            foreach (DataRow dr in ProductList.Rows) 
+            foreach (DataRow dr in ProductList.Rows)
             {
-                if (int.Parse(dr["Amount"].ToString()) == 0) 
+                if (int.Parse(dr["Amount"].ToString()) == 0)
                 {
                     int index = ProductList.Rows.IndexOf(dr);
                     ProductList.Rows[index].Delete();
@@ -599,7 +607,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             ProductList.AcceptChanges();
 
-            if (ProductList.Rows.Count == 0) 
+            if (ProductList.Rows.Count == 0)
             {
                 MessageWindow.ShowMessage("尚未新增售出商品項目！", MessageType.ERROR);
                 return;
@@ -609,7 +617,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("CustomerID", CustomerView.ReturnCusID()));
+            parameters.Add(new SqlParameter("CustomerID", CustomerView.CusID));
             parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
             parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
             parameters.Add(new SqlParameter("CashAmount", tbCash.Text));

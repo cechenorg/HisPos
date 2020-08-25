@@ -287,7 +287,7 @@
                                             <EventSetter Event="MouseEnter" Handler="Price_MouseEnter"/>
                                             <Setter Property="ToolTip">
                                                 <Setter.Value>
-                                                    <Label x:Name="ttLastPrice" Content="{Binding Path=Inv_LastPrice, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Width="120" Height="Auto" FontFamily="Courier New" FontSize="18" Foreground="WhiteSmoke" HorizontalContentAlignment="Center">
+                                                    <Label x:Name="ttLastPrice" Content="{Binding Path=PriceTooltip, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Width="Auto" Height="Auto" FontFamily="Courier New" FontSize="18" Foreground="WhiteSmoke" HorizontalContentAlignment="Center">
                                                     </Label>
                                                 </Setter.Value>
                                             </Setter>

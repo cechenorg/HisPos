@@ -15,27 +15,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
     /// </summary>
     public partial class NoCustomerControl : UserControl
     {
-        private bool isAnonymous = true;
-        private string cusID;
+        private static string cusID = "0";
+
+        public string CusID
+        {
+            get { return cusID; }
+            set { cusID = value; }
+        }
 
         public NoCustomerControl()
         {
             InitializeComponent();
         }
 
-        public string ReturnCusID() 
-        {
-            if (isAnonymous)
-            {
-                return "0";
-            }
-            else 
-            {
-                return cusID;
-            }
-        }
-
-        public void ClearView() 
+        public void ClearView()
         {
             lbName.Content = "";
             lbGender.Content = "";
@@ -45,10 +38,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             tbAddress.Text = "";
             tbNote.Text = "";
 
-            isAnonymous = true;
+            cusID = "0";
         }
 
-        private void FillInCustomerData(DataTable result) 
+        private void FillInCustomerData(DataTable result)
         {
             cusID = result.Rows[0]["PosCus_Uid"].ToString();
 
@@ -87,7 +80,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
                     parameters.Add(new SqlParameter("PosCus_Cellphone", tb.Text));
                     parameters.Add(new SqlParameter("PosCus_Telephone", DBNull.Value));
                 }
-                else 
+                else
                 {
                     parameters.Add(new SqlParameter("PosCus_Cellphone", DBNull.Value));
                     parameters.Add(new SqlParameter("PosCus_Telephone", tb.Text));
@@ -99,14 +92,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
                 {
                     MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
                 }
-                else 
+                else
                 {
-                    isAnonymous = false;
                     FillInCustomerData(result);
                 }
             }
         }
-
-        
     }
 }
