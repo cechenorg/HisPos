@@ -81,43 +81,37 @@
                         <StackPanel Grid.Row="0" Orientation="Horizontal"  >
                             
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="排除合作" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="處方排除合作" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="合作" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="處方合作" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="盤盈" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
-                            </Border>
-                            <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="盤損" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="銷售收入" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                                <Label Content="報廢" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="庫存異動" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}"  >
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding TotalCashFlow.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="{Binding TotalCashFlow.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding SelfPrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117" />
+                                <Label Content="{Binding SelfPrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140" />
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding CooperativePrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="{Binding CooperativePrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding InventoryDifference.InventoryOverage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
-                            </Border>
-                            <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding InventoryDifference.InventoryShortage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}"  FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="{Binding TotalTradeProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                                <Label Content="{Binding InventoryDifference.InventoryScrap,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                <Label Content="{Binding InventoryDifference.InventoryTotal,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
 
                         </StackPanel>
@@ -256,11 +250,10 @@
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="50"/>
 
-                        
                             <RowDefinition Height="60"/>
                             
-                            <RowDefinition Height="150"/>
-                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="125"/>
+                            <RowDefinition Height="40"/>
 
                             <RowDefinition Height="60"/>
                             <RowDefinition Height="50"/>
@@ -306,9 +299,10 @@
                                         </Trigger>
                                     </Style.Triggers>
                                     <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="DarkGray"/>
                                     <Setter Property="FontSize" Value="16"/>
                                     <Setter Property="Height" Value="41"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
@@ -416,9 +410,10 @@
                                         </Trigger>
                                     </Style.Triggers>
                                     <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="DarkGray"/>
                                     <Setter Property="FontSize" Value="16"/>
                                     <Setter Property="Height" Value="41"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
                                 </Style>
                             </DataGrid.RowStyle>
                             <DataGrid.Columns>
@@ -500,7 +495,7 @@
                         </StackPanel>
                         
                         <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"  >
-                            <Label  Content="銷售帳" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Bottom"/>
+                            <Label  Content="銷售收入" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Bottom"/>
                         </StackPanel>
                         
                         <DataGrid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
@@ -538,13 +533,50 @@
                                             </Trigger>
                                         </Style.Triggers>
                                         <Setter Property="Background" Value="Transparent"/>
-                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="DarkGray"/>
                                         <Setter Property="FontSize" Value="16"/>
                                         <Setter Property="Height" Value="41"/>
-                                    </Style>
+                                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                </Style>
                                 </DataGrid.RowStyle>
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Width="110" Header="" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding TypeName}">
+                                <DataGridTextColumn Width="110" Header="" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding TypeName}">
+                                    <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                <Setter Property="FontSize" Value="20"/>
+                                        </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                <DataGridTextColumn Width="100" Header="筆數"   FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Count}">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            <Setter Property="FontSize" Value="20"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+
+                                    <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                <DataGridTextColumn Width="150" Header="實收金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NetIncome}">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            <Setter Property="FontSize" Value="20"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -552,23 +584,16 @@
                                             </Style>
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
-                                    <DataGridTextColumn Width="100" Header="張數" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Count}">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
-                                <DataGridTextColumn Width="150" Header="淨收入" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NetIncome}">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
-                                <DataGridTextColumn Width="150" Header="成本" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
+                                <DataGridTextColumn Width="150" Header="耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            <Setter Property="FontSize" Value="20"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -577,6 +602,15 @@
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
                                 <DataGridTextColumn Width="150" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Profit}">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            <Setter Property="FontSize" Value="20"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="HorizontalAlignment"  Value="Center"/>

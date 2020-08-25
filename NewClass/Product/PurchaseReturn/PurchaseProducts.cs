@@ -7,7 +7,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 {
     public class PurchaseProducts : ObservableCollection<PurchaseProduct>, ICloneable
     {
-        private PurchaseProducts() { }
+        public PurchaseProducts() { }
         private PurchaseProducts(DataTable dataTable)
         {
             string lastID = "";

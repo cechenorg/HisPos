@@ -38,6 +38,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 case "合併拆分":
                     Type = ProductInventoryRecordType.MergeSplit;
                     break;
+                case "銷售":
+                    Type = ProductInventoryRecordType.Transaction;
+                    break;
+                case "銷售刪單":
+                    Type = ProductInventoryRecordType.Transaction;
+                    break;
                 default:
                     Type = ProductInventoryRecordType.Error;
                     break;
