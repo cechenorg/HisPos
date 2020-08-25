@@ -48,6 +48,7 @@ namespace His_Pos.NewClass.Prescription.Service
         protected MedicinesSendSingdeViewModel vm { get; set; } = null;
         protected Prescription Current { get; set; }
         protected Prescription TempPre { get; set; }
+        protected Prescription TempPrint { get; set; }
         protected List<bool?> PrintResult { get; set; }
         #region Functions
         public static PrescriptionService CreateService(Prescription p)
@@ -579,11 +580,24 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
-            var singleMode = (bool)PrintResult[1];
-            if (singleMode)
-                TempPre.PrintMedBagSingleMode();
+            
+            if (TempPre.Institution.ID == "3532082753")
+            {
+                TempPrint.Division.Name = "";
+                var singleMode = (bool)PrintResult[1];
+                if (singleMode)
+                    TempPrint.PrintMedBagSingleMode();
+                else
+                    TempPrint.PrintMedBagMultiMode();
+            }
             else
-                TempPre.PrintMedBagMultiMode();
+            {
+                var singleMode = (bool)PrintResult[1];
+                if (singleMode)
+                    TempPre.PrintMedBagSingleMode();
+                else
+                    TempPre.PrintMedBagMultiMode();
+            }
         }
 
         protected bool CheckChronicRegister()
@@ -741,6 +755,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
+            if (TempPre.Institution.ID == "3532082753") {
+                TempPrint = (Prescription)Current.PrintClone();
+            }
+            
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]

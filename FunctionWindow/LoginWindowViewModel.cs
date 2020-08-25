@@ -121,6 +121,25 @@ namespace His_Pos.FunctionWindow
                 Properties.Settings.Default.Save();
             }
         }
+
+        public static string ReadSettingFilePharmacyName()
+        {
+            var filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            using (var fileReader = new StreamReader(filePath))
+            {
+                var medReg = new Regex(@"M (.*)");
+                var recReg = new Regex(@"Rc (.*)");
+                var recRegWithForm = new Regex(@"Rc (.*)[$](.*)");
+                var repReg = new Regex(@"Rp (.*)");
+                var verifyKey = fileReader.ReadLine();
+                verifyKey = verifyKey.Substring(2, verifyKey.Length - 2);
+                var xml = WebApi.GetPharmacyInfoByVerify(verifyKey);
+                var PharmacyName = xml.SelectSingleNode("CurrentPharmacyInfo/Name").InnerText;
+                return PharmacyName;
+            }
+
+        }
         private static bool CheckSettingFileExist() { 
             if (!Directory.Exists("C:\\Program Files\\HISPOS"))
                 Directory.CreateDirectory("C:\\Program Files\\HISPOS");  

@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
 {
@@ -20,24 +8,19 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     /// </summary>
     public partial class TradeAddProductWindow : Window
     {
-        public TradeAddProductWindow(string searchString)
+        public DataRow SelectedProduct { get; set; }
+
+        public TradeAddProductWindow(DataTable dt)
         {
             InitializeComponent();
+            ResultGrid.ItemsSource = dt.DefaultView;
+        }
 
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                if (notificationMessage.Notification.Equals("CloseAddProductView"))
-                    Close();
-            });
-
-            if (searchString.Equals(""))
-                DataContext = new AddProductViewModel(AddProductEnum.Trade, "0");
-            else
-                DataContext = new AddProductViewModel(searchString, AddProductEnum.Trade, "0");
-
-            SearchStringTextBox.Focus();
-
-            Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+        private void btnConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView drv = (DataRowView)ResultGrid.SelectedItem;
+            SelectedProduct = drv.Row;
+            Close();
         }
     }
 }
