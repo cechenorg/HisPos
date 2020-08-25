@@ -40,14 +40,17 @@
             <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="付款方式：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
                 
-                <Label Content="現金" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
-                <Label x:Name="lbCash" Content="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label Content="現金$" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label x:Name="lbCash" Content="0" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
                 
-                <Label Content="信用卡" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
-                <Label x:Name="lbCard" Content="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label Content="信用卡$" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label x:Name="lbCard" Content="0" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
                 
-                <Label Content="禮券" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
-                <Label x:Name="lbVoucher" Content="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label Content="禮券$" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label x:Name="lbVoucher" Content="0" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
+
+                <Label Content="顧客姓名：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="202,0,0,0"/>
+                <Label x:Name="lbCusName" Content="" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
@@ -109,6 +112,13 @@
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource Shadow}"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding Path=TraDet_IsGift}" Value="1">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="ForestGreen" Opacity="0.5"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>

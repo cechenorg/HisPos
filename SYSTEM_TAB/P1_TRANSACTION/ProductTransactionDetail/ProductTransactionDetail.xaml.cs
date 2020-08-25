@@ -46,6 +46,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     break;
             }
 
+            lbCusName.Content = masterRow["Cus_Name"];
             lblRealTotal.Content = masterRow["TraMas_RealTotal"];
             lblCashier.Content = masterRow["TraMas_Cashier"];
             tbCardNum.Text = masterRow["TraMas_CardNumber"].ToString();

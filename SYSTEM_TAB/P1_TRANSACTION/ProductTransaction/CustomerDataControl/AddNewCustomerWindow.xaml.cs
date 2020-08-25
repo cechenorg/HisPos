@@ -17,7 +17,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
     {
         public bool IsTelephone(string str_telephone)
         {
-            return Regex.IsMatch(str_telephone, @"^(\d{3,4}-)?\d{6,8}$");
+            return Regex.IsMatch(str_telephone, @"\d{2,3}\d{3,4}\d{4}");
         }
 
         public bool IsCellphone(string str_handset)
@@ -51,6 +51,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
 
         private string GetBirthday() 
         {
+            if (tbYear.Text == "" && tbMonth.Text == "" && tbDay.Text == "") 
+            {
+                return "";
+            }
+
             int.TryParse(tbYear.Text, out int year);
             int.TryParse(tbMonth.Text, out int month);
             int.TryParse(tbDay.Text, out int day);
@@ -64,7 +69,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             }
             else 
             {
-                return "";
+                return "ERROR";
             }
         }
 
@@ -88,6 +93,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             string birthday = GetBirthday();
+            string tel = tbTelPhoneCode.Text + tbTelPhone.Text;
 
             if (tbCellPhone.Text == "" && tbTelPhone.Text == "") 
             {
@@ -99,17 +105,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
                 MessageWindow.ShowMessage("手機號碼格式錯誤！", MessageType.ERROR);
                 return;
             }
-            if (!IsTelephone(tbTelPhone.Text) && tbTelPhone.Text != "")
+            if (!IsTelephone(tel) && tel != "")
             {
                 MessageWindow.ShowMessage("家電號碼格式錯誤！", MessageType.ERROR);
                 return;
             }
-            if (birthday == "")
+            if (birthday == "ERROR")
             {
                 MessageWindow.ShowMessage("生日格式錯誤！", MessageType.ERROR);
                 return;
             }
-
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -140,6 +145,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
                 MessageWindow.ShowMessage("新增成功！", MessageType.SUCCESS);
+                Close();
+            }
+            else if (result.Rows[0].Field<string>("RESULT").Equals("SAME"))
+            {
+                MessageWindow.ShowMessage("該電話號碼已登錄會員！", MessageType.WARNING);
             }
             else 
             {

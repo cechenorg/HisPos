@@ -37,7 +37,7 @@
                 <ColumnDefinition Width="400"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <ContentControl Grid.Row="0" Grid.Column="0" Margin="0,0,10,10" Content="{Binding CustomerViewModel}">
+            <ContentControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="0,0,10,10" Content="{Binding CustomerViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource NoCustomerControl}"/>
@@ -208,6 +208,13 @@
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource Shadow}"/>
                             </Trigger>
+                            <DataTrigger Binding="{Binding Path=IsGift}" Value="1">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="ForestGreen" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
@@ -247,12 +254,12 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="400" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="350" Header="商品名稱" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}"/>
-                                    <Label x:Name="lblProductName" Width="400" FontSize="20" FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="0,0,20,0" MouseDoubleClick="lblProductName_MouseDoubleClick"/>
+                                    <Label x:Name="lblProductName" Width="350" FontSize="16" FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="0,0,20,0" MouseDoubleClick="lblProductName_MouseDoubleClick"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -264,10 +271,10 @@
                             </Style>
                         </DataGridTemplateColumn.CellStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="售價" Width="100">
+                    <DataGridTemplateColumn Header="售價" Width="80">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Price" Text="{Binding Path=CurrentPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Price_LostFocus" TextChanged="Price_TextChanged" PreviewKeyDown="Price_PreviewKeyDown">
+                                <TextBox x:Name="Price" Text="{Binding Path=CurrentPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Price_LostFocus" TextChanged="Price_TextChanged" PreviewKeyDown="Price_PreviewKeyDown">
                                     <TextBox.InputScope>
                                         <InputScope>
                                             <InputScope.Names>
@@ -329,7 +336,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="庫存" Width="50" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Inv_Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                    <DataGridTextColumn Header="庫存" Width="60" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Inv_Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>

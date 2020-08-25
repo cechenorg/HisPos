@@ -19,6 +19,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetPrices;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using MySqlX.XDevAPI.Relational;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
@@ -28,6 +29,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     /// </summary>
     public partial class ProductTransactionView : UserControl
     {
+        public NoCustomerControl CustomerView { get; set; }
+
         public DataTable ProductList;
         public string AppliedPrice;
 
@@ -43,6 +46,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public ProductTransactionView()
         {
             InitializeComponent();
+            CustomerView = new NoCustomerControl();
             GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
@@ -98,7 +102,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void AddProductByInputAction(string searchString, int rowIndex)
         {
-            MessageBox.Show(isGift.ToString());
             if (string.IsNullOrEmpty(searchString)) return;
             if (searchString.Length == 0) 
             {
@@ -153,13 +156,30 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (ProductList.Rows.Count == 0)
                     {
                         ProductList = result.Clone();
-                        ProductList.Columns.Add("ID", typeof(int));
+
+                        DataColumn id = new DataColumn("ID", typeof(int));
+                        id.DefaultValue = 0;
+                        ProductList.Columns.Add(id);
+
                         DataColumn amt = new DataColumn("Amount", typeof(int));
                         amt.DefaultValue = 1;
                         ProductList.Columns.Add(amt);
-                        ProductList.Columns.Add("Calc", typeof(double));
-                        ProductList.Columns.Add("CurrentPrice", typeof(int));
-                        ProductList.Columns.Add("PriceTooltip", typeof(double));
+
+                        DataColumn calc = new DataColumn("Calc", typeof(int));
+                        calc.DefaultValue = 0;
+                        ProductList.Columns.Add(calc);
+
+                        DataColumn cp = new DataColumn("CurrentPrice", typeof(int));
+                        cp.DefaultValue = 0;
+                        ProductList.Columns.Add(cp);
+
+                        DataColumn gift = new DataColumn("IsGift", typeof(int));
+                        gift.DefaultValue = 0;
+                        ProductList.Columns.Add(gift);
+
+                        DataColumn ptt = new DataColumn("PriceTooltip", typeof(int));
+                        ptt.DefaultValue = 0;
+                        ProductList.Columns.Add(ptt);
                     }
 
                     DataRow newRow = ProductList.NewRow();
@@ -203,7 +223,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (isGift)
                     {
                         ProductList.Rows[rowIndex]["CurrentPrice"] = 0;
+                        ProductList.Rows[rowIndex]["IsGift"] = 1;
                         isGift = false;
+                        btnGift.IsEnabled = true;
                     }
                     CalculateTotal("AMT");
                 }
@@ -217,7 +239,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 foreach (DataRow dr in ProductList.Rows)
                 {
-                    dr["CurrentPrice"] = dr[AppliedPrice];
+                    bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
+                    if (!tp || ig != 1) 
+                    {
+                        dr["CurrentPrice"] = dr[AppliedPrice];
+                    }
                 }                
             }
         }
@@ -319,7 +345,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     AppliedPrice,
                     dr[AppliedPrice],
                     dr["Calc"],
-                    0);
+                    dr["IsGift"]);
             }
             return dt;
         }
@@ -335,7 +361,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbPaid.Text = "";
             AppliedPrice = "Pro_RetailPrice";
             CalculateTotal("AMT");
-            PriceCombo.SelectedIndex = 0; 
+            PriceCombo.SelectedIndex = 0;
+            CustomerView.ClearView();
         }
 
         #region ----- Events -----
@@ -580,12 +607,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
             if (!(bool)confirmWindow.DialogResult) { return; }
 
-            string cusID = "0";
-            //string payMethod = (bool)rbCash.IsChecked ? "現金" : "信用卡";
-
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("CustomerID", cusID));
+            parameters.Add(new SqlParameter("CustomerID", CustomerView.ReturnCusID()));
             parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
             parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
             parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
@@ -633,6 +657,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void btnGift_Click(object sender, RoutedEventArgs e)
         {
             isGift = true;
+            btnGift.IsEnabled = false;
         }
     }
 }
