@@ -452,7 +452,7 @@
                 </DataGrid>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                     <Label Content="共" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <Label Content="{Binding CommonProductsCollection.Count ,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="20" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Width="42"/>
+                    <Label Content="{Binding ProductCollectionView.Count ,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontSize="20" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Width="42"/>
                     <Label Content="個" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                     <Button Width="110" Command="{Binding CommonMedStoreOrderCommand}" Margin="205,0,0,0" Content="常備採購" Height="35" FontSize="18" FontFamily="Segoe UI Semi" Background="ForestGreen" BorderThickness="0" />
                 </StackPanel>

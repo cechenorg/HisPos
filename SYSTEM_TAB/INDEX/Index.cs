@@ -59,7 +59,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 SetPhoneCount();
             }
         }
-        private string productTypeStatusSelectedItem = "全選";
+        private string productTypeStatusSelectedItem = "藥品";
         public string ProductTypeStatusSelectedItem
         {
             get => productTypeStatusSelectedItem;
@@ -445,7 +445,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void InitStatusstring() {
             PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" };
             MedPrepareStatusCollection = new List<string>() { "未處理","已備藥","不備藥" };
-            ProductTypeCollection = new List<string>() { "全選", "藥品", "OTC藥" };
+            ProductTypeCollection = new List<string>() { "藥品", "OTC藥" };
         }
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -462,27 +462,54 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將低於安全量之藥品傳送訂單至杏德?","常備藥傳送");
             if ((bool)confirmWindow.DialogResult)
             {
-                DataTable table = StoreOrderDB.StoreOrderCommonMedicine();
-
-                if (table.Rows.Count > 0)
+                if (ProductTypeStatusSelectedItem == "藥品")
                 {
-                    StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
-                    storeOrder.GetOrderProducts();
+                    DataTable table = StoreOrderDB.StoreOrderCommonMedicine();
 
-                    table = StoreOrderDB.SendStoreOrderToSingde(storeOrder);
-
-                    if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                    if (table.Rows.Count > 0)
                     {
-                        StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
-                        MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
-                    }
-                    else
-                    {
-                        StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID);
-                        MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
+                        StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
+                        storeOrder.GetOrderProducts();
+
+                        table = StoreOrderDB.SendStoreOrderToSingde(storeOrder);
+
+                        if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        {
+                            StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
+                            MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
+                        }
+                        else
+                        {
+                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID);
+                            MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
+                        }
+
+                        CommonProductGetDataAcion();
                     }
 
-                    CommonProductGetDataAcion();
+                }
+                else if(ProductTypeStatusSelectedItem == "OTC藥") { 
+                    DataTable table = StoreOrderDB.StoreOrderOTCMedicine();
+
+                    if (table.Rows.Count > 0)
+                    {
+                        StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
+                        storeOrder.GetOrderProducts();
+
+                        table = StoreOrderDB.SendOTCStoreOrderToSingde(storeOrder);
+
+                        if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        {
+                            StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
+                            MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
+                        }
+                        else
+                        {
+                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID);
+                            MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
+                        }
+                        CommonProductGetDataAcion();
+                    }
                 }
             }
         }
@@ -541,9 +568,6 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 e.Accepted = true;
             else if (commonProducts.TypeID == 1 && ProductTypeStatusSelectedItem == "藥品")
                 e.Accepted = true;
-            else if (ProductTypeStatusSelectedItem == "全選")
-                e.Accepted = true;
-
         }
         private void Filter(object sender, FilterEventArgs e) {
             if (e.Item is null) return;

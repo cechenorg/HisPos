@@ -50,6 +50,7 @@ namespace His_Pos.NewClass.StoreOrder
         public string TargetPreOrderCustomer { get; set; }
         public DateTime Day { get; set; }
 
+        public int IsOTC { get; set; }
 
 
 
@@ -118,6 +119,7 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void CalculateTotalPrice();
         public abstract void SetProductToProcessingStatus();
         public abstract object Clone();
+        public abstract int GetOrderProductsIsOTC();
         #endregion
 
         #region ///// Status Function /////
@@ -215,6 +217,7 @@ namespace His_Pos.NewClass.StoreOrder
             if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                 MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
         }
+
         #endregion
 
         #region ///// Check Function /////
@@ -241,9 +244,16 @@ namespace His_Pos.NewClass.StoreOrder
         #region ///// Singde Function /////
         private bool SendOrderToSingde()
         {
-            DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
-
-            return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+            if (GetOrderProductsIsOTC() == 2)
+            {
+                DataTable dataTable = StoreOrderDB.SendOTCStoreOrderToSingde(this);
+                return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+            }
+            else
+            {
+                DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
+                return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+            }
         }
         public void UpdateOrderDataFromSingde(DataRow dataRow)
         {

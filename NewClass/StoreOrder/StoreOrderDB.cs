@@ -247,6 +247,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             return storeOrderDetailTable;
         }
+     
         private static DataTable SetReturnOrderDetail(ReturnOrder r)
         {
             int detailId = 1;
@@ -588,11 +589,6 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
         }
-
-
-
-
-
         internal static void SaveReturnOrder(ReturnOrder returnOrder)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -715,6 +711,66 @@ namespace His_Pos.NewClass.StoreOrder
             //planDate = (indexReserve.AdjustDate.Year - 1911) + indexReserve.AdjustDate.ToString("MMdd"); 
             return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','','{note}', '{orderMedicines}')");
         }
+        internal static DataTable SendOTCStoreOrderToSingde(StoreOrder storeOrder)
+        {
+            string orderOTC = "";
+            //string cusName = "";
+            //string planDate = "";
+
+            if (storeOrder is PurchaseOrder)
+            {
+                foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
+                {
+                   
+                        if (product.ID.Length > 12)
+                            orderOTC += product.ID.Substring(0, 13);
+                        else
+                            orderOTC += product.ID.PadRight(12, ' ');
+
+                        orderOTC += product.OrderAmount.ToString("0.00").PadLeft(9, ' ');
+
+                        if (product.ID.Length > 12)
+                            orderOTC += product.ID.Substring(13);
+
+                        orderOTC += product.Note;
+                        orderOTC += "\r\n";
+
+                    }
+                   
+                }
+
+               //cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
+
+                //if (((PurchaseOrder)storeOrder).PlanArriveDate != null)
+                   // planDate = (((PurchaseOrder)storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
+            }
+            else
+            {
+                foreach (var product in ((ReturnOrder)storeOrder).ReturnProducts)
+                {
+                    if (product.ID.Length > 12)
+                        orderOTC += product.ID.Substring(0, 12);
+                    else
+                        orderOTC += product.ID.PadRight(12, ' ');
+
+                    orderOTC += (-product.ReturnAmount).ToString().PadLeft(10, ' ');
+
+                    if (product.ID.Length > 12)
+                        orderOTC += product.ID.Substring(13);
+
+                    orderOTC += product.Note;
+                    orderOTC += "\r\n";
+                }
+            }
+            DataTable tableOTC;
+
+            tableOTC = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOTCOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{storeOrder.Note}', '{orderOTC}')");
+
+            return tableOTC;
+        }
+
+
+
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderMedicines = "";
@@ -725,7 +781,7 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
                 {
-                   
+                    
                         if (product.ID.Length > 12)
                             orderMedicines += product.ID.Substring(0, 12);
                         else
@@ -738,7 +794,6 @@ namespace His_Pos.NewClass.StoreOrder
 
                         orderMedicines += product.Note;
                         orderMedicines += "\r\n";
-         
                 }
 
                 cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
@@ -764,12 +819,10 @@ namespace His_Pos.NewClass.StoreOrder
                     orderMedicines += "\r\n";
                 }
             }
-  
+          
             DataTable tableMedicines;
-
-            //tableOTC = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOTCOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{storeOrder.Note}', '{orderOTC}')");
             tableMedicines = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
-            //tableMedicines.Merge(tableOTC);
+
             return tableMedicines;
         }
 
@@ -842,6 +895,15 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderCommonMedicine]", parameters);
         }
+
+        internal static DataTable StoreOrderOTCMedicine()
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderOTCMedicine]", parameters);
+        }
+
+
         internal static DataTable DeleteDoneOrder(string orderID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

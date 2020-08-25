@@ -42,7 +42,7 @@ namespace His_Pos.Database
             try
             {
                 MySqlCommand cmd = new MySqlCommand(sqlString, connection);
-                cmd.CommandTimeout = 120;
+                cmd.CommandTimeout = 180;
                 var sqlDapter = new MySqlDataAdapter(cmd);
                 sqlDapter.Fill(table);
             }

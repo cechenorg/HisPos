@@ -741,8 +741,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         private void CalculateTotal()
         {
-            TotalCashFlow.Total = (double)(TotalCashFlow.TotalPrice+ SelfPrescriptionProfitReport.Profit+CooperativePrescriptionProfitReport.Profit+ InventoryDifference.InventoryOverage+ InventoryDifference.InventoryShortage+ InventoryDifference.InventoryScrap);
-        }
+            TotalCashFlow.Total = (double)(TotalCashFlow.TotalPrice + SelfPrescriptionProfitReport.Profit + CooperativePrescriptionProfitReport.Profit + InventoryDifference.InventoryOverage + InventoryDifference.InventoryShortage + InventoryDifference.InventoryScrap);
+            InventoryDifference.InventoryTotal = (double)(InventoryDifference.InventoryOverage + InventoryDifference.InventoryShortage + InventoryDifference.InventoryScrap);
+         }
         private void AdjustCaseFilter(object sender, FilterEventArgs e)
         {
             if (e.Item is null) return;

@@ -40,6 +40,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SafeAmount { get; set; }
         public string BatchNumber { get; set; }
         public string Note { get; set; }
+        public int Type { get; set; }
         public double ReturnStockValue
         {
             get { return returnStockValue; }
@@ -125,6 +126,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             price = (double)row.Field<decimal>("StoOrdDet_Price");
             subTotal = (double)row.Field<decimal>("StoOrdDet_SubTotal");
             InventoryDetailCollection.Add(new ReturnProductInventoryDetail(row));
+            Type= row.Field<int>("Pro_TypeID");
         }
 
         #region ----- Define Variables -----
