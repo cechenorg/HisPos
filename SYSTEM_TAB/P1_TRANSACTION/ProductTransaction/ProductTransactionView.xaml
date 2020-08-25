@@ -171,7 +171,7 @@
                         </TextBox.InputScope>
                     </TextBox>
                     <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                    <Button x:Name="btnGift" Width="80" Height="35" Content="贈品" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" BorderThickness="0" Background="ForestGreen" Click="btnCheckout_Click"/>
+                    <Button x:Name="btnGift" Width="80" Height="35" Content="贈品" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" BorderThickness="0" Background="ForestGreen" Click="btnGift_Click"/>
                     <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="55,0,0,0"/>
                     <ComboBox x:Name="PriceCombo" Width="120" Height="35" HorizontalContentAlignment="Center" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}"  FontSize="20" Foreground="Black" SelectionChanged="PriceCombo_SelectionChanged">
                         <ComboBoxItem Content="零售價" IsSelected="True"/>

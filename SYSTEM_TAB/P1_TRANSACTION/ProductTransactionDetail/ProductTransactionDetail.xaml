@@ -39,8 +39,15 @@
             </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="付款方式：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
-                <RadioButton x:Name="rbCash" GroupName="rbgPayMethod" Content="現金" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" IsChecked="True"/>
-                <RadioButton x:Name="rbCard" GroupName="rbgPayMethod" Content="刷卡" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                
+                <Label Content="現金" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label x:Name="lbCash" Content="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                
+                <Label Content="信用卡" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label x:Name="lbCard" Content="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                
+                <Label Content="禮券" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label x:Name="lbVoucher" Content="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
@@ -70,15 +77,7 @@
                 <Label Content="折扣前總計 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
                 <Label x:Name="lblPreTotal" Content="0" Width="95" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black"/>
                 <Label Content="折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="20,0,0,0"/>
-                <TextBox x:Name="tbDiscountAmt" Text="0" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black">
-                    <TextBox.InputScope>
-                        <InputScope>
-                            <InputScope.Names>
-                                <InputScopeName NameValue="AlphanumericHalfWidth"/>
-                            </InputScope.Names>
-                        </InputScope>
-                    </TextBox.InputScope>
-                </TextBox>
+                <Label x:Name="lbDiscountAmt" Width="80" Content="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
                 <Label Content="元" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
                 <Label Content="套用價格：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="280,0,0,0"/>
                 <Label x:Name="lblPriceType" Content="" Width="95" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
@@ -137,15 +136,8 @@
                 <DataGridTemplateColumn Width="160" Header="商品代碼" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Name="ProductIDTextbox" Text="{Binding Path=TraDet_ProductID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="140" FontSize="16" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center">
-                                <TextBox.InputScope>
-                                    <InputScope>
-                                        <InputScope.Names>
-                                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
-                                        </InputScope.Names>
-                                    </InputScope>
-                                </TextBox.InputScope>
-                            </TextBox>
+                            <Label Name="ProductIDTextbox" Content="{Binding Path=TraDet_ProductID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="140" FontSize="16" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center">
+                            </Label>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -177,15 +169,8 @@
                 <DataGridTemplateColumn Width="50" Header="數量">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Amount" Text="{Binding Path=TraDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="16" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                                <TextBox.InputScope>
-                                    <InputScope>
-                                        <InputScope.Names>
-                                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
-                                        </InputScope.Names>
-                                    </InputScope>
-                                </TextBox.InputScope>
-                            </TextBox>
+                            <Label x:Name="Amount" Content="{Binding Path=TraDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="16" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
+                            </Label>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

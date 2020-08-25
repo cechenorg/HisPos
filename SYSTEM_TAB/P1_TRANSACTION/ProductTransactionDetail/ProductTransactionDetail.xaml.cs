@@ -45,15 +45,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     PriceTypeConverted = "零售價";
                     break;
             }
+
             lblRealTotal.Content = masterRow["TraMas_RealTotal"];
             lblCashier.Content = masterRow["TraMas_Cashier"];
             tbCardNum.Text = masterRow["TraMas_CardNumber"].ToString();
             tbTaxNum.Text = masterRow["TraMas_TaxNumber"].ToString();
             tbInvoiceNum.Text = masterRow["TraMas_InvoiceNumber"].ToString();
             lblPreTotal.Content = masterRow["TraMas_PreTotal"];
-            tbDiscountAmt.Text = masterRow["TraMas_DiscountAmt"].ToString();
+            lbDiscountAmt.Content = masterRow["TraMas_DiscountAmt"].ToString();
             lblPriceType.Content = PriceTypeConverted;
-            if (masterRow["TraMas_PayMethod"].ToString() == "信用卡") { rbCard.IsChecked = true; }
+
+            lbCash.Content = masterRow["TraMas_CashAmount"].ToString();
+            lbCard.Content = masterRow["TraMas_CardAmount"].ToString();
+            lbVoucher.Content = masterRow["TraMas_VoucherAmount"].ToString();
+
             lblTradeTime.Content = masterRow["TransTime_Format"];
             tbNote.Text = masterRow["TraMas_Note"].ToString();
         }
