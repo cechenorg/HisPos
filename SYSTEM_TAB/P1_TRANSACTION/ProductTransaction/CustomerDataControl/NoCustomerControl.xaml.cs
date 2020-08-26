@@ -30,6 +30,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
 
         public void ClearView()
         {
+            tbSearch.Text = "";
+
             lbName.Content = "";
             lbGender.Content = "";
             lbBirthDay.Content = "";

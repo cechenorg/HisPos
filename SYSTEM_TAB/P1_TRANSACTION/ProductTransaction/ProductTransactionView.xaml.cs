@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -7,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -18,9 +16,7 @@ using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetPrices;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
-using MySqlX.XDevAPI.Relational;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -29,16 +25,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     /// </summary>
     public partial class ProductTransactionView : UserControl
     {
-        public NoCustomerControl CustomerView { get; set; }
+        private NoCustomerControl CustomerView { get; set; }
 
-        public DataTable ProductList;
-        public string AppliedPrice;
+        private DataTable ProductList;
+        private string AppliedPrice;
 
-        public int preTotal = 0;
-        public int discountAmount = 0;
-        public int realTotal = 0;
+        private int preTotal = 0;
+        private int discountAmount = 0;
+        private int realTotal = 0;
+        private double totalProfit = 0;
 
-        public bool isGift = false;
+        private bool isGift = false;
 
         private static readonly Regex _regex = new Regex("^[0-9]+$");
         private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
@@ -78,18 +75,23 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             List<string> list = new List<string>();
             bool CashParse = int.TryParse(tbCash.Text, out int Cash);
+            bool CardParse = int.TryParse(tbCard.Text, out int Card);
+            bool VoucherParse = int.TryParse(tbVoucher.Text, out int Voucher);
+            int Total = Cash + Card + Voucher;
+
+            if (Total != realTotal) 
+            {
+                return "NOT_MATCH";
+            }
+
             if (CashParse && Cash > 0)
             {
                 list.Add("現金");
             }
-
-            bool CardParse = int.TryParse(tbCard.Text, out int Card);
             if (CardParse && Card > 0)
             {
                 list.Add("信用卡");
             }
-
-            bool VoucherParse = int.TryParse(tbVoucher.Text, out int Voucher);
             if (VoucherParse && Voucher > 0)
             {
                 list.Add("禮券");
@@ -180,6 +182,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         DataColumn ptt = new DataColumn("PriceTooltip", typeof(string));
                         ptt.DefaultValue = "";
                         ProductList.Columns.Add(ptt);
+
+                        DataColumn profit = new DataColumn("Profit", typeof(double));
+                        ptt.DefaultValue = 0;
+                        ProductList.Columns.Add(profit);
                     }
 
                     DataRow newRow = ProductList.NewRow();
@@ -258,15 +264,21 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (dr["CurrentPrice"].ToString() != "" && dr["Amount"].ToString() != "")
                     {
                         dr["Calc"] = int.Parse(dr["CurrentPrice"].ToString()) * int.Parse(dr["Amount"].ToString());
+                        dr["Profit"] = (double.Parse(dr["CurrentPrice"].ToString()) -
+                        double.Parse(dr["Inv_LastPrice"].ToString())) * int.Parse(dr["Amount"].ToString());
                     }
                 }
                 preTotal = int.Parse(ProductList.Compute("SUM(Calc)", string.Empty).ToString());
+                totalProfit = double.Parse(ProductList.Compute("SUM(Profit)", string.Empty).ToString());
                 lblPreTotal.Content = preTotal;
+                lblTotalProfit.Content = totalProfit;
             }
             if (ProductList.Rows.Count == 0)
             {
                 preTotal = 0;
                 lblPreTotal.Content = preTotal;
+                totalProfit = 0;
+                lblTotalProfit.Content = totalProfit;
             }
             CalculateDiscount(type);
             CalculateChange();
@@ -462,7 +474,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal("AMT");
             foreach (DataRow dr in ProductList.Rows)
             {
-                dr["PriceTooltip"] = string.Format("{0:F2}", dr["Inv_LastPrice"]) + "/" + (double.Parse(dr["CurrentPrice"].ToString()) - double.Parse(dr["Inv_LastPrice"].ToString())).ToString();
+                dr["PriceTooltip"] = string.Format("{0:F2}", dr["Inv_LastPrice"]) + "/" + 
+                    (double.Parse(dr["CurrentPrice"].ToString()) -
+                    double.Parse(dr["Inv_LastPrice"].ToString())).ToString();
             }
         }
 
@@ -612,6 +626,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("尚未新增售出商品項目！", MessageType.ERROR);
                 return;
             }
+
+            if (GetPayMethod() == "NOT_MATCH") 
+            {
+                MessageWindow.ShowMessage("付款金額與應收金額不符！", MessageType.WARNING);
+                return;
+            }
+
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
             if (!(bool)confirmWindow.DialogResult) { return; }
 
@@ -666,6 +687,51 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             isGift = true;
             btnGift.IsEnabled = false;
+
+            // Focus Next Row
+            Dispatcher.InvokeAsync(() =>
+            {
+                var ProductIDList = new List<TextBox>();
+                NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
+                    ref ProductIDList);
+                ProductIDList[ProductIDList.Count - 1].Focus();
+            }, DispatcherPriority.ApplicationIdle);
+        }
+
+        private void tbCash_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (e.Key == Key.Enter) 
+            {
+                if (tbCash.Text == "" && tbCash.Text == "" && tbVoucher.Text == "") 
+                {
+                    tb.Text = realTotal.ToString();
+                }
+            }
+        }
+
+        private void tbCard_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (e.Key == Key.Enter)
+            {
+                if (tbCash.Text == "" && tbCash.Text == "" && tbVoucher.Text == "")
+                {
+                    tb.Text = realTotal.ToString();
+                }
+            }
+        }
+
+        private void tbVoucher_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (e.Key == Key.Enter)
+            {
+                if (tbCash.Text == "" && tbCash.Text == "" && tbVoucher.Text == "")
+                {
+                    tb.Text = realTotal.ToString();
+                }
+            }
         }
     }
 }

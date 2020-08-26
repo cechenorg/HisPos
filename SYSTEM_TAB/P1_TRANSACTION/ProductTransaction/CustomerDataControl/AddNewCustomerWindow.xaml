@@ -18,30 +18,30 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label Content="手機：" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></Label>
-            <TextBox x:Name="tbCellPhone" Width="120" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></TextBox>
+            <TextBox x:Name="tbCellPhone" Width="120" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" PreviewKeyDown="tbCellPhone_PreviewKeyDown"></TextBox>
             <Label Content="家電：(" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></Label>
-            <TextBox x:Name="tbTelPhoneCode" Width="40" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></TextBox>
+            <TextBox x:Name="tbTelPhoneCode" Width="40" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" PreviewKeyDown="tbTelPhoneCode_PreviewKeyDown"></TextBox>
             <Label Content=")–" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></Label>
-            <TextBox x:Name="tbTelPhone" Width="100" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></TextBox>
+            <TextBox x:Name="tbTelPhone" Width="100" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" PreviewKeyDown="tbTelPhone_PreviewKeyDown"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="姓名：" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></Label>
-            <TextBox x:Name="tbName" Width="120" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></TextBox>
+            <TextBox x:Name="tbName" Width="120" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" PreviewKeyDown="tbName_PreviewKeyDown"></TextBox>
             <RadioButton x:Name="rbMale" GroupName="rbgGender" Content="男" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" IsChecked="True"></RadioButton>
             <RadioButton x:Name="rbFemale" GroupName="rbgGender" Content="女" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></RadioButton>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Label Content="生日：" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></Label>
-            <TextBox x:Name="tbYear" Width="50" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></TextBox>
+            <Label Content="生日：民國" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></Label>
+            <TextBox x:Name="tbYear" Width="50" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" PreviewKeyDown="tbYear_PreviewKeyDown"></TextBox>
             <Label Content="年" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></Label>
-            <TextBox x:Name="tbMonth" Width="30" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></TextBox>
+            <TextBox x:Name="tbMonth" Width="30" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" PreviewKeyDown="tbMonth_PreviewKeyDown"></TextBox>
             <Label Content="月" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></Label>
-            <TextBox x:Name="tbDay" Width="30" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></TextBox>
+            <TextBox x:Name="tbDay" Width="30" Height="35" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" PreviewKeyDown="tbDay_PreviewKeyDown"></TextBox>
             <Label Content="日" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></Label>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Label Content="地址：" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></Label>
-            <TextBox x:Name="tbAddress" Width="350" Height="35" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"></TextBox>
+            <TextBox x:Name="tbAddress" Width="350" Height="35" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" PreviewKeyDown="tbAddress_PreviewKeyDown"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Label Content="備註：" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></Label>
