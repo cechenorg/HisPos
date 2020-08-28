@@ -186,6 +186,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         DataColumn profit = new DataColumn("Profit", typeof(double));
                         ptt.DefaultValue = 0;
                         ProductList.Columns.Add(profit);
+
+                        DataColumn deposit = new DataColumn("Deposit", typeof(int));
+                        ptt.DefaultValue = 0;
+                        ProductList.Columns.Add(deposit);
                     }
 
                     DataRow newRow = ProductList.NewRow();
