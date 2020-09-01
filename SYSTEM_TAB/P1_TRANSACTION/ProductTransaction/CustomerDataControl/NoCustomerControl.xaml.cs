@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,17 +11,84 @@ using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl
 {
+    public class CustomerDetail 
+    {
+        public string _search;
+        public string Search
+        {
+            get => _search;
+            set
+            {
+                _search = value;
+            }
+        }
+    }
     /// <summary>
     /// NoCustomerControl.xaml 的互動邏輯
     /// </summary>
     public partial class NoCustomerControl : UserControl
     {
+        CustomerDetail cd = new CustomerDetail();
+
         private static string cusID = "0";
+
+        
+        private static string name = "";
+        private static string gender = "";
+        private static string birthday = "";
+        private static string cellphone = "";
+        private static string telephone = "";
+        private static string address = "";
+        private static string note = "";
 
         public string CusID
         {
             get { return cusID; }
             set { cusID = value; }
+        }
+
+        
+
+        public string CusName
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        public string Gender
+        {
+            get { return gender; }
+            set { gender = value; }
+        }
+
+        public string Birthday
+        {
+            get { return birthday; }
+            set { birthday = value; }
+        }
+
+        public string Cellphone
+        {
+            get { return cellphone; }
+            set { cellphone = value; }
+        }
+
+        public string Telephone
+        {
+            get { return telephone; }
+            set { telephone = value; }
+        }
+
+        public string Address
+        {
+            get { return address; }
+            set { address = value; }
+        }
+
+        public string Note
+        {
+            get { return note; }
+            set { note = value; }
         }
 
         public NoCustomerControl()
@@ -30,15 +98,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
 
         public void ClearView()
         {
-            tbSearch.Text = "";
+            cd._search = "123123123";
 
-            lbName.Content = "";
-            lbGender.Content = "";
-            lbBirthDay.Content = "";
-            lbCellphone.Content = "";
-            lbTelephone.Content = "";
-            tbAddress.Text = "";
-            tbNote.Text = "";
+            name = "";
+            gender = "";
+            birthday = "";
+            cellphone = "";
+            telephone = "";
+            address = "";
+            note = "";
 
             cusID = "0";
         }

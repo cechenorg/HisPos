@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" >
+    <UserControl.DataContext>
+        <local:CustomerDetail/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -14,7 +17,7 @@
             <RowDefinition Height="390"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-            <TextBox x:Name="tbSearch" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="手機 / 家電" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,2" KeyDown="tbSearch_KeyDown">
+            <TextBox x:Name="tbSearch" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="手機 / 家電" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,2" KeyDown="tbSearch_KeyDown">
             </TextBox>
             <Button x:Name="btnAddCustomer" Width="100" Content="新增顧客" FontFamily="Segoe UI Semibold" FontSize="17" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Click="btnAddCustomer_Click"/>
             <Button x:Name="btnClearCustomer" Width="65" Content="清除" FontFamily="Segoe UI Semibold" FontSize="17" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClearCustomer_Click"/>
@@ -40,7 +43,7 @@
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
                 <Label Content="手機：" FontFamily="Segoe UI Semibold" FontSize="17" VerticalContentAlignment="Center"></Label>
-                <Label x:Name="lbCellphone" Content="0912-345-678" Width="120" FontFamily="Segoe UI Semibold" FontSize="17" VerticalContentAlignment="Center"></Label>
+                <Label x:Name="lbCellphone" Content="" Width="120" FontFamily="Segoe UI Semibold" FontSize="17" VerticalContentAlignment="Center"></Label>
                 <Label Content="家電：" FontFamily="Segoe UI Semibold" FontSize="17" VerticalContentAlignment="Center"></Label>
                 <Label x:Name="lbTelephone" Content="" Width="120" FontFamily="Segoe UI Semibold" FontSize="17" VerticalContentAlignment="Center"></Label>
             </StackPanel>
