@@ -272,20 +272,9 @@ namespace His_Pos.NewClass.StoreOrder
             //backgroundWorker.DoWork += (sender, args) =>
             //{
 
-            PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
+            StoreOrderDB.SavePurchaseOrder(this);
 
-            string note;
-            DateTime dt = Day;
-            if (dt == default(DateTime))
-            {
-                saveStoreOrder.Note = TargetPreOrderCustomer + " " + saveStoreOrder.Note;
-                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-            }
-            else
-            {
-                saveStoreOrder.Note = TargetPreOrderCustomer + " " + dt.ToString("yyyy年MM月dd日") + " " + saveStoreOrder.Note;
-                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
-            }
+
         }
         public override object Clone()
         {
@@ -424,6 +413,25 @@ namespace His_Pos.NewClass.StoreOrder
             catch (Exception ex)
             {
                 MessageWindow.ShowMessage("更新藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR); 
+            }
+        }
+
+        public override void SaveOrderCus()
+        {
+
+            PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
+
+            string note;
+            DateTime dt = Day;
+            if (dt == default(DateTime))
+            {
+                saveStoreOrder.Note = TargetPreOrderCustomer + " " + saveStoreOrder.Note;
+                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
+            }
+            else
+            {
+                saveStoreOrder.Note = TargetPreOrderCustomer + " " + dt.ToString("yyyy年MM月dd日") + " " + saveStoreOrder.Note;
+                StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
             }
         }
         #endregion

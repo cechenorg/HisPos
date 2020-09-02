@@ -305,6 +305,10 @@ namespace His_Pos.NewClass.StoreOrder
             return type;
         }
 
+        public override void SaveOrderCus()
+        {
+        }
+
 
 
         #endregion

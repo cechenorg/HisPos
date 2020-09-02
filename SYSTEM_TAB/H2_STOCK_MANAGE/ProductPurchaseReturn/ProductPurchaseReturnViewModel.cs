@@ -130,11 +130,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
 
                     if (storeOrders.Count > 0)
-                        dateTime = storeOrders[0].CreateDateTime.AddDays(-1).ToString("yyyyMMdd");
+                        dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
 
                     BusyContent = "取得杏德訂單最新狀態...";
                     dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
-
                     if (dataTable.Rows.Count > 0)
                     {
                         storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
@@ -152,13 +151,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 NormalViewModel.InitData(storeOrderCollection);
                 IsBusy = false;
             };
-
         }
         private void InitVariables()
         {
             IsBusy = true;
 
-            if(!initBackgroundWorker.IsBusy)
+            if (!initBackgroundWorker.IsBusy)
                 initBackgroundWorker.RunWorkerAsync();
         }
         private void RegisterCommand()
