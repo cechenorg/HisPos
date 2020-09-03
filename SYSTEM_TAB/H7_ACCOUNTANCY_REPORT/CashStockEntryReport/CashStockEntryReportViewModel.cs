@@ -24,6 +24,7 @@ using His_Pos.NewClass.Prescription.Service;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.NewClass.Report.TradeProfitReport;
+using His_Pos.NewClass.Report.StockTakingReport;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {
@@ -153,6 +154,48 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
 
         public TradeProfitReports TotalTradeProfitReportCollection { get; set; } = new TradeProfitReports();
         // 8.12新增^^^
+
+
+        //9.3新增
+        private StockTakingReports stockTakingReportCollection = new StockTakingReports();
+        public StockTakingReports StockTakingReportCollection
+        {
+            get => stockTakingReportCollection;
+            set
+            {
+                Set(() => StockTakingReportCollection, ref stockTakingReportCollection, value);
+            }
+        }
+
+
+        private StockTakingReport stockTakingReport = new StockTakingReport();
+        public StockTakingReport StockTakingReport
+        {
+            get => stockTakingReport;
+            set
+            {
+                Set(() => StockTakingReport, ref stockTakingReport, value);
+            }
+        }
+
+
+        private StockTakingReport totalStockTakingReport = new StockTakingReport();
+        public StockTakingReport TotalStockTakingReport
+        {
+            get => totalStockTakingReport;
+            set
+            {
+                Set(() => TotalStockTakingReport, ref totalStockTakingReport, value);
+            }
+        }
+
+        public StockTakingReports TotalStockTakingReportCollection { get; set; } = new StockTakingReports();
+
+
+
+
+
+        //9.3新增^^^^
 
         private PrescriptionProfitReports selfPrescriptionProfitReportCollection = new PrescriptionProfitReports();
         public PrescriptionProfitReports SelfPrescriptionProfitReportCollection
@@ -595,6 +638,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             SelfPrescriptionProfitReportCollection.Clear();
             CooperativePrescriptionProfitReportCollection.Clear();
             TradeProfitReportCollection.Clear();
+            StockTakingReportCollection.Clear();
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -603,6 +647,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 CashflowCollection = new CashReports(StartDate,EndDate);
                 TotalPrescriptionProfitReportCollection.GetDataByDate(StartDate, EndDate);
                 TradeProfitReportCollection=new TradeProfitReports(StartDate, EndDate);
+                StockTakingReportCollection = new StockTakingReports(StartDate, EndDate);
 
                 GetInventoryDifference();
                 //PrescriptionPointEditRecords.GetEditRecords(StartDate, EndDate);
@@ -619,6 +664,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 }
                 //RevertSelfPrescriptionProfitByEditRecords();
                 CalculateTotalTradeProfit();
+                CalculateTotalStockTaking();
                 CalculateTotalCashFlow();
                 CalculateTotalPrescriptionProfit();
                 CalculateSelfPrescriptionProfit();
@@ -632,6 +678,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
              
         }
 
+     
         private void GetInventoryDifference()
         {
             var table = CashReportDb.GetInventoryDifferenceByDate(StartDate, EndDate);
@@ -710,7 +757,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             TotalTradeProfitReport.Profit = TradeProfitReportCollection.Sum(c => c.Profit);
         }
 
-
+        private void CalculateTotalStockTaking()
+        {
+            TotalStockTakingReport.Count = StockTakingReportCollection.Sum(c => c.Count);
+            TotalStockTakingReport.Price = StockTakingReportCollection.Sum(c => c.Price);
+        }
 
         private void CalculateSelfPrescriptionProfit()
         {

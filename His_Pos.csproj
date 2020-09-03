@@ -618,6 +618,9 @@
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionProfitReport\PrescriptionProfitReports.cs" />
+    <Compile Include="NewClass\Report\StockTakingReport\StockTakingReport.cs" />
+    <Compile Include="NewClass\Report\StockTakingReport\StockTakingReportDb.cs" />
+    <Compile Include="NewClass\Report\StockTakingReport\StockTakingReports.cs" />
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReport.cs" />
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReportDb.cs" />
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReports.cs" />
