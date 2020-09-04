@@ -25,6 +25,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.NewClass.Report.TradeProfitReport;
 using His_Pos.NewClass.Report.StockTakingReport;
+using His_Pos.NewClass.Report.CashDetailReport.StockTakingDetailRecordReport;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {
@@ -191,11 +192,76 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
 
         public StockTakingReports TotalStockTakingReportCollection { get; set; } = new StockTakingReports();
 
-
-
-
-
         //9.3新增^^^^
+
+        //9.4新增
+        private StockTakingReport stockTakingSelectedItem;
+        public StockTakingReport StockTakingSelectedItem
+        {
+            get => stockTakingSelectedItem;
+            set
+            {
+                Set(() => StockTakingSelectedItem, ref stockTakingSelectedItem, value);
+            }
+        }
+
+        private StockTakingDetailReports stockTakingDetailReportCollection;
+        public StockTakingDetailReports StockTakingDetailReportCollection
+        {
+            get => stockTakingDetailReportCollection;
+            set
+            {
+                Set(() => StockTakingDetailReportCollection, ref stockTakingDetailReportCollection, value);
+            }
+        }
+        private CollectionViewSource stockTakingDetailReportViewSource;
+        private CollectionViewSource StockTakingDetailReportViewSource
+        {
+            get => stockTakingDetailReportViewSource;
+            set
+            {
+                Set(() => StockTakingDetailReportViewSource, ref stockTakingDetailReportViewSource, value);
+            }
+        }
+        private ICollectionView stockTakingDetailReportView;
+        public ICollectionView StockTakingDetailReportView
+        {
+            get => stockTakingDetailReportView;
+            private set
+            {
+                Set(() => StockTakingDetailReportView, ref stockTakingDetailReportView, value);
+            }
+        }
+
+        private StockTakingDetailReport stockTakingDetailReportSelectItem;
+        public StockTakingDetailReport StockTakingDetailReportSelectItem
+        {
+            get => stockTakingDetailReportSelectItem;
+            set
+            {
+                Set(() => StockTakingDetailReportSelectItem, ref stockTakingDetailReportSelectItem, value);
+            }
+        }
+
+        private StockTakingDetailRecordReports stockTakingDetailRecordReportCollection = new StockTakingDetailRecordReports();
+        public StockTakingDetailRecordReports StockTakingDetailRecordReportCollection
+        {
+            get => stockTakingDetailRecordReportCollection;
+            set
+            {
+                Set(() => StockTakingDetailRecordReportCollection, ref stockTakingDetailRecordReportCollection, value);
+            }
+        }
+        private StockTakingDetailRecordReport stockTakingDetailMedicineReportSelectItem;
+        public StockTakingDetailRecordReport StockTakingDetailMedicineReportSelectItem
+        {
+            get => stockTakingDetailMedicineReportSelectItem;
+            set
+            {
+                Set(() => StockTakingDetailMedicineReportSelectItem, ref stockTakingDetailMedicineReportSelectItem, value);
+            }
+        }
+        //9.4新增^^^^
 
         private PrescriptionProfitReports selfPrescriptionProfitReportCollection = new PrescriptionProfitReports();
         public PrescriptionProfitReports SelfPrescriptionProfitReportCollection
@@ -387,6 +453,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
         public RelayCommand PrintCashPerDayCommand { get; set; }
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
+        public RelayCommand StockTakingReportSelectionChangedCommand { get; set; }
+        public RelayCommand StockTakingDetailClickCommand { get; set; }
+        public RelayCommand StockTakingDetailMedicineDoubleClickCommand { get; set; }
         
         #endregion
         public CashStockEntryReportViewModel() {
@@ -400,6 +469,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
             PrintCashPerDayCommand = new RelayCommand(PrintCashPerDayAction);
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
+            StockTakingReportSelectionChangedCommand = new RelayCommand(StockTakingReportSelectionChangedAction);
+            StockTakingDetailClickCommand = new RelayCommand(StockTakingDetailClickAction);
+
             GetData();
             InitCollection();
         }
@@ -511,7 +583,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             if (PrescriptionDetailMedicineRepotSelectItem is null) return;
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { PrescriptionDetailMedicineRepotSelectItem.Id, "0" }, "ShowProductDetail"));
-        } 
+        }
+  
         private void PrescriptionDetailDoubleClickAction() {
             if (PrescriptionDetailReportSelectItem is null)
             {
@@ -535,6 +608,56 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             } 
             CashDetailRecordReportCollection.GetDateByDate(CashDetailReportSelectItem.Id,StartDate,EndDate);
         }
+
+        private void StockTakingDetailClickAction()
+        {
+            if (StockTakingDetailReportSelectItem is null)
+            {
+                StockTakingDetailRecordReportCollection.Clear();
+                return;
+            }
+            StockTakingDetailRecordReportCollection.GetDateByDate(StockTakingDetailReportSelectItem.Id, StartDate, EndDate);
+        }
+
+
+        private void StockTakingReportSelectionChangedAction()
+        {
+
+            if (StockTakingSelectedItem is null ) {
+                StockTakingDetailReportCollection.Clear();
+                StockTakingDetailReportViewSource = new CollectionViewSource { Source = StockTakingDetailReportCollection };
+                StockTakingDetailReportView = StockTakingDetailReportViewSource.View;
+                //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
+                //SumPrescriptionDetailReport();
+            }
+            if (StockTakingSelectedItem is null)
+                return; 
+            CashStockEntryReportEnum = CashStockEntryReportEnum.StockTaking;
+
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "報表查詢中";
+                StockTakingDetailReportCollection = new StockTakingDetailReports(StockTakingSelectedItem.TypeId, StartDate, EndDate);
+                
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                StockTakingDetailReportViewSource = new CollectionViewSource { Source = StockTakingDetailReportCollection };
+                StockTakingDetailReportView = StockTakingDetailReportViewSource.View;
+                //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
+                //SumStockTakingDetailReport();
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync(); 
+            /*SelfPrescriptionSelectedItem = null;
+            CooperativePrescriptionSelectedItem = null;*/
+            CashflowSelectedItem = null;
+        }
+
         private void CashSelectionChangedAction() {
             if (CashflowSelectedItem is null)
             {
@@ -545,6 +668,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             CashDetailReportCollection.GetDataByDate(CashflowSelectedItem.TypeId, StartDate, EndDate);
             CooperativePrescriptionSelectedItem = null;
             SelfPrescriptionSelectedItem = null;
+            StockTakingSelectedItem = null;
         }
         private void CooperativePrescriptionSelectionChangedAction()
         {
@@ -581,6 +705,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             worker.RunWorkerAsync(); 
             SelfPrescriptionSelectedItem = null;
             CashflowSelectedItem = null;
+            StockTakingSelectedItem = null;
         }
         private void SelfPrescriptionSelectionChangedAction() {
             if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) {
@@ -629,6 +754,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             worker.RunWorkerAsync();
             CooperativePrescriptionSelectedItem = null;
             CashflowSelectedItem = null;
+            StockTakingSelectedItem = null;
         }
         private void SearchAction() { 
                 GetData(); 

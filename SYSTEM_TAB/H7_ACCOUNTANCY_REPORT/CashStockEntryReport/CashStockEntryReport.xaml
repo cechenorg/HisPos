@@ -18,6 +18,9 @@
         <DataTemplate x:Key="PrescriptionDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
             <entryDetailControl:PrescriptionDetailControl/>
         </DataTemplate>
+        <DataTemplate x:Key="StockTakingDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
+            <entryDetailControl:StockTakingDetailControl/>
+        </DataTemplate>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
         <Grid Margin="10">
@@ -669,11 +672,11 @@
                             <Label  Content="庫存異動" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Bottom"/>
                         </StackPanel>
                         <DataGrid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                      ItemsSource="{Binding StockTakingReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
+                      ItemsSource="{Binding StockTakingReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding StockTakingSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
                       CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction />
+                                <i:EventTrigger EventName="SelectionChanged" >
+                                    <i:InvokeCommandAction Command="{Binding  StockTakingReportSelectionChangedCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.Resources>
@@ -774,6 +777,9 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="Prescription">
                                 <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionDetailControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="StockTaking">
+                                <Setter Property="ContentTemplate" Value="{StaticResource StockTakingDetailControl}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

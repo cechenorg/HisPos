@@ -9,7 +9,8 @@ namespace His_Pos.NewClass.Report
     public enum CashStockEntryReportEnum
     {
         Cash = 0,
-        Prescription = 1
+        Prescription = 1,
+        StockTaking = 2
     }
 }
  
