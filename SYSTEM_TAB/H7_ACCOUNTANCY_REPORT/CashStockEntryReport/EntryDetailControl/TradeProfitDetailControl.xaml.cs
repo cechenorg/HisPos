@@ -17,6 +17,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Report.CashDetailReport.CashDetailRecordReport;
 using His_Pos.NewClass.Report.PrescriptionDetailReport.PrescriptionDetailMedicineRepot;
 using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport;
+using His_Pos.NewClass.Report.TradeProfitDetailReport.TradeProfitDetailRecordReport;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl
@@ -24,15 +25,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
     /// <summary>
     /// PrescriptionDetailControl.xaml 的互動邏輯
     /// </summary>
-    public partial class StockTakingDetailControl : UserControl
+    public partial class TradeProfitDetailControl : UserControl
     {
-        public StockTakingDetailControl()
+        public TradeProfitDetailControl()
         {
             InitializeComponent();
             
         }
 
-       /* private void ShowProductDetail(object sender, MouseButtonEventArgs e)
+        private void ShowProductDetail(object sender, MouseButtonEventArgs e)
         {
             DataGridRow row = sender as DataGridRow;
 
@@ -40,7 +41,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string>(this, ((StockTakingDetailRecordReport)row.Item).MasterID, "ShowProductDetail"));
-        }*/
+           // Messenger.Default.Send(new NotificationMessage<string>(this, ((TradeProfitDetailRecordReport)row.Item).MasterID, "ShowProductDetail"));
+        }
     }
 }

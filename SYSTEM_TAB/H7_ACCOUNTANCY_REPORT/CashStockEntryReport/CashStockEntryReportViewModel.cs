@@ -25,7 +25,10 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.NewClass.Report.TradeProfitReport;
 using His_Pos.NewClass.Report.StockTakingReport;
-using His_Pos.NewClass.Report.CashDetailReport.StockTakingDetailRecordReport;
+using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport;
+using His_Pos.NewClass.Report.StockTakingDetailReport;
+using His_Pos.NewClass.Report.TradeProfitDetailReport;
+using His_Pos.NewClass.Report.TradeProfitDetailReport.TradeProfitDetailRecordReport;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {
@@ -263,6 +266,76 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         //9.4新增^^^^
 
+
+        //9.7新增
+        private TradeProfitReport tradeProfitSelectedItem;
+        public TradeProfitReport TradeProfitSelectedItem
+        {
+            get => tradeProfitSelectedItem;
+            set
+            {
+                Set(() => TradeProfitSelectedItem, ref tradeProfitSelectedItem, value);
+            }
+        }
+
+        private TradeProfitDetailReports tradeProfitDetailReportCollection;
+        public TradeProfitDetailReports TradeProfitDetailReportCollection
+        {
+            get => tradeProfitDetailReportCollection;
+            set
+            {
+                Set(() => TradeProfitDetailReportCollection, ref tradeProfitDetailReportCollection, value);
+            }
+        }
+        private CollectionViewSource tradeProfitDetailReportViewSource;
+        private CollectionViewSource TradeProfitDetailReportViewSource
+        {
+            get => tradeProfitDetailReportViewSource;
+            set
+            {
+                Set(() => TradeProfitDetailReportViewSource, ref tradeProfitDetailReportViewSource, value);
+            }
+        }
+        private ICollectionView tradeProfitDetailReportView;
+        public ICollectionView TradeProfitDetailReportView
+        {
+            get => tradeProfitDetailReportView;
+            private set
+            {
+                Set(() => TradeProfitDetailReportView, ref tradeProfitDetailReportView, value);
+            }
+        }
+
+        private TradeProfitDetailReport tradeProfitDetailReportSelectItem;
+        public TradeProfitDetailReport TradeProfitDetailReportSelectItem
+        {
+            get => tradeProfitDetailReportSelectItem;
+            set
+            {
+                Set(() => TradeProfitDetailReportSelectItem, ref tradeProfitDetailReportSelectItem, value);
+            }
+        }
+
+        private TradeProfitDetailRecordReports tradeProfitDetailRecordReportCollection = new TradeProfitDetailRecordReports();
+        public TradeProfitDetailRecordReports TradeProfitDetailRecordReportCollection
+        {
+            get => tradeProfitDetailRecordReportCollection;
+            set
+            {
+                Set(() => TradeProfitDetailRecordReportCollection, ref tradeProfitDetailRecordReportCollection, value);
+            }
+        }
+        private TradeProfitDetailRecordReport tradeProfitDetailMedicineReportSelectItem;
+        public TradeProfitDetailRecordReport TradeProfitDetailMedicineReportSelectItem
+        {
+            get => tradeProfitDetailMedicineReportSelectItem;
+            set
+            {
+                Set(() => TradeProfitDetailMedicineReportSelectItem, ref tradeProfitDetailMedicineReportSelectItem, value);
+            }
+        }
+        //9.7新增^^^^
+
         private PrescriptionProfitReports selfPrescriptionProfitReportCollection = new PrescriptionProfitReports();
         public PrescriptionProfitReports SelfPrescriptionProfitReportCollection
         {
@@ -456,7 +529,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand StockTakingReportSelectionChangedCommand { get; set; }
         public RelayCommand StockTakingDetailClickCommand { get; set; }
         public RelayCommand StockTakingDetailMedicineDoubleClickCommand { get; set; }
-        
+        public RelayCommand TradeProfitReportSelectionChangedCommand { get; set; }
+        public RelayCommand TradeProfitDetailClickCommand { get; set; }
+
+
         #endregion
         public CashStockEntryReportViewModel() {
             SearchCommand = new RelayCommand(SearchAction);
@@ -471,7 +547,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
             StockTakingReportSelectionChangedCommand = new RelayCommand(StockTakingReportSelectionChangedAction);
             StockTakingDetailClickCommand = new RelayCommand(StockTakingDetailClickAction);
-
+            TradeProfitReportSelectionChangedCommand = new RelayCommand(TradeProfitReportSelectionChangedAction);
+            TradeProfitDetailClickCommand = new RelayCommand(TradeProfitDetailClickAction);
             GetData();
             InitCollection();
         }
@@ -608,7 +685,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             } 
             CashDetailRecordReportCollection.GetDateByDate(CashDetailReportSelectItem.Id,StartDate,EndDate);
         }
-
+        private void TradeProfitDetailClickAction()
+        {
+            if (TradeProfitDetailReportSelectItem is null)
+            {
+                TradeProfitDetailRecordReportCollection.Clear();
+                return;
+            }
+            TradeProfitDetailRecordReportCollection.GetDateByDate(TradeProfitDetailReportSelectItem.Id, StartDate, EndDate);
+        }
         private void StockTakingDetailClickAction()
         {
             if (StockTakingDetailReportSelectItem is null)
@@ -617,6 +702,44 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 return;
             }
             StockTakingDetailRecordReportCollection.GetDateByDate(StockTakingDetailReportSelectItem.Id, StartDate, EndDate);
+        }
+        private void TradeProfitReportSelectionChangedAction()
+        {
+
+            if (TradeProfitSelectedItem is null)
+            {
+                TradeProfitDetailReportCollection.Clear();
+                TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
+                TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
+                //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
+                //SumPrescriptionDetailReport();
+            }
+            if (TradeProfitSelectedItem is null)
+                return;
+            CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
+
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "報表查詢中";
+                TradeProfitDetailReportCollection = new TradeProfitDetailReports(TradeProfitSelectedItem.TypeId, StartDate, EndDate);
+
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
+                TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
+                //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
+                //SumStockTakingDetailReport();
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+            /*SelfPrescriptionSelectedItem = null;
+            CooperativePrescriptionSelectedItem = null;*/
+            CashflowSelectedItem = null;
         }
 
 

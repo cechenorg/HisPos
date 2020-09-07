@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.NewClass.Report.CashDetailReport.CashDetailRecordReport
+namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport
 {
     public class StockTakingDetailRecordReport : ObservableObject
     {

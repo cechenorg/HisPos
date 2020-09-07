@@ -580,6 +580,12 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProduct.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProducts.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReport.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReportDb.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReports.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailReport.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailReportDb.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailReports.cs" />
     <Compile Include="NewClass\Report\StockTakingDetailReport\StockTakingDetailRecordReport\StockTakingDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\StockTakingDetailReport\StockTakingDetailRecordReport\StockTakingDetailRecordReportDb.cs" />
     <Compile Include="NewClass\Report\StockTakingDetailReport\StockTakingDetailRecordReport\StockTakingDetailRecordReports.cs" />
@@ -1182,6 +1188,9 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\CashStockEntryReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\CashDetailControl.xaml.cs">
       <DependentUpon>CashDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\TradeProfitDetailControl.xaml.cs">
+      <DependentUpon>TradeProfitDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\StockTakingDetailControl.xaml.cs">
       <DependentUpon>StockTakingDetailControl.xaml</DependentUpon>
@@ -1991,6 +2000,10 @@
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\CashDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\TradeProfitDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\StockTakingDetailControl.xaml">
       <Generator>MSBuild:Compile</Generator>

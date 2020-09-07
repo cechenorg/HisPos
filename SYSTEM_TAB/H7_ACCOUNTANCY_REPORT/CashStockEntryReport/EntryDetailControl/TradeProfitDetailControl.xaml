@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl.StockTakingDetailControl"
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl.TradeProfitDetailControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,15 +15,15 @@
             <RowDefinition Height="300"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Label  Content="庫存異動詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label  Content="銷售紀錄" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Rectangle Width="150"/>
         </StackPanel> 
         <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  ItemsSource="{Binding StockTakingDetailReportCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding StockTakingDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
+                  ItemsSource="{Binding TradeProfitDetailReportCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeProfitDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                    CanUserDeleteRows="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding StockTakingDetailClickCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding TradeProfitDetailClickCommand}"/>
                 </i:EventTrigger>
                 <!--<i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding StockTakingDetailDoubleClickCommand}"/>
@@ -62,7 +62,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="150" Header="品號" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding Id}">
+                <DataGridTextColumn Width="150" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -70,15 +70,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="品名" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding ChineseName}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="left"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="異動前" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding OldValue}">
+                <DataGridTextColumn Width="150" Header="金額" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding RealTotal}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -86,7 +78,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="異動後" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding NewValue}">
+                <DataGridTextColumn Width="100" Header="成本" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding ValueDifference}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -94,7 +86,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="金額" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding Price}">
+                <DataGridTextColumn Width="100" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding Profit}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -102,7 +94,6 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
@@ -112,13 +103,13 @@
 
         <Rectangle Grid.Row="3" Fill="{StaticResource GridBackGround}"/>
         <DataGrid Grid.Row="3" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  ItemsSource="{Binding StockTakingDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                  SelectedItem="{Binding StockTakingDetailMedicineReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding TradeProfitDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                  SelectedItem="{Binding TradeProfitDetailMedicineReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding StockTakingDetailMedicineDoubleClickCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding TradeProfitDetailMedicineDoubleClickCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Resources>
@@ -154,7 +145,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="150" Header="單號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MasterID}">
+                <DataGridTextColumn Width="150" Header="商品代號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ProductID}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -162,23 +153,15 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="異動前" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OldValue}">
+                <DataGridTextColumn Width="150" Header="品名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ChineseName}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="HorizontalAlignment"  Value="Left"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="150" Header="異動後" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NewValue}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValueDiff}">
+                <DataGridTextColumn Width="150" Header="金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PriceSum}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

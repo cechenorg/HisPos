@@ -7,17 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport
+namespace His_Pos.NewClass.Report.TradeProfitDetailReport
 {
-    public static class StockTakingDetailRecordReportDb
+    public static class TradeProfitDetailReportDb
     {
-        public static DataTable GetDataByDate(string Id, DateTime sDate, DateTime eDate)
+        public static DataTable GetDataByDate(string typeId, DateTime sDate, DateTime eDate)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Id", Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "typeId", typeId);
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingDetailRecordByDate]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[POS].[TradeProfitDetailReportByDate]", parameterList);
         }
     }
 }

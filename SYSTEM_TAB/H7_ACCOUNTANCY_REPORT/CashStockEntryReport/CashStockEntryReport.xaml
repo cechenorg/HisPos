@@ -21,6 +21,9 @@
         <DataTemplate x:Key="StockTakingDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
             <entryDetailControl:StockTakingDetailControl/>
         </DataTemplate>
+        <DataTemplate x:Key="TradeProfitDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
+            <entryDetailControl:TradeProfitDetailControl/>
+        </DataTemplate>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
         <Grid Margin="10">
@@ -537,14 +540,14 @@
                         </StackPanel>
                         
                         <DataGrid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                      ItemsSource="{Binding TradeProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
+                      ItemsSource="{Binding TradeProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeProfitSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
                       CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="SelectionChanged">
-                                        <i:InvokeCommandAction />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <DataGrid.Resources>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged" >
+                                    <i:InvokeCommandAction Command="{Binding  TradeProfitReportSelectionChangedCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <DataGrid.Resources>
                                     <Style TargetType="{x:Type ScrollBar}">
                                         <Setter Property="SnapsToDevicePixels" Value="True"/>
                                         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -780,6 +783,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="StockTaking">
                                 <Setter Property="ContentTemplate" Value="{StaticResource StockTakingDetailControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="TradeProfit">
+                                <Setter Property="ContentTemplate" Value="{StaticResource TradeProfitDetailControl}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
