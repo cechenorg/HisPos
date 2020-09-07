@@ -11,27 +11,12 @@ using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl
 {
-    public class CustomerDetail 
-    {
-        public string _search;
-        public string Search
-        {
-            get => _search;
-            set
-            {
-                _search = value;
-            }
-        }
-    }
     /// <summary>
     /// NoCustomerControl.xaml 的互動邏輯
     /// </summary>
     public partial class NoCustomerControl : UserControl
     {
-        CustomerDetail cd = new CustomerDetail();
-
         private static string cusID = "0";
-
         
         private static string name = "";
         private static string gender = "";
@@ -46,8 +31,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             get { return cusID; }
             set { cusID = value; }
         }
-
-        
 
         public string CusName
         {
@@ -98,15 +81,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
 
         public void ClearView()
         {
-            cd._search = "123123123";
+            tbSearch.Text = "";
 
-            name = "";
-            gender = "";
-            birthday = "";
-            cellphone = "";
-            telephone = "";
-            address = "";
-            note = "";
+            lbName.Content = "";
+            lbGender.Content = "";
+            lbBirthDay.Content = "";
+            lbCellphone.Content = "";
+            lbTelephone.Content = "";
+            tbAddress.Text = "";
+            tbNote.Text = "";
 
             cusID = "0";
         }
@@ -127,7 +110,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
             AddNewCustomerWindow acw = new AddNewCustomerWindow();
+            acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
             acw.ShowDialog();
+        }
+
+        private void acw_RaiseCustomEvent(object sender, CustomEventArgs e)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", int.Parse(e.Message)));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetCustomerByID]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (result.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
+            }
+            else
+            {
+                FillInCustomerData(result);
+            }
         }
 
         private void btnClearCustomer_Click(object sender, RoutedEventArgs e)

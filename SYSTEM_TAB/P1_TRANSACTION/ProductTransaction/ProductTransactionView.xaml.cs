@@ -273,9 +273,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     }
                 }
                 preTotal = int.Parse(ProductList.Compute("SUM(Calc)", string.Empty).ToString());
-                totalProfit = double.Parse(ProductList.Compute("SUM(Profit)", string.Empty).ToString());
                 lblPreTotal.Content = preTotal;
-                lblTotalProfit.Content = totalProfit;
             }
             if (ProductList.Rows.Count == 0)
             {
@@ -305,6 +303,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             discountAmount = int.Parse(tbDiscountAmt.Text);
             realTotal = preTotal - discountAmount;
             lblRealTotal.Content = realTotal;
+
+            double preProfit = 0;
+            double.TryParse(ProductList.Compute("SUM(Profit)", string.Empty).ToString(), out preProfit);
+            totalProfit = preProfit - discountAmount;
+            lblTotalProfit.Content = totalProfit;
 
             if (int.Parse(lblRealTotal.Content.ToString()) < 0)
             {
@@ -598,7 +601,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbPaid_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) { CalculateChange(); }
+            if (e.Key == Key.Enter) 
+            { 
+                CalculateChange();
+                tbCash.Text = realTotal.ToString();
+            }
         }
 
         private void tbCardNum_KeyDown(object sender, KeyEventArgs e)
@@ -707,7 +714,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter) 
             {
-                if (tbCash.Text == "" && tbCash.Text == "" && tbVoucher.Text == "") 
+                if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "") 
                 {
                     tb.Text = realTotal.ToString();
                 }
@@ -719,7 +726,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
-                if (tbCash.Text == "" && tbCash.Text == "" && tbVoucher.Text == "")
+                if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
                 {
                     tb.Text = realTotal.ToString();
                 }
@@ -731,7 +738,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
-                if (tbCash.Text == "" && tbCash.Text == "" && tbVoucher.Text == "")
+                if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
                 {
                     tb.Text = realTotal.ToString();
                 }

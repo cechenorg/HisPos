@@ -6,9 +6,6 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" >
-    <UserControl.DataContext>
-        <local:CustomerDetail/>
-    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
