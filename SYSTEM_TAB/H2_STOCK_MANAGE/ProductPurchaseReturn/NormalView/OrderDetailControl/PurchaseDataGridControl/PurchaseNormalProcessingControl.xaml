@@ -159,7 +159,12 @@
                 <DataGridTemplateColumn MinWidth="70" Header="入庫量" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Amount" Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus" PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown" KeyDown="UIElement_OnKeyDown" PreviewMouseDoubleClick="Amount_MouseDown">
+                            <TextBox x:Name="Amount" Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" GotFocus="UIElement_OnGotFocus" PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown" KeyDown="UIElement_OnKeyDown" >
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="PreviewMouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding Path=DataContext.RealAmountMouseDoubleClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding ID}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

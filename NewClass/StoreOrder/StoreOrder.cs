@@ -120,6 +120,7 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void SetProductToProcessingStatus();
         public abstract object Clone();
         public abstract int GetOrderProductsIsOTC();
+        public abstract void SetRealAmount(string id);
         #endregion
 
         #region ///// Status Function /////

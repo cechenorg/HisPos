@@ -969,7 +969,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
-            if (!CheckPrescription(false,false))
+            if (!CheckRegisterPrescription(false,false))
             {
                 CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
                 return;
@@ -1424,6 +1424,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 CurrentPrescription.SetDetail();
             return checkPrescription;
         }
+        private bool CheckRegisterPrescription(bool noCard, bool errorAdjust)
+        {
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            var setPharmacist = currentService.SetRegisterPharmacist(SelectedPharmacist, PrescriptionCount);
+            if (!setPharmacist)
+            {
+                isAdjusting = false;
+                return false;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var checkPrescription = currentService.CheckPrescription(noCard, errorAdjust);
+            MainWindow.ServerConnection.CloseConnection();
+            if (!checkPrescription)
+                isAdjusting = false;
+            else
+                CurrentPrescription.SetDetail();
+            return checkPrescription;
+        }
+
 
         private void StartAutoRegister(Prescription p)
         {

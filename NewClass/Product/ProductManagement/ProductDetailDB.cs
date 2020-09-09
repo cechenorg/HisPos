@@ -8,7 +8,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
 {
     public class ProductDetailDB
     {
-        internal static DataTable GetProductManageStructsByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID)
+        internal static DataTable GetProductManageStructsByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID,bool searchIsSingdeInventory)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", searchID));
@@ -16,7 +16,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             parameters.Add(new SqlParameter("SHOW_DISABLE", searchIsEnable));
             parameters.Add(new SqlParameter("SHOW_INV_ZERO", searchIsInventoryZero));
             parameters.Add(new SqlParameter("WAREID", int.Parse(wareID)));
-
+            parameters.Add(new SqlParameter("SHOW_INV_SINGDE", searchIsSingdeInventory));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
         }
 

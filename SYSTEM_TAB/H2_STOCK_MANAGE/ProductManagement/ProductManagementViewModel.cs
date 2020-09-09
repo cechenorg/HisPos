@@ -33,6 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         public string SearchName { get; set; } = "";
         public bool SearchIsEnable { get; set; }
         public bool SearchIsInventoryZero { get; set; }
+        public bool SearchIsSingdeInventory { get; set; }
         #endregion
 
         private ProductManageStructs searchProductCollection;
@@ -129,7 +130,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 BusyContent = "查詢商品資料中";
 
                 MainWindow.ServerConnection.OpenConnection();
-                SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID.Trim(), SearchName.Trim(), SearchIsEnable, SearchIsInventoryZero, SelectedWareHouse.ID);
+                SearchProductCollection = ProductManageStructs.SearchProductByConditions(SearchID.Trim(), SearchName.Trim(), SearchIsEnable, SearchIsInventoryZero, SelectedWareHouse.ID, SearchIsSingdeInventory);
                 DataTable dataTable = ProductDetailDB.GetTotalStockValue(SelectedWareHouse.ID);
                 MainWindow.ServerConnection.CloseConnection();
 

@@ -75,7 +75,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             InitMedicineData(proID, wareHouseID);
 
             IsNHIProduct = true;
-            if ((int)ProductType == 2) IsNHIProduct = false;
+            if ((int)ProductType == 2) IsNHIProduct = true;
         }
         
         #region ----- Define Actions -----

@@ -309,6 +309,10 @@ namespace His_Pos.NewClass.StoreOrder
         {
         }
 
+        public override void SetRealAmount(string id)
+        {
+        }
+
 
 
         #endregion

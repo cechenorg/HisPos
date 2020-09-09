@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -40,6 +42,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand ReturnOrderRePurchaseCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand ExportOrderDataCommand { get; set; }
+        public RelayCommand<string> RealAmountMouseDoubleClickCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -112,6 +115,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             (CurrentStoreOrder as ReturnOrder).CalculateReturnAmount();
         }
+        private void DoubleClickRealAmount(string id)
+        {
+            CurrentStoreOrder.SetRealAmount(id);
+        }
+        
         private void CalculateTotalPriceAction()
         {
             CurrentStoreOrder.CalculateTotalPrice();
@@ -317,6 +325,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             ReturnOrderCalculateReturnAmountCommand = new RelayCommand(ReturnOrderCalculateReturnAmountAction);
             ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
             ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
+            RealAmountMouseDoubleClickCommand= new RelayCommand<string>(DoubleClickRealAmount);
         }
         private void RegisterMessengers()
         {

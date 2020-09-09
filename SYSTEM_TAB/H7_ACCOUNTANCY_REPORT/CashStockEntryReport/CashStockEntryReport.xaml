@@ -67,6 +67,7 @@
                 <Button x:Name="SearchButton" Width="120" Command="{Binding SearchCommand}" Margin="855,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
             </StackPanel>
             <ScrollViewer Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Height="780">
+                <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -117,7 +118,7 @@
                                 <Label Content="{Binding TotalTradeProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                                <Label Content="{Binding InventoryDifference.InventoryTotal,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                                    <Label Content="{Binding TotalStockTakingReport.Price,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{OS}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
                             </Border>
 
                         </StackPanel>
@@ -128,14 +129,15 @@
                         </StackPanel>
                     </Grid>
                     <Label Grid.Row="2" Grid.Column="0"  Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="25" />
-                    <Grid Grid.Row="3" Grid.Column="0">
+                        <Grid Grid.Row="3" Grid.Column="0" >
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
                         <DataGrid Grid.Row="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       ItemsSource="{Binding CashflowCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CashflowSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
-                      CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">
+                      CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" PreviewMouseWheel="DataGrid_PreviewMouseWheel"
+                                  >
                             <DataGrid.ContextMenu>
                                 <ContextMenu TextBlock.TextAlignment="Left">
                                     <MenuItem Header="匯出每日金流報表"  Command="{Binding PrintCashPerDayCommand }"/>
@@ -272,7 +274,7 @@
                         <Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Fill="LightSkyBlue" Margin="0,45,0,0"/>
                         <TextBlock Text="排除合作" FontFamily="Segoe UI Semibold" FontSize="25" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,45,0,0"/>
                         <DataGrid Grid.Row="0" Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding SelfPrescriptionProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelfPrescriptionSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
-                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction Command="{Binding SelfPrescriptionSelectionChangedCommand}"/>
@@ -418,7 +420,7 @@
                         <TextBlock Text="合作" FontFamily="Segoe UI Semibold" FontSize="25" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,10"/>
                         <DataGrid Grid.Row="2" Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       ItemsSource="{Binding CooperativePrescriptionProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding CooperativePrescriptionSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False" HeadersVisibility="None"
-                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction Command="{Binding CooperativePrescriptionSelectionChangedCommand}"/>
@@ -541,7 +543,7 @@
                         
                         <DataGrid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       ItemsSource="{Binding TradeProfitReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeProfitSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
-                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged" >
                                     <i:InvokeCommandAction Command="{Binding  TradeProfitReportSelectionChangedCommand}"/>
@@ -676,7 +678,7 @@
                         </StackPanel>
                         <DataGrid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       ItemsSource="{Binding StockTakingReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding StockTakingSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
-                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged" >
                                     <i:InvokeCommandAction Command="{Binding  StockTakingReportSelectionChangedCommand}"/>
@@ -772,6 +774,7 @@
                         
                     </Grid>
                 </Grid>
+                </StackPanel>
             </ScrollViewer>
             <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Margin="10,0,0,0" Content="{Binding}">
                 <ContentControl.Style>

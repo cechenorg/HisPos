@@ -133,6 +133,25 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.Pharmacist = selectedPharmacist;
             return true;
         }
+
+        public bool SetRegisterPharmacist(Employee selectedPharmacist, int prescriptionCount)
+        {
+            if (selectedPharmacist is null || string.IsNullOrEmpty(selectedPharmacist.IDNumber))
+            {
+                MessageWindow.ShowMessage(Resources.尚未選擇藥師, MessageType.ERROR);
+                return false;
+            }
+            /*if (prescriptionCount >= 80)
+            {
+                var confirmMsg = Resources.調劑張數提醒 + prescriptionCount + "張，是否繼續調劑?";
+                var confirm = new ConfirmWindow(confirmMsg, "調劑張數提醒", true);
+                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                var result = (bool)confirm.DialogResult;
+                if (!result) return false;
+            }*/
+            Current.Pharmacist = selectedPharmacist;
+            return true;
+        }
         public void SetPharmacistWithoutCheckCount(Employee selectedPharmacist)
         {
             Current.Pharmacist = selectedPharmacist;

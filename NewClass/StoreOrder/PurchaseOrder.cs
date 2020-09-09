@@ -292,6 +292,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Define Function -----
 
         #region ///// Batch Function /////
+
         public void SplitBatch(string productID)
         {
             for (int x = 0; x < OrderProducts.Count; x++)
@@ -434,6 +435,21 @@ namespace His_Pos.NewClass.StoreOrder
                 StoreOrderDB.SavePurchaseOrder(saveStoreOrder);
             }
         }
-        #endregion
+
+        public override void SetRealAmount(string id)
+        {
+            for (int x = 0; x < OrderProducts.Count; x++)
+            {
+                if (OrderProducts[x].ID.Equals(id))
+                {
+                    OrderProducts[x].RealAmount = OrderProducts[x].OrderAmount;
+                    return;
+                }
+            }
+            RaisePropertyChanged(nameof(ProductCount));
+        }
+
     }
+    #endregion
 }
+
