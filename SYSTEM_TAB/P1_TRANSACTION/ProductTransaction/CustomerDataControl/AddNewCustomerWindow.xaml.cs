@@ -11,11 +11,25 @@ using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl
 {
+    public class CustomEventArgs : EventArgs
+    {
+        public CustomEventArgs(string s)
+        {
+            msg = s;
+        }
+        private string msg;
+        public string Message
+        {
+            get { return msg; }
+        }
+    }
     /// <summary>
     /// AddNewCustomerWindow.xaml 的互動邏輯
     /// </summary>
     public partial class AddNewCustomerWindow : Window
     {
+        public event EventHandler<CustomEventArgs> RaiseCustomEvent;
+
         public bool IsTelephone(string str_telephone)
         {
             return Regex.IsMatch(str_telephone, @"\d{2,3}\d{3,4}\d{4}");
@@ -155,6 +169,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
                 MessageWindow.ShowMessage("新增成功！", MessageType.SUCCESS);
+                RaiseCustomEvent(this, new CustomEventArgs(result.Rows[0].Field<int>("ID").ToString()));
                 Close();
             }
             else if (result.Rows[0].Field<string>("RESULT").Equals("SAME"))

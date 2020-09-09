@@ -6,9 +6,6 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" >
-    <UserControl.DataContext>
-        <local:CustomerDetail/>
-    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -59,7 +56,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}" Margin="0,10,0,0">
             <Label Content="消費紀錄" Width="120" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Margin="130,0,0,0">
             </Label>
-            <Button x:Name="btnDepositManage" Width="100" Content="寄庫管理" FontFamily="Segoe UI Semibold" FontSize="17" Margin="25,0,0,0" BorderThickness="0" Background="RoyalBlue" Click="btnAddCustomer_Click"/>
+            <Button x:Name="btnDepositManage" Width="100" Content="寄庫管理" FontFamily="Segoe UI Semibold" FontSize="17" Margin="25,0,0,0" BorderThickness="0" Background="RoyalBlue"/>
         </StackPanel>
         <Rectangle Grid.Row="3" Fill="{StaticResource GridDarkerBackGround}"/>
         <DataGrid Grid.Row="3">
