@@ -121,6 +121,8 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract object Clone();
         public abstract int GetOrderProductsIsOTC();
         public abstract void SetRealAmount(string id);
+        public abstract bool ChkPrice();
+
         #endregion
 
         #region ///// Status Function /////

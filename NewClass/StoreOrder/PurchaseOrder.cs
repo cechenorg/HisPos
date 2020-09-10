@@ -449,6 +449,25 @@ namespace His_Pos.NewClass.StoreOrder
             RaisePropertyChanged(nameof(ProductCount));
         }
 
+        public override bool ChkPrice()
+        {
+            int flag = 0;
+            for (int x = 0; x < OrderProducts.Count; x++)
+            {
+                if (OrderProducts[x].LastPrice!= OrderProducts[x].Price)
+                {
+                    flag = 1;
+                }
+            }
+            if (flag == 1)
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
+           
+        }
     }
     #endregion
 }

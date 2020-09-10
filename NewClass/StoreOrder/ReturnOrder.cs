@@ -313,6 +313,11 @@ namespace His_Pos.NewClass.StoreOrder
         {
         }
 
+        public override bool ChkPrice()
+        {
+            return true;
+        }
+
 
 
         #endregion

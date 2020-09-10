@@ -168,6 +168,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void ToNextStatusAction()
         {
+            if (!CurrentStoreOrder.ChkPrice()) {
+                MessageWindow.ShowMessage("本次進價與上次進價不同", MessageType.WARNING);
+            }
+
             if (CurrentStoreOrder.CheckOrder())
             {
                 MainWindow.ServerConnection.OpenConnection();

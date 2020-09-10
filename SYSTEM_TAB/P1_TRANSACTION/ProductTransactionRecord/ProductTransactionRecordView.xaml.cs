@@ -61,6 +61,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             if (StartDate.Text.Contains("-") || EndDate.Text.Contains("-")) { return; }
             string sDate = ConvertMaskedDate(StartDate.Text);
             string eDate = ConvertMaskedDate(EndDate.Text);
+            bool isIrregular = chkIsIrregular.IsChecked.Value;
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -69,6 +70,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parameters.Add(new SqlParameter("eDate", eDate));
             parameters.Add(new SqlParameter("flag", "0"));
             parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parameters.Add(new SqlParameter("ShowIrregular", isIrregular));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             FormatData(result);
@@ -112,6 +114,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parameters.Add(new SqlParameter("sDate", ""));
             parameters.Add(new SqlParameter("eDate", ""));
             parameters.Add(new SqlParameter("flag", "1"));
+            parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
