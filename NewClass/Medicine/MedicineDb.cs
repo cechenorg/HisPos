@@ -8,6 +8,14 @@ namespace His_Pos.NewClass.Medicine
 {
     public static class MedicineDb
     {
+        public static DataTable GetQRcodeMedicine(List<string> MedicineIds, string wareHouseID, DateTime? adjustDate)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "IDList", SetQRcodePrescriptionDetail(MedicineIds));
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", wareHouseID);
+            DataBaseFunction.AddSqlParameter(parameterList, "AdjustDate", adjustDate ?? DateTime.Today);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[QRcodeMedicine]", parameterList);
+        }
         public static DataTable GetMedicinesBySearchIds(List<string> MedicineIds,string wareHouseID,DateTime? adjustDate)
         { 
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -49,6 +57,21 @@ namespace His_Pos.NewClass.Medicine
                 DataRow newRow = medicineListTable.NewRow(); 
                 DataBaseFunction.AddColumnValue(newRow, "MedicineID", m);
                 medicineListTable.Rows.Add(newRow);
+            }
+            return medicineListTable;
+        }
+        public static DataTable SetQRcodePrescriptionDetail(List<string> MedicineIds)
+        { //一般藥費
+            DataTable medicineListTable = MedicineListTable();
+            medicineListTable.Columns.Add("OrderID", typeof(int));
+            int order = 0;
+            foreach (string m in MedicineIds)
+            {
+                DataRow newRow = medicineListTable.NewRow();
+                DataBaseFunction.AddColumnValue(newRow, "MedicineID", m);
+                DataBaseFunction.AddColumnValue(newRow, "OrderID", order);
+                medicineListTable.Rows.Add(newRow);
+                order++;
             }
             return medicineListTable;
         }

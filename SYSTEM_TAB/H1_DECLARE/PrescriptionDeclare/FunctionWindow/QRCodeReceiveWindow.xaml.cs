@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
+using System.Threading;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -23,22 +26,41 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
     public partial class QRCodeReceiveWindow : Window
     {
         private Prescription p;
+        System.Timers.Timer timer = new System.Timers.Timer(200);
         public QRCodeReceiveWindow()
         {
             InitializeComponent();
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(InputIdle);
             p = new Prescription();
             QRCodeReceiver.Focus();
             ShowDialog();
         }
 
+        private void InputIdle(object source, System.Timers.ElapsedEventArgs e) 
+        {
+            Dispatcher.Invoke(() =>
+            {
+                btnFinish.IsEnabled = true;
+            });
+        }
+
         private void QRCodeReceiver_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            btnFinish.IsEnabled = false;
+            if (timer.Enabled)
+            {
+                timer.Interval = 200;
+            }
+            else 
+            {
+                timer.Start();
+            }
+            /*int count = 0;
             if (e.Key == Key.Return)
             {
-                SetPrescriptionData();
-                Close();
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, p, "CustomerPrescriptionSelected"));
-            }
+                count++;
+                lblInfo.Content = $"已掃描 {count} 個QRcode";
+            }*/
         }
 
         private void SetPrescriptionData()
@@ -184,7 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
         {
             var medIdList = CreateMedicineIDList(result);
             MainWindow.ServerConnection.OpenConnection();
-            var table = MedicineDb.GetMedicinesBySearchIds(medIdList, p.WareHouse?.ID, p.AdjustDate);
+            var table = MedicineDb.GetQRcodeMedicine(medIdList, p.WareHouse?.ID, p.AdjustDate);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -279,6 +301,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                     }
                 }
                 i++;
+            }
+        }
+
+        private void btnFinish_Click(object sender, RoutedEventArgs e)
+        {
+            SetPrescriptionData();
+            Close();
+            Messenger.Default.Send(new NotificationMessage<Prescription>(this, p, "CustomerPrescriptionSelected"));
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) 
+            {
+                btnFinish.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+            if (e.Key == Key.Escape)
+            {
+                btnCancel.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
         }
     }
