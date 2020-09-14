@@ -66,10 +66,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MasterID", DBNull.Value));
+            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
             parameters.Add(new SqlParameter("sDate", sDate));
             parameters.Add(new SqlParameter("eDate", eDate));
             parameters.Add(new SqlParameter("flag", "0"));
-            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
             parameters.Add(new SqlParameter("ShowIrregular", isIrregular));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
@@ -111,6 +111,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MasterID", TradeID));
+            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
             parameters.Add(new SqlParameter("sDate", ""));
             parameters.Add(new SqlParameter("eDate", ""));
             parameters.Add(new SqlParameter("flag", "1"));

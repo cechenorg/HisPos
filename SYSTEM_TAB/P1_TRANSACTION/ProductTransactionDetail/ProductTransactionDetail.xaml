@@ -151,12 +151,12 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="400" Header="商品名稱" IsReadOnly="True">
+                <DataGridTemplateColumn Width="320" Header="商品名稱" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}"/>
-                                <Label x:Name="lblProductName" Width="400" FontSize="16" FontFamily="Segoe UI Semibold" Content="{Binding Path=TraDet_ProductName}" VerticalAlignment="Center" Margin="0,0,20,0" MouseDoubleClick="lblProductName_MouseDoubleClick"/>
+                                <Label x:Name="lblProductName" Width="320" FontSize="16" FontFamily="Segoe UI Semibold" Content="{Binding Path=TraDet_ProductName}" VerticalAlignment="Center" Margin="0,0,20,0" MouseDoubleClick="lblProductName_MouseDoubleClick"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -192,6 +192,14 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTemplateColumn Width="50" Header="寄庫">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label x:Name="Deposit" Content="{Binding Path=TraDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="16" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
+                            </Label>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Margin="0,10,0,0">

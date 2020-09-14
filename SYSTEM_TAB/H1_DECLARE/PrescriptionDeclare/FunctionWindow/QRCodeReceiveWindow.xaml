@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow"
         mc:Ignorable="d"
-        Title="掃描處方條碼" Height="100" Width="200" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Label Content="等待掃描處方條碼中..." FontFamily="Segoe UI Semibold" FontSize="16"/>
+        Title="掃描處方條碼" Height="140" Width="250" WindowStartupLocation="CenterScreen">
+    <Grid PreviewKeyDown="Grid_PreviewKeyDown">
+        <Label x:Name="lblInfo" Content="等待掃描處方條碼中..." FontFamily="Segoe UI Semibold" FontSize="18" Margin="0,5,0,0" HorizontalAlignment="Center"/>
         <TextBox Name="QRCodeReceiver" Visibility="Visible" InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth" PreviewKeyDown="QRCodeReceiver_OnPreviewKeyDown" Width="0" Height="0"/>
+        <Button x:Name="btnFinish" Content="完成" Background="RoyalBlue" Height="35" Width="80" BorderThickness="0" Margin="35,40,0,0" FontSize="16" FontFamily="Segoe UI Semibold" HorizontalAlignment="Left" Click="btnFinish_Click" IsEnabled="False"/>
+        <Button x:Name="btnCancel" Content="取消" Background="IndianRed" Height="35" Width="80" BorderThickness="0" Margin="0,40,35,0" FontSize="16" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Click="btnCancel_Click"/>
     </Grid>
 </Window>
