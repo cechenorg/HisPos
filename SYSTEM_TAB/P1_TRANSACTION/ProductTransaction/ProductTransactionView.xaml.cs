@@ -744,5 +744,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
             }
         }
+
+        private void Deposit_LostFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Deposit_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void Deposit_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
     }
 }

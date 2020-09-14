@@ -256,12 +256,12 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="350" Header="商品名稱" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="320" Header="商品名稱" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}"/>
-                                    <Label x:Name="lblProductName" Width="350" FontSize="16" FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="0,0,20,0" MouseDoubleClick="lblProductName_MouseDoubleClick"/>
+                                    <Label x:Name="lblProductName" Width="320" FontSize="16" FontFamily="Segoe UI Semibold" Content="{Binding Path=Pro_ChineseName}" VerticalAlignment="Center" Margin="0,0,20,0" MouseDoubleClick="lblProductName_MouseDoubleClick"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -346,6 +346,21 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
+                    <DataGridTemplateColumn Width="50" Header="寄庫">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="Deposit" Text="{Binding Path=Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Deposit_LostFocus" TextChanged="Deposit_TextChanged" PreviewKeyDown="Deposit_PreviewKeyDown">
+                                    <TextBox.InputScope>
+                                        <InputScope>
+                                            <InputScope.Names>
+                                                <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                            </InputScope.Names>
+                                        </InputScope>
+                                    </TextBox.InputScope>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
