@@ -546,12 +546,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            int index = GetRowIndex(e);
-            if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count)
+            if (ProductList.Rows.Count > 0) 
             {
-                ProductList.Rows.Remove(ProductList.Rows[index]);
-            }
-            CalculateTotal("AMT");
+                int index = GetRowIndex(e);
+                if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count)
+                {
+                    ProductList.Rows.Remove(ProductList.Rows[index]);
+                }
+                CalculateTotal("AMT");
+            }            
         }
 
         private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
