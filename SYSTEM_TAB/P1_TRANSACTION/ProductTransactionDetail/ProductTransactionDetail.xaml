@@ -195,7 +195,7 @@
                 <DataGridTemplateColumn Width="50" Header="寄庫">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Label x:Name="Deposit" Content="{Binding Path=TraDet_Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="16" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
+                            <Label x:Name="Deposit" Content="{Binding Path=TraDet_DepositAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="16" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
                             </Label>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

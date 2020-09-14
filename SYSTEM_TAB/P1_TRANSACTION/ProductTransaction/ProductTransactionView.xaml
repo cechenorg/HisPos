@@ -174,8 +174,8 @@
                     </TextBox>
                     <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
                     <Button x:Name="btnGift" Width="80" Height="35" Content="贈品" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" BorderThickness="0" Background="ForestGreen" Click="btnGift_Click"/>
-                    <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="55,0,0,0"/>
-                    <ComboBox x:Name="PriceCombo" Width="120" Height="35" HorizontalContentAlignment="Center" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}"  FontSize="20" Foreground="Black" SelectionChanged="PriceCombo_SelectionChanged">
+                    <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="55,0,0,0" Visibility="Collapsed"/>
+                    <ComboBox x:Name="PriceCombo" Width="120" Height="35" HorizontalContentAlignment="Center" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" FontSize="20" Foreground="Black" SelectionChanged="PriceCombo_SelectionChanged" Visibility="Collapsed">
                         <ComboBoxItem Content="零售價" IsSelected="True"/>
                         <ComboBoxItem Content="會員價"/>
                         <ComboBoxItem Content="員工價"/>
@@ -338,7 +338,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="庫存" Width="60" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Inv_Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                    <DataGridTextColumn Header="可用量" Width="65" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Inv_Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
