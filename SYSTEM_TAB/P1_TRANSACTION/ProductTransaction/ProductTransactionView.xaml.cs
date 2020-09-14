@@ -13,10 +13,14 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
+using His_Pos.NewClass.Medicine.NotEnoughMedicine;
+using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.NotEnoughOTCPurchaseWindow;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -643,6 +647,44 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("付款金額與應收金額不符！", MessageType.WARNING);
                 return;
             }
+
+            //9.14欠OTC採購
+            var notEnoughMedicines = new NotEnoughMedicines();
+            foreach (DataRow dr in ProductList.Rows)
+            {
+                if (int.Parse(dr["Amount"].ToString()) > int.Parse(dr["Inv_Inventory"].ToString()))
+                {
+                    int buckle;
+                    if (int.Parse(dr["Inv_Inventory"].ToString()) <= 0)
+                    {
+                        buckle = 0;
+
+                        notEnoughMedicines.Add(new NotEnoughMedicine(dr["Pro_ID"].ToString(), dr["Pro_ChineseName"].ToString(), int.Parse(dr["Amount"].ToString()) - buckle, true, false, 0, 0, int.Parse(dr["Amount"].ToString()) - buckle));
+                    }
+                    else {
+                        notEnoughMedicines.Add(new NotEnoughMedicine(dr["Pro_ID"].ToString(), dr["Pro_ChineseName"].ToString(), int.Parse(dr["Amount"].ToString()) - int.Parse(dr["Inv_Inventory"].ToString()), true, false, 0, 0, int.Parse(dr["Amount"].ToString()) - int.Parse(dr["Inv_Inventory"].ToString())));
+
+                    }
+
+                }
+            }
+            if (notEnoughMedicines.Count > 0 )
+            {
+                
+                
+                var purchaseWindow = new NotEnoughOTCPurchaseWindow("欠OTC採購", "OTC", notEnoughMedicines);
+                if (purchaseWindow.DialogResult is null || !(bool)purchaseWindow.DialogResult)
+                {
+                    MessageWindow.ShowMessage("欠OTC採購取消。", MessageType.WARNING);
+                }
+                else
+                {
+                    
+                    MessageWindow.ShowMessage("採購單已送出。", MessageType.WARNING);
+                    
+                }
+            }
+            //9.14欠OTC採購
 
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
             if (!(bool)confirmWindow.DialogResult) { return; }

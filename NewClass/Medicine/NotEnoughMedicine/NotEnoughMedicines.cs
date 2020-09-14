@@ -49,5 +49,12 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             StoreOrderID = result.Rows[0].Field<string>("newStoordId");
             ToWaitingStatus(note);
         }
+        public void CreateOTCOrder(string note, string cusName)
+        {
+            var result = StoreOrderDB.InsertNotEnoughOTCOrder(this, note, cusName);
+            if (result.Rows.Count <= 0) return;
+            StoreOrderID = result.Rows[0].Field<string>("newStoordId");
+            ToWaitingStatus(note);
+        }
     }
 }

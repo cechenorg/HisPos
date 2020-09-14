@@ -1444,6 +1444,10 @@
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\NoCustomerDetailControl.xaml.cs">
       <DependentUpon>NoCustomerDetailControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\FuntionWindow\NotEnoughOTCPurchaseWindow\NotEnoughOTCPurchaseViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\FuntionWindow\NotEnoughOTCPurchaseWindow\NotEnoughOTCPurchaseWindow.xaml.cs">
+      <DependentUpon>NotEnoughOTCPurchaseWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionCustomerViewModel.cs" />
     <Compile Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionView.xaml.cs">
       <DependentUpon>ProductTransactionView.xaml</DependentUpon>
@@ -2273,6 +2277,10 @@
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\CustomerDetailControl\NoCustomerDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\FuntionWindow\NotEnoughOTCPurchaseWindow\NotEnoughOTCPurchaseWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\P1_TRANSACTION\ProductTransaction\ProductTransactionView.xaml">
       <SubType>Designer</SubType>
