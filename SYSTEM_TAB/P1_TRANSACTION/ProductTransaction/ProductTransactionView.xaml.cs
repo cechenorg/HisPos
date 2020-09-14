@@ -308,10 +308,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             realTotal = preTotal - discountAmount;
             lblRealTotal.Content = realTotal;
 
-            double preProfit = 0;
-            double.TryParse(ProductList.Compute("SUM(Profit)", string.Empty).ToString(), out preProfit);
-            totalProfit = preProfit - discountAmount;
-            lblTotalProfit.Content = totalProfit;
+            if (ProductList.Rows.Count > 0) 
+            {
+                double preProfit = 0;
+                double.TryParse(ProductList.Compute("SUM(Profit)", string.Empty).ToString(), out preProfit);
+                totalProfit = preProfit - discountAmount;
+                lblTotalProfit.Content = totalProfit;
+            }
 
             if (int.Parse(lblRealTotal.Content.ToString()) < 0)
             {
@@ -546,15 +549,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (ProductList.Rows.Count > 0) 
+            int index = GetRowIndex(e);
+            if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count)
             {
-                int index = GetRowIndex(e);
-                if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count)
-                {
-                    ProductList.Rows.Remove(ProductList.Rows[index]);
-                }
-                CalculateTotal("AMT");
-            }            
+                ProductList.Rows.Remove(ProductList.Rows[index]);
+            }
+            CalculateTotal("AMT");
         }
 
         private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
