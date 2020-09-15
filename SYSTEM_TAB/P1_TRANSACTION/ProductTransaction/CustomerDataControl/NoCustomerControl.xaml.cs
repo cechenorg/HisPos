@@ -1,6 +1,5 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,6 +7,7 @@ using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl
 {
@@ -17,14 +17,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
     public partial class NoCustomerControl : UserControl
     {
         private static string cusID = "0";
-        
-        private static string name = "";
-        private static string gender = "";
-        private static string birthday = "";
-        private static string cellphone = "";
-        private static string telephone = "";
-        private static string address = "";
-        private static string note = "";
 
         public string CusID
         {
@@ -32,51 +24,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             set { cusID = value; }
         }
 
-        public string CusName
-        {
-            get { return name; }
-            set { name = value; }
-        }
-
-        public string Gender
-        {
-            get { return gender; }
-            set { gender = value; }
-        }
-
-        public string Birthday
-        {
-            get { return birthday; }
-            set { birthday = value; }
-        }
-
-        public string Cellphone
-        {
-            get { return cellphone; }
-            set { cellphone = value; }
-        }
-
-        public string Telephone
-        {
-            get { return telephone; }
-            set { telephone = value; }
-        }
-
-        public string Address
-        {
-            get { return address; }
-            set { address = value; }
-        }
-
-        public string Note
-        {
-            get { return note; }
-            set { note = value; }
-        }
-
         public NoCustomerControl()
         {
             InitializeComponent();
+            var parent = VisualTreeHelper.GetParent(this) as UserControl;
+            MessageBox.Show((parent as UserControl).Name);
         }
 
         public void ClearView()

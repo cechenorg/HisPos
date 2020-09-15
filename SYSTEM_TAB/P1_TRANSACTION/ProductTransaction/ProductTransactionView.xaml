@@ -41,11 +41,6 @@
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource NoCustomerControl}"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasCustomer, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                <Setter Property="ContentTemplate" Value="{StaticResource CustomerControl}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
@@ -346,7 +341,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Width="50" Header="寄庫">
+                    <DataGridTemplateColumn x:Name="DepositColumn" Width="65" Header="寄庫" Visibility="Hidden">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox x:Name="Deposit" Text="{Binding Path=Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Deposit_LostFocus" TextChanged="Deposit_TextChanged" PreviewKeyDown="Deposit_PreviewKeyDown">

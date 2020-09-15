@@ -14,8 +14,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
-using His_Pos.NewClass.Person.Customer;
-using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
@@ -53,6 +51,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
         }
 
+        public void DepositControl(bool isEnable) 
+        {
+            if (isEnable)
+            {
+                DepositColumn.Visibility = Visibility.Visible;
+            }
+            else 
+            {
+                DepositColumn.Visibility = Visibility.Hidden;
+            }
+        }
+
         private void GetEmployeeList()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -62,6 +72,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
 
         private int GetRowIndex(MouseButtonEventArgs e)
+        {
+            DataGridRow dgr = null;
+            DependencyObject visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
+            while (dgr == null && visParent != null)
+            {
+                dgr = visParent as DataGridRow;
+                visParent = VisualTreeHelper.GetParent(visParent);
+            }
+            if (dgr == null) { return -1; }
+            int rowIdx = dgr.GetIndex();
+            return rowIdx;
+        }
+
+        private int GetRowIndexRouted(RoutedEventArgs e)
         {
             DataGridRow dgr = null;
             DependencyObject visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
@@ -158,7 +182,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[SearchProductsByID]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
 
-
+                    // Add Columns
                     if (ProductList.Rows.Count == 0)
                     {
                         ProductList = result.Clone();
@@ -214,7 +238,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         TradeAddProductWindow tapw = new TradeAddProductWindow(result);
                         tapw.ShowDialog();
                         DataRow NewProduct = tapw.SelectedProduct;
-                        newRow.ItemArray = NewProduct.ItemArray;
+                        if (NewProduct != null) 
+                        {
+                            newRow.ItemArray = NewProduct.ItemArray;
+                        }
                         if (rowIndex < ProductList.Rows.Count)
                         {
                             ProductList.Rows.RemoveAt(rowIndex);
@@ -310,8 +337,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             if (ProductList.Rows.Count > 0) 
             {
-                double preProfit = 0;
-                double.TryParse(ProductList.Compute("SUM(Profit)", string.Empty).ToString(), out preProfit);
+                double.TryParse(ProductList.Compute("SUM(Profit)", string.Empty).ToString(), out double preProfit);
                 totalProfit = preProfit - discountAmount;
                 lblTotalProfit.Content = totalProfit;
             }
@@ -362,6 +388,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             dt.Columns.Add("TraDet_Price", typeof(int));
             dt.Columns.Add("TraDet_PriceSum", typeof(int));
             dt.Columns.Add("TraDet_IsGift", typeof(int));
+            dt.Columns.Add("TraDet_DepositAmount", typeof(int));
             foreach (DataRow dr in ProductList.Rows)
             {
                 dt.Rows.Add(
@@ -371,7 +398,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     AppliedPrice,
                     dr[AppliedPrice],
                     dr["Calc"],
-                    dr["IsGift"]);
+                    dr["IsGift"],
+                    dr["Deposit"]);
             }
             return dt;
         }
@@ -488,7 +516,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal("AMT");
             foreach (DataRow dr in ProductList.Rows)
             {
-                dr["PriceTooltip"] = string.Format("{0:F2}", dr["Inv_LastPrice"]) + "/" + 
+                dr["PriceTooltip"] = string.Format("{0:F2}", dr["Inv_LastPrice"]) + " / " + 
                     (double.Parse(dr["CurrentPrice"].ToString()) -
                     double.Parse(dr["Inv_LastPrice"].ToString())).ToString();
             }
@@ -644,37 +672,49 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("尚未新增售出商品項目！", MessageType.ERROR);
                 return;
             }
-
             if (GetPayMethod() == "NOT_MATCH") 
             {
                 MessageWindow.ShowMessage("付款金額與應收金額不符！", MessageType.WARNING);
                 return;
             }
 
-            //9.14欠OTC採購
+            // 9.14欠OTC採購
             var notEnoughMedicines = new NotEnoughMedicines();
             foreach (DataRow dr in ProductList.Rows)
             {
-                if (int.Parse(dr["Amount"].ToString()) > int.Parse(dr["Inv_Inventory"].ToString()))
+                var amount = dr["Amount"].ToString();
+                var inventory = dr["Inv_Inventory"].ToString();
+                if (int.Parse(amount) > int.Parse(inventory))
                 {
                     int buckle;
-                    if (int.Parse(dr["Inv_Inventory"].ToString()) <= 0)
+                    if (int.Parse(inventory) <= 0)
                     {
                         buckle = 0;
-
-                        notEnoughMedicines.Add(new NotEnoughMedicine(dr["Pro_ID"].ToString(), dr["Pro_ChineseName"].ToString(), int.Parse(dr["Amount"].ToString()) - buckle, true, false, 0, 0, int.Parse(dr["Amount"].ToString()) - buckle));
+                        notEnoughMedicines.Add(new NotEnoughMedicine(
+                            dr["Pro_ID"].ToString(),
+                            dr["Pro_ChineseName"].ToString(),
+                            int.Parse(amount) - buckle,
+                            true,
+                            false,
+                            0,
+                            0,
+                            int.Parse(amount) - buckle));
                     }
                     else {
-                        notEnoughMedicines.Add(new NotEnoughMedicine(dr["Pro_ID"].ToString(), dr["Pro_ChineseName"].ToString(), int.Parse(dr["Amount"].ToString()) - int.Parse(dr["Inv_Inventory"].ToString()), true, false, 0, 0, int.Parse(dr["Amount"].ToString()) - int.Parse(dr["Inv_Inventory"].ToString())));
-
+                        notEnoughMedicines.Add(new NotEnoughMedicine(
+                            dr["Pro_ID"].ToString(),
+                            dr["Pro_ChineseName"].ToString(),
+                            int.Parse(amount) - int.Parse(inventory),
+                            true,
+                            false,
+                            0,
+                            0,
+                            int.Parse(amount) - int.Parse(inventory)));
                     }
-
                 }
             }
             if (notEnoughMedicines.Count > 0 )
             {
-                
-                
                 var purchaseWindow = new NotEnoughOTCPurchaseWindow("欠OTC採購", "OTC", notEnoughMedicines);
                 if (purchaseWindow.DialogResult is null || !(bool)purchaseWindow.DialogResult)
                 {
@@ -682,12 +722,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
                 else
                 {
-                    
                     MessageWindow.ShowMessage("採購單已送出。", MessageType.WARNING);
-                    
                 }
             }
-            //9.14欠OTC採購
 
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
             if (!(bool)confirmWindow.DialogResult) { return; }
@@ -792,7 +829,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Deposit_LostFocus(object sender, RoutedEventArgs e)
         {
-
+            TextBox tb = (TextBox)sender;
+            int index = GetRowIndexRouted(e);
+            if (index < ProductList.Rows.Count)
+            {
+                int.TryParse(ProductList.Rows[index]["Deposit"].ToString(), out int deposit);
+                int amount = int.Parse(ProductList.Rows[index]["Amount"].ToString());
+                if (deposit > amount) 
+                {
+                    tb.Text = "0";
+                    MessageWindow.ShowMessage("寄庫量大於購買數量！", MessageType.ERROR);
+                }
+            }
         }
 
         private void Deposit_TextChanged(object sender, TextChangedEventArgs e)
