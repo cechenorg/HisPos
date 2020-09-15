@@ -27,8 +27,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
         public NoCustomerControl()
         {
             InitializeComponent();
-            var parent = VisualTreeHelper.GetParent(this) as UserControl;
-            MessageBox.Show((parent as UserControl).Name);
         }
 
         public void ClearView()
