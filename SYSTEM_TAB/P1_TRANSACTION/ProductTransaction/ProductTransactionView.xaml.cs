@@ -27,8 +27,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     /// </summary>
     public partial class ProductTransactionView : UserControl
     {
-        private NoCustomerControl CustomerView { get; set; }
-
         private DataTable ProductList;
         private string AppliedPrice;
 
@@ -42,25 +40,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private static readonly Regex _regex = new Regex("^[0-9]+$");
         private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
 
+        private string cusID = "0";
+
         public ProductTransactionView()
         {
             InitializeComponent();
-            CustomerView = new NoCustomerControl();
             GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
-        }
-
-        public void DepositControl(bool isEnable) 
-        {
-            if (isEnable)
-            {
-                DepositColumn.Visibility = Visibility.Visible;
-            }
-            else 
-            {
-                DepositColumn.Visibility = Visibility.Hidden;
-            }
         }
 
         private void GetEmployeeList()
@@ -406,6 +393,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void ClearPage()
         {
+            ClearCustomerView();
+
             ProductList.Clear();
             tbDiscountAmt.Text = "0";
             tbNote.Text = "";
@@ -731,7 +720,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("CustomerID", CustomerView.CusID));
+            parameters.Add(new SqlParameter("CustomerID", cusID));
             parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
             parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
             parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
@@ -852,5 +841,104 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
 
         }
+
+        #region CustomerControl
+
+        public void ClearCustomerView()
+        {
+            tbSearch.Text = "";
+
+            lbName.Content = "";
+            lbGender.Content = "";
+            lbBirthDay.Content = "";
+            lbCellphone.Content = "";
+            lbTelephone.Content = "";
+            tbAddress.Text = "";
+            tbCusNote.Text = "";
+
+            cusID = "0";
+            DepositColumn.Visibility = Visibility.Hidden;
+        }
+
+        private void FillInCustomerData(DataTable result)
+        {
+            cusID = result.Rows[0]["PosCus_Uid"].ToString();
+
+            lbName.Content = result.Rows[0]["PosCus_Name"].ToString();
+            lbGender.Content = result.Rows[0]["PosCus_Gender"].ToString();
+            lbBirthDay.Content = result.Rows[0]["PosCus_Birthday"].ToString();
+            lbCellphone.Content = result.Rows[0]["PosCus_Cellphone"].ToString();
+            lbTelephone.Content = result.Rows[0]["PosCus_Telephone"].ToString();
+            tbAddress.Text = result.Rows[0]["PosCus_Address"].ToString();
+            tbCusNote.Text = result.Rows[0]["PosCus_Note"].ToString();
+
+            DepositColumn.Visibility = Visibility.Visible;
+        }
+
+        private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            AddNewCustomerWindow acw = new AddNewCustomerWindow();
+            acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
+            acw.ShowDialog();
+        }
+
+        private void acw_RaiseCustomEvent(object sender, CustomEventArgs e)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", int.Parse(e.Message)));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetCustomerByID]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (result.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
+            }
+            else
+            {
+                FillInCustomerData(result);
+            }
+        }
+
+        private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            ClearCustomerView();
+        }
+
+        private void tbSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                bool isCell = tb.Text.StartsWith("09");
+                if (isCell)
+                {
+                    parameters.Add(new SqlParameter("PosCus_Cellphone", tb.Text));
+                    parameters.Add(new SqlParameter("PosCus_Telephone", DBNull.Value));
+                }
+                else
+                {
+                    parameters.Add(new SqlParameter("PosCus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("PosCus_Telephone", tb.Text));
+                }
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+
+                if (result.Rows.Count == 0)
+                {
+                    MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
+                }
+                else
+                {
+                    FillInCustomerData(result);
+                }
+            }
+        }
+
+        #endregion
     }
 }

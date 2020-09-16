@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,6 +28,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
         public NoCustomerControl()
         {
             InitializeComponent();
+        }
+
+        public static IEnumerable<T> FindLogicalChildren<T>(DependencyObject obj) where T : DependencyObject
+        {
+            if (obj != null)
+            {
+                if (obj is T)
+                    yield return obj as T;
+
+                foreach (DependencyObject child in LogicalTreeHelper.GetChildren(obj).OfType<DependencyObject>())
+                    foreach (T c in FindLogicalChildren<T>(child))
+                        yield return c;
+            }
         }
 
         public void ClearView()
@@ -55,6 +69,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             lbTelephone.Content = result.Rows[0]["PosCus_Telephone"].ToString();
             tbAddress.Text = result.Rows[0]["PosCus_Address"].ToString();
             tbNote.Text = result.Rows[0]["PosCus_Note"].ToString();
+
+            foreach (DataGridTemplateColumn column in FindLogicalChildren<DataGridTemplateColumn>(Application.Current.MainWindow))
+            {
+                int count = 0;
+                MessageBox.Show(count.ToString());
+                count++;
+            }
         }
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
