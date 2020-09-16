@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO.Ports;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -740,11 +741,94 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
+                InvoicePrint(TransferDetailTable());
                 ClearPage();
                 MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
             }
             else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
+
+
+            /*ConfirmWindow confirmInvoiceWindow = new ConfirmWindow("是否列印發票?", "發票確認");
+            if (!(bool)confirmWindow.DialogResult) { return; }*/
+            
+
         }
+        //9.16發票
+
+        private void InvoicePrint(DataTable detail) {
+            SerialPort port = new SerialPort("COM3", 9600, Parity.None, 8, StopBits.One);
+            port.Open();
+            byte[] strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("GGEZ");
+            port.Write(Convert.ToChar(27) + "@");
+            port.Write(Convert.ToChar(27) + "z" + Convert.ToChar(1));
+            port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(4));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("測試藥局");
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("地址:XXXXXXXXXX");
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統編:XXXXXXXXXX");
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("電話:(03)XXXXXXXXXX");
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("客編:XXXXXXX");
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(1));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統一編號:XXXXXXX");
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            
+            int j = detail.Rows.Count;
+            int priceSum=0;
+            for (int i = 0; i < j ; i++)
+            {
+
+                strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(detail.Rows[i]["TraDet_ProductID"].ToString().PadRight(13, ' ') +" *"+ detail.Rows[i]["TraDet_Amount"].ToString()+"= "+ detail.Rows[i]["TraDet_PriceSum"].ToString().PadLeft(4, ' ') + "TX");
+                port.Write(strArr, 0, strArr.Length);
+                priceSum += (int)detail.Rows[i]["TraDet_PriceSum"];
+                port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+
+
+                if (i!=0 && (i % 7) == 0 && i != j)
+                {
+                    strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("下頁");
+                    port.Write(strArr, 0, strArr.Length);
+                    port.Write("" + Convert.ToChar(12));
+
+                    port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(4));
+
+                }
+
+
+            }
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("折價:            " + ("-"+discountAmount.ToString()).ToString().PadLeft(5, ' ') + "TX");
+            port.Write(strArr, 0, strArr.Length);
+
+            port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(4));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("實收金額:        $" + tbPaid.Text.ToString());
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("應找金額:        $" + lblChange.Content.ToString());
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("合計:            $" + realTotal.ToString());
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+
+
+            port.Write("" + Convert.ToChar(29) + Convert.ToChar(86) + Convert.ToChar(66) + Convert.ToChar(13) + Convert.ToChar(10));
+            port.Close();
+
+        }
+        //9.16發票
 
         private async void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
