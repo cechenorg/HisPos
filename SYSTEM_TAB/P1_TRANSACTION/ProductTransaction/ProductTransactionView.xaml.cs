@@ -575,6 +575,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Price_TextChanged(object sender, TextChangedEventArgs e)
         {
+            TextBox tb = (TextBox)sender;
+            int.TryParse(tb.Text, out int tryprice);
+            if (tryprice < 0) 
+            { 
+                tb.Text = "0";
+                return;
+            }
+
             CalculateTotal("AMT");
             foreach (DataRow dr in ProductList.Rows)
             {
@@ -586,11 +594,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Price_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return)
-            {
-                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
-                MoveFocus(request);
-            }
+            //if (e.Key == Key.Enter)
+            //{
+            //    TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
+            //    MoveFocus(request);
+            //}
         }
 
         #endregion
@@ -838,10 +846,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         #endregion
 
-        private void Price_MouseEnter(object sender, MouseEventArgs e)
-        {
-        }
-
         private void btnGift_Click(object sender, RoutedEventArgs e)
         {
             isGift = true;
@@ -1018,6 +1022,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
+                if (tb.Text.Length < 9) 
+                {
+                    MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
+                    return;
+                }
 
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
@@ -1048,5 +1057,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
 
         #endregion
+
+        private void btnDepositManage_Click(object sender, RoutedEventArgs e)
+        {
+            CustomerDepositManageView cdmv = new CustomerDepositManageView();
+            cdmv.ShowDialog();
+        }
     }
 }
