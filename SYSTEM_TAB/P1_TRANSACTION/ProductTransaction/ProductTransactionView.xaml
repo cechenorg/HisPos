@@ -99,20 +99,42 @@
                     <Button x:Name="btnDepositManage" Width="100" Content="寄庫管理" FontFamily="Segoe UI Semibold" FontSize="17" Margin="25,0,0,0" BorderThickness="0" Background="RoyalBlue"/>
                 </StackPanel>
                 <Rectangle Grid.Row="3" Fill="{StaticResource GridDarkerBackGround}"/>
-                <DataGrid Grid.Row="3" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False">
+                <DataGrid x:Name="TradeRecordGrid" Grid.Row="3" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
                             <Setter Property="Foreground"  Value="#FF535353" />
                         </Style>
                     </DataGrid.Resources>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <!--<EventSetter Event="MouseDoubleClick" Handler="ShowSelectedDetailWindow"/>-->
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Height" Value="40"/>
+                        </Style>
+                    </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="80" Header="日期" IsReadOnly="True" Binding="{Binding Path=TransTime_Format}">
+                        <DataGridTextColumn Width="200" Header="消費日期" IsReadOnly="True" Binding="{Binding Path=TransTime_Format}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Margin" Value="25,0,0,0"/>
+                                    <Setter Property="Margin" Value="0,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="120" Header="消費金額" IsReadOnly="True" Binding="{Binding Path=TraMas_RealTotal}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="0,0,0,0"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -417,7 +439,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn x:Name="DepositColumn" Width="65" Header="寄庫">
+                    <DataGridTemplateColumn x:Name="DepositColumn" Width="65" Header="寄庫" Visibility="Hidden">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox x:Name="Deposit" Text="{Binding Path=Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Deposit_LostFocus" TextChanged="Deposit_TextChanged" PreviewKeyDown="Deposit_PreviewKeyDown">
