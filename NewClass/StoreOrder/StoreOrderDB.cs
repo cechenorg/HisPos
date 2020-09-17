@@ -829,6 +829,37 @@ namespace His_Pos.NewClass.StoreOrder
             return tableMedicines;
         }
 
+         internal static DataTable SendOTCStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
+        {
+            string orderOTCs = "";
+            string cusName = "";
+            string planDate = "";
+
+            foreach (var product in purchaseList)
+            {
+                    if (product.ID.Length > 12)
+                    orderOTCs += product.ID.Substring(0, 13);
+                    else
+                    orderOTCs += product.ID.PadRight(12, ' ');
+
+                    orderOTCs += product.Amount.ToString("0.00").PadLeft(9, ' ');
+
+                    if (product.ID.Length > 12)
+                    orderOTCs += product.ID.Substring(13);
+
+                    orderOTCs += "\r\n";
+
+            }
+
+
+            DataTable tableOTC;
+
+            tableOTC = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOTCOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{purchaseList.StoreOrderID}','{note}', '{orderOTCs}')");
+
+            return tableOTC;
+        }
+
+
         internal static DataTable SendStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
         {
             string orderMedicines = "";

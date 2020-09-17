@@ -319,6 +319,9 @@
     <Compile Include="NewClass\BalanceSheet\StrikeHistories.cs" />
     <Compile Include="NewClass\BalanceSheet\StrikeHistory.cs" />
     <Compile Include="NewClass\BalanceSheet\StrikeTypeEnum.cs" />
+    <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSetting.cs" />
+    <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSettings.cs" />
+    <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSettingDb.cs" />
     <Compile Include="NewClass\Manufactory\ControlManufactory.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
@@ -1460,6 +1463,10 @@
       <DependentUpon>CooperativeClinicControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\CooperativeClinicControl\CooperativeClinicControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\InvoiceControl\InvoiceControl.xaml.cs">
+      <DependentUpon>InvoiceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\InvoiceControl\InvoiceControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\MyPharmacyControl.xaml.cs">
       <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
     </Compile>
@@ -2296,6 +2303,10 @@
     <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\CooperativeClinicControl\CooperativeClinicControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\InvoiceControl\InvoiceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl\MyPharmacyControl.xaml">
       <SubType>Designer</SubType>

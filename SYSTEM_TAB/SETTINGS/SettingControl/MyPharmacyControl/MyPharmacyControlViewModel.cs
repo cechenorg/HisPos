@@ -109,6 +109,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
             {
                 fileWriter.WriteLine(leftLines);
                 fileWriter.WriteLine("Com " + Properties.Settings.Default.ReaderComPort);
+                fileWriter.WriteLine("ICom " + Properties.Settings.Default.InvoiceComPort);
+                fileWriter.WriteLine("INum " + Properties.Settings.Default.InvoiceNumber);
+                fileWriter.WriteLine("IChk " + Properties.Settings.Default.InvoiceCheck); 
             }
 
             IsDataChanged = false;

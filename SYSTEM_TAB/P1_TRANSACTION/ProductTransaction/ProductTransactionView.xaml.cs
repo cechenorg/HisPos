@@ -16,11 +16,13 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.NotEnoughOTCPurchaseWindow;
+using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -43,6 +45,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
 
         private string cusID = "0";
+
+        public Pharmacy MyPharmacy;
 
         public ProductTransactionView()
         {
@@ -417,32 +421,43 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         //9.16發票
         private void InvoicePrint(DataTable detail)
         {
-            SerialPort port = new SerialPort("COM3", 9600, Parity.None, 8, StopBits.One);
-            port.Open();
-            byte[] strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("GGEZ");
+
+            MyPharmacy = Pharmacy.GetCurrentPharmacy();
+            
+            SerialPort port = new SerialPort(Properties.Settings.Default.InvoiceComPort, 9600, Parity.None, 8, StopBits.One);
+            try
+            {
+                port.Open();
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage(e.Message, MessageType.ERROR);
+                return;
+            }
+            byte[] strArr;
             port.Write(Convert.ToChar(27) + "@");
             port.Write(Convert.ToChar(27) + "z" + Convert.ToChar(1));
             port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(4));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("測試藥局");
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(MyPharmacy.Name.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("地址:XXXXXXXXXX");
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("地址:"+ MyPharmacy.Address.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統編:XXXXXXXXXX");
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統編:"+ MyPharmacy.ID.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("電話:(03)XXXXXXXXXX");
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("電話:"+MyPharmacy.Tel.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
             strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("客編:XXXXXXX");
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("客編:"+ cusID.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
             port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(1));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統一編號:XXXXXXX");
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統一編號:"+tbTaxNum.Text.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
 
@@ -821,9 +836,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
-                //InvoicePrint(TransferDetailTable());
+                if (Properties.Settings.Default.InvoiceCheck != "1") {
+
+                }
+                else
+                {
+                    InvoicePrint(TransferDetailTable());
+                    InvoiceControlViewModel vm = new InvoiceControlViewModel();
+                    vm.InvoiceNumPlusOneAction();
+                }
+                
                 ClearPage();
                 MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
+               
             }
             else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
 

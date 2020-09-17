@@ -12,6 +12,7 @@ using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.Service;
 using System.Deployment.Application;
+using System.Windows;
 
 namespace His_Pos.FunctionWindow
 {
@@ -101,6 +102,9 @@ namespace His_Pos.FunctionWindow
                 var receiptPrinter = fileReader.ReadLine();
                 var reportPrinter = fileReader.ReadLine();
                 var comport = fileReader.ReadLine();
+                var icomport = fileReader.ReadLine();
+                var inumber = fileReader.ReadLine();
+                var ichk = fileReader.ReadLine();
                 var match = medReg.Match(medBagPrinter);
                 Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
                 if (receiptPrinter.Contains("$"))
@@ -118,6 +122,9 @@ namespace His_Pos.FunctionWindow
                 match = repReg.Match(reportPrinter);
                 Properties.Settings.Default.ReportPrinter = match.Groups[1].Value;
                 Properties.Settings.Default.ReaderComPort = string.IsNullOrEmpty(comport) ? "" : comport.Substring(4, comport.Length - 4);
+                Properties.Settings.Default.InvoiceComPort = string.IsNullOrEmpty(icomport) ? "" : icomport.Substring(5, icomport.Length - 5);
+                Properties.Settings.Default.InvoiceNumber = string.IsNullOrEmpty(inumber) ? "" : inumber.Substring(5, inumber.Length - 5);
+                Properties.Settings.Default.InvoiceCheck = string.IsNullOrEmpty(ichk) ? "" : ichk.Substring(5, ichk.Length - 5);
                 Properties.Settings.Default.Save();
             }
         }

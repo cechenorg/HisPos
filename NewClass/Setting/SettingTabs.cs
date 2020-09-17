@@ -11,6 +11,7 @@ namespace His_Pos.NewClass.Setting
         MyPharmacy = 1,
         Printer = 2,
         CooperativeClinic = 3,
-        WareHouse = 4
+        WareHouse = 4,
+        Invoice=5
     }
 }

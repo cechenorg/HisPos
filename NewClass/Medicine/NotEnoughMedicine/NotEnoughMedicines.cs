@@ -35,7 +35,22 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
                 MessageWindow.ShowMessage("傳送杏德失敗 請稍後至進退或管理傳送採購單", MessageType.ERROR);
         }
 
+        public void OTCToWaitingStatus(string note)
+        {
+            var isSuccess = SendOTCOrderToSingde(note);
+            if (isSuccess)
+            {
+                StoreOrderDB.StoreOrderToWaiting(StoreOrderID);
+            }
+            else
+                MessageWindow.ShowMessage("傳送杏德失敗 請稍後至進退或管理傳送採購單", MessageType.ERROR);
+        }
 
+        private bool SendOTCOrderToSingde(string note)
+        {
+            DataTable dataTable = StoreOrderDB.SendOTCStoreOrderToSingde(this, note);
+            return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+        }
         private bool SendOrderToSingde(string note)
         {
             DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this,note);
@@ -54,7 +69,7 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             var result = StoreOrderDB.InsertNotEnoughOTCOrder(this, note, cusName);
             if (result.Rows.Count <= 0) return;
             StoreOrderID = result.Rows[0].Field<string>("newStoordId");
-            ToWaitingStatus(note);
+            OTCToWaitingStatus(note);
         }
     }
 }

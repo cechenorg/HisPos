@@ -128,7 +128,53 @@ namespace His_Pos.Properties {
                 this["ReaderComPort"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InvoiceComPort
+        {
+            get
+            {
+                return ((string)(this["InvoiceComPort"]));
+            }
+            set
+            {
+                this["InvoiceComPort"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         
+        public string InvoiceNumber
+        {
+            get
+            {
+                return ((string)(this["InvoiceNumber"]));
+            }
+            set
+            {
+                this["InvoiceNumber"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
+        public string InvoiceCheck
+        {
+            get
+            {
+                return ((string)(this["InvoiceCheck"]));
+            }
+            set
+            {
+                this["InvoiceCheck"] = value;
+            }
+        }
+
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
