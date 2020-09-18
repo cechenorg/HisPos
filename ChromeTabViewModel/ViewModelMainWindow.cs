@@ -16,6 +16,7 @@ using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.Medicine.Position;
 using His_Pos.NewClass.Medicine.Usage;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.Division;
@@ -26,6 +27,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow;
 using Microsoft.Reporting.WinForms;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -117,6 +119,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Institutions Institutions { get; set; }
         public static WareHouses WareHouses { get; set; }
         public static CooperativeClinicSettings CooperativeClinicSettings { get; set; }
+        public CusPrePreviewBases cooperativePres { get; set; }
         public static Divisions Divisions { get; set; }
         public static AdjustCases AdjustCases { get; set; }
         public static PaymentCategories PaymentCategories { get; set; }
@@ -170,12 +173,14 @@ namespace His_Pos.ChromeTabViewModel
                 WareHouses = WareHouses.GetWareHouses();
                 BusyContent = StringRes.取得院所;
                 Institutions = new Institutions(true);
-                BusyContent = "取得合作院所設定";
-                CooperativeClinicSettings = new CooperativeClinicSettings();
-                CooperativeClinicSettings.Init();
-                CooperativeClinicSettings.FilePurge();
                 BusyContent = StringRes.取得科別;
                 Divisions = new Divisions();
+                BusyContent = "取得合作院所設定";
+                CooperativeClinicSettings = new CooperativeClinicSettings();
+                cooperativePres = new CusPrePreviewBases();
+                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
+                CooperativeClinicSettings.Init();
+                CooperativeClinicSettings.FilePurge();
                 BusyContent = StringRes.GetAdjustCases;
                 AdjustCases = new AdjustCases(true);
                 BusyContent = StringRes.取得給付類別;

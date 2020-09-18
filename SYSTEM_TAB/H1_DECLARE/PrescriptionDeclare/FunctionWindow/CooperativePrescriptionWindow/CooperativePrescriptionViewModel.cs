@@ -146,7 +146,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             EndDate = DateTime.Today;
         }
 
-        private void InitPrescriptions()
+        public void InitPrescriptions()
         {
             cooperativePres = new CusPrePreviewBases();
             var getCooperativePresWorker = new BackgroundWorker();
