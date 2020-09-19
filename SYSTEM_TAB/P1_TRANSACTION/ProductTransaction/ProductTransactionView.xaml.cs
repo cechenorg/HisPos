@@ -123,6 +123,58 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return result;
         }
 
+        private void GetNotEnoughMedicines() 
+        {
+            // 9.14欠OTC採購
+            var notEnoughMedicines = new NotEnoughMedicines();
+            foreach (DataRow dr in ProductList.Rows)
+            {
+                var amount = dr["Amount"].ToString();
+                var inventory = dr["Inv_Inventory"].ToString();
+                if (int.Parse(amount) > int.Parse(inventory))
+                {
+                    int buckle;
+                    if (int.Parse(inventory) <= 0)
+                    {
+                        buckle = 0;
+                        notEnoughMedicines.Add(new NotEnoughMedicine(
+                            dr["Pro_ID"].ToString(),
+                            dr["Pro_ChineseName"].ToString(),
+                            int.Parse(amount) - buckle,
+                            true,
+                            false,
+                            0,
+                            0,
+                            int.Parse(amount) - buckle));
+                    }
+                    else
+                    {
+                        notEnoughMedicines.Add(new NotEnoughMedicine(
+                            dr["Pro_ID"].ToString(),
+                            dr["Pro_ChineseName"].ToString(),
+                            int.Parse(amount) - int.Parse(inventory),
+                            true,
+                            false,
+                            0,
+                            0,
+                            int.Parse(amount) - int.Parse(inventory)));
+                    }
+                }
+            }
+            if (notEnoughMedicines.Count > 0)
+            {
+                var purchaseWindow = new NotEnoughOTCPurchaseWindow("欠OTC採購", "OTC", notEnoughMedicines);
+                if (purchaseWindow.DialogResult is null || !(bool)purchaseWindow.DialogResult)
+                {
+                    MessageWindow.ShowMessage("欠OTC採購取消。", MessageType.WARNING);
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("採購單已送出。", MessageType.WARNING);
+                }
+            }
+        }
+
         private void AddProductByInputAction(string searchString, int rowIndex)
         {
             if (string.IsNullOrEmpty(searchString)) return;
@@ -763,97 +815,53 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 return;
             }
 
-            // 9.14欠OTC採購
-            var notEnoughMedicines = new NotEnoughMedicines();
-            foreach (DataRow dr in ProductList.Rows)
-            {
-                var amount = dr["Amount"].ToString();
-                var inventory = dr["Inv_Inventory"].ToString();
-                if (int.Parse(amount) > int.Parse(inventory))
-                {
-                    int buckle;
-                    if (int.Parse(inventory) <= 0)
-                    {
-                        buckle = 0;
-                        notEnoughMedicines.Add(new NotEnoughMedicine(
-                            dr["Pro_ID"].ToString(),
-                            dr["Pro_ChineseName"].ToString(),
-                            int.Parse(amount) - buckle,
-                            true,
-                            false,
-                            0,
-                            0,
-                            int.Parse(amount) - buckle));
-                    }
-                    else {
-                        notEnoughMedicines.Add(new NotEnoughMedicine(
-                            dr["Pro_ID"].ToString(),
-                            dr["Pro_ChineseName"].ToString(),
-                            int.Parse(amount) - int.Parse(inventory),
-                            true,
-                            false,
-                            0,
-                            0,
-                            int.Parse(amount) - int.Parse(inventory)));
-                    }
-                }
-            }
-            if (notEnoughMedicines.Count > 0 )
-            {
-                var purchaseWindow = new NotEnoughOTCPurchaseWindow("欠OTC採購", "OTC", notEnoughMedicines);
-                if (purchaseWindow.DialogResult is null || !(bool)purchaseWindow.DialogResult)
-                {
-                    MessageWindow.ShowMessage("欠OTC採購取消。", MessageType.WARNING);
-                }
-                else
-                {
-                    MessageWindow.ShowMessage("採購單已送出。", MessageType.WARNING);
-                }
-            }
+            GetNotEnoughMedicines();
 
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
             if (!(bool)confirmWindow.DialogResult) { return; }
 
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("CustomerID", cusID));
-            parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
-            parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
-            parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
-            parameters.Add(new SqlParameter("CardAmount", tbCard.Text));
-            parameters.Add(new SqlParameter("VoucherAmount", tbVoucher.Text));
-            parameters.Add(new SqlParameter("PreTotal", preTotal));
-            parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
-            parameters.Add(new SqlParameter("RealTotal", realTotal));
-            parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
-            parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Text));
-            parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
-            parameters.Add(new SqlParameter("Cashier", cbCashier.Text));
-            parameters.Add(new SqlParameter("Note", tbNote.Text));
-            parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-
-            if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            try 
             {
-                if (Properties.Settings.Default.InvoiceCheck != "1") {
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("CustomerID", cusID));
+                parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
+                parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
+                parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
+                parameters.Add(new SqlParameter("CardAmount", tbCard.Text));
+                parameters.Add(new SqlParameter("VoucherAmount", tbVoucher.Text));
+                parameters.Add(new SqlParameter("PreTotal", preTotal));
+                parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
+                parameters.Add(new SqlParameter("RealTotal", realTotal));
+                parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
+                parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Text));
+                parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
+                parameters.Add(new SqlParameter("Cashier", cbCashier.Text));
+                parameters.Add(new SqlParameter("Note", tbNote.Text));
+                parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
 
-                }
-                else
+                if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 {
-                    InvoicePrint(TransferDetailTable());
-                    InvoiceControlViewModel vm = new InvoiceControlViewModel();
-                    vm.InvoiceNumPlusOneAction();
+                    if (Properties.Settings.Default.InvoiceCheck == "1")
+                    {
+                        InvoicePrint(TransferDetailTable());
+                        InvoiceControlViewModel vm = new InvoiceControlViewModel();
+                        vm.InvoiceNumPlusOneAction();
+                    }
+                    ClearPage();
+                    MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
                 }
-                
-                ClearPage();
-                MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
-               
-            }
-            else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
+                else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
 
-            /*ConfirmWindow confirmInvoiceWindow = new ConfirmWindow("是否列印發票?", "發票確認");
-            if (!(bool)confirmWindow.DialogResult) { return; }*/
+                /*ConfirmWindow confirmInvoiceWindow = new ConfirmWindow("是否列印發票?", "發票確認");
+                if (!(bool)confirmWindow.DialogResult) { return; }*/
+            }
+            catch (Exception ex) 
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
         }
 
         private async void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
