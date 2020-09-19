@@ -24,7 +24,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
-            <Label Content="0911122233" FontFamily="Segoe UI Semibold" FontSize="25" VerticalContentAlignment="Center"></Label>
+            <Label Content="" FontFamily="Segoe UI Semibold" FontSize="25" VerticalContentAlignment="Center"></Label>
         </StackPanel>
         <DataGrid Grid.Column="0" Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False">
             <DataGrid.Resources>
