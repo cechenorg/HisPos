@@ -127,15 +127,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="30" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Visibility="Hidden">
-                            </Image>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="序" Width="30" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=TraDet_DetailID}">
+                <DataGridTextColumn Header="序" Width="40" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=TraDet_DetailID}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -151,7 +143,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="320" Header="商品名稱" IsReadOnly="True">
+                <DataGridTemplateColumn Width="250" Header="商品名稱" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -197,6 +189,21 @@
                         <DataTemplate>
                             <Label x:Name="Deposit" Content="{Binding Path=TraDet_DepositAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="16" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
                             </Label>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="80" Header="獎勵">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label x:Name="Deposit" Content="{Binding Path=TraDet_DepositAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="16" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
+                            </Label>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="60" Header="退貨">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="btnReturn" Width="50" Height="30" Content="退" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="DimGray" IsEnabled="False"></Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

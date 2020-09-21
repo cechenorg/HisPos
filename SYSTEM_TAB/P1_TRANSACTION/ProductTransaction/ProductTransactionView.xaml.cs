@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -625,6 +626,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Amount_TextChanged(object sender, TextChangedEventArgs e)
         {
+            TextBox tb = (TextBox)sender;
+            int.TryParse(tb.Text, out int amt);
+            if (amt < 0) { tb.Text = "0"; }
             CalculateTotal("AMT");
         }
 
@@ -1021,9 +1025,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
-            AddNewCustomerWindow acw = new AddNewCustomerWindow();
-            acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
-            acw.ShowDialog();
+            var newCustomerWindow = new AddCustomerWindow();
+
+            //AddNewCustomerWindow acw = new AddNewCustomerWindow();
+            //acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
+            //acw.ShowDialog();
         }
 
         private void acw_RaiseCustomEvent(object sender, CustomEventArgs e)
