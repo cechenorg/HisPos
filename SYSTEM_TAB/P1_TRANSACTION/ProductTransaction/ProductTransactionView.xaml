@@ -163,7 +163,7 @@
                     <Label Content="應收金額 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="34" Foreground="Black" Margin="10,0,0,0"/>
                     <Label x:Name="lblRealTotal" Content="0" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="34" Foreground="Black"/>
                     <Label Content="結帳人員：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="80,0,0,0"/>
-                    <ComboBox x:Name="cbCashier" Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_Name" SelectedIndex="0"/>
+                    <ComboBox x:Name="cbCashier" Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID" SelectedIndex="0"/>
                     <Button x:Name="btnClear" Width="100" Height="40"  Content="清除" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClear_Click"/>
                     <Button x:Name="btnCheckout" Width="150" Height="40" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnCheckout_Click"/>
                 </StackPanel>

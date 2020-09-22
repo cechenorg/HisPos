@@ -11,7 +11,7 @@
         Title="銷售詳細記錄" 
         Height="680" 
         Width="900"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
@@ -31,11 +31,13 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
                 <Label Content="實收金額 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                <Label x:Name="lblRealTotal" Content="0" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="Black"/>
-                <Label Content="結帳人員：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="80,0,0,0"/>
+                <Label x:Name="lblRealTotal" Content="0" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="Black"/>
+                <Label Content="結帳人員：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="40,0,0,0"/>
                 <Label x:Name="lblCashier" Content="" Width="100" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                <Button x:Name="btnDelete" Width="100" Height="30"  Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="40,0,0,0" BorderThickness="0" Background="DimGray" Click="btnDelete_Click"/>
-                <Button x:Name="btnSubmit" Width="150" Height="30" Content="送出修改" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnSubmit_Click" IsEnabled="False"/>
+                <Label x:Name="lblChanged" Content="未修改" Width="100" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                <Button x:Name="btnSubmit" Width="150" Height="30" Content="送出修改" FontFamily="Segoe UI Semibold" FontSize="16" Margin="20,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnSubmit_Click" IsEnabled="False"/>
+                <Button x:Name="btnDelete" Width="100" Height="30"  Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnDelete_Click"/>
+              
             </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="付款方式：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
@@ -54,7 +56,7 @@
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
-                <TextBox x:Name="tbCardNum" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black">
+                <TextBox x:Name="tbCardNum" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black" TextChanged="tb_TextChanged">
                     <TextBox.InputScope>
                         <InputScope>
                             <InputScope.Names>
@@ -64,7 +66,7 @@
                     </TextBox.InputScope>
                 </TextBox>
                 <Label Content="統編" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
-                <TextBox x:Name="tbTaxNum" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black">
+                <TextBox x:Name="tbTaxNum" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black" TextChanged="tb_TextChanged">
                     <TextBox.InputScope>
                         <InputScope>
                             <InputScope.Names>
@@ -74,7 +76,7 @@
                     </TextBox.InputScope>
                 </TextBox>
                 <Label Content="發票號碼" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
-                <TextBox x:Name="tbInvoiceNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black"/>
+                <Label x:Name="tbInvoiceNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black"/>
             </StackPanel>
             <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
                 <Label Content="折扣前總計 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
@@ -195,8 +197,7 @@
                 <DataGridTemplateColumn Width="80" Header="獎勵">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Label x:Name="Deposit" Content="{Binding Path=TraDet_DepositAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="16" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2">
-                            </Label>
+                            <ComboBox x:Name="cbCashier"  Text="{Binding Path=TraDet_RewardPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID" ItemsSource="{Binding Path=DataContext.List, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" DropDownClosed="cbCashier_DropDownClosed"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

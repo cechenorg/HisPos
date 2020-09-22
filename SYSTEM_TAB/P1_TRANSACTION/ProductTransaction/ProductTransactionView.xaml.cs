@@ -558,8 +558,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void ProductDataGrid_Loaded(object sender, RoutedEventArgs e)
         {
             var ProductIDList = new List<TextBox>();
-            NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
-                ref ProductIDList);
+            NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox", ref ProductIDList);
             ProductIDList[ProductIDList.Count - 1].Focus();
         }
 
@@ -840,7 +839,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
                 parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Text));
                 parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
-                parameters.Add(new SqlParameter("Cashier", cbCashier.Text));
+                parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
                 parameters.Add(new SqlParameter("Note", tbNote.Text));
                 parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
