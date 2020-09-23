@@ -74,7 +74,7 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Label Content="*姓名.生日及身分證為必填欄位" Foreground="Red" FontSize="20" VerticalAlignment="Center" Width="565"/>
+            <Label Content="手機 / 家電至少擇一填寫" Foreground="Red" FontSize="20" VerticalAlignment="Center" Width="565"/>
             <Button Content="取消" FontSize="20" Height="35" Width="80" Margin="10,0,10,0" BorderThickness="0" HorizontalAlignment="Right" Background="DimGray" Command="{Binding Cancel}"/>
             <Button Content="新增" FontSize="20" Height="35" Width="80" Margin="0,0,10,0" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Command="{Binding Submit}"/>
         </StackPanel>
