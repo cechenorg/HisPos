@@ -1,6 +1,7 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -67,7 +68,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
             lbCusName.Content = masterRow["Cus_Name"];
             lblRealTotal.Content = masterRow["TraMas_RealTotal"];
-            lblCashier.Content = masterRow["TraMas_Cashier"];
+            lblCashier.Content = masterRow["Emp_Name"];
             tbCardNum.Text = masterRow["TraMas_CardNumber"].ToString();
             tbTaxNum.Text = masterRow["TraMas_TaxNumber"].ToString();
             tbInvoiceNum.Content = masterRow["TraMas_InvoiceNumber"].ToString();
@@ -81,6 +82,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbVoucher.Content = masterRow["TraMas_VoucherAmount"].ToString();
             lblTradeTime.Content = masterRow["TransTime_Format"];
             tbNote.Text = masterRow["TraMas_Note"].ToString();
+            /* string ogTransTime = masterRow["TraMas_UpdateTime"].ToString();
+             DateTime dTime = DateTime.Parse(ogTransTime);
+             string formatTransTime = dTime.ToString("yyyy-MM-dd HH:mm");*/
+            if (masterRow["TraMas_UpdateTime"] != DBNull.Value)
+            {
+                lblUpdateTime.Content = Convert.ToDateTime(masterRow["TraMas_UpdateTime"]).ToString("MM/dd/yyyy h:mm tt");
+            }
+            else
+            {
+                lblUpdateTime.Content = "";
+            }
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -106,11 +118,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MasterID", masID));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDelete]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
+            ConfirmWindow cw = new ConfirmWindow("是否刪除交易紀錄?", "刪除紀錄確認");
+            if (!(bool)cw.DialogResult) { return; }
+            else { 
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("MasterID", masID));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDelete]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
 
             if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
@@ -118,6 +133,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 Close();
             }
             else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
+            }
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)

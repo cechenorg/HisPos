@@ -207,7 +207,7 @@
             <Label Content="結帳時間：" Width="95" HorizontalAlignment="Left" FontSize="18" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"></Label>
             <Label x:Name="lblTradeTime" Content="" Width="180" HorizontalAlignment="Left" FontSize="18" FontFamily="Segoe UI Semibold"></Label>
             <Label Content="最後編輯時間：" Width="130" HorizontalAlignment="Left" FontSize="18" FontFamily="Segoe UI Semibold" Margin="50,0,0,0"></Label>
-            <Label Content="" Width="250" HorizontalAlignment="Left" FontSize="18" FontFamily="Segoe UI Semibold"></Label>
+            <Label x:Name="lblUpdateTime" Content="" Width="250" HorizontalAlignment="Left" FontSize="18" FontFamily="Segoe UI Semibold"></Label>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Margin="0,10,0,0">
             <Label Content="備註：" HorizontalAlignment="Left" FontSize="18" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"></Label>

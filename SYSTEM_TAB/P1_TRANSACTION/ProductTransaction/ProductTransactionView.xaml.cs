@@ -55,6 +55,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
+            tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
         }
 
         private void GetEmployeeList()
@@ -459,7 +460,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbNote.Text = "";
             tbTaxNum.Text = "";
             tbCardNum.Text = "";
-            tbInvoiceNum.Text = "";
             tbPaid.Text = "";
 
             tbCash.Text = "";
@@ -837,7 +837,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
                 parameters.Add(new SqlParameter("RealTotal", realTotal));
                 parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
-                parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Text));
+                parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
                 parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
                 parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
                 parameters.Add(new SqlParameter("Note", tbNote.Text));
@@ -852,6 +852,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         InvoicePrint(TransferDetailTable());
                         InvoiceControlViewModel vm = new InvoiceControlViewModel();
                         vm.InvoiceNumPlusOneAction();
+                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
                     }
                     ClearPage();
                     MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
