@@ -197,7 +197,7 @@
                 <DataGridTemplateColumn Width="100" Header="獎勵">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="cbCashier"  Text="{Binding Path=TraDet_RewardPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID" ItemsSource="{Binding Path=DataContext.List, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" DropDownClosed="cbCashier_DropDownClosed"/>
+                            <ComboBox x:Name="cbCashier" Text="{Binding Path=TraDet_RewardPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID" DropDownClosed="cbCashier_DropDownClosed"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

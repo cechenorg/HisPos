@@ -21,6 +21,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         DataTable detail;
         string cusID;
         string payMethod;
+
         public ProductTransactionDetail(DataRow masterRow, DataTable detailTable)
         {
             InitializeComponent();
@@ -44,6 +45,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 CashierList[index].ItemsSource = result.DefaultView;
             }
         }
+
         private void AssignMasterValue(DataRow masterRow, string PriceType) 
         {
             string PriceTypeConverted;
@@ -143,7 +145,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             parameters.Add(new SqlParameter("ID", masID));
             parameters.Add(new SqlParameter("CustomerID", cusID));
             parameters.Add(new SqlParameter("PayMethod",payMethod));
-
             parameters.Add(new SqlParameter("PreTotal", lblPreTotal.Content));
             parameters.Add(new SqlParameter("DiscountAmt", lbDiscountAmt.Content));
             parameters.Add(new SqlParameter("RealTotal", lblRealTotal.Content));
@@ -159,15 +160,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordEdit]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
-
             if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
                 MessageWindow.ShowMessage("修改成功！", MessageType.SUCCESS);
                 Close();
             }
             else { MessageWindow.ShowMessage("修改失敗！", MessageType.ERROR); }
-
         }
+
         private DataTable TransferDetailTable()
         {
             DataTable dt = new DataTable();
@@ -225,7 +225,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lblChanged.Content = "已修改";
             lblChanged.Foreground = Brushes.Red;
         }
-
 
         private void cbCashier_DropDownClosed(object sender, System.EventArgs e)
         {

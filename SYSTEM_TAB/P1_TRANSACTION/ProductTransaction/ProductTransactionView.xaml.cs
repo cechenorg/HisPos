@@ -461,12 +461,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbTaxNum.Text = "";
             tbCardNum.Text = "";
             tbPaid.Text = "";
-
             tbCash.Text = "";
             tbCard.Text = "";
             tbVoucher.Text = "";
-
+            cbCashier.SelectedItem = null;
             AppliedPrice = "Pro_RetailPrice";
+
             CalculateTotal("AMT");
             PriceCombo.SelectedIndex = 0;
         }
@@ -807,6 +807,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             ProductList.AcceptChanges();
 
+            if (cbCashier.SelectedItem == null) 
+            {
+                MessageWindow.ShowMessage("尚未選擇結帳人員！", MessageType.ERROR);
+                return;
+            }
             if (ProductList.Rows.Count == 0)
             {
                 MessageWindow.ShowMessage("尚未新增售出商品項目！", MessageType.ERROR);
@@ -858,9 +863,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
                 }
                 else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
-
-                /*ConfirmWindow confirmInvoiceWindow = new ConfirmWindow("是否列印發票?", "發票確認");
-                if (!(bool)confirmWindow.DialogResult) { return; }*/
             }
             catch (Exception ex) 
             {
@@ -1101,6 +1103,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             CustomerDepositManageView cdmv = new CustomerDepositManageView();
             cdmv.ShowDialog();
+        }
+
+        private void btnReturn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
