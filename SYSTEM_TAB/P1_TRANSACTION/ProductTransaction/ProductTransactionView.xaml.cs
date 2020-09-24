@@ -41,6 +41,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private double totalProfit = 0;
 
         private bool isGift = false;
+        private bool isReturn = false;
 
         private static readonly Regex _regex = new Regex("^[0-9]+$");
         private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
@@ -259,12 +260,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         ProductList.Columns.Add(ptt);
 
                         DataColumn profit = new DataColumn("Profit", typeof(double));
-                        ptt.DefaultValue = 0;
+                        profit.DefaultValue = 0;
                         ProductList.Columns.Add(profit);
-
-                        DataColumn deposit = new DataColumn("Deposit", typeof(int));
-                        ptt.DefaultValue = 0;
-                        ProductList.Columns.Add(deposit);
                     }
 
                     DataRow newRow = ProductList.NewRow();
@@ -469,6 +466,95 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             CalculateTotal("AMT");
             PriceCombo.SelectedIndex = 0;
+        }
+
+        private void CheckoutSubmit() 
+        {
+            GetNotEnoughMedicines();
+
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
+            if (!(bool)confirmWindow.DialogResult) { return; }
+
+            try
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("CustomerID", cusID));
+                parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
+                parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
+                parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
+                parameters.Add(new SqlParameter("CardAmount", tbCard.Text));
+                parameters.Add(new SqlParameter("VoucherAmount", tbVoucher.Text));
+                parameters.Add(new SqlParameter("PreTotal", preTotal));
+                parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
+                parameters.Add(new SqlParameter("RealTotal", realTotal));
+                parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
+                parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
+                parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
+                parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
+                parameters.Add(new SqlParameter("Note", tbNote.Text));
+                parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+
+                if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                {
+                    if (Properties.Settings.Default.InvoiceCheck == "1")
+                    {
+                        InvoicePrint(TransferDetailTable());
+                        InvoiceControlViewModel vm = new InvoiceControlViewModel();
+                        vm.InvoiceNumPlusOneAction();
+                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+                    }
+                    ClearPage();
+                    MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
+                }
+                else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
+        }
+
+        private void ReturnSubmit() 
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出退貨資料?", "退貨確認");
+            if (!(bool)confirmWindow.DialogResult) { return; }
+
+            try
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
+                parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
+                parameters.Add(new SqlParameter("PreTotal", preTotal));
+                parameters.Add(new SqlParameter("RealTotal", realTotal));
+                parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
+                parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
+                parameters.Add(new SqlParameter("Note", tbNote.Text));
+                parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeReturnInsert]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+
+                if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                {
+                    if (Properties.Settings.Default.InvoiceCheck == "1")
+                    {
+                        InvoicePrint(TransferDetailTable());
+                        InvoiceControlViewModel vm = new InvoiceControlViewModel();
+                        vm.InvoiceNumPlusOneAction();
+                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+                    }
+                    ClearPage();
+                    MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
+                }
+                else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
         }
 
         //9.16發票
@@ -814,7 +900,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             if (ProductList.Rows.Count == 0)
             {
-                MessageWindow.ShowMessage("尚未新增售出商品項目！", MessageType.ERROR);
+                MessageWindow.ShowMessage("尚未新增商品項目！", MessageType.ERROR);
                 return;
             }
             if (GetPayMethod() == "NOT_MATCH") 
@@ -823,50 +909,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 return;
             }
 
-            GetNotEnoughMedicines();
-
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
-            if (!(bool)confirmWindow.DialogResult) { return; }
-
-            try 
+            if (isReturn)
             {
-                MainWindow.ServerConnection.OpenConnection();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("CustomerID", cusID));
-                parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
-                parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
-                parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
-                parameters.Add(new SqlParameter("CardAmount", tbCard.Text));
-                parameters.Add(new SqlParameter("VoucherAmount", tbVoucher.Text));
-                parameters.Add(new SqlParameter("PreTotal", preTotal));
-                parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
-                parameters.Add(new SqlParameter("RealTotal", realTotal));
-                parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
-                parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
-                parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
-                parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
-                parameters.Add(new SqlParameter("Note", tbNote.Text));
-                parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
-                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
-                MainWindow.ServerConnection.CloseConnection();
-
-                if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                {
-                    if (Properties.Settings.Default.InvoiceCheck == "1")
-                    {
-                        InvoicePrint(TransferDetailTable());
-                        InvoiceControlViewModel vm = new InvoiceControlViewModel();
-                        vm.InvoiceNumPlusOneAction();
-                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
-                    }
-                    ClearPage();
-                    MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
-                }
-                else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
+                ReturnSubmit();
             }
-            catch (Exception ex) 
+            else 
             {
-                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                CheckoutSubmit();
             }
         }
 
@@ -1107,7 +1156,40 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
+            if (isReturn) 
+            {
+                isReturn = false;
 
+                tbPaid.IsEnabled = true;
+                tbCash.IsEnabled = true;
+                tbCard.IsEnabled = true;
+                tbVoucher.IsEnabled = true;
+                tbCardNum.IsEnabled = true;
+                tbTaxNum.IsEnabled = true;
+                tbDiscountAmt.IsEnabled = true;
+                tbDiscountPer.IsEnabled = true;
+                btnGift.IsEnabled = true;
+
+                btnCheckout.Content = "結帳";
+                btnCheckout.Background = Brushes.RoyalBlue;
+            }
+            else 
+            {
+                isReturn = true;
+
+                tbPaid.IsEnabled = false;
+                tbCash.IsEnabled = false;
+                tbCard.IsEnabled = false;
+                tbVoucher.IsEnabled = false;
+                tbCardNum.IsEnabled = false;
+                tbTaxNum.IsEnabled = false;
+                tbDiscountAmt.IsEnabled = false;
+                tbDiscountPer.IsEnabled = false;
+                btnGift.IsEnabled = false;
+
+                btnCheckout.Content = "退貨";
+                btnCheckout.Background = Brushes.IndianRed;
+            }
         }
     }
 }
