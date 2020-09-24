@@ -103,7 +103,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             bool VoucherParse = int.TryParse(tbVoucher.Text, out int Voucher);
             int Total = Cash + Card + Voucher;
 
-            if (Total != realTotal) 
+            if (Total != realTotal)
             {
                 return "NOT_MATCH";
             }
@@ -126,7 +126,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return result;
         }
 
-        private void GetNotEnoughMedicines() 
+        private void GetNotEnoughMedicines()
         {
             // 9.14欠OTC採購
             var notEnoughMedicines = new NotEnoughMedicines();
@@ -282,7 +282,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         TradeAddProductWindow tapw = new TradeAddProductWindow(result);
                         tapw.ShowDialog();
                         DataRow NewProduct = tapw.SelectedProduct;
-                        if (NewProduct != null) 
+                        if (NewProduct != null)
                         {
                             newRow.ItemArray = NewProduct.ItemArray;
                         }
@@ -379,7 +379,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             realTotal = preTotal - discountAmount;
             lblRealTotal.Content = realTotal;
 
-            if (ProductList.Rows.Count > 0) 
+            if (ProductList.Rows.Count > 0)
             {
                 double.TryParse(ProductList.Compute("SUM(Profit)", string.Empty).ToString(), out double preProfit);
                 totalProfit = preProfit - discountAmount;
@@ -468,7 +468,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             PriceCombo.SelectedIndex = 0;
         }
 
-        private void CheckoutSubmit() 
+        private void CheckoutSubmit()
         {
             GetNotEnoughMedicines();
 
@@ -497,8 +497,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
 
+               
                 if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 {
+                    DepositInsert();
                     if (Properties.Settings.Default.InvoiceCheck == "1")
                     {
                         InvoicePrint(TransferDetailTable());
@@ -517,7 +519,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private void ReturnSubmit() 
+        private void ReturnSubmit()
         {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出退貨資料?", "退貨確認");
             if (!(bool)confirmWindow.DialogResult) { return; }
@@ -527,7 +529,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
-                parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
                 parameters.Add(new SqlParameter("PreTotal", preTotal));
                 parameters.Add(new SqlParameter("RealTotal", realTotal));
                 parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
@@ -562,7 +563,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
 
             MyPharmacy = Pharmacy.GetCurrentPharmacy();
-            
+
             SerialPort port = new SerialPort(Properties.Settings.Default.InvoiceComPort, 9600, Parity.None, 8, StopBits.One);
             try
             {
@@ -580,23 +581,23 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(MyPharmacy.Name.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("地址:"+ MyPharmacy.Address.ToString());
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("地址:" + MyPharmacy.Address.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統編:"+ MyPharmacy.ID.ToString());
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統編:" + MyPharmacy.ID.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("電話:"+MyPharmacy.Tel.ToString());
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("電話:" + MyPharmacy.Tel.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
             strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("客編:"+ cusID.ToString());
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("客編:" + cusID.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
             port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(1));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統一編號:"+tbTaxNum.Text.ToString());
+            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統一編號:" + tbTaxNum.Text.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
 
@@ -637,7 +638,23 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             port.Write("" + Convert.ToChar(29) + Convert.ToChar(86) + Convert.ToChar(66) + Convert.ToChar(13) + Convert.ToChar(10));
             port.Close();
         }
+        //9.24寄庫
+        private void DepositInsert()
+        {
 
+            foreach (DataRow dr in ProductList.Rows)
+            {
+                if ((int)dr["Deposit"] != 0)
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    List<SqlParameter> parameters = new List<SqlParameter>();
+                    parameters.Add(new SqlParameter("DepRec_ProductID", dr["Pro_ID"]));
+                    parameters.Add(new SqlParameter("DepRec_Amount", dr["Deposit"]));
+                    DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[DepositRecordInsert]", parameters);
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+            }
+        }
 
         #region ----- Events -----
 
@@ -733,8 +750,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             TextBox tb = (TextBox)sender;
             int.TryParse(tb.Text, out int tryprice);
-            if (tryprice < 0) 
-            { 
+            if (tryprice < 0)
+            {
                 tb.Text = "0";
                 return;
             }
@@ -742,7 +759,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal("AMT");
             foreach (DataRow dr in ProductList.Rows)
             {
-                dr["PriceTooltip"] = string.Format("{0:F2}", dr["Inv_LastPrice"]) + " / " + 
+                dr["PriceTooltip"] = string.Format("{0:F2}", dr["Inv_LastPrice"]) + " / " +
                     (double.Parse(dr["CurrentPrice"].ToString()) -
                     double.Parse(dr["Inv_LastPrice"].ToString())).ToString();
             }
@@ -862,8 +879,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbPaid_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) 
-            { 
+            if (e.Key == Key.Enter)
+            {
                 CalculateChange();
                 tbCash.Text = realTotal.ToString();
             }
@@ -893,7 +910,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             ProductList.AcceptChanges();
 
-            if (cbCashier.SelectedItem == null) 
+            if (cbCashier.SelectedItem == null)
             {
                 MessageWindow.ShowMessage("尚未選擇結帳人員！", MessageType.ERROR);
                 return;
@@ -903,7 +920,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("尚未新增商品項目！", MessageType.ERROR);
                 return;
             }
-            if (GetPayMethod() == "NOT_MATCH") 
+            if (GetPayMethod() == "NOT_MATCH")
             {
                 MessageWindow.ShowMessage("付款金額與應收金額不符！", MessageType.WARNING);
                 return;
@@ -913,7 +930,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 ReturnSubmit();
             }
-            else 
+            else
             {
                 CheckoutSubmit();
             }
@@ -952,9 +969,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void tbCash_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            if (e.Key == Key.Enter) 
+            if (e.Key == Key.Enter)
             {
-                if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "") 
+                if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
                 {
                     tb.Text = realTotal.ToString();
                 }
@@ -993,7 +1010,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 int.TryParse(ProductList.Rows[index]["Deposit"].ToString(), out int deposit);
                 int amount = int.Parse(ProductList.Rows[index]["Amount"].ToString());
-                if (deposit > amount) 
+                if (deposit > amount)
                 {
                     tb.Text = "0";
                     MessageWindow.ShowMessage("寄庫量大於購買數量！", MessageType.ERROR);
@@ -1045,7 +1062,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             DepositColumn.Visibility = Visibility.Visible;
         }
 
-        private void GetCustomerTradeRecord()        
+        private void GetCustomerTradeRecord()
         {
             //MessageBox.Show(cusID);
             MainWindow.ServerConnection.OpenConnection();
@@ -1112,7 +1129,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
-                if (tb.Text.Length < 9) 
+                if (tb.Text.Length < 9)
                 {
                     MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
                     return;
@@ -1150,13 +1167,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnDepositManage_Click(object sender, RoutedEventArgs e)
         {
-            CustomerDepositManageView cdmv = new CustomerDepositManageView();
+            CustomerDepositManageView cdmv = new CustomerDepositManageView(cusID);
             cdmv.ShowDialog();
         }
 
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
-            if (isReturn) 
+            if (isReturn)
             {
                 isReturn = false;
 
@@ -1173,7 +1190,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 btnCheckout.Content = "結帳";
                 btnCheckout.Background = Brushes.RoyalBlue;
             }
-            else 
+            else
             {
                 isReturn = true;
 

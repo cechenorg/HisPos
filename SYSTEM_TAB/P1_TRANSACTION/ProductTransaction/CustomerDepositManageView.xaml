@@ -26,7 +26,7 @@
         <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
             <Label Content="" FontFamily="Segoe UI Semibold" FontSize="25" VerticalContentAlignment="Center"></Label>
         </StackPanel>
-        <DataGrid Grid.Column="0" Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False">
+        <DataGrid Name="ProductDepositDataGrid" Grid.Column="0" Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False">
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="Background" Value="#FFA8A8A8" />
@@ -46,7 +46,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="180" Header="品項" IsReadOnly="True" Binding="{Binding Path=TransTime_Format}">
+                <DataGridTextColumn Width="180" Header="品項" IsReadOnly="True" Binding="{Binding Path=Pro_ChineseName}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontSize" Value="16"/>
@@ -60,7 +60,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="寄存量" IsReadOnly="True" Binding="{Binding Path=TraMas_RealTotal}">
+                <DataGridTextColumn Width="100" Header="寄存量" IsReadOnly="True" Binding="{Binding Path=TraDet_DepositAmount}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontSize" Value="16"/>
@@ -74,30 +74,31 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="提取量" IsReadOnly="True" Binding="{Binding Path=TraMas_RealTotal}">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="FontSize" Value="16"/>
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Margin" Value="0,0,0,0"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="100" Header="提取量" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Name="ProductAmountTextbox" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="100" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" >
+                                <TextBox.InputScope>
+                                    <InputScope>
+                                        <InputScope.Names>
+                                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                        </InputScope.Names>
+                                    </InputScope>
+                                </TextBox.InputScope>
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Column="0" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
-            <Button x:Name="btnWithdraw" Width="80" Height="30" Content="提領" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,5,10,0" BorderThickness="0" Background="RoyalBlue" HorizontalAlignment="Right"/>
+            <Button x:Name="btnWithdraw" Width="80" Height="30" Content="提領" FontFamily="Segoe UI Semibold" FontSize="16" Margin="296,5,0,0" BorderThickness="0" Background="RoyalBlue" HorizontalAlignment="Left" Click="btnWithdraw_Click"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center">
             <Label Content="異動明細：" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
         </StackPanel>
-        <DataGrid Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="10,0,0,0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False">
+        <DataGrid x:Name="ProductDepositRecordDataGrid" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="10,0,0,0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False">
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="Background" Value="#FFA8A8A8" />
@@ -117,7 +118,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="120" Header="日期" IsReadOnly="True" Binding="{Binding Path=TransTime_Format}">
+                <DataGridTextColumn Width="100" Header="日期" IsReadOnly="True" Binding="{Binding Path=DepRec_RecTime,StringFormat='yyyy/MM/dd'}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontSize" Value="16"/>
@@ -131,7 +132,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="160" Header="品項" IsReadOnly="True" Binding="{Binding Path=TraMas_RealTotal}">
+                <DataGridTextColumn Width="160" Header="品項" IsReadOnly="True" Binding="{Binding Path=Pro_ChineseName}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontSize" Value="16"/>
@@ -145,7 +146,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="數量" IsReadOnly="True" Binding="{Binding Path=TraMas_RealTotal}">
+                <DataGridTextColumn Width="100" Header="數量" IsReadOnly="True" Binding="{Binding Path=DepRec_Amount}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontSize" Value="16"/>
