@@ -189,7 +189,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.供應商管理):
                     break;
                 case nameof(FeatureItem.櫃位管理):
-                    LocationManageView.Instance.SaveLocation();
+                    //LocationManageView.Instance.SaveLocation();
                     break;
                 case nameof(FeatureItem.員工管理):
                     break;

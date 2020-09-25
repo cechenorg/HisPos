@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class.Location;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.ProductLocation;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
@@ -15,7 +17,87 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     /// </summary>
     public partial class LocationManageView : UserControl
     {
-        public static LocationManageView Instance;
+        public LocationManageView()
+        {
+            InitializeComponent();
+            InitLocation();
+        }
+
+        private void NewButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddLocationWindow addTypeWindow = new AddLocationWindow();
+            addTypeWindow.ShowDialog();
+            InitLocationLoad();
+
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditLocationWindow editTypeWindow = new EditLocationWindow((int)ProductLocationDataGrid.SelectedValue);
+            editTypeWindow.ShowDialog();
+            InitLocationLoad();
+            
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteLocationWindow deleteTypeWindow = new DeleteLocationWindow((int)ProductLocationDataGrid.SelectedValue);
+            deleteTypeWindow.ShowDialog();
+            InitLocationLoad();
+        }
+        private void InitLocation()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductLocationDB.GetProductLocationMasters();
+            MainWindow.ServerConnection.CloseConnection();
+            
+            ProductLocationDataGrid.ItemsSource = dataTable.DefaultView;
+        }
+        private void InitLocationLoad()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = ProductLocationDB.GetProductLocationMasters();
+            MainWindow.ServerConnection.CloseConnection();
+
+            ProductLocationDataGrid.ItemsSource = dataTable.DefaultView;
+            ProductLocationDataGrid.SelectedIndex = 0;
+        }
+        private void InitLocationDetail()
+        {
+
+            if (ProductLocationDataGrid.SelectedValue == null)
+            {
+                return;
+            }
+            else {
+                MainWindow.ServerConnection.OpenConnection();
+                DataTable dataTable = ProductLocationDB.GetProductLocationDetails((int)ProductLocationDataGrid.SelectedValue);
+                MainWindow.ServerConnection.CloseConnection();
+
+                ProductLocationDetailDataGrid.ItemsSource = dataTable.DefaultView;
+            }
+           
+
+        }
+
+        private void ProductLocationDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            
+            InitLocationDetail();
+            InsertButton.Visibility = Visibility.Visible;
+
+
+        }
+
+        private void InsertButton_Click(object sender, RoutedEventArgs e)
+        {
+            InsertLocationDetailWindow insertTypeWindow = new InsertLocationDetailWindow((int)ProductLocationDataGrid.SelectedValue);
+            insertTypeWindow.ShowDialog();
+            InitLocationDetail();
+        }
+
+
+        /*public static LocationManageView Instance;
         public LocationControl selectItem;
         public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();
         public static int id = 0;
@@ -53,7 +135,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             contentControl.Height = (height == 0) ? 50 : height;
             contentControl.Width = (width == 0) ? 50 : width;
             contentControl.Content = newLocation;
-            LocationCanvus.Children.Add(contentControl);
+            //LocationCanvus.Children.Add(contentControl);
             Canvas.SetTop(contentControl, top == 0 ? 360 : top);
             Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
             SaveLocation();
@@ -138,6 +220,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         {
             ItemChangeWindow itemChangeWindow = new ItemChangeWindow("Location");
             itemChangeWindow.ShowDialog();
-        }
+        }*/
     }
 }

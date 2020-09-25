@@ -19,7 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             string error = IsCheck();
             if (error == "")
             {
-                LocationManageView.Instance.NewLocation(null, txtNewLocation.Text);
+                //LocationManageView.Instance.NewLocation(null, txtNewLocation.Text);
                 Close();
             }
             else
@@ -31,7 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
         private string IsCheck()
         {
-            int number = 0;
+           /* int number = 0;
             bool canConvert = int.TryParse(txtNewLocation.Text.Substring(0, 1), out number);
             if (canConvert)
             {
@@ -41,7 +41,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             {
                 LocationControl locationControl = (LocationControl)contentControl.Content;
                 if (locationControl.Name == txtNewLocation.Text) return "已有同名櫃位";
-            }
+            }*/
 
             return "";
         }
