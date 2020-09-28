@@ -23,6 +23,11 @@ namespace His_Pos.NewClass.Product.ProductManagement.MedBagDetail
         {
             return new MedBagDetailStructs(ProductDetailDB.GetMedBagDetailByID(proID, wareID));
         }
+
+        internal static MedBagDetailStructs GetOTCMedBagDetailByID(string proID, string wareID)
+        {
+            return new MedBagDetailStructs(ProductDetailDB.GetOTCMedBagDetailByID(proID, wareID));
+        }
         #endregion
     }
 }

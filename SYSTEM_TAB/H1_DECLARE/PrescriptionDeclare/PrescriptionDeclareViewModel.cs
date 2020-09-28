@@ -746,6 +746,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (productCount > 1)
                     addMedicineWindow.ShowDialog();
             }
+            CountMedicinePointAction();
+
         }
 
         private void DeleteMedicineAction()

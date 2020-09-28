@@ -20,6 +20,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
         }
 
+        internal static DataTable GetOTCMedBagDetailByID(string proID, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proID));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductOTCMedBagDetailByID]", parameters);
+        }
+
         internal static DataTable GetOnTheWayDetailByID(string proID, string wareID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -206,6 +215,16 @@ namespace His_Pos.NewClass.Product.ProductManagement
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineStockDetailByID]", parameters);
         }
+
+        internal static DataTable GetOTCStockDetailByID(string id, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[OTCStockDetailByID]", parameters);
+        }
+
 
         internal static DataTable RecycleProductByID(string id, string recycleAmount, string wareID)
         {

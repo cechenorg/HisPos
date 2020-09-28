@@ -13,6 +13,7 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTCControl;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -148,7 +149,11 @@ namespace His_Pos.ChromeTabViewModel
             switch (type)
             {
                 case ProductTypeEnum.NHIMedicine:
+                    newTab = new MedicineControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
+                    break;
                 case ProductTypeEnum.OTCMedicine:
+                    newTab = new OTCControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
+                    break;
                 case ProductTypeEnum.SpecialMedicine:
                     newTab = new MedicineControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
                     break;

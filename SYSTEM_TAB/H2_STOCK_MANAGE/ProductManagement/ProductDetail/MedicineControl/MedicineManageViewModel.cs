@@ -30,6 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public SingdePriceControlViewModel PriceViewModel { get; set; }
         public ProductRecordDetailControlViewModel RecordViewModel { get; set; }
         public MedicineStockViewModel StockViewModel { get; set; }
+        public OTCStockViewModel OTCStockViewModel { get; set; }
         public PrescriptionViewModel PrescriptionViewModel { get; set; }
         #endregion
 
@@ -119,6 +120,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             PriceViewModel = new SingdePriceControlViewModel();
             RecordViewModel = new ProductRecordDetailControlViewModel();
             StockViewModel = new MedicineStockViewModel();
+            OTCStockViewModel = new OTCStockViewModel();
             PrescriptionViewModel = new PrescriptionViewModel();
         }
         private void RegisterCommand()
@@ -131,6 +133,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             PriceViewModel.ReloadData(medicineID, selectedWareHouse.ID, productType);
             StockViewModel.ReloadData(medicineID, selectedWareHouse.ID);
+            OTCStockViewModel.ReloadData(medicineID, selectedWareHouse.ID);
             GroupViewModel.ReloadData(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail.TotalInventory);
             RecordViewModel.ReloadData(medicineID, selectedWareHouse.ID);
             PrescriptionViewModel.ReloadData(medicineID, selectedWareHouse.ID);

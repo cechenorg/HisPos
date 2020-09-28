@@ -561,6 +561,7 @@
     <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescriptions.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescriptionTypeEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductSearchTypeEnum.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\OTCStockDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\MedicineStockDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductStockDetail\ProductStockDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductTypeEnum.cs" />
@@ -920,6 +921,10 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\ExportPresHistoryWindow.xaml.cs">
       <DependentUpon>ExportPresHistoryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\OTCStockControl.xaml.cs">
+      <DependentUpon>OTCStockControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\OTCStockViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\MedicineStockViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\NHIMedicineHistoryPriceWindow.xaml.cs">
       <DependentUpon>NHIMedicineHistoryPriceWindow.xaml</DependentUpon>
@@ -1708,6 +1713,10 @@
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\PresControl\PrescriptionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\MedicineControl\StockControl\OTCStockControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedControl\PriceControl\NHIMedicinePriceControl.xaml">
       <SubType>Designer</SubType>

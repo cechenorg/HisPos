@@ -276,7 +276,7 @@
                 <RowDefinition Height="220"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <stockControl:MedicineStockControl Grid.Row="0" DataContext="{Binding StockViewModel}"/>
+            <stockControl:OTCStockControl Grid.Row="0" DataContext="{Binding OTCStockViewModel}"/>
             <recordControl:ProductRecordDetailControl Grid.Row="1" Margin="0,10,0,0" DataContext="{Binding RecordViewModel}"/>
         </Grid>
     </Grid>
