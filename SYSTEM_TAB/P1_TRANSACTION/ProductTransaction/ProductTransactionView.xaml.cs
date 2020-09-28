@@ -164,7 +164,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                                 int.Parse(amount) - int.Parse(inventory)));
                         }
                     }
-                    
                 }
             }
             if (notEnoughMedicines.Count > 0)
@@ -574,9 +573,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
-
-        //9.16發票
-        private void InvoicePrint(DataTable detail)
+        
+        private void InvoicePrint(DataTable detail) //9.16發票
         {
 
             MyPharmacy = Pharmacy.GetCurrentPharmacy();
@@ -655,8 +653,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             port.Write("" + Convert.ToChar(29) + Convert.ToChar(86) + Convert.ToChar(66) + Convert.ToChar(13) + Convert.ToChar(10));
             port.Close();
         }
-        //9.24寄庫
-        private void DepositInsert()
+        
+        private void DepositInsert() //9.24寄庫
         {
 
             foreach (DataRow dr in ProductList.Rows)
@@ -877,7 +875,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
             int stock = int.Parse(ProductList.Rows[index]["Inv_Inventory"].ToString());
-            if (original < stock) { ProductList.Rows[index]["Amount"] = original + 1; }
+            ProductList.Rows[index]["Amount"] = original + 1;
         }
 
         private void back_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -937,11 +935,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("尚未新增商品項目！", MessageType.ERROR);
                 return;
             }
-            if (GetPayMethod() == "NOT_MATCH")
-            {
-                MessageWindow.ShowMessage("付款金額與應收金額不符！", MessageType.WARNING);
-                return;
-            }
 
             if (isReturn)
             {
@@ -949,6 +942,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             else
             {
+                if (GetPayMethod() == "NOT_MATCH")
+                {
+                    MessageWindow.ShowMessage("付款金額與應收金額不符！", MessageType.WARNING);
+                    return;
+                }
                 CheckoutSubmit();
             }
         }
