@@ -120,13 +120,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
                 bool isCell = tb.Text.StartsWith("09");
                 if (isCell)
                 {
-                    parameters.Add(new SqlParameter("PosCus_Cellphone", tb.Text));
-                    parameters.Add(new SqlParameter("PosCus_Telephone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
+                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
                 }
                 else
                 {
-                    parameters.Add(new SqlParameter("PosCus_Cellphone", DBNull.Value));
-                    parameters.Add(new SqlParameter("PosCus_Telephone", tb.Text));
+                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Telephone", tb.Text));
                 }
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
                 MainWindow.ServerConnection.CloseConnection();

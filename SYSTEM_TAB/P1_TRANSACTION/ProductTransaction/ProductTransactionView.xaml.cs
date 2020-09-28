@@ -136,32 +136,35 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 var inventory = dr["Inv_Inventory"].ToString();
                 if (int.Parse(amount) > int.Parse(inventory))
                 {
-                    int buckle;
-                    if (int.Parse(inventory) <= 0)
-                    {
-                        buckle = 0;
-                        notEnoughMedicines.Add(new NotEnoughMedicine(
-                            dr["Pro_ID"].ToString(),
-                            dr["Pro_ChineseName"].ToString(),
-                            int.Parse(amount) - buckle,
-                            true,
-                            false,
-                            0,
-                            0,
-                            int.Parse(amount) - buckle));
+                    if (CheckOTCFromSingde(dr["Pro_ID"].ToString()).Rows.Count!=0) {
+                        int buckle;
+                        if (int.Parse(inventory) <= 0)
+                        {
+                            buckle = 0;
+                            notEnoughMedicines.Add(new NotEnoughMedicine(
+                                dr["Pro_ID"].ToString(),
+                                dr["Pro_ChineseName"].ToString(),
+                                int.Parse(amount) - buckle,
+                                true,
+                                false,
+                                0,
+                                0,
+                                int.Parse(amount) - buckle));
+                        }
+                        else
+                        {
+                            notEnoughMedicines.Add(new NotEnoughMedicine(
+                                dr["Pro_ID"].ToString(),
+                                dr["Pro_ChineseName"].ToString(),
+                                int.Parse(amount) - int.Parse(inventory),
+                                true,
+                                false,
+                                0,
+                                0,
+                                int.Parse(amount) - int.Parse(inventory)));
+                        }
                     }
-                    else
-                    {
-                        notEnoughMedicines.Add(new NotEnoughMedicine(
-                            dr["Pro_ID"].ToString(),
-                            dr["Pro_ChineseName"].ToString(),
-                            int.Parse(amount) - int.Parse(inventory),
-                            true,
-                            false,
-                            0,
-                            0,
-                            int.Parse(amount) - int.Parse(inventory)));
-                    }
+                    
                 }
             }
             if (notEnoughMedicines.Count > 0)
@@ -178,6 +181,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
+        private DataTable CheckOTCFromSingde(string id)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", id));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CheckOTCFromSingde]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            return result;
+        }
         private void AddProductByInputAction(string searchString, int rowIndex)
         {
             if (string.IsNullOrEmpty(searchString)) return;
@@ -262,6 +275,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         DataColumn profit = new DataColumn("Profit", typeof(double));
                         profit.DefaultValue = 0;
                         ProductList.Columns.Add(profit);
+
+                        DataColumn deposit = new DataColumn("Deposit", typeof(int));
+                        deposit.DefaultValue = 0;
+                        ProductList.Columns.Add(deposit);
                     }
 
                     DataRow newRow = ProductList.NewRow();
@@ -1049,15 +1066,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void FillInCustomerData(DataTable result)
         {
-            cusID = result.Rows[0]["PosCus_Uid"].ToString();
+            cusID = result.Rows[0]["Cus_ID"].ToString();
 
-            lbName.Content = result.Rows[0]["PosCus_Name"].ToString();
-            lbGender.Content = result.Rows[0]["PosCus_Gender"].ToString();
-            lbBirthDay.Content = result.Rows[0]["PosCus_Birthday"].ToString();
-            lbCellphone.Content = result.Rows[0]["PosCus_Cellphone"].ToString();
-            lbTelephone.Content = result.Rows[0]["PosCus_Telephone"].ToString();
-            tbAddress.Text = result.Rows[0]["PosCus_Address"].ToString();
-            tbCusNote.Text = result.Rows[0]["PosCus_Note"].ToString();
+            lbName.Content = result.Rows[0]["Cus_Name"].ToString();
+            lbGender.Content = result.Rows[0]["Cus_Gender"].ToString();
+            lbBirthDay.Content = result.Rows[0]["Cus_Birthday"].ToString();
+            lbCellphone.Content = result.Rows[0]["Cus_Cellphone"].ToString();
+            lbTelephone.Content = result.Rows[0]["Cus_Telephone"].ToString();
+            tbAddress.Text = result.Rows[0]["Cus_Address"].ToString();
+            tbCusNote.Text = result.Rows[0]["Cus_Note"].ToString();
 
             DepositColumn.Visibility = Visibility.Visible;
         }
@@ -1140,13 +1157,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 bool isCell = tb.Text.StartsWith("09");
                 if (isCell)
                 {
-                    parameters.Add(new SqlParameter("PosCus_Cellphone", tb.Text));
-                    parameters.Add(new SqlParameter("PosCus_Telephone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
+                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
                 }
                 else
                 {
-                    parameters.Add(new SqlParameter("PosCus_Cellphone", DBNull.Value));
-                    parameters.Add(new SqlParameter("PosCus_Telephone", tb.Text));
+                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Telephone", tb.Text));
                 }
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
