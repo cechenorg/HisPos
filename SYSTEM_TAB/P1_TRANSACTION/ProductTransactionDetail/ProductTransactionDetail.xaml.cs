@@ -38,7 +38,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
 
                 int index = detail.Rows.IndexOf(dr);
-                if (GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_MemberPrice"].ToString() == PerPrice.ToString() || GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_RetailPrice"].ToString() == PerPrice.ToString())
+                if (GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_MemberPrice"].ToString() == PerPrice.ToString() || GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_RetailPrice"].ToString() == PerPrice.ToString()|| dr["TraDet_IsGift"].ToString()=="1")
                 {
                     dr["Irr"] = "";
                 }
