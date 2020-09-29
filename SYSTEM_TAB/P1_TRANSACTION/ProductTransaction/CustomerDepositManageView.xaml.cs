@@ -59,10 +59,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("TraDet_ProductID", dr["TraDet_ProductID"]));
                     parameters.Add(new SqlParameter("Amount", dr["Amount"]));
                     parameters.Add(new SqlParameter("cusID", cus));
-                    MainWindow.ServerConnection.ExecuteProc("[POS].[DepositBuckles]", parameters);
+                    DataTable result=MainWindow.ServerConnection.ExecuteProc("[POS].[DepositBuckles]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
+                    if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                    {
+                        MessageWindow.ShowMessage("提取成功！", MessageType.SUCCESS);
+                        Close();
+                    }
+                    else { MessageWindow.ShowMessage("提取失敗！", MessageType.ERROR); }
                 }
             }
         }
+        }
     }
-}
+
