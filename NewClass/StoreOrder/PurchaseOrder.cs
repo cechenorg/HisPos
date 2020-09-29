@@ -192,9 +192,9 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         public override int GetOrderProductsIsOTC() {
-
-            OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
-            int type = OrderProducts[0].Type;
+            PurchaseProducts purchaseProductsOTC = new PurchaseProducts();
+            purchaseProductsOTC = PurchaseProducts.GetProductsByStoreOrderID(ID);
+            int type = purchaseProductsOTC[0].Type;
             return type;
         }
 

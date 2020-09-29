@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
@@ -19,6 +20,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public DateTime? ValidDate { get; set; }
         public double Price { get; set; }
         public double Inventory { get; set; }
+
+        public int TypeOTC { get; set; }
         public double ReturnStockValue
         {
             get { return returnStockValue; }
@@ -41,6 +44,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public ReturnProductInventoryDetail(DataRow row)
         {
+            TypeOTC = row.Field<int>("Pro_TypeID");
             ID = row.Field<int>("InvDet_ID");
             BatchNumber = row.Field<string>("InvDet_BatchNumber");
             ValidDate = row.Field<DateTime?>("InvDet_ValidDate");

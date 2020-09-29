@@ -40,7 +40,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public int SafeAmount { get; set; }
         public string BatchNumber { get; set; }
         public string Note { get; set; }
-        public int Type { get; set; }
+        public int type;
+        public int TypeOTC
+        {
+            get { return type; }
+            set { Set(() => TypeOTC, ref type, value); }
+        }
         public double ReturnStockValue
         {
             get { return returnStockValue; }
@@ -113,6 +118,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public ReturnProduct(DataRow row) : base(row)
         {
+            TypeOTC = row.Field<int>("Pro_TypeID");
             WareHouseID = row.Field<int>("ProInv_WareHouseID");
             InvID = row.Field<int>("Inv_ID");
             Inventory = row.Field<double>("Inv_Inventory");
@@ -125,8 +131,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             BatchNumber = row.Field<string>("StoOrdDet_BatchNumber");
             price = (double)row.Field<decimal>("StoOrdDet_Price");
             subTotal = (double)row.Field<decimal>("StoOrdDet_SubTotal");
+            
             InventoryDetailCollection.Add(new ReturnProductInventoryDetail(row));
-            Type= row.Field<int>("Pro_TypeID");
+            
         }
 
         #region ----- Define Variables -----
@@ -223,6 +230,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             RealAmount = returnProduct.RealAmount;
             Price = returnProduct.Price;
             SubTotal = returnProduct.SubTotal;
+            TypeOTC = returnProduct.TypeOTC;
 
             InventoryDetailCollection = returnProduct.InventoryDetailCollection;
         }

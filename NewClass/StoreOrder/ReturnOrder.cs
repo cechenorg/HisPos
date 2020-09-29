@@ -81,11 +81,11 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 退貨量不可大於架上量", MessageType.ERROR);
                     return false;
                 }
-                else if (product.Type == 2)
+               else if (product.TypeOTC == 2)
                 {
                     flagOTC = 1;
                 }
-                else if (product.Type != 2)
+                else if (product.TypeOTC != 2)
                 {
                     flagNotOTC = 1;
                 }
@@ -95,6 +95,7 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage($"此訂單包含藥品與OTC商品\n請分開建立退貨單！", MessageType.ERROR);
                 return false;
             }
+            
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認退貨?\n(確認後直接扣除庫存)", "", true);
 
@@ -300,8 +301,9 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override int GetOrderProductsIsOTC()
         {
-            ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
-            int type = ReturnProducts[0].Type;
+            ReturnProducts returnProductsOTC = new ReturnProducts();
+            returnProductsOTC = ReturnProducts.GetProductsByStoreOrderID(ID);
+            int type = returnProductsOTC[0].TypeOTC;
             return type;
         }
 

@@ -62,6 +62,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                     MessageWindow.ShowMessage("新增失敗 請稍後再試", Class.MessageType.ERROR);
                     return;
                 }
+                {
+                    MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
+                }
 
                 Close();
             }

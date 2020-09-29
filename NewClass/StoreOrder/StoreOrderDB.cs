@@ -518,6 +518,7 @@ namespace His_Pos.NewClass.StoreOrder
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", order.ID));
             DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetReturnInventoryDetail(order.ReturnProducts));
+
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToProcessing]", parameters);
         }
         internal static DataTable AddStoreOrderLowerThenOrderAmount(string storeOrderID, string manufactoryID, string warehouseID, PurchaseProducts orderProducts)

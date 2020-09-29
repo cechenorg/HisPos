@@ -30,6 +30,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             AssignMasterValue(masterRow, priceType);
             detail = detailTable;
             ProductDataGrid.ItemsSource = detail.DefaultView;
+            var Price = new List<DataGridTextColumn>();
+            NewFunction.FindChildGroup(ProductDataGrid, "Price", ref Price);
+            foreach (DataRow dr in detail.Rows)
+            {
+                int index = detail.Rows.IndexOf(dr);
+                if (GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_MemberPrice"].ToString() == dr["TraDet_Price"].ToString() || GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_RetailPrice"].ToString() == dr["TraDet_Price"].ToString())
+                {
+                    dr["Irr"] = "";
+                }
+                else {
+                    dr["Irr"] = "Yes";
+                }
+            }
         }
 
         private void GetEmployeeList()
@@ -218,7 +231,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 CashierList[index].SelectedValue= dr["TraDet_RewardPersonnel"];
             }
         }
-
+        private DataTable GetPriceList(string id)
+        {
+            int war = 0;
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SEARCH_STRING", id));
+            parameters.Add(new SqlParameter("WAREHOUSE_ID", war));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[SearchProductPriceByID]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            return result;
+        }
         private void tb_TextChanged(object sender, TextChangedEventArgs e)
         {
             btnSubmit.IsEnabled = true;

@@ -6,8 +6,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 {
     public class ReturnProducts : ObservableCollection<ReturnProduct>, ICloneable
     {
-        private ReturnProducts() { }
-        private ReturnProducts(DataTable dataTable)
+        public ReturnProducts() { }
+        public ReturnProducts(DataTable dataTable)
         {
             ReturnProduct tempProduct = null;
             short tempID = 0;
