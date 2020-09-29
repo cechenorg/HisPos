@@ -34,8 +34,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             NewFunction.FindChildGroup(ProductDataGrid, "Price", ref Price);
             foreach (DataRow dr in detail.Rows)
             {
+                int PerPrice = Math.Abs((int)dr["TraDet_Price"]);
+
+
                 int index = detail.Rows.IndexOf(dr);
-                if (GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_MemberPrice"].ToString() == dr["TraDet_Price"].ToString() || GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_RetailPrice"].ToString() == dr["TraDet_Price"].ToString())
+                if (GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_MemberPrice"].ToString() == PerPrice.ToString() || GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_RetailPrice"].ToString() == PerPrice.ToString())
                 {
                     dr["Irr"] = "";
                 }
