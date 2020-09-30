@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO.Ports;
-using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,6 +39,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private int discountAmount = 0;
         private int realTotal = 0;
         private double totalProfit = 0;
+        private string cusID = "0";
 
         private bool isGift = false;
         private bool isReturn = false;
@@ -46,9 +47,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private static readonly Regex _regex = new Regex("^[0-9]+$");
         private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
 
-        private string cusID = "0";
-
         public Pharmacy MyPharmacy;
+
+        public static RoutedCommand CheckoutCommand = new RoutedCommand();
 
         public ProductTransactionView()
         {
@@ -57,6 +58,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
             tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+
+            CheckoutCommand.InputGestures.Add(new KeyGesture(Key.S));
+        }
+
+        private void MyCommandExecuted(object sender, ExecutedRoutedEventArgs e) 
+        {
+            MessageBox.Show("123");
         }
 
         private void GetEmployeeList()
@@ -512,7 +520,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
-
                
                 if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 {
@@ -576,7 +583,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         
         private void InvoicePrint(DataTable detail) //9.16發票
         {
-
             MyPharmacy = Pharmacy.GetCurrentPharmacy();
 
             SerialPort port = new SerialPort(Properties.Settings.Default.InvoiceComPort, 9600, Parity.None, 8, StopBits.One);
@@ -589,74 +595,81 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage(e.Message, MessageType.ERROR);
                 return;
             }
+
             byte[] strArr;
-            port.Write(Convert.ToChar(27) + "@");
-            port.Write(Convert.ToChar(27) + "z" + Convert.ToChar(1));
-            port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(4));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(MyPharmacy.Name.ToString());
+            Encoding big5 = Encoding.GetEncoding("big5");
+            char lf = Convert.ToChar(10);
+            char cr = Convert.ToChar(13);
+            char esc = Convert.ToChar(27);
+
+            port.Write(esc + "@");
+            port.Write(esc + "z" + Convert.ToChar(1));
+            port.Write(esc + "d" + Convert.ToChar(4));
+            strArr = big5.GetBytes(MyPharmacy.Name.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("地址:" + MyPharmacy.Address.ToString());
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes("地址:" + MyPharmacy.Address.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統編:" + MyPharmacy.ID.ToString());
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes("統編:" + MyPharmacy.ID.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("電話:" + MyPharmacy.Tel.ToString());
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes("電話:" + MyPharmacy.Tel.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("客編:" + cusID.ToString());
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes("客編:" + cusID.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(1));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("統一編號:" + tbTaxNum.Text.ToString());
+            port.Write("" + cr + lf);
+            port.Write(esc + "d" + Convert.ToChar(1));
+            strArr = big5.GetBytes("統一編號:" + tbTaxNum.Text.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+            port.Write("" + cr + lf);
 
             int j = detail.Rows.Count;
             int priceSum = 0;
             for (int i = 0; i < j; i++)
             {
-                strArr = System.Text.Encoding.GetEncoding("big5").GetBytes(detail.Rows[i]["TraDet_ProductID"].ToString().PadRight(13, ' ') + " *" + detail.Rows[i]["TraDet_Amount"].ToString() + "= " + detail.Rows[i]["TraDet_PriceSum"].ToString().PadLeft(4, ' ') + "TX");
+                strArr = big5.GetBytes(detail.Rows[i]["TraDet_ProductID"].ToString().PadRight(13, ' ')
+                    + " *" + detail.Rows[i]["TraDet_Amount"].ToString()
+                    + "= " + detail.Rows[i]["TraDet_PriceSum"].ToString().PadLeft(4, ' ') + "TX");
                 port.Write(strArr, 0, strArr.Length);
                 priceSum += (int)detail.Rows[i]["TraDet_PriceSum"];
-                port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
+                port.Write("" + cr + lf);
 
                 if (i != 0 && (i % 7) == 0 && i != j)
                 {
-                    strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("下頁");
+                    strArr = big5.GetBytes("下頁");
                     port.Write(strArr, 0, strArr.Length);
                     port.Write("" + Convert.ToChar(12));
-                    port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(4));
+                    port.Write(esc + "d" + Convert.ToChar(4));
                 }
             }
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("折價:            "
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes("折價:            "
                 + ("-" + discountAmount.ToString()).ToString().PadLeft(5, ' ') + "TX");
             port.Write(strArr, 0, strArr.Length);
-            port.Write(Convert.ToChar(27) + "d" + Convert.ToChar(4));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("實收金額:        $"
+            port.Write(esc + "d" + Convert.ToChar(4));
+            strArr = big5.GetBytes("實收金額:        $"
                 + tbPaid.Text.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("應找金額:        $"
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes("應找金額:        $"
                 + lblChange.Content.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            strArr = System.Text.Encoding.GetEncoding("big5").GetBytes("合計:            $"
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes("合計:            $"
                 + realTotal.ToString());
             port.Write(strArr, 0, strArr.Length);
-            port.Write("" + Convert.ToChar(13) + Convert.ToChar(10));
-            port.Write("" + Convert.ToChar(29) + Convert.ToChar(86) + Convert.ToChar(66) + Convert.ToChar(13) + Convert.ToChar(10));
+            port.Write("" + cr + lf);
+            port.Write("" + Convert.ToChar(29) + Convert.ToChar(86) + Convert.ToChar(66) + cr + lf);
             port.Close();
         }
         
         private void DepositInsert() //9.24寄庫
         {
-
             foreach (DataRow dr in ProductList.Rows)
             {
                 if ((int)dr["Deposit"] != 0)
@@ -863,7 +876,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     AppliedPrice = "Pro_RetailPrice";
                     break;
             }
-
             SetPrice();
             CalculateTotal("AMT");
         }
