@@ -964,6 +964,45 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
+        private void btnReturn_Click(object sender, RoutedEventArgs e)
+        {
+            ClearCustomerView();
+            if (isReturn)
+            {
+                isReturn = false;
+
+                tbPaid.IsEnabled = true;
+                tbCash.IsEnabled = true;
+                tbCard.IsEnabled = true;
+                tbVoucher.IsEnabled = true;
+                tbCardNum.IsEnabled = true;
+                tbTaxNum.IsEnabled = true;
+                tbDiscountAmt.IsEnabled = true;
+                tbDiscountPer.IsEnabled = true;
+                btnGift.IsEnabled = true;
+
+                btnCheckout.Content = "結帳";
+                btnCheckout.Background = Brushes.RoyalBlue;
+            }
+            else
+            {
+                isReturn = true;
+
+                tbPaid.IsEnabled = false;
+                tbCash.IsEnabled = false;
+                tbCard.IsEnabled = false;
+                tbVoucher.IsEnabled = false;
+                tbCardNum.IsEnabled = false;
+                tbTaxNum.IsEnabled = false;
+                tbDiscountAmt.IsEnabled = false;
+                tbDiscountPer.IsEnabled = false;
+                btnGift.IsEnabled = false;
+
+                btnCheckout.Content = "退貨";
+                btnCheckout.Background = Brushes.IndianRed;
+            }
+        }
+
         #endregion
 
         private void btnGift_Click(object sender, RoutedEventArgs e)
@@ -1107,15 +1146,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
-        {
-            var newCustomerWindow = new AddCustomerWindow();
-
-            //AddNewCustomerWindow acw = new AddNewCustomerWindow();
-            //acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
-            //acw.ShowDialog();
-        }
-
         private void acw_RaiseCustomEvent(object sender, CustomEventArgs e)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -1132,11 +1162,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 FillInCustomerData(result);
             }
-        }
-
-        private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
-        {
-            ClearCustomerView();
         }
 
         private void tbSearch_KeyDown(object sender, KeyEventArgs e)
@@ -1179,7 +1204,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        #endregion
+        private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            var newCustomerWindow = new AddCustomerWindow();
+            //AddNewCustomerWindow acw = new AddNewCustomerWindow();
+            //acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
+            //acw.ShowDialog();
+        }
+
+        private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            ClearCustomerView();
+        }
 
         private void btnDepositManage_Click(object sender, RoutedEventArgs e)
         {
@@ -1187,42 +1223,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             cdmv.ShowDialog();
         }
 
-        private void btnReturn_Click(object sender, RoutedEventArgs e)
-        {
-            if (isReturn)
-            {
-                isReturn = false;
+        #endregion
 
-                tbPaid.IsEnabled = true;
-                tbCash.IsEnabled = true;
-                tbCard.IsEnabled = true;
-                tbVoucher.IsEnabled = true;
-                tbCardNum.IsEnabled = true;
-                tbTaxNum.IsEnabled = true;
-                tbDiscountAmt.IsEnabled = true;
-                tbDiscountPer.IsEnabled = true;
-                btnGift.IsEnabled = true;
-
-                btnCheckout.Content = "結帳";
-                btnCheckout.Background = Brushes.RoyalBlue;
-            }
-            else
-            {
-                isReturn = true;
-
-                tbPaid.IsEnabled = false;
-                tbCash.IsEnabled = false;
-                tbCard.IsEnabled = false;
-                tbVoucher.IsEnabled = false;
-                tbCardNum.IsEnabled = false;
-                tbTaxNum.IsEnabled = false;
-                tbDiscountAmt.IsEnabled = false;
-                tbDiscountPer.IsEnabled = false;
-                btnGift.IsEnabled = false;
-
-                btnCheckout.Content = "退貨";
-                btnCheckout.Background = Brushes.IndianRed;
-            }
-        }
     }
 }
