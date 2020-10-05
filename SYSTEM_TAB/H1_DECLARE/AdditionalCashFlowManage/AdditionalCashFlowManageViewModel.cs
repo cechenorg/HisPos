@@ -163,6 +163,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             MainWindow.ServerConnection.OpenConnection();
             CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue);
             MainWindow.ServerConnection.CloseConnection();
+            SearchAction();
         }
 
         private void DateMouseDoubleClickAction(MaskedTextBox sender)

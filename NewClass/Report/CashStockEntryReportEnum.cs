@@ -11,7 +11,9 @@ namespace His_Pos.NewClass.Report
         Cash = 0,
         Prescription = 1,
         StockTaking = 2,
-        TradeProfit = 3
+        TradeProfit = 3,
+        ExtraMoney = 4,
+        OTCStockTaking = 5
     }
 }
  

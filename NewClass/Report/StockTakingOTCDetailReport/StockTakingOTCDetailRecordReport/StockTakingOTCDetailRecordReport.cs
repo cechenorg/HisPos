@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport
+namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingOTCDetailRecordReport
 {
-    public class StockTakingDetailRecordReport : ObservableObject
+    public class StockTakingOTCDetailRecordReport : ObservableObject
     {
-        public StockTakingDetailRecordReport(DataRow r) {
+        public StockTakingOTCDetailRecordReport(DataRow r) {
             MasterID = r.Field<string>("StoTakDet_MasterID");
             OldValue = r.Field<double>("StoTakDet_OldValue");
             NewValue = r.Field<double>("StoTakDet_NewValue");

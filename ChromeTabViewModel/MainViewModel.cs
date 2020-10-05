@@ -266,7 +266,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.額外收入登錄):
-                    newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[10].Functions[0], Icon = MainWindow.HisFeatures[10].Icon };
                     break;
 
                 //銷售作業

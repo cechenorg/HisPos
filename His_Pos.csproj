@@ -585,6 +585,21 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProduct.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProducts.cs" />
+    <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailRecordReport\ExtraMoneyDetailRecordReport.cs" />
+    <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailRecordReport\ExtraMoneyDetailRecordReportDb.cs" />
+    <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailRecordReport\ExtraMoneyDetailRecordReports.cs" />
+    <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReport.cs" />
+    <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReportDb.cs" />
+    <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReports.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReport.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReportDb.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReports.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailReport.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailReportDb.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailReports.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCReport\StockTakingOTCReport.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCReport\StockTakingOTCReportDb.cs" />
+    <Compile Include="NewClass\Report\StockTakingOTCReport\StockTakingOTCReports.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReportDb.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReports.cs" />
@@ -1210,6 +1225,12 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\CashStockEntryReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\CashDetailControl.xaml.cs">
       <DependentUpon>CashDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\ExtraMoneyDetailControl.xaml.cs">
+      <DependentUpon>ExtraMoneyDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\StockTakingOTCDetailControl.xaml.cs">
+      <DependentUpon>StockTakingOTCDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\TradeProfitDetailControl.xaml.cs">
       <DependentUpon>TradeProfitDetailControl.xaml</DependentUpon>
@@ -2053,6 +2074,14 @@
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\CashDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\ExtraMoneyDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\StockTakingOTCDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\TradeProfitDetailControl.xaml">
       <Generator>MSBuild:Compile</Generator>

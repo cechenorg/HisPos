@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.Class;
 using His_Pos.Class.Location;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.ProductLocation;
@@ -15,8 +22,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     /// <summary>
     /// LocationManageView.xaml 的互動邏輯
     /// </summary>
-    public partial class LocationManageView : UserControl
+    public partial class LocationManageView : System.Windows.Controls.UserControl
     {
+        DataTable master;
+
+        DataTable detail;
+
+        StreamReader streamToPrint;
+        private Font printFont;
+        static string filePath;
+
         public LocationManageView()
         {
             InitializeComponent();
@@ -50,7 +65,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             MainWindow.ServerConnection.OpenConnection();
             DataTable dataTable = ProductLocationDB.GetProductLocationMasters();
             MainWindow.ServerConnection.CloseConnection();
-            
+            master = dataTable;
             ProductLocationDataGrid.ItemsSource = dataTable.DefaultView;
         }
         private void InitLocationLoad()
@@ -58,7 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             MainWindow.ServerConnection.OpenConnection();
             DataTable dataTable = ProductLocationDB.GetProductLocationMasters();
             MainWindow.ServerConnection.CloseConnection();
-
+            master = dataTable;
             ProductLocationDataGrid.ItemsSource = dataTable.DefaultView;
             ProductLocationDataGrid.SelectedIndex = 0;
         }
@@ -73,7 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 MainWindow.ServerConnection.OpenConnection();
                 DataTable dataTable = ProductLocationDB.GetProductLocationDetails((int)ProductLocationDataGrid.SelectedValue);
                 MainWindow.ServerConnection.CloseConnection();
-
+                detail = dataTable;
                 ProductLocationDetailDataGrid.ItemsSource = dataTable.DefaultView;
             }
            
@@ -85,6 +100,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             
             InitLocationDetail();
             InsertButton.Visibility = Visibility.Visible;
+            PrintButton.Visibility = Visibility.Visible;
 
 
         }
@@ -96,7 +112,64 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             InitLocationDetail();
         }
 
+        private void PrintButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (master.DefaultView is null) return;
+            if (detail.DefaultView is null) return;
 
+
+            Process myProcess = new Process();
+
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "儲位管理";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
+            fdlg.Filter = "Csv檔案|*.csv";
+            fdlg.FileName = master.Rows[0]["ProLoc_Name"].ToString() + "儲位管理";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
+                Properties.Settings.Default.Save();
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine(master.Rows[0]["ProLoc_Name"].ToString() + "儲位管理");
+                        file.WriteLine("商品代碼,品名,庫存,盤點量");
+                        foreach (DataRow c in detail.Rows)
+                        {
+
+                            
+                            file.WriteLine($"\t{c["Pro_ID"]},{c["Pro_ChineseName"]},{c["Inv_Inventory"]},");
+                        }
+                        
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出Excel 開始列印", MessageType.SUCCESS);
+                   
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+
+                try
+                {
+                    myProcess.StartInfo.UseShellExecute = true;
+                    myProcess.StartInfo.FileName = (fdlg.InitialDirectory);
+                    myProcess.StartInfo.CreateNoWindow = true;
+                    myProcess.StartInfo.Verb = "print";
+                    myProcess.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+               
+            }
+        }
         /*public static LocationManageView Instance;
         public LocationControl selectItem;
         public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();

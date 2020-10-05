@@ -69,7 +69,7 @@ namespace His_Pos
         private void FeatureFactory()
         {
             HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", StringRes.hisPrescription,
-                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.DeclareFileExport,StringRes.AdditionalCashFlowManage }));
+                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.DeclareFileExport }));
 
             HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.Transaction,
                             new[] { StringRes.ProductTransaction, StringRes.ProductTransactionRecord, StringRes.Activity }));
@@ -95,8 +95,10 @@ namespace His_Pos
                             new[] { StringRes.AdminManage }));
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.SystemTutorial,
                             new[] { StringRes.SystemTutorial }));
-            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
-                            new[] { StringRes.CompanyWeb }));
+            /*HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
+                            new[] { StringRes.CompanyWeb }));*/
+            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.AdditionalCashFlowManage,
+                         new[] { StringRes.AdditionalCashFlowManage }));
         }
         
         private void InitializeMenu()

@@ -7,19 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport
+namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingOTCDetailRecordReport
 {
-    public class StockTakingDetailRecordReports: ObservableCollection<StockTakingDetailRecordReport>
+    public class StockTakingOTCDetailRecordReports : ObservableCollection<StockTakingOTCDetailRecordReport>
     {
-        public StockTakingDetailRecordReports() {
+        public StockTakingOTCDetailRecordReports() {
         }
 
         public void GetDateByDate(string typeId, DateTime sDate, DateTime eDate,string type) {
-            DataTable table = StockTakingDetailRecordReportDb.GetDataByDate(typeId, sDate, eDate, type);
+            DataTable table = StockTakingOTCDetailRecordReportDb.GetDataByDate(typeId, sDate, eDate,type);
             Clear();
             foreach (DataRow r in table.Rows)
             {
-                Add(new StockTakingDetailRecordReport(r));
+                Add(new StockTakingOTCDetailRecordReport(r));
             }
         }
     }

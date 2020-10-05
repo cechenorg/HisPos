@@ -21,8 +21,14 @@
         <DataTemplate x:Key="StockTakingDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
             <entryDetailControl:StockTakingDetailControl/>
         </DataTemplate>
+        <DataTemplate x:Key="StockTakingOTCDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
+            <entryDetailControl:StockTakingOTCDetailControl/>
+        </DataTemplate>
         <DataTemplate x:Key="TradeProfitDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
             <entryDetailControl:TradeProfitDetailControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="ExtraMoneyDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
+            <entryDetailControl:ExtraMoneyDetailControl/>
         </DataTemplate>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
@@ -88,40 +94,51 @@
                         <StackPanel Grid.Row="0" Orientation="Horizontal"  >
                             
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                                <Label Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="處方排除合作" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                                <Label Content="處方非合作" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="處方合作" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                                <Label Content="處方合作" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="銷售毛利" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                                <Label Content="銷售毛利" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
-                            <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                                <Label Content="庫存異動" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
-                            </Border>
-                        </StackPanel>
+                                <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
+                                    <Label Content="庫存異動" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                </Border>
+                                <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                                    <Label Content="額外收支" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
+                                </Border>
+                            </StackPanel>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}"  >
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding TotalCashFlow.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                                <Label Content="{Binding TotalCashFlow.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding SelfPrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140" />
+                                <Label Content="{Binding SelfPrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117" />
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding CooperativePrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                                <Label Content="{Binding CooperativePrescriptionProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
                             <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                                <Label Content="{Binding TotalTradeProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                                <Label Content="{Binding TotalTradeProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
-                            <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                                    <Label Content="{Binding TotalStockTakingReport.Price,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{OS}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="140"/>
+                            <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
+                                    <Label Content="{Binding TotalStockTakingReport.Price,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{OS}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117"/>
                             </Border>
+                                <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                                    <Label Content="{Binding ExtraMoney,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="117" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Black">
+                                        <Label.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding ExtraMoneyReportSelectionChangedCommand}"></MouseBinding>
+                                        </Label.InputBindings>
+                                    </Label>
+                                    
+                                </Border>
 
-                        </StackPanel>
+                            </StackPanel>
 
                         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0" Background="{StaticResource GridDarkerBackGround}"  >
                             <Label Content="總計" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="100" />
@@ -143,12 +160,12 @@
                                     <MenuItem Header="匯出每日金流報表"  Command="{Binding PrintCashPerDayCommand }"/>
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding CashSelectionChangedCommand}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <DataGrid.Resources>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding CashSelectionChangedCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <DataGrid.Resources>
                                 <Style TargetType="{x:Type ScrollBar}">
                                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                                     <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -263,6 +280,10 @@
                             <RowDefinition Height="130"/>
                             <RowDefinition Height="40"/>
 
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="170"/>
+                            <RowDefinition Height="40"/>
+                            
                             <RowDefinition Height="60"/>
                             <RowDefinition Height="170"/>
                             <RowDefinition Height="40"/>
@@ -674,7 +695,7 @@
 
 
                         <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                            <Label  Content="庫存異動" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Bottom"/>
+                                <Label  Content="庫存異動(藥品)" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Bottom"/>
                         </StackPanel>
                         <DataGrid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       ItemsSource="{Binding StockTakingReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding StockTakingSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
@@ -771,8 +792,108 @@
                             <TextBlock Text="{Binding TotalStockTakingReport.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="150"/>
                             <TextBlock Text="{Binding TotalStockTakingReport.Price,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="400"/>
                         </StackPanel>
-                        
-                    </Grid>
+
+
+
+                            <StackPanel Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                                <Label  Content="庫存異動(OTC)" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Bottom"/>
+                            </StackPanel>
+                            <DataGrid Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                      ItemsSource="{Binding StockTakingOTCReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding StockTakingOTCSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeRows="False"
+                      CanUserResizeColumns="False" CanUserSortColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged" >
+                                        <i:InvokeCommandAction Command="{Binding  StockTakingOTCReportSelectionChangedCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <DataGrid.Resources>
+                                    <Style TargetType="{x:Type ScrollBar}">
+                                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                        <Setter Property="Width" Value="100"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Horizontal">
+                                                <Setter Property="Width" Value="Auto" />
+                                                <Setter Property="Height" Value="15" />
+                                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                            </Trigger>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="15"/>
+                                                <Setter Property="Height" Value="Auto" />
+                                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="{x:Type DataGridRow}">
+                                        <Style.Triggers>
+                                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="DarkGray"/>
+                                        <Setter Property="FontSize" Value="16"/>
+                                        <Setter Property="Height" Value="41"/>
+                                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    </Style>
+                                </DataGrid.RowStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="110" Header="" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding TypeName}">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                <Setter Property="FontSize" Value="20"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Width="150" Header="筆數"   FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Count}">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="FontSize" Value="20"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Width="400" Header="金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Price}">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="FontSize" Value="20"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+
+                            <StackPanel Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Margin="0,0,0,0" >
+                                <Label Content="總計" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="110"/>
+                                <TextBlock Text="{Binding TotalStockTakingOTCReport.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="150"/>
+                                <TextBlock Text="{Binding TotalStockTakingOTCReport.Price,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="400"/>
+                            </StackPanel>
+                        </Grid>
                 </Grid>
                 </StackPanel>
             </ScrollViewer>
@@ -787,8 +908,14 @@
                             <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="StockTaking">
                                 <Setter Property="ContentTemplate" Value="{StaticResource StockTakingDetailControl}" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="OTCStockTaking">
+                                <Setter Property="ContentTemplate" Value="{StaticResource StockTakingOTCDetailControl}" />
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="TradeProfit">
                                 <Setter Property="ContentTemplate" Value="{StaticResource TradeProfitDetailControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="ExtraMoney">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ExtraMoneyDetailControl}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

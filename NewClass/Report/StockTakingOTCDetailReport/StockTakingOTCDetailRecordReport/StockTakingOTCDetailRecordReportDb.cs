@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport
+namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingOTCDetailRecordReport
 {
-    public static class StockTakingDetailRecordReportDb
+    public static class StockTakingOTCDetailRecordReportDb
     {
         public static DataTable GetDataByDate(string Id, DateTime sDate, DateTime eDate,string type)
         {
