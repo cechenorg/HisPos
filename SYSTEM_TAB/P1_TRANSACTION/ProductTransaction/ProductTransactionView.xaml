@@ -27,6 +27,9 @@
             <customerDetailControl:CustomerDetailBase/>
         </DataTemplate>
     </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.MyCommand}" Executed="MyCommandExecuted"/>
+    </UserControl.CommandBindings>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1345" Height="850" Margin="10">
             <Grid.RowDefinitions>
