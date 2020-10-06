@@ -1296,6 +1296,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             TotalTradeProfitReport.NetIncome = TradeProfitReportCollection.Sum(c => c.NetIncome);
             TotalTradeProfitReport.Cost = TradeProfitReportCollection.Sum(c => c.Cost);
             TotalTradeProfitReport.Profit = TradeProfitReportCollection.Sum(c => c.Profit);
+            TotalTradeProfitReport.CashAmount = TradeProfitReportCollection.Sum(c => c.CashAmount);
+            TotalTradeProfitReport.CardAmount = TradeProfitReportCollection.Sum(c => c.CardAmount);
+            TotalTradeProfitReport.DiscountAmt = TradeProfitReportCollection.Sum(c => c.DiscountAmt);
         }
 
         private void CalculateTotalStockTaking()

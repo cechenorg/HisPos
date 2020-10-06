@@ -613,7 +613,7 @@
                                         </Style>
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
-                                <DataGridTextColumn Width="100" Header="筆數"   FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Count}">
+                                <DataGridTextColumn Width="50" Header="筆數"   FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Count}">
                                     <DataGridTextColumn.HeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
                                             <Setter Property="FontWeight" Value="Bold"/>
@@ -631,7 +631,7 @@
                                             </Style>
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
-                                <DataGridTextColumn Width="150" Header="實收金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding NetIncome}">
+                                    <DataGridTextColumn Width="100" Header="現金" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CashAmount}">
                                     <DataGridTextColumn.HeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
                                             <Setter Property="FontWeight" Value="Bold"/>
@@ -648,7 +648,41 @@
                                             </Style>
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
-                                <DataGridTextColumn Width="150" Header="耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
+                                    <DataGridTextColumn Width="100" Header="刷卡" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CardAmount}">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="FontSize" Value="20"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Width="100" Header="禮券" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DiscountAmt}">
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="FontSize" Value="20"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Width="120" Header="耗用" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
                                     <DataGridTextColumn.HeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
                                             <Setter Property="FontWeight" Value="Bold"/>
@@ -665,7 +699,7 @@
                                             </Style>
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
-                                <DataGridTextColumn Width="150" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Profit}">
+                                <DataGridTextColumn Width="120" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Profit}">
                                     <DataGridTextColumn.HeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
                                             <Setter Property="FontWeight" Value="Bold"/>
@@ -686,11 +720,14 @@
                             </DataGrid>
 
                         <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Margin="0,0,0,0" >
-                            <Label Content="總計" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="110"/>
-                            <TextBlock Text="{Binding TotalTradeProfitReport.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="100"/>
-                            <TextBlock Text="{Binding TotalTradeProfitReport.NetIncome,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="150"/>
-                            <TextBlock Text="{Binding TotalTradeProfitReport.Cost,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="150"/>
-                            <TextBlock Text="{Binding TotalTradeProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="150"/>
+                                <Label Content="總計" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="110"/>
+                                <TextBlock Text="{Binding TotalTradeProfitReport.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="50"/>
+                                <TextBlock Text="{Binding TotalTradeProfitReport.CashAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="100"/>
+                                <TextBlock Text="{Binding TotalTradeProfitReport.CardAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="100"/>
+
+                                <TextBlock Text="{Binding TotalTradeProfitReport.DiscountAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="100"/>
+                                <TextBlock Text="{Binding TotalTradeProfitReport.Cost,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="120"/>
+                                <TextBlock Text="{Binding TotalTradeProfitReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" TextAlignment="Center" Width="120"/>
                         </StackPanel>
 
 

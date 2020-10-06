@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClosedXML.Excel;
 using His_Pos.Class;
 using His_Pos.Class.Location;
 using His_Pos.FunctionWindow;
@@ -25,12 +26,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     public partial class LocationManageView : System.Windows.Controls.UserControl
     {
         DataTable master;
-
         DataTable detail;
-
-        StreamReader streamToPrint;
-        private Font printFont;
-        static string filePath;
 
         public LocationManageView()
         {
@@ -79,12 +75,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         }
         private void InitLocationDetail()
         {
-
             if (ProductLocationDataGrid.SelectedValue == null)
             {
                 return;
             }
             else {
+                
                 MainWindow.ServerConnection.OpenConnection();
                 DataTable dataTable = ProductLocationDB.GetProductLocationDetails((int)ProductLocationDataGrid.SelectedValue);
                 MainWindow.ServerConnection.CloseConnection();
@@ -97,12 +93,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
         private void ProductLocationDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            
             InitLocationDetail();
             InsertButton.Visibility = Visibility.Visible;
             PrintButton.Visibility = Visibility.Visible;
-
-
         }
 
         private void InsertButton_Click(object sender, RoutedEventArgs e)
@@ -117,8 +110,62 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             if (master.DefaultView is null) return;
             if (detail.DefaultView is null) return;
 
+            DataRowView row = (DataRowView)ProductLocationDataGrid.SelectedItem;
 
             Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "儲位管理";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName = row["ProLoc_Name"].ToString() + "儲位管理";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+           
+                var ws = wb.Worksheets.Add(row["ProLoc_Name"].ToString() + "儲位管理");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                var col1 = ws.Column("A");
+                col1.Width = 25;
+                var col2 = ws.Column("B");
+                col2.Width = 40;
+                var col3 = ws.Column("C");
+                col3.Width = 10;
+                var col4 = ws.Column("D");
+                col4.Width = 10;
+
+                ws.Cell(1, 1).Value = "櫃位名稱："+row["ProLoc_Name"].ToString();
+                ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "商品代碼";
+                ws.Cell("B2").Value = "商品名稱";
+                ws.Cell("C2").Value = "庫存數量";
+                ws.Cell("D2").Value = "盤點數量";
+                var rangeWithData = ws.Cell(3, 1).InsertData(detail.AsEnumerable());
+
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                wb.SaveAs(fdlg.FileName);
+            }
+            try
+            {
+                myProcess.StartInfo.UseShellExecute = true;
+                myProcess.StartInfo.FileName = (fdlg.FileName);
+                myProcess.StartInfo.CreateNoWindow = true;
+                myProcess.StartInfo.Verb = "print";
+                myProcess.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
+            /*Process myProcess = new Process();
 
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "儲位管理";
@@ -166,9 +213,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 catch (Exception ex)
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                }
-               
-            }
+                }*/
+
+        }
         }
         /*public static LocationManageView Instance;
         public LocationControl selectItem;
@@ -294,5 +341,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             ItemChangeWindow itemChangeWindow = new ItemChangeWindow("Location");
             itemChangeWindow.ShowDialog();
         }*/
-    }
+    
 }
+

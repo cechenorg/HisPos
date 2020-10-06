@@ -203,7 +203,7 @@
             </Grid.RowDefinitions>
             <DataGrid  Name="ProductLocationDataGrid" Grid.Column="0" Grid.Row="0" HeadersVisibility="None" Background="{StaticResource GridDarkerBackGround}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
                       CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"   IsSynchronizedWithCurrentItem="False" 
-                       SelectedValuePath="ProLoc_ID" SelectedCellsChanged="ProductLocationDataGrid_SelectedCellsChanged">
+                       SelectedValuePath="ProLoc_ID"  SelectedCellsChanged="ProductLocationDataGrid_SelectedCellsChanged">
                  <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>

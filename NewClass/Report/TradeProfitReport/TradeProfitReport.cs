@@ -20,6 +20,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             NetIncome = r.Field<int>("NetIncome");
             Cost = r.Field<int>("Cost");
             Profit = r.Field<int>("Profit");
+            CashAmount = r.Field<int>("CashAmount");
+            CardAmount = r.Field<int>("CardAmount");
+            DiscountAmt = r.Field<int>("DiscountAmt");
         }
         private string typeId;
         public string TypeId {
@@ -78,6 +81,36 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => Profit, ref profit, value);
             }
         }
+        private int cashAmount;
+        public int CashAmount
+        {
+            get => cashAmount;
+            set
+            {
+                Set(() => CashAmount, ref cashAmount, value);
+            }
+        }
+
+        private int cardAmount;
+        public int CardAmount
+        {
+            get => cardAmount;
+            set
+            {
+                Set(() => CardAmount, ref cardAmount, value);
+            }
+        }
+
+        private int discountAmt;
+        public int DiscountAmt
+        {
+            get => discountAmt;
+            set
+            {
+                Set(() => DiscountAmt, ref discountAmt, value);
+            }
+        }
+
 
         public void CountEditPoint(DataRow editDataRow)
         {

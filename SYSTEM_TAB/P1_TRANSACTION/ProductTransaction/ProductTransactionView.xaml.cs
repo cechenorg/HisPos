@@ -69,7 +69,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
-            tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+            if (Properties.Settings.Default.InvoiceCheck == "1")
+            {
+                tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+            }
+            else {
+                tbInvoiceNum.Content = "";
+            }
         }
 
         /*private void PaidAmountCommandExecuted(object sender, ExecutedRoutedEventArgs e) 
@@ -184,13 +190,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             // 9.14欠OTC採購
             var notEnoughMedicines = new NotEnoughMedicines();
+            DataTable check = CheckOTCFromSingde();
             foreach (DataRow dr in ProductList.Rows)
             {
                 var amount = dr["Amount"].ToString();
                 var inventory = dr["Inv_Inventory"].ToString();
                 if (int.Parse(amount) > int.Parse(inventory))
                 {
-                    if (CheckOTCFromSingde(dr["Pro_ID"].ToString()).Rows.Count!=0) {
+                    var foundRow = check.Select("OTC_Code= '"+dr["Pro_ID"].ToString()+"'");
+                    var foundRowBar = check.Select("OTC_Barcode= '"+dr["Pro_ID"].ToString()+"'");
+                    if (foundRow.Length> 0 || foundRowBar.Length>0) {
                         int buckle;
                         if (int.Parse(inventory) <= 0)
                         {
@@ -245,12 +254,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }, DispatcherPriority.ApplicationIdle);
         }
 
-        private DataTable CheckOTCFromSingde(string id)
+        private DataTable CheckOTCFromSingde()
         {
             MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", id));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CheckOTCFromSingde]", parameters);
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CheckOTCFromSingde]");
             MainWindow.ServerConnection.CloseConnection();
             return result;
         }
