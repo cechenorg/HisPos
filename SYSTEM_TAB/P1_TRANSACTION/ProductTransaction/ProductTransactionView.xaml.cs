@@ -49,7 +49,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         public Pharmacy MyPharmacy;
 
-        public static RoutedCommand CheckoutCommand = new RoutedCommand();
+        /*public static RoutedCommand CheckoutCommand = new RoutedCommand();
         public static RoutedCommand PaidAmountCommand = new RoutedCommand();
         public static RoutedCommand CashierCommand = new RoutedCommand();
         public static RoutedCommand CashAmountCommand = new RoutedCommand();
@@ -61,7 +61,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public static RoutedCommand GiftCommand = new RoutedCommand();
         public static RoutedCommand ReturnCommand = new RoutedCommand();
         public static RoutedCommand CustomerCommand = new RoutedCommand();
-        public static RoutedCommand FocusLastRowCommand = new RoutedCommand();
+        public static RoutedCommand FocusLastRowCommand = new RoutedCommand();*/
 
         public ProductTransactionView()
         {
@@ -72,11 +72,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
         }
 
-        private void PaidAmountCommandExecuted(object sender, ExecutedRoutedEventArgs e) 
+        /*private void PaidAmountCommandExecuted(object sender, ExecutedRoutedEventArgs e) 
         {
 
         }
-
         private void CashierCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
 
@@ -112,7 +111,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void FocusLastRowCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             FocusLastRow();
-        }
+        }*/
 
         private void GetEmployeeList()
         {
@@ -786,6 +785,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
+        private async void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            int index = GetRowIndex(e);
+            if (index < ProductList.Rows.Count)
+            {
+                string proID = ProductList.Rows[index]["Pro_ID"].ToString();
+                ProductDetailWindow.ShowProductDetailWindow();
+                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
+                await Task.Delay(20);
+                ProductDetailWindow.ActivateProductDetailWindow();
+            }
+        }
+
         #endregion
 
         #region Amount
@@ -813,6 +825,25 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
             CalculateTotal("AMT");
+        }
+
+        private void next_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int index = GetRowIndex(e);
+            if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
+
+            int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
+            int stock = int.Parse(ProductList.Rows[index]["Inv_Inventory"].ToString());
+            ProductList.Rows[index]["Amount"] = original + 1;
+        }
+
+        private void back_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int index = GetRowIndex(e);
+            if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
+
+            int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
+            if (original > 0) { ProductList.Rows[index]["Amount"] = original - 1; }
         }
 
         #endregion
@@ -899,73 +930,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         #endregion
 
-        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            int index = GetRowIndex(e);
-            if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count)
-            {
-                ProductList.Rows.Remove(ProductList.Rows[index]);
-            }
-            CalculateTotal("AMT");
-        }
-
-        private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch (PriceCombo.SelectedIndex)
-            {
-                case 0:
-                    AppliedPrice = "Pro_RetailPrice";
-                    break;
-                case 1:
-                    AppliedPrice = "Pro_MemberPrice";
-                    break;
-                case 2:
-                    AppliedPrice = "Pro_EmployeePrice";
-                    break;
-                case 3:
-                    AppliedPrice = "Pro_SpecialPrice";
-                    break;
-                default:
-                    AppliedPrice = "Pro_RetailPrice";
-                    break;
-            }
-            SetPrice();
-            CalculateTotal("AMT");
-        }
-
-        private void next_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            int index = GetRowIndex(e);
-            if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
-
-            int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
-            int stock = int.Parse(ProductList.Rows[index]["Inv_Inventory"].ToString());
-            ProductList.Rows[index]["Amount"] = original + 1;
-        }
-
-        private void back_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            int index = GetRowIndex(e);
-            if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
-
-            int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
-            if (original > 0) { ProductList.Rows[index]["Amount"] = original - 1; }
-        }
-
-        private void tbPaid_LostFocus(object sender, RoutedEventArgs e)
-        {
-            CalculateChange();
-        }
-
-        private void tbPaid_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                CalculateChange();
-                tbCash.Text = realTotal.ToString();
-                tbCash.Focus();
-            }
-        }
+        #region Buttons
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
@@ -989,11 +954,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (cbCashier.SelectedItem == null)
             {
                 MessageWindow.ShowMessage("尚未選擇結帳人員！", MessageType.ERROR);
+                cbCashier.Focus();
+                cbCashier.IsDropDownOpen = true;
                 return;
             }
             if (ProductList.Rows.Count == 0)
             {
                 MessageWindow.ShowMessage("尚未新增商品項目！", MessageType.ERROR);
+                FocusLastRow();
                 return;
             }
 
@@ -1009,19 +977,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     return;
                 }
                 CheckoutSubmit();
-            }
-        }
-
-        private async void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            int index = GetRowIndex(e);
-            if (index < ProductList.Rows.Count)
-            {
-                string proID = ProductList.Rows[index]["Pro_ID"].ToString();
-                ProductDetailWindow.ShowProductDetailWindow();
-                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
-                await Task.Delay(20);
-                ProductDetailWindow.ActivateProductDetailWindow();
             }
         }
 
@@ -1064,8 +1019,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        #endregion
-
         private void btnGift_Click(object sender, RoutedEventArgs e)
         {
             isGift = true;
@@ -1079,6 +1032,59 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     ref ProductIDList);
                 ProductIDList[ProductIDList.Count - 1].Focus();
             }, DispatcherPriority.ApplicationIdle);
+        }
+
+        #endregion
+
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int index = GetRowIndex(e);
+            if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count)
+            {
+                ProductList.Rows.Remove(ProductList.Rows[index]);
+            }
+            CalculateTotal("AMT");
+        }
+
+        private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (PriceCombo.SelectedIndex)
+            {
+                case 0:
+                    AppliedPrice = "Pro_RetailPrice";
+                    break;
+                case 1:
+                    AppliedPrice = "Pro_MemberPrice";
+                    break;
+                case 2:
+                    AppliedPrice = "Pro_EmployeePrice";
+                    break;
+                case 3:
+                    AppliedPrice = "Pro_SpecialPrice";
+                    break;
+                default:
+                    AppliedPrice = "Pro_RetailPrice";
+                    break;
+            }
+            SetPrice();
+            CalculateTotal("AMT");
+        }
+
+        
+
+        private void tbPaid_LostFocus(object sender, RoutedEventArgs e)
+        {
+            CalculateChange();
+        }
+
+        private void tbPaid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                CalculateChange();
+                tbCash.Text = realTotal.ToString();
+                tbCash.Focus();
+            }
         }
 
         private void tbCash_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1142,6 +1148,42 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
 
         }
+
+        private void tbCash_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbCard.Focus(); }
+        }
+
+        private void tbCard_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbVoucher.Focus(); }
+        }
+
+        private void tbVoucher_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbCardNum.Focus(); }
+        }
+
+        private void tbCardNum_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbTaxNum.Focus(); }
+        }
+
+        private void tbTaxNum_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                cbCashier.Focus();
+                cbCashier.IsDropDownOpen = true;
+            }
+        }
+
+        private void cbCashier_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { btnCheckout.Focus(); }
+        }
+
+        #endregion
 
         #region CustomerControl
 
@@ -1285,39 +1327,5 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
 
         #endregion
-
-        private void tbCash_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) { tbCard.Focus(); }
-        }
-
-        private void tbCard_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) { tbVoucher.Focus(); }
-        }
-
-        private void tbVoucher_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) { tbCardNum.Focus(); }
-        }
-
-        private void tbCardNum_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) { tbTaxNum.Focus(); }
-        }
-
-        private void tbTaxNum_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) 
-            {
-                cbCashier.Focus();
-                cbCashier.IsDropDownOpen = true;
-            }
-        }
-
-        private void cbCashier_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) { btnCheckout.Focus(); }
-        }
     }
 }
