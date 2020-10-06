@@ -50,6 +50,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public Pharmacy MyPharmacy;
 
         public static RoutedCommand CheckoutCommand = new RoutedCommand();
+        public static RoutedCommand PaidAmountCommand = new RoutedCommand();
+        public static RoutedCommand CashierCommand = new RoutedCommand();
+        public static RoutedCommand CashAmountCommand = new RoutedCommand();
+        public static RoutedCommand CardAmountCommand = new RoutedCommand();
+        public static RoutedCommand VoucherAmountCommand = new RoutedCommand();
+        public static RoutedCommand CardNumberCommand = new RoutedCommand();
+        public static RoutedCommand TaxNumberCommand = new RoutedCommand();
+        public static RoutedCommand DiscountCommand = new RoutedCommand();
+        public static RoutedCommand GiftCommand = new RoutedCommand();
+        public static RoutedCommand ReturnCommand = new RoutedCommand();
+        public static RoutedCommand CustomerCommand = new RoutedCommand();
+        public static RoutedCommand FocusLastRowCommand = new RoutedCommand();
 
         public ProductTransactionView()
         {
@@ -58,13 +70,48 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
             tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
-
-            CheckoutCommand.InputGestures.Add(new KeyGesture(Key.S));
         }
 
-        private void MyCommandExecuted(object sender, ExecutedRoutedEventArgs e) 
+        private void PaidAmountCommandExecuted(object sender, ExecutedRoutedEventArgs e) 
         {
-            MessageBox.Show("123");
+
+        }
+
+        private void CashierCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        private void CashAmountCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        private void CardAmountCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        private void VoucherAmountCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        private void CardNumberCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        private void TaxNumberCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        private void DiscountCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        private void CustomerCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+        private void FocusLastRowCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            FocusLastRow();
         }
 
         private void GetEmployeeList()
@@ -188,6 +235,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
+        private void FocusLastRow()
+        {
+            Dispatcher.InvokeAsync(() =>
+            {
+                var ProductIDList = new List<TextBox>();
+                NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
+                    ref ProductIDList);
+                ProductIDList[ProductIDList.Count - 1].Focus();
+            }, DispatcherPriority.ApplicationIdle);
+        }
+
         private DataTable CheckOTCFromSingde(string id)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -195,9 +253,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             parameters.Add(new SqlParameter("ID", id));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CheckOTCFromSingde]", parameters);
             MainWindow.ServerConnection.CloseConnection();
-
             return result;
         }
+
         private void AddProductByInputAction(string searchString, int rowIndex)
         {
             if (string.IsNullOrEmpty(searchString)) return;
@@ -214,9 +272,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
             }
-
-            // 相同商品疊加
-            foreach (DataRow dr in ProductList.Rows)
+            
+            foreach (DataRow dr in ProductList.Rows) // 相同商品疊加
             {
                 if (dr["Pro_ID"].ToString() == searchString && isGift == false)
                 {
@@ -249,9 +306,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("WAREHOUSE_ID", WareID));
                     DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[SearchProductsByID]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
-
-                    // Add Columns
-                    if (ProductList.Rows.Count == 0)
+                    
+                    if (ProductList.Rows.Count == 0) // Add Columns
                     {
                         ProductList = result.Clone();
 
@@ -319,16 +375,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         ProductDataGrid.ItemsSource = ProductList.DefaultView;
                     }
 
-                    // Focus Next Row
-                    Dispatcher.InvokeAsync(() =>
-                    {
-                        var ProductIDList = new List<TextBox>();
-                        NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
-                            ref ProductIDList);
-                        ProductIDList[ProductIDList.Count - 1].Focus();
-                    }, DispatcherPriority.ApplicationIdle);
-
+                    FocusLastRow();
                     SetPrice();
+
                     if (isGift)
                     {
                         ProductList.Rows[rowIndex]["CurrentPrice"] = 0;
@@ -336,6 +385,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         isGift = false;
                         btnGift.IsEnabled = true;
                     }
+
                     CalculateTotal("AMT");
                 }
                 else { MessageWindow.ShowMessage("查無此商品", MessageType.WARNING); }
@@ -699,19 +749,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             TextBox tb = (TextBox)sender;
             int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
-            int preCount = ProductList.Rows.Count;
 
             if (e.Key == Key.Enter)
             {
-                e.Handled = true;
-                AddProductByInputAction(tb.Text, currentRowIndex);
-                int newCount = ProductList.Rows.Count;
-                foreach (DataRow dr in ProductList.Rows)
+                if (tb.Text == "") 
                 {
-                    dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
+                    tbDiscountAmt.Focus();
                 }
-                tb.Text = "";
-                //if (currentRowIndex == ProductList.Rows.Count - 1 && newCount > preCount) { tb.Text = ""; }
+                else 
+                {
+                    AddProductByInputAction(tb.Text, currentRowIndex);
+                    foreach (DataRow dr in ProductList.Rows)
+                    {
+                        dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
+                    }
+                    tb.Text = "";
+                }
             }
         }
 
@@ -910,12 +963,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 CalculateChange();
                 tbCash.Text = realTotal.ToString();
+                tbCash.Focus();
             }
-        }
-
-        private void tbCardNum_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) { tbTaxNum.Focus(); }
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
@@ -1237,5 +1286,38 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         #endregion
 
+        private void tbCash_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbCard.Focus(); }
+        }
+
+        private void tbCard_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbVoucher.Focus(); }
+        }
+
+        private void tbVoucher_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbCardNum.Focus(); }
+        }
+
+        private void tbCardNum_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { tbTaxNum.Focus(); }
+        }
+
+        private void tbTaxNum_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) 
+            {
+                cbCashier.Focus();
+                cbCashier.IsDropDownOpen = true;
+            }
+        }
+
+        private void cbCashier_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) { btnCheckout.Focus(); }
+        }
     }
 }

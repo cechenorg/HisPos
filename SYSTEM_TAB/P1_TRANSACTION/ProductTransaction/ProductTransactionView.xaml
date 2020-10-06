@@ -28,8 +28,35 @@
         </DataTemplate>
     </UserControl.Resources>
     <UserControl.CommandBindings>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.MyCommand}" Executed="MyCommandExecuted"/>
+        <!--<CommandBinding Command="{x:Static local:ProductTransactionView.CheckoutCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.PaidAmountCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.CashierCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.CashAmountCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.CardAmountCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.VoucherAmountCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.CardNumberCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.TaxNumberCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.DiscountCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.GiftCommand}" Executed="btnGift_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.ReturnCommand}" Executed="btnReturn_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.CustomerCommand}" Executed="btnCheckout_Click"/>
+        <CommandBinding Command="{x:Static local:ProductTransactionView.FocusLastRowCommand}" Executed="FocusLastRowCommandExecuted"/>-->
     </UserControl.CommandBindings>
+    <UserControl.InputBindings>
+        <KeyBinding Command="{x:Static local:ProductTransactionView.CheckoutCommand}" Key="F5" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.PaidAmountCommand}" Key="P" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.CashierCommand}" Key="E" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.CashAmountCommand}" Key="F1" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.CardAmountCommand}" Key="F2" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.VoucherAmountCommand}" Key="F3" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.CardNumberCommand}" Key="K" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.TaxNumberCommand}" Key="T" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.DiscountCommand}" Key="D" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.GiftCommand}" Key="G" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.ReturnCommand}" Key="R" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.CustomerCommand}" Key="C" />
+        <KeyBinding Command="{x:Static local:ProductTransactionView.FocusLastRowCommand}" Key="F" />
+    </UserControl.InputBindings>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1345" Height="850" Margin="10">
             <Grid.RowDefinitions>
@@ -40,15 +67,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="400"/>
                 <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <!--<ContentControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="0,0,10,10" Content="{Binding CustomerViewModel}">
-                <ContentControl.Style>
-                    <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoCustomerControl}"/>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>-->
-            
+            </Grid.ColumnDefinitions>            
             <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="0,0,10,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
@@ -117,7 +136,6 @@
                                 </Trigger>
                             </Style.Triggers>
                             <Setter Property="Background" Value="Transparent"/>
-                            <!--<EventSetter Event="MouseDoubleClick" Handler="ShowSelectedDetailWindow"/>-->
                             <Setter Property="FontSize" Value="18"/>
                             <Setter Property="Height" Value="40"/>
                         </Style>
@@ -166,7 +184,7 @@
                     <Label Content="應收金額 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="34" Foreground="Black" Margin="10,0,0,0"/>
                     <Label x:Name="lblRealTotal" Content="0" Width="150" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="34" Foreground="Black"/>
                     <Label Content="結帳人員：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="80,0,0,0"/>
-                    <ComboBox x:Name="cbCashier" Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID"/>
+                    <ComboBox x:Name="cbCashier" Width="120" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID" KeyDown="cbCashier_KeyDown"/>
                     <Button x:Name="btnClear" Width="100" Height="40"  Content="清除" FontFamily="Segoe UI Semibold" FontSize="20" Margin="20,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClear_Click"/>
                     <Button x:Name="btnCheckout" Width="150" Height="40" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Click="btnCheckout_Click"/>
                 </StackPanel>
@@ -192,7 +210,7 @@
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                     <Label Content="付款方式：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,0"/>
                     <Label Content="現金" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbCash" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" PreviewKeyDown="tbCash_PreviewKeyDown">
+                    <TextBox x:Name="tbCash" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" PreviewKeyDown="tbCash_PreviewKeyDown" KeyDown="tbCash_KeyDown">
                         <TextBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -202,7 +220,7 @@
                         </TextBox.InputScope>
                     </TextBox>
                     <Label Content="刷卡" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbCard" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" PreviewKeyDown="tbCard_PreviewKeyDown">
+                    <TextBox x:Name="tbCard" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" PreviewKeyDown="tbCard_PreviewKeyDown" KeyDown="tbCard_KeyDown">
                         <TextBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -212,7 +230,7 @@
                         </TextBox.InputScope>
                     </TextBox>
                     <Label Content="禮券" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbVoucher" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" PreviewKeyDown="tbVoucher_PreviewKeyDown">
+                    <TextBox x:Name="tbVoucher" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" PreviewKeyDown="tbVoucher_PreviewKeyDown" KeyDown="tbVoucher_KeyDown">
                         <TextBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -234,7 +252,7 @@
                         </TextBox.InputScope>
                     </TextBox>
                     <Label Content="統編" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbTaxNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black">
+                    <TextBox x:Name="tbTaxNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" KeyDown="tbTaxNum_KeyDown">
                         <TextBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -382,7 +400,6 @@
                                     </TextBox.InputScope>
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                            <!--<EventSetter Event="MouseEnter" Handler="Price_MouseEnter"/>-->
                                             <Setter Property="ToolTip">
                                                 <Setter.Value>
                                                     <Label x:Name="ttLastPrice" Content="{Binding Path=PriceTooltip, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Width="Auto" Height="Auto" FontFamily="Courier New" FontSize="18" Foreground="WhiteSmoke" HorizontalContentAlignment="Center">
