@@ -24,10 +24,12 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label Content="姓名 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Name="CusName" Width="200" Height="35" Text="{Binding NewCustomer.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusName_OnPreviewKeyDown"/>
-            <Label Content="生日 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,10,0"/>
-            <xctk:MaskedTextBox Name="CusBirthday" Width="100" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
-                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" CaretBrush="Black" PreviewKeyDown="CusBirthday_OnPreviewKeyDown">
+            <TextBox Name="CusName" Width="110" Height="35" Text="{Binding NewCustomer.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusName_OnPreviewKeyDown"/>
+            <Label Content="姓別 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <RadioButton x:Name="rbMale" GroupName="rbgGender" Content="男" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" IsChecked="True"></RadioButton>
+            <RadioButton x:Name="rbFemale" GroupName="rbgGender" Content="女" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></RadioButton>
+            <Label Content="生日 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <xctk:MaskedTextBox Name="CusBirthday" Width="100" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" CaretBrush="Black" PreviewKeyDown="CusBirthday_OnPreviewKeyDown">
                 <xctk:MaskedTextBox.Text>
                     <Binding Path="NewCustomer.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
@@ -38,22 +40,21 @@
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
             <Label Content="身分證 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Name="CusIdNumber" Width="120" Height="35" Text="{Binding NewCustomer.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusIdNumber_OnPreviewKeyDown"
-                     InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" InputScope="AlphanumericHalfWidth"/>
+            <TextBox Name="CusIdNumber" Width="120" Height="35" Text="{Binding NewCustomer.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusIdNumber_OnPreviewKeyDown" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" InputScope="AlphanumericHalfWidth"/>
         </StackPanel>
-        <StackPanel Grid.Row="1"   Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="手機 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Name="CusCellPhone" Width="110" Height="35" Text="{Binding NewCustomer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown"/>
+            <TextBox Name="CusCellPhone" Width="110" Height="35" Text="{Binding NewCustomer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown"/>
             <Label Content="家電 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Name="CusTel" Width="110" Height="35" Text="{Binding NewCustomer.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusTel_OnPreviewKeyDown"/>
+            <TextBox Name="CusTel" Width="110" Height="35" Text="{Binding NewCustomer.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusTel_OnPreviewKeyDown"/>
             <Label Content="地址 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Name="CusAddress" Width="270" Height="35" Text="{Binding NewCustomer.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusAddress_OnPreviewKeyDown"/>
+            <TextBox Name="CusAddress" Width="300" Height="35" Text="{Binding NewCustomer.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusAddress_OnPreviewKeyDown"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label Content="LineID : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Name="CusLine" Width="275" Height="35" Text="{Binding NewCustomer.Line,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusLine_OnPreviewKeyDown"/>
+            <TextBox Name="CusLine" Width="270" Height="35" Text="{Binding NewCustomer.Line,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusLine_OnPreviewKeyDown"/>
             <Label Content="Email : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Name="CusEmail" Width="275" Height="35" Text="{Binding NewCustomer.Email,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" CaretBrush="Black" PreviewKeyDown="CusEmail_OnPreviewKeyDown"/>
+            <TextBox Name="CusEmail" Width="275" Height="35" Text="{Binding NewCustomer.Email,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusEmail_OnPreviewKeyDown"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">

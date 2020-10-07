@@ -27,12 +27,17 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         }
         public bool IsTelephone(string str_telephone)
         {
-            return Regex.IsMatch(str_telephone, @"\d{2,3}\d{3,4}\d{4}");
+            if (string.IsNullOrEmpty(str_telephone))
+                return false;
+            else
+                return Regex.IsMatch(str_telephone, @"\d{2,3}\d{3,4}\d{4}");
         }
-
         public bool IsCellphone(string str_handset)
         {
-            return Regex.IsMatch(str_handset, @"^09[0-9]{8}$");
+            if (string.IsNullOrEmpty(str_handset))
+                return false;
+            else
+                return Regex.IsMatch(str_handset, @"^09[0-9]{8}$");
         }
         #endregion
 
@@ -40,6 +45,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         public RelayCommand Submit { get; set; }
         public RelayCommand Cancel { get; set; }
         #endregion
+
         public AddCustomerWindowViewModel()
         {
             NewCustomer = new Customer();
@@ -80,12 +86,12 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             if (!string.IsNullOrEmpty(NewCustomer.CellPhone) && clearedCell.Length != 10)
                 errorString += "手機格式錯誤\r\n";*/
             if (string.IsNullOrEmpty(NewCustomer.CellPhone) && string.IsNullOrEmpty(NewCustomer.Tel))
-                errorString += "手機 / 市話 必擇一填寫！\r\n";
+                errorString += "手機 / 家電必擇一填寫！\r\n";
             else if (!IsCellphone(NewCustomer.CellPhone) && !string.IsNullOrEmpty(NewCustomer.CellPhone))
                 errorString += "手機號碼格式錯誤！\r\n";
             else if (!IsTelephone(NewCustomer.Tel) && !string.IsNullOrEmpty(NewCustomer.Tel))
                 errorString += "家電號碼格式錯誤！\r\n";
-            else if (string.IsNullOrEmpty(NewCustomer.IDNumber) || !VerifyService.VerifyIDNumber(NewCustomer.IDNumber))
+            else if (!string.IsNullOrEmpty(NewCustomer.IDNumber) && !VerifyService.VerifyIDNumber(NewCustomer.IDNumber))
                 errorString += "身分證格式錯誤\r\n";
             if (!string.IsNullOrEmpty(errorString))
                 MessageWindow.ShowMessage(errorString,MessageType.ERROR);
