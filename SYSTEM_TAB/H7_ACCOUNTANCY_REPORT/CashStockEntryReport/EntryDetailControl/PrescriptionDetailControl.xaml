@@ -20,8 +20,8 @@
             <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding AdjustCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding AdjustCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
             </ComboBox>
-            <Rectangle Width="150"/>
-            <Button Content="匯出檔案" Command="{Binding PrintPrescriptionProfitDetailCommand}" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderBrush="DarkCyan" FontSize="20"/>
+            <Rectangle Width="132"/>
+            <Button Content="匯出檔案" Command="{Binding PrintPrescriptionProfitDetailCommand}" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderBrush="DarkCyan" FontSize="20" Width="120"/>
         </StackPanel> 
         <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding PrescriptionDetailReportView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"

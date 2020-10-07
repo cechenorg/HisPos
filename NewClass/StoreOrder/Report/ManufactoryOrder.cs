@@ -96,6 +96,39 @@ namespace His_Pos.NewClass.StoreOrder.Report
                 }
             }
         }
-        #endregion
+        public void ExportToCSVTotalDetail(DateTime searchStartDate, DateTime searchEndDate, string wareID)
+        {
+            ManufactoryOrderDetails detailTotal = ManufactoryOrderDetails.GetOrderTotalDetails(searchStartDate, searchEndDate, wareID);
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "進退貨報表存檔";
+            fdlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            fdlg.Filter = "報表格式|*.csv";
+            fdlg.FileName = $"進退貨明細總報表_{searchStartDate.ToString("yyyyMMdd")}-{searchEndDate.ToString("yyyyMMdd")}";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine("廠商,訂單類型,訂單編號,結案時間,未稅金額,稅額(5%),含稅金額");
+                        foreach (var order in detailTotal)
+                        {
+                            string typeName = order.Type == OrderTypeEnum.PURCHASE ? "進貨" : "退貨";
+                            file.WriteLine($"{order.Name},{typeName},{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{order.UnTaxPrice},{order.Tax},{order.TaxPrice}");
+                        }
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            }
+            #endregion
+        }
     }
 }

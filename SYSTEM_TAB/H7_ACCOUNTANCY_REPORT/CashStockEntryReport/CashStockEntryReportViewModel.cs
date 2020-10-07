@@ -715,6 +715,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand TradeProfitDetailClickCommand { get; set; }
         public RelayCommand ExtraMoneyReportSelectionChangedCommand { get; set; }
         public RelayCommand ExtraMoneyDetailClickCommand { get; set; }
+        public RelayCommand<string> ChangeUiTypeCommand { get; set; }
 
 
         #endregion

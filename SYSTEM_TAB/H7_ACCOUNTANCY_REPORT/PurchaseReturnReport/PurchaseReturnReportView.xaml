@@ -24,8 +24,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
@@ -116,19 +117,24 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Background="{StaticResource GridBackGround}"></StackPanel>
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+        <StackPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <Button Width="120" Command="{Binding ExportCSVTotalCommand}" Margin="0,0,10,0" Content="列印匯總" Height="30" FontSize="15" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+            <Button Width="120" Command="{Binding ExportCSVDetailTotalCommand}" Margin="10,0,0,0" Content="列印總明細" Height="30" FontSize="15" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.RowSpan="3" Background="{StaticResource GridBackGround}"></StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
             <TextBlock Text="進貨單總量" FontSize="15" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding ManufactoryOrdersPurchaseCount, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="50" FontFamily="Segoe UI Semi" TextAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="進貨總額 $" FontSize="15" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding ManufactoryOrdersPurchaseTotal, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="15" FontFamily="Segoe UI Semi" Width="80" TextAlignment="Right" VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+        <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
             <TextBlock Text="退貨單總量" FontSize="15" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding ManufactoryOrdersReturnCount, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Width="50" FontFamily="Segoe UI Semi" TextAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="退貨總額 $" FontSize="15" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding ManufactoryOrdersReturnTotal, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontSize="15" FontFamily="Segoe UI Semi" Width="80" TextAlignment="Right" VerticalAlignment="Center"/>
         </StackPanel>
-        <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Content="{Binding}">
+        <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource NoManufactoryControl}" />

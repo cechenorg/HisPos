@@ -54,5 +54,31 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             }
 
         }
+
+        private void btnMed_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnTrade.Background = Brushes.Transparent;
+            btnTrade.Foreground = Brushes.DimGray;
+            btnMed.Foreground = Brushes.White;
+            btnMed.Background = Brushes.DimGray;
+            StockOTC.Visibility = Visibility.Collapsed;
+            TradeProfit.Visibility = Visibility.Collapsed;
+            CashFlow.Visibility = Visibility.Visible;
+            PrescriptionProfit.Visibility = Visibility.Visible;
+            StockMed.Visibility = Visibility.Visible;
+        }
+
+        private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnMed.Background = Brushes.Transparent;
+            btnMed.Foreground = Brushes.DimGray;
+            btnTrade.Foreground = Brushes.White;
+            btnTrade.Background = Brushes.DimGray;
+            StockOTC.Visibility = Visibility.Visible;
+            TradeProfit.Visibility = Visibility.Visible;
+            CashFlow.Visibility = Visibility.Collapsed;
+            PrescriptionProfit.Visibility = Visibility.Collapsed;
+            StockMed.Visibility = Visibility.Collapsed;
+        }
     }
 }

@@ -910,6 +910,14 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("WAREID", wareID));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderManufactoryOrderDetail]", parameters);
         }
+        internal static DataTable GetOrderDetails( DateTime searchStartDate, DateTime searchEndDate, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SDATE", searchStartDate));
+            parameters.Add(new SqlParameter("EDATE", searchEndDate));
+            parameters.Add(new SqlParameter("WAREID", wareID));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderOrderDetail]", parameters);
+        }
         internal static DataTable StoreOrderReserveByResIDList(DateTime sDate, DateTime eDate)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

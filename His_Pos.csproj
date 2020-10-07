@@ -606,6 +606,7 @@
     <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReport.cs" />
     <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReportDb.cs" />
     <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReports.cs" />
+    <Compile Include="NewClass\Report\ReportTypeEnum.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReportDb.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReports.cs" />
