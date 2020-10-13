@@ -17,6 +17,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
@@ -33,16 +34,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     public partial class ProductTransactionView : UserControl
     {
         public static Label InvoiceNumLable;
-
         private DataTable ProductList;
         private string AppliedPrice;
-
         private int preTotal = 0;
         private int discountAmount = 0;
         private int realTotal = 0;
         private double totalProfit = 0;
         private string cusID = "0";
-
         private bool isGift = false;
         private bool isReturn = false;
 
@@ -296,7 +294,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     return;
                 }
             }
-
             foreach (DataRow dr in ProductList.Rows) // 相同商品疊加
             {
                 if (dr["Pro_ID"].ToString() == searchString && isGift == false)
@@ -1336,7 +1333,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
-            var newCustomerWindow = new AddCustomerWindow();
+            Customer customer = null;
+            var newCustomerWindow = new AddCustomerWindow(customer);
             //AddNewCustomerWindow acw = new AddNewCustomerWindow();
             //acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
             //acw.ShowDialog();

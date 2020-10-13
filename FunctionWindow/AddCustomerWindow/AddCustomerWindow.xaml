@@ -26,8 +26,8 @@
             <Label Content="姓名 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <TextBox Name="CusName" Width="110" Height="35" Text="{Binding NewCustomer.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusName_OnPreviewKeyDown"/>
             <Label Content="姓別 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <RadioButton x:Name="rbMale" GroupName="rbgGender" Content="男" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" IsChecked="True"></RadioButton>
-            <RadioButton x:Name="rbFemale" GroupName="rbgGender" Content="女" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"></RadioButton>
+            <RadioButton x:Name="rbMale" GroupName="rbgGender" Content="男" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" IsChecked="{Binding IsMale,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="50" VerticalAlignment="Top"></RadioButton>
+            <RadioButton x:Name="rbFemale" GroupName="rbgGender" Content="女" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" IsChecked="{Binding IsFemale,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></RadioButton>
             <Label Content="生日 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <xctk:MaskedTextBox Name="CusBirthday" Width="100" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" CaretBrush="Black" PreviewKeyDown="CusBirthday_OnPreviewKeyDown">
                 <xctk:MaskedTextBox.Text>

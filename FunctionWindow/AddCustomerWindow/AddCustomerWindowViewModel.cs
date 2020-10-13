@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -39,6 +40,25 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             else
                 return Regex.IsMatch(str_handset, @"^09[0-9]{8}$");
         }
+
+        private bool isMale;
+        public bool IsMale
+        {
+            get => isMale;
+            set
+            {
+                Set(() => IsMale, ref isMale, value);
+            }
+        }
+        private bool isFemale;
+        public bool IsFemale
+        {
+            get => isFemale;
+            set
+            {
+                Set(() => IsFemale, ref isFemale, value);
+            }
+        }
         #endregion
 
         #region Commands
@@ -56,6 +76,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         public AddCustomerWindowViewModel(Customer customer = null)
         {
             NewCustomer = new Customer();
+            IsMale = true;
             if (customer != null)
             {
                 NewCustomer.IDNumber = customer.IDNumber;
@@ -63,13 +84,35 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 NewCustomer.Birthday = customer.Birthday;
                 NewCustomer.CellPhone = customer.CellPhone;
                 NewCustomer.Tel = customer.Tel;
+                if (customer.Gender == Properties.Resources.Male)
+                {
+                    IsMale = true;
+                    NewCustomer.Gender = Properties.Resources.Male;
+                }
+                else if (customer.Gender == Properties.Resources.Female)
+                {
+                    IsFemale = true;
+                    NewCustomer.Gender = Properties.Resources.Female;
+                }
+                else {
+                    IsMale = true;
+                    NewCustomer.Gender = Properties.Resources.Male;
+                }
             }
+            
             Submit = new RelayCommand(SubmitAction);
             Cancel = new RelayCommand(CancelAction);
         }
         private void SubmitAction()
         {
             if(!CheckFormat()) return;
+            if (IsMale == true)
+            {
+                NewCustomer.Gender = Properties.Resources.Male;
+            }
+            else if(IsFemale == true){
+                NewCustomer.Gender = Properties.Resources.Female;
+            }
             var insertResult = NewCustomer.InsertData();
             if (insertResult)
                 NewCustomerInsertSuccess();
@@ -93,6 +136,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 errorString += "家電號碼格式錯誤！\r\n";
             else if (!string.IsNullOrEmpty(NewCustomer.IDNumber) && !VerifyService.VerifyIDNumber(NewCustomer.IDNumber))
                 errorString += "身分證格式錯誤\r\n";
+
             if (!string.IsNullOrEmpty(errorString))
                 MessageWindow.ShowMessage(errorString,MessageType.ERROR);
             return string.IsNullOrEmpty(errorString);
@@ -107,6 +151,18 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         {
             Messenger.Default.Send(new NotificationMessage<Customer>(NewCustomer, "GetSelectedCustomer"));
             Messenger.Default.Send(new NotificationMessage("CloseAddCustomerWindow"));
+        }
+        public class GenderConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                return ((string)parameter == (string)value);
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            {
+                return (bool)value ? parameter : null;
+            }
         }
     }
 }
