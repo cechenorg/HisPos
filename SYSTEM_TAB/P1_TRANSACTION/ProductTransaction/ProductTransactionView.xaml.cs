@@ -1211,7 +1211,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         #endregion
 
-        #region CustomerControl
+        #region ----- CustomerControl -----
 
         public void ClearCustomerView()
         {
