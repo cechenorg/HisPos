@@ -283,6 +283,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (searchString.Length < 5)
                 {
                     MessageWindow.ShowMessage("商品代碼長度不得小於5", MessageType.WARNING);
+                    FocusLastRow();
                     return;
                 }
             }
@@ -290,8 +291,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 if (searchString.Length < 2)
                 {
-                    MessageBox.Show(searchString.Length.ToString());
                     MessageWindow.ShowMessage("搜尋字串長度不得小於2", MessageType.WARNING);
+                    FocusLastRow();
                     return;
                 }
             }
