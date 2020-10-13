@@ -78,6 +78,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
                     <TextBox x:Name="tbSearch" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="手機 / 家電" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,2" KeyDown="tbSearch_KeyDown">
                     </TextBox>
+                    <TextBox x:Name="tbCUS" Visibility="Collapsed" TextChanged="tbCUS_TextChanged"></TextBox>
                     <Button x:Name="btnAddCustomer" Width="100" Content="新增顧客" FontFamily="Segoe UI Semibold" FontSize="17" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Click="btnAddCustomer_Click"/>
                     <Button x:Name="btnClearCustomer" Width="65" Content="清除" FontFamily="Segoe UI Semibold" FontSize="17" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClearCustomer_Click"/>
                 </StackPanel>

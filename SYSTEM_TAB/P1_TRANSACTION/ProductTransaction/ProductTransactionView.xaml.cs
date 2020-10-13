@@ -31,9 +31,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     /// <summary>
     /// ProductTransactionView.xaml 的互動邏輯
     /// </summary>
+    /// 
     public partial class ProductTransactionView : UserControl
     {
         public static Label InvoiceNumLable;
+        public static TextBox Cuslblcheck;
         private DataTable ProductList;
         private string AppliedPrice;
         private int preTotal = 0;
@@ -43,6 +45,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private string cusID = "0";
         private bool isGift = false;
         private bool isReturn = false;
+        public AddCustomerWindow addCustomerWindow;
+       
 
         private static readonly Regex _regex = new Regex("^[0-9]+$");
         private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
@@ -67,10 +71,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             
             InitializeComponent();
+            
             InvoiceNumLable = this.tbInvoiceNum;
+            Cuslblcheck = this.tbCUS;
             GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
+          
             if (Properties.Settings.Default.InvoiceCheck == "1")
             {
                 tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
@@ -1330,27 +1337,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
             }
         }
-        public void FillCustomerDirect(string fill) {
-            if (fill.Length < 9)
-            {
-                MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
-                return;
-            }
+        public void FillCustomerDirect() {
 
             MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            bool isCell = fill.StartsWith("09");
-            if (isCell)
-            {
-                parameters.Add(new SqlParameter("Cus_Cellphone", fill));
-                parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
-            }
-            else
-            {
-                parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
-                parameters.Add(new SqlParameter("Cus_Telephone", fill));
-            }
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[NewestCustomerQuery]");
             MainWindow.ServerConnection.CloseConnection();
 
             if (result.Rows.Count == 0)
@@ -1359,19 +1349,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             else
             {
-                FillInCustomerData(result);
-                GetCustomerTradeRecord();
+               FillInCustomerData(result);
+               GetCustomerTradeRecord();
             }
         }
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
             Customer customer = null;
-            var newCustomerWindow = new AddCustomerWindow(customer);
+            addCustomerWindow = new AddCustomerWindow(customer);
+            addCustomerWindow.Closed += new EventHandler(SetContentHandler);
+
             //AddNewCustomerWindow acw = new AddNewCustomerWindow();
             //acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
             //acw.ShowDialog();
         }
-
+        private void SetContentHandler(object sender, EventArgs e) {
+            addCustomerWindow = null;
+            FillCustomerDirect();
+            
+        }
+    
         private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
         {
             ClearCustomerView();
@@ -1384,5 +1381,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         }
 
         #endregion
+
+        private void tbCUS_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tbCUS.Text == "1") {
+                FillCustomerDirect();
+                tbCUS.Text = "0";
+            }
+        }
     }
 }

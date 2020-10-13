@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
 {
@@ -151,6 +152,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         {
             Messenger.Default.Send(new NotificationMessage<Customer>(NewCustomer, "GetSelectedCustomer"));
             Messenger.Default.Send(new NotificationMessage("CloseAddCustomerWindow"));
+            ProductTransactionView.Cuslblcheck.Text = "1";
         }
         public class GenderConverter : IValueConverter
         {
