@@ -567,7 +567,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             GetNotEnoughMedicines();
 
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認");
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認" , true);
             if (!(bool)confirmWindow.DialogResult) { return; }
 
             try
@@ -1330,7 +1330,39 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
             }
         }
+        public void FillCustomerDirect(string fill) {
+            if (fill.Length < 9)
+            {
+                MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
+                return;
+            }
 
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            bool isCell = fill.StartsWith("09");
+            if (isCell)
+            {
+                parameters.Add(new SqlParameter("Cus_Cellphone", fill));
+                parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+            }
+            else
+            {
+                parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                parameters.Add(new SqlParameter("Cus_Telephone", fill));
+            }
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (result.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
+            }
+            else
+            {
+                FillInCustomerData(result);
+                GetCustomerTradeRecord();
+            }
+        }
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
             Customer customer = null;

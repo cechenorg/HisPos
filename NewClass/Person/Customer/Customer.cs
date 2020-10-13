@@ -222,6 +222,10 @@ namespace His_Pos.NewClass.Person.Customer
         public bool InsertData()
         {
             var table = CustomerDb.InsertCustomerData(this);
+            if (table.Rows[0].Field<string>("RESULT").Equals("SAME")) {
+                MessageWindow.ShowMessage("電話號碼已存在。", MessageType.ERROR);
+                return false;
+            }
             if (table.Rows.Count > 0)
             {
                 var c = new Customer(table.Rows[0]);
