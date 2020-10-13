@@ -277,6 +277,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     CalculateTotal("AMT");
                 }
             }
+
             if (int.TryParse(searchString, out int n))
             {
                 if (searchString.Length < 5)
