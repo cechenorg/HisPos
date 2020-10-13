@@ -235,10 +235,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         }
         private void PrintMasterInventoryAction()
         {
-            
+            Process myProcess = new Process();
             DataTable table = ControlMedicineDeclareDb.GetInventoryDataByDate(SDateTime, EDateTime, SelectedWareHouse.ID);
             if (table is null) return;
-            Process myProcess = new Process();
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "管藥庫存";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
@@ -282,7 +281,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
                 wb.SaveAs(fdlg.FileName);
             }
-
+            try
+            {
+                myProcess.StartInfo.UseShellExecute = true;
+                myProcess.StartInfo.FileName = (fdlg.FileName);
+                myProcess.StartInfo.CreateNoWindow = true;
+                myProcess.StartInfo.Verb = "print";
+                myProcess.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
+            
 
 
         }

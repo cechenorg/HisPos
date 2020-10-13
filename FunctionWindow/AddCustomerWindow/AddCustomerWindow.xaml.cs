@@ -23,6 +23,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                     case "CloseAddCustomerWindow":
                         Close();
                         break;
+                    
                 }
             });
             this.DataContext = new AddCustomerWindowViewModel();
@@ -39,7 +40,10 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 {
                     case "CloseAddCustomerWindow":
                         Close();
-                        ProductTransactionView.Cuslblcheck.Text="1";
+                        break;
+                    case "SuccessCloseAddCustomerWindow":
+                        Close();
+                        ProductTransactionView.Cuslblcheck.Text = "1";
                         break;
                 }
             });
