@@ -17,5 +17,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare {
             if (sender is MaskedTextBox t && e.Key == Key.Enter)
                 t.Text = DateTimeExtensions.ConvertDateStringToTaiwanCalendar(t.Text);
         }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

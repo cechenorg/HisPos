@@ -32,6 +32,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     /// </summary>
     public partial class ProductTransactionView : UserControl
     {
+        public static Label InvoiceNumLable;
+
         private DataTable ProductList;
         private string AppliedPrice;
 
@@ -65,7 +67,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         public ProductTransactionView()
         {
+            
             InitializeComponent();
+            InvoiceNumLable = this.tbInvoiceNum;
             GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
@@ -273,12 +277,24 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     CalculateTotal("AMT");
                 }
             }
-            if (searchString.Length < 5)
+            if (int.TryParse(searchString, out int n))
             {
-                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
-                return;
+                if (searchString.Length < 5)
+                {
+                    MessageWindow.ShowMessage("商品代碼長度不得小於5", MessageType.WARNING);
+                    return;
+                }
             }
-            
+            else
+            {
+                if (searchString.Length < 2)
+                {
+                    MessageBox.Show(searchString.Length.ToString());
+                    MessageWindow.ShowMessage("搜尋字串長度不得小於2", MessageType.WARNING);
+                    return;
+                }
+            }
+
             foreach (DataRow dr in ProductList.Rows) // 相同商品疊加
             {
                 if (dr["Pro_ID"].ToString() == searchString && isGift == false)
@@ -594,7 +610,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             catch (Exception ex)
             {
-                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                //MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
 
@@ -633,7 +649,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             catch (Exception ex)
             {
-                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                //MessageWindow.ShowMessage("發票列表機設定錯誤", MessageType.ERROR);
             }
         }
         
@@ -648,6 +664,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             catch (Exception e)
             {
+                ClearPage();
+                MessageWindow.ShowMessage("發票列表機設定錯誤", MessageType.ERROR);
                 MessageWindow.ShowMessage(e.Message, MessageType.ERROR);
                 return;
             }

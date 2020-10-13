@@ -16,6 +16,8 @@ using System.Data;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.ControlMedicineEditWindow.WareHouseSelectWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using ClosedXML.Excel;
+using System.Diagnostics;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
 {
@@ -122,6 +124,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         public RelayCommand WareHouseSelectedWindowCommand { get; set; }
         public RelayCommand ShowMedicineDetailCommand { get; set; }
         public RelayCommand ShowControlMedicineEditInputWindowCommand { get; set; }
+        public RelayCommand PrintMasterInventoryCommand { get; set; }
         
 
         public ControlMedicineDeclareViewModel()
@@ -135,7 +138,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
             ControlMedEditCommand = new RelayCommand(ControlMedEditAction);
             WareHouseSelectedWindowCommand = new RelayCommand(WareHouseSelectedWindowAction);
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
-            ShowControlMedicineEditInputWindowCommand = new RelayCommand(ShowControlMedicineEditInputWindowAction); 
+            ShowControlMedicineEditInputWindowCommand = new RelayCommand(ShowControlMedicineEditInputWindowAction);
+            PrintMasterInventoryCommand = new RelayCommand(PrintMasterInventoryAction);
             SelectedWareHouse = WareHouseCollection[0];
             SearchAction();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -229,6 +233,60 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                 }
             }
         }
+        private void PrintMasterInventoryAction()
+        {
+            
+            DataTable table = ControlMedicineDeclareDb.GetInventoryDataByDate(SDateTime, EDateTime, SelectedWareHouse.ID);
+            if (table is null) return;
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "管藥庫存";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName = SDateTime.ToString("yyyyMMdd") + "_" + EDateTime.ToString("yyyyMMdd") + ViewModelMainWindow.CurrentPharmacy.Name + "管制藥品庫存表";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                var ws = wb.Worksheets.Add(SelectedWareHouse.Name + "管藥管理");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                var col1 = ws.Column("A");
+                col1.Width = 18;
+                var col2 = ws.Column("B");
+                col2.Width = 45;
+                var col3 = ws.Column("C");
+                col3.Width = 10;
+                var col4 = ws.Column("D");
+                col4.Width = 10;
+
+                ws.Cell(1, 1).Value = "庫別名稱：" + SelectedWareHouse.Name;
+                ws.Range(1, 1, 1, 1).Merge().AddToNamed("Titles");
+                ws.Cell(1, 2).Value = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
+                ws.Range(1, 2, 1, 4).Merge().AddToNamed("Days");
+                ws.Cell(1, 2).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                ws.Cell("A2").Value = "管藥代碼";
+                ws.Cell("B2").Value = "管藥名稱";
+                ws.Cell("C2").Value = "庫存數量";
+                ws.Cell("D2").Value = "盤點數量";
+                var rangeWithData = ws.Cell(3, 1).InsertData(table.AsEnumerable());
+
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                wb.SaveAs(fdlg.FileName);
+            }
+
+
+
+        }
+            
         private void WareHouseSelectionChangedAction() {
             ControlCollectionViewSource.Filter += Filter;
         }

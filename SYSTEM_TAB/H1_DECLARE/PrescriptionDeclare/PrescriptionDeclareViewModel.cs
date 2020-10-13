@@ -897,7 +897,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             CheckCustomerEdited();
             if(!CheckAdjustDate()) return;
-            if(!ErrorAdjustConfirm()) return;
+            CheckWay();
+            if (!ErrorAdjustConfirm()) return;
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
             CheckChronicCopayment();
@@ -913,6 +914,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             CheckCustomerEdited();
             if(!CheckAdjustDate()) return;
+            CheckWay();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
             if (!CheckPrescription(true,false)) return;
@@ -927,6 +929,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return;
             CheckCustomerEdited();
             if(!CheckAdjustDate()) return;
+            CheckWay();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
             CheckChronicCopayment();
@@ -1635,6 +1638,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return false;
             }
             return true;
+        }
+        private void CheckWay()
+        {
+
+            foreach (var c in CurrentPrescription.Medicines) {
+                if (c.PositionID.Length > 4) {
+                    c.PositionID = c.PositionID.Substring(0, 4);
+                }
+            }
         }
         #endregion
     }

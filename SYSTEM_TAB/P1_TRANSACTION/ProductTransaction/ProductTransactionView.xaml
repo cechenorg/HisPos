@@ -358,7 +358,7 @@
                     <DataGridTemplateColumn Width="160" Header="商品代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Name="ProductIDTextbox" Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="140" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" KeyDown="ProductIDTextbox_KeyDown" TextChanged="ProductIDTextbox_TextChanged">
+                                <TextBox Name="ProductIDTextbox" Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="140" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" PreviewKeyDown="ProductIDTextbox_KeyDown" TextChanged="ProductIDTextbox_TextChanged">
                                     <TextBox.InputScope>
                                         <InputScope>
                                             <InputScope.Names>

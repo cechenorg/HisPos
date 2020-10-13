@@ -53,6 +53,7 @@
                 </i:Interaction.Triggers>
             </ComboBox>
             <Button Content="列印明細" Margin="10,0,0,0" Command="{Binding PrintMaserCommand}" FontSize="20" Background="DarkCyan"  FontFamily="Segoe UI Semibold"  Grid.Row="1" VerticalAlignment="Center" BorderBrush="Transparent"/>
+            <Button Content="列印盤點" Margin="10,8.8,0,8.8" Command="{Binding PrintMasterInventoryCommand}" FontSize="20" Background="DarkCyan"  FontFamily="Segoe UI Semibold" VerticalAlignment="Center" BorderBrush="Transparent" />
         </StackPanel>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>

@@ -22,7 +22,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <RadioButton Content="收入" Tag="3" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding GainCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>  
+            <RadioButton Content="收入" Tag="3" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding GainCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <RadioButton Content="支出" Tag="4" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding PayCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="科目" FontSize="18" VerticalAlignment="Center"/>
             <ComboBox Width="100" Margin="10,0,0,0" FontSize="16" ItemsSource="{Binding CashFlowAccounts,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="AccountName" SelectedItem="{Binding SelectedCashFlowAccount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
@@ -69,10 +69,11 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="153*"/>
+                    <ColumnDefinition Width="962*"/>
                 </Grid.ColumnDefinitions>
                 <DataGrid Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"              
-                      ItemsSource="{Binding CashFlowRecords,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled">
+                      ItemsSource="{Binding CashFlowRecords,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,10,9.6,-0.4" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -111,7 +112,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760"       
-                          ItemsSource="{Binding SelectedCashFlowRecord.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0,10,10,0" HorizontalScrollBarVisibility="Disabled">
+                          ItemsSource="{Binding SelectedCashFlowRecord.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0.4,10,9.8,-0.4" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -183,7 +184,7 @@
                         <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button x:Name="DeleteCashFlowRecordButton" Content="刪除" Background="Red" BorderBrush="Transparent" Command="{Binding DataContext.DeleteCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Button x:Name="DeleteCashFlowRecordButton" Content="刪除" Background="IndianRed" BorderBrush="Transparent" Command="{Binding DataContext.DeleteCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

@@ -79,7 +79,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         }
         private void OpenFileAction() {
             if (SelectItem is null)
-                MessageWindow.ShowMessage("請先填寫院所戴碼",Class.MessageType.WARNING);
+                MessageWindow.ShowMessage("請先填寫院所代碼",Class.MessageType.WARNING);
             FolderBrowserDialog fdlg = new FolderBrowserDialog(); 
             if (fdlg.ShowDialog() == DialogResult.OK) {
                 SelectItem.FilePath = fdlg.SelectedPath;

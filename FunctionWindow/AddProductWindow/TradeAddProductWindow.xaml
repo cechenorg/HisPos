@@ -124,7 +124,7 @@
                 <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
             </ContentControl.InputBindings>
         </ContentControl>-->
-        <DataGrid x:Name="ResultGrid" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="765" HorizontalAlignment="Left" AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" IsReadOnly="true" SelectedIndex="0">
+        <DataGrid x:Name="ResultGrid" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="765" HorizontalAlignment="Left" AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" IsReadOnly="true" SelectedIndex="0" Loaded="DataGrid_Loaded" PreviewKeyDown="ResultGrid_KeyDown">
             <i:Interaction.Behaviors>
                 <behaviors:ScrollIntoView/>
             </i:Interaction.Behaviors>

@@ -52,7 +52,7 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label Content="發票號碼" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <TextBox Text="{Binding InvoiceNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,29,0,29" Width="215">
+            <TextBox x:Name="InvoiceNum" Text="{Binding InvoiceNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,29,0,29" Width="215">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <command:EventToCommand Command="{Binding DataChangedCommand}"/>
@@ -62,7 +62,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="發票是否列印" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <CheckBox IsChecked="{Binding InvoiceCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,29,0,29" Width="215">
+            <CheckBox  x:Name="InvoiceCheck" IsChecked="{Binding InvoiceCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,29,0,29" Width="215">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding DataChangedCommand}"/>
@@ -87,7 +87,7 @@
                 </ContentControl.Style>
             </ContentControl>
             <Button  Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0" Command="{Binding CancelChangeCommand}"/>
-            <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding ConfirmChangeCommand}"/>
+            <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding ConfirmChangeCommand}" Click="ConfirmButton_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>
