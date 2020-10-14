@@ -49,6 +49,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     MessageWindow.ShowMessage("提取量不得大於寄庫量", MessageType.WARNING);
                     return;
                 }
+
+                if ((int)dr["Amount"] < 0) {
+                    MessageWindow.ShowMessage("提取量不得為負", MessageType.WARNING);
+                    return;
+                }
             }
             foreach (DataRow dr in depositTable.Rows)
             {

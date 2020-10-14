@@ -1643,7 +1643,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
 
             foreach (var c in CurrentPrescription.Medicines) {
-                if (c.PositionID.Length > 4) {
+                if (c.PositionID ==null)
+                {
+                }
+                else if (c.PositionID.Length > 4) {
                     c.PositionID = c.PositionID.Substring(0, 4);
                 }
             }
