@@ -329,8 +329,9 @@
                         </DataGridTextColumn.HeaderStyle>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="20,0,0,0"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
