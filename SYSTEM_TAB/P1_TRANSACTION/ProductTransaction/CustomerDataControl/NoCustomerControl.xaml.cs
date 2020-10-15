@@ -73,7 +73,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             foreach (DataGridTemplateColumn column in FindLogicalChildren<DataGridTemplateColumn>(Application.Current.MainWindow))
             {
                 int count = 0;
-                MessageBox.Show(count.ToString());
                 count++;
             }
         }

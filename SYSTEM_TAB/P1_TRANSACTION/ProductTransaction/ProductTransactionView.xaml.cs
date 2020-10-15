@@ -604,10 +604,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DepositInsert();
                     if (Properties.Settings.Default.InvoiceCheck == "1")
                     {
-                        MessageBox.Show("YES");
                         InvoicePrint(TransferDetailTable());
                         InvoiceControlViewModel vm = new InvoiceControlViewModel();
-                        MessageBox.Show("YES");
                         vm.InvoiceNumPlusOneAction();
                         tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
                     }
