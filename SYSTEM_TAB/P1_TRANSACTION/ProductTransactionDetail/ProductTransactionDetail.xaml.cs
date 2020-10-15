@@ -47,7 +47,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 }
             }
         }
-
         private void GetEmployeeList()
         {
             MainWindow.ServerConnection.OpenConnection();

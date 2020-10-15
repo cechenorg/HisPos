@@ -63,13 +63,32 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             string eDate = ConvertMaskedDate(EndDate.Text);
             bool isIrregular = chkIsIrregular.IsChecked.Value;
             bool isReturn = chkIsReturn.IsChecked.Value;
-
+            string sInvoice = StartInvoice.Text;
+            string eInvoice = EndInvoice.Text;
+            if (sInvoice.Length == 8 || sInvoice.Length == 0 || sInvoice == "" || int.TryParse(sInvoice, out int S))
+            {
+            }
+            else
+            {
+                MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
+                return;
+            }
+            if (eInvoice.Length == 8 || eInvoice.Length == 0 || eInvoice=="" || int.TryParse(eInvoice, out int E))
+            {
+            }
+            else
+            {
+                MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
+                return;
+            }
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MasterID", DBNull.Value));
             parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
             parameters.Add(new SqlParameter("sDate", sDate));
             parameters.Add(new SqlParameter("eDate", eDate));
+            parameters.Add(new SqlParameter("sInvoice", sInvoice));
+            parameters.Add(new SqlParameter("eInvoice", eInvoice));
             parameters.Add(new SqlParameter("flag", "0"));
             parameters.Add(new SqlParameter("ShowIrregular", isIrregular));
             parameters.Add(new SqlParameter("ShowReturn", isReturn));
@@ -116,6 +135,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
             parameters.Add(new SqlParameter("sDate", ""));
             parameters.Add(new SqlParameter("eDate", ""));
+            parameters.Add(new SqlParameter("sInvoice", ""));
+            parameters.Add(new SqlParameter("eInvoice", ""));
             parameters.Add(new SqlParameter("flag", "1"));
             parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));

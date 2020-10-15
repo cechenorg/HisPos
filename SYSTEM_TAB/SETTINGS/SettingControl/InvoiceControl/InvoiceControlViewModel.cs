@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
 {
@@ -78,6 +80,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             else {
                 ic = "1";
             }
+            
+            if (InvoiceNumber.Length != 10)
+            {
+                MessageWindow.ShowMessage("發票號碼為兩位英文加八位數字！", MessageType.ERROR);
+                return;
+            }
             Properties.Settings.Default.InvoiceNumber = InvoiceNumber.ToString();
             Properties.Settings.Default.InvoiceComPort = InvoiceCom.ToString();
             Properties.Settings.Default.InvoiceCheck = ic;
@@ -114,8 +122,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             int num;
             string invnum;
 
-            eng = Properties.Settings.Default.InvoiceNumber.Substring(0, 1);
-            num = int.Parse(Properties.Settings.Default.InvoiceNumber.Substring(2, 7));
+            eng = Properties.Settings.Default.InvoiceNumber.Substring(0, 2);
+            num = Int32.Parse(Properties.Settings.Default.InvoiceNumber.Substring(2, 8));
             num = num + 1;
             invnum = eng + num.ToString();
 

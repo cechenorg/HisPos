@@ -20,7 +20,7 @@
             <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid Background="LightGray">
+    <Grid Background="LightGray" Loaded="Grid_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition Height="100"/>
@@ -28,10 +28,10 @@
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="發票印表機 COM" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox Margin="10,0,0,0" Width="150" FontSize="25" Height="40" FontFamily="Segoe UI Semi" Foreground="DimGray" HorizontalContentAlignment="Center"
-                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Text="{Binding InvoiceCom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding InvoiceComPick,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            <ComboBox x:Name="InvoiceCOM" Margin="10,0,0,0" Width="150" FontSize="25" Height="40" FontFamily="Segoe UI Semi" Foreground="DimGray" HorizontalContentAlignment="Center"
+                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Text="{Binding InvoiceCom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding InvoiceComPick,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="True">
                 <TextBlock Text="COM0" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
                 <TextBlock Text="COM1" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
                 <TextBlock Text="COM2" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
@@ -49,20 +49,9 @@
                 </i:Interaction.Triggers>
             </ComboBox>
         </StackPanel>
-
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Content="發票號碼" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <TextBox x:Name="InvoiceNum" Text="{Binding InvoiceNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,29,0,29" Width="215">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="TextChanged">
-                        <command:EventToCommand Command="{Binding DataChangedCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="發票是否列印" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <CheckBox  x:Name="InvoiceCheck" IsChecked="{Binding InvoiceCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,29,0,29" Width="215">
+            <CheckBox  x:Name="InvoiceCheck" IsChecked="{Binding InvoiceCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,29,0,29" Width="215" Checked="InvoiceCheck_Checked" Unchecked="InvoiceCheck_Unchecked">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding DataChangedCommand}"/>
@@ -72,6 +61,16 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </CheckBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" >
+            <Label Content="起始發票號碼" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBox x:Name="InvoiceNum" Text="{Binding InvoiceNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,29,0,29" Width="215" IsEnabled="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="4">
             <ContentControl Margin="415,0,0,0">

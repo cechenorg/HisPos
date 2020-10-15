@@ -45,7 +45,9 @@
             </xctk:MaskedTextBox>
             <Label Content="身分證" Margin="10,0,0,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <TextBox  Text="{Binding IdNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="10,0,0,8" Width="120" FontSize="18" FontFamily="Segoe UI Semi"/>
-            <Button Command="{Binding ClearCommand}" Margin="555,0,0,0" Width="100" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"/>
+            <Label Content="電話" Margin="10,0,0,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+            <TextBox  Text="{Binding PhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="10,0,0,8" Width="120" FontSize="18" FontFamily="Segoe UI Semi"/>
+            <Button Command="{Binding ClearCommand}" Margin="350,0,0,0" Width="100" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"/>
             <Button Command="{Binding SearchCommand}" Margin="10,0,0,0" Width="100" Content="查詢" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0"/>
         </StackPanel>
         <Grid Grid.Row="1">

@@ -117,7 +117,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             fdlg.Title = "儲位管理";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName = row["ProLoc_Name"].ToString() + "儲位管理";
+            fdlg.FileName = DateTime.Now.ToString("yyyy-MM-dd")+"_"+row["ProLoc_Name"].ToString() +"_"+ "櫃位管理";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)

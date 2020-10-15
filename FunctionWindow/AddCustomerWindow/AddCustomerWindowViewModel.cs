@@ -152,6 +152,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         {
             Messenger.Default.Send(new NotificationMessage<Customer>(NewCustomer, "GetSelectedCustomer"));
             Messenger.Default.Send(new NotificationMessage("SuccessCloseAddCustomerWindow"));
+            MessageWindow.ShowMessage("新增顧客成功!", MessageType.SUCCESS);
             ProductTransactionView.Cuslblcheck.Text = "1";
         }
         public class GenderConverter : IValueConverter

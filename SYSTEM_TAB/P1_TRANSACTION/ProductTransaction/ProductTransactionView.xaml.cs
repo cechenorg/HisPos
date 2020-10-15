@@ -604,8 +604,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DepositInsert();
                     if (Properties.Settings.Default.InvoiceCheck == "1")
                     {
+                        MessageBox.Show("YES");
                         InvoicePrint(TransferDetailTable());
                         InvoiceControlViewModel vm = new InvoiceControlViewModel();
+                        MessageBox.Show("YES");
                         vm.InvoiceNumPlusOneAction();
                         tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
                     }
@@ -1259,6 +1261,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             parameters.Add(new SqlParameter("CustomerID", cusID));
             parameters.Add(new SqlParameter("sDate", ""));
             parameters.Add(new SqlParameter("eDate", ""));
+            parameters.Add(new SqlParameter("sInvoice", ""));
+            parameters.Add(new SqlParameter("eInvoice", ""));
             parameters.Add(new SqlParameter("flag", "2"));
             parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
@@ -1389,5 +1393,44 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 tbCUS.Text = "0";
             }
         }
+        private void TradeRecordGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (TradeRecordGrid.SelectedCells.Count <= 0)
+            {
+                return;
+
+            }
+            else {
+
+                DataRowView row = (DataRowView)TradeRecordGrid.SelectedItems[0];
+
+                DataRow masterRow = row.Row;
+
+                int index = GetRowIndex(e);
+                string TradeID = row["TraMas_ID"].ToString();
+
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("MasterID", TradeID));
+                parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
+                parameters.Add(new SqlParameter("sDate", ""));
+                parameters.Add(new SqlParameter("eDate", ""));
+                parameters.Add(new SqlParameter("sInvoice", ""));
+                parameters.Add(new SqlParameter("eInvoice", ""));
+                parameters.Add(new SqlParameter("flag", "1"));
+                parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
+                parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+
+                ProductTransactionDetail.ProductTransactionDetail ptd = new ProductTransactionDetail.ProductTransactionDetail(masterRow, result);
+
+                ptd.ShowDialog();
+                ptd.Activate();
+
+            }
+
+        }
+        
     }
 }
