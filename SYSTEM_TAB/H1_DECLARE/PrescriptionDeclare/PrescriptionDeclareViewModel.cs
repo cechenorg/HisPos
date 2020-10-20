@@ -484,18 +484,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 ShowCustomerSearch(condition.Name);
             }
-            if (CurrentPrescription.Patient.CellPhone != null || CurrentPrescription.Patient.CellPhone != "")
+            if (ProductTransactionView.FromHISCuslblcheck == null) {
+                return;
+            }
+            else if (CurrentPrescription.Patient.CellPhone != null || CurrentPrescription.Patient.CellPhone != "")
             {
                 ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.CellPhone;
             }
-            else if (CurrentPrescription.Patient.Tel != null || CurrentPrescription.Patient.Tel != "")
+            else if (CurrentPrescription.Patient.Tel != null || CurrentPrescription.Patient.Tel != "" || ProductTransactionView.FromHISCuslblcheck != null)
             {
                 ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.Tel;
             }
             else {
                 return;
             }
-           
         }
         public void GetCustomersFromPOSAction() {
             if (CusFromPOS.Length > 1)
