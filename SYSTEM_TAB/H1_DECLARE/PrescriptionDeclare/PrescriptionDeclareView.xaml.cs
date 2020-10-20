@@ -7,8 +7,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Medicine.Base;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow;
 using Xceed.Wpf.Toolkit;
 using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
 
@@ -20,6 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
     public partial class PrescriptionDeclareView : System.Windows.Controls.UserControl
     {
         int prevRowIndex = -1;
+        public static TextBox FromPOSCuslblcheck;
         public delegate Point GetDragDropPosition(IInputElement theElement);
         public PrescriptionDeclareView()
         {
@@ -31,6 +34,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage>("FocusMainDisease", FocusMainDisease);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
             PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
+            FromPOSCuslblcheck = this.tbFromPOS;
         }
 
         private void FocusMainDisease(NotificationMessage msg)
@@ -712,6 +716,5 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             
         }
-
     }
 }

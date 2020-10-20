@@ -77,7 +77,8 @@
                 <DataGridTemplateColumn Width="100" Header="提取量" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Name="ProductAmountTextbox" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="100" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center" >
+                            <TextBox x:Name="ProductAmountTextbox"  Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="True" Width="100" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center"
+                                     PreviewMouseLeftButtonDown="ProductAmountTextbox_PreviewMouseLeftButtonDown" GotFocus="ProductAmountTextbox_GotFocus">
                                 <TextBox.InputScope>
                                     <InputScope>
                                         <InputScope.Names>

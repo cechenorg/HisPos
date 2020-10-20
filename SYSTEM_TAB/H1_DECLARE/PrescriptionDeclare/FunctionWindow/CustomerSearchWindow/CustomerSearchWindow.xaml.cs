@@ -27,6 +27,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 ShowDialog();
         }
 
+        public CustomerSearchWindow(CustomerSearchCondition condition, int phone,string search = null)
+        {
+            InitializeComponent();
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseCustomerSearchWindow"))
+                    Close();
+            });
+            customerSearchViewModel = new CustomerSearchViewModel(search, condition,0);
+            DataContext = customerSearchViewModel;
+            SearchStringTextBox.Focus();
+            if (customerSearchViewModel.ShowDialog)
+                ShowDialog();
+        }
+
         public CustomerSearchWindow(DateTime? birth)
         {
             InitializeComponent();

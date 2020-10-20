@@ -46,6 +46,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineS
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
 using Application = System.Windows.Application;
 using Label = System.Windows.Controls.Label;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
@@ -64,6 +65,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {
     public class PrescriptionDeclareViewModel : TabBase
     {
+        public static TabBase TabThis;
+        public static TabBase getThis() {
+            return TabThis;
+        }
         public override TabBase getTab()
         {
             return this;
@@ -240,6 +245,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => ReserveStatus, ref reserveStatus, value);
             }
         }
+        private string cusFromPOS;
+        public string CusFromPOS
+        {
+            get => cusFromPOS;
+            set
+            {
+                cusFromPOS = value;
+                if (cusFromPOS.Length > 1)
+                {
+                    GetCustomersFromPOSAction();
+                }
+            }
+        }
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;
@@ -291,6 +309,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand Adjust { get; set; }
         public RelayCommand Register { get; set; }
         public RelayCommand PrescribeAdjust { get; set; }
+        public RelayCommand CustomerFromPOS { get; set; }
         #endregion
         public PrescriptionDeclareViewModel()
         {
@@ -307,6 +326,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             SetPharmacist();
             MainWindow.ServerConnection.CloseConnection();
             Messenger.Default.Register<NotificationMessage>("UpdateUsableAmountMessage", UpdateInventories);
+            TabThis = this;
         }
 
         private void UpdateInventories(NotificationMessage msg)
@@ -394,6 +414,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
             Register = new RelayCommand(RegisterAction,CheckIsAdjusting);
             PrescribeAdjust = new RelayCommand(PrescribeAdjustAction, CheckIsAdjusting);
+            CustomerFromPOS= new RelayCommand(GetCustomersFromPOSAction);
         }
         #endregion
         #region CommandAction
@@ -456,12 +477,40 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
             if (!CheckConditionEmpty(condition.Name))
+            {
                 ShowCustomerSearchEditedToday(condition.Name);
+            }
             else
+            {
                 ShowCustomerSearch(condition.Name);
+            }
+            if (CurrentPrescription.Patient.CellPhone != null || CurrentPrescription.Patient.CellPhone != "")
+            {
+                ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.CellPhone;
+            }
+            else if (CurrentPrescription.Patient.Tel != null || CurrentPrescription.Patient.Tel != "")
+            {
+                ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.Tel;
+            }
+            else {
+                return;
+            }
+           
         }
-
-        private void GetCustomersEditedTodayAction(Label condition)
+        public void GetCustomersFromPOSAction() {
+            if (CusFromPOS.Length > 1)
+            {
+                GetCustomersFromPOSAction(CusFromPOS);
+                CusFromPOS = "";
+            }
+            
+        }
+        private void GetCustomersFromPOSAction(string condition)
+        {
+            Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
+            ShowCustomerFromPOSSearch(condition);
+        }
+            private void GetCustomersEditedTodayAction(Label condition)
         {
             Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
             ShowCustomerSearchEditedToday(condition.Name);
@@ -510,7 +559,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     break;
             }
         }
+        private void ShowCustomerFromPOSSearch(string conditionName)
+        {
+            if (conditionName.Length > 1)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CustomerSearchWindow customerSearch;
+                bool isCell = conditionName.StartsWith("09");
+                if (isCell)
+                {
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, conditionName.Trim());
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
+                }
+                else
+                {
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Tel, 0 ,conditionName.Trim());
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
 
+                }
+            }
+        }
         private void ShowCustomerSearchEditedToday(string conditionName)
         {
             MainWindow.ServerConnection.OpenConnection();

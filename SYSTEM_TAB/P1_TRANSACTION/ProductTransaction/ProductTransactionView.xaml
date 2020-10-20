@@ -79,6 +79,7 @@
                     <TextBox x:Name="tbSearch" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="手機 / 家電" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,2" KeyDown="tbSearch_KeyDown">
                     </TextBox>
                     <TextBox x:Name="tbCUS" Visibility="Collapsed" TextChanged="tbCUS_TextChanged"></TextBox>
+                    <TextBox x:Name="tbFromHIS" Visibility="Collapsed" TextChanged="tbFromHIS_TextChanged"></TextBox>
                     <Button x:Name="btnAddCustomer" Width="100" Content="新增顧客" FontFamily="Segoe UI Semibold" FontSize="17" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Click="btnAddCustomer_Click"/>
                     <Button x:Name="btnClearCustomer" Width="65" Content="清除" FontFamily="Segoe UI Semibold" FontSize="17" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClearCustomer_Click"/>
                 </StackPanel>
@@ -142,7 +143,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="200" Header="消費日期" IsReadOnly="True" Binding="{Binding Path=TransTime_Format}">
+                        <DataGridTextColumn Width="100" Header="消費日期" IsReadOnly="True" Binding="{Binding Path=TransTime_Format}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -151,7 +152,16 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="消費金額" IsReadOnly="True" Binding="{Binding Path=TraMas_RealTotal}">
+                        <DataGridTextColumn Width="200" Header="商品名稱" IsReadOnly="True" Binding="{Binding Path=TraDet_ProductName}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="0,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="數量" IsReadOnly="True" Binding="{Binding Path=TraDet_Amount}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>

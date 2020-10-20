@@ -153,7 +153,22 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerByCard]", parameterList);
         }
-
+        public static DataTable CheckCustomerByPhone(string cell,string tel)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "cell", cell);
+            DataBaseFunction.AddSqlParameter(parameterList, "tel", tel);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerByPhone]", parameterList);
+        }
+        public static DataTable UpdateCustomerByPhone(int id_OG,int id,string cell, string tel)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "id_OG", id_OG);
+            DataBaseFunction.AddSqlParameter(parameterList, "id", id);
+            DataBaseFunction.AddSqlParameter(parameterList, "cell", cell);
+            DataBaseFunction.AddSqlParameter(parameterList, "tel", tel);
+            return MainWindow.ServerConnection.ExecuteProc("[set].[UpdateCustomerByCard]", parameterList);
+        }
         public static DataTable GetTodayEdited()
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[TodayEditedCustomers]");

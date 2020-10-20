@@ -130,20 +130,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
 
                 var col1 = ws.Column("A");
-                col1.Width = 25;
+                col1.Width = 20;
                 var col2 = ws.Column("B");
-                col2.Width = 40;
+                col2.Width = 33;
                 var col3 = ws.Column("C");
                 col3.Width = 10;
                 var col4 = ws.Column("D");
                 col4.Width = 10;
+                var col5 = ws.Column("E");
+                col5.Width = 10;
 
                 ws.Cell(1, 1).Value = "櫃位名稱："+row["ProLoc_Name"].ToString();
-                ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
+                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "商品代碼";
                 ws.Cell("B2").Value = "商品名稱";
                 ws.Cell("C2").Value = "庫存數量";
-                ws.Cell("D2").Value = "盤點數量";
+                ws.Cell("D2").Value = "寄庫數量";
+                ws.Cell("E2").Value = "盤點數量";
                 var rangeWithData = ws.Cell(3, 1).InsertData(detail.AsEnumerable());
 
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;

@@ -9,7 +9,7 @@
         xmlns:service="clr-namespace:His_Pos.Service"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d" FontFamily="Segoe UI Semibold" WindowStartupLocation="CenterScreen"
-        Title="缺藥採購確認" Height="450" Width="800">
+        Title="缺OTC採購確認" Height="450" Width="800">
     <Window.Resources>
         <service:NullableIntConverter x:Key="NullableIntConverter" />
         <service:SentinelConverter x:Key="SentinelConverter"/>

@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using His_Pos.FunctionWindow;
 using His_Pos.Class;
+using System.Windows.Controls;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -75,6 +76,21 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
             }
         }
+
+        private void ProductAmountTextbox_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+
+            e.Handled = true;
+            textBox.Focus();
         }
+
+        private void ProductAmountTextbox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+
+            textBox.SelectAll();
+        }
+    }
     }
 

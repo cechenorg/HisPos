@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO.Ports;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,6 +22,7 @@ using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.NotEnoughOTCPurchaseWindow;
@@ -36,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     {
         public static Label InvoiceNumLable;
         public static TextBox Cuslblcheck;
+        public static TextBox FromHISCuslblcheck;
         private DataTable ProductList;
         private string AppliedPrice;
         private int preTotal = 0;
@@ -74,6 +77,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             
             InvoiceNumLable = this.tbInvoiceNum;
             Cuslblcheck = this.tbCUS;
+            FromHISCuslblcheck = this.tbFromHIS;
             GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
@@ -1241,7 +1245,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             lbName.Content = result.Rows[0]["Cus_Name"].ToString();
             lbGender.Content = result.Rows[0]["Cus_Gender"].ToString();
-            lbBirthDay.Content = result.Rows[0]["Cus_Birthday"].ToString();
+            if (result.Rows[0]["Cus_Birthday"] == null || result.Rows[0]["Cus_Birthday"].ToString() == "")
+            {
+                lbBirthDay.Content = "";
+            }
+            else {
+                DateTime dt = (DateTime)result.Rows[0]["Cus_Birthday"];
+                CultureInfo culture = new CultureInfo("zh-TW");
+                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                lbBirthDay.Content = dt.ToString("yyy/MM/dd", culture);
+            }
             lbCellphone.Content = result.Rows[0]["Cus_Cellphone"].ToString();
             lbTelephone.Content = result.Rows[0]["Cus_Telephone"].ToString();
             tbAddress.Text = result.Rows[0]["Cus_Address"].ToString();
@@ -1264,6 +1277,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             parameters.Add(new SqlParameter("flag", "2"));
             parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
+            parameters.Add(new SqlParameter("Cashier", -1));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             FormatTradeTime(result);
@@ -1308,8 +1322,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 e.Handled = true;
                 if (tb.Text.Length < 9)
                 {
-                    MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
-                    return;
+                    //MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
+                   //return;
                 }
 
                 MainWindow.ServerConnection.OpenConnection();
@@ -1320,10 +1334,43 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
                     parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
                 }
-                else
+                else if (tb.Text.Length >= 7 && tb.Text.Length <= 8)
                 {
                     parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
                     parameters.Add(new SqlParameter("Cus_Telephone", tb.Text));
+                }
+                else
+                {
+                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+                }
+                if (!int.TryParse(tb.Text, out int i))
+                {
+                    parameters.Add(new SqlParameter("@Cus_Name", tb.Text));
+                }
+                else {
+                    parameters.Add(new SqlParameter("@Cus_Name", DBNull.Value));
+                }
+                if (tb.Text.Length == 6 )
+                {
+                    int.TryParse(tb.Text.Substring(0, 2), out int year);
+                    int.TryParse(tb.Text.Substring(2, 2), out int month);
+                    int.TryParse(tb.Text.Substring(4, 2), out int day);
+                    string yearStr = (year + 1911).ToString();
+                    string dateStr = yearStr + month.ToString("00") + day.ToString("00");
+
+                    parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+                }
+                else if ((tb.Text.Length == 7 && tb.Text.StartsWith("1"))) {
+                    int.TryParse(tb.Text.Substring(0, 3), out int year);
+                    int.TryParse(tb.Text.Substring(3, 2), out int month);
+                    int.TryParse(tb.Text.Substring(5, 2), out int day);
+                    string yearStr = (year + 1911).ToString();
+                    string dateStr = yearStr + month.ToString("00") + day.ToString("00");
+                    parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+                }
+                else {
+                    parameters.Add(new SqlParameter("@Cus_Birthday", DBNull.Value));
                 }
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
@@ -1336,8 +1383,77 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     FillInCustomerData(result);
                     GetCustomerTradeRecord();
+                    if (PrescriptionDeclareView.FromPOSCuslblcheck != null)
+                    {
+                        PrescriptionDeclareView.FromPOSCuslblcheck.Text = tb.Text;
+                    }
                 }
             }
+        }
+
+        private void SearchCustomerFromHIS(string phone)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            bool isCell = phone.StartsWith("09");
+            if (isCell)
+            {
+                parameters.Add(new SqlParameter("Cus_Cellphone", phone));
+                parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+            }
+            else if (phone.Length >= 7 && phone.Length <= 8)
+            {
+                parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                parameters.Add(new SqlParameter("Cus_Telephone", phone));
+            }
+            else {
+                parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+            }
+            if (!int.TryParse(phone, out int i))
+            {
+                parameters.Add(new SqlParameter("@Cus_Name", phone));
+            }
+            else
+            {
+                parameters.Add(new SqlParameter("@Cus_Name", DBNull.Value));
+            }
+            if (phone.Length == 6)
+            {
+                int.TryParse(phone.Substring(0, 2), out int year);
+                int.TryParse(phone.Substring(2, 2), out int month);
+                int.TryParse(phone.Substring(4, 2), out int day);
+                string yearStr = (year + 1911).ToString();
+                string dateStr = yearStr + month.ToString("00") + day.ToString("00");
+
+                parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+            }
+            else if ((phone.Length == 7 && phone.StartsWith("1")))
+            {
+                int.TryParse(phone.Substring(0, 3), out int year);
+                int.TryParse(phone.Substring(3, 2), out int month);
+                int.TryParse(phone.Substring(5, 2), out int day);
+                string yearStr = (year + 1911).ToString();
+                string dateStr = yearStr + month.ToString("00") + day.ToString("00");
+                parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+            }
+            else
+            {
+                parameters.Add(new SqlParameter("@Cus_Birthday", DBNull.Value));
+            }
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (result.Rows.Count == 0)
+                {
+                    
+                }
+                else
+                {
+                    FillInCustomerData(result);
+                    GetCustomerTradeRecord();
+                }
+            
         }
         public void FillCustomerDirect() {
 
@@ -1388,7 +1504,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             if (tbCUS.Text == "1") {
                 FillCustomerDirect();
+                tbSearch.Text = "";
                 tbCUS.Text = "0";
+            }
+        }
+        private void tbFromHIS_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tbFromHIS.Text.Length>1)
+            {
+                SearchCustomerFromHIS(tbFromHIS.Text);
+                tbSearch.Text = "";
+                tbFromHIS.Text = "";
             }
         }
         private void TradeRecordGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
@@ -1418,6 +1544,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("flag", "1"));
                 parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
                 parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
+                parameters.Add(new SqlParameter("Cashier", -1));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
 
@@ -1429,6 +1556,5 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
 
         }
-        
     }
 }

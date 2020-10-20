@@ -27,8 +27,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             StartDate.Value = GetDefaultDate();
             EndDate.Value = GetDefaultDate();
             RecordList = new DataTable();
+            GetEmployeeList();
         }
-
+        private void GetEmployeeList()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
+            MainWindow.ServerConnection.CloseConnection();
+            cbCashier.ItemsSource = result.DefaultView;
+        }
         private int GetRowIndex(MouseButtonEventArgs e)
         {
             DataGridRow dgr = null;
@@ -65,6 +72,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             bool isReturn = chkIsReturn.IsChecked.Value;
             string sInvoice = StartInvoice.Text;
             string eInvoice = EndInvoice.Text;
+            int Cashier;
+            if (cbCashier.SelectedValue == null)
+            {
+                Cashier = -1;
+            }
+            else {
+                Cashier=(int)cbCashier.SelectedValue;
+            }
             if (sInvoice.Length == 8 || sInvoice.Length == 0 || sInvoice == "" || int.TryParse(sInvoice, out int S))
             {
             }
@@ -92,6 +107,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parameters.Add(new SqlParameter("flag", "0"));
             parameters.Add(new SqlParameter("ShowIrregular", isIrregular));
             parameters.Add(new SqlParameter("ShowReturn", isReturn));
+            parameters.Add(new SqlParameter("Cashier", Cashier));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             FormatData(result);
@@ -140,6 +156,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parameters.Add(new SqlParameter("flag", "1"));
             parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
+            parameters.Add(new SqlParameter("Cashier", -1));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
@@ -180,6 +197,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             RecordList.Clear();
+            StartInvoice.Text = "";
+            EndInvoice.Text = "";
+            cbCashier.SelectedIndex = -1;
         }
     }
 }

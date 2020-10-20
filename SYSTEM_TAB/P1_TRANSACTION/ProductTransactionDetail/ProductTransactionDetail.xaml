@@ -34,10 +34,11 @@
                 <Label x:Name="lblRealTotal" Content="0" Width="100" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="Black"/>
                 <Label Content="結帳人員：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="40,0,0,0"/>
                 <Label x:Name="lblCashier" Content="" Width="100" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
-                <Label x:Name="lblChanged" Content="未修改" Width="70" HorizontalContentAlignment="Right" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" Margin="70,0,0,0"/>
+                <Label x:Name="lblChanged" Content="未修改" Width="70" HorizontalContentAlignment="Right" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" Margin="20,0,0,0"/>
                 <Button x:Name="btnSubmit" Width="140" Height="30" Content="送出修改" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" BorderThickness="0" Background="IndianRed" Click="btnSubmit_Click" IsEnabled="False"/>
-                <Button x:Name="btnDelete" Width="100" Height="30"  Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnDelete_Click"/>
-              
+                <Button x:Name="btnDelete" Width="70" Height="30"  Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnDelete_Click"/>
+                <Button x:Name="btnReturn" Width="70" Height="30"  Content="退貨" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnReturn_Click"/>
+
             </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="付款方式：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>

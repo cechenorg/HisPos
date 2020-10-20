@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Messaging;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
     public class CustomerManageViewModel : TabBase
@@ -260,6 +261,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                     break;
                 }
             }
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable= CustomerDb.CheckCustomerByPhone(Customer.CellPhone, Customer.Tel);
+            MainWindow.ServerConnection.CloseConnection();
+            if (dataTable.Rows.Count == 1)
+            {
+                CustomerDb.UpdateCustomerByPhone((int)dataTable.Rows[0]["Person_Id"],Customer.ID, Customer.CellPhone, Customer.Tel);
+                MessageWindow.ShowMessage("POS顧客已併入HIS!", Class.MessageType.SUCCESS);
+            }
+
             if (!Customer.IsEnable)
             {
                 ConfirmWindow confirmWindow = new ConfirmWindow("關閉後會刪除此位客人病患所有預約慢箋 是否關閉?", "關閉病患視窗確認");

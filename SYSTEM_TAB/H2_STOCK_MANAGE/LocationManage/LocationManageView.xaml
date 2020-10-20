@@ -225,8 +225,10 @@
                                     </Grid.RowDefinitions>
                                     <Label  Content="{Binding ProLoc_Name, UpdateSourceTrigger=PropertyChanged}" FontSize="30" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="20,0,0,0" />
                                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <Label Content="{Binding COUNT_ID, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semi" Width="30" HorizontalContentAlignment="Right"/>
+                                        <Label Content="{Binding COUNT_ID, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="N0" FontSize="18" FontFamily="Segoe UI Semi" Width="60" HorizontalContentAlignment="Right"/>
                                         <Label Content="個商品" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                        <Label Content="庫存現值 $ " FontSize="18" FontFamily="Segoe UI Semi"/>
+                                        <Label Content="{Binding total, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="N0" FontSize="18" FontFamily="Segoe UI Semi" Width="60" HorizontalContentAlignment="Right"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -347,6 +349,38 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                                 <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="FontSize" Value="25"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="寄庫量" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding DepRec_Amount}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="22"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="FontSize" Value="25"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="庫存量" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Inv_Inventory}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="22"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
                                 <Setter Property="FontSize" Value="25"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>

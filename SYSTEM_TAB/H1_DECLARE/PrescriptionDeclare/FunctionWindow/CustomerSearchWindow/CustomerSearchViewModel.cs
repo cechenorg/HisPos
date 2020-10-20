@@ -173,7 +173,79 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             else
                 IsEditing = false;
         }
-
+        public CustomerSearchViewModel(string search, CustomerSearchCondition condition,int phone)
+        {
+            Customers = new Customers();
+            SearchCondition = condition;
+            SearchTextChanged = new RelayCommand(ExecuteSearchTextChanged);
+            CustomerSelected = new RelayCommand(ExecuteCustomerSelected);
+            FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
+            StartEditingCommand = new RelayCommand(StartEditingAction);
+            if (string.IsNullOrEmpty(search))
+            {
+                switch (SearchCondition)
+                {
+                    case CustomerSearchCondition.IDNumber:
+                        SelectedRadioButton = "Option1";
+                        break;
+                    case CustomerSearchCondition.Name:
+                        SelectedRadioButton = "Option2";
+                        break;
+                    case CustomerSearchCondition.CellPhone:
+                        SelectedRadioButton = "Option4";
+                        break;
+                    case CustomerSearchCondition.Tel:
+                        SelectedRadioButton = "Option5";
+                        break;
+                }
+                Customers.GetTodayEdited();
+            }
+            else
+            {
+                switch (SearchCondition)
+                {
+                    case CustomerSearchCondition.IDNumber:
+                        SelectedRadioButton = "Option1";
+                        Customers.SearchCustomers(search, null, null, null, null);
+                        break;
+                    case CustomerSearchCondition.Name:
+                        SelectedRadioButton = "Option2";
+                        Customers.SearchCustomers(null, search, null, null, null);
+                        break;
+                    case CustomerSearchCondition.CellPhone:
+                        SelectedRadioButton = "Option4";
+                        Customers.SearchCustomers(null, null, search, null, null);
+                        break;
+                    case CustomerSearchCondition.Tel:
+                        SelectedRadioButton = "Option5";
+                        Customers.SearchCustomers(null, null, null, search, null);
+                        break;
+                }
+            }
+            switch (Customers.Count)
+            {
+                case 0:
+                    ShowDialog = false;
+                    //MessageWindow.ShowMessage("查無顧客", MessageType.WARNING);
+                    AskAddCustomerData();
+                    return;
+                case 1:/* when SearchCondition.Equals(CustomerSearchCondition.IDNumber):*/
+                    ShowDialog = false;
+                    SelectedCustomer = Customers[0];
+                    ExecuteCustomerSelected();
+                    break;
+                default:
+                    ShowDialog = true;
+                    break;
+            }
+            CustomerCollectionViewSource = new CollectionViewSource { Source = Customers };
+            CustomerCollectionView = CustomerCollectionViewSource.View;
+            Search = search;
+            if (!string.IsNullOrEmpty(search))
+                ExecuteSearchTextChanged();
+            else
+                IsEditing = false;
+        }
         public CustomerSearchViewModel(DateTime? birth)
         {
             SearchCondition = CustomerSearchCondition.Birthday;

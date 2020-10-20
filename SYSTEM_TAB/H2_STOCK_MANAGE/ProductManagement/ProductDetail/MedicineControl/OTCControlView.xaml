@@ -270,6 +270,14 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <groupControl:GroupInventoryControl Grid.Column="0" Margin="0,10,10,0" DataContext="{Binding GroupViewModel}"/>
+                <presControl:PrescriptionControl Grid.Column="1" Margin="0,10,10,0" DataContext="{Binding PrescriptionViewModel}"/>
+            </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="2" Margin="0,10,0,0" DataContext="{Binding ManageViewModel}">
             <Grid.RowDefinitions>

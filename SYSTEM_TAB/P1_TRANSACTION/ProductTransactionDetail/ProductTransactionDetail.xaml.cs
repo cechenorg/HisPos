@@ -152,7 +152,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
             }
         }
+        private void btnReturn_Click(object sender, RoutedEventArgs e)
+        {
+            ConfirmWindow cw = new ConfirmWindow("是否進行退貨?", "退貨確認");
+            if (!(bool)cw.DialogResult) { return; }
+            else
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("MasterID", masID));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordReturn]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
 
+                if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                {
+                    MessageWindow.ShowMessage("退貨成功！", MessageType.SUCCESS);
+                    Close();
+                }
+                else { MessageWindow.ShowMessage("退貨失敗！", MessageType.ERROR); }
+            }
+        }
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -257,5 +276,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lblChanged.Content = "已修改";
             lblChanged.Foreground = Brushes.Red;
         }
+
+   
     }
 }

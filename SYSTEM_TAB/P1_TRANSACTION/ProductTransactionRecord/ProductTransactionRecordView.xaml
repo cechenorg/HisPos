@@ -54,6 +54,8 @@
                     <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}"/>
                     <TextBox x:Name="EndInvoice" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False">
                     </TextBox>
+                    <Label Content="結帳人員" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"></Label>
+                    <ComboBox Margin="20,0,0,0"  x:Name="cbCashier" Width="100" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID"/>
                     <Button x:Name="btnClear" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="30,0,0,0" FontSize="16" Click="btnClear_Click"/>
                     <Button x:Name="btnQuery" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16" Click="btnQuery_Click"/>
                     <CheckBox x:Name="chkIsIrregular" Content="顯示非常規銷售" IsChecked="{Binding SearchIsIrregular, Mode=TwoWay}" Margin="10,0,0,0" Background="RoyalBlue" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
