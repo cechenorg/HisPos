@@ -1290,9 +1290,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             foreach (DataRow dr in result.Rows)
             {
                 string ogTransTime = dr["TraMas_ChkoutTime"].ToString();
-                DateTime dTime = DateTime.Parse(ogTransTime);
-                string formatTransTime = dTime.ToString("yyyy-MM-dd");
-                dr["TransTime_Format"] = formatTransTime;
+                DateTime dt = DateTime.Parse(ogTransTime);
+                CultureInfo culture = new CultureInfo("zh-TW");
+                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
             }
         }
 
