@@ -5,18 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage"
         mc:Ignorable="d"
-        Title="編輯名稱" Height="200" Width="400" WindowStartupLocation="CenterScreen">
-    <Grid Height="150" Width="390" VerticalAlignment="Top" HorizontalAlignment="Left">
+        Title="編輯名稱" Height="150" Width="300" WindowStartupLocation="CenterScreen">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
+            <RowDefinition />
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox Name="ChiName" Grid.Row="1" Width="170" Height="35"  FontFamily="Segoe UI Semi" FontSize="20" Grid.ColumnSpan="2" Margin="109,0.2,111.4,4.8"/>
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="50" Content="確認" FontFamily="Segoe UI Semibold" FontSize="25" Background="IndianRed" BorderThickness="0" VerticalAlignment="Bottom" Click="Confirm_OnClick"/>
+        <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" >
+            <Label Content="櫃位名稱:" FontFamily="Segoe UI bold" FontSize="20" Margin="0,0,0,0" Foreground="DimGray" HorizontalContentAlignment="Right"/>
+        </StackPanel>
+        <TextBox Name="ChiName" Grid.Row="0"  Grid.Column="1" Width="120" Height="35"  FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="150" Height="35" Content="編輯" FontFamily="Segoe UI Semibold" FontSize="20" Background="ForestGreen" BorderThickness="0" Click="Confirm_OnClick"/>
     </Grid>
 </Window>

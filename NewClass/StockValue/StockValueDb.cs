@@ -15,6 +15,14 @@ namespace His_Pos.NewClass.StockValue {
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", endDate);
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StockChangeReport]", parameterList);
-        } 
+        }
+        public static DataTable GetOTCDataByDate(DateTime startDate, DateTime endDate, string warID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", startDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", endDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[OTCStockChangeReport]", parameterList);
+        }
     }
 }

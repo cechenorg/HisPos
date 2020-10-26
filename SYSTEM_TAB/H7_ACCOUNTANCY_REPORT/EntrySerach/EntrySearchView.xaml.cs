@@ -1,4 +1,6 @@
-﻿using UserControl = System.Windows.Controls.UserControl;
+﻿using System.Windows;
+using System.Windows.Media;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
 {
@@ -13,6 +15,37 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             InitializeComponent(); 
         }
 
-       
+        private void btnTrade_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            btnMed.Background = Brushes.Transparent;
+            btnMed.Foreground = Brushes.DimGray;
+            btnTrade.Foreground = Brushes.White;
+            btnTrade.Background = Brushes.DimGray;
+            OTC.Visibility= Visibility.Visible;
+            OTCDG.Visibility = Visibility.Visible;
+            OTClbl.Visibility = Visibility.Visible;
+            OTCPrint.Visibility = Visibility.Visible;
+            Med.Visibility = Visibility.Collapsed;
+            MedDG.Visibility = Visibility.Collapsed;
+            Medlbl.Visibility = Visibility.Collapsed;
+
+        }
+
+        private void btnMed_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            btnTrade.Background = Brushes.Transparent;
+            btnTrade.Foreground = Brushes.DimGray;
+            btnMed.Foreground = Brushes.White;
+            btnMed.Background = Brushes.DimGray;
+            Med.Visibility = Visibility.Visible;
+            MedDG.Visibility = Visibility.Visible;
+            Medlbl.Visibility = Visibility.Visible;
+            OTCDG.Visibility = Visibility.Collapsed;
+            OTClbl.Visibility = Visibility.Collapsed;
+            OTCPrint.Visibility = Visibility.Collapsed;
+            OTC.Visibility = Visibility.Collapsed;
+
+
+        }
     }
 }

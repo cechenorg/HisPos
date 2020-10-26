@@ -9,7 +9,8 @@
         Title="顧客寄庫管理"
         Height="450"
         Width="800"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg"/>
     </Window.Background>
@@ -24,7 +25,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
-            <Label Content="" FontFamily="Segoe UI Semibold" FontSize="25" VerticalContentAlignment="Center"></Label>
+            <Label x:Name="CusName" Content="" FontFamily="Segoe UI Semibold" FontSize="25" VerticalContentAlignment="Center"></Label>
         </StackPanel>
         <DataGrid Name="ProductDepositDataGrid" Grid.Column="0" Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False">
             <DataGrid.Resources>
@@ -60,7 +61,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="寄存量" IsReadOnly="True" Binding="{Binding Path=TraDet_DepositAmount}">
+                <DataGridTextColumn Width="90" Header="寄存量" IsReadOnly="True" Binding="{Binding Path=TraDet_DepositAmount}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontSize" Value="16"/>
@@ -77,7 +78,7 @@
                 <DataGridTemplateColumn Width="100" Header="提取量" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="ProductAmountTextbox"  Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="True" Width="100" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" HorizontalContentAlignment="Center"
+                            <TextBox x:Name="ProductAmountTextbox"  Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="True" Width="100" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,0" HorizontalContentAlignment="Center"
                                      PreviewMouseLeftButtonDown="ProductAmountTextbox_PreviewMouseLeftButtonDown" GotFocus="ProductAmountTextbox_GotFocus">
                                 <TextBox.InputScope>
                                     <InputScope>
@@ -119,7 +120,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Header="日期" IsReadOnly="True" Binding="{Binding Path=DepRec_RecTime,StringFormat='yyyy/MM/dd'}">
+                <DataGridTextColumn Width="130" Header="日期" IsReadOnly="True" Binding="{Binding Path=TransTime_Format}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontSize" Value="16"/>
@@ -147,7 +148,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="數量" IsReadOnly="True" Binding="{Binding Path=DepRec_Amount}">
+                <DataGridTextColumn Width="60" Header="數量" IsReadOnly="True" Binding="{Binding Path=DepRec_Amount}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontSize" Value="16"/>

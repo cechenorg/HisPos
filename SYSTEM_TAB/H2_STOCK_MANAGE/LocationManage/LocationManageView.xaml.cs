@@ -45,6 +45,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             EditLocationWindow editTypeWindow = new EditLocationWindow((int)ProductLocationDataGrid.SelectedValue);
+            DataRowView row = (DataRowView)ProductLocationDataGrid.SelectedItem;
+            editTypeWindow.ChiName.Text = row["ProLoc_Name"].ToString();
             editTypeWindow.ShowDialog();
             InitLocationLoad();
             
@@ -52,8 +54,24 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            DeleteLocationWindow deleteTypeWindow = new DeleteLocationWindow((int)ProductLocationDataGrid.SelectedValue);
-            deleteTypeWindow.ShowDialog();
+           
+            var deleteMsg = "確定刪除選取櫃位?";
+            var delete = new ConfirmWindow(deleteMsg, "刪除確認");
+            if ((bool)delete.DialogResult)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                DataTable dataTable = ProductLocationDB.DeleteLocation((int)ProductLocationDataGrid.SelectedValue);
+                MainWindow.ServerConnection.CloseConnection();
+
+                if (dataTable is null || dataTable.Rows.Count == 0)
+                {
+                    MessageWindow.ShowMessage("刪除失敗 請稍後再試", Class.MessageType.ERROR);
+                    return;
+                }
+
+            }
+
+
             InitLocationLoad();
         }
         private void InitLocation()
@@ -96,6 +114,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             InitLocationDetail();
             InsertButton.Visibility = Visibility.Visible;
             PrintButton.Visibility = Visibility.Visible;
+            if (ProductLocationDataGrid.SelectedValue==null) {
+                Newbtn.Visibility = Visibility.Visible;
+                Editbtn.Visibility = Visibility.Visible;
+                Deletebtn.Visibility = Visibility.Visible;
+            }
+            else if ((int)ProductLocationDataGrid.SelectedValue == 9999)
+            {
+                Newbtn.IsEnabled = false;
+                Editbtn.IsEnabled = false;
+                Deletebtn.IsEnabled = false;
+            }
+            else {
+                Newbtn.IsEnabled = true;
+                Editbtn.IsEnabled = true;
+                Deletebtn.IsEnabled = true;
+            }
         }
 
         private void InsertButton_Click(object sender, RoutedEventArgs e)

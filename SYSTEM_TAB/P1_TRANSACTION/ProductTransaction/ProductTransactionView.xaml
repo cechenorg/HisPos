@@ -76,7 +76,7 @@
                     <RowDefinition Height="390"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-                    <TextBox x:Name="tbSearch" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="手機 / 家電" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,2" KeyDown="tbSearch_KeyDown">
+                    <TextBox x:Name="tbSearch" Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="手機 / 家電 / 姓名 / 生日" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Gray" Margin="10,0,0,2" KeyDown="tbSearch_KeyDown">
                     </TextBox>
                     <TextBox x:Name="tbCUS" Visibility="Collapsed" TextChanged="tbCUS_TextChanged"></TextBox>
                     <TextBox x:Name="tbFromHIS" Visibility="Collapsed" TextChanged="tbFromHIS_TextChanged"></TextBox>
@@ -299,7 +299,7 @@
                     </TextBox>
                     <Label Content="折" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
                     <Button x:Name="btnGift" Width="80" Height="35" Content="贈品" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" BorderThickness="0" Background="ForestGreen" Click="btnGift_Click"/>
-                    <Button x:Name="btnReturn" Width="80" Height="35" Content="退貨" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnReturn_Click"/>
+                    <Button x:Name="btnReturn" Width="80" Height="35" Content="退貨" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnReturn_Click" Visibility="Collapsed"/>
                     <Label Content="套用價格" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="55,0,0,0" Visibility="Collapsed"/>
                     <ComboBox x:Name="PriceCombo" Width="120" Height="35" HorizontalContentAlignment="Center" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyleAlignLeft}" FontSize="20" Foreground="Black" SelectionChanged="PriceCombo_SelectionChanged" Visibility="Collapsed">
                         <ComboBoxItem Content="零售價" IsSelected="True"/>

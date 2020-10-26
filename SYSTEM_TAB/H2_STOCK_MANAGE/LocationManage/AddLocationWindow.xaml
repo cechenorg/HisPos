@@ -5,22 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="新增櫃位" Height="250" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="新增櫃位" Height="150" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition />
             <RowDefinition Height="50"/>
-            <RowDefinition/>
-            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
-            <Label Name="SelectionHint" FontFamily="Segoe UI Semibold" FontSize="18" Margin="20,0,0,0" Foreground="DimGray"/>
+        <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" >
+            <Label Content="櫃位名稱:" FontFamily="Segoe UI bold" FontSize="20" Margin="0,0,0,0" Foreground="DimGray" HorizontalContentAlignment="Right"/>
         </StackPanel>
-        <TextBox Name="ChiName" Grid.Row="1" Width="170" Height="35" materialDesign:HintAssist.Hint="名稱" FontFamily="Segoe UI Semi" FontSize="20" Grid.ColumnSpan="2" Margin="116,24.4,107.6,51"/>
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="45" Content="新增" FontFamily="Segoe UI Semibold" FontSize="25" Background="IndianRed" BorderThickness="0" Click="ConfrimClick"/>
+        <TextBox Name="ChiName" Grid.Row="0"  Grid.Column="1" Width="120" Height="35"  FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" />
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="150" Height="35" Content="新增" FontFamily="Segoe UI Semibold" FontSize="20" Background="ForestGreen" BorderThickness="0" Click="ConfrimClick"/>
     </Grid>
 </Window>

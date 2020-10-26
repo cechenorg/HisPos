@@ -15,6 +15,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         DISABLE = 5,
         INV_ERROR = 6,
         ZERO=7,
-        OTCMedicine = 8
+        OTCMedicine = 8,
+        Medicine=9
     }
 }

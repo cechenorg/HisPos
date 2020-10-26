@@ -24,6 +24,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         public RelayCommand<string> ChangeSearchTypeCommand { get; set; }
         public RelayCommand InsertProductCommand { get; set; }
         public RelayCommand<string> FilterCommand { get; set; }
+
+        public RelayCommand<string> FilterIsOTCCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -45,7 +47,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private double errorStockValue;
         private WareHouse selectedWareHouse;
         private ICollectionView productCollectionView;
-        private ProductManageFilterEnum filterType = ProductManageFilterEnum.ALL;
+        private ProductManageFilterEnum filterType = ProductManageFilterEnum.Medicine;
+        private ProductManageFilterEnum filterIsOTC = ProductManageFilterEnum.Medicine;
         private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
         private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
 
@@ -136,6 +139,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
                 ProductCollectionView = CollectionViewSource.GetDefaultView(SearchProductCollection);
                 ProductCollectionView.Filter += ProductFilter;
+              
                 RaisePropertyChanged(nameof(CurrentStockValue));
                 RaisePropertyChanged(nameof(CurrentShelfStockValue));
 
@@ -177,10 +181,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private void FilterAction(string type)
         {
             filterType = (ProductManageFilterEnum) int.Parse(type);
-
+            
             ProductCollectionView.Filter += ProductFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
             RaisePropertyChanged(nameof(CurrentShelfStockValue));
+        }
+        private void FilterIsOTCAction(string type)
+        {
+            filterIsOTC = (ProductManageFilterEnum)int.Parse(type);
+            ProductCollectionView.Filter += ProductFilter;
+            RaisePropertyChanged(nameof(CurrentStockValue));
+            RaisePropertyChanged(nameof(CurrentShelfStockValue));
+
         }
         #endregion
 
@@ -191,6 +203,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             ChangeSearchTypeCommand = new RelayCommand<string>(ChangeSearchTypeAction);
             InsertProductCommand = new RelayCommand(InsertProductAction);
             FilterCommand = new RelayCommand<string>(FilterAction);
+            FilterIsOTCCommand = new RelayCommand<string>(FilterIsOTCAction);
         }
         private void InsertProductAction() {
             InsertProductWindow.InsertProductWindow insertProductWindow = new InsertProductWindow.InsertProductWindow();
@@ -216,28 +229,105 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private bool ProductFilter(object product)
         {
             var tempProduct = product as ProductManageStruct;
-
-            switch (filterType)
+            if (filterIsOTC == ProductManageFilterEnum.Medicine)
             {
-                case ProductManageFilterEnum.ALL:
-                    return true;
-                case ProductManageFilterEnum.COMMON:
-                    return tempProduct.IsCommon;
-                case ProductManageFilterEnum.CONTROL:
-                    return tempProduct.ControlLevel != null;
-                case ProductManageFilterEnum.FROZE:
-                    return tempProduct.IsFrozen;
-                case ProductManageFilterEnum.DISABLE:
-                    return !tempProduct.IsEnable; 
-                case ProductManageFilterEnum.INV_ERROR:
-                    return tempProduct.InventoryError;
-                case ProductManageFilterEnum.ZERO:
-                    return tempProduct.IsZero == 0 &&tempProduct.ProductType== (ProductTypeEnum)1;
-                case ProductManageFilterEnum.OTCMedicine:
-                    return tempProduct.ProductType ==(ProductTypeEnum)2;
+                switch (filterType)
+                {
+                    case ProductManageFilterEnum.Medicine:
+                        return tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.COMMON:
+                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.CONTROL:
+                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.FROZE:
+                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.DISABLE:
+                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.INV_ERROR:
+                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.ZERO:
+                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)1;
+                    default:
+                        return tempProduct.ProductType == (ProductTypeEnum)1;
+                }
             }
 
+            else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
+            {
+                switch (filterType)
+                {
+                    case ProductManageFilterEnum.OTCMedicine:
+                        return tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.COMMON:
+                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.CONTROL:
+                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.FROZE:
+                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.DISABLE:
+                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.INV_ERROR:
+                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.ZERO:
+                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)2;
+                    default:
+                        return tempProduct.ProductType == (ProductTypeEnum)2;
+                }
+            }
+           
+
             return false;
+        }
+        private bool ProductIsOTCFilter(object product)
+        {
+            var tempProduct = product as ProductManageStruct;
+            if (filterIsOTC == ProductManageFilterEnum.Medicine)
+            {
+                switch (filterType)
+                {
+                    case ProductManageFilterEnum.Medicine:
+                        return tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.COMMON:
+                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.CONTROL:
+                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.FROZE:
+                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.DISABLE:
+                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.INV_ERROR:
+                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)1;
+                    case ProductManageFilterEnum.ZERO:
+                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)1;
+                    default:
+                        return tempProduct.ProductType == (ProductTypeEnum)1;
+                }
+            }
+
+            else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
+            {
+                switch (filterType)
+                {
+                    case ProductManageFilterEnum.OTCMedicine:
+                        return tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.COMMON:
+                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.CONTROL:
+                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.FROZE:
+                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.DISABLE:
+                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.INV_ERROR:
+                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)2;
+                    case ProductManageFilterEnum.ZERO:
+                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)2;
+                    default:
+                        return tempProduct.ProductType == (ProductTypeEnum)2;
+                }
+            }
+
+                return false;
         }
         #endregion
     }

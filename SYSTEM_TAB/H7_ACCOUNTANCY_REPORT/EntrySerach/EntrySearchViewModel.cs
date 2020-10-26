@@ -31,6 +31,22 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             set { Set(() => TotalDailyStock, ref totalDailyStock, value); }
         }
         private DateTime startDate = DateTime.Now.AddDays(-DateTime.Now.Day + 1);
+
+        //10.21
+        public StockValue SelectOTCStockValue { get; set; }
+        private StockValues dailyOTCStockValueCollection = new StockValues();
+        public StockValues DailyOTCStockValueCollection
+        {
+            get { return dailyOTCStockValueCollection; }
+            set { Set(() => DailyOTCStockValueCollection, ref dailyOTCStockValueCollection, value); }
+        }
+        private StockValue totalOTCDailyStock = new StockValue();
+        public StockValue TotalOTCDailyStock
+        {
+            get { return totalOTCDailyStock; }
+            set { Set(() => TotalOTCDailyStock, ref totalOTCDailyStock, value); }
+        }
+        //10.21^^^
         public DateTime StartDate
         {
             get { return startDate; }
@@ -102,8 +118,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
         
         private void Search() { 
             DailyStockValueCollection.Clear();
+            DailyOTCStockValueCollection.Clear();
             DailyStockValueCollection.GetDataByDate(StartDate, EndDate, SelectedWareHouse.ID);
+            DailyOTCStockValueCollection.GetOTCDataByDate(StartDate, EndDate, SelectedWareHouse.ID);
             CaculateTotalStock();
+            CaculateOTCTotalStock();
         }
         private void CaculateTotalStock() {
             if (DailyStockValueCollection.Count > 0) {
@@ -117,6 +136,21 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalDailyStock.FinalStockValue = DailyStockValueCollection[DailyStockValueCollection.Count - 1].FinalStockValue;
             }
        
+        }
+        private void CaculateOTCTotalStock()
+        {
+            if (DailyOTCStockValueCollection.Count > 0)
+            {
+                TotalOTCDailyStock.InitStockValue = DailyOTCStockValueCollection[0].InitStockValue;
+                TotalOTCDailyStock.PurchaseValue = DailyOTCStockValueCollection.Sum(d => d.PurchaseValue);
+                TotalOTCDailyStock.ReturnValue = DailyOTCStockValueCollection.Sum(d => d.ReturnValue);
+                TotalOTCDailyStock.MedUseValue = DailyOTCStockValueCollection.Sum(d => d.MedUseValue);
+                TotalOTCDailyStock.MinusStockAdjustValue = DailyOTCStockValueCollection.Sum(d => d.MinusStockAdjustValue);
+                TotalOTCDailyStock.StockCheckValue = DailyOTCStockValueCollection.Sum(d => d.StockCheckValue);
+                TotalOTCDailyStock.TrashValue = DailyOTCStockValueCollection.Sum(d => d.TrashValue);
+                TotalOTCDailyStock.FinalStockValue = DailyOTCStockValueCollection[DailyOTCStockValueCollection.Count - 1].FinalStockValue;
+            }
+
         }
         #endregion
     }

@@ -33,7 +33,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <Label Content="銷售日期" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"></Label>
-                    <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type s:String}" InsertKeyMode="Overwrite" PreviewKeyDown="StartDate_OnPreviewKeyDown">
+                    <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="20" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type s:String}" InsertKeyMode="Overwrite" PreviewKeyDown="StartDate_OnPreviewKeyDown">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
                                 <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=StartDate}"/>
@@ -41,7 +41,7 @@
                         </i:Interaction.Triggers>
                     </xctk:MaskedTextBox>
                     <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}"/>
-                    <xctk:MaskedTextBox x:Name="EndDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type s:String}" InsertKeyMode="Overwrite" PreviewKeyDown="EndDate_OnPreviewKeyDown">
+                    <xctk:MaskedTextBox x:Name="EndDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="20" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type s:String}" InsertKeyMode="Overwrite" PreviewKeyDown="EndDate_OnPreviewKeyDown">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
                                 <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=EndDate}"/>
@@ -56,10 +56,11 @@
                     </TextBox>
                     <Label Content="結帳人員" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"></Label>
                     <ComboBox Margin="20,0,0,0"  x:Name="cbCashier" Width="100" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID"/>
-                    <Button x:Name="btnClear" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="30,0,0,0" FontSize="16" Click="btnClear_Click"/>
-                    <Button x:Name="btnQuery" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16" Click="btnQuery_Click"/>
+                    
                     <CheckBox x:Name="chkIsIrregular" Content="顯示非常規銷售" IsChecked="{Binding SearchIsIrregular, Mode=TwoWay}" Margin="10,0,0,0" Background="RoyalBlue" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox x:Name="chkIsReturn" Content="顯示退貨" IsChecked="{Binding SearchIsReturn, Mode=TwoWay}" Margin="10,0,0,0" Background="RoyalBlue" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <Button x:Name="btnClear" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="80,0,0,0" FontSize="16" Click="btnClear_Click" HorizontalAlignment="Right" Width="100"/>
+                    <Button x:Name="btnQuery" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16" Click="btnQuery_Click" HorizontalAlignment="Right" Width="100"/>
                 </StackPanel>
                 <DataGrid x:Name="RecordGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>

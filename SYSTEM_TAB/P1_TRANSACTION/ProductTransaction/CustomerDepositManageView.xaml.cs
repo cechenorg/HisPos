@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using His_Pos.FunctionWindow;
 using His_Pos.Class;
 using System.Windows.Controls;
+using System;
+using System.Globalization;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -31,6 +33,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             parameters.Add(new SqlParameter("TraMas_CustomerID", cus));
             detail = MainWindow.ServerConnection.ExecuteProc("[POS].[DepositRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
+            detail.Columns.Add("TransTime_Format", typeof(string));
+            foreach (DataRow dr in detail.Rows)
+            {
+                string ogTransTime = dr["DepRec_RecTime"].ToString();
+                DateTime dt = DateTime.Parse(ogTransTime);
+                CultureInfo culture = new CultureInfo("zh-TW");
+                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
+            }
             ProductDepositRecordDataGrid.ItemsSource=detail.DefaultView;
         }
         public void CustomerDepositManage()

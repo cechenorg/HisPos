@@ -1496,6 +1496,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void btnDepositManage_Click(object sender, RoutedEventArgs e)
         {
             CustomerDepositManageView cdmv = new CustomerDepositManageView(cusID);
+            if (cdmv.CusName != null)
+            {
+                cdmv.CusName.Content = lbName.Content;
+            }
             cdmv.ShowDialog();
         }
 

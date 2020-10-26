@@ -4,18 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" ResizeMode="NoResize"
-        Title="刪除櫃位" Height="200" Width="400" WindowStartupLocation="CenterScreen">
-    <Grid Height="150" Width="390" VerticalAlignment="Top" HorizontalAlignment="Left">
+        Title="刪除櫃位" Height="100" Width="200" WindowStartupLocation="CenterScreen">
+    <Grid Height="150" Width="390" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
-            <RowDefinition Height="45"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
      
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="50" Content="確認刪除" FontFamily="Segoe UI Semibold" FontSize="25" Background="IndianRed" BorderThickness="0" VerticalAlignment="Bottom" Click="Confirm_OnClick"/>
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="170" Height="30" Content="確認刪除" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" VerticalAlignment="Center" Click="Confirm_OnClick"/>
     </Grid>
 </Window>
