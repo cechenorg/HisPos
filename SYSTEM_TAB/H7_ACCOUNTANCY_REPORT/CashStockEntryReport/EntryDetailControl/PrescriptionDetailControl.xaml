@@ -6,15 +6,18 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl"
              mc:Ignorable="d" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="380" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="700"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
             <Label  Content="處方詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="調劑案件" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" FontSize="25"/>
             <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding AdjustCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -22,8 +25,8 @@
             </ComboBox>
             <Rectangle Width="132"/>
             <Button Content="匯出檔案" Command="{Binding PrintPrescriptionProfitDetailCommand}" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderBrush="DarkCyan" FontSize="20" Width="120"/>
-        </StackPanel> 
-        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        </StackPanel>
+        <DataGrid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding PrescriptionDetailReportView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                    CanUserDeleteRows="False">
             <i:Interaction.Triggers>
@@ -180,16 +183,16 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
             <Label Width="60" VerticalAlignment="Center" Margin="80,0,0,0" Content="{Binding PrescriptionDetailReportSum.InsName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20"/>
-            <TextBlock Width="75" VerticalAlignment="Center" TextAlignment="Right" Margin="70,0,0,0" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+            <TextBlock Width="55" VerticalAlignment="Center" TextAlignment="Right" Margin="70,0,0,0" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
             <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.MedicalPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
-            <TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
-            <TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Meduse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+            <TextBlock Width="110" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+            <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Meduse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
             <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
-        </StackPanel> 
-        <Rectangle Grid.Row="3" Grid.RowSpan="2" Fill="{StaticResource GridBackGround}"/>
-        <DataGrid Grid.Row="3" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        </StackPanel>
+        <Rectangle Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Fill="{StaticResource GridBackGround}"/>
+        <DataGrid Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding PrescriptionDetailMedicineRepotCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailMedicineRepotSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">
             <i:Interaction.Triggers>

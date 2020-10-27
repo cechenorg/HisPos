@@ -110,6 +110,15 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => DiscountAmt, ref discountAmt, value);
             }
         }
+        private int totalAmt;
+        public int TotalAmt
+        {
+            get => totalAmt;
+            set
+            {
+                Set(() => TotalAmt, ref totalAmt, value);
+            }
+        }
 
 
         public void CountEditPoint(DataRow editDataRow)

@@ -7,18 +7,21 @@
              mc:Ignorable="d" 
               xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="800" d:DesignWidth="1400">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition/>
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="290"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
-        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="700"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0"  Grid.Column="0" Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
+        <DataGrid Grid.Row="1" Grid.Column="0"  Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding CashDetailReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CashDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserDeleteRows="False" >
             <i:Interaction.Triggers>
@@ -165,8 +168,8 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Rectangle Grid.Row="2" Fill="{StaticResource GridBackGround}"/>
-        <DataGrid Grid.Row="2" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <Rectangle Grid.Row="1" Grid.Column="1" Fill="{StaticResource GridBackGround}"/>
+        <DataGrid Grid.Row="1"  Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding CashDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">
             <DataGrid.Resources>

@@ -61,24 +61,63 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             btnTrade.Foreground = Brushes.DimGray;
             btnMed.Foreground = Brushes.White;
             btnMed.Background = Brushes.DimGray;
-            StockOTC.Visibility = Visibility.Collapsed;
-            TradeProfit.Visibility = Visibility.Collapsed;
-            CashFlow.Visibility = Visibility.Visible;
-            PrescriptionProfit.Visibility = Visibility.Visible;
-            StockMed.Visibility = Visibility.Visible;
+            btnAll.Background = Brushes.Transparent;
+            btnAll.Foreground = Brushes.DimGray;
+            Med.Visibility = Visibility.Visible;
+            OTC.Visibility = Visibility.Collapsed;
+            All.Visibility = Visibility.Collapsed;
         }
 
         private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            btnMed.Background = Brushes.Transparent;
-            btnMed.Foreground = Brushes.DimGray;
-            btnTrade.Foreground = Brushes.White;
             btnTrade.Background = Brushes.DimGray;
-            StockOTC.Visibility = Visibility.Visible;
-            TradeProfit.Visibility = Visibility.Visible;
-            CashFlow.Visibility = Visibility.Collapsed;
-            PrescriptionProfit.Visibility = Visibility.Collapsed;
-            StockMed.Visibility = Visibility.Collapsed;
+            btnTrade.Foreground = Brushes.White;
+            btnMed.Foreground = Brushes.DimGray;
+            btnMed.Background = Brushes.Transparent;
+            btnAll.Background = Brushes.Transparent;
+            btnAll.Foreground = Brushes.DimGray;
+            Med.Visibility = Visibility.Collapsed;
+            OTC.Visibility = Visibility.Visible;
+            All.Visibility = Visibility.Collapsed;
+        }
+
+        private void btnAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnTrade.Background = Brushes.Transparent;
+            btnTrade.Foreground = Brushes.DimGray;
+            btnMed.Foreground = Brushes.DimGray;
+            btnMed.Background = Brushes.Transparent;
+            btnAll.Background = Brushes.DimGray;
+            btnAll.Foreground = Brushes.White;
+            Med.Visibility = Visibility.Collapsed;
+            OTC.Visibility = Visibility.Collapsed;
+            All.Visibility = Visibility.Visible;
+        }
+
+        private void OTCMain_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnTrade.Background = Brushes.DimGray;
+            btnTrade.Foreground = Brushes.White;
+            btnMed.Foreground = Brushes.DimGray;
+            btnMed.Background = Brushes.Transparent;
+            btnAll.Background = Brushes.Transparent;
+            btnAll.Foreground = Brushes.DimGray;
+            Med.Visibility = Visibility.Collapsed;
+            OTC.Visibility = Visibility.Visible;
+            All.Visibility = Visibility.Collapsed;
+        }
+
+        private void MedMain_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnTrade.Background = Brushes.Transparent;
+            btnTrade.Foreground = Brushes.DimGray;
+            btnMed.Foreground = Brushes.White;
+            btnMed.Background = Brushes.DimGray;
+            btnAll.Background = Brushes.Transparent;
+            btnAll.Foreground = Brushes.DimGray;
+            Med.Visibility = Visibility.Visible;
+            OTC.Visibility = Visibility.Collapsed;
+            All.Visibility = Visibility.Collapsed;
         }
     }
 }

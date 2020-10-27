@@ -10,15 +10,17 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="290"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="700"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
             <Label  Content="銷售紀錄" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Rectangle Width="150"/>
-        </StackPanel> 
-        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        </StackPanel>
+        <DataGrid Grid.Row="1"  Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding TradeProfitDetailReportCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeProfitDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                    CanUserDeleteRows="False">
             <i:Interaction.Triggers>
@@ -127,7 +129,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                
+
                 <DataGridTextColumn Width="100" Header="成本" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding ValueDifference}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -168,13 +170,8 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-            <!--<Label Width="60" VerticalAlignment="Center" Margin="80,0,0,0" Content="{Binding PrescriptionDetailReportSum.InsName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20"/>
-            <TextBlock Width="75" VerticalAlignment="Center" TextAlignment="Right" Margin="70,0,0,0" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>-->
-        </StackPanel>
-
-        <Rectangle Grid.Row="3" Fill="{StaticResource GridBackGround}"/>
-        <DataGrid Grid.Row="3" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <Rectangle Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Fill="{StaticResource GridBackGround}"/>
+        <DataGrid Grid.Row="1" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding TradeProfitDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                   SelectedItem="{Binding TradeProfitDetailMedicineReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"

@@ -105,5 +105,51 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => Total, ref total, value);
             }
         }
+
+        private double totalOTC;
+        public double TotalOTC
+        {
+            get => totalOTC;
+            set
+            {
+                Set(() => TotalOTC, ref totalOTC, value);
+            }
+        }
+        private double totalMedProfit;
+        public double TotalMedProfit
+        {
+            get => totalMedProfit;
+            set
+            {
+                Set(() => TotalMedProfit, ref totalMedProfit, value);
+            }
+        }
+        private double totalMedUse;
+        public double TotalMedUse
+        {
+            get => totalMedUse;
+            set
+            {
+                Set(() => TotalMedUse, ref totalMedUse, value);
+            }
+        }
+        private double totalMedCash;
+        public double TotalMedCash
+        {
+            get => totalMedCash;
+            set
+            {
+                Set(() => TotalMedCash, ref totalMedCash, value);
+            }
+        }
+        private double totalMed;
+        public double TotalMed
+        {
+            get => totalMed;
+            set
+            {
+                Set(() => TotalMed, ref totalMed, value);
+            }
+        }
     }
 }

@@ -94,6 +94,16 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => Profit, ref profit, value);
             }
         }
+        private int totalMed;
+        public int TotalMed
+        {
+            get => totalMed;
+            set
+            {
+                Set(() => TotalMed, ref totalMed, value);
+            }
+        }
+
 
         public void CountEditPoint(DataRow editDataRow)
         {
