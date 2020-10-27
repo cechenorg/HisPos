@@ -160,8 +160,8 @@ namespace His_Pos.Service
                 Collection<Holiday> holidayCollection = new Collection<Holiday>(tempCollection.Where(x => x.date.Year == year).ToList());
                 foreach (Holiday day in holidayCollection) {
                     if (day.name == "軍人節") continue;
-                    if (day.isHoliday == "是")
-                        ;/// FunctionDb.UpdateLastYearlyHoliday(day);
+                    // if (day.isHoliday == "是");
+                    // FunctionDb.UpdateLastYearlyHoliday(day);
                 }
             }
         }
@@ -224,7 +224,7 @@ namespace His_Pos.Service
                 }
                 HisApiFunction.CloseCom();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageWindow.ShowMessage("上傳異常，請稍後再試。", MessageType.ERROR);
             }

@@ -56,7 +56,8 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                         File.Delete(fs);
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception)
+                {
 
                 } 
             }

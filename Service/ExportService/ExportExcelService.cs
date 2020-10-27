@@ -52,7 +52,7 @@ namespace His_Pos.Service.ExportService
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

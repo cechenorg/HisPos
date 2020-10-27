@@ -391,7 +391,7 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 StoreOrderDB.RemoveStoreOrderByID(newstoordId);
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
@@ -411,7 +411,7 @@ namespace His_Pos.NewClass.StoreOrder
                 else
                     StoreOrderDB.UpdateDetailByStoOrdID(pSendData, stoordId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageWindow.ShowMessage("更新藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR); 
             }
@@ -419,10 +419,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void SaveOrderCus()
         {
-
             PurchaseOrder saveStoreOrder = this.Clone() as PurchaseOrder;
-
-            string note;
             DateTime dt = Day;
             if (dt == default(DateTime))
             {

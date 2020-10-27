@@ -22,7 +22,7 @@ namespace His_Pos.Database
             {
                 connection.Open();
             }
-            catch (SqlException e)
+            catch (SqlException)
             {
                 return false;
             }
@@ -44,7 +44,7 @@ namespace His_Pos.Database
                 if(connection.State == ConnectionState.Closed)
                     connection.Open();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
             }

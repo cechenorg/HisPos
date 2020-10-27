@@ -117,8 +117,6 @@ namespace His_Pos.ChromeTabViewModel
 
         public void AddTabCommandAction(string tabName)
         {
-            TabBase newTab;
-
             foreach (TabBase tab in ItemCollection)
             {
                 if (tab.TabName == "調劑")

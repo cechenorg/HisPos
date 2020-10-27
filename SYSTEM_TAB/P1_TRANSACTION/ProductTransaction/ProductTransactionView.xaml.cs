@@ -618,7 +618,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
                 else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
@@ -657,7 +657,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
                 else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageWindow.ShowMessage("發票列表機設定錯誤", MessageType.ERROR);
             }

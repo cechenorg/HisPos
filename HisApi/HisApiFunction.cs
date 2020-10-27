@@ -184,7 +184,7 @@ namespace His_Pos.HisApi
             {
                 res = HisApiBase.hpcVerifyHPCPIN();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ShowMessage(Resources.控制軟體異常);
             }

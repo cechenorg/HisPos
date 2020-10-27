@@ -38,13 +38,14 @@ namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
                                 cusIdNumbers.Add(cusIdNumber);
                                 filepaths.Add(s);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
                         }
                         XmlOfPrescriptionDb.Insert(cusIdNumbers, filepaths, xmls, c.TypeName);
                     }
-                    catch (Exception ex) {
+                    catch (Exception)
+                    {
                     }
                 } 
             }
