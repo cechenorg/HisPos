@@ -13,7 +13,8 @@ namespace His_Pos.NewClass.Report
         StockTaking = 2,
         TradeProfit = 3,
         ExtraMoney = 4,
-        OTCStockTaking = 5
+        OTCStockTaking = 5,
+        Reward=6
     }
 }
  

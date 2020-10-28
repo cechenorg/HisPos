@@ -616,6 +616,12 @@
     <Compile Include="NewClass\Report\StockTakingOTCReport\StockTakingOTCReport.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCReport\StockTakingOTCReportDb.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCReport\StockTakingOTCReports.cs" />
+    <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailRecordReport\RewardDetailRecordReport.cs" />
+    <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailRecordReport\RewardDetailRecordReportDb.cs" />
+    <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailRecordReport\RewardDetailRecordReports.cs" />
+    <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailReport.cs" />
+    <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailReportDb.cs" />
+    <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailReports.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReportDb.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReports.cs" />
@@ -669,6 +675,9 @@
     <Compile Include="NewClass\Report\StockTakingReport\StockTakingReport.cs" />
     <Compile Include="NewClass\Report\StockTakingReport\StockTakingReportDb.cs" />
     <Compile Include="NewClass\Report\StockTakingReport\StockTakingReports.cs" />
+    <Compile Include="NewClass\Report\RewardReport\RewardReport.cs" />
+    <Compile Include="NewClass\Report\RewardReport\RewardReportDb.cs" />
+    <Compile Include="NewClass\Report\RewardReport\RewardReports.cs" />
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReport.cs" />
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReportDb.cs" />
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReports.cs" />
@@ -1247,6 +1256,9 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\StockTakingOTCDetailControl.xaml.cs">
       <DependentUpon>StockTakingOTCDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\RewardDetailControl.xaml.cs">
+      <DependentUpon>RewardDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\TradeProfitDetailControl.xaml.cs">
       <DependentUpon>TradeProfitDetailControl.xaml</DependentUpon>
@@ -2096,6 +2108,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\StockTakingOTCDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\EntryDetailControl\RewardDetailControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

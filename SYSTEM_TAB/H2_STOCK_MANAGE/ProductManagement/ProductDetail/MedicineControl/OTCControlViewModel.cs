@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Windows;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -196,7 +198,27 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
                     return false;
                 }
             }
+            if (Medicine.IsReward == true)
+            {
+                if (Medicine.RewardPercent is null)
+                {
+                    MessageWindow.ShowMessage("醫獎欄位不可為空", MessageType.ERROR);
+                    return false;
+                }
+                if (Medicine.RewardPercent >100 || Medicine.RewardPercent < 0)
+                {
+                    MessageWindow.ShowMessage("醫獎%數必須在0~100之間", MessageType.ERROR);
+                    return false;
+                }
+                bool notNumber = Double.TryParse(Medicine.RewardPercent.ToString(), out double i);
+                if (notNumber==false)
+                {
+                    MessageWindow.ShowMessage("醫獎欄位只能輸入數字", MessageType.ERROR);
+                    return false;
+                }
+                Medicine.RewardPercent = System.Math.Round((double)Medicine.RewardPercent, 2, MidpointRounding.AwayFromZero);
 
+            }
             return true;
         }
         #endregion

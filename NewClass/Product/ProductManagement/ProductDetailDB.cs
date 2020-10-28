@@ -131,6 +131,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
             DataBaseFunction.AddSqlParameter(parameters, "PRO_NOTE", productManageMedicine.Note);
             DataBaseFunction.AddSqlParameter(parameters, "PRO_SELFPAYTYPE", productManageMedicine.SelfPayType == SelfPayTypeEnum.Default? "D" : "C");
             DataBaseFunction.AddSqlParameter(parameters, "PRO_SELFPAYPRICE", productManageMedicine.SelfPayPrice);
+            parameters.Add(new SqlParameter("Pro_IsReward", productManageMedicine.IsReward));
+            DataBaseFunction.AddSqlParameter(parameters, "Pro_RewardPercent", productManageMedicine.RewardPercent);
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
         }

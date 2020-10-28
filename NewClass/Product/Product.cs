@@ -101,6 +101,8 @@ namespace His_Pos.NewClass.Product
                 }
             }
         }
+   
+
         #endregion
 
         #region ----- Define Functions -----

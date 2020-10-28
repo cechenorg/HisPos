@@ -30,6 +30,9 @@
         <DataTemplate x:Key="ExtraMoneyDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
             <entryDetailControl:ExtraMoneyDetailControl/>
         </DataTemplate>
+        <DataTemplate x:Key="RewardDetailControl" DataType="{x:Type local:CashStockEntryReportViewModel}">
+            <entryDetailControl:RewardDetailControl/>
+        </DataTemplate>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
         <Grid Margin="10">
@@ -92,14 +95,14 @@
                     <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" Background="DarkSeaGreen"/>
                     <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
                     <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" Grid.ColumnSpan="4" Grid.RowSpan="2" BorderBrush="DarkSeaGreen"/>
-                    <Label Grid.Row="0" Grid.Column="0" Content="OTC交易" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" />
+                    <Label Grid.Row="0" Grid.Column="0" Content="OTC交易" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center"/>
                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" MouseDown="OTCMain_MouseDown" Width="330">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="{Binding TotalCashFlow.TotalOTC,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="330"/>
                         </Border>
                     </StackPanel>
                     <Label Grid.Row="0" Grid.Column="1" Content="調劑總計" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center"/>
-                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" MouseDown="MedMain_MouseDown"  Width="350">
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" MouseDown="MedMain_MouseDown"  Width="330">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="{Binding TotalCashFlow.TotalMed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="330"/>
                         </Border>
@@ -110,13 +113,13 @@
                         <MouseBinding Gesture="LeftClick" Command="{Binding ExtraMoneyReportSelectionChangedCommand}"/>
                     </StackPanel.InputBindings>
                     <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                        <Label Content="{Binding ExtraMoney,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="350"/>
+                        <Label Content="{Binding ExtraMoney,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="330"/>
                     </Border>
                 </StackPanel>
                 <Label Grid.Row="0" Grid.Column="3" Content="合計" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" />
-                    <StackPanel Grid.Row="1" Grid.Column="3"  Orientation="Horizontal" Width="330">
+                    <StackPanel Grid.Row="1" Grid.Column="3"  Orientation="Horizontal" Width="315">
                     <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
-                        <Label Content="{Binding TotalCashFlow.Total,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="330"/>
+                            <Label Content="{Binding TotalCashFlow.Total,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="315"/>
                     </Border>
                 </StackPanel>
                 </Grid>
@@ -147,9 +150,8 @@
                     <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
                     <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
                     <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
-                    <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
-                    <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
-                    <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" Grid.ColumnSpan="5" Grid.RowSpan="7" BorderBrush="DarkSeaGreen"/>
+                    <StackPanel Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="10" Background="DarkSeaGreen"/>
+                    <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" Grid.ColumnSpan="5" Grid.RowSpan="6" BorderBrush="DarkSeaGreen"/>
                     <Label Grid.Row="1" Grid.Column="0" Content="處方" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Background="Transparent" >
                         <Label Content="處方合作" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300" />
@@ -169,9 +171,7 @@
                             <Label Content="小計" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200"/>
                         </Border>
                     </StackPanel>
-
-                   
-                        <StackPanel Grid.Row="1" Grid.Column="1"  Background="Transparent">
+                    <StackPanel Grid.Row="1" Grid.Column="1"  Background="Transparent">
                             <StackPanel.InputBindings>
                                 <MouseBinding Gesture="LeftClick" Command="{Binding CooperativePrescriptionSelectionChangedCommand}"/>
                             </StackPanel.InputBindings>
@@ -223,10 +223,6 @@
                             <Label Content="{Binding TotalCashFlow.TotalMedUse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200" Margin="0,10,0,0"/>
                         </Border>
                     </StackPanel>
-
-
-               
-
                     <Label Grid.Row="3" Grid.Column="0" Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="3" Grid.Column="1"  Orientation="Horizontal" Background="Transparent">
                         <StackPanel.InputBindings>
@@ -257,8 +253,6 @@
                             <Label Content="{Binding TotalCashFlow.TotalMedCash,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200"/>
                         </Border>
                     </StackPanel>
-
-
                     <Label Grid.Row="4" Grid.Column="0" Content="盤差" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Background="Transparent">
                         <StackPanel.InputBindings>
@@ -305,7 +299,7 @@
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Grid.Column="3" Orientation="Horizontal" Background="Transparent">
-                            <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                             </Border>
                     </StackPanel>
@@ -314,22 +308,7 @@
                             <Label  Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200"/>
                         </Border>
                     </StackPanel>
-                    <Label Grid.Row="6" Grid.Column="0" Content="結算" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Background="Transparent">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
-                        </Border>
-                    </StackPanel>
-                    <StackPanel Grid.Row="6" Grid.Column="2" Orientation="Horizontal" Background="Transparent">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
-                        </Border>
-                    </StackPanel>
-                    <StackPanel Grid.Row="6" Grid.Column="3" Orientation="Horizontal" Background="Transparent">
-                    <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                        <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
-                    </Border>
-                    </StackPanel>
+                    <Label Grid.Row="6" Grid.Column="3" Content="合計" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="6" Grid.Column="4" Orientation="Horizontal" Background="Transparent">
                     <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                         <Label Content="{Binding TotalCashFlow.TotalMed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200"/>
@@ -365,8 +344,8 @@
                     <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
                     <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
                     <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
-                    <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
-                    <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" Grid.ColumnSpan="6" Grid.RowSpan="8" BorderBrush="DarkSeaGreen"/>
+                    <StackPanel Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="10" Background="DarkSeaGreen"/>
+                    <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" Grid.ColumnSpan="6" Grid.RowSpan="7" BorderBrush="DarkSeaGreen"/>
                     <Label Grid.Row="1" Grid.Column="0" Content="營收" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal"  >
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
@@ -543,28 +522,43 @@
                     </StackPanel>
                     <Label Grid.Row="5" Grid.Column="0" Content="獎金" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Background="Transparent" >
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding RewardReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Grid.Column="2" Orientation="Horizontal" Background="Transparent" >
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding RewardReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Grid.Column="3" Orientation="Horizontal" Background="Transparent" >
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding RewardReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Grid.Column="4" Orientation="Horizontal" Background="Transparent" >
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding RewardReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label Content="{Binding TotalRewardReport.RewardAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Grid.Column="5" Orientation="Horizontal" Background="Transparent">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding RewardReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="{Binding TotalRewardReport.RewardAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
                     <Label Grid.Row="6" Grid.Column="0" Content="禮券" FontFamily="Segoe UI Semibold" FontSize="20"
@@ -581,41 +575,21 @@
                     </StackPanel>
                     <StackPanel Grid.Row="6" Grid.Column="3" Orientation="Horizontal" Background="Transparent">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label Content="{Binding DiscountAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="6" Grid.Column="4" Orientation="Horizontal" Background="Transparent">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding TotalTradeProfitReport.DiscountAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="6" Grid.Column="5" Orientation="Horizontal" Background="Transparent">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding TotalTradeProfitReport.DiscountAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="{Binding DiscountAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
-                    
-                    <Label Grid.Row="7" Grid.Column="0" Content="結算" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <StackPanel  Grid.Row="7" Grid.Column="1" Orientation="Horizontal" Background="Transparent">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
-                        </Border>
-                    </StackPanel>
-                    <StackPanel  Grid.Row="7" Grid.Column="2" Orientation="Horizontal" Background="Transparent">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
-                        </Border>
-                    </StackPanel>
-                    <StackPanel  Grid.Row="7" Grid.Column="3" Orientation="Horizontal" Background="Transparent">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
-                        </Border>
-                    </StackPanel>
-                    <StackPanel  Grid.Row="7" Grid.Column="4" Orientation="Horizontal" Background="Transparent">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
-                        </Border>
-                    </StackPanel>
+
+                    <Label Grid.Row="7" Grid.Column="4" Content="合計" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,0,0,0"/>
                     <StackPanel  Grid.Row="7" Grid.Column="5" Orientation="Horizontal" Background="Transparent">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="{Binding TotalCashFlow.TotalOTC,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
@@ -642,6 +616,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="ExtraMoney">
                                 <Setter Property="ContentTemplate" Value="{StaticResource ExtraMoneyDetailControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="Reward">
+                                <Setter Property="ContentTemplate" Value="{StaticResource RewardDetailControl}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
