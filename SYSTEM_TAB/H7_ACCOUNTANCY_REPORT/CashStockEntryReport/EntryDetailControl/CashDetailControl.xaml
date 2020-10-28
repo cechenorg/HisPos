@@ -7,17 +7,17 @@
              mc:Ignorable="d" 
               xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             d:DesignHeight="800" d:DesignWidth="1400">
+             d:DesignHeight="600" d:DesignWidth="1400">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="290"/>
+            <RowDefinition Height="360"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="670"/>
             <ColumnDefinition Width="700"/>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0"  Grid.Column="0" Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>

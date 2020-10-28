@@ -25,6 +25,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             OTCDG.Visibility = Visibility.Visible;
             OTClbl.Visibility = Visibility.Visible;
             OTCPrint.Visibility = Visibility.Visible;
+            Print.Visibility = Visibility.Collapsed;
             Med.Visibility = Visibility.Collapsed;
             MedDG.Visibility = Visibility.Collapsed;
             Medlbl.Visibility = Visibility.Collapsed;
@@ -44,7 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             OTClbl.Visibility = Visibility.Collapsed;
             OTCPrint.Visibility = Visibility.Collapsed;
             OTC.Visibility = Visibility.Collapsed;
-
+            Print.Visibility = Visibility.Visible;
 
         }
     }
