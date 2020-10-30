@@ -31,9 +31,9 @@ namespace His_Pos.NewClass.Prescription.Search
             }
         }
 
-        public void GetNoBucklePrescriptions(DateTime? sDate, DateTime? eDate)
+        public void GetNoBucklePrescriptions()
         {
-            var table = PrescriptionDb.GetNoBucklePrescriptions(sDate, eDate);
+            var table = PrescriptionDb.GetNoBucklePrescriptions();
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));

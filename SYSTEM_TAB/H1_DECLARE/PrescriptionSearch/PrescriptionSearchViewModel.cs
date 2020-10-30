@@ -337,6 +337,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand ShowPrescriptionEdit { get; set; }
         public RelayCommand ExportPrescriptionCsv { get; set; }
         public RelayCommand ExportMedicineCsv { get; set; }
+        public RelayCommand SearchNotBuckleCommad { get; set; }
+        
         #endregion
         public PrescriptionSearchViewModel()
         {
@@ -395,6 +397,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ShowPrescriptionEdit = new RelayCommand(ShowPrescriptionEditAction);
             ExportPrescriptionCsv = new RelayCommand(ExportPrescriptionCsvAction);
             ExportMedicineCsv = new RelayCommand(ExportMedicineCsvAction);
+            SearchNotBuckleCommad = new RelayCommand(SearchNotBuckleAction); 
         }
         #endregion
 
@@ -421,6 +424,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             }
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) => { SearchByConditions(); };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                EndSearch();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+        }
+
+        private void SearchNotBuckleAction()
+        {
+           
+            worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) => { SearchNotBuckle(); };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
@@ -614,6 +631,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MainWindow.ServerConnection.CloseConnection();
             searchType = SelectedTimeIntervalType.Equals("預約日") ? PrescriptionType.ChronicReserve : PrescriptionType.Normal;
         }
+        private void SearchNotBuckle()
+        {
+            BusyContent = "處方查詢中...";
+            SearchPrescriptions = new PrescriptionSearchPreviews();
+            MainWindow.ServerConnection.OpenConnection();
+            SearchPrescriptions.GetNoBucklePrescriptions();
+            MainWindow.ServerConnection.CloseConnection();
+
+        }
+
 
         private void EndSearch()
         {

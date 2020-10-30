@@ -20,8 +20,17 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int? SafeAmount { get; set; }
         public int? BasicAmount { get; set; }
         public int MinOrderAmount { get; set; }
-        public double? RewardPercent { get; set; }
-        
+        private string rewardPercent;
+        public string RewardPercent
+        {
+            get { return rewardPercent; }
+            set
+            {
+                rewardPercent = value;
+                RaisePropertyChanged(nameof(RewardPercent));
+            }
+        }
+
         public SelfPayTypeEnum SelfPayType { get; set; }
         public double? SelfPayPrice { get; set; }
         public double SelfPayMultiplier
@@ -74,7 +83,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SelfPayType = row.Field<string>("Pro_SelfPayType").Equals("D")? SelfPayTypeEnum.Default : SelfPayTypeEnum.Customize;
             SelfPayPrice = (double?)row.Field<decimal?>("Pro_SelfPayPrice");
             SelfPayMultiplier = row.Field<double>("SysPar_Value");
-            RewardPercent= row.Field<double>("Pro_RewardPercent");
+            RewardPercent= row.Field<double>("Pro_RewardPercent").ToString();
             
         }
 

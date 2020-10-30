@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
@@ -47,6 +48,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             if (textBox is null) return;
 
             textBox.SelectAll();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 }

@@ -175,12 +175,9 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public static DataTable GetNoBucklePrescriptions(DateTime? sDate,DateTime? eDate)
+        public static DataTable GetNoBucklePrescriptions()
         {
-            var parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "StartDate", sDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "EndDate", eDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[NoBucklePrescriptions]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[NoBucklePrescriptions]");
         }
 
         public static DataTable GetSearchPrescriptionsData(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName, Institution ins, Division div)

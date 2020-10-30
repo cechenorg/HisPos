@@ -66,6 +66,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             Med.Visibility = Visibility.Visible;
             OTC.Visibility = Visibility.Collapsed;
             All.Visibility = Visibility.Collapsed;
+            MedPreBack.Background = Brushes.LightGray;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
         }
 
         private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -79,6 +87,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             Med.Visibility = Visibility.Collapsed;
             OTC.Visibility = Visibility.Visible;
             All.Visibility = Visibility.Collapsed;
+            OTCTradeBack.Background = Brushes.LightGray;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
         }
 
         private void btnAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -96,7 +112,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
 
         private void OTCMain_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            btnTrade.Background = Brushes.DimGray;
+            /*btnTrade.Background = Brushes.DimGray;
             btnTrade.Foreground = Brushes.White;
             btnMed.Foreground = Brushes.DimGray;
             btnMed.Background = Brushes.Transparent;
@@ -105,11 +121,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             Med.Visibility = Visibility.Collapsed;
             OTC.Visibility = Visibility.Visible;
             All.Visibility = Visibility.Collapsed;
+            OTCTradeBack.Background = Brushes.LightGray;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;*/
         }
 
         private void MedMain_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            btnTrade.Background = Brushes.Transparent;
+            /*btnTrade.Background = Brushes.Transparent;
             btnTrade.Foreground = Brushes.DimGray;
             btnMed.Foreground = Brushes.White;
             btnMed.Background = Brushes.DimGray;
@@ -118,6 +142,112 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             Med.Visibility = Visibility.Visible;
             OTC.Visibility = Visibility.Collapsed;
             All.Visibility = Visibility.Collapsed;
+            MedPreBack.Background = Brushes.LightGray;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;*/
+        }
+
+        private void MedPre_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MedPreBack.Background = Brushes.LightGray;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+
+        }
+
+        private void MedCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.LightGray;
+            MedStockBack.Background = Brushes.GhostWhite;
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+        }
+
+        private void MedCash_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.LightGray;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+        }
+
+        private void MedStock_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.LightGray;
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+        }
+
+        private void OTCTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OTCTradeBack.Background = Brushes.LightGray;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+        }
+
+        private void OTCCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.LightGray;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+
+        }
+
+        private void OTCStock_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.LightGray;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+        }
+
+        private void OTCReward_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.LightGray;
+            MedPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
         }
     }
 }

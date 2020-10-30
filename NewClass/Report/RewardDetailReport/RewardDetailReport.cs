@@ -14,6 +14,7 @@ namespace His_Pos.NewClass.Report.RewardDetailReport
             RewardAmount = r.Field<double>("RewardAmount");
             Emp_Name = r.Field<string>("Emp_Name");
             TraDet_RewardPersonnel = r.Field<string>("TraDet_RewardPersonnel");
+            RewardAmount=Math.Ceiling(RewardAmount);
         }
 
         public double RewardAmount { get; set; }

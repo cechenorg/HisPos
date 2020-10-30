@@ -36,6 +36,9 @@ using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingOTCDetailRecord
 using His_Pos.NewClass.Report.RewardReport;
 using His_Pos.NewClass.Report.RewardDetailReport;
 using His_Pos.NewClass.Report.TradeProfitDetailReport.RewardDetailRecordReport;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail;
+using System.Data.SqlClient;
+using System.Globalization;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {
@@ -836,6 +839,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
 
         public RelayCommand RewardReportSelectionChangedCommand { get; set; }
         public RelayCommand RewardDetailClickCommand { get; set; }
+        public RelayCommand RewardDetailMedicineDoubleClickCommand { get; set; }
 
         #endregion
         public CashStockEntryReportViewModel() {
@@ -860,6 +864,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             ExtraMoneyDetailClickCommand = new RelayCommand(ExtraMoneyDetailClickAction);
             RewardReportSelectionChangedCommand = new RelayCommand(RewardReportSelectionChangedAction);
             RewardDetailClickCommand = new RelayCommand(RewardDetailClickAction);
+            RewardDetailMedicineDoubleClickCommand = new RelayCommand(RewardDetailMedicineDoubleClickAction);
             GetData();
             InitCollection();
         }
@@ -972,7 +977,44 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { PrescriptionDetailMedicineRepotSelectItem.Id, "0" }, "ShowProductDetail"));
         }
-  
+        private void RewardDetailMedicineDoubleClickAction()
+        {
+            if (RewardDetailMedicineReportSelectItem is null) return;
+
+            string TradeID = RewardDetailMedicineReportSelectItem.MasterID.ToString();
+
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MasterID", TradeID));
+            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parameters.Add(new SqlParameter("sDate", ""));
+            parameters.Add(new SqlParameter("eDate", ""));
+            parameters.Add(new SqlParameter("sInvoice", ""));
+            parameters.Add(new SqlParameter("eInvoice", ""));
+            parameters.Add(new SqlParameter("flag", "1"));
+            parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
+            parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
+            parameters.Add(new SqlParameter("Cashier", -1));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            result.Columns.Add("TransTime_Format", typeof(string));
+            foreach (DataRow dr in result.Rows)
+            {
+                string ogTransTime = dr["TraMas_ChkoutTime"].ToString();
+                DateTime dt = DateTime.Parse(ogTransTime);
+                CultureInfo culture = new CultureInfo("zh-TW");
+                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
+            }
+            DataRow masterRow = result.Rows[0];
+
+            ProductTransactionDetail ptd = new ProductTransactionDetail(masterRow, result);
+
+            ptd.ShowDialog();
+            ptd.Activate();
+        }
+
         private void PrescriptionDetailDoubleClickAction() {
             if (PrescriptionDetailReportSelectItem is null)
             {

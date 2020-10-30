@@ -847,11 +847,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Amount_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Return)
+           /* if (e.Key == Key.Return)
             {
                 TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
                 MoveFocus(request);
-            }
+            }*/
         }
 
         private void Amount_TextChanged(object sender, TextChangedEventArgs e)
@@ -1321,10 +1321,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
-                if (tb.Text.Length < 9)
+                if (tb.Text.Length == 0)
                 {
-                    //MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
-                   //return;
+                    MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
+                   return;
                 }
 
                 MainWindow.ServerConnection.OpenConnection();

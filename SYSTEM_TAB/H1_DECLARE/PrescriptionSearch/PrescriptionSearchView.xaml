@@ -110,7 +110,8 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                     <CheckBox Content="顯示未調劑" FontSize="16" IsChecked="{Binding FilterNotAdjust,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NoBuckleFilterEnable,UpdateSourceTrigger=PropertyChanged}"/>
                     <CheckBox Content="未過卡篩選" FontSize="16" IsChecked="{Binding FilterNoGetCard,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NoBuckleFilterEnable,UpdateSourceTrigger=PropertyChanged}"/>
-                    <CheckBox Content="調劑未扣庫篩選" FontSize="16" IsChecked="{Binding FilterNoBuckle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NoBuckleFilterEnable,UpdateSourceTrigger=PropertyChanged}"/>
+                    <CheckBox Content="調劑未扣庫篩選" FontSize="16" IsChecked="{Binding FilterNoBuckle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding NoBuckleFilterEnable,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"/>
+                    <Button Command="{Binding DataContext.SearchNotBuckleCommad, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="120" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="未扣庫查詢" Margin="17,0,0,0" FontSize="16"/>
                 </StackPanel>
                 <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedPrescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"              
                           ItemsSource="{Binding PrescriptionCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
