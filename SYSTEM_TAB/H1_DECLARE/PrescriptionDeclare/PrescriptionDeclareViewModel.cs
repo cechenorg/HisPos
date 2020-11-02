@@ -1110,6 +1110,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             RaisePropertyChanged("CanSearchPatient");
             CurrentPrescription.Patient.UpdateEditTime();
             CurrentPrescription.Patient.GetHistories();
+            CurrentPrescription.Patient.GetRecord();
             MainWindow.ServerConnection.CloseConnection();
             CheckCustomPrescriptions();
             CustomerEdited = false;

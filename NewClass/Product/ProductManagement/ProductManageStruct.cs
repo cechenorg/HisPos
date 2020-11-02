@@ -26,11 +26,13 @@ namespace His_Pos.NewClass.Product.ProductManagement
             IsEnable = row.Field<bool>("Pro_IsEnable");
             InventoryError = row.Field<bool>("ERROR_FLAG");
             IsZero = row.Field<decimal>("NHIMED_PRICE");
+            DepRec_Amount = row.Field<int>("DepRec_Amount");
         }
 
         public ProductTypeEnum ProductType { get; set; }
         public string ID { get; set; }
         public int WareHouseID { get; set; }
+        public int DepRec_Amount { get; set; }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
         public string FullName

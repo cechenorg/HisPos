@@ -23,12 +23,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             btnTrade.Background = Brushes.DimGray;
             OTC.Visibility= Visibility.Visible;
             OTCDG.Visibility = Visibility.Visible;
-            OTClbl.Visibility = Visibility.Visible;
             OTCPrint.Visibility = Visibility.Visible;
             Print.Visibility = Visibility.Collapsed;
             Med.Visibility = Visibility.Collapsed;
             MedDG.Visibility = Visibility.Collapsed;
-            Medlbl.Visibility = Visibility.Collapsed;
 
         }
 
@@ -40,9 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             btnMed.Background = Brushes.DimGray;
             Med.Visibility = Visibility.Visible;
             MedDG.Visibility = Visibility.Visible;
-            Medlbl.Visibility = Visibility.Visible;
             OTCDG.Visibility = Visibility.Collapsed;
-            OTClbl.Visibility = Visibility.Collapsed;
             OTCPrint.Visibility = Visibility.Collapsed;
             OTC.Visibility = Visibility.Collapsed;
             Print.Visibility = Visibility.Visible;

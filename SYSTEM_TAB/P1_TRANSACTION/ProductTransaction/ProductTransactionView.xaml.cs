@@ -19,6 +19,7 @@ using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
@@ -1236,6 +1237,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             cusID = "0";
             TradeRecordGrid.ItemsSource = null;
+            HISRecordGrid.ItemsSource = null;
             DepositColumn.Visibility = Visibility.Hidden;
         }
 
@@ -1283,7 +1285,24 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             FormatTradeTime(result);
             TradeRecordGrid.ItemsSource = result.DefaultView;
         }
-
+        private void GetCustomerHISRecord()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("CustomerID", cusID));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[HISRecordQuery]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            result.Columns.Add("TransTime_Format", typeof(string));
+            foreach (DataRow dr in result.Rows)
+            {
+                string ogTransTime = dr["AdjustDate"].ToString();
+                DateTime dt = DateTime.Parse(ogTransTime);
+                CultureInfo culture = new CultureInfo("zh-TW");
+                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
+            }
+            HISRecordGrid.ItemsSource = result.DefaultView;
+        }
         private void FormatTradeTime(DataTable result)
         {
             result.Columns.Add("TransTime_Format", typeof(string));
@@ -1384,6 +1403,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     FillInCustomerData(result);
                     GetCustomerTradeRecord();
+                    GetCustomerHISRecord();
                     if (PrescriptionDeclareView.FromPOSCuslblcheck != null)
                     {
                         PrescriptionDeclareView.FromPOSCuslblcheck.Text = tb.Text;
@@ -1453,6 +1473,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     FillInCustomerData(result);
                     GetCustomerTradeRecord();
+                GetCustomerHISRecord();
                 }
             
         }
@@ -1470,6 +1491,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                FillInCustomerData(result);
                GetCustomerTradeRecord();
+                GetCustomerHISRecord();
             }
         }
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
@@ -1560,6 +1582,48 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             }
 
+        }
+
+        private void btnChangeRecord_Click(object sender, RoutedEventArgs e)
+        {
+            btnChangeRecord.Visibility = Visibility.Collapsed;
+            btnChangeHIS.Visibility = Visibility.Visible;
+            lbRecord.Content = "消費紀錄";
+            HISRecordGrid.Visibility = Visibility.Collapsed;
+            TradeRecordGrid.Visibility = Visibility.Visible;
+
+        }
+
+        private void btnChangeHIS_Click(object sender, RoutedEventArgs e)
+        {
+            btnChangeRecord.Visibility = Visibility.Visible;
+            btnChangeHIS.Visibility = Visibility.Collapsed;
+            lbRecord.Content = "處方紀錄";
+            HISRecordGrid.Visibility = Visibility.Visible;
+            TradeRecordGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void HISRecordGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (HISRecordGrid.SelectedCells.Count <= 0)
+            {
+                return;
+
+            }
+            else
+            {
+
+                DataRowView row = (DataRowView)HISRecordGrid.SelectedItems[0];
+
+                DataRow masterRow = row.Row;
+
+                int index = GetRowIndex(e);
+                int TradeID = (int)row["SourceId"];
+                string Type = row["Type"].ToString();
+
+                PrescriptionService.ShowPrescriptionEditWindow(TradeID,0);
+
+            }
         }
     }
 }

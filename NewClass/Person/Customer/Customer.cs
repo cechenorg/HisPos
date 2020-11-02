@@ -58,6 +58,30 @@ namespace His_Pos.NewClass.Person.Customer
 
         private ICollectionView historyCollectionView;
 
+        //11.02
+
+        public CustomerRecords Records { get; set; }//處方.自費調劑紀錄
+        private CollectionViewSource recordCollectionViewSource;
+        public CollectionViewSource RecordCollectionViewSource
+        {
+            get => recordCollectionViewSource;
+            set
+            {
+                Set(() => RecordCollectionViewSource, ref recordCollectionViewSource, value);
+            }
+        }
+
+        private ICollectionView recordCollectionView;
+        public ICollectionView RecordCollectionView
+        {
+            get => recordCollectionView;
+            set
+            {
+                Set(() => RecordCollectionView, ref recordCollectionView, value);
+            }
+        }
+        //11.02^^
+
         public Customer(Cooperative.CooperativeInstitution.Customer customer,int birthYear, int birthMonth, int birthDay)
         {
             IDNumber = customer.IdNumber;
@@ -254,7 +278,12 @@ namespace His_Pos.NewClass.Person.Customer
             HistoryCollectionViewSource = new CollectionViewSource { Source = Histories };
             HistoryCollectionView =HistoryCollectionViewSource.View;
         }
-
+        public void GetRecord()
+        {
+            Records = new CustomerRecords(ID);
+            RecordCollectionViewSource = new CollectionViewSource { Source = Records };
+            RecordCollectionView = RecordCollectionViewSource.View;
+        }
         public void CheckPatientWithCard(Customer patientFromCard)
         {
             if (!IDNumber.Equals(patientFromCard.IDNumber))

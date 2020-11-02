@@ -17,10 +17,13 @@
             <ColumnDefinition Width="700"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-            <Label  Content="銷售紀錄" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label x:Name="lblRecord" Content="銷售紀錄" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label x:Name="lblEmp" Content="人員業績" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="Collapsed"/>
             <Rectangle Width="150"/>
+            <Button x:Name="Recordbtn" Click="Recordbtn_Click" Margin="0,0,0,0" Width="100" Content="切換" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Visibility="Collapsed"/>
+            <Button x:Name="Empbtn" Click="Empbtn_Click"  Margin="0,0,0,0" Width="100" Content="切換" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" />
         </StackPanel>
-        <DataGrid Grid.Row="1"  Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <DataGrid x:Name="dgRecord" Grid.Row="1"  Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding TradeProfitDetailReportCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeProfitDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                    CanUserDeleteRows="False">
             <i:Interaction.Triggers>
@@ -170,8 +173,81 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <DataGrid x:Name="dgEmp" Grid.Row="1"  Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                  ItemsSource="{Binding TradeProfitDetailEmpReportCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeProfitDetailEmpReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
+                   CanUserDeleteRows="False" Visibility="Collapsed">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding TradeProfitDetailEmpClickCommand}"/>
+                </i:EventTrigger>
+                <!--<i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding StockTakingDetailDoubleClickCommand}"/>
+                </i:EventTrigger>-->
+            </i:Interaction.Triggers>
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Setter Property="Width" Value="100"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Height" Value="41"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="200" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding Emp_Name}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="100" Header="金額" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding Profit}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+                            <Setter Property="Height" Value="41"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <Rectangle Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Fill="{StaticResource GridBackGround}"/>
-        <DataGrid Grid.Row="1" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <DataGrid x:Name="dgRecordRecord" Grid.Row="1" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding TradeProfitDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                   SelectedItem="{Binding TradeProfitDetailMedicineReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
@@ -246,6 +322,68 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="dgEmpRecord" Grid.Row="1" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                  ItemsSource="{Binding TradeProfitDetailEmpRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                  SelectedItem="{Binding TradeProfitDetailEmpMedicineReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
+                  CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" Visibility="Collapsed">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding TradeProfitDetailEmpMedicineDoubleClickCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Setter Property="Width" Value="100"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Height" Value="41"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="150" Header="日期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TraMas_ChkoutTime}">
+
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="150" Header="金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TraMas_RealTotal}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>

@@ -89,7 +89,7 @@
                 <Label x:Name="lblPriceType" Content="" Width="95" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
             </StackPanel>
         </Grid>
-        <DataGrid Name="ProductDataGrid" Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="False" SelectionUnit="Cell">
+        <DataGrid Name="ProductDataGrid" Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="False" SelectionUnit="Cell" MouseDoubleClick="ProductDataGrid_MouseDoubleClick">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -203,7 +203,7 @@
                 <DataGridTemplateColumn Width="100" Header="獎勵">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox x:Name="cbCashier" Text="{Binding Path=TraDet_RewardPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID" DropDownClosed="cbCashier_DropDownClosed"/>
+                            <ComboBox x:Name="cbCashier" SelectedIndex="0" Text="{Binding Path=TraDet_RewardPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" DisplayMemberPath="Emp_Name" SelectedValuePath="Emp_ID" DropDownClosed="cbCashier_DropDownClosed" IsEnabled="{Binding Path=IsReward_Format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -43,5 +43,29 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
 
            // Messenger.Default.Send(new NotificationMessage<string>(this, ((TradeProfitDetailRecordReport)row.Item).MasterID, "ShowProductDetail"));
         }
+
+        private void Recordbtn_Click(object sender, RoutedEventArgs e)
+        {
+            Recordbtn.Visibility = Visibility.Collapsed;
+            Empbtn.Visibility = Visibility.Visible;
+            dgEmp.Visibility = Visibility.Collapsed;
+            dgEmpRecord.Visibility = Visibility.Collapsed;
+            lblEmp.Visibility = Visibility.Collapsed;
+            dgRecord.Visibility = Visibility.Visible;
+            dgRecordRecord.Visibility = Visibility.Visible;
+            lblRecord.Visibility = Visibility.Visible;
+        }
+
+        private void Empbtn_Click(object sender, RoutedEventArgs e)
+        {
+            Recordbtn.Visibility = Visibility.Visible;
+            Empbtn.Visibility = Visibility.Collapsed;
+            dgEmp.Visibility = Visibility.Visible;
+            dgEmpRecord.Visibility = Visibility.Visible;
+            lblEmp.Visibility = Visibility.Visible;
+            dgRecord.Visibility = Visibility.Collapsed;
+            dgRecordRecord.Visibility = Visibility.Collapsed;
+            lblRecord.Visibility = Visibility.Collapsed;
+        }
     }
 }

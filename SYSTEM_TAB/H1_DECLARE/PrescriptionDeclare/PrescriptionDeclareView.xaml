@@ -54,6 +54,9 @@
         <DataTemplate x:Key="CustomerDetail" DataType="{x:Type local:PrescriptionDeclareView}">
             <patientData:PatientBasicDataControl Patient="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}"/>
         </DataTemplate>
+        <DataTemplate x:Key="CustomerRecord" DataType="{x:Type local:PrescriptionDeclareView}">
+            <patientData:PatientRecordControl Patient="{Binding CurrentPrescription.Patient,UpdateSourceTrigger=PropertyChanged}"/>
+        </DataTemplate>
         <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}"/>
         <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -563,7 +566,9 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.Column="0" Background="{StaticResource GridBackGround}">
                         <RadioButton GroupName="CusHistoryGroup" Content="處方紀錄" IsChecked="{Binding Path=SelectedPatientDetail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" FontSize="14"/>
+                        <RadioButton GroupName="CusHistoryGroup" Content="銷售紀錄" IsChecked="{Binding Path=SelectedPatientDetail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}" FontSize="14"/>
                         <RadioButton GroupName="CusHistoryGroup" Content="顧客資料" IsChecked="{Binding Path=SelectedPatientDetail, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}" FontSize="14"/>
+                       
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                         <Label Content="藥品組合" Style="{StaticResource BoldLabelContent16}" Margin="100,0,10,0"/>
@@ -582,6 +587,9 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding DataContext.SelectedPatientDetail, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Option2">
                                         <Setter Property="ContentTemplate" Value="{StaticResource CustomerDetail}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.SelectedPatientDetail, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Option3">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource CustomerRecord}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

@@ -139,7 +139,7 @@
 
             </Grid>
         </StackPanel>
-        <Label Grid.Row="3" Content="藥品" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="Medlbl"></Label>
+
         <DataGrid  Grid.Row="4" ItemsSource="{Binding DailyStockValueCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 SelectedItem="{Binding SelectStockValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" x:Name="MedDG">
             <i:Interaction.Triggers>
@@ -253,7 +253,7 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Label Grid.Row="3" Content="OTC" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed" x:Name="OTClbl"></Label>
+       
         <DataGrid  Grid.Row="4" ItemsSource="{Binding DailyOTCStockValueCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 SelectedItem="{Binding SelectStockValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10" Visibility="Collapsed" x:Name="OTCDG">
             <i:Interaction.Triggers>

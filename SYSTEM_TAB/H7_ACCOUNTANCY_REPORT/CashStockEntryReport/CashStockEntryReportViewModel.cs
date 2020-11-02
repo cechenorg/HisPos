@@ -39,6 +39,8 @@ using His_Pos.NewClass.Report.TradeProfitDetailReport.RewardDetailRecordReport;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail;
 using System.Data.SqlClient;
 using System.Globalization;
+using His_Pos.NewClass.Report.TradeProfitDetailEmpReport;
+using His_Pos.NewClass.Report.TradeProfitDetailEmpReport.TradeProfitDetailEmpRecordReport;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {
@@ -617,7 +619,66 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
 
         //10.28新增^^^
+        //11.02新增
+       
 
+        private TradeProfitDetailEmpReports tradeProfitDetailEmpReportCollection;
+        public TradeProfitDetailEmpReports TradeProfitDetailEmpReportCollection
+        {
+            get => tradeProfitDetailEmpReportCollection;
+            set
+            {
+                Set(() => TradeProfitDetailEmpReportCollection, ref tradeProfitDetailEmpReportCollection, value);
+            }
+        }
+        private CollectionViewSource tradeProfitDetailEmpReportViewSource;
+        private CollectionViewSource TradeProfitDetailEmpReportViewSource
+        {
+            get => tradeProfitDetailEmpReportViewSource;
+            set
+            {
+                Set(() => TradeProfitDetailEmpReportViewSource, ref tradeProfitDetailEmpReportViewSource, value);
+            }
+        }
+        private ICollectionView tradeProfitDetailEmpReportView;
+        public ICollectionView TradeProfitDetailEmpReportView
+        {
+            get => tradeProfitDetailEmpReportView;
+            private set
+            {
+                Set(() => TradeProfitDetailEmpReportView, ref tradeProfitDetailEmpReportView, value);
+            }
+        }
+
+        private TradeProfitDetailEmpReport tradeProfitDetailEmpReportSelectItem;
+        public TradeProfitDetailEmpReport TradeProfitDetailEmpReportSelectItem
+        {
+            get => tradeProfitDetailEmpReportSelectItem;
+            set
+            {
+                Set(() => TradeProfitDetailEmpReportSelectItem, ref tradeProfitDetailEmpReportSelectItem, value);
+            }
+        }
+
+        private TradeProfitDetailEmpRecordReports tradeProfitDetailEmpRecordReportCollection = new TradeProfitDetailEmpRecordReports();
+        public TradeProfitDetailEmpRecordReports TradeProfitDetailEmpRecordReportCollection
+        {
+            get => tradeProfitDetailEmpRecordReportCollection;
+            set
+            {
+                Set(() => TradeProfitDetailEmpRecordReportCollection, ref tradeProfitDetailEmpRecordReportCollection, value);
+            }
+        }
+        private TradeProfitDetailEmpRecordReport tradeProfitDetailEmpMedicineReportSelectItem;
+        public TradeProfitDetailEmpRecordReport TradeProfitDetailEmpMedicineReportSelectItem
+        {
+            get => tradeProfitDetailEmpMedicineReportSelectItem;
+            set
+            {
+                Set(() => TradeProfitDetailEmpMedicineReportSelectItem, ref tradeProfitDetailEmpMedicineReportSelectItem, value);
+            }
+        }
+        //11.02新增^^^
         private PrescriptionProfitReports selfPrescriptionProfitReportCollection = new PrescriptionProfitReports();
         public PrescriptionProfitReports SelfPrescriptionProfitReportCollection
         {
@@ -833,6 +894,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand StockTakingDetailMedicineDoubleClickCommand { get; set; }
         public RelayCommand TradeProfitReportSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitDetailClickCommand { get; set; }
+        public RelayCommand TradeProfitDetailEmpClickCommand { get; set; }
         public RelayCommand ExtraMoneyReportSelectionChangedCommand { get; set; }
         public RelayCommand ExtraMoneyDetailClickCommand { get; set; }
         public RelayCommand<string> ChangeUiTypeCommand { get; set; }
@@ -860,6 +922,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             StockTakingOTCDetailClickCommand = new RelayCommand(StockTakingOTCDetailClickAction);
             TradeProfitReportSelectionChangedCommand = new RelayCommand(TradeProfitReportSelectionChangedAction);
             TradeProfitDetailClickCommand = new RelayCommand(TradeProfitDetailClickAction);
+
+            TradeProfitDetailEmpClickCommand = new RelayCommand(TradeProfitDetailEmpClickAction);
             ExtraMoneyReportSelectionChangedCommand = new RelayCommand(ExtraMoneyReportSelectionChangedAction);
             ExtraMoneyDetailClickCommand = new RelayCommand(ExtraMoneyDetailClickAction);
             RewardReportSelectionChangedCommand = new RelayCommand(RewardReportSelectionChangedAction);
@@ -867,6 +931,16 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             RewardDetailMedicineDoubleClickCommand = new RelayCommand(RewardDetailMedicineDoubleClickAction);
             GetData();
             InitCollection();
+        }
+
+        private void TradeProfitDetailEmpClickAction()
+        {
+            if (TradeProfitDetailEmpReportSelectItem is null)
+            {
+                TradeProfitDetailEmpRecordReportCollection.Clear();
+                return;
+            }
+            TradeProfitDetailEmpRecordReportCollection.GetDateByDate(TradeProfitDetailEmpReportSelectItem.TraMas_Cashier, StartDate, EndDate);
         }
         #region Action
         private void PrintPrescriptionProfitDetailAction()
@@ -1104,6 +1178,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
                 TradeProfitDetailReportCollection = new TradeProfitDetailReports("0", StartDate, EndDate);
+                TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
 
                 MainWindow.ServerConnection.CloseConnection();
             };
@@ -1111,6 +1186,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             {
                 TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
                 TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
+                TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
+                TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
                 //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
                 //SumStockTakingDetailReport();
                 IsBusy = false;

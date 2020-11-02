@@ -358,6 +358,9 @@
     <Compile Include="NewClass\Medicine\ReserveMedicine\ReserveMedicines.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerGroupTag.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerGroupTags.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerRecord\CustomerRecords.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerRecord\CustomerRecord.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerRecord\CustomerRecordDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="FunctionWindow\AddProductWindow\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
@@ -622,6 +625,12 @@
     <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailReport.cs" />
     <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailReportDb.cs" />
     <Compile Include="NewClass\Report\RewardDetailReport\RewardDetailReports.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailEmpReport\TradeProfitDetailEmpRecordReport\TradeProfitDetailEmpRecordReport.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailEmpReport\TradeProfitDetailEmpRecordReport\TradeProfitDetailEmpRecordReportDb.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailEmpReport\TradeProfitDetailEmpRecordReport\TradeProfitDetailEmpRecordReports.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailEmpReport\TradeProfitDetailEmpReport.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailEmpReport\TradeProfitDetailEmpReportDb.cs" />
+    <Compile Include="NewClass\Report\TradeProfitDetailEmpReport\TradeProfitDetailEmpReports.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReportDb.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailRecordReport\TradeProfitDetailRecordReports.cs" />
@@ -900,6 +909,9 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientCanSearchControl.xaml.cs">
       <DependentUpon>PatientCanSearchControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientRecordControl.xaml.cs">
+      <DependentUpon>PatientRecordControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientHistoriesControl.xaml.cs">
       <DependentUpon>PatientHistoriesControl.xaml</DependentUpon>
@@ -1686,6 +1698,10 @@
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientCanSearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientRecordControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\UserControl\PatientData\PatientHistoriesControl.xaml">
       <SubType>Designer</SubType>

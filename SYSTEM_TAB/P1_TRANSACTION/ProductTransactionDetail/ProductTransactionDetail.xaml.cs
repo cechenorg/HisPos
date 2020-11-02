@@ -1,12 +1,16 @@
-﻿using His_Pos.Class;
+﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -32,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             ProductDataGrid.ItemsSource = detail.DefaultView;
             var Price = new List<DataGridTextColumn>();
             NewFunction.FindChildGroup(ProductDataGrid, "Price", ref Price);
+            detail.Columns.Add("IsReward_Format", typeof(bool));
             foreach (DataRow dr in detail.Rows)
             {
                 int PerPrice = Math.Abs((int)dr["TraDet_Price"]);
@@ -45,20 +50,34 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 else {
                     dr["Irr"] = "Yes";
                 }
+                
+                if ((bool)dr["Pro_IsReward"] == false)
+                {
+                    dr["IsReward_Format"] = false;
+                }
+                else {
+                    dr["IsReward_Format"] = true;
+                }
             }
         }
         private void GetEmployeeList()
         {
+            
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
             MainWindow.ServerConnection.CloseConnection();
+            DataRow toInsert = result.NewRow();
+            result.Rows.InsertAt(toInsert, 0);
             var CashierList = new List<ComboBox>();
             NewFunction.FindChildGroup(ProductDataGrid, "cbCashier", ref CashierList);
+            
             foreach (DataRow dr in detail.Rows) 
             {
                 int index = detail.Rows.IndexOf(dr);
                 CashierList[index].ItemsSource = result.DefaultView;
+                CashierList[index].SelectedIndex = 0;
             }
+            
         }
 
         private void AssignMasterValue(DataRow masterRow, string PriceType) 
@@ -248,8 +267,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             NewFunction.FindChildGroup(ProductDataGrid, "cbCashier", ref CashierList);
             foreach (DataRow dr in detail.Rows)
             {
+                
                 int index = detail.Rows.IndexOf(dr);
-                CashierList[index].SelectedValue= dr["TraDet_RewardPersonnel"];
+                CashierList[index].SelectedIndex = 0;
+                if (!string.IsNullOrEmpty(dr["TraDet_RewardPersonnel"].ToString()))
+                {
+                    CashierList[index].SelectedValue = dr["TraDet_RewardPersonnel"];
+                }
             }
         }
         private DataTable GetPriceList(string id)
@@ -277,6 +301,30 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lblChanged.Foreground = Brushes.Red;
         }
 
-   
+        private async void ProductDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            int index = GetRowIndex(e);
+            if (index < detail.Rows.Count)
+            {
+                string proID = detail.Rows[index]["TraDet_ProductID"].ToString();
+                ProductDetailWindow.ShowProductDetailWindow();
+                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
+                await Task.Delay(20);
+                ProductDetailWindow.ActivateProductDetailWindow();
+            }
+        }
+        private int GetRowIndex(MouseButtonEventArgs e)
+        {
+            DataGridRow dgr = null;
+            DependencyObject visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
+            while (dgr == null && visParent != null)
+            {
+                dgr = visParent as DataGridRow;
+                visParent = VisualTreeHelper.GetParent(visParent);
+            }
+            if (dgr == null) { return -1; }
+            int rowIdx = dgr.GetIndex();
+            return rowIdx;
+        }
     }
 }

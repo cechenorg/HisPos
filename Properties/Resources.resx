@@ -208,7 +208,7 @@
     <value>Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*</value>
   </data>
   <data name="CustomerManage" xml:space="preserve">
-    <value>顧客管理</value>
+    <value>病歷管理</value>
   </data>
   <data name="DeclareFile" xml:space="preserve">
     <value>申報檔作業</value>

@@ -328,6 +328,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 }
             }
         }
+        public bool IsNotBuckle=false;
         #endregion
         #region Commands
         public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
@@ -417,6 +418,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void SearchAction()
         {
+            IsNotBuckle = false;
             if (CheckSearchConditionsEmpty())
             {
                 MessageWindow.ShowMessage("請至少填寫一個查詢條件",MessageType.WARNING);
@@ -435,7 +437,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void SearchNotBuckleAction()
         {
-           
+            IsNotBuckle = true;
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) => { SearchNotBuckle(); };
             worker.RunWorkerCompleted += (o, ea) =>
@@ -486,6 +488,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
             PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Type);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
+      
         }
 
         private void ExportPrescriptionCsvAction()
@@ -682,8 +685,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void Refresh(NotificationMessage msg)
         {
-            if (msg.Notification.Equals("PrescriptionEdited"))
-                SearchAction();
+            if (msg.Notification.Equals("PrescriptionEdited")) {
+                if (IsNotBuckle)
+                {
+                    SearchNotBuckleAction();
+                }
+                else
+                {
+                    SearchAction();
+                }
+            }
+            
         }
 
         private void SetPrescriptionsSummary()

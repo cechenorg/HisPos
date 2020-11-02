@@ -43,7 +43,6 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                         break;
                     case "SuccessCloseAddCustomerWindow":
                         Close();
-                        ProductTransactionView.Cuslblcheck.Text = "1";
                         break;
                 }
             });

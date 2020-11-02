@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
@@ -52,6 +53,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
         private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
 
+
+        private Visibility mEDDeposit;
+        public Visibility MEDDeposit
+        {
+            get => mEDDeposit;
+            set { Set(() => MEDDeposit, ref mEDDeposit, value); }
+        }
+        private Visibility oTCDeposit;
+        public Visibility OTCDeposit
+        {
+            get => oTCDeposit;
+            set { Set(() => OTCDeposit, ref oTCDeposit, value); }
+        }
         public bool IsBusy
         {
             get => isBusy;
@@ -118,6 +132,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             InitData();
             RegisterCommand();
             SearchAction();
+            MEDDeposit = Visibility.Visible;
+            OTCDeposit = Visibility.Collapsed;
         }
         
         #region ----- Define Actions -----
@@ -189,6 +205,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private void FilterIsOTCAction(string type)
         {
             filterIsOTC = (ProductManageFilterEnum)int.Parse(type);
+            if (filterIsOTC == (ProductManageFilterEnum)8)
+            {
+                MEDDeposit = Visibility.Collapsed;
+                OTCDeposit = Visibility.Visible;
+            }
+            else if (filterIsOTC == (ProductManageFilterEnum)9) {
+                MEDDeposit = Visibility.Visible;
+                OTCDeposit = Visibility.Collapsed;
+            }
             ProductCollectionView.Filter += ProductFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
             RaisePropertyChanged(nameof(CurrentShelfStockValue));
