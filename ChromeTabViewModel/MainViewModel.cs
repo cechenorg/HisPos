@@ -164,7 +164,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.匯出申報檔):
                     break;
-                case nameof(FeatureItem.額外收入登錄):
+                case nameof(FeatureItem.額外收支):
                     break;
                 case nameof(FeatureItem.商品查詢):
                     break;
@@ -193,7 +193,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.員工管理):
                     break;
-                case nameof(FeatureItem.病歷管理):
+                case nameof(FeatureItem.顧客管理):
                     break;
                 case nameof(FeatureItem.藥品頻率管理):
                     break;
@@ -264,11 +264,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.匯出申報檔):
                     newTab = new DeclareFileManageViewModel() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
-                case nameof(FeatureItem.病歷管理):
-                    newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).CustomerManageView;
-                    break;
-
-                case nameof(FeatureItem.額外收入登錄):
+                case nameof(FeatureItem.額外收支):
                     newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[10].Functions[0], Icon = MainWindow.HisFeatures[10].Icon };
                     break;
 
@@ -331,11 +327,12 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.員工管理):
                     newTab = new EmployeeManageViewModel() { TabName = MainWindow.HisFeatures[4].Functions[2], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
-
                 case nameof(FeatureItem.審核管理):
                     newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[4].Functions[3], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
-              
+                case nameof(FeatureItem.顧客管理):
+                    newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).CustomerManageView;
+                    break;
 
                 //打卡
                 case nameof(FeatureItem.排班管理):

@@ -192,7 +192,7 @@
             <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
         </StackPanel>
         <Rectangle Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Fill="{StaticResource GridBackGround}"/>
-        <DataGrid Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <DataGrid Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding PrescriptionDetailMedicineRepotCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailMedicineRepotSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">
             <i:Interaction.Triggers>

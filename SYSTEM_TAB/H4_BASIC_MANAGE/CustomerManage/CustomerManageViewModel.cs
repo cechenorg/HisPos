@@ -191,7 +191,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         }
         #endregion
         public CustomerManageViewModel() {
-            TabName = MainWindow.HisFeatures[0].Functions[3];
+            TabName = MainWindow.HisFeatures[4].Functions[4];
             Icon = MainWindow.HisFeatures[4].Icon;
             Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedCustomer);
             DataChangeCommand = new RelayCommand(DataChangeAction);

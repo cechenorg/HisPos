@@ -69,7 +69,7 @@ namespace His_Pos
         private void FeatureFactory()
         {
             HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", StringRes.hisPrescription,
-                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.DeclareFileExport, StringRes.CustomerManage }));
+                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.DeclareFileExport}));
 
             HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.Transaction,
                             new[] { StringRes.ProductTransaction, StringRes.ProductTransactionRecord, StringRes.Activity }));
@@ -81,7 +81,7 @@ namespace His_Pos
                             new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord, StringRes.StockTakingPlan }));
 
             HisFeatures.Add(new Feature(@"..\Images\Management.png", StringRes.DataManagement,
-                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage, StringRes.EmployeeManage, StringRes.AuthenticationManage}));
+                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage, StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", StringRes.Attend,
                             new[] { StringRes.ClockIn, StringRes.WorkScheduleManage }));

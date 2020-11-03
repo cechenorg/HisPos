@@ -79,7 +79,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 額外收入登錄 的當地語系化字串。
+        ///   查詢類似 額外收支 的當地語系化字串。
         /// </summary>
         internal static string AdditionalCashFlowManage {
             get {
@@ -265,7 +265,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 病歷管理 的當地語系化字串。
+        ///   查詢類似 顧客管理 的當地語系化字串。
         /// </summary>
         internal static string CustomerManage {
             get {

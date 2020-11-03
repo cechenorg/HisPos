@@ -208,7 +208,7 @@
     <value>Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*</value>
   </data>
   <data name="CustomerManage" xml:space="preserve">
-    <value>病歷管理</value>
+    <value>顧客管理</value>
   </data>
   <data name="DeclareFile" xml:space="preserve">
     <value>申報檔作業</value>
@@ -540,7 +540,7 @@
     <value>合作診所結帳報表</value>
   </data>
   <data name="AdditionalCashFlowManage" xml:space="preserve">
-    <value>額外收入登錄</value>
+    <value>額外收支</value>
   </data>
   <data name="代入處方錯誤" xml:space="preserve">
     <value>代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。</value>
