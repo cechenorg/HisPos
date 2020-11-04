@@ -73,7 +73,7 @@
                 </xctk:MaskedTextBox>
                 <StackPanel  Grid.Row="3" Orientation="Horizontal">
                     <Button x:Name="btnAll" Content="門市總計" Background="DimGray"  BorderThickness="0" Height="25" Width="200" Margin="50,0,0,0" FontFamily="Segoe UI Semibold" FontSize="13" PreviewMouseDown="btnAll_PreviewMouseDown" Command="{Binding ExtraMoneyReportSelectionChangedCommand}"/>
-                    <Button x:Name="btnMed" Content="處方調劑" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="200" Margin="0,0,0,0" FontFamily="Segoe UI Semibold" FontSize="13" PreviewMouseDown="btnMed_PreviewMouseDown" Command="{Binding SelfPrescriptionSelectionChangedCommand}"/>
+                    <Button x:Name="btnMed" Content="處方調劑" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="200" Margin="0,0,0,0" FontFamily="Segoe UI Semibold" FontSize="13" PreviewMouseDown="btnMed_PreviewMouseDown" Command="{Binding CooperativePrescriptionSelectionChangedCommand}"/>
                         <Button x:Name="btnTrade" Content="OTC交易" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="200" Margin="0,0,0,0" FontFamily="Segoe UI Semibold" FontSize="13" PreviewMouseDown="btnTrade_PreviewMouseDown" Command="{Binding TradeProfitReportSelectionChangedCommand}"/>
                 </StackPanel>
                 <Button x:Name="SearchButton" Width="120" Command="{Binding SearchCommand}" Margin="185,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" />
@@ -276,7 +276,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding StockTakingReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding  TotalStockTakingReport.Price,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="4" Grid.Column="3" Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedStock_PreviewMouseDown">

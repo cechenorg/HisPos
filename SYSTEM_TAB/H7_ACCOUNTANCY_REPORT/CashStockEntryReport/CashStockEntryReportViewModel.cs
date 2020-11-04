@@ -41,6 +41,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using His_Pos.NewClass.Report.TradeProfitDetailEmpReport;
 using His_Pos.NewClass.Report.TradeProfitDetailEmpReport.TradeProfitDetailEmpRecordReport;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
     public class CashStockEntryReportViewModel : TabBase {
@@ -48,6 +49,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public override TabBase getTab() {
             return this;
         }
+        private Visibility coopVis;
+        public Visibility CoopVis
+        {
+            get => coopVis;
+            set
+            {
+                Set(() => CoopVis, ref coopVis, value);
+            }
+        }
+
+
         private List<string> adjustCaseString;
         public List<string> AdjustCaseString
         {
@@ -55,6 +67,29 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             set
             {
                 Set(() => AdjustCaseString, ref adjustCaseString, value);
+            }
+        }
+        private List<string> coopString;
+        public List<string> CoopString
+        {
+            get => coopString;
+            set
+            {
+                Set(() => CoopString, ref coopString, value);
+            }
+        }
+
+        private string coopSelectItem = "全部";
+        public string CoopSelectItem
+        {
+            get => coopSelectItem;
+            set
+            {
+                Set(() => CoopSelectItem, ref coopSelectItem, value);
+                
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+
             }
         }
         private string adjustCaseSelectItem = "全部";
@@ -991,7 +1026,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             }
         }
         private void InitCollection() {
-            AdjustCaseString = new List<string>() { "全部", "一般箋", "慢箋", "自費調劑" }; 
+            AdjustCaseString = new List<string>() { "全部", "一般箋", "慢箋", "自費調劑" };
         }
         private void PrintCashPerDayAction() {
             if (CashflowSelectedItem is null) 
@@ -1300,6 +1335,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             }
             if (CooperativePrescriptionSelectedItem is null)
                 return; */
+            
+            CoopVis = Visibility.Visible;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
 
             var worker = new BackgroundWorker();
@@ -1308,13 +1345,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
                 PrescriptionDetailReportCollection = new PrescriptionDetailReports("0", StartDate, EndDate);
-                
+
+                var CoopStringCopy = new List<string>() { };
+                foreach (var r in PrescriptionDetailReportCollection)
+                {
+                    CoopStringCopy.Add(r.InsName);
+                }
+                var DistinctItems = CoopStringCopy.Select(x => x).Distinct();
+                CoopString = new List<string>() { "全部" };
+                foreach (var item in DistinctItems)
+                {
+                    CoopString.Add(item);
+                }
+
                 MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
                 PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                CoopSelectItem = "全部";
+                
                 PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
                 SumPrescriptionDetailReport();
                 IsBusy = false;
@@ -1336,6 +1387,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                
             if (SelfPrescriptionSelectedItem is null)
                 return; */
+           
+            CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
@@ -1364,6 +1417,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 //}
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
                 PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                CoopSelectItem = "全部";
                 PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
                 SumPrescriptionDetailReport();
                 IsBusy = false;
@@ -1538,18 +1592,45 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         private void SumPrescriptionDetailReport() {
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
             PrescriptionDetailReportSum.InsName = "總計"; 
+
             var tempCollection = PrescriptionDetailReportCollection.Where(p => true);
-            switch (AdjustCaseSelectItem) {
-                case "一般箋":
-                    tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-                    break;
-                case "慢箋":
-                    tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "2" );
-                    break;                                                                               
-                case "自費調劑":                                                                         
-                    tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "0" );
-                    break;
+
+            if (CoopSelectItem!="全部")
+            {
+                switch (AdjustCaseSelectItem)
+                {
+                    case "一般箋":
+                        tempCollection = PrescriptionDetailReportCollection.Where(p => (p.AdjustCaseID == "1" || p.AdjustCaseID == "3") && p.InsName== CoopSelectItem);
+                        break;
+                    case "慢箋":
+                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "2" && p.InsName == CoopSelectItem);
+                        break;
+                    case "自費調劑":
+                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "0" && p.InsName == CoopSelectItem);
+                        break;
+                    case "全部":
+                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.InsName == CoopSelectItem);
+                        break;
+                }
             }
+            else  {
+                switch (AdjustCaseSelectItem)
+                {
+                    case "一般箋":
+                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
+                        break;
+                    case "慢箋":
+                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "2");
+                        break;
+                    case "自費調劑":
+                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "0");
+                        break;
+                    case "全部":
+                        tempCollection = PrescriptionDetailReportCollection;
+                        break;
+                }
+            }
+            
             PrescriptionDetailReportSum.MedicalPoint = tempCollection.Sum(s => s.MedicalPoint);
             PrescriptionDetailReportSum.MedicalServicePoint = tempCollection.Sum(s => s.MedicalServicePoint);
             PrescriptionDetailReportSum.PaySelfPoint = tempCollection.Sum(s => s.PaySelfPoint);
@@ -1652,13 +1733,43 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             e.Accepted = false;
 
             PrescriptionDetailReport indexitem = ((PrescriptionDetailReport)e.Item);
-            if (AdjustCaseSelectItem == "一般箋" && (indexitem.AdjustCaseID == "1" || indexitem.AdjustCaseID == "3"))
+            if (CoopSelectItem == indexitem.InsName)
+            {
+                 if (AdjustCaseSelectItem == "一般箋" && (indexitem.AdjustCaseID == "1" || indexitem.AdjustCaseID == "3"))
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == "慢箋" && indexitem.AdjustCaseID == "2")
+                else if (AdjustCaseSelectItem == "慢箋" && indexitem.AdjustCaseID == "2")
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == "自費調劑" && indexitem.AdjustCaseID == "0")
+                else if (AdjustCaseSelectItem == "自費調劑" && indexitem.AdjustCaseID == "0")
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == "全部")
+                else if (AdjustCaseSelectItem == "全部")
+                e.Accepted = true;
+            }
+            else if (CoopSelectItem == "全部")
+            {
+                if (AdjustCaseSelectItem == "一般箋" && (indexitem.AdjustCaseID == "1" || indexitem.AdjustCaseID == "3"))
+                    e.Accepted = true;
+                else if (AdjustCaseSelectItem == "慢箋" && indexitem.AdjustCaseID == "2")
+                    e.Accepted = true;
+                else if (AdjustCaseSelectItem == "自費調劑" && indexitem.AdjustCaseID == "0")
+                    e.Accepted = true;
+                else if (AdjustCaseSelectItem == "全部")
+                    e.Accepted = true;
+            }
+                
+           
+        }
+        private void CoopFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is PrescriptionDetailReport src))
+                e.Accepted = false;
+
+            e.Accepted = false;
+
+            PrescriptionDetailReport indexitem = ((PrescriptionDetailReport)e.Item);
+            if (CoopSelectItem == indexitem.InsName)
+                e.Accepted = true;
+            else if (CoopSelectItem == "全部")
                 e.Accepted = true;
         }
         #endregion

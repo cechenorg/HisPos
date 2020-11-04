@@ -23,8 +23,11 @@
             <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding AdjustCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding AdjustCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
             </ComboBox>
-            <Rectangle Width="132"/>
-            <Button Content="匯出檔案" Command="{Binding PrintPrescriptionProfitDetailCommand}" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderBrush="DarkCyan" FontSize="20" Width="120"/>
+            <Label  Content="合作院所" FontFamily="Segoe UI Semibold" FontSize="25" Margin="20,0,0,0"/>
+            <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding CoopSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding CoopString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Visibility="{Binding CoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+            
         </StackPanel>
         <DataGrid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding PrescriptionDetailReportView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
@@ -79,6 +82,17 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="90" Header="醫療院所" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding InsName}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalAlignment"  Value="Left"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+                            <Setter Property="Height" Value="41"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -183,15 +197,22 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-            <Label Width="60" VerticalAlignment="Center" Margin="80,0,0,0" Content="{Binding PrescriptionDetailReportSum.InsName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20"/>
-            <TextBlock Width="55" VerticalAlignment="Center" TextAlignment="Right" Margin="70,0,0,0" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
-            <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.MedicalPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
-            <TextBlock Width="110" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
-            <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Meduse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
-            <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+
+        <Border  Grid.Row="2" Grid.Column="0" BorderThickness="2" BorderBrush="DarkSeaGreen" >
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
+                <Label Width="60" VerticalAlignment="Center" Margin="93,0,0,0" Content="{Binding PrescriptionDetailReportSum.InsName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                <TextBlock Width="55" VerticalAlignment="Center" TextAlignment="Right" Margin="55,0,0,0" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.MedicalPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="110" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Meduse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+            </StackPanel>
+        </Border>
+        <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+            <Button Content="匯出檔案" Command="{Binding PrintPrescriptionProfitDetailCommand}" FontFamily="Segoe UI Semibold" Background="DarkCyan" BorderBrush="DarkCyan" FontSize="18" Width="120" Margin="450,0,0,0"/>
         </StackPanel>
         <Rectangle Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Fill="{StaticResource GridBackGround}"/>
+
         <DataGrid Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding PrescriptionDetailMedicineRepotCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailMedicineRepotSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">

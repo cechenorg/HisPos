@@ -74,6 +74,9 @@ namespace His_Pos
             HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.Transaction,
                             new[] { StringRes.ProductTransaction, StringRes.ProductTransactionRecord, StringRes.Activity }));
 
+            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.AdditionalCashFlowManage,
+                         new[] { StringRes.AdditionalCashFlowManage }));
+
             HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", StringRes.StockManage,
                             new[] { StringRes.StockSearch, StringRes.MedBagManage, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
 
@@ -97,8 +100,7 @@ namespace His_Pos
                             new[] { StringRes.SystemTutorial }));
             /*HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
                             new[] { StringRes.CompanyWeb }));*/
-            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.AdditionalCashFlowManage,
-                         new[] { StringRes.AdditionalCashFlowManage }));
+            
         }
         
         private void InitializeMenu()

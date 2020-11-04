@@ -64,8 +64,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public ProductPurchaseReturnViewModel()
         {
-            TabName = MainWindow.HisFeatures[2].Functions[2];
-            Icon = MainWindow.HisFeatures[2].Icon;
+            TabName = MainWindow.HisFeatures[3].Functions[2];
+            Icon = MainWindow.HisFeatures[3].Icon;
 
             NormalViewModel = new NormalViewModel();
             SingdeTotalViewModel = new SingdeTotalViewModel();
