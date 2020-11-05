@@ -236,7 +236,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding CashNotCoopSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding CashProfitReport.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="{Binding CoopCashProfitReport.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="MedCashNotCoop" Grid.Row="3" Grid.Column="2"  Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedCashNotCoop_PreviewMouseDown">
@@ -244,7 +244,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding CashCoopSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding CoopCashProfitReport.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="{Binding CashProfitReport.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="3"  Orientation="Horizontal" Background="Transparent" >
