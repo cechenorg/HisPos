@@ -967,7 +967,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => PrescriptionDetailMedicineRepotSelectItem, ref prescriptionDetailMedicineRepotSelectItem, value);
             }
         }
-        private CashStockEntryReportEnum cashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
+        private CashStockEntryReportEnum cashStockEntryReportEnum = CashStockEntryReportEnum.ExtraMoney;
         public CashStockEntryReportEnum CashStockEntryReportEnum
         {
             get => cashStockEntryReportEnum;
