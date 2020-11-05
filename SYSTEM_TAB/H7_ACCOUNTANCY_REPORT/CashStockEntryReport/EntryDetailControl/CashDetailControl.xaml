@@ -14,15 +14,22 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="360"/>
+            <RowDefinition Height="320"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="670"/>
             <ColumnDefinition Width="700"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0"  Grid.Column="0" Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
+        <StackPanel  Grid.Row="0"  Grid.Column="0" Orientation="Horizontal">
+            <Label Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label  Content="合作院所" FontFamily="Segoe UI Semibold" FontSize="25" Margin="20,0,0,0" Visibility="{Binding CashCoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding CashCoopSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding CashCoopString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Visibility="{Binding CashCoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+        </StackPanel>
         <DataGrid Grid.Row="1" Grid.Column="0"  Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  ItemsSource="{Binding CashDetailReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CashDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
+                  ItemsSource="{Binding CashDetailReportView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CashDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserDeleteRows="False" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -168,8 +175,8 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Rectangle Grid.Row="1" Grid.Column="1" Fill="{StaticResource GridBackGround}"/>
-        <DataGrid Grid.Row="1"  Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <Rectangle Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Fill="{StaticResource GridBackGround}"/>
+        <DataGrid Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding CashDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False">
             <DataGrid.Resources>
@@ -231,5 +238,15 @@
                 </DataGridTextColumn> 
             </DataGrid.Columns>
         </DataGrid>
+        <Border  Grid.Row="2" Grid.Column="0" BorderThickness="2" BorderBrush="DarkSeaGreen" >
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
+                <Label Width="60" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="22,0,0,0" Content="{Binding CashDetailReportSum.CusName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                <TextBlock Width="55" VerticalAlignment="Center" TextAlignment="Right" Margin="55,0,0,0" Text="{Binding CashDetailReportSum.CopayMentPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Margin="13,0,0,0" Text="{Binding CashDetailReportSum.PaySelfPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="90" VerticalAlignment="Center" TextAlignment="Right"  Margin="0,0,0,0" Text="{Binding CashDetailReportSum.Deposit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="100" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding CashDetailReportSum.PaySelfPrescritionPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="100" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding CashDetailReportSum.Other,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

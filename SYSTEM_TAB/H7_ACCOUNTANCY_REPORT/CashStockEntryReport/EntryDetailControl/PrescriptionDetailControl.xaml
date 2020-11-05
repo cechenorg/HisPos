@@ -23,7 +23,7 @@
             <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding AdjustCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding AdjustCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
             </ComboBox>
-            <Label  Content="合作院所" FontFamily="Segoe UI Semibold" FontSize="25" Margin="20,0,0,0"/>
+            <Label  Content="合作院所" FontFamily="Segoe UI Semibold" FontSize="25" Margin="20,0,0,0" Visibility="{Binding CoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding CoopSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding CoopString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Visibility="{Binding CoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             </ComboBox>

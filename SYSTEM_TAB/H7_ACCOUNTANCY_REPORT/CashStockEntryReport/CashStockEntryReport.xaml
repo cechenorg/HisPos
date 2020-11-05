@@ -230,29 +230,26 @@
                             <Label Content="{Binding TotalCashFlow.TotalMedUse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200" Margin="0,10,0,0"/>
                         </Border>
                     </StackPanel>
-                    <Label x:Name="MedCash" Grid.Row="3" Grid.Column="0" Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center" PreviewMouseDown="MedCash_PreviewMouseDown"/>
-                    <StackPanel Grid.Row="3" Grid.Column="1"  Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedCash_PreviewMouseDown">
+                    <Label x:Name="MedCash" Grid.Row="3" Grid.Column="0" Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                    <StackPanel x:Name="MedCashCoop" Grid.Row="3" Grid.Column="1"  Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedCashCoop_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command="{Binding CashSelectionChangedCommand}"/>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding CommandCashNotCoopSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="{Binding CashProfitReport.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
-                    <StackPanel Grid.Row="3" Grid.Column="2"  Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedCash_PreviewMouseDown">
+                    <StackPanel x:Name="MedCashNotCoop" Grid.Row="3" Grid.Column="2"  Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedCashNotCoop_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command="{Binding CashSelectionChangedCommand}"/>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding CashCoopSelectionChanged}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="{Binding CoopCashProfitReport.TotalPrice,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
-                    <StackPanel Grid.Row="3" Grid.Column="3"  Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedCash_PreviewMouseDown">
-                            <StackPanel.InputBindings>
-                                <MouseBinding Gesture="LeftClick" Command="{Binding CashSelectionChangedCommand}" />
-                             </StackPanel.InputBindings>
-                            <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                                <Label Content="{Binding TotalCashFlow.TotalMedCash,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                    <StackPanel Grid.Row="3" Grid.Column="3"  Orientation="Horizontal" Background="Transparent" >
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                                <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                             </Border>
                 </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="4"  Orientation="Horizontal" Background="Transparent">
