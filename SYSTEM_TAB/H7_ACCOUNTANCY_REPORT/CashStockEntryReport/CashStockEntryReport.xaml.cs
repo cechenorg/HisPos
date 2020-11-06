@@ -80,6 +80,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             OTCTicketBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -107,6 +109,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             OTCTicketBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void btnAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -180,6 +184,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             OTCTicketBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
 
         }
 
@@ -199,6 +205,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             OTCTicketBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void MedCash_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -217,6 +225,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             OTCTicketBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void MedStock_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -235,6 +245,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             OTCTicketBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void OTCTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -253,6 +265,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void OTCCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -271,6 +285,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
 
         }
 
@@ -290,6 +306,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void OTCReward_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -308,6 +326,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void OTCFee_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -326,6 +346,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void OTCTicket_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -344,6 +366,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
 
         }
 
@@ -363,6 +387,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
 
         }
 
@@ -382,6 +408,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void MedCostCoopBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -400,6 +428,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
 
         }
 
@@ -437,6 +467,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.LightGray;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void MedCashCoop_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -455,6 +487,46 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.LightGray;
             MedCashNotCoop.Background = Brushes.Transparent;
+        }
+
+        private void MedChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+            OTCFeeBack.Background = Brushes.GhostWhite;
+            OTCTicketBack.Background = Brushes.GhostWhite;
+            MedCoopPreBack.Background = Brushes.GhostWhite;
+            MedSelfPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostCoopBack.Background = Brushes.GhostWhite;
+            MedCostSelfBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+            MedCashCoop.Background = Brushes.Transparent;
+            MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.LightGray;
+            MedCoopChange.Background = Brushes.Transparent;
+        }
+
+        private void MedCoopChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OTCTradeBack.Background = Brushes.GhostWhite;
+            OTCCostBack.Background = Brushes.GhostWhite;
+            OTCStockBack.Background = Brushes.GhostWhite;
+            OTCRewardBack.Background = Brushes.GhostWhite;
+            OTCFeeBack.Background = Brushes.GhostWhite;
+            OTCTicketBack.Background = Brushes.GhostWhite;
+            MedCoopPreBack.Background = Brushes.GhostWhite;
+            MedSelfPreBack.Background = Brushes.GhostWhite;
+            MedCashBack.Background = Brushes.GhostWhite;
+            MedCostCoopBack.Background = Brushes.GhostWhite;
+            MedCostSelfBack.Background = Brushes.GhostWhite;
+            MedStockBack.Background = Brushes.GhostWhite;
+            MedCashCoop.Background = Brushes.Transparent;
+            MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.LightGray;
         }
     }
 }

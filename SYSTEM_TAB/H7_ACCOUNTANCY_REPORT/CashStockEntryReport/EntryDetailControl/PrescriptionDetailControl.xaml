@@ -17,9 +17,12 @@
             <ColumnDefinition Width="670"/>
             <ColumnDefinition Width="700"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  Orientation="Horizontal">
             <Label  Content="處方詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
-            <Label  Content="調劑案件" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" FontSize="25"/>
+            <Label  Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label  Content="{Binding PrescriptionDetailReportSum.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label  Content="調劑案件" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" FontSize="25"/>
             <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding AdjustCaseSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding AdjustCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
             </ComboBox>
@@ -200,8 +203,8 @@
 
         <Border  Grid.Row="2" Grid.Column="0" BorderThickness="2" BorderBrush="DarkSeaGreen" >
             <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
-                <Label Width="60" VerticalAlignment="Center" Margin="93,0,0,0" Content="{Binding PrescriptionDetailReportSum.InsName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                <TextBlock Width="55" VerticalAlignment="Center" TextAlignment="Right" Margin="55,0,0,0" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <Label Width="60" VerticalAlignment="Center" Margin="25,0,0,0" Content="{Binding PrescriptionDetailReportSum.InsName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                <TextBlock Width="55" VerticalAlignment="Center" TextAlignment="Right" Margin="123,0,0,0" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.MedicalPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 <TextBlock Width="110" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding PrescriptionDetailReportSum.Meduse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>

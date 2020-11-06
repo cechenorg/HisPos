@@ -32,6 +32,7 @@ namespace His_Pos.NewClass.Report.CashDetailReport
         private int paySelfPrescritionPrice;
         private int deposit;
         private int other;
+        private int count;
         public int Id
         {
             get => id;
@@ -94,6 +95,14 @@ namespace His_Pos.NewClass.Report.CashDetailReport
             set
             {
                 Set(() => Other, ref other ,value);
+            }
+        }
+        public int Count
+        {
+            get => count;
+            set
+            {
+                Set(() => Count, ref count, value);
             }
         }
     }

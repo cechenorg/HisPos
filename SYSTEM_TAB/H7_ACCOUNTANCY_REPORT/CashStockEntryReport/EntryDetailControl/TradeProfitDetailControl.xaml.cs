@@ -54,6 +54,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
             dgRecord.Visibility = Visibility.Visible;
             dgRecordRecord.Visibility = Visibility.Visible;
             lblRecord.Visibility = Visibility.Visible;
+            spRecord.Visibility = Visibility.Visible;
+            spEmp.Visibility = Visibility.Collapsed;
         }
 
         private void Empbtn_Click(object sender, RoutedEventArgs e)
@@ -66,6 +68,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
             dgRecord.Visibility = Visibility.Collapsed;
             dgRecordRecord.Visibility = Visibility.Collapsed;
             lblRecord.Visibility = Visibility.Collapsed;
+            spRecord.Visibility = Visibility.Collapsed;
+            spEmp.Visibility = Visibility.Visible;
         }
     }
 }

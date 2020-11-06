@@ -151,5 +151,14 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalMed, ref totalMed, value);
             }
         }
+        private double totalMedChange;
+        public double TotalMedChange
+        {
+            get => totalMedChange;
+            set
+            {
+                Set(() => TotalMedChange, ref totalMedChange, value);
+            }
+        }
     }
 }

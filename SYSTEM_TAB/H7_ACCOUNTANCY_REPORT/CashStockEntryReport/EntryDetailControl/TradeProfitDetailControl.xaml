@@ -19,7 +19,17 @@
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
             <Label x:Name="lblRecord" Content="銷售紀錄" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label x:Name="lblEmp" Content="人員業績" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="Collapsed"/>
-            <Rectangle Width="150"/>
+            <StackPanel x:Name="spRecord" Width="200" Orientation="Horizontal">
+                <Label  Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
+                <Label  Content="{Binding TradeDetailCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
+                <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            </StackPanel >
+            <StackPanel x:Name="spEmp" Width="200" Visibility="Collapsed" Orientation="Horizontal">
+                <Label  Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
+                <Label  Content="{Binding TradeEmpDetailCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
+                <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25" />
+            </StackPanel>
+            
             <Button x:Name="Recordbtn" Click="Recordbtn_Click" Margin="0,0,0,0" Width="100" Content="切換" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Visibility="Collapsed"/>
             <Button x:Name="Empbtn" Click="Empbtn_Click"  Margin="0,0,0,0" Width="100" Content="切換" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" />
         </StackPanel>

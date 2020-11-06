@@ -28,6 +28,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         private double paySelfPoint;
         private double meduse;
         private double profit;
+        private int count;
         public int Id { get; set; }
         public string AdjustCaseID { get; set; }
         public string CusName { get; set; }
@@ -77,6 +78,14 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             set
             {
                 Set(() => Profit, ref profit, value);
+            }
+        }
+        public int Count
+        {
+            get => count;
+            set
+            {
+                Set(() => Count, ref count, value);
             }
         }
     }

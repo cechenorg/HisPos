@@ -149,12 +149,14 @@
                     <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
                     <StackPanel x:Name="MedCashBack" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
                     <StackPanel x:Name="MedStockBack" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
-                    <StackPanel Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="10" Background="DarkSeaGreen"/>
+                    <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="10" Background="GhostWhite"/>
+                    <StackPanel Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="10" Background="DarkSeaGreen"/>
                     
                     <Border Grid.Row="2" Grid.Column="0" BorderThickness="0,1,0,0" Grid.ColumnSpan="5" Grid.RowSpan="6" BorderBrush="LightGray"/>
                     <Border Grid.Row="3" Grid.Column="0" BorderThickness="0,1,0,0" Grid.ColumnSpan="5" Grid.RowSpan="6" BorderBrush="LightGray"/>
                     <Border Grid.Row="4" Grid.Column="0" BorderThickness="0,1,0,0" Grid.ColumnSpan="5" Grid.RowSpan="6" BorderBrush="LightGray"/>
-                    <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" Grid.ColumnSpan="5" Grid.RowSpan="5" BorderBrush="DarkSeaGreen"/>
+                    <Border Grid.Row="5" Grid.Column="0" BorderThickness="0,1,0,0" Grid.ColumnSpan="5" Grid.RowSpan="6" BorderBrush="LightGray"/>
+                    <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" Grid.ColumnSpan="5" Grid.RowSpan="6" BorderBrush="DarkSeaGreen"/>
                     <StackPanel  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label Content="處方" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
                     </StackPanel>
@@ -293,8 +295,40 @@
                         </Border>
                     </StackPanel>
 
-                    <Label Grid.Row="5" Grid.Column="3" Content="合計" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <StackPanel Grid.Row="5" Grid.Column="4" Orientation="Horizontal" Background="Transparent">
+                    <StackPanel Grid.Row="5" Grid.Column="0">
+                        <Label  Content="調整" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0"  PreviewMouseDown="MedStock_PreviewMouseDown"/>
+                    </StackPanel>
+                    <StackPanel x:Name="MedChange"  Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedChange_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding CooperativePrescriptionChangeSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label Content="{Binding  CooperativePrescriptionChangeReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel x:Name="MedCoopChange" Grid.Row="5" Grid.Column="2" Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedCoopChange_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding SelfPrescriptionChangeSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label Content="{Binding  SelfPrescriptionChangeReport.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Grid.Column="3" Orientation="Horizontal" Background="Transparent" >
+                       
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Grid.Column="4" Orientation="Horizontal" Background="Transparent" >
+                        
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label Content="{Binding  TotalCashFlow.TotalMedChange,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200"/>
+                        </Border>
+                    </StackPanel>
+
+                    <Label Grid.Row="6" Grid.Column="3" Content="合計" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="6" Grid.Column="4" Orientation="Horizontal" Background="Transparent">
                     <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                         <Label Content="{Binding TotalCashFlow.TotalMed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200"/>
                     </Border>
