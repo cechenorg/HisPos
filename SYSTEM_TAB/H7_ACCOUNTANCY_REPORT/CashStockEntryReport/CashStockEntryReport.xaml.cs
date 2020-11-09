@@ -449,6 +449,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedStockBack.Background = Brushes.GhostWhite;
             MedCashCoop.Background = Brushes.Transparent;
             MedCashNotCoop.Background = Brushes.Transparent;
+            MedChange.Background = Brushes.Transparent;
+            MedCoopChange.Background = Brushes.Transparent;
         }
 
         private void MedCashNotCoop_PreviewMouseDown(object sender, MouseButtonEventArgs e)

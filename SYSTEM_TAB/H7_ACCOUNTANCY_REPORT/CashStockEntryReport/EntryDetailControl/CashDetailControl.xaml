@@ -22,12 +22,12 @@
             <ColumnDefinition Width="700"/>
         </Grid.ColumnDefinitions>
         <StackPanel  Grid.Row="0"  Grid.Column="0" Orientation="Horizontal">
-            <Label Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
-            <Label  Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label  Content="現金詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label Margin="20,0,0,0" Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="{Binding CashDetailReportSum.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="合作院所" FontFamily="Segoe UI Semibold" FontSize="25" Margin="20,0,0,0" Visibility="{Binding CashCoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding CashCoopSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            <ComboBox Width="200"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding CashCoopSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding CashCoopString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Visibility="{Binding CashCoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             </ComboBox>
         </StackPanel>

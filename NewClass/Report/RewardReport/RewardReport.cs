@@ -26,5 +26,15 @@ namespace His_Pos.NewClass.Report.RewardReport
                 Set(() => RewardAmount, ref rewardAmount, value);
             }
         }
+
+        private double rewardAmountSum;
+        public double RewardAmountSum
+        {
+            get => rewardAmountSum;
+            set
+            {
+                Set(() => RewardAmountSum, ref rewardAmountSum, value);
+            }
+        }
     }
 }

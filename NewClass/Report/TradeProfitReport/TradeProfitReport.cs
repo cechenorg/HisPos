@@ -119,6 +119,33 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalAmt, ref totalAmt, value);
             }
         }
+        private int totalDeleteAmt;
+        public int TotalDeleteAmt
+        {
+            get => totalDeleteAmt;
+            set
+            {
+                Set(() => TotalDeleteAmt, ref totalDeleteAmt, value);
+            }
+        }
+        private int totalChangeAmt;
+        public int TotalChangeAmt
+        {
+            get => totalChangeAmt;
+            set
+            {
+                Set(() => TotalChangeAmt, ref totalChangeAmt, value);
+            }
+        }
+        private int totalNormalAmt;
+        public int TotalNormalAmt
+        {
+            get => totalNormalAmt;
+            set
+            {
+                Set(() => TotalNormalAmt, ref totalNormalAmt, value);
+            }
+        }
 
 
         public void CountEditPoint(DataRow editDataRow)

@@ -10,7 +10,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="360"/>
+            <RowDefinition Height="320"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="670"/>
@@ -19,22 +20,26 @@
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
             <Label x:Name="lblRecord" Content="銷售紀錄" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label x:Name="lblEmp" Content="人員業績" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="Collapsed"/>
-            <StackPanel x:Name="spRecord" Width="200" Orientation="Horizontal">
-                <Label  Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
-                <Label  Content="{Binding TradeDetailCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <StackPanel x:Name="spRecord" Width="400" Orientation="Horizontal">
+                <Label Margin="20,0,0,0" Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
+                <Label  Content="{Binding TradeDetailReportSum.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
                 <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25"/>
+                <Label  Content="銷售案件" FontFamily="Segoe UI Semibold" FontSize="25" Margin="20,0,0,0" Visibility="{Binding ChangeVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding TradeChangeSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding ChangeString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Visibility="{Binding ChangeVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                </ComboBox>
             </StackPanel >
             <StackPanel x:Name="spEmp" Width="200" Visibility="Collapsed" Orientation="Horizontal">
-                <Label  Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
+                <Label Margin="20,0,0,0" Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
                 <Label  Content="{Binding TradeEmpDetailCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
                 <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25" />
             </StackPanel>
             
-            <Button x:Name="Recordbtn" Click="Recordbtn_Click" Margin="0,0,0,0" Width="100" Content="切換" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Visibility="Collapsed"/>
-            <Button x:Name="Empbtn" Click="Empbtn_Click"  Margin="0,0,0,0" Width="100" Content="切換" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" />
+            <Button x:Name="Recordbtn" Click="Recordbtn_Click" Margin="50,0,0,0" Width="100" Content="切換" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Visibility="Collapsed"/>
+            <Button x:Name="Empbtn" Click="Empbtn_Click"  Margin="50,0,0,0" Width="100" Content="切換" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" />
         </StackPanel>
         <DataGrid x:Name="dgRecord" Grid.Row="1"  Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  ItemsSource="{Binding TradeProfitDetailReportCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeProfitDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
+                  ItemsSource="{Binding TradeProfitDetailReportView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding TradeProfitDetailReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
                    CanUserDeleteRows="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -85,7 +90,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="現金" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding CashAmount}">
+                <DataGridTextColumn Width="80" Header="現金" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding CashAmount}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -104,7 +109,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="刷卡" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding CardAmount}">
+                <DataGridTextColumn Width="80" Header="刷卡" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding CardAmount}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -123,7 +128,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="禮券" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding DiscountAmt}">
+                <DataGridTextColumn Width="80" Header="禮券" FontFamily="Segoe UI Semi"  IsReadOnly="True" Binding="{Binding DiscountAmt}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -143,7 +148,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Width="100" Header="成本" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding ValueDifference}">
+                <DataGridTextColumn Width="80" Header="耗用" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding ValueDifference}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -162,7 +167,26 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding Profit}">
+                <DataGridTextColumn Width="80" Header="手續費" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding fee}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+                            <Setter Property="Height" Value="41"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="80" Header="毛利" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding Profit}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -256,8 +280,8 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Rectangle Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Fill="{StaticResource GridBackGround}"/>
-        <DataGrid x:Name="dgRecordRecord" Grid.Row="1" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <Rectangle Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"  Fill="{StaticResource GridBackGround}"/>
+        <DataGrid x:Name="dgRecordRecord" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding TradeProfitDetailRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                   SelectedItem="{Binding TradeProfitDetailMedicineReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
@@ -338,7 +362,7 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="dgEmpRecord" Grid.Row="1" Grid.Column="1" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <DataGrid x:Name="dgEmpRecord" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Background="{StaticResource Shadow}" Margin="0,0,0,0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   ItemsSource="{Binding TradeProfitDetailEmpRecordReportCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                   SelectedItem="{Binding TradeProfitDetailEmpMedicineReportSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False"
@@ -400,5 +424,22 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Border x:Name="SumRecord" Grid.Row="2" Grid.Column="0" BorderThickness="2" BorderBrush="DarkSeaGreen" >
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
+                <Label Width="60" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="22,0,0,0" Content="總計" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                <TextBlock Width="55" VerticalAlignment="Center" TextAlignment="Right" Margin="30,0,0,0" Text="{Binding TradeDetailReportSum.CashAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Margin="10,0,0,0" Text="{Binding TradeDetailReportSum.CardAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right"  Margin="0,0,0,0" Text="{Binding TradeDetailReportSum.DiscountAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding TradeDetailReportSum.ValueDifference,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="100" VerticalAlignment="Center" TextAlignment="Right"  Margin="60,0,0,0" Text="{Binding TradeDetailReportSum.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+            </StackPanel>
+        </Border>
+        <Border x:Name="SumEmp" Grid.Row="2" Grid.Column="0" BorderThickness="2" BorderBrush="DarkSeaGreen"  Visibility="Collapsed" >
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
+                <Label Width="60" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="70,0,0,0" Content="總計" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                <TextBlock Width="55" VerticalAlignment="Center" TextAlignment="Right" Margin="115,0,0,0" Text="{Binding EmpProfit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

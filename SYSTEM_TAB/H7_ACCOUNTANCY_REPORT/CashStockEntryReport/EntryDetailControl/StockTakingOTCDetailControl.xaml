@@ -18,7 +18,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
             <Label  Content="庫存異動詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
-            <Label  Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label Margin="20,0,0,0" Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="{Binding StockOTCDetailCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Rectangle Width="150"/>

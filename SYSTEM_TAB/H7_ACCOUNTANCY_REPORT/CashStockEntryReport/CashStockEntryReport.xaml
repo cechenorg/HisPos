@@ -490,31 +490,49 @@
                         </Border>
                     </StackPanel>
                     <StackPanel x:Name="OTCFee" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" PreviewMouseDown="OTCFee_PreviewMouseDown" >
-                    <Label  Content="手續費" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
+                        <Label  Content="調整" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal"  Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal"  Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal"  Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="4" Orientation="Horizontal" Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown" >
-                            <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                                <Label Content="{Binding TotalTradeProfitReport.CardAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label Content="{Binding TotalCashFlow.TotalOTCChange,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                             </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="5" Orientation="Horizontal"  Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding TotalTradeProfitReport.CardAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="{Binding TotalCashFlow.TotalOTCChange,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" PreviewMouseDown="OTCStock_PreviewMouseDown">

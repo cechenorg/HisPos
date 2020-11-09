@@ -58,6 +58,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => ExtraMoneyDetailCount, ref extraMoneyDetailCount, value);
             }
         }
+        private int empProfit;
+        public int EmpProfit
+        {
+            get => empProfit;
+            set
+            {
+                Set(() => EmpProfit, ref empProfit, value);
+            }
+        }
         private int rewardDetailCount;
         public int RewardDetailCount
         {
@@ -122,6 +131,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => CashCoopVis, ref cashcoopVis, value);
             }
         }
+        private Visibility changeVis;
+        public Visibility ChangeVis
+        {
+            get => changeVis;
+            set
+            {
+                Set(() => ChangeVis, ref changeVis, value);
+            }
+        }
 
         private List<string> adjustCaseString;
         public List<string> AdjustCaseString
@@ -150,6 +168,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => CoopString, ref coopString, value);
             }
         }
+        private List<string> changeString;
+        public List<string> ChangeString
+        {
+            get => changeString;
+            set
+            {
+                Set(() => ChangeString, ref changeString, value);
+            }
+        }
 
         private string coopSelectItem = "全部";
         public string CoopSelectItem
@@ -175,6 +202,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
 
                 CashDetailReportViewSource.Filter += CashCoopFilter;
                 SumCashDetailReport();
+
+            }
+        }
+        private string tradeChangeSelectItem = "全部";
+        public string TradeChangeSelectItem
+        {
+            get => tradeChangeSelectItem;
+            set
+            {
+                Set(() => TradeChangeSelectItem, ref tradeChangeSelectItem, value);
+
+                TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
+                SumOTCReport("1");
 
             }
         }
@@ -264,6 +304,34 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             set
             {
                 Set(() => TradeProfitReportCollection, ref tradeProfitReportCollection, value);
+            }
+        }
+
+        private TradeProfitReports tradeDeleteReportCollection = new TradeProfitReports();
+        public TradeProfitReports TradeDeleteReportCollection
+        {
+            get => tradeDeleteReportCollection;
+            set
+            {
+                Set(() => TradeDeleteReportCollection, ref tradeDeleteReportCollection, value);
+            }
+        }
+        private TradeProfitReports tradeChangeReportCollection = new TradeProfitReports();
+        public TradeProfitReports TradeChangeReportCollection
+        {
+            get => tradeChangeReportCollection;
+            set
+            {
+                Set(() => TradeChangeReportCollection, ref tradeChangeReportCollection, value);
+            }
+        }
+        private TradeProfitReports tradeNormalReportCollection = new TradeProfitReports();
+        public TradeProfitReports TradeNormalReportCollection
+        {
+            get => tradeNormalReportCollection;
+            set
+            {
+                Set(() => TradeNormalReportCollection, ref tradeNormalReportCollection, value);
             }
         }
 
@@ -975,6 +1043,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => CashDetailReportSum, ref cashDetailReportSum, value);
             }
         }
+        private TradeProfitDetailReport tradeDetailReportSum;
+        public TradeProfitDetailReport TradeDetailReportSum
+        {
+            get => tradeDetailReportSum;
+            set
+            {
+                Set(() => TradeDetailReportSum, ref tradeDetailReportSum, value);
+            }
+        }
         private PrescriptionDetailReports prescriptionDetailReportCollection;
         public PrescriptionDetailReports PrescriptionDetailReportCollection
         {
@@ -1146,6 +1223,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand RewardReportSelectionChangedCommand { get; set; }
         public RelayCommand RewardDetailClickCommand { get; set; }
         public RelayCommand RewardDetailMedicineDoubleClickCommand { get; set; }
+        public RelayCommand TradeChangeReportSelectionChangedCommand { get; set; }
 
         #endregion
         public CashStockEntryReportViewModel() {
@@ -1178,6 +1256,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             RewardReportSelectionChangedCommand = new RelayCommand(RewardReportSelectionChangedAction);
             RewardDetailClickCommand = new RelayCommand(RewardDetailClickAction);
             RewardDetailMedicineDoubleClickCommand = new RelayCommand(RewardDetailMedicineDoubleClickAction);
+            TradeChangeReportSelectionChangedCommand = new RelayCommand(TradeChangeReportSelectionChangedAction);
             GetData();
             InitCollection();
         }
@@ -1425,7 +1504,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             if (TradeProfitSelectedItem is null)
                 return;*/
             CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
-
+            ChangeVis = Visibility.Collapsed;
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -1444,9 +1523,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
 
                 TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
                 //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
-                //SumStockTakingDetailReport();
+                //SumStockTakingDetailReport();                
+                TradeChangeSelectItem = "全部";
+                TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
+                SumOTCReport("0");
                 TradeDetailCount = TradeProfitDetailReportCollection.Count();
                 TradeEmpDetailCount =TradeProfitDetailEmpReportCollection.Count();
+                EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
                 IsBusy = false;
             };
             IsBusy = true;
@@ -1455,6 +1538,68 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             CooperativePrescriptionSelectedItem = null;*/
             CashflowSelectedItem = null;
         }
+
+        private void TradeChangeReportSelectionChangedAction()
+        {
+
+            /* if (TradeProfitSelectedItem is null)
+             {
+                 TradeProfitDetailReportCollection.Clear();
+                 TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
+                 TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
+                 //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
+                 //SumPrescriptionDetailReport();
+             }
+             if (TradeProfitSelectedItem is null)
+                 return;*/
+            CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
+
+            ChangeVis = Visibility.Visible;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "報表查詢中";
+                TradeProfitDetailReportCollection = new TradeProfitDetailReports("1", StartDate, EndDate);
+                TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
+
+                MainWindow.ServerConnection.CloseConnection();
+                var StringCopy = new List<string>() { };
+                foreach (var r in TradeProfitDetailReportCollection)
+                {
+                    StringCopy.Add(r.TypeId);
+                }
+                var DistinctItems = StringCopy.Select(x => x).Distinct();
+                ChangeString = new List<string>() { "全部" };
+                foreach (var item in DistinctItems)
+                {
+                    ChangeString.Add(item);
+                }
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
+                TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
+                TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
+
+                TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
+                //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
+                //SumStockTakingDetailReport();
+                TradeChangeSelectItem = "全部";
+                TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
+                SumOTCReport("1");
+                TradeDetailCount = TradeProfitDetailReportCollection.Count();
+                TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
+                EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+            /*SelfPrescriptionSelectedItem = null;
+            CooperativePrescriptionSelectedItem = null;*/
+            CashflowSelectedItem = null;
+        }
+
 
 
         private void StockTakingReportSelectionChangedAction()
@@ -2007,8 +2152,21 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                     else
                         CoopCashProfitReportCollection.Add(r);
                 }
+                foreach (var r in TradeProfitReportCollection)
+                {
+                    if (r.TypeId == "1")
+                        TradeNormalReportCollection.Add(r);
+                    else if(r.TypeId == "5")
+                        TradeChangeReportCollection.Add(r);
+                    else if(r.TypeId == "6")
+                    TradeDeleteReportCollection.Add(r);
+                }
+
                 //RevertSelfPrescriptionProfitByEditRecords();
                 CalculateTotalTradeProfit();
+                CalculateTotalTradeNormal();
+                CalculateTotalTradeDelete();
+                CalculateTotalTradeChange();
                 CalculateTotalStockTaking();
                 CalculateTotalStockTakingOTC();
                 CalculateTotalCashFlow();
@@ -2133,6 +2291,36 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
             PrescriptionDetailReportSum.Count= tempCollection.Count();
         }
+
+        private void SumOTCReport(string ID)
+        {
+            TradeDetailReportSum = new TradeProfitDetailReport();
+
+            var tempCollection = TradeProfitDetailReportCollection.Where(p => true);
+            if (ID == "0")
+            {
+                tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId == "1"));
+            }
+            else
+            {
+                if (TradeChangeSelectItem == "全部")
+                {
+                    tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId != "1"));
+
+                }
+                else
+                {
+                    tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId == TradeChangeSelectItem));
+                }
+            }
+            TradeDetailReportSum.CardAmount = tempCollection.Sum(s => s.CardAmount);
+            TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
+            TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => s.DiscountAmt);
+            TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.RealTotal);
+            TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
+            TradeDetailReportSum.Count = tempCollection.Count();
+        }
         private void CalculateTotalCashFlow() {
             
             TotalCashFlow.CopayMentPrice = CashflowCollection.Sum(c => c.CopayMentPrice);
@@ -2165,8 +2353,32 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             TotalTradeProfitReport.DiscountAmt = TradeProfitReportCollection.Sum(c => c.DiscountAmt);
             TotalTradeProfitReport.TotalAmt = TotalTradeProfitReport.CashAmount + TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.DiscountAmt;
         }
+
+
+        private void CalculateTotalTradeNormal()
+        {
+            foreach (var r in TradeNormalReportCollection)
+            {
+                TotalTradeProfitReport.TotalNormalAmt += r.DiscountAmt+r.CardAmount+r.CashAmount;
+            }
+        }
+        private void CalculateTotalTradeDelete()
+        {
+            foreach (var r in TradeDeleteReportCollection)
+            {
+                TotalTradeProfitReport.TotalDeleteAmt += r.DiscountAmt + r.CardAmount + r.CashAmount;
+            }
+        }
+        private void CalculateTotalTradeChange()
+        {
+            foreach (var r in TradeChangeReportCollection)
+            {
+                TotalTradeProfitReport.TotalChangeAmt += r.DiscountAmt + r.CardAmount + r.CashAmount;
+            }
+        }
         private void CalculateTotalRewardProfit()
         {
+            TotalRewardReport.RewardAmountSum = RewardReportCollection.Sum(c => c.RewardAmount);
             TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
         }
         private void CalculateTotalStockTaking()
@@ -2255,6 +2467,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         private void CalculateTotal()
         {
+            TotalCashFlow.TotalOTCChange = TotalTradeProfitReport.TotalDeleteAmt + TotalTradeProfitReport.TotalChangeAmt;
+
             DiscountAmt = -TotalTradeProfitReport.DiscountAmt;
             InventoryDifference.InventoryTotal = (double)(InventoryDifference.InventoryOverage + InventoryDifference.InventoryShortage + InventoryDifference.InventoryScrap);
             TotalCashFlow.TotalOTC = TotalTradeProfitReport.Profit+ (int)TotalStockTakingOTCReport.Price+ DiscountAmt+ TotalRewardReport.RewardAmount;
@@ -2328,6 +2542,26 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             else if (CashCoopSelectItem == "全部")
                 e.Accepted = true;
         }
+        private void OTCChangeFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is TradeProfitDetailReport src))
+                e.Accepted = false;
+
+            e.Accepted = false;
+
+            TradeProfitDetailReport indexitem = ((TradeProfitDetailReport)e.Item);
+            if (TradeChangeSelectItem == indexitem.TypeId)
+            {
+                e.Accepted = true;
+            }
+            else if (TradeChangeSelectItem == "全部")
+            {
+                e.Accepted = true;
+            }
+        }
+
+
         #endregion
     }
 }

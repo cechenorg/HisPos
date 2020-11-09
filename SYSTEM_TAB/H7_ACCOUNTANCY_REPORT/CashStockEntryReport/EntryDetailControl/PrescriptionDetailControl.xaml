@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  Orientation="Horizontal">
             <Label  Content="處方詳細" FontFamily="Segoe UI Semibold" FontSize="25"/>
-            <Label  Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
+            <Label Margin="20,0,0,0" Content="共" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="{Binding PrescriptionDetailReportSum.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25"/>
             <Label  Content="調劑案件" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" FontSize="25"/>
@@ -27,7 +27,7 @@
                                             ItemsSource="{Binding AdjustCaseString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
             </ComboBox>
             <Label  Content="合作院所" FontFamily="Segoe UI Semibold" FontSize="25" Margin="20,0,0,0" Visibility="{Binding CoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <ComboBox Width="100"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding CoopSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            <ComboBox Width="200"  FontFamily="Segoe UI Semi" FontSize="18" SelectedItem="{Binding CoopSelectItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding CoopString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Visibility="{Binding CoopVis,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             </ComboBox>
             
