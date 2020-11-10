@@ -92,6 +92,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
+        public static void Send(Key key)
+        {
+            if (Keyboard.PrimaryDevice != null)
+            {
+                if (Keyboard.PrimaryDevice.ActiveSource != null)
+                {
+                    var e = new KeyEventArgs(Keyboard.PrimaryDevice, Keyboard.PrimaryDevice.ActiveSource, 0, key)
+                    {
+                        RoutedEvent = Keyboard.PreviewKeyDownEvent
+                    };
+                    InputManager.Current.ProcessInput(e);
+
+                    // Note: Based on your requirements you may also need to fire events for:
+                    // RoutedEvent = Keyboard.PreviewKeyDownEvent
+                    // RoutedEvent = Keyboard.KeyUpEvent
+                    // RoutedEvent = Keyboard.PreviewKeyUpEvent
+                }
+            }
+        }
+
         /*private void PaidAmountCommandExecuted(object sender, ExecutedRoutedEventArgs e) 
         {
 
@@ -798,6 +818,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     {
                         dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
                     }
+                    // Focus Next Row
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        var ProductIDList = new List<TextBox>();
+                        NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
+                            ref ProductIDList);
+                        ProductIDList[ProductIDList.Count - 1].Focus();
+                    }, DispatcherPriority.ApplicationIdle);
                     tb.Text = "";
                 }
             }
@@ -806,18 +834,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void ProductIDTextbox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox tb = (TextBox)sender;
+
             if (tb.Text.Length == 13)
             {
-                Key key = Key.Enter;
-                IInputElement target = Keyboard.FocusedElement;
-                RoutedEvent routedEvent = Keyboard.KeyDownEvent;
-                if (target != null)
-                {
-                    target.RaiseEvent(new KeyEventArgs(
-                    Keyboard.PrimaryDevice,
-                    Keyboard.PrimaryDevice.ActiveSource, 0, key)
-                    { RoutedEvent = routedEvent });
-                }
+                Send(Key.Enter);
             }
         }
 
@@ -1535,6 +1555,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 tbCUS.Text = "0";
             }
         }
+
         private void tbFromHIS_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (tbFromHIS.Text.Length>1)
@@ -1544,6 +1565,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 tbFromHIS.Text = "";
             }
         }
+
         private void TradeRecordGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (TradeRecordGrid.SelectedCells.Count <= 0)
