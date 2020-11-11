@@ -208,17 +208,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
                 bool notNumber = Double.TryParse(Medicine.RewardPercent.ToString(), out double i);
                 if (notNumber==false)
                 {
-                    MessageWindow.ShowMessage("醫獎%數輸入錯誤", MessageType.ERROR);
+                    MessageWindow.ShowMessage("績效輸入錯誤", MessageType.ERROR);
                     Medicine.RewardPercent = "0";
                     return false;
                 }
 
-                if (i > 100 || i < 0)
+                /*if (i > 100 || i < 0)
                 {
                     MessageWindow.ShowMessage("醫獎%數必須大於0及小於等於100", MessageType.ERROR);
                     Medicine.RewardPercent = "0";
                     return false;
-                }
+                }*/
                 
               
               

@@ -10,20 +10,54 @@ namespace His_Pos.NewClass.Report.StockTakingDetailReport
 {
     public class StockTakingOTCDetailReport : ObservableObject
     {
+        public StockTakingOTCDetailReport()
+        {
+        }
+
         public StockTakingOTCDetailReport(DataRow r) {
-            Id = r.Field<string>("ID");
-            ChineseName = r.Field<string>("Pro_ChineseName");
-            OldValue = r.Field<double>("StoTakDet_OldValue");
-            NewValue = r.Field<double>("StoTakDet_NewValue");
+            InvRecSourceID = r.Field<string>("StoTakDet_MasterID");
             Price = Math.Round(r.Field<decimal>("Price"), 2);
             Type= r.Field<string>("TypeID");
         }
-        public string Id { get; set; }
-        public string Type { get; set; }
-        public string ChineseName { get; set; }
-        public double OldValue { get; set; }
-        public double NewValue { get; set; }
-        public decimal Price { get; set; }
+
+        private string invRecSourceID;
+        private string type;
+        private decimal price;
+        private int count;
+        public string InvRecSourceID
+        {
+            get => invRecSourceID;
+            set
+            {
+                Set(() => InvRecSourceID, ref invRecSourceID, value);
+            }
+        }
+        public string Type
+        {
+            get => type;
+            set
+            {
+                Set(() => Type, ref type, value);
+            }
+        }
+        public decimal Price
+        {
+            get => price;
+            set
+            {
+                Set(() => Price, ref price, value);
+            }
+        }
+
+        public int Count
+        {
+            get => count;
+            set
+            {
+                Set(() => Count, ref count, value);
+            }
+        }
+
 
     }
 }

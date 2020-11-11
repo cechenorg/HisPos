@@ -167,7 +167,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="80" Header="手續費" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding fee}">
+                <DataGridTextColumn Width="80" Header="手續費" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding fee}" >
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>

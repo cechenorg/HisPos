@@ -178,6 +178,26 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             }
         }
 
+        private List<string> stockTakingOTCString;
+        public List<string> StockTakingOTCString
+        {
+            get => stockTakingOTCString;
+            set
+            {
+                Set(() => StockTakingOTCString, ref stockTakingOTCString, value);
+            }
+        }
+
+        private List<string> stockTakingString;
+        public List<string> StockTakingString
+        {
+            get => stockTakingString;
+            set
+            {
+                Set(() => StockTakingString, ref stockTakingString, value);
+            }
+        }
+
         private string coopSelectItem = "全部";
         public string CoopSelectItem
         {
@@ -229,6 +249,31 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 SumPrescriptionDetailReport();
             }
         }
+
+        private string stockTakingOTCSelectItem = "全部";
+        public string StockTakingOTCSelectItem
+        {
+            get => stockTakingOTCSelectItem;
+            set
+            {
+                Set(() => StockTakingOTCSelectItem, ref stockTakingOTCSelectItem, value);
+                StockTakingOTCDetailReportViewSource.Filter += StockTakingOTCDetailFilter;
+                SumStockTakingOTCDetailReport();
+            }
+        }
+
+        private string stockTakingSelectItem = "全部";
+        public string StockTakingSelectItem
+        {
+            get => stockTakingSelectItem;
+            set
+            {
+                Set(() => StockTakingSelectItem, ref stockTakingSelectItem, value);
+                StockTakingDetailReportViewSource.Filter += StockTakingDetailFilter;
+                SumStockTakingDetailReport();
+            }
+        }
+
         private DateTime startDate = DateTime.Today;
         public DateTime StartDate
         {
@@ -1043,6 +1088,24 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 Set(() => CashDetailReportSum, ref cashDetailReportSum, value);
             }
         }
+        private StockTakingDetailReport stockTakingDetailReportSum;
+        public StockTakingDetailReport StockTakingDetailReportSum
+        {
+            get => stockTakingDetailReportSum;
+            set
+            {
+                Set(() => StockTakingDetailReportSum, ref stockTakingDetailReportSum, value);
+            }
+        }
+        private StockTakingOTCDetailReport stockTakingOTCDetailReportSum;
+        public StockTakingOTCDetailReport StockTakingOTCDetailReportSum
+        {
+            get => stockTakingOTCDetailReportSum;
+            set
+            {
+                Set(() => StockTakingOTCDetailReportSum, ref stockTakingOTCDetailReportSum, value);
+            }
+        }
         private TradeProfitDetailReport tradeDetailReportSum;
         public TradeProfitDetailReport TradeDetailReportSum
         {
@@ -1479,7 +1542,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 StockTakingDetailRecordReportCollection.Clear();
                 return;
             }
-            StockTakingDetailRecordReportCollection.GetDateByDate(StockTakingDetailReportSelectItem.Id, StartDate, EndDate, StockTakingDetailReportSelectItem.Type);
+            StockTakingDetailRecordReportCollection.GetDateByDate(StockTakingDetailReportSelectItem.InvRecSourceID, StartDate, EndDate, StockTakingDetailReportSelectItem.Type);
         }
         private void StockTakingOTCDetailClickAction()
         {
@@ -1488,7 +1551,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 StockTakingOTCDetailRecordReportCollection.Clear();
                 return;
             }
-            StockTakingOTCDetailRecordReportCollection.GetDateByDate(StockTakingOTCDetailReportSelectItem.Id, StartDate, EndDate, StockTakingOTCDetailReportSelectItem.Type);
+            StockTakingOTCDetailRecordReportCollection.GetDateByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID, StartDate, EndDate, StockTakingOTCDetailReportSelectItem.Type);
         }
         private void TradeProfitReportSelectionChangedAction()
         {
@@ -1624,6 +1687,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 StockTakingDetailReportCollection = new StockTakingDetailReports("0", StartDate, EndDate);
                 
                 MainWindow.ServerConnection.CloseConnection();
+                var CashCoopStringCopy = new List<string>() { };
+                foreach (var r in StockTakingDetailReportCollection)
+                {
+                    CashCoopStringCopy.Add(r.Type);
+                }
+                var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
+                StockTakingString = new List<string>() { "全部" };
+                foreach (var item in DistinctItems)
+                {
+                    StockTakingString.Add(item);
+                }
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -1631,6 +1705,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 StockTakingDetailReportView = StockTakingDetailReportViewSource.View;
                 //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
                 //SumStockTakingDetailReport();
+                StockTakingSelectItem = "全部";
+                StockTakingDetailReportViewSource.Filter += StockTakingDetailFilter;
+
+
+                SumStockTakingDetailReport();
                 StockDetailCount = StockTakingDetailReportCollection.Count();
                 IsBusy = false;
             };
@@ -1661,6 +1740,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
                 StockTakingOTCDetailReportCollection = new StockTakingOTCDetailReports("0", StartDate, EndDate);
+                var CashCoopStringCopy = new List<string>() { };
+                foreach (var r in StockTakingOTCDetailReportCollection)
+                {
+                    CashCoopStringCopy.Add(r.Type);
+                }
+                var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
+                StockTakingOTCString = new List<string>() { "全部" };
+                foreach (var item in DistinctItems)
+                {
+                    StockTakingOTCString.Add(item);
+                }
 
                 MainWindow.ServerConnection.CloseConnection();
             };
@@ -1670,6 +1760,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 StockTakingOTCDetailReportView = StockTakingOTCDetailReportViewSource.View;
                 //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
                 //SumStockTakingDetailReport();
+                StockTakingOTCSelectItem = "全部";
+                StockTakingOTCDetailReportViewSource.Filter += StockTakingOTCDetailFilter;
+                SumStockTakingOTCDetailReport();
                 StockOTCDetailCount = StockTakingOTCDetailReportCollection.Count();
                 IsBusy = false;
             };
@@ -2321,6 +2414,48 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
             TradeDetailReportSum.Count = tempCollection.Count();
         }
+
+        private void SumStockTakingOTCDetailReport()
+        {
+            StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
+
+            var tempCollection = StockTakingOTCDetailReportCollection.Where(p => true);
+  
+                if (StockTakingOTCSelectItem == "全部")
+                {
+                    tempCollection = StockTakingOTCDetailReportCollection;
+
+                }
+                else
+                {
+                    tempCollection = StockTakingOTCDetailReportCollection.Where(p => (p.Type == StockTakingOTCSelectItem));
+                }
+
+            StockTakingOTCDetailReportSum.Price = tempCollection.Sum(s => s.Price);
+
+            StockTakingOTCDetailReportSum.Count = tempCollection.Count();
+        }
+
+        private void SumStockTakingDetailReport()
+        {
+            StockTakingDetailReportSum = new StockTakingDetailReport();
+
+            var tempCollection = StockTakingDetailReportCollection.Where(p => true);
+
+            if (StockTakingSelectItem == "全部")
+            {
+                tempCollection = StockTakingDetailReportCollection;
+
+            }
+            else
+            {
+                tempCollection = StockTakingDetailReportCollection.Where(p => (p.Type == StockTakingSelectItem));
+            }
+
+            StockTakingDetailReportSum.Price = tempCollection.Sum(s => s.Price);
+
+            StockTakingDetailReportSum.Count = tempCollection.Count();
+        }
         private void CalculateTotalCashFlow() {
             
             TotalCashFlow.CopayMentPrice = CashflowCollection.Sum(c => c.CopayMentPrice);
@@ -2556,6 +2691,42 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 e.Accepted = true;
             }
             else if (TradeChangeSelectItem == "全部")
+            {
+                e.Accepted = true;
+            }
+        }
+        private void StockTakingDetailFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is StockTakingDetailReport src))
+                e.Accepted = false;
+
+            e.Accepted = false;
+
+            StockTakingDetailReport indexitem = ((StockTakingDetailReport)e.Item);
+            if (StockTakingSelectItem == indexitem.Type)
+            {
+                e.Accepted = true;
+            }
+            else if (StockTakingSelectItem == "全部")
+            {
+                e.Accepted = true;
+            }
+        }
+        private void StockTakingOTCDetailFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is StockTakingOTCDetailReport src))
+                e.Accepted = false;
+
+            e.Accepted = false;
+
+            StockTakingOTCDetailReport indexitem = ((StockTakingOTCDetailReport)e.Item);
+            if (StockTakingOTCSelectItem == indexitem.Type)
+            {
+                e.Accepted = true;
+            }
+            else if (StockTakingOTCSelectItem == "全部")
             {
                 e.Accepted = true;
             }

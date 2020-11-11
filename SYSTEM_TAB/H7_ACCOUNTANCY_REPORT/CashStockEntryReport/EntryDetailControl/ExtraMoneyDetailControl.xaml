@@ -152,7 +152,7 @@
         <Border  Grid.Row="2" Grid.Column="0" BorderThickness="2" BorderBrush="DarkSeaGreen" >
             <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
                 <Label Width="60" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,0,0" Content="總計" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                <TextBlock Width="60" VerticalAlignment="Center" TextAlignment="Right" Margin="55,0,0,0" Text="{Binding ExtraMoney,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="60" VerticalAlignment="Center" TextAlignment="Center" Margin="80,0,0,0" Text="{Binding ExtraMoney,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
             </StackPanel>
         </Border>
     </Grid>
