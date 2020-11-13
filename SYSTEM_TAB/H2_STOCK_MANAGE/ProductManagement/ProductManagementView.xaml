@@ -140,7 +140,7 @@
                     <Label Content="不足需求品項淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="195,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                     <TextBlock Text="{Binding ErrorStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
                 </StackPanel>
-                <Rectangle Width="495" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <!--<Rectangle Width="495" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
                 <Label Content="架上量淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <TextBlock Text="{Binding ShelfStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label x:Name="MedBagAmt" Content="藥袋量淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>

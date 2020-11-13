@@ -45,9 +45,9 @@
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding TradeProfitDetailClickCommand}"/>
                 </i:EventTrigger>
-                <!--<i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding StockTakingDetailDoubleClickCommand}"/>
-                </i:EventTrigger>-->
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding TradeProfitDetailDoubleClickCommand}"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">

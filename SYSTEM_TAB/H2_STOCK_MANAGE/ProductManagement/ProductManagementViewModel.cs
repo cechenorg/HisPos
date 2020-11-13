@@ -122,7 +122,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             set { Set(() => ProductCollectionView, ref productCollectionView, value); }
         }
         public WareHouses WareHouseCollection { get; set; }
-        public bool HasError => ((int) ErrorStockValue).Equals(0);
+        public bool HasError = true;
         public double CurrentStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.StockValue);
         public double CurrentShelfStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.ShelfStockValue);
         #endregion
@@ -196,27 +196,34 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         }
         private void FilterAction(string type)
         {
+           
             filterType = (ProductManageFilterEnum) int.Parse(type);
             
             ProductCollectionView.Filter += ProductFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
             RaisePropertyChanged(nameof(CurrentShelfStockValue));
+            
         }
         private void FilterIsOTCAction(string type)
         {
+
+           
             filterIsOTC = (ProductManageFilterEnum)int.Parse(type);
             if (filterIsOTC == (ProductManageFilterEnum)8)
             {
                 MEDDeposit = Visibility.Collapsed;
                 OTCDeposit = Visibility.Visible;
+                ErrorStockValue = 0;
             }
             else if (filterIsOTC == (ProductManageFilterEnum)9) {
                 MEDDeposit = Visibility.Visible;
                 OTCDeposit = Visibility.Collapsed;
+                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
             }
             ProductCollectionView.Filter += ProductFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
             RaisePropertyChanged(nameof(CurrentShelfStockValue));
+            
 
         }
         #endregion

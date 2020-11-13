@@ -1289,6 +1289,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         public RelayCommand StockTakingDetailMedicineDoubleClickCommand { get; set; }
         public RelayCommand TradeProfitReportSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitDetailClickCommand { get; set; }
+        public RelayCommand TradeProfitDetailDoubleClickCommand { get; set; }
         public RelayCommand TradeProfitDetailEmpClickCommand { get; set; }
         public RelayCommand ExtraMoneyReportSelectionChangedCommand { get; set; }
         public RelayCommand ExtraMoneyDetailClickCommand { get; set; }
@@ -1323,7 +1324,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             StockTakingOTCDetailClickCommand = new RelayCommand(StockTakingOTCDetailClickAction);
             TradeProfitReportSelectionChangedCommand = new RelayCommand(TradeProfitReportSelectionChangedAction);
             TradeProfitDetailClickCommand = new RelayCommand(TradeProfitDetailClickAction);
-
+            TradeProfitDetailDoubleClickCommand = new RelayCommand(TradeProfitDetailDoubleClickAction); 
             TradeProfitDetailEmpClickCommand = new RelayCommand(TradeProfitDetailEmpClickAction);
             ExtraMoneyReportSelectionChangedCommand = new RelayCommand(ExtraMoneyReportSelectionChangedAction);
             ExtraMoneyDetailClickCommand = new RelayCommand(ExtraMoneyDetailClickAction);
@@ -1503,6 +1504,41 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 return;
             }
             PrescriptionService.ShowPrescriptionEditWindow(PrescriptionDetailReportSelectItem.Id); 
+        }
+        private void TradeProfitDetailDoubleClickAction()
+        {
+            if (TradeProfitDetailReportSelectItem is null)
+            {
+                return;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MasterID", TradeProfitDetailReportSelectItem.Id));
+            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parameters.Add(new SqlParameter("sDate", ""));
+            parameters.Add(new SqlParameter("eDate", ""));
+            parameters.Add(new SqlParameter("sInvoice", ""));
+            parameters.Add(new SqlParameter("eInvoice", ""));
+            parameters.Add(new SqlParameter("flag", "1"));
+            parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
+            parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
+            parameters.Add(new SqlParameter("Cashier", -1));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            DataRow masterRow = result.Rows[0];
+            result.Columns.Add("TransTime_Format", typeof(string));
+            foreach (DataRow dr in result.Rows)
+            {
+                string ogTransTime = dr["TraMas_ChkoutTime"].ToString();
+                DateTime dt = DateTime.Parse(ogTransTime);
+                CultureInfo culture = new CultureInfo("zh-TW");
+                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
+            }
+            ProductTransactionDetail ptd = new ProductTransactionDetail(masterRow, result);
+
+            ptd.ShowDialog();
+            ptd.Activate();
         }
         private void PrescriptionDetailClickAction() {
             if (PrescriptionDetailReportSelectItem is null)
