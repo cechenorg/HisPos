@@ -100,7 +100,10 @@ namespace His_Pos
                             new[] { StringRes.SystemTutorial }));
             /*HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
                             new[] { StringRes.CompanyWeb }));*/
+            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.ClosingWork,
+                          new[] { StringRes.ClosingWork }));
             
+
         }
         
         private void InitializeMenu()

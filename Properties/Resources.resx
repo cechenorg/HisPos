@@ -602,6 +602,9 @@
   <data name="CompanyWeb" xml:space="preserve">
     <value>藥健康網頁</value>
   </data>
+    <data name="ClosingWork" xml:space="preserve">
+    <value>關班作業</value>
+  </data>
   <data name="SystemTutorial" xml:space="preserve">
     <value>系統教學文件</value>
   </data>

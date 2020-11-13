@@ -210,6 +210,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 關班作業 的當地語系化字串。
+        /// </summary>
+        internal static string ClosingWork {
+            get {
+                return ResourceManager.GetString("ClosingWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 藥健康網頁 的當地語系化字串。
         /// </summary>
         internal static string CompanyWeb {

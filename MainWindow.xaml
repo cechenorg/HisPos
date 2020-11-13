@@ -42,7 +42,7 @@
     xmlns:companyWeb="clr-namespace:His_Pos.SYSTEM_TAB.H10_WEB.CompanyWeb"
     xmlns:systemtutorial="clr-namespace:His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial"
     xmlns:incomeStatement="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
-    xmlns:balanceSheet="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet"
+    xmlns:balanceSheet="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet" xmlns:closingWork="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.Closing"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -157,6 +157,9 @@
         <DataTemplate DataType="{x:Type balanceSheet:BalanceSheetViewModel}">
             <balanceSheet:BalanceSheetView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type closingWork:ClosingWorkViewModel}">
+            <closingWork:ClosingWorkView/>
+        </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -258,6 +261,7 @@
                         <generalCustomControl:MenuListItem x:Name="HisFeature9" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature10" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <generalCustomControl:MenuListItem x:Name="HisFeature11" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                            <generalCustomControl:MenuListItem x:Name="HisFeature12" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         </StackPanel>
                 </ScrollViewer>
             </StackPanel>

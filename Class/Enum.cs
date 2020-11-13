@@ -63,7 +63,8 @@ namespace His_Pos.Class
         藥健康網頁 = 36,
         系統教學文件 = 37,
         損益報表 = 38,
-        資產負債表 = 39
+        資產負債表 = 39,
+        關班作業 = 40
     }
 
     public enum StoreOrderProductType
