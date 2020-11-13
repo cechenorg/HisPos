@@ -465,14 +465,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="20" IsReadOnly="True">
+                    <!--<DataGridTemplateColumn Width="20" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Name="back" Width="14" Source="/Images/minus.png" MouseLeftButtonDown="back_MouseLeftButtonDown">
                                 </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                     <DataGridTemplateColumn Width="50" Header="數量">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -488,14 +488,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="20" IsReadOnly="True">
+                    <!--<DataGridTemplateColumn Width="20" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Name="next" Width="14" Source="/Images/more.png" MouseLeftButtonDown="next_MouseLeftButtonDown">
                                 </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                     <DataGridTextColumn Header="小計" Width="80" FontSize="20" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Path=Calc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">

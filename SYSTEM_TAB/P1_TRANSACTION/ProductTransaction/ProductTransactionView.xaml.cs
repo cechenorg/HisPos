@@ -398,10 +398,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     }
 
                     DataRow newRow = ProductList.NewRow();
+                    
                     if (result.Rows.Count == 1)
                     {
                         DataRow NewProduct = result.Rows[0];
                         newRow.ItemArray = NewProduct.ItemArray;
+                        int amt = int.Parse(result.Rows[rowIndex]["Available_Amount"].ToString());
+                        if (amt < 1)
+                        {
+                            MessageWindow.ShowMessage("該品項可用量不足", MessageType.WARNING);
+                            return;
+                        }
                         if (rowIndex < ProductList.Rows.Count)
                         {
                             ProductList.Rows.RemoveAt(rowIndex);
@@ -414,10 +421,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     {
                         TradeAddProductWindow tapw = new TradeAddProductWindow(result);
                         tapw.ShowDialog();
-                        DataRow NewProduct = tapw.SelectedProduct;
+                        DataRow NewProduct = tapw.SelectedProduct; 
+                        int amt = 0;
                         if (NewProduct != null)
                         {
-                            newRow.ItemArray = NewProduct.ItemArray;
+                            newRow.ItemArray = NewProduct.ItemArray; 
+                            amt = int.Parse(NewProduct["Available_Amount"].ToString());
+                            if (amt < 1)
+                            {
+                                MessageWindow.ShowMessage("該品項可用量不足", MessageType.WARNING);
+                                return;
+                            }
                         }
                         if (rowIndex < ProductList.Rows.Count)
                         {
@@ -880,6 +894,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
+            int index = GetRowIndexRouted(e);
+            int stock = int.Parse(ProductList.Rows[index]["Available_Amount"].ToString());
+            if (amt > stock) 
+            {
+                MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
+                tb.Text = stock.ToString(); 
+            }
             CalculateTotal("AMT");
         }
 

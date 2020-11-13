@@ -440,7 +440,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding TradeProfitReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding TotalTradeProfitReport.TotalAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
+                            <Label Content="{Binding  TotalTradeProfitReport.TotalAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="300"/>
                         </Border>
                     </StackPanel>
                     <StackPanel   Grid.Row="2" Grid.Column="0" PreviewMouseDown="OTCCost_PreviewMouseDown"  HorizontalAlignment="Center" VerticalAlignment="Center">
