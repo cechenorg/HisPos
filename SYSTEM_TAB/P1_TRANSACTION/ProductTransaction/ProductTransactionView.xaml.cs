@@ -403,7 +403,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     {
                         DataRow NewProduct = result.Rows[0];
                         newRow.ItemArray = NewProduct.ItemArray;
-                        int amt = int.Parse(result.Rows[rowIndex]["Available_Amount"].ToString());
+                        int amt = int.Parse(result.Rows[0]["Available_Amount"].ToString());
                         if (amt < 1)
                         {
                             MessageWindow.ShowMessage("該品項可用量不足", MessageType.WARNING);
