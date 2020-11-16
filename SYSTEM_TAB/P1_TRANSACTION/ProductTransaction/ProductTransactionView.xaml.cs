@@ -1397,7 +1397,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
                     parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
                 }
-                else if (tb.Text.Length >= 7 && tb.Text.Length <= 8)
+                else if (tb.Text.Length >= 7 && tb.Text.Length <= 10)
                 {
                     parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
                     parameters.Add(new SqlParameter("Cus_Telephone", tb.Text));
