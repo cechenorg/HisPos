@@ -484,8 +484,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (dr["CurrentPrice"].ToString() != "" && dr["Amount"].ToString() != "")
                     {
                         dr["Calc"] = int.Parse(dr["CurrentPrice"].ToString()) * int.Parse(dr["Amount"].ToString());
-                        dr["Profit"] = (double.Parse(dr["CurrentPrice"].ToString()) -
-                        double.Parse(dr["Inv_LastPrice"].ToString())) * int.Parse(dr["Amount"].ToString());
+                        double profit = (double.Parse(dr["CurrentPrice"].ToString()) -
+                        double.Parse(dr["AVGVALUE"].ToString())) * int.Parse(dr["Amount"].ToString());
+                        dr["Profit"] = string.Format("{0:F2}", profit);
                     }
                 }
                 preTotal = int.Parse(ProductList.Compute("SUM(Calc)", string.Empty).ToString());
@@ -948,9 +949,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal("AMT");
             foreach (DataRow dr in ProductList.Rows)
             {
-                dr["PriceTooltip"] = string.Format("{0:F2}", dr["Inv_LastPrice"]) + " / " +
-                    (double.Parse(dr["CurrentPrice"].ToString()) -
-                    double.Parse(dr["Inv_LastPrice"].ToString())).ToString();
+                double profit = (double.Parse(dr["CurrentPrice"].ToString()) -
+                    double.Parse(dr["AVGVALUE"].ToString()));
+                dr["PriceTooltip"] = string.Format("{0:F2}", dr["AVGVALUE"]) + " / " +
+                    string.Format("{0:F2}", profit);
             }
         }
 

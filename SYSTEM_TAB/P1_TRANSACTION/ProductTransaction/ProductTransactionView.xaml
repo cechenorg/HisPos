@@ -255,9 +255,9 @@
                     <Label Content="應找 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="Black" Margin="10,0,0,0"/>
                     <Label x:Name="lblChange" Content="0" Width="100" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="26" Foreground="Black"/>
                     <Label Content="[" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="26" Foreground="Black" Margin="35,0,0,0"/>
-                    <Label x:Name="lblTotalProfit" Content="0" Width="70" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
+                    <Label x:Name="lblTotalProfit" Content="0" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black"/>
                     <Label Content="]" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="26" Foreground="Black"/>
-                    <Label Content="發票號碼" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="165,0,0,0"/>
+                    <Label Content="發票號碼" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="135,0,0,0"/>
                     <Label x:Name="tbInvoiceNum" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
