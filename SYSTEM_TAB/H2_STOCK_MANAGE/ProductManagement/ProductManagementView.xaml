@@ -137,15 +137,15 @@
             <StackPanel Orientation="Horizontal" Grid.Row="6" Background="{StaticResource GridBackGround}">
                 <Button Content="新增商品" Background="IndianRed" Height="35" FontSize="18" FontWeight="Bold" Width="120" BorderThickness="0" Command="{Binding InsertProductCommand}" Margin="10,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InverseBoolToVisConverter}}">
-                    <Label Content="不足需求品項淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="195,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                    <TextBlock Text="{Binding ErrorStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
+                    <Label x:Name="ErrorAmt" Content="不足需求品項淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="195,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                    <TextBlock x:Name="tbErrorAmt" Text="{Binding ErrorStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
                 </StackPanel>
                 <!--<Rectangle Width="495" Visibility="{Binding HasError, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
                 <Label Content="架上量淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <TextBlock Text="{Binding ShelfStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label x:Name="MedBagAmt" Content="藥袋量淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label x:Name="DepositAmt" Content="寄庫量淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold" Visibility="Collapsed"/>
-                <TextBlock Text="{Binding MedBagStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
+                <TextBlock  x:Name="tbMedBagAmt" Text="{Binding MedBagStockValue, StringFormat=N2, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="庫存淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <TextBlock Text="{Binding TotalStockValue, FallbackValue=0, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
             </StackPanel>
