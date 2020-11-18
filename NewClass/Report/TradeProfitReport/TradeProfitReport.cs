@@ -147,7 +147,114 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             }
         }
 
-
+        private int totalChangeCashAmt;
+        public int TotalChangeCashAmt
+        {
+            get => totalChangeCashAmt;
+            set
+            {
+                Set(() => TotalChangeCashAmt, ref totalChangeCashAmt, value);
+            }
+        }
+        private int totalChangeCardAmt;
+        public int TotalChangeCardAmt
+        {
+            get => totalChangeCardAmt;
+            set
+            {
+                Set(() => TotalChangeCardAmt, ref totalChangeCardAmt, value);
+            }
+        }
+        private int totalChangeDiscountAmt;
+        public int TotalChangeDiscountAmt
+        {
+            get => totalChangeDiscountAmt;
+            set
+            {
+                Set(() => TotalChangeDiscountAmt, ref totalChangeDiscountAmt, value);
+            }
+        }
+        private int totalDeleteCashAmt;
+        public int TotalDeleteCashAmt
+        {
+            get => totalDeleteCashAmt;
+            set
+            {
+                Set(() => TotalDeleteCashAmt, ref totalDeleteCashAmt, value);
+            }
+        }
+        private int totalDeleteCardAmt;
+        public int TotalDeleteCardAmt
+        {
+            get => totalDeleteCardAmt;
+            set
+            {
+                Set(() => TotalDeleteCardAmt, ref totalDeleteCardAmt, value);
+            }
+        }
+        private int totalDeleteCostAmt;
+        public int TotalDeleteCostAmt
+        {
+            get => totalDeleteCostAmt;
+            set
+            {
+                Set(() => TotalDeleteCostAmt, ref totalDeleteCostAmt, value);
+            }
+        }
+        private int totalChangeCostAmt;
+        public int TotalChangeCostAmt
+        {
+            get => totalChangeCostAmt;
+            set
+            {
+                Set(() => TotalChangeCostAmt, ref totalDeleteCostAmt, value);
+            }
+        }
+        private int totalDeleteDiscountAmt;
+        public int TotalDeleteDiscountAmt
+        {
+            get => totalDeleteDiscountAmt;
+            set
+            {
+                Set(() => TotalDeleteDiscountAmt, ref totalDeleteDiscountAmt, value);
+            }
+        }
+        private int totalDiscountTotalAmt;
+        public int TotalDiscountTotalAmt
+        {
+            get => totalDiscountTotalAmt;
+            set
+            {
+                Set(() => TotalDiscountTotalAmt, ref totalDiscountTotalAmt, value);
+            }
+        }
+        private int totalCardTotalAmt;
+        public int TotalCardTotalAmt
+        {
+            get => totalCardTotalAmt;
+            set
+            {
+                Set(() => TotalCardTotalAmt , ref totalCardTotalAmt, value);
+            }
+        }
+        private int totalCashTotalAmt;
+        public int TotalCashTotalAmt
+        {
+            get => totalCashTotalAmt;
+            set
+            {
+                Set(() => TotalCashTotalAmt, ref totalCashTotalAmt, value);
+            }
+        }
+        private int totalCostTotalAmt;
+        public int TotalCostTotalAmt
+        {
+            get => totalCostTotalAmt;
+            set
+            {
+                Set(() => TotalCostTotalAmt, ref totalCostTotalAmt, value);
+            }
+        }
         public void CountEditPoint(DataRow editDataRow)
         {
             Count += editDataRow.Field<int>("Count");

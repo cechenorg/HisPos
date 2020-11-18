@@ -500,7 +500,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label Content="{Binding TotalTradeProfitReport.TotalCashTotalAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal"  Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown">
@@ -508,7 +508,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label Content="{Binding TotalTradeProfitReport.TotalCardTotalAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal"  Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown">
@@ -516,7 +516,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label Content="{Binding TotalTradeProfitReport.TotalDiscountTotalAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="4" Orientation="Horizontal" Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown" >
@@ -524,7 +524,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding TotalCashFlow.TotalOTCChange,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label Content="{Binding TotalTradeProfitReport.TotalCostTotalAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                             </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="5" Orientation="Horizontal"  Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown">

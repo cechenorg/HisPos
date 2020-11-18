@@ -2561,6 +2561,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             foreach (var r in TradeDeleteReportCollection)
             {
                 TotalTradeProfitReport.TotalDeleteAmt += r.DiscountAmt + r.CardAmount + r.CashAmount+r.Cost;
+                TotalTradeProfitReport.TotalDeleteCardAmt += r.CardAmount;
+                TotalTradeProfitReport.TotalDeleteCashAmt += r.CashAmount;
+                TotalTradeProfitReport.TotalDeleteDiscountAmt += r.DiscountAmt;
+                TotalTradeProfitReport.TotalDeleteCostAmt += r.Cost;
             }
         }
         private void CalculateTotalTradeChange()
@@ -2568,6 +2572,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             foreach (var r in TradeChangeReportCollection)
             {
                 TotalTradeProfitReport.TotalChangeAmt += r.DiscountAmt + r.CardAmount + r.CashAmount + r.Cost;
+                TotalTradeProfitReport.TotalChangeCardAmt += r.CardAmount;
+                TotalTradeProfitReport.TotalChangeCashAmt += r.CashAmount;
+                TotalTradeProfitReport.TotalChangeDiscountAmt += r.DiscountAmt;
+                TotalTradeProfitReport.TotalChangeCostAmt += r.Cost;
             }
         }
         private void CalculateTotalRewardProfit()
@@ -2661,6 +2669,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         private void CalculateTotal()
         {
+            TotalTradeProfitReport.TotalCostTotalAmt = TotalTradeProfitReport.TotalDeleteCostAmt + TotalTradeProfitReport.TotalChangeCostAmt;
+            TotalTradeProfitReport.TotalCashTotalAmt = TotalTradeProfitReport.TotalDeleteCashAmt + TotalTradeProfitReport.TotalChangeCashAmt;
+            TotalTradeProfitReport.TotalCardTotalAmt = TotalTradeProfitReport.TotalDeleteCardAmt + TotalTradeProfitReport.TotalChangeCardAmt;
+            TotalTradeProfitReport.TotalDiscountTotalAmt = TotalTradeProfitReport.TotalDeleteDiscountAmt + TotalTradeProfitReport.TotalChangeDiscountAmt;
+
             TotalCashFlow.TotalOTCChange = TotalTradeProfitReport.TotalDeleteAmt + TotalTradeProfitReport.TotalChangeAmt;
 
             DiscountAmt = -TotalTradeProfitReport.DiscountAmt;

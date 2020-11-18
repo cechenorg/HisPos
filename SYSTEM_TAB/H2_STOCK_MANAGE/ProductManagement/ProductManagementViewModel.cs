@@ -125,6 +125,38 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         public bool HasError = true;
         public double CurrentStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.StockValue);
         public double CurrentShelfStockValue => (ProductCollectionView is null) ? 0 : ProductCollectionView.OfType<ProductManageStruct>().Sum(p => p.ShelfStockValue);
+
+
+        private double medShelfStockValue;
+        public double MedShelfStockValue
+        {
+            get { return medShelfStockValue; }
+            set { Set(() => MedShelfStockValue, ref medShelfStockValue, value); }
+        }
+
+        private double medStockValue;
+        public double MedStockValue
+        {
+            get { return medStockValue; }
+            set { Set(() => MedStockValue, ref medStockValue, value); }
+        }
+
+        private double oTCShelfStockValue;
+        public double OTCShelfStockValue
+        {
+            get { return oTCShelfStockValue; }
+            set { Set(() => OTCShelfStockValue, ref oTCShelfStockValue, value); }
+        }
+
+        private double oTCStockValue;
+        public double OTCStockValue
+        {
+            get { return oTCStockValue; }
+            set { Set(() => OTCStockValue, ref oTCStockValue, value); }
+        }
+
+
+
         #endregion
 
         public ProductManagementViewModel()
@@ -154,16 +186,33 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 MainWindow.ServerConnection.CloseConnection();
 
                 ProductCollectionView = CollectionViewSource.GetDefaultView(SearchProductCollection);
-                ProductCollectionView.Filter += ProductFilter;
-              
+
+
                 RaisePropertyChanged(nameof(CurrentStockValue));
                 RaisePropertyChanged(nameof(CurrentShelfStockValue));
 
                 TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
-                ShelfStockValue = dataTable.Rows[0].Field<double>("SHELF_STOCK");
+                ShelfStockValue = CurrentShelfStockValue;
                 MedBagStockValue = dataTable.Rows[0].Field<double>("MEDBAG_STOCK");
+                ErrorStockValue = dataTable.Rows[0].Field<double>("ERROR_STOCK");
 
-                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+                ProductCollectionView.Filter += MEDFilter;
+                RaisePropertyChanged(nameof(CurrentStockValue));
+                RaisePropertyChanged(nameof(CurrentShelfStockValue));
+                MedShelfStockValue = CurrentShelfStockValue;
+                MedStockValue = CurrentStockValue;
+
+                ProductCollectionView.Filter += OTCFilter;
+                RaisePropertyChanged(nameof(CurrentStockValue));
+                RaisePropertyChanged(nameof(CurrentShelfStockValue));
+                OTCShelfStockValue = CurrentShelfStockValue;
+                OTCStockValue = CurrentStockValue;
+
+                ProductCollectionView.Filter += ProductFilter;
+                RaisePropertyChanged(nameof(CurrentStockValue));
+                RaisePropertyChanged(nameof(CurrentShelfStockValue));
+
+                //ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
                 RaisePropertyChanged(nameof(HasError));
             };
 
@@ -213,7 +262,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             {
                 MEDDeposit = Visibility.Collapsed;
                 OTCDeposit = Visibility.Visible;
-                ErrorStockValue = 0;
+                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
             }
             else if (filterIsOTC == (ProductManageFilterEnum)9) {
                 MEDDeposit = Visibility.Visible;
@@ -258,57 +307,70 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
             SelectedWareHouse = WareHouseCollection[0];
         }
-        private bool ProductFilter(object product)
+        private bool MEDFilter(object product)
         {
             var tempProduct = product as ProductManageStruct;
-            if (filterIsOTC == ProductManageFilterEnum.Medicine)
-            {
-                switch (filterType)
-                {
-                    case ProductManageFilterEnum.Medicine:
-                        return tempProduct.ProductType == (ProductTypeEnum)1;
-                    case ProductManageFilterEnum.COMMON:
-                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)1;
-                    case ProductManageFilterEnum.CONTROL:
-                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)1;
-                    case ProductManageFilterEnum.FROZE:
-                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)1;
-                    case ProductManageFilterEnum.DISABLE:
-                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)1;
-                    case ProductManageFilterEnum.INV_ERROR:
-                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)1;
-                    case ProductManageFilterEnum.ZERO:
-                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)1;
-                    default:
-                        return tempProduct.ProductType == (ProductTypeEnum)1;
-                }
+            return tempProduct.ProductType == (ProductTypeEnum)1;
             }
 
-            else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
-            {
-                switch (filterType)
-                {
-                    case ProductManageFilterEnum.OTCMedicine:
-                        return tempProduct.ProductType == (ProductTypeEnum)2;
-                    case ProductManageFilterEnum.COMMON:
-                        return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)2;
-                    case ProductManageFilterEnum.CONTROL:
-                        return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)2;
-                    case ProductManageFilterEnum.FROZE:
-                        return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)2;
-                    case ProductManageFilterEnum.DISABLE:
-                        return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)2;
-                    case ProductManageFilterEnum.INV_ERROR:
-                        return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)2;
-                    case ProductManageFilterEnum.ZERO:
-                        return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)2;
-                    default:
-                        return tempProduct.ProductType == (ProductTypeEnum)2;
-                }
-            }
-           
+        private bool OTCFilter(object product)
+        {
+            var tempProduct = product as ProductManageStruct;
+            return tempProduct.ProductType == (ProductTypeEnum)2;
+        }
 
-            return false;
+
+        private bool ProductFilter(object product)
+            {
+                var tempProduct = product as ProductManageStruct;
+                if (filterIsOTC == ProductManageFilterEnum.Medicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.Medicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)1;
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)1;
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)1;
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)1;
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)1;
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)1;
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)1;
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)1;
+                    }
+                }
+
+                else if (filterIsOTC == ProductManageFilterEnum.OTCMedicine)
+                {
+                    switch (filterType)
+                    {
+                        case ProductManageFilterEnum.OTCMedicine:
+                            return tempProduct.ProductType == (ProductTypeEnum)2;
+                        case ProductManageFilterEnum.COMMON:
+                            return tempProduct.IsCommon && tempProduct.ProductType == (ProductTypeEnum)2;
+                        case ProductManageFilterEnum.CONTROL:
+                            return tempProduct.ControlLevel != null && tempProduct.ProductType == (ProductTypeEnum)2;
+                        case ProductManageFilterEnum.FROZE:
+                            return tempProduct.IsFrozen && tempProduct.ProductType == (ProductTypeEnum)2;
+                        case ProductManageFilterEnum.DISABLE:
+                            return !tempProduct.IsEnable && tempProduct.ProductType == (ProductTypeEnum)2;
+                        case ProductManageFilterEnum.INV_ERROR:
+                            return tempProduct.InventoryError && tempProduct.ProductType == (ProductTypeEnum)2;
+                        case ProductManageFilterEnum.ZERO:
+                            return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)2;
+                        default:
+                            return tempProduct.ProductType == (ProductTypeEnum)2;
+                    }
+                }
+
+
+                return false;
         }
         private bool ProductIsOTCFilter(object product)
         {
