@@ -167,7 +167,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="80" Header="手續費" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding fee}" >
+                <DataGridTextColumn Width="80" Header="手續費" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding CardFee}" >
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -431,7 +431,8 @@
                 <TextBlock Width="70" VerticalAlignment="Center" TextAlignment="Right" Margin="10,0,0,0" Text="{Binding TradeDetailReportSum.CardAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 <TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right"  Margin="0,0,0,0" Text="{Binding TradeDetailReportSum.DiscountAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 <TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding TradeDetailReportSum.ValueDifference,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
-                <TextBlock Width="100" VerticalAlignment="Center" TextAlignment="Right"  Margin="60,0,0,0" Text="{Binding TradeDetailReportSum.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding TradeDetailReportSum.CardFee,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                <TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right"  Margin="0,0,0,0" Text="{Binding TradeDetailReportSum.Profit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16"/>
             </StackPanel>
         </Border>
         <Border x:Name="SumEmp" Grid.Row="2" Grid.Column="0" BorderThickness="2" BorderBrush="DarkSeaGreen"  Visibility="Collapsed" >

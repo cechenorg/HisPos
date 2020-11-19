@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             CashAmount = r.Field<int>("CashAmount");
             CardAmount = r.Field<int>("CardAmount");
             DiscountAmt = r.Field<int>("DiscountAmt");
+            CardFee = r.Field<decimal>("CardFee");
         }
         private string typeId;
         public string TypeId {
@@ -253,6 +254,24 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             set
             {
                 Set(() => TotalCostTotalAmt, ref totalCostTotalAmt, value);
+            }
+        }
+        private int totalCostTotal;
+        public int TotalCostTotal
+        {
+            get => totalCostTotal;
+            set
+            {
+                Set(() => TotalCostTotal, ref totalCostTotal, value);
+            }
+        }
+        private decimal cardFee;
+        public decimal CardFee
+        {
+            get => cardFee;
+            set
+            {
+                Set(() => CardFee, ref cardFee, value);
             }
         }
         public void CountEditPoint(DataRow editDataRow)
