@@ -39,7 +39,7 @@
                             </Binding>
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
-                    <Button Width="150" Content="搜尋" Margin="260,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}"/>
+                    <Button Width="150" Content="搜尋" Margin="260,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}" Height="40"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" >

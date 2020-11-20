@@ -2464,6 +2464,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
             TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.RealTotal);
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
+            TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
             TradeDetailReportSum.Count = tempCollection.Count();
         }
 
@@ -2541,11 +2542,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 TotalTradeProfitReport.CashAmount += r.CashAmount;
                 TotalTradeProfitReport.CardAmount += r.CardAmount;
                 TotalTradeProfitReport.DiscountAmt +=r.DiscountAmt;
+                TotalTradeProfitReport.CardFee += r.CardFee;
             }
             TotalTradeProfitReport.TotalAmt = TotalTradeProfitReport.CashAmount + TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.DiscountAmt;
 
+            TotalTradeProfitReport.TotalCostTotal = (int)(TotalTradeProfitReport.Cost + TotalTradeProfitReport.CardFee);
 
-           
+
+
+
         }
 
 
@@ -2561,6 +2566,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             foreach (var r in TradeDeleteReportCollection)
             {
                 TotalTradeProfitReport.TotalDeleteAmt += r.DiscountAmt + r.CardAmount + r.CashAmount+r.Cost;
+                TotalTradeProfitReport.TotalDeleteCardAmt += r.CardAmount;
+                TotalTradeProfitReport.TotalDeleteCashAmt += r.CashAmount;
+                TotalTradeProfitReport.TotalDeleteDiscountAmt += r.DiscountAmt;
+                TotalTradeProfitReport.TotalDeleteCostAmt += r.Cost+(int)(r.CardFee);
             }
         }
         private void CalculateTotalTradeChange()
@@ -2568,12 +2577,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             foreach (var r in TradeChangeReportCollection)
             {
                 TotalTradeProfitReport.TotalChangeAmt += r.DiscountAmt + r.CardAmount + r.CashAmount + r.Cost;
+                TotalTradeProfitReport.TotalChangeCardAmt += r.CardAmount;
+                TotalTradeProfitReport.TotalChangeCashAmt += r.CashAmount;
+                TotalTradeProfitReport.TotalChangeDiscountAmt += r.DiscountAmt;
+                TotalTradeProfitReport.TotalChangeCostAmt += r.Cost + (int)(r.CardFee);
             }
         }
         private void CalculateTotalRewardProfit()
         {
             TotalRewardReport.RewardAmountSum = RewardReportCollection.Sum(c => c.RewardAmount);
-            TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
+            TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount)- RewardReportCollection.Sum(c => c.Free);
+            TotalRewardReport.Free = RewardReportCollection.Sum(c => c.Free);
         }
         private void CalculateTotalStockTaking()
         {
@@ -2661,6 +2675,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         }
         private void CalculateTotal()
         {
+            TotalTradeProfitReport.TotalCostTotalAmt = TotalTradeProfitReport.TotalDeleteCostAmt + TotalTradeProfitReport.TotalChangeCostAmt;
+            TotalTradeProfitReport.TotalCashTotalAmt = TotalTradeProfitReport.TotalDeleteCashAmt + TotalTradeProfitReport.TotalChangeCashAmt;
+            TotalTradeProfitReport.TotalCardTotalAmt = TotalTradeProfitReport.TotalDeleteCardAmt + TotalTradeProfitReport.TotalChangeCardAmt;
+            TotalTradeProfitReport.TotalDiscountTotalAmt = TotalTradeProfitReport.TotalDeleteDiscountAmt + TotalTradeProfitReport.TotalChangeDiscountAmt;
+
             TotalCashFlow.TotalOTCChange = TotalTradeProfitReport.TotalDeleteAmt + TotalTradeProfitReport.TotalChangeAmt;
 
             DiscountAmt = -TotalTradeProfitReport.DiscountAmt;
