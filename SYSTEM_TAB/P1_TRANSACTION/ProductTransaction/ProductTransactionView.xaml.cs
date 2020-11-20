@@ -48,9 +48,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private double totalProfit = 0;
         private string cusID = "0";
         private bool isGift = false;
-        private bool isReturn = false;
         public AddCustomerWindow addCustomerWindow;
-       
 
         private static readonly Regex _regex = new Regex("^[0-9]+$");
         private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
@@ -158,7 +156,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
             MainWindow.ServerConnection.CloseConnection();
-            cbCashier.ItemsSource = result.DefaultView;
+            //cbCashier.ItemsSource = result.DefaultView;
         }
 
         private int GetRowIndex(MouseButtonEventArgs e)
@@ -189,36 +187,36 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return rowIdx;
         }
 
-        private string GetPayMethod()
+        /*private string GetPayMethod()
         {
-            List<string> list = new List<string>();
-            bool CashParse = int.TryParse(tbCash.Text, out int Cash);
-            bool CardParse = int.TryParse(tbCard.Text, out int Card);
-            bool VoucherParse = int.TryParse(tbVoucher.Text, out int Voucher);
-            int Total = Cash + Card + Voucher;
+            //List<string> list = new List<string>();
+            //bool CashParse = int.TryParse(tbCash.Text, out int Cash);
+            //bool CardParse = int.TryParse(tbCard.Text, out int Card);
+            //bool VoucherParse = int.TryParse(tbVoucher.Text, out int Voucher);
+            //int Total = Cash + Card + Voucher;
 
-            if (Total != realTotal)
-            {
-                return "NOT_MATCH";
-            }
+            //if (Total != realTotal)
+            //{
+            //    return "NOT_MATCH";
+            //}
 
-            if (CashParse && Cash > 0)
-            {
-                list.Add("現金");
-            }
-            if (CardParse && Card > 0)
-            {
-                list.Add("信用卡");
-            }
-            if (VoucherParse && Voucher > 0)
-            {
-                list.Add("禮券");
-            }
+            //if (CashParse && Cash > 0)
+            //{
+            //    list.Add("現金");
+            //}
+            //if (CardParse && Card > 0)
+            //{
+            //    list.Add("信用卡");
+            //}
+            //if (VoucherParse && Voucher > 0)
+            //{
+            //    list.Add("禮券");
+            //}
 
-            string[] arr = list.ToArray();
-            string result = string.Join("/", arr);
-            return result;
-        }
+            //string[] arr = list.ToArray();
+            //string result = string.Join("/", arr);
+            //return result;
+        }*/
 
         private void GetNotEnoughMedicines()
         {
@@ -508,15 +506,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (type == "AMT" && tbDiscountAmt.Text != "")
             {
                 double amt = double.Parse(tbDiscountAmt.Text);
-                if (amt == 0) { tbDiscountPer.Text = ""; }
-                else { tbDiscountPer.Text = ((preTotal - amt) / preTotal * 100).ToString("N0").Replace("0", ""); }
+                //if (amt == 0) { tbDiscountPer.Text = ""; }
+                //else { tbDiscountPer.Text = ((preTotal - amt) / preTotal * 100).ToString("N0").Replace("0", ""); }
             }
-            else if (type == "PER" && tbDiscountPer.Text != "")
-            {
-                double per = double.Parse(tbDiscountPer.Text);
-                if (per > 10) { tbDiscountAmt.Text = (preTotal - preTotal * per / 100).ToString("N0"); }
-                else { tbDiscountAmt.Text = (preTotal - preTotal * per / 10).ToString("N0"); }
-            }
+            //else if (type == "PER" && tbDiscountPer.Text != "")
+            //{
+            //    double per = double.Parse(tbDiscountPer.Text);
+            //    if (per > 10) { tbDiscountAmt.Text = (preTotal - preTotal * per / 100).ToString("N0"); }
+            //    else { tbDiscountAmt.Text = (preTotal - preTotal * per / 10).ToString("N0"); }
+            //}
             discountAmount = int.Parse(tbDiscountAmt.Text);
             realTotal = preTotal - discountAmount;
             lblRealTotal.Content = realTotal;
@@ -541,7 +539,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         break;
                     case "PER":
                         await Task.Delay(20);
-                        tbDiscountPer.Focus();
+                        //tbDiscountPer.Focus();
                         break;
                 }
             }
@@ -549,7 +547,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void CalculateChange()
         {
-            if (tbPaid.Text.Length > 0 && !IsTextAllowed(tbPaid.Text))
+            /*if (tbPaid.Text.Length > 0 && !IsTextAllowed(tbPaid.Text))
             {
                 int change = int.Parse(tbPaid.Text) - int.Parse(lblRealTotal.Content.ToString());
                 if (change >= 0) { lblChange.Content = change; }
@@ -561,7 +559,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     tbPaid.Focus();
                 }
             }
-            else { lblChange.Content = "0"; }
+            else { lblChange.Content = "0"; }*/
         }
 
         private DataTable TransferDetailTable()
@@ -597,13 +595,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ProductList.Clear();
             tbDiscountAmt.Text = "0";
             tbNote.Text = "";
-            tbTaxNum.Text = "";
-            tbCardNum.Text = "";
-            tbPaid.Text = "";
-            tbCash.Text = "";
-            tbCard.Text = "";
-            tbVoucher.Text = "";
-            cbCashier.SelectedItem = null;
+            //tbTaxNum.Text = "";
+            //tbCardNum.Text = "";
+            //tbPaid.Text = "";
+            //tbCash.Text = "";
+            //tbCard.Text = "";
+            //tbVoucher.Text = "";
+            //cbCashier.SelectedItem = null;
             AppliedPrice = "Pro_RetailPrice";
 
             CalculateTotal("AMT");
@@ -623,17 +621,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("CustomerID", cusID));
                 parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
-                parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
-                parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
-                parameters.Add(new SqlParameter("CardAmount", tbCard.Text));
-                parameters.Add(new SqlParameter("VoucherAmount", tbVoucher.Text));
+                //parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
+                //parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
+                //parameters.Add(new SqlParameter("CardAmount", tbCard.Text));
+                //parameters.Add(new SqlParameter("VoucherAmount", tbVoucher.Text));
                 parameters.Add(new SqlParameter("PreTotal", preTotal));
                 parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
                 parameters.Add(new SqlParameter("RealTotal", realTotal));
-                parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
+                //parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
                 parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
-                parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
-                parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
+                //parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
+                //parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
                 parameters.Add(new SqlParameter("Note", tbNote.Text));
                 parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
@@ -657,45 +655,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             catch (Exception)
             {
                 //MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-            }
-        }
-
-        private void ReturnSubmit()
-        {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出退貨資料?", "退貨確認");
-            if (!(bool)confirmWindow.DialogResult) { return; }
-
-            try
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
-                parameters.Add(new SqlParameter("PreTotal", preTotal));
-                parameters.Add(new SqlParameter("RealTotal", realTotal));
-                parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
-                parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
-                parameters.Add(new SqlParameter("Note", tbNote.Text));
-                parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
-                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeReturnInsert]", parameters);
-                MainWindow.ServerConnection.CloseConnection();
-
-                if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                {
-                    if (Properties.Settings.Default.InvoiceCheck == "1")
-                    {
-                        InvoicePrint(TransferDetailTable());
-                        InvoiceControlViewModel vm = new InvoiceControlViewModel();
-                        vm.InvoiceNumPlusOneAction();
-                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
-                    }
-                    ClearPage();
-                    MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
-                }
-                else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
-            }
-            catch (Exception)
-            {
-                //MessageWindow.ShowMessage("發票列表機設定錯誤", MessageType.ERROR);
             }
         }
         
@@ -744,7 +703,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
             port.Write(esc + "d" + Convert.ToChar(1));
-            strArr = big5.GetBytes("統一編號:" + tbTaxNum.Text.ToString());
+            //strArr = big5.GetBytes("統一編號:" + tbTaxNum.Text.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
 
@@ -772,16 +731,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 + ("-" + discountAmount.ToString()).ToString().PadLeft(5, ' ') + "TX");
             port.Write(strArr, 0, strArr.Length);
             port.Write(esc + "d" + Convert.ToChar(4));
-            strArr = big5.GetBytes("實收金額:        $"
-                + tbPaid.Text.ToString());
+            //strArr = big5.GetBytes("實收金額:        $" + tbPaid.Text.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
-            strArr = big5.GetBytes("應找金額:        $"
-                + lblChange.Content.ToString());
+            //strArr = big5.GetBytes("應找金額:        $" + lblChange.Content.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
-            strArr = big5.GetBytes("合計:            $"
-                + realTotal.ToString());
+            strArr = big5.GetBytes("合計:            $" + realTotal.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
             port.Write("" + Convert.ToChar(29) + Convert.ToChar(86) + Convert.ToChar(66) + cr + lf);
@@ -985,26 +941,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbDiscountPer_LostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox tb = (TextBox)sender;
-            if (IsTextAllowed(tb.Text)) { tb.Text = ""; }
-            if (tbDiscountPer.Text == "")
-            {
-                tbDiscountAmt.Text = "0";
-                CalculateTotal("AMT");
-                return;
-            }
-            if (preTotal != 0 && int.Parse(tbDiscountPer.Text) > 0) { CalculateTotal("PER"); }
-            else { tbDiscountPer.Text = ""; }
+            //TextBox tb = (TextBox)sender;
+            //if (IsTextAllowed(tb.Text)) { tb.Text = ""; }
+            //if (tbDiscountPer.Text == "")
+            //{
+            //    tbDiscountAmt.Text = "0";
+            //    CalculateTotal("AMT");
+            //    return;
+            //}
+            //if (preTotal != 0 && int.Parse(tbDiscountPer.Text) > 0) { CalculateTotal("PER"); }
+            //else { tbDiscountPer.Text = ""; }
         }
 
         private void tbDiscountAmt_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) { tbPaid.Focus(); }
+            //if (e.Key == Key.Enter) { tbPaid.Focus(); }
         }
 
         private void tbDiscountPer_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) { tbPaid.Focus(); }
+            //if (e.Key == Key.Enter) { tbPaid.Focus(); }
         }
 
         #endregion
@@ -1020,7 +976,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnCheckout_Click(object sender, RoutedEventArgs e)
         {
-            foreach (DataRow dr in ProductList.Rows)
+            CheckoutWindowView chk = new CheckoutWindowView();
+            chk.ShowDialog();
+
+            /*foreach (DataRow dr in ProductList.Rows)
             {
                 if (int.Parse(dr["Amount"].ToString()) == 0)
                 {
@@ -1056,46 +1015,46 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     return;
                 }
                 CheckoutSubmit();
-            }
+            }*/
         }
 
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             ClearCustomerView();
-            if (isReturn)
-            {
-                isReturn = false;
+            //if (isReturn)
+            //{
+            //    isReturn = false;
 
-                tbPaid.IsEnabled = true;
-                tbCash.IsEnabled = true;
-                tbCard.IsEnabled = true;
-                tbVoucher.IsEnabled = true;
-                tbCardNum.IsEnabled = true;
-                tbTaxNum.IsEnabled = true;
-                tbDiscountAmt.IsEnabled = true;
-                tbDiscountPer.IsEnabled = true;
-                btnGift.IsEnabled = true;
+            //    tbPaid.IsEnabled = true;
+            //    tbCash.IsEnabled = true;
+            //    tbCard.IsEnabled = true;
+            //    tbVoucher.IsEnabled = true;
+            //    tbCardNum.IsEnabled = true;
+            //    tbTaxNum.IsEnabled = true;
+            //    tbDiscountAmt.IsEnabled = true;
+            //    tbDiscountPer.IsEnabled = true;
+            //    btnGift.IsEnabled = true;
 
-                btnCheckout.Content = "結帳";
-                btnCheckout.Background = Brushes.RoyalBlue;
-            }
-            else
-            {
-                isReturn = true;
+            //    btnCheckout.Content = "結帳";
+            //    btnCheckout.Background = Brushes.RoyalBlue;
+            //}
+            //else
+            //{
+            //    isReturn = true;
 
-                tbPaid.IsEnabled = false;
-                tbCash.IsEnabled = false;
-                tbCard.IsEnabled = false;
-                tbVoucher.IsEnabled = false;
-                tbCardNum.IsEnabled = false;
-                tbTaxNum.IsEnabled = false;
-                tbDiscountAmt.IsEnabled = false;
-                tbDiscountPer.IsEnabled = false;
-                btnGift.IsEnabled = false;
+            //    tbPaid.IsEnabled = false;
+            //    tbCash.IsEnabled = false;
+            //    tbCard.IsEnabled = false;
+            //    tbVoucher.IsEnabled = false;
+            //    tbCardNum.IsEnabled = false;
+            //    tbTaxNum.IsEnabled = false;
+            //    tbDiscountAmt.IsEnabled = false;
+            //    tbDiscountPer.IsEnabled = false;
+            //    btnGift.IsEnabled = false;
 
-                btnCheckout.Content = "退貨";
-                btnCheckout.Background = Brushes.IndianRed;
-            }
+            //    btnCheckout.Content = "退貨";
+            //    btnCheckout.Background = Brushes.IndianRed;
+            //}
         }
 
         private void btnGift_Click(object sender, RoutedEventArgs e)
@@ -1149,7 +1108,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal("AMT");
         }
 
-        
+
 
         private void tbPaid_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -1161,8 +1120,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter)
             {
                 CalculateChange();
-                tbCash.Text = realTotal.ToString();
-                tbCash.Focus();
+                //tbCash.Text = realTotal.ToString();
+                //tbCash.Focus();
             }
         }
 
@@ -1171,10 +1130,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
-                if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
-                {
-                    tb.Text = realTotal.ToString();
-                }
+                //if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
+                //{
+                //    tb.Text = realTotal.ToString();
+                //}
             }
         }
 
@@ -1183,10 +1142,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
-                if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
-                {
-                    tb.Text = realTotal.ToString();
-                }
+                //if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
+                //{
+                //    tb.Text = realTotal.ToString();
+                //}
             }
         }
 
@@ -1195,10 +1154,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
-                if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
-                {
-                    tb.Text = realTotal.ToString();
-                }
+                //if (tbCash.Text == "" && tbCard.Text == "" && tbVoucher.Text == "")
+                //{
+                //    tb.Text = realTotal.ToString();
+                //}
             }
         }
 
@@ -1230,30 +1189,30 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbCash_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) { tbCard.Focus(); }
+            //if (e.Key == Key.Enter) { tbCard.Focus(); }
         }
 
         private void tbCard_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) { tbVoucher.Focus(); }
+            //if (e.Key == Key.Enter) { tbVoucher.Focus(); }
         }
 
         private void tbVoucher_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) { tbCardNum.Focus(); }
+            //if (e.Key == Key.Enter) { tbCardNum.Focus(); }
         }
 
         private void tbCardNum_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) { tbTaxNum.Focus(); }
+            //if (e.Key == Key.Enter) { tbTaxNum.Focus(); }
         }
 
         private void tbTaxNum_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                cbCashier.Focus();
-                cbCashier.IsDropDownOpen = true;
+                //cbCashier.Focus();
+                //cbCashier.IsDropDownOpen = true;
             }
         }
 
