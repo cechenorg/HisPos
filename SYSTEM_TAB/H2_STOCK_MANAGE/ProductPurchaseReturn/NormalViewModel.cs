@@ -133,9 +133,30 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (viewModel.NewStoreOrder != null)
             {
-                storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
+                /*storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
 
-                CurrentStoreOrder = storeOrderCollection[0];
+                CurrentStoreOrder = storeOrderCollection[0];*/
+
+                IsBusy = true;
+                BusyContent = "新增訂單";
+
+                BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+                backgroundWorker.DoWork += (sender, args) =>
+                {
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate ()
+                    {
+                        storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
+                        CurrentStoreOrder = storeOrderCollection[0];
+                    });
+                };
+
+                backgroundWorker.RunWorkerCompleted += (sender, args) =>
+                {
+                    IsBusy = false;
+                };
+
+                backgroundWorker.RunWorkerAsync();
             }
         }
         private void DeleteOrderAction()

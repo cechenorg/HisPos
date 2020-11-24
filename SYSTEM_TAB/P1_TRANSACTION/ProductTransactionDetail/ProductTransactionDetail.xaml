@@ -52,8 +52,11 @@
                 <Label Content="禮券$" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
                 <Label x:Name="lbVoucher" Content="0" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
 
-                <Label Content="顧客姓名：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="202,0,0,0"/>
-                <Label x:Name="lbCusName" Content="" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
+                <Label Content="現金券$" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>
+                <Label x:Name="lbCashCoupon" Content="0" Width="60" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
+                
+                <Label Content="顧客姓名：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="80,0,0,0"/>
+                <Label x:Name="lbCusName"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" MouseDoubleClick="lbCusName_MouseDoubleClick" />
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                 <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black" Margin="10,0,0,0"/>

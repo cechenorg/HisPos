@@ -24,6 +24,7 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             CardAmount = r.Field<int>("CardAmount");
             DiscountAmt = r.Field<int>("DiscountAmt");
             CardFee = r.Field<decimal>("CardFee");
+            CashCoupon = r.Field<int>("CashCoupon");
         }
         private string typeId;
         public string TypeId {
@@ -49,6 +50,15 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             set
             {
                 Set(() => Count, ref count, value);
+            }
+        }
+        private int cashCoupon;
+        public int CashCoupon
+        {
+            get => cashCoupon;
+            set
+            {
+                Set(() => CashCoupon, ref cashCoupon, value);
             }
         }
         private int netIncome;
@@ -175,6 +185,15 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalChangeDiscountAmt, ref totalChangeDiscountAmt, value);
             }
         }
+        private int totalChangeCashCouponAmt;
+        public int TotalChangeCashCouponAmt
+        {
+            get => totalChangeCashCouponAmt;
+            set
+            {
+                Set(() => TotalChangeCashCouponAmt, ref totalChangeCashCouponAmt, value);
+            }
+        }
         private int totalDeleteCashAmt;
         public int TotalDeleteCashAmt
         {
@@ -220,6 +239,15 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalDeleteDiscountAmt, ref totalDeleteDiscountAmt, value);
             }
         }
+        private int totalDeleteCashCouponAmt;
+        public int TotalDeleteCashCouponAmt
+        {
+            get => totalDeleteCashCouponAmt;
+            set
+            {
+                Set(() => TotalDeleteCashCouponAmt, ref totalDeleteCashCouponAmt, value);
+            }
+        }
         private int totalDiscountTotalAmt;
         public int TotalDiscountTotalAmt
         {
@@ -263,6 +291,15 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             set
             {
                 Set(() => TotalCostTotal, ref totalCostTotal, value);
+            }
+        }
+        private int totalCashCouponTotalAmt;
+        public int TotalCashCouponTotalAmt
+        {
+            get => totalCashCouponTotalAmt;
+            set
+            {
+                Set(() => TotalCashCouponTotalAmt, ref totalCashCouponTotalAmt, value);
             }
         }
         private decimal cardFee;

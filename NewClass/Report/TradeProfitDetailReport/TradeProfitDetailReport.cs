@@ -25,6 +25,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             DiscountAmt = r.Field<int>("DiscountAmt");
             TypeId= r.Field<string>("TypeId");
             CardFee = r.Field<decimal>("CardFee");
+            CashCoupon = r.Field<int>("CashCoupon");
         }
         private int id;
         private string name;
@@ -37,6 +38,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private string typeId;
         private int count;
         private decimal cardFee;
+        private int cashCoupon;
         public string TypeId
         {
             get => typeId;
@@ -117,6 +119,14 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             set
             {
                 Set(() => DiscountAmt, ref discountAmt, value);
+            }
+        }
+        public int CashCoupon
+        {
+            get => cashCoupon;
+            set
+            {
+                Set(() => CashCoupon, ref cashCoupon, value);
             }
         }
 

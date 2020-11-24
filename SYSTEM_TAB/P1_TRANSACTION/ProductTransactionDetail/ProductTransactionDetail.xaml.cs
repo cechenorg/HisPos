@@ -2,6 +2,7 @@
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         DataTable detail;
         string cusID;
         string payMethod;
+        public int ID;
+        public CustomerSearchCondition Con;
+        public NewClass.Prescription.Prescription CurrentPrescription
+        {
+            get; set;
+        }
 
         public ProductTransactionDetail(DataRow masterRow, DataTable detailTable)
         {
@@ -102,7 +109,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     break;
             }
 
-            lbCusName.Content = masterRow["Cus_Name"];
+            lbCusName.Content = masterRow["Cus_Name"].ToString();
             lblRealTotal.Content = masterRow["TraMas_RealTotal"];
             lblCashier.Content = masterRow["Emp_Name"];
             tbCardNum.Text = masterRow["TraMas_CardNumber"].ToString();
@@ -116,6 +123,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbCash.Content = masterRow["TraMas_CashAmount"].ToString();
             lbCard.Content = masterRow["TraMas_CardAmount"].ToString();
             lbVoucher.Content = masterRow["TraMas_VoucherAmount"].ToString();
+            lbCashCoupon.Content = masterRow["TraMas_CashCoupon"].ToString();
             lblTradeTime.Content = masterRow["TransTime_Format"];
             tbNote.Text = masterRow["TraMas_Note"].ToString();
             /* string ogTransTime = masterRow["TraMas_UpdateTime"].ToString();
@@ -209,6 +217,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             parameters.Add(new SqlParameter("TraMas_CashAmount", lbCash.Content));
             parameters.Add(new SqlParameter("TraMas_CardAmount", lbCard.Content));
             parameters.Add(new SqlParameter("TraMas_VoucherAmount", lbVoucher.Content));
+            parameters.Add(new SqlParameter("TraMas_CashCoupon", lbCashCoupon.Content));
             parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordEdit]", parameters);
             MainWindow.ServerConnection.CloseConnection();
@@ -325,6 +334,52 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             if (dgr == null) { return -1; }
             int rowIdx = dgr.GetIndex();
             return rowIdx;
+        }
+
+        private void lbCusName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (cusID == "0") { 
+            CustomerSearchWindow customerSearch;
+            Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+            customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, null);
+            Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+            }
+        }
+        private void GetSelectedCustomer(NotificationMessage<NewClass.Person.Customer.Customer> receiveSelectedCustomer)
+        {
+            Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+            if (receiveSelectedCustomer.Content is null)
+            {
+                if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
+            }
+            else
+            {
+                CurrentPrescription = new NewClass.Prescription.Prescription();
+
+                CurrentPrescription.Patient = new NewClass.Person.Customer.Customer();
+                CurrentPrescription.Patient = receiveSelectedCustomer.Content;
+
+                cusID = CurrentPrescription.Patient.ID.ToString();
+
+
+                
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("Cus_Id", Int32.Parse(cusID)));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+                if (result.Rows.Count > 0)
+                {
+                    lbCusName.Content = result.Rows[0]["Person_Name"].ToString();
+
+
+                    MainWindow.ServerConnection.CloseConnection();
+                    btnSubmit.IsEnabled = true;
+                    lblChanged.Content = "已修改";
+                    lblChanged.Foreground = Brushes.Red;
+                }
+            }
+
         }
     }
 }

@@ -290,6 +290,16 @@
                             </InputScope>
                         </TextBox.InputScope>
                     </TextBox>
+                    <Label Content="現金券" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                    <TextBox x:Name="tbCashCoupon" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" PreviewKeyDown="tbCashCoupon_PreviewKeyDown" KeyDown="tbCashCoupon_KeyDown">
+                        <TextBox.InputScope>
+                            <InputScope>
+                                <InputScope.Names>
+                                    <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                </InputScope.Names>
+                            </InputScope>
+                        </TextBox.InputScope>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                     <Label Content="卡號" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
