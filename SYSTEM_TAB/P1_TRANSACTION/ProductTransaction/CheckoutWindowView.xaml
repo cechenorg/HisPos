@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         FontFamily="Segoe UI Semibold"
         Title="結帳視窗"
@@ -45,19 +46,19 @@
         </StackPanel>
         <StackPanel Grid.Row="3" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="實收現金：" FontSize="24"></Label>
-            <TextBox x:Name="tbCash" Text="0" Width="100" FontSize="24" PreviewKeyDown="tbCash_PreviewKeyDown"></TextBox>
+            <TextBox x:Name="tbCash" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCash_PreviewKeyDown" LostFocus="tbCash_LostFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="禮券抵用：" FontSize="24"></Label>
-            <TextBox x:Name="tbVoucher" Text="0" Width="100" FontSize="24" PreviewKeyDown="tbVoucher_PreviewKeyDown"></TextBox>
+            <TextBox x:Name="tbVoucher" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbVoucher_PreviewKeyDown" LostFocus="tbVoucher_LostFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="5" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="收現金券：" FontSize="24"></Label>
-            <TextBox x:Name="tbCashCoupon" Text="0" Width="100" FontSize="24" PreviewKeyDown="tbCashCoupon_PreviewKeyDown"></TextBox>
+            <TextBox x:Name="tbCashCoupon" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCashCoupon_PreviewKeyDown" LostFocus="tbCashCoupon_LostFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="6" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="刷卡金額：" FontSize="24"></Label>
-            <TextBox x:Name="tbCard" Text="0" Width="100" FontSize="24" PreviewKeyDown="tbCard_PreviewKeyDown"></TextBox>
+            <TextBox x:Name="tbCard" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCard_PreviewKeyDown" LostFocus="tbCard_LostFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="7" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="信用卡號：" FontSize="24"></Label>
@@ -79,7 +80,7 @@
             <TextBox x:Name="tbEmployee" Text="" Width="60" FontSize="24" PreviewKeyDown="tbEmployee_PreviewKeyDown"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="10" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button x:Name="btnSubmit" Width="120" Height="40" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0" BorderThickness="0" Background="RoyalBlue" IsEnabled="False"/>
+            <Button x:Name="btnSubmit" Width="120" Height="40" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0" BorderThickness="0" Background="RoyalBlue" Click="btnSubmit_Click"/>
             <Button x:Name="btnReturn" Width="120" Height="40" Content="返回" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10" BorderThickness="0" Background="DimGray"/>
         </StackPanel>
     </Grid>

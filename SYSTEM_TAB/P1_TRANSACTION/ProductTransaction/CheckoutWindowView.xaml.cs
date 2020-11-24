@@ -1,19 +1,10 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -23,25 +14,30 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     public partial class CheckoutWindowView : Window
     {
         private int Total;
-        private int Linecount;
-        private int Itemcount;
-
-        private string TaxNumber;
         private int Cash;
         private int Voucher;
         private int CashCoupon;
         private int Card;
-        private string CardNumber;
         private int Change;
+        private string TaxNumber;
+        private string CardNum1;
+        private string CardNum2;
+        private string CardNum3;
+        private string CardNum4;
         private string Employee;
+
+        private bool IsPayAmountEnough = false;
+        private bool IsSelectCashier = false;
+
+        private static readonly Regex _regex = new Regex("^[0-9]+$");
+        private static bool IsTextAllowed(string text) { return _regex.IsMatch(text); }
 
         public CheckoutWindowView(int total, int linecount, int itemcount)
         {
             InitializeComponent();
             Total = total;
-            Linecount = linecount;
-            Itemcount = itemcount;
-            tbTaxNum.Text = total.ToString();
+            lblTotal.Content = total.ToString();
+            ChangeCount();
             lblLineCount.Content = linecount.ToString();
             lblItemCount.Content = itemcount.ToString();
             tbTaxNum.Focus();
@@ -49,12 +45,35 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void SubmitCheckout() 
         {
+            if (!IsPayAmountEnough)
+            {
+                MessageWindow.ShowMessage("支付金額不足！", MessageType.WARNING);
+                return;
+            }
+            if (!IsSelectCashier)
+            {
+                MessageWindow.ShowMessage("尚未選擇結帳人員！", MessageType.WARNING);
+                return;
+            }
 
         }
 
         private void ChangeCount() 
         {
-
+            int.TryParse(tbCash.Text, out int cash);
+            int.TryParse(tbVoucher.Text, out int voucher);
+            int.TryParse(tbCashCoupon.Text, out int cashcoupon);
+            int.TryParse(tbCard.Text, out int card);
+            int change = (cash + voucher + cashcoupon + card) - Total;
+            tbChange.Content = change;
+            if (change >= 0)
+            {
+                IsPayAmountEnough = true;
+            }
+            else 
+            {
+                IsPayAmountEnough = false;
+            }
         }
 
         private void tbTaxNum_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -62,9 +81,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter) 
             {
-                if (tb.Text.Length != 8) 
+                if (tb.Text.Length != 0 && tb.Text.Length != 8) 
                 {
-                    MessageWindow.ShowMessage("統一編號長度有誤", MessageType.WARNING);
+                    MessageWindow.ShowMessage("統一編號位數有誤", MessageType.WARNING);
                     return;
                 }
                 tbCash.Focus();
@@ -76,6 +95,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
+                ChangeCount();
                 tbVoucher.Focus();
             }
         }
@@ -85,6 +105,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
+                ChangeCount();
                 tbCashCoupon.Focus();
             }
         }
@@ -94,6 +115,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
+                ChangeCount();
                 tbCard.Focus();
             }
         }
@@ -103,9 +125,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
+                ChangeCount();
                 tbCardNum1.Focus();
             }
         }
+
+        private void tbEmployee_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnSubmit.Focus();
+            }
+        }
+
+        #region CardNum
 
         private void tbCardNum1_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -143,13 +176,39 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private void tbEmployee_PreviewKeyDown(object sender, KeyEventArgs e)
+        #endregion
+
+        #region LostFocus
+
+        private void tbCash_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            if (e.Key == Key.Enter)
-            {
-                btnSubmit.Focus();
-            }
+            if (!IsTextAllowed(tb.Text)) { tb.Text = "0"; }
+        }
+
+        private void tbVoucher_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (!IsTextAllowed(tb.Text)) { tb.Text = "0"; }
+        }
+
+        private void tbCashCoupon_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (!IsTextAllowed(tb.Text)) { tb.Text = "0"; }
+        }
+
+        private void tbCard_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (!IsTextAllowed(tb.Text)) { tb.Text = "0"; }
+        }
+
+        #endregion
+
+        private void btnSubmit_Click(object sender, RoutedEventArgs e)
+        {
+            SubmitCheckout();
         }
     }
 }

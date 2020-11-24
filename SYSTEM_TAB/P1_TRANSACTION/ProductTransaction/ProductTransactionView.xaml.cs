@@ -44,6 +44,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public static Label InvoiceNumLable;
         public static TextBox Cuslblcheck;
         public static TextBox FromHISCuslblcheck;
+
         private DataTable ProductList;
         private string AppliedPrice;
         private int preTotal = 0;
@@ -52,6 +53,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private double totalProfit = 0;
         private string cusID = "0";
         private bool isGift = false;
+
         public AddCustomerWindow addCustomerWindow;
         public int ID;
         public CustomerSearchCondition Con;
@@ -61,13 +63,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
 
         public Pharmacy MyPharmacy;
+        public NewClass.Prescription.Prescription CurrentPrescription { get; set; }
 
-
-
-        public NewClass.Prescription.Prescription CurrentPrescription
-        {
-            get;set;
-        }
         /*public static RoutedCommand CheckoutCommand = new RoutedCommand();
         public static RoutedCommand PaidAmountCommand = new RoutedCommand();
         public static RoutedCommand CashierCommand = new RoutedCommand();
@@ -989,7 +986,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnCheckout_Click(object sender, RoutedEventArgs e)
         {
-            CheckoutWindowView chk = new CheckoutWindowView();
+            CheckoutWindowView chk = new CheckoutWindowView(realTotal, 1,1);
             chk.ShowDialog();
 
             /*foreach (DataRow dr in ProductList.Rows)
