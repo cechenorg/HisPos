@@ -1399,5 +1399,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
         }
+
+        private void tbDiscountAmt_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) 
+            {
+                btnCheckout.Focus();
+            }
+        }
     }
 }

@@ -23,12 +23,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private string cardNumber = "";
 
         private int cash = 0;
+        private int realcash = 0;
         private int voucher = 0;
         private int cashcoupon = 0;
         private int card = 0;
         private int change = 0;
 
-        public int Cash => cash;
+        public int Cash => realcash;
         public int Voucher => voucher;
         public int CashCoupon => cashcoupon;
         public int Card => card;
@@ -116,13 +117,24 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void ChangeCount()
         {
-            int.TryParse(tbCash.Text, out int cash);
-            int.TryParse(tbVoucher.Text, out int voucher);
-            int.TryParse(tbCashCoupon.Text, out int cashcoupon);
-            int.TryParse(tbCard.Text, out int card);
-            change = (cash + voucher + cashcoupon + card) - Total;
-            paid = cash + voucher + cashcoupon + card;
-            tbChange.Content = change;
+            int.TryParse(tbCash.Text, out cash);
+            int.TryParse(tbVoucher.Text, out voucher);
+            int.TryParse(tbCashCoupon.Text, out cashcoupon);
+            int.TryParse(tbCard.Text, out card);
+
+            if (cash > 0) 
+            {
+                change = (cash + voucher + cashcoupon + card) - Total;
+                if (change > cash) 
+                {
+                    MessageWindow.ShowMessage("實收現金大於應找金額！", MessageType.WARNING);
+                    return;
+                }
+                tbChange.Content = change;
+                paid = cash + voucher + cashcoupon + card;
+                realcash = (change - cash);
+            }
+            
             if (change >= 0)
             {
                 IsPayAmountEnough = true;
@@ -138,11 +150,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (!IsPayAmountEnough)
             {
                 MessageWindow.ShowMessage("支付金額不足！", MessageType.WARNING);
-                return;
-            }
-            if (change > cash && cash > 0)
-            {
-                MessageWindow.ShowMessage("應找金額大於實收現金！", MessageType.WARNING);
                 return;
             }
             if (!IsEmployeeIDValid()) 
