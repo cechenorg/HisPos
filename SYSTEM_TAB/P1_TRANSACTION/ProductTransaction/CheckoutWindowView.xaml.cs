@@ -20,7 +20,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private DataTable EmployeeList;
         private int Total;
         private int paid;
-        private string cardNumber;
+        private string cardNumber = "";
 
         public int Cash => int.Parse(tbCash.Text);
         public int Voucher => int.Parse(tbVoucher.Text);
