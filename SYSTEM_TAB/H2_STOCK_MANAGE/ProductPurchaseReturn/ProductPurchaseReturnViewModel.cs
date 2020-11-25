@@ -1,23 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.FunctionWindow.AddProductWindow;
-using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
-using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
-using His_Pos.Service.ExportService;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {

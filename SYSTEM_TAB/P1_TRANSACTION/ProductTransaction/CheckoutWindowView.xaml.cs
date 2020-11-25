@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -76,6 +77,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
+        #region PreviewKeyDown
+
         private void tbTaxNum_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             TextBox tb = (TextBox)sender;
@@ -86,46 +89,83 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     MessageWindow.ShowMessage("統一編號位數有誤", MessageType.WARNING);
                     return;
                 }
+                if (!IsTextAllowed(tb.Text)) 
+                {
+                    MessageWindow.ShowMessage("統一編號輸入有誤", MessageType.WARNING);
+                    return;
+                }
+                tbCash.Focus();
+            }
+            if (e.Key == Key.Down)
+            {
                 tbCash.Focus();
             }
         }
 
         private void tbCash_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
                 ChangeCount();
+                tbVoucher.Focus();
+            }
+            if (e.Key == Key.Up)
+            {
+                tbTaxNum.Focus();
+            }
+            if (e.Key == Key.Down)
+            {
                 tbVoucher.Focus();
             }
         }
 
         private void tbVoucher_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
                 ChangeCount();
+                tbCashCoupon.Focus();
+            }
+            if (e.Key == Key.Up)
+            {
+                tbCash.Focus();
+            }
+            if (e.Key == Key.Down)
+            {
                 tbCashCoupon.Focus();
             }
         }
 
         private void tbCashCoupon_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
                 ChangeCount();
+                tbCard.Focus();
+            }
+            if (e.Key == Key.Up)
+            {
+                tbVoucher.Focus();
+            }
+            if (e.Key == Key.Down)
+            {
                 tbCard.Focus();
             }
         }
 
         private void tbCard_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tb = (TextBox)sender;
             if (e.Key == Key.Enter)
             {
                 ChangeCount();
+                tbCardNum1.Focus();
+            }
+            if (e.Key == Key.Up)
+            {
+                tbCashCoupon.Focus();
+            }
+            if (e.Key == Key.Down)
+            {
                 tbCardNum1.Focus();
             }
         }
@@ -137,6 +177,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 btnSubmit.Focus();
             }
         }
+
+        #endregion
 
         #region CardNum
 
@@ -178,6 +220,34 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         #endregion
 
+        #region GotFocus
+
+        private void tbCash_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
+        }
+
+        private void tbVoucher_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
+        }
+
+        private void tbCashCoupon_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
+        }
+
+        private void tbCard_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
+        }
+
+        #endregion
+
         #region LostFocus
 
         private void tbCash_LostFocus(object sender, RoutedEventArgs e)
@@ -210,5 +280,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             SubmitCheckout();
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -75,9 +76,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
 
             MainWindow.ServerConnection.OpenConnection();
             NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID, int.Parse(SelectedWareHouse.ID));
-            MainWindow.ServerConnection.CloseConnection(); 
+            MainWindow.ServerConnection.CloseConnection();
 
-            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseAddNewOrderWindow"));
+            Messenger.Default.Send(new NotificationMessage("CloseAddNewOrderWindow"));
         }
         #endregion
 

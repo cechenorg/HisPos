@@ -46,19 +46,19 @@
         </StackPanel>
         <StackPanel Grid.Row="3" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="實收現金：" FontSize="24"></Label>
-            <TextBox x:Name="tbCash" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCash_PreviewKeyDown" LostFocus="tbCash_LostFocus"></TextBox>
+            <TextBox x:Name="tbCash" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCash_PreviewKeyDown" LostFocus="tbCash_LostFocus" GotFocus="tbCash_GotFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="禮券抵用：" FontSize="24"></Label>
-            <TextBox x:Name="tbVoucher" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbVoucher_PreviewKeyDown" LostFocus="tbVoucher_LostFocus"></TextBox>
+            <TextBox x:Name="tbVoucher" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbVoucher_PreviewKeyDown" LostFocus="tbVoucher_LostFocus" GotFocus="tbVoucher_GotFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="5" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="收現金券：" FontSize="24"></Label>
-            <TextBox x:Name="tbCashCoupon" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCashCoupon_PreviewKeyDown" LostFocus="tbCashCoupon_LostFocus"></TextBox>
+            <TextBox x:Name="tbCashCoupon" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCashCoupon_PreviewKeyDown" LostFocus="tbCashCoupon_LostFocus" GotFocus="tbCashCoupon_GotFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="6" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="刷卡金額：" FontSize="24"></Label>
-            <TextBox x:Name="tbCard" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCard_PreviewKeyDown" LostFocus="tbCard_LostFocus"></TextBox>
+            <TextBox x:Name="tbCard" Text="0" Width="100" FontSize="24" InputMethod.InputScope="Number" PreviewKeyDown="tbCard_PreviewKeyDown" LostFocus="tbCard_LostFocus" GotFocus="tbCard_GotFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="7" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="信用卡號：" FontSize="24"></Label>

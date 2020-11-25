@@ -27,36 +27,6 @@
             <customerDetailControl:CustomerDetailBase/>
         </DataTemplate>
     </UserControl.Resources>
-    <UserControl.CommandBindings>
-        <!--<CommandBinding Command="{x:Static local:ProductTransactionView.CheckoutCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.PaidAmountCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.CashierCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.CashAmountCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.CardAmountCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.VoucherAmountCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.CardNumberCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.TaxNumberCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.DiscountCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.GiftCommand}" Executed="btnGift_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.ReturnCommand}" Executed="btnReturn_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.CustomerCommand}" Executed="btnCheckout_Click"/>
-        <CommandBinding Command="{x:Static local:ProductTransactionView.FocusLastRowCommand}" Executed="FocusLastRowCommandExecuted"/>-->
-    </UserControl.CommandBindings>
-    <UserControl.InputBindings>
-        <!--<KeyBinding Command="{x:Static local:ProductTransactionView.CheckoutCommand}" Key="F5" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.PaidAmountCommand}" Key="P" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.CashierCommand}" Key="E" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.CashAmountCommand}" Key="F1" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.CardAmountCommand}" Key="F2" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.VoucherAmountCommand}" Key="F3" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.CardNumberCommand}" Key="K" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.TaxNumberCommand}" Key="T" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.DiscountCommand}" Key="D" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.GiftCommand}" Key="G" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.ReturnCommand}" Key="R" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.CustomerCommand}" Key="C" />
-        <KeyBinding Command="{x:Static local:ProductTransactionView.FocusLastRowCommand}" Key="F" />-->
-    </UserControl.InputBindings>
     <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1345" Height="850" Margin="10">
             <Grid.RowDefinitions>
@@ -327,7 +297,8 @@
                     <Label Content="折扣前總計 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
                     <Label x:Name="lblPreTotal" Content="0" Width="75" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="整單折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
-                    <TextBox x:Name="tbDiscountAmt" Text="0" Width="75" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountAmt_LostFocus" KeyDown="tbDiscountAmt_KeyDown">
+                    <TextBox x:Name="tbDiscountAmt" Text="0" Width="75" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountAmt_LostFocus" TextChanged="tbDiscountAmt_TextChanged"
+                             GotFocus="tbDiscountAmt_GotFocus">
                         <TextBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
