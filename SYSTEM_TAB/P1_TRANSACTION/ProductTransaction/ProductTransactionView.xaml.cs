@@ -376,7 +376,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 foreach (DataRow dr in ProductList.Rows)
                 {
                     bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
-                    if (!tp || ig != 1 && dr["CurrentPrice"].ToString() == "0")
+                    //if (!tp || ig != 1 && dr["CurrentPrice"].ToString() == "0")
+                    if (!tp || ig != 1)
                     {
                         dr["CurrentPrice"] = dr[AppliedPrice];
                     }
@@ -707,47 +708,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal(); 
         }
 
-        private void Amount_KeyDown(object sender, KeyEventArgs e)
-        {
-           /* if (e.Key == Key.Return)
-            {
-                TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
-                MoveFocus(request);
-            }*/
-        }
-
         private void Amount_TextChanged(object sender, TextChangedEventArgs e)
         {
+            int index = GetRowIndexRouted(e);
+            if (index > ProductList.Rows.Count - 1) { return; }
             TextBox tb = (TextBox)sender;
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
-            int index = GetRowIndexRouted(e);
-            int stock = int.Parse(ProductList.Rows[index]["Available_Amount"].ToString());
+            int.TryParse(ProductList.Rows[index]["Available_Amount"].ToString(), out int stock);
             if (amt > stock) 
             {
                 MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
                 tb.Text = stock.ToString(); 
             }
             CalculateTotal();
-        }
-
-        private void next_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            int index = GetRowIndex(e);
-            if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
-
-            int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
-            int stock = int.Parse(ProductList.Rows[index]["Inv_Inventory"].ToString());
-            ProductList.Rows[index]["Amount"] = original + 1;
-        }
-
-        private void back_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            int index = GetRowIndex(e);
-            if (ProductList.Rows.Count == 0 || index >= ProductList.Rows.Count) { return; }
-
-            int original = int.Parse(ProductList.Rows[index]["Amount"].ToString());
-            if (original > 0) { ProductList.Rows[index]["Amount"] = original - 1; }
         }
 
         #endregion
@@ -953,6 +927,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TradeRecordGrid.ItemsSource = null;
             HISRecordGrid.ItemsSource = null;
             DepositColumn.Visibility = Visibility.Hidden;
+            AppliedPrice = "Pro_RetailPrice";
+            SetPrice();
+            CalculateTotal();
         }
 
         private void FillInCustomerData(DataTable result)
@@ -976,6 +953,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbAddress.Text = result.Rows[0]["Cus_Address"].ToString();
             tbCusNote.Text = result.Rows[0]["Cus_Note"].ToString();
 
+            AppliedPrice = "Pro_MemberPrice";
+            SetPrice();
+            CalculateTotal();
             DepositColumn.Visibility = Visibility.Visible;
         }
 
@@ -1136,7 +1116,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         customerSearch = new CustomerSearchWindow(Con, 0, tb.Text.Trim());
                         Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
                     }
-            
 
                     if (ID != 0) {
                     MainWindow.ServerConnection.OpenConnection();
@@ -1152,8 +1131,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                             PrescriptionDeclareView.FromPOSCuslblcheck.Text = tb.Text;
                         }
                     }
-                   
-
                 }
                 else
                 {
@@ -1167,6 +1144,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
             }
         }
+
         private void GetSelectedCustomer(NotificationMessage<NewClass.Person.Customer.Customer> receiveSelectedCustomer)
         {
             Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
@@ -1174,23 +1152,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
             }
-            else {
+            else 
+            {
                 CurrentPrescription = new NewClass.Prescription.Prescription();
 
                 CurrentPrescription.Patient = new NewClass.Person.Customer.Customer();
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
 
-                 ID = CurrentPrescription.Patient.ID;
-
-
-            MainWindow.ServerConnection.CloseConnection();
-}
-
-}
+                ID = CurrentPrescription.Patient.ID;
+                MainWindow.ServerConnection.CloseConnection();
+            }
+        }
         private void SearchCustomerFromHIS(string phone)
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
+
             bool isCell = phone.StartsWith("09");
             if (isCell)
             {
@@ -1214,6 +1191,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 parameters.Add(new SqlParameter("@Cus_Name", DBNull.Value));
             }
+
             if (phone.Length == 6)
             {
                 int.TryParse(phone.Substring(0, 2), out int year);
@@ -1233,8 +1211,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 string dateStr = yearStr + month.ToString("00") + day.ToString("00");
                 parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
             }
-           
-
             else
             {
                 parameters.Add(new SqlParameter("@Cus_Birthday", DBNull.Value));
@@ -1243,18 +1219,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             MainWindow.ServerConnection.CloseConnection();
 
             if (result.Rows.Count == 0)
-                {
-                    
-                }
-
-                else
-                {
-                    FillInCustomerData(result);
-                    GetCustomerTradeRecord();
+            {
+            }
+            else
+            {
+                FillInCustomerData(result);
+                GetCustomerTradeRecord();
                 GetCustomerHISRecord();
-                }
-            
+            }
         }
+
         public void FillCustomerDirect() {
 
             MainWindow.ServerConnection.OpenConnection();
@@ -1386,10 +1360,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             else
             {
                 DataRowView row = (DataRowView)HISRecordGrid.SelectedItems[0];
-                DataRow masterRow = row.Row;
-                int index = GetRowIndex(e);
+                //DataRow masterRow = row.Row;
+                //int index = GetRowIndex(e);
                 int TradeID = (int)row["SourceId"];
-                string Type = row["Type"].ToString();
+                //string Type = row["Type"].ToString();
                 PrescriptionService.ShowPrescriptionEditWindow(TradeID,0);
             }
         }
@@ -1400,7 +1374,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
         }
 
-        private void tbDiscountAmt_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void tbDiscountAmt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) 
             {

@@ -96,7 +96,7 @@
                     <Button x:Name="btnDepositManage" Width="100" Content="寄庫管理" FontFamily="Segoe UI Semibold" FontSize="17" Margin="5,0,0,0" BorderThickness="0" Background="RoyalBlue" Click="btnDepositManage_Click"/>
                 </StackPanel>
                 <Rectangle Grid.Row="3" Fill="{StaticResource GridDarkerBackGround}"/>
-                <DataGrid x:Name="TradeRecordGrid" Grid.Row="3" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" MouseDoubleClick="TradeRecordGridRow_DoubleClick">
+                <DataGrid x:Name="TradeRecordGrid" Grid.Row="3" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" MouseDoubleClick="TradeRecordGridRow_DoubleClick">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -225,8 +225,6 @@
                     </TextBox>
                     <Label Content="應找 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="24" Foreground="Black" Margin="10,0,0,0"/>
                     <Label x:Name="lblChange" Content="0" Width="100" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="26" Foreground="Black"/>-->
-                    
-                    
                 </StackPanel>
                 <!--<StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                     <Label Content="付款方式：" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,0"/>
@@ -298,7 +296,7 @@
                     <Label x:Name="lblPreTotal" Content="0" Width="75" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black"/>
                     <Label Content="整單折價 $" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
                     <TextBox x:Name="tbDiscountAmt" Text="0" Width="75" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="20" Foreground="Black" LostFocus="tbDiscountAmt_LostFocus" TextChanged="tbDiscountAmt_TextChanged"
-                             GotFocus="tbDiscountAmt_GotFocus" PreviewKeyDown="tbDiscountAmt_PreviewKeyDown">
+                             GotFocus="tbDiscountAmt_GotFocus" KeyDown="tbDiscountAmt_KeyDown">
                         <TextBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -332,7 +330,7 @@
                     </ComboBox>
                 </StackPanel>
             </Grid>
-            <DataGrid Name="ProductDataGrid" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True" SelectionUnit="Cell" Loaded="ProductDataGrid_Loaded">
+            <DataGrid Name="ProductDataGrid" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True" SelectionUnit="Cell" Loaded="ProductDataGrid_Loaded">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -457,7 +455,7 @@
                     <DataGridTemplateColumn Width="50" Header="數量">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Amount" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Amount_LostFocus" TextChanged="Amount_TextChanged" PreviewKeyDown="Amount_KeyDown">
+                                <TextBox x:Name="Amount" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="40" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" LostFocus="Amount_LostFocus" TextChanged="Amount_TextChanged">
                                     <TextBox.InputScope>
                                         <InputScope>
                                             <InputScope.Names>
