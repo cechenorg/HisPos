@@ -62,7 +62,7 @@
         </StackPanel>
         <StackPanel Grid.Row="7" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="信用卡號：" FontSize="24"></Label>
-            <TextBox x:Name="tbCardNum1" Text="" Width="55" FontSize="22" VerticalContentAlignment="Center" TextChanged="tbCardNum1_TextChanged"></TextBox>
+            <TextBox x:Name="tbCardNum1" Text="" Width="55" FontSize="22" VerticalContentAlignment="Center" TextChanged="tbCardNum1_TextChanged" PreviewKeyDown="tbCardNum1_PreviewKeyDown"></TextBox>
             <Label Content="-" FontSize="24"></Label>
             <TextBox x:Name="tbCardNum2" Text="" Width="55" FontSize="22" VerticalContentAlignment="Center" TextChanged="tbCardNum2_TextChanged"></TextBox>
             <Label Content="-" FontSize="24"></Label>

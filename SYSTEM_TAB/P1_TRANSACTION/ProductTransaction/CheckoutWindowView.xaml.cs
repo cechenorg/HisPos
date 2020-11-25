@@ -69,7 +69,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             List<string> list = new List<string>();
             bool CashParse = int.TryParse(tbCash.Text, out int Cash);
             bool VoucherParse = int.TryParse(tbVoucher.Text, out int Voucher);
-            bool CashCouponParse = int.TryParse(tbVoucher.Text, out int CashCoupon);
+            bool CashCouponParse = int.TryParse(tbCashCoupon.Text, out int CashCoupon);
             bool CardParse = int.TryParse(tbCard.Text, out int Card);
 
             if (CashParse && Cash > 0)
@@ -132,6 +132,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (!IsPayAmountEnough)
             {
                 MessageWindow.ShowMessage("支付金額不足！", MessageType.WARNING);
+                return;
+            }
+            if (paid != Total) 
+            {
+                MessageWindow.ShowMessage("支付金額與應收金額不符！", MessageType.WARNING);
                 return;
             }
             if (!IsEmployeeIDValid()) 
@@ -247,6 +252,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Down)
             {
                 tbCardNum1.Focus();
+            }
+        }
+
+        private void tbCardNum1_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                tbEmployee.Focus();
+            }
+            if (e.Key == Key.Up)
+            {
+                tbCard.Focus();
+            }
+            if (e.Key == Key.Down)
+            {
+                tbEmployee.Focus();
             }
         }
 
