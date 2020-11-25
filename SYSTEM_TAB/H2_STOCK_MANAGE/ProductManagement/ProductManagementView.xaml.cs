@@ -48,9 +48,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             StopRB.Visibility = Visibility.Visible;
             ZeroRB.Visibility = Visibility.Visible;
             MedBagAmt.Visibility = Visibility.Visible;
-            ErrorAmt.Visibility = Visibility.Visible;
+            ErrorAmt.Visibility = Visibility.Hidden;
             tbMedBagAmt.Visibility = Visibility.Visible;
-            tbErrorAmt.Visibility = Visibility.Visible;
+            tbErrorAmt.Visibility = Visibility.Hidden;
             MedGroup.Visibility = Visibility.Visible;
             OTCGroup.Visibility = Visibility.Collapsed;
 
@@ -66,9 +66,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             IceRB.Visibility = Visibility.Collapsed;
             ZeroRB.Visibility = Visibility.Collapsed;
             MedBagAmt.Visibility = Visibility.Visible;
-            ErrorAmt.Visibility = Visibility.Visible;
+            ErrorAmt.Visibility = Visibility.Hidden;
             tbMedBagAmt.Visibility = Visibility.Visible;
-            tbErrorAmt.Visibility = Visibility.Visible;
+            tbErrorAmt.Visibility = Visibility.Hidden;
             OTCGroup.Visibility = Visibility.Visible;
             MedGroup.Visibility = Visibility.Collapsed;
         }

@@ -12,15 +12,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
+        <StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0,37.541,196.6,75">
             <Label Name="SelectionHint" FontFamily="Segoe UI Semibold" FontSize="18" Margin="20,0,0,0" Foreground="DimGray"/>
         </StackPanel>
-        <TextBox Name="ProID" Grid.Row="1" Width="170" Height="35" materialDesign:HintAssist.Hint="名稱" FontFamily="Segoe UI Semi" FontSize="20" Grid.ColumnSpan="2" Margin="116,24.4,107.6,51"/>
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="45" Content="新增" FontFamily="Segoe UI Semibold" FontSize="25" Background="IndianRed" BorderThickness="0" Click="ConfrimClick"/>
+        <TextBox x:Name="ProID" Grid.Row="2" Width="170" Height="35" materialDesign:HintAssist.Hint="名稱" FontFamily="Segoe UI Semi" FontSize="20" Grid.ColumnSpan="2" Margin="116,11.541,107.6,0" KeyDown="ProID_KeyDown"/>
+        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="45" Content="新增" FontFamily="Segoe UI Semibold" FontSize="25" Background="IndianRed" BorderThickness="0" Click="ConfrimClick" Margin="72,8,71.6,8"/>
     </Grid>
 </Window>

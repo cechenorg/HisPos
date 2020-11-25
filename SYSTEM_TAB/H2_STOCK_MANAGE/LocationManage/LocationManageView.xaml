@@ -289,7 +289,7 @@
                 </DataGrid.Columns>
             </DataGrid>-->
             <DataGrid  Name="ProductLocationDetailDataGrid" Grid.Row="0" Grid.Column="2" Margin="10,0,0,0" Background="{StaticResource GridDarkerBackGround}"  CanUserAddRows="False"
-                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" AutoGenerateColumns="False">
+                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" AutoGenerateColumns="False" SelectedValuePath="Pro_ID">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -393,9 +393,16 @@
                 <Button Margin="20,0,0,0" Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding DeleteTypeCommand}" Click="DeleteButton_Click" x:Name="Deletebtn"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="1" Margin="10,0,0,10" Background="{StaticResource GridBackGround}">
-                <Button Margin="505,0,0,0" Width="120" Content="商品換類" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Command="{Binding AddTypeCommand}" Visibility="Hidden"/>
-                <Button x:Name="PrintButton" Margin="120,0,0,0" Width="100" Content="列印表單" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"  Click="PrintButton_Click" Visibility="Hidden"/>
-                <Button x:Name="InsertButton" Margin="20,0,0,0" Width="100" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"  Click="InsertButton_Click" Visibility="Hidden"/>
+                <Button Margin="280,0,0,0" Width="120" Content="商品換類" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Command="{Binding AddTypeCommand}" Visibility="Hidden"/>
+
+                <Label x:Name="lbInsertID" Content="商品代碼:" Margin="0,10,0,0" FontFamily="Segoe UI Semibold" FontSize="16" Visibility="Hidden"></Label>
+                <TextBox x:Name="InsertID" Width="130"  FontSize="16" Margin="0,0,0,10" KeyDown="InsertID_KeyDown" Visibility="Hidden"></TextBox>
+                <Button x:Name="InsertButton" Margin="20,0,0,0" Width="100" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"  Click="InsertButton_Click_1" Visibility="Hidden"/>
+
+                <Button x:Name="DeleteDetailButton" Margin="20,0,0,0" Width="100" Content="刪除商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0"  Click="DeleteDetailButton_Click" Visibility="Hidden"/>
+                
+                <Button x:Name="PrintButton" Margin="20,0,0,0" Width="100" Content="列印表單" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"  Click="PrintButton_Click" Visibility="Hidden"/>
+                
                 
             </StackPanel>
         </Grid>

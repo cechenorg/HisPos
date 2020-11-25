@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -16,6 +18,8 @@ using ClosedXML.Excel;
 using His_Pos.Class;
 using His_Pos.Class.Location;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddProductWindow;
+using His_Pos.NewClass.Product;
 using His_Pos.NewClass.ProductLocation;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
@@ -27,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     {
         DataTable master;
         DataTable detail;
+        int SelectedValue;
 
         public LocationManageView()
         {
@@ -81,6 +86,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             MainWindow.ServerConnection.CloseConnection();
             master = dataTable;
             ProductLocationDataGrid.ItemsSource = dataTable.DefaultView;
+            if (SelectedValue > 0) { ProductLocationDataGrid.SelectedValue = SelectedValue; }
         }
         private void InitLocationLoad()
         {
@@ -100,7 +106,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             else {
                 
                 MainWindow.ServerConnection.OpenConnection();
-                DataTable dataTable = ProductLocationDB.GetProductLocationDetails((int)ProductLocationDataGrid.SelectedValue);
+                DataTable dataTable = ProductLocationDB.GetProductLocationDetails(SelectedValue);
                 MainWindow.ServerConnection.CloseConnection();
                 detail = dataTable;
                 ProductLocationDetailDataGrid.ItemsSource = dataTable.DefaultView;
@@ -111,9 +117,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
         private void ProductLocationDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            InitLocationDetail();
+            
             InsertButton.Visibility = Visibility.Visible;
             PrintButton.Visibility = Visibility.Visible;
+            lbInsertID.Visibility = Visibility.Visible;
+            InsertID.Visibility = Visibility.Visible;
+            DeleteDetailButton.Visibility = Visibility.Visible;
             if (ProductLocationDataGrid.SelectedValue==null) {
                 Newbtn.Visibility = Visibility.Visible;
                 Editbtn.Visibility = Visibility.Visible;
@@ -124,12 +133,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 Newbtn.IsEnabled = false;
                 Editbtn.IsEnabled = false;
                 Deletebtn.IsEnabled = false;
+                InsertButton.Visibility = Visibility.Hidden;
+                PrintButton.Visibility = Visibility.Visible;
+                lbInsertID.Visibility = Visibility.Hidden;
+                InsertID.Visibility = Visibility.Hidden;
+                DeleteDetailButton.Visibility = Visibility.Hidden;
+                SelectedValue = (int)ProductLocationDataGrid.SelectedValue;
             }
             else {
                 Newbtn.IsEnabled = true;
                 Editbtn.IsEnabled = true;
                 Deletebtn.IsEnabled = true;
+                SelectedValue = (int)ProductLocationDataGrid.SelectedValue;
             }
+            InitLocationDetail();
         }
 
         private void InsertButton_Click(object sender, RoutedEventArgs e)
@@ -253,7 +270,151 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 }*/
 
         }
+
+        private void InsertID_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                AddProductByInputAction(InsertID.Text);
+            }
         }
+        private void AddProductByInputAction(string searchString)
+        {
+            if (string.IsNullOrEmpty(searchString)) return;
+            if (searchString.Length == 0)
+            {
+                return;
+            }
+
+            if (int.TryParse(searchString, out int n))
+            {
+                if (searchString.Length < 5)
+                {
+                    MessageWindow.ShowMessage("商品代碼長度不得小於5", MessageType.WARNING);
+                    InsertID.Text = "";
+                    return;
+                }
+            }
+            else
+            {
+                if (searchString.Length < 2)
+                {
+                    MessageWindow.ShowMessage("搜尋字串長度不得小於2", MessageType.WARNING);
+                    InsertID.Text = "";
+                    return;
+                }
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            int productCount = ProductStructs.GetProductStructCountBySearchString(searchString, AddProductEnum.Trade);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (productCount == 0)
+            {
+                MessageWindow.ShowMessage("查無商品", MessageType.WARNING);
+                InsertID.Text = "";
+                return;
+            }
+            else
+            {
+                if (productCount > 0)
+                {
+                    int WareID = 0;
+                    MainWindow.ServerConnection.OpenConnection();
+                    List<SqlParameter> parameters = new List<SqlParameter>();
+                    parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
+                    parameters.Add(new SqlParameter("WAREHOUSE_ID", WareID));
+                    DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[SearchProductsByID]", parameters);
+                    MainWindow.ServerConnection.CloseConnection();
+
+                    if (result.Rows.Count == 1)
+                    {
+                        InsertID.Text = result.Rows[0]["Pro_ID"].ToString();
+                    }
+                    else if (result.Rows.Count > 1)
+                    {
+                        TradeAddProductWindow tapw = new TradeAddProductWindow(result);
+                        tapw.ShowDialog();
+                        DataRow NewProduct = tapw.SelectedProduct;
+                        int amt = 0;
+                        if (NewProduct != null)
+                        {
+                            InsertID.Text = NewProduct["Pro_ID"].ToString();
+                        }
+
+                    }
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
+                    InsertID.Text = "";
+                    return;
+                }
+            }
+        }
+
+        private void InsertButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            AddProductByInputAction(InsertID.Text);
+            if (CheckEmptyData())
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                DataTable dataTable = ProductLocationDB.InsertProductLocationDetails((int)ProductLocationDataGrid.SelectedValue, InsertID.Text);
+                MainWindow.ServerConnection.CloseConnection();
+
+                if (dataTable is null || dataTable.Rows.Count == 0)
+                {
+                    MessageWindow.ShowMessage("查無商品 請重新輸入", Class.MessageType.ERROR);
+                    InsertID.Text = "";
+                    return;
+                }
+                {
+                    MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
+                    InsertID.Text = "";
+                    InitLocationDetail();
+                    InitLocation();
+                }
+            }
+        }
+        private bool CheckEmptyData()
+        {
+            string error = "";
+
+            if (InsertID.Text.Equals(""))
+                error += "未填寫名稱!\n";
+
+            if (error.Length != 0)
+            {
+                MessageWindow.ShowMessage(error, Class.MessageType.ERROR);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private void DeleteDetailButton_Click(object sender, RoutedEventArgs e)
+        {
+            string Pro_id;
+            Pro_id=ProductLocationDetailDataGrid.SelectedValue.ToString();
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Pro_ID", Pro_id));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[ProductLocationDetailsDelete]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            if (result is null || result.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("刪除時發生錯誤 請再試一次", Class.MessageType.ERROR);
+                return;
+            }
+            {
+                MessageWindow.ShowMessage("刪除成功", Class.MessageType.SUCCESS);
+                InitLocationDetail();
+                InitLocation();
+            }
+
+
+        }
+    }
         /*public static LocationManageView Instance;
         public LocationControl selectItem;
         public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();
