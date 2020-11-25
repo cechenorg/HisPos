@@ -472,6 +472,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             CalculateTotal();
             PriceCombo.SelectedIndex = 0;
+
+            chkWindow = null;
         }
 
         private void CheckoutSubmit()
