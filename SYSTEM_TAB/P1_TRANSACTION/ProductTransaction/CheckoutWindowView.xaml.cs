@@ -79,7 +79,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             bool CashCouponParse = int.TryParse(tbCashCoupon.Text, out cashcoupon);
             bool CardParse = int.TryParse(tbCard.Text, out card);
 
-            if (CashParse && cash > 0)
+            if (CashParse && realcash > 0)
             {
                 list.Add("現金");
             }
@@ -133,7 +133,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             tbChange.Content = change;
             paid = cash + voucher + cashcoupon + card;
-            realcash = change - cash;
+            realcash = cash - change;
                         
             if (change >= 0)
             {
