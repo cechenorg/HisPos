@@ -22,12 +22,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private int paid;
         private string cardNumber = "";
 
-        public int Cash => int.Parse(tbCash.Text);
-        public int Voucher => int.Parse(tbVoucher.Text);
-        public int CashCoupon => int.Parse(tbCashCoupon.Text);
-        public int Card => int.Parse(tbCard.Text);
+        private int cash = 0;
+        private int voucher = 0;
+        private int cashcoupon = 0;
+        private int card = 0;
+        private int change = 0;
+
+        public int Cash => cash;
+        public int Voucher => voucher;
+        public int CashCoupon => cashcoupon;
+        public int Card => card;
         public int Paid => paid;
-        public int Change => int.Parse(tbChange.Content.ToString());
+        public int Change => change;
         public string TaxNumber => tbTaxNum.Text;
         public string CardNumber => cardNumber;
         public string Employee => tbEmployee.Text;
@@ -67,24 +73,24 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private string GetPayMethod()
         {
             List<string> list = new List<string>();
-            bool CashParse = int.TryParse(tbCash.Text, out int Cash);
-            bool VoucherParse = int.TryParse(tbVoucher.Text, out int Voucher);
-            bool CashCouponParse = int.TryParse(tbCashCoupon.Text, out int CashCoupon);
-            bool CardParse = int.TryParse(tbCard.Text, out int Card);
+            bool CashParse = int.TryParse(tbCash.Text, out cash);
+            bool VoucherParse = int.TryParse(tbVoucher.Text, out voucher);
+            bool CashCouponParse = int.TryParse(tbCashCoupon.Text, out cashcoupon);
+            bool CardParse = int.TryParse(tbCard.Text, out card);
 
-            if (CashParse && Cash > 0)
+            if (CashParse && cash > 0)
             {
                 list.Add("現金");
             }
-            if (VoucherParse && Voucher > 0)
+            if (VoucherParse && voucher > 0)
             {
                 list.Add("禮券");
             }
-            if (CashCouponParse && CashCoupon > 0)
+            if (CashCouponParse && cashcoupon > 0)
             {
                 list.Add("現金券");
             }
-            if (CardParse && Card > 0)
+            if (CardParse && card > 0)
             {
                 list.Add("信用卡");
             }
@@ -114,7 +120,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int.TryParse(tbVoucher.Text, out int voucher);
             int.TryParse(tbCashCoupon.Text, out int cashcoupon);
             int.TryParse(tbCard.Text, out int card);
-            int change = (cash + voucher + cashcoupon + card) - Total;
+            change = (cash + voucher + cashcoupon + card) - Total;
             paid = cash + voucher + cashcoupon + card;
             tbChange.Content = change;
             if (change >= 0)
@@ -134,9 +140,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("支付金額不足！", MessageType.WARNING);
                 return;
             }
-            if (paid != Total) 
+            if (change > cash && cash > 0)
             {
-                MessageWindow.ShowMessage("支付金額與應收金額不符！", MessageType.WARNING);
+                MessageWindow.ShowMessage("應找金額大於實收現金！", MessageType.WARNING);
                 return;
             }
             if (!IsEmployeeIDValid()) 
