@@ -35,8 +35,20 @@ namespace His_Pos.NewClass.Person.Employee
             IsEnable = r.Field<bool>("Emp_IsEnable");
             AuthorityValue = r.Field<byte>("Aut_LevelID");
             IsLocal = r.Field<bool>("Emp_IsLocal");
+            CashierID=r.Field<string>("Emp_CashierID"); 
             WorkPosition = new WorkPosition.WorkPosition(r);
         }
+        private string cashierID;
+        [IgnoreFormat]
+        public virtual string CashierID
+        {
+            get => cashierID;
+            set
+            {
+                Set(() => CashierID, ref cashierID, value);
+            }
+        }
+
         private string password;//密碼
         [Index(7)]
         public virtual string Password

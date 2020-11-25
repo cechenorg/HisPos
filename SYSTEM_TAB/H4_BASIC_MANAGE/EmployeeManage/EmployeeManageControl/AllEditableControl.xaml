@@ -44,6 +44,9 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
+            <Label Content="{Binding Employee.CashierID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                   VerticalAlignment="Center" Foreground="DimGray" FontSize="25" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0" Width="100">
+            </Label>
         </StackPanel>
         <Button Content="更改帳號密碼" Grid.Row="0" Grid.Column="5" FontSize="20" Height="40" Width="150" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Margin="0,0,20,0" FontFamily="Segoe UI Semi" Command="{Binding ChangePassWordCommand}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
