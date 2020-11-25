@@ -122,19 +122,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int.TryParse(tbCashCoupon.Text, out cashcoupon);
             int.TryParse(tbCard.Text, out card);
 
-            if (cash > 0) 
+            int nochange = voucher + cashcoupon + card;
+            if (nochange >= Total)
+            {
+                change = cash;
+            }
+            else 
             {
                 change = (cash + voucher + cashcoupon + card) - Total;
-                if (change > cash) 
-                {
-                    MessageWindow.ShowMessage("實收現金大於應找金額！", MessageType.WARNING);
-                    return;
-                }
-                tbChange.Content = change;
-                paid = cash + voucher + cashcoupon + card;
-                realcash = (change - cash);
             }
-            
+            tbChange.Content = change;
+            paid = cash + voucher + cashcoupon + card;
+            realcash = change - cash;
+                        
             if (change >= 0)
             {
                 IsPayAmountEnough = true;
