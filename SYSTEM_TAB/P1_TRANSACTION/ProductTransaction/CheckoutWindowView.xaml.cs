@@ -34,7 +34,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public string PayMethod => GetPayMethod();
 
         private bool IsPayAmountEnough = false;
-        //private bool IsSelectCashier = false;
 
         private static readonly Regex _regex = new Regex("^[0-9]+$");
         private static bool IsTextAllowed(string text) { return _regex.IsMatch(text); }
@@ -135,17 +134,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("支付金額不足！", MessageType.WARNING);
                 return;
             }
-            /*if (!IsSelectCashier)
-            {
-                MessageWindow.ShowMessage("尚未選擇結帳人員！", MessageType.WARNING);
-                return;
-            }*/
             if (!IsEmployeeIDValid()) 
             {
                 MessageWindow.ShowMessage("結帳人員輸入錯誤！", MessageType.WARNING);
                 return;
             }
-            if (!CheckCardNumber())
+            int.TryParse(tbCard.Text, out int card);
+            if (card > 0 && !CheckCardNumber())
             {
                 MessageWindow.ShowMessage("信用卡號輸入有誤！", MessageType.WARNING);
                 return;
@@ -170,14 +165,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 if (tb.Text.Length != 0 && tb.Text.Length != 8) 
                 {
+                    if (!IsTextAllowed(tb.Text))
+                    {
+                        MessageWindow.ShowMessage("統一編號輸入有誤", MessageType.WARNING);
+                        return;
+                    }
                     MessageWindow.ShowMessage("統一編號位數有誤", MessageType.WARNING);
                     return;
                 }
-                if (!IsTextAllowed(tb.Text)) 
-                {
-                    MessageWindow.ShowMessage("統一編號輸入有誤", MessageType.WARNING);
-                    return;
-                }
+                
                 tbCash.Focus();
             }
             if (e.Key == Key.Down)
