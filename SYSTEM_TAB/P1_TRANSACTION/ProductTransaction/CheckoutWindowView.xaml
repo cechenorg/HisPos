@@ -77,11 +77,11 @@
         </StackPanel>
         <StackPanel Grid.Row="9" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
             <Label Content="結帳人員：" FontSize="24"></Label>
-            <TextBox x:Name="tbEmployee" Text="" Width="60" FontSize="24" PreviewKeyDown="tbEmployee_PreviewKeyDown"></TextBox>
+            <TextBox x:Name="tbEmployee" Text="" Width="60" FontSize="24" PreviewKeyDown="tbEmployee_PreviewKeyDown" LostFocus="tbEmployee_LostFocus"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="10" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Button x:Name="btnSubmit" Width="120" Height="40" Content="結帳" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0" BorderThickness="0" Background="RoyalBlue" Click="btnSubmit_Click"/>
-            <Button x:Name="btnReturn" Width="120" Height="40" Content="返回" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10" BorderThickness="0" Background="DimGray"/>
+            <Button x:Name="btnReturn" Width="120" Height="40" Content="返回" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10" BorderThickness="0" Background="DimGray" IsCancel="True"/>
         </StackPanel>
     </Grid>
 </Window>

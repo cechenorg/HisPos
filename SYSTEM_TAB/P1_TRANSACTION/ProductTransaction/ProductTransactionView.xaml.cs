@@ -13,14 +13,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
-using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
-using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
@@ -31,8 +28,6 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.NotEnoughOTCPurchaseWindow;
 using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl;
-using His_Pos.NewClass.Prescription;
-using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -55,6 +50,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private string cusID = "0";
         private bool isGift = false;
 
+        private CheckoutWindowView chkWindow;
+
         public AddCustomerWindow addCustomerWindow;
         public int ID;
         public CustomerSearchCondition Con;
@@ -74,7 +71,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             InvoiceNumLable = tbInvoiceNum;
             Cuslblcheck = tbCUS;
             FromHISCuslblcheck = tbFromHIS;
-            GetEmployeeList();
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
           
@@ -107,14 +103,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private void GetEmployeeList()
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
-            MainWindow.ServerConnection.CloseConnection();
-            //cbCashier.ItemsSource = result.DefaultView;
-        }
-
         private int GetRowIndex(MouseButtonEventArgs e)
         {
             DataGridRow dgr = null;
@@ -142,37 +130,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int rowIdx = dgr.GetIndex();
             return rowIdx;
         }
-
-        /*private string GetPayMethod()
-        {
-            //List<string> list = new List<string>();
-            //bool CashParse = int.TryParse(tbCash.Text, out int Cash);
-            //bool CardParse = int.TryParse(tbCard.Text, out int Card);
-            //bool VoucherParse = int.TryParse(tbVoucher.Text, out int Voucher);
-            //int Total = Cash + Card + Voucher;
-
-            //if (Total != realTotal)
-            //{
-            //    return "NOT_MATCH";
-            //}
-
-            //if (CashParse && Cash > 0)
-            //{
-            //    list.Add("現金");
-            //}
-            //if (CardParse && Card > 0)
-            //{
-            //    list.Add("信用卡");
-            //}
-            //if (VoucherParse && Voucher > 0)
-            //{
-            //    list.Add("禮券");
-            //}
-
-            //string[] arr = list.ToArray();
-            //string result = string.Join("/", arr);
-            //return result;
-        }*/
 
         private void GetNotEnoughOTCs()
         {
@@ -406,7 +363,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         isGift = false;
                         btnGift.IsEnabled = true;
                     }
-
                     CalculateTotal();
                 }
                 else { MessageWindow.ShowMessage("查無此商品", MessageType.WARNING); }
@@ -454,7 +410,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 lblTotalProfit.Content = totalProfit;
             }
             CalculateDiscount();
-            CalculateChange();
         }
 
         private async void CalculateDiscount()
@@ -478,23 +433,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 await Task.Delay(20);
                 tbDiscountAmt.Focus();
             }
-        }
-
-        private void CalculateChange()
-        {
-            /*if (tbPaid.Text.Length > 0 && !IsTextAllowed(tbPaid.Text))
-            {
-                int change = int.Parse(tbPaid.Text) - int.Parse(lblRealTotal.Content.ToString());
-                if (change >= 0) { lblChange.Content = change; }
-                else
-                {
-                    MessageWindow.ShowMessage("實收金額小於應收金額！", MessageType.ERROR);
-                    tbPaid.Text = "";
-                    CalculateChange();
-                    tbPaid.Focus();
-                }
-            }
-            else { lblChange.Content = "0"; }*/
         }
 
         private DataTable TransferDetailTable()
@@ -538,6 +476,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void CheckoutSubmit()
         {
+            if (chkWindow == null) { return; }
             GetNotEnoughOTCs();
 
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認" , true);
@@ -549,17 +488,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("CustomerID", cusID));
                 parameters.Add(new SqlParameter("ChkoutTime", DateTime.Now));
-                //parameters.Add(new SqlParameter("PayMethod", GetPayMethod()));
-                //parameters.Add(new SqlParameter("CashAmount", tbCash.Text));
-                //parameters.Add(new SqlParameter("CardAmount", tbCard.Text));
-                //parameters.Add(new SqlParameter("VoucherAmount", tbVoucher.Text));
+                parameters.Add(new SqlParameter("PayMethod", chkWindow.PayMethod));
+                parameters.Add(new SqlParameter("CashAmount", chkWindow.Cash));
+                parameters.Add(new SqlParameter("VoucherAmount", chkWindow.Voucher));
+                parameters.Add(new SqlParameter("CashCouponAmount", chkWindow.CashCoupon));
+                parameters.Add(new SqlParameter("CardAmount", chkWindow.Card));
                 parameters.Add(new SqlParameter("PreTotal", preTotal));
                 parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
                 parameters.Add(new SqlParameter("RealTotal", realTotal));
-                //parameters.Add(new SqlParameter("CardNumber", tbCardNum.Text));
+                parameters.Add(new SqlParameter("CardNumber", chkWindow.CardNumber));
                 parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
-                //parameters.Add(new SqlParameter("TaxNumber", tbTaxNum.Text));
-                //parameters.Add(new SqlParameter("Cashier", cbCashier.SelectedValue));
+                parameters.Add(new SqlParameter("TaxNumber", chkWindow.TaxNumber));
+                parameters.Add(new SqlParameter("Cashier", chkWindow.Employee));
                 parameters.Add(new SqlParameter("Note", tbNote.Text));
                 parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
@@ -631,7 +571,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
             port.Write(esc + "d" + Convert.ToChar(1));
-            //strArr = big5.GetBytes("統一編號:" + tbTaxNum.Text.ToString());
+            strArr = big5.GetBytes("統一編號:" + chkWindow.TaxNumber);
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
 
@@ -659,10 +599,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 + ("-" + discountAmount.ToString()).ToString().PadLeft(5, ' ') + "TX");
             port.Write(strArr, 0, strArr.Length);
             port.Write(esc + "d" + Convert.ToChar(4));
-            //strArr = big5.GetBytes("實收金額:        $" + tbPaid.Text.ToString());
+            strArr = big5.GetBytes("實收金額:        $" + chkWindow.Paid);
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
-            //strArr = big5.GetBytes("應找金額:        $" + lblChange.Content.ToString());
+            strArr = big5.GetBytes("應找金額:        $" + chkWindow.Change);
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
             strArr = big5.GetBytes("合計:            $" + realTotal.ToString());
@@ -905,8 +845,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int rowCount = ProductList.Rows.Count;
             int amtCount = int.Parse(ProductList.Compute("Sum(Amount)", string.Empty).ToString());
 
-            CheckoutWindowView chk = new CheckoutWindowView(realTotal, rowCount, amtCount);
-            chk.ShowDialog();
+            chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount);
+            chkWindow.ShowDialog();
+            if ((bool)chkWindow.DialogResult) 
+            {
+                CheckoutSubmit();
+            }
         }
 
         private void btnGift_Click(object sender, RoutedEventArgs e)
@@ -1384,8 +1328,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 return;
             }
-            else {
-
+            else 
+            {
                 DataRowView row = (DataRowView)TradeRecordGrid.SelectedItems[0];
                 DataRow masterRow = row.Row;
 
@@ -1420,7 +1364,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             lbRecord.Content = "消費紀錄";
             HISRecordGrid.Visibility = Visibility.Collapsed;
             TradeRecordGrid.Visibility = Visibility.Visible;
-
         }
 
         private void btnChangeHIS_Click(object sender, RoutedEventArgs e)
@@ -1437,21 +1380,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (HISRecordGrid.SelectedCells.Count <= 0)
             {
                 return;
-
             }
             else
             {
-
                 DataRowView row = (DataRowView)HISRecordGrid.SelectedItems[0];
-
                 DataRow masterRow = row.Row;
-
                 int index = GetRowIndex(e);
                 int TradeID = (int)row["SourceId"];
                 string Type = row["Type"].ToString();
-
                 PrescriptionService.ShowPrescriptionEditWindow(TradeID,0);
-
             }
         }
 
