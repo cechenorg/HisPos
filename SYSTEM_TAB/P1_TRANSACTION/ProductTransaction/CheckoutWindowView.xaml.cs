@@ -48,12 +48,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public CheckoutWindowView(int total, int linecount, int itemcount)
         {
             InitializeComponent();
-            GetEmployeeList();
             Total = total;
             lblTotal.Content = total.ToString();
-            ChangeCount();
             lblLineCount.Content = linecount.ToString();
             lblItemCount.Content = itemcount.ToString();
+            GetEmployeeList();
+            CardNumberControl();
+            ChangeCount();
             tbTaxNum.Focus();
         }
 
@@ -101,6 +102,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return result;
         }
 
+        private void CardNumberControl() 
+        {
+            if (!int.TryParse(tbCard.Text, out int tmp)) { return; }
+            bool isCard = int.Parse(tbCard.Text) > 0 ? true : false;
+            if (isCard)
+            {
+                tbCardNum1.IsEnabled = true;
+                tbCardNum2.IsEnabled = true;
+                tbCardNum3.IsEnabled = true;
+                tbCardNum4.IsEnabled = true;
+            }
+            else 
+            {
+                tbCardNum1.IsEnabled = false;
+                tbCardNum2.IsEnabled = false;
+                tbCardNum3.IsEnabled = false;
+                tbCardNum4.IsEnabled = false;
+            }
+        }
+
         private bool CheckCardNumber() 
         {
             string FullCard = tbCardNum1.Text + tbCardNum2.Text + tbCardNum3.Text + tbCardNum4.Text;
@@ -129,12 +150,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             else 
             {
-                change = (cash + voucher + cashcoupon + card) - Total;
+                change = (cash + voucher + cashcoupon + card) - Total;                
             }
             tbChange.Content = change;
             paid = cash + voucher + cashcoupon + card;
             realcash = cash - change;
-                        
+
             if (change >= 0)
             {
                 IsPayAmountEnough = true;
@@ -163,6 +184,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("信用卡號輸入有誤！", MessageType.WARNING);
                 return;
             }
+            if (card == 0) 
+            {
+                cardNumber = "";
+            }
 
             DialogResult = true;
         }        
@@ -171,7 +196,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             TextBox tb = (TextBox)sender;
             if (!IsTextAllowed(tb.Text)) { tb.Text = "0"; }
-            ChangeCount();
         }
 
         #region PreviewKeyDown
@@ -179,7 +203,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void tbTaxNum_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            if (e.Key == Key.Enter) 
+            if (e.Key == Key.Enter || e.Key == Key.Down) 
             {
                 if (tb.Text.Length != 0 && tb.Text.Length != 8) 
                 {
@@ -194,83 +218,83 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 
                 tbCash.Focus();
             }
-            if (e.Key == Key.Down)
-            {
-                tbCash.Focus();
-            }
         }
 
         private void tbCash_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter || e.Key == Key.Down)
             {
                 ChangeCount();
                 tbVoucher.Focus();
             }
             if (e.Key == Key.Up)
             {
+                ChangeCount();
                 tbTaxNum.Focus();
-            }
-            if (e.Key == Key.Down)
-            {
-                tbVoucher.Focus();
             }
         }
 
         private void tbVoucher_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter || e.Key == Key.Down)
             {
                 ChangeCount();
                 tbCashCoupon.Focus();
             }
             if (e.Key == Key.Up)
             {
+                ChangeCount();
                 tbCash.Focus();
-            }
-            if (e.Key == Key.Down)
-            {
-                tbCashCoupon.Focus();
             }
         }
 
         private void tbCashCoupon_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter || e.Key == Key.Down)
             {
                 ChangeCount();
                 tbCard.Focus();
             }
             if (e.Key == Key.Up)
             {
+                ChangeCount();
                 tbVoucher.Focus();
-            }
-            if (e.Key == Key.Down)
-            {
-                tbCard.Focus();
             }
         }
 
         private void tbCard_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (tbCardNum1.IsEnabled)
             {
-                ChangeCount();
-                tbCardNum1.Focus();
+                if (e.Key == Key.Enter || e.Key == Key.Down)
+                {
+                    ChangeCount();
+                    tbCardNum1.Focus();
+                }
+                if (e.Key == Key.Up)
+                {
+                    ChangeCount();
+                    tbCashCoupon.Focus();
+                }
             }
-            if (e.Key == Key.Up)
+            else 
             {
-                tbCashCoupon.Focus();
-            }
-            if (e.Key == Key.Down)
-            {
-                tbCardNum1.Focus();
+                if (e.Key == Key.Enter || e.Key == Key.Down)
+                {
+                    ChangeCount();
+                    tbEmployee.Focus();
+                }
+                if (e.Key == Key.Up)
+                {
+                    ChangeCount();
+                    tbCashCoupon.Focus();
+                }
             }
         }
 
         private void tbCardNum1_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter || e.Key == Key.Down)
             {
                 tbEmployee.Focus();
             }
@@ -278,17 +302,33 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 tbCard.Focus();
             }
-            if (e.Key == Key.Down)
-            {
-                tbEmployee.Focus();
-            }
         }
 
         private void tbEmployee_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            
+
+            if (tbCardNum1.IsEnabled)
             {
-                btnSubmit.Focus();
+                if (e.Key == Key.Enter)
+                {
+                    btnSubmit.Focus();
+                }
+                if (e.Key == Key.Up)
+                {
+                    tbCardNum1.Focus();
+                }
+            }
+            else
+            {
+                if (e.Key == Key.Enter)
+                {
+                    btnSubmit.Focus();
+                }
+                if (e.Key == Key.Up)
+                {
+                    tbCard.Focus();
+                }
             }
         }
 
@@ -382,6 +422,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void tbCard_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBoxLostFocus(sender);
+            CardNumberControl();
         }
 
         #endregion
@@ -391,10 +432,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             SubmitCheckout();
         }
 
-        private void tbEmployee_LostFocus(object sender, RoutedEventArgs e)
+        private void tbCard_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
-            
+            if (IsLoaded) 
+            {
+                CardNumberControl();
+            }
         }
     }
 }
