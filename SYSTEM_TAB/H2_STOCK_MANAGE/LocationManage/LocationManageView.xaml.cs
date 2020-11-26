@@ -368,6 +368,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                     return;
                 }
                 {
+                    if (dataTable.Rows[0]["RESULT"].ToString() == "DOUBLE") {
+                        MessageWindow.ShowMessage("商品已在櫃位內 請先執行刪除", Class.MessageType.ERROR);
+                        return;
+                    }
                     MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
                     InsertID.Text = "";
                     InitLocationDetail();
