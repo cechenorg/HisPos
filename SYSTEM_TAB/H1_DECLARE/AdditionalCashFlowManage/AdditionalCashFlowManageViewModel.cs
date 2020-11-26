@@ -18,7 +18,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             return this;
         }
 
-        private List<CashFlowAccount> CashFlowAccountsSource => new List<CashFlowAccount> { new CashFlowAccount(CashFlowType.Expenses, "雜支"), new CashFlowAccount(CashFlowType.Income, "額外收入") };
+        private List<CashFlowAccount> CashFlowAccountsSource => 
+            new List<CashFlowAccount> 
+            { 
+                new CashFlowAccount(CashFlowType.Expenses, "雜支"),
+                new CashFlowAccount(CashFlowType.Expenses, "水/電費"),
+                new CashFlowAccount(CashFlowType.Expenses, "電話/網路費"),
+                new CashFlowAccount(CashFlowType.Expenses, "薪資"),
+                new CashFlowAccount(CashFlowType.Expenses, "租金"),
+                new CashFlowAccount(CashFlowType.Expenses, "設備"),
+                new CashFlowAccount(CashFlowType.Expenses, "文具用品"),
+                new CashFlowAccount(CashFlowType.Expenses, "其他耗材"),
+                new CashFlowAccount(CashFlowType.Income, "額外收入") 
+            };
 
         private List<CashFlowAccount> cashFlowAccounts;
         public List<CashFlowAccount> CashFlowAccounts
