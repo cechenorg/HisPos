@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.BalanceSheet
         MedPoint = 2,
         Payable = 3,
         Pay = 4,
-        Transfer = 5
+        Transfer = 5,
+        Normal=6
     }
 }

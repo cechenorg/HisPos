@@ -70,6 +70,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 會計科目 的當地語系化字串。
+        /// </summary>
+        internal static string AccountsManage {
+            get {
+                return ResourceManager.GetString("AccountsManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 促銷管理 的當地語系化字串。
         /// </summary>
         internal static string Activity {

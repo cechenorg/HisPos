@@ -75,7 +75,7 @@ namespace His_Pos
                             new[] { StringRes.ProductTransaction, StringRes.ProductTransactionRecord, StringRes.Activity }));
 
             HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.AdditionalCashFlowManage,
-                         new[] { StringRes.AdditionalCashFlowManage }));
+                         new[] { StringRes.AdditionalCashFlowManage , StringRes.AccountsManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", StringRes.StockManage,
                             new[] { StringRes.StockSearch, StringRes.MedBagManage, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));

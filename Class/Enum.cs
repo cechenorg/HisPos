@@ -64,7 +64,8 @@ namespace His_Pos.Class
         系統教學文件 = 37,
         損益報表 = 38,
         資產負債表 = 39,
-        關班作業 = 40
+        關班作業 = 40,
+        會計科目 = 41,
     }
 
     public enum StoreOrderProductType

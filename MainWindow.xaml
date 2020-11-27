@@ -33,6 +33,7 @@
     xmlns:command="http://www.galasoft.ch/mvvmlight"
     xmlns:productManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement"
     xmlns:AdditionalCashFlowManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
+        xmlns:AccountsManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage"
     xmlns:InstitutionDeclarePointReport ="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport"
     xmlns:stockTakingPlan="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan"
     xmlns:productTransaction="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction"
@@ -126,6 +127,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type  AdditionalCashFlowManage:AdditionalCashFlowManageViewModel}">
             <AdditionalCashFlowManage:AdditionalCashFlowManage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type  AccountsManage:AccountsManageViewModel}">
+            <AccountsManage:AccountsManage/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type  InstitutionDeclarePointReport:InstitutionDeclarePointReportViewModel}">
             <InstitutionDeclarePointReport:InstitutionDeclarePointReport/>

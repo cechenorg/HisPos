@@ -542,6 +542,9 @@
   <data name="AdditionalCashFlowManage" xml:space="preserve">
     <value>額外收支</value>
   </data>
+	<data name="AccountsManage" xml:space="preserve">
+    <value>會計科目</value>
+  </data>
   <data name="代入處方錯誤" xml:space="preserve">
     <value>代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。</value>
   </data>

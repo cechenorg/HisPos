@@ -26,6 +26,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         public TransferViewModel TransferViewModel { get; set; }
         public PayableViewModel PayableViewModel { get; set; }
         public PayViewModel PayViewModel { get; set; }
+        public NormalViewModel NormalViewModel { get; set; }
         #endregion
 
         #region ----- Define Commands -----
@@ -119,6 +120,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             TransferViewModel = new TransferViewModel();
             PayableViewModel = new PayableViewModel();
             PayViewModel = new PayViewModel();
+            NormalViewModel = new NormalViewModel();
 
             ReloadCommand = new RelayCommand(ReloadAction);
             ShowHistoryCommand = new RelayCommand(ShowHistoryAction);
@@ -181,7 +183,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 else if (LeftSelectedData.Name.Contains("申報應收帳款"))
                     BalanceSheetType = BalanceSheetTypeEnum.MedPoint;
                 else
-                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                {
+                    if (LeftSelectedData.ID.Length == 3)
+                    {
+                        NormalViewModel = new NormalViewModel(LeftSelectedData.ID);
+                        BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                    }
+                    else {
+                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                    }
+                }
             }
             else if (RightSelectedData != null)
             {
@@ -195,7 +206,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     PayViewModel.Target = ins;
                 }
                 else
+                {
+                    if (RightSelectedData.ID.Length==3) { 
+                    NormalViewModel = new NormalViewModel(RightSelectedData.ID);
+                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                }
+                    else
+                {
                     BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                }
+            }
             }
         }
         #endregion

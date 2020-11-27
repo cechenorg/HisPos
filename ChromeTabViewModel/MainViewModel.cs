@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
@@ -167,6 +168,8 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.額外收支):
                     break;
+                case nameof(FeatureItem.會計科目):
+                    break;
                 case nameof(FeatureItem.商品查詢):
                     break;
                 case nameof(FeatureItem.進退貨管理):
@@ -269,6 +272,9 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.額外收支):
                     newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
+                    break;
+                case nameof(FeatureItem.會計科目):
+                    newTab = new AccountsManageViewModel() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 //銷售作業

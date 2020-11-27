@@ -21,6 +21,9 @@
         <DataTemplate x:Key="TransferControl" DataType="UserControl">
             <balanceControl:TransferControl/>
         </DataTemplate>
+        <DataTemplate x:Key="NormalControl" DataType="UserControl">
+            <balanceControl:NormalControl/>
+        </DataTemplate>
         <DataTemplate x:Key="NoControl" DataType="UserControl">
             <StackPanel Background="{StaticResource GridDarkerBackGround}">
             </StackPanel>
@@ -198,6 +201,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding BalanceSheetType, UpdateSourceTrigger=PropertyChanged}" Value="Transfer">
                                 <Setter Property="ContentTemplate" Value="{StaticResource TransferControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding BalanceSheetType, UpdateSourceTrigger=PropertyChanged}" Value="Normal">
+                                <Setter Property="ContentTemplate" Value="{StaticResource NormalControl}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
