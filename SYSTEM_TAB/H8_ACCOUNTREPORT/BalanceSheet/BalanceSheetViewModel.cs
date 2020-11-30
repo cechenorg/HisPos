@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -179,6 +180,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     BalanceSheetType = BalanceSheetTypeEnum.Transfer;
                     TransferViewModel.Target = "現金";
                     TransferViewModel.MaxValue = LeftSelectedData.Value;
+                    NormalViewModel = new NormalViewModel(LeftSelectedData.ID);
+                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
                 }
                 else if (LeftSelectedData.Name.Contains("申報應收帳款"))
                     BalanceSheetType = BalanceSheetTypeEnum.MedPoint;
@@ -187,6 +191,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     if (LeftSelectedData.ID.Length == 3)
                     {
                         NormalViewModel = new NormalViewModel(LeftSelectedData.ID);
+                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                         BalanceSheetType = BalanceSheetTypeEnum.Normal;
                     }
                     else {
@@ -209,7 +214,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 {
                     if (RightSelectedData.ID.Length==3) { 
                     NormalViewModel = new NormalViewModel(RightSelectedData.ID);
-                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                        BalanceSheetType = BalanceSheetTypeEnum.Normal;
                 }
                     else
                 {

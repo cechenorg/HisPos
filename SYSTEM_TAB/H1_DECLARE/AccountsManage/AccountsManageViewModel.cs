@@ -10,7 +10,7 @@ using His_Pos.NewClass.Report.Accounts;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
 using His_Pos.NewClass.Report.Accounts.AccountsRecords;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
-
+using System.Data.SqlClient;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
 {
@@ -18,20 +18,25 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         public override TabBase getTab() {
             return this;
         }
-
-        private List<AccountsAccount> CashFlowAccountsSource => 
-            new List<AccountsAccount> 
-            { 
-                new AccountsAccount(CashFlowType.Expenses, "雜支"),
-                new AccountsAccount(CashFlowType.Expenses, "水/電費"),
-                new AccountsAccount(CashFlowType.Expenses, "電話/網路費"),
-                new AccountsAccount(CashFlowType.Expenses, "薪資"),
-                new AccountsAccount(CashFlowType.Expenses, "租金"),
-                new AccountsAccount(CashFlowType.Expenses, "設備"),
-                new AccountsAccount(CashFlowType.Expenses, "文具用品"),
-                new AccountsAccount(CashFlowType.Expenses, "其他耗材"),
-                new AccountsAccount(CashFlowType.Income, "額外收入") 
-            };
+        private DataTable left;
+        public DataTable Left
+        {
+            get => left;
+            set
+            {
+                Set(() => Left, ref left, value);
+            }
+        }
+        private DataTable right;
+        public DataTable Right
+        {
+            get => right;
+            set
+            {
+                Set(() => Right, ref right, value);
+            }
+        }
+        private List<AccountsAccount> CashFlowAccountsSource;
 
         private List<AccountsAccount> cashFlowAccounts;
         public List<AccountsAccount> CashFlowAccounts
@@ -100,7 +105,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 if (value)
                 {
                     CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Expenses).ToList();
-                    SelectedCashFlowAccount = CashFlowAccounts[0];
+                    int count = CashFlowAccounts.Count();
+                    if (count == 0)
+                    {
+                    }
+                    else
+                    {
+                        SelectedCashFlowAccount = CashFlowAccounts[0];
+                    }
                 }
                 Set(() => PayCheck, ref payCheck, value);
             }
@@ -114,7 +126,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 if (value)
                 {
                     CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
-                    SelectedCashFlowAccount = CashFlowAccounts[0];
+                    int count = CashFlowAccounts.Count();
+                    if (count == 0)
+                    {
+                    }
+                    else
+                    {
+                        SelectedCashFlowAccount = CashFlowAccounts[0];
+                    }
                 }
                 Set(() => GainCheck, ref gainCheck, value);
             }
@@ -155,6 +174,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         public AccountsManageViewModel()
         {
             InitCommand();
+            InitAccounts();
             CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
             SelectedCashFlowAccount = CashFlowAccounts[0];
             CashFlowRecords = new AccountsRecords();
@@ -162,7 +182,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             EndDate = DateTime.Today;
             SearchAction();
         }
+        private void InitAccounts()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            Right = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsRight]");
+            Left= MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsLeft]");
+            MainWindow.ServerConnection.CloseConnection();
+            CashFlowAccountsSource = new List<AccountsAccount>();
+            foreach (DataRow R in Right.Rows)
+            {
+                CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Expenses, R["Accounts_Name"].ToString()));
+                
+            }
 
+            foreach (DataRow L in Left.Rows)
+            {
+                CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Income, L["Accounts_Name"].ToString()));
+
+            }
+
+
+        }
         private void InitCommand()
         {
             SubmitCommand = new RelayCommand(SubmitAction);

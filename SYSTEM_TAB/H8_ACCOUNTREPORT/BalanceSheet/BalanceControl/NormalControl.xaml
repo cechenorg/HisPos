@@ -19,61 +19,54 @@
             <Button Width="120" Content="新增" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding InsertCommand}"/>
         </StackPanel>
 
-        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False"   ItemsSource="{Binding jjj, UpdateSourceTrigger=PropertyChanged}" 
-                          SelectedItem="{Binding SelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760"       
+                          ItemsSource="{Binding AccData,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2">
             <DataGrid.Resources>
-                <Style TargetType="{x:Type ScrollBar}">
-                    <Setter Property="SnapsToDevicePixels" Value="True"/>
-                    <Setter Property="OverridesDefaultStyle" Value="true"/>
-                    <Setter Property="Width" Value="100"/>
-                    <Style.Triggers>
-                        <Trigger Property="Orientation" Value="Horizontal">
-                            <Setter Property="Width" Value="Auto" />
-                            <Setter Property="Height" Value="15" />
-                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                        </Trigger>
-                        <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="Width" Value="15"/>
-                            <Setter Property="Height" Value="Auto" />
-                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                        </Trigger>
-                    </Style.Triggers>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Background" Value="#FFA8A8A8" />
+                    <Setter Property="Foreground"  Value="#FF535353" />
                 </Style>
+                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             </DataGrid.Resources>
             <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
                     <Style.Triggers>
-                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                        <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                         </Trigger>
                     </Style.Triggers>
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="16"/>
-                    <Setter Property="Height" Value="41"/>
+                    <Setter Property="FontSize" Value="15"/>
+                    <Setter Property="Height" Value="35"/>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="科目名稱" Width="180" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                <DataGridTextColumn Width="100" Header="科目" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Left"/>
-                            <Setter Property="Margin"  Value="10,0,0,0"/>
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="5,0,0,0"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="金額" Width="150" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value, StringFormat=N2}">
+                <DataGridTextColumn Width="80" Header="金額" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Value,UpdateSourceTrigger=PropertyChanged, StringFormat=N2}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Right"/>
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="5,0,0,0"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="DeleteCashFlowRecordButton" Content="刪除" Background="IndianRed" BorderBrush="Transparent" Command="{Binding DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter},RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
-
         </DataGrid>
         <StackPanel Grid.Row="3" Background="{StaticResource GridDarkerBackGround}"/>
     </Grid>
