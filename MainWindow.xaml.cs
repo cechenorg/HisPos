@@ -75,7 +75,7 @@ namespace His_Pos
                             new[] { StringRes.ProductTransaction, StringRes.ProductTransactionRecord, StringRes.Activity }));
 
             HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.AdditionalCashFlowManage,
-                         new[] { StringRes.AdditionalCashFlowManage , StringRes.AccountsManage }));
+                         new[] { StringRes.AdditionalCashFlowManage  }));
 
             HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", StringRes.StockManage,
                             new[] { StringRes.StockSearch, StringRes.MedBagManage, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
@@ -93,7 +93,7 @@ namespace His_Pos
                             new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare, StringRes.CashStockEntryReport }));
             
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.AccountReportSystem,
-                            new[] { StringRes.InstitutionDeclarePointReport ,StringRes.IncomeStatement, StringRes.BalanceSheet })); 
+                            new[] { StringRes.InstitutionDeclarePointReport ,StringRes.IncomeStatement, StringRes.BalanceSheet, StringRes.AccountsManage })); 
             HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", StringRes.AdminManage,
                             new[] { StringRes.AdminManage }));
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.SystemTutorial,

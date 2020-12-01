@@ -2590,8 +2590,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         private void CalculateTotalRewardProfit()
         {
             TotalRewardReport.RewardAmountSum = RewardReportCollection.Sum(c => c.RewardAmount);
-            TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount)- RewardReportCollection.Sum(c => c.Free);
-            TotalRewardReport.Free = RewardReportCollection.Sum(c => c.Free);
+            TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
         }
         private void CalculateTotalStockTaking()
         {

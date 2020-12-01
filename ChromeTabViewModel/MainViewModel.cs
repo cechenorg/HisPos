@@ -273,9 +273,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.額外收支):
                     newTab = new AdditionalCashFlowManageViewModel() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
-                case nameof(FeatureItem.會計科目):
-                    newTab = new AccountsManageViewModel() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
-                    break;
+               
 
                 //銷售作業
                 case nameof(FeatureItem.結帳作業):
@@ -371,6 +369,9 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.資產負債表):
                     newTab = new BalanceSheetViewModel() { TabName = MainWindow.HisFeatures[8].Functions[2], Icon = MainWindow.HisFeatures[8].Icon };
+                    break;
+                case nameof(FeatureItem.會計科目):
+                    newTab = new AccountsManageViewModel() { TabName = MainWindow.HisFeatures[8].Functions[3], Icon = MainWindow.HisFeatures[8].Icon };
                     break;
 
                 //系統教學
