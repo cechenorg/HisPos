@@ -306,8 +306,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbEmployee_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            
-
             if (tbCardNum1.IsEnabled)
             {
                 if (e.Key == Key.Enter)
@@ -429,6 +427,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
+            ChangeCount();
             SubmitCheckout();
         }
 
