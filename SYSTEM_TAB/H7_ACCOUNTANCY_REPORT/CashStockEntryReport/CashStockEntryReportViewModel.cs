@@ -2579,7 +2579,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
         {
             foreach (var r in TradeChangeReportCollection)
             {
-                TotalTradeProfitReport.TotalChangeAmt += r.DiscountAmt + r.CardAmount + r.CashAmount + r.Cost;
+                TotalTradeProfitReport.TotalChangeAmt += r.DiscountAmt + r.CardAmount + r.CashAmount + r.Cost + (int)(r.CardFee);
                 TotalTradeProfitReport.TotalChangeCardAmt += r.CardAmount;
                 TotalTradeProfitReport.TotalChangeCashAmt += r.CashAmount;
                 TotalTradeProfitReport.TotalChangeDiscountAmt += r.DiscountAmt;
@@ -2688,7 +2688,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
 
             DiscountAmt = -TotalTradeProfitReport.DiscountAmt;
             InventoryDifference.InventoryTotal = (double)(InventoryDifference.InventoryOverage + InventoryDifference.InventoryShortage + InventoryDifference.InventoryScrap);
-            TotalCashFlow.TotalOTC = TotalTradeProfitReport.Profit+ (int)TotalStockTakingOTCReport.Price+ DiscountAmt+ TotalRewardReport.RewardAmount;
+            TotalCashFlow.TotalOTC = TotalTradeProfitReport.Profit+ (int)TotalStockTakingOTCReport.Price+ DiscountAmt+ TotalRewardReport.RewardAmount+ TotalTradeProfitReport.TotalChangeAmt;
             TotalCashFlow.TotalMedProfit = CooperativePrescriptionProfitReport.TotalMed + SelfPrescriptionProfitReport.TotalMed;
             TotalCashFlow.TotalMedUse = CooperativePrescriptionProfitReport.MedUse + SelfPrescriptionProfitReport.MedUse;
             TotalCashFlow.TotalMedCash = TotalCashFlow.CopayMentPrice + TotalCashFlow.PaySelfPrice + TotalCashFlow.AllPaySelfPrice + TotalCashFlow.DepositPrice + TotalCashFlow.OtherPrice;
