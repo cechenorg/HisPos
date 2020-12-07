@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -27,6 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
     public class NormalViewModel : ViewModelBase
     {
         #region ----- Define Command -----
+
         public RelayCommand AddOrderCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
         public RelayCommand DeleteWaitingOrderCommand { get; set; }
@@ -43,9 +39,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand ExportOrderDataCommand { get; set; }
         public RelayCommand<string> RealAmountMouseDoubleClickCommand { get; set; }
+
         #endregion
 
         #region ----- Define Variables -----
+
         private bool isBusy;
         private string busyContent;
         private StoreOrder currentStoreOrder;
@@ -60,11 +58,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => isBusy;
             set { Set(() => IsBusy, ref isBusy, value); }
         }
+
         public string BusyContent
         {
             get => busyContent;
             set { Set(() => BusyContent, ref busyContent, value); }
         }
+
         public ICollectionView StoreOrderCollectionView
         {
             get => storeOrderCollectionView;
@@ -73,6 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => StoreOrderCollectionView, ref storeOrderCollectionView, value);
             }
         }
+
         public StoreOrder CurrentStoreOrder
         {
             get { return currentStoreOrder; }
@@ -85,11 +86,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
         }
+
         public string SearchString
         {
             get => searchString;
             set { Set(() => SearchString, ref searchString, value); }
         }
+
         #endregion
 
         public NormalViewModel()
@@ -124,6 +127,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             CurrentStoreOrder.CalculateTotalPrice();
         }
+
         private void AddOrderAction()
         {
             AddNewOrderWindow.AddNewOrderWindow addNewOrderWindow = new AddNewOrderWindow.AddNewOrderWindow();
@@ -133,32 +137,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (viewModel.NewStoreOrder != null)
             {
-                /*storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
-
-                CurrentStoreOrder = storeOrderCollection[0];*/
-
-                IsBusy = true;
-                BusyContent = "新增訂單";
-
-                BackgroundWorker backgroundWorker = new BackgroundWorker();
-
-                backgroundWorker.DoWork += (sender, args) =>
-                {
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate ()
-                    {
-                        storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
-                        CurrentStoreOrder = storeOrderCollection[0];
-                    });
-                };
-
-                backgroundWorker.RunWorkerCompleted += (sender, args) =>
-                {
-                    IsBusy = false;
-                };
-
-                backgroundWorker.RunWorkerAsync();
+                storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
+                CurrentStoreOrder = storeOrderCollection[0];
             }
         }
+
         private void DeleteOrderAction()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -173,6 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
             }
         }
+
         private void DeleteWaitingOrderAction()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -187,6 +171,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
             }
         }
+
         private void ToNextStatusAction()
         {
             if (!CurrentStoreOrder.ChkPrice()) {
@@ -203,10 +188,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 storeOrderCollection.ReloadCollection();
             }
         }
+
         private void ReloadAction()
         {
             InitVariables();
         }
+
         private void AddProductByInputAction(string searchString)
         {
             if (CurrentStoreOrder.SelectedItem != null && CurrentStoreOrder.SelectedItem.ID.Equals(searchString)) return;
@@ -240,6 +227,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
             }
         }
+
         private void AddProductAction()
         {
             AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
@@ -249,6 +237,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             productPurchaseReturnAddProductWindow.ShowDialog();
             Messenger.Default.Unregister(this);
         }
+
         private void DeleteProductAction()
         {
             CurrentStoreOrder.DeleteSelectedProduct();
@@ -267,11 +256,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             (CurrentStoreOrder as PurchaseOrder).MergeBatch(product);
         }
+
         private void CloseTabAction()
         {
             if (CurrentStoreOrder != null)
                 CurrentStoreOrder.SaveOrder();
         }
+
         private void ExportOrderDataAction()
         {
             if (CurrentStoreOrder.OrderStatus == OrderStatusEnum.WAITING)
@@ -310,9 +301,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             backgroundWorker.RunWorkerAsync();
         }
+
         #endregion
 
         #region ----- Define Functions -----
+
         public void InitData(StoreOrders storeOrders)
         {
             storeOrderCollection = storeOrders;
@@ -325,6 +318,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
             }
         }
+
         private void InitVariables(string searchStr = "")
         {
             IsBusy = true;
@@ -333,6 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (!initBackgroundWorker.IsBusy)
                 initBackgroundWorker.RunWorkerAsync();
         }
+
         private void RegisterCommand()
         {
             AddOrderCommand = new RelayCommand(AddOrderAction);
@@ -359,6 +354,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ///// Messenger Functions /////
+
         private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
@@ -368,6 +364,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.CloseConnection();
             }
         }
+
         private void GetSelectedProductFromAddButton(NotificationMessage<ProductStruct> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductPurchaseReturnViewModel))
@@ -377,6 +374,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.CloseConnection();
             }
         }
+
         private void ShowOrderDetailByOrderID(NotificationMessage<string> notificationMessage)
         {
             if (notificationMessage.Target == this)
@@ -386,6 +384,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 InitVariables(notificationMessage.Content);
             }
         }
+
         private void ReloadProducts(NotificationMessage notificationMessage)
         {
             if (notificationMessage.Notification == "UpdateUsableAmountMessage")
@@ -396,9 +395,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.CloseConnection();
             }
         }
+
         #endregion
 
         #region ///// Filter Functions /////
+
         private bool OrderFilter(object order)
         {
             bool returnValue = true;
@@ -475,6 +476,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             return returnValue;
         }
+
         #endregion
 
         #endregion

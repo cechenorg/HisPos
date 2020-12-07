@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -29,6 +30,11 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if (selectedItem != null)
                     ((IDeletableProduct)selectedItem).IsSelected = true;
+
+                if (selectedItem == null) 
+                {
+                    MessageBox.Show("123");
+                }
             }
         }
         public OrderStatusEnum OrderStatus
