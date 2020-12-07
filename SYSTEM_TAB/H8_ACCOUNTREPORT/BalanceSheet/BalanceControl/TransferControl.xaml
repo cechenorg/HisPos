@@ -13,6 +13,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="轉至" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <Label Content="{Binding Target, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <ComboBox HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding Bank, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath="Name" SelectedItem="{Binding SelectBank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="180"/>
             <TextBox Text="{Binding TransferValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="100" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
             <Button Width="120" Content="轉帳" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding StrikeCommand}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         </StackPanel>

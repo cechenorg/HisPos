@@ -26,13 +26,13 @@ namespace His_Pos.NewClass.Report.Accounts
         {
             double cashFlowValue;
             if (account.Type == CashFlowType.Expenses)
-                cashFlowValue = value * -1;
+                cashFlowValue = value * 1;
             else
                 cashFlowValue = value;
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Name", account.AccountName);
             DataBaseFunction.AddSqlParameter(parameterList, "Value", cashFlowValue);
-            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", 0);
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", account.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "CurrentUserId", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "Note", note);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertAccountsRecordDetail]", parameterList);

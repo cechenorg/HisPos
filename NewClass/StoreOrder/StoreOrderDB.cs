@@ -325,8 +325,15 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 string dateString = row.Field<string>("VALIDDATE");
                 DateTime? validDate = null;
-                if (dateString != null && dateString != string.Empty)
-                    validDate = new DateTime(int.Parse(dateString.Substring(0, dateString.Length - 4)) + 1911, int.Parse(dateString.Substring(dateString.Length - 4, 2)), int.Parse(dateString.Substring(dateString.Length - 2, 2)));
+                try
+                {
+                    if (dateString != null && dateString != string.Empty)
+                        validDate = new DateTime(int.Parse(dateString.Substring(0, dateString.Length - 4)) + 1911, int.Parse(dateString.Substring(dateString.Length - 4, 2)), int.Parse(dateString.Substring(dateString.Length - 2, 2)));
+                }
+                catch {
+                    MessageBox.Show(row.Field<string>("PRO_ID"));
+                    MessageBox.Show(row.Field<string>("BATCHNUM"));
+                }
 
                 string realProductID = row.Field<string>("PRO_ID");
 

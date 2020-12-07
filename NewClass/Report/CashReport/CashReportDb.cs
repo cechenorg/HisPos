@@ -41,14 +41,14 @@ namespace His_Pos.NewClass.Report.CashReport
             return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[BalanceSheet]");
         }
 
-        internal static DataTable StrikeBalanceSheet(StrikeTypeEnum strikeType, BalanceSheetTypeEnum sheetType, double value, string sourceID, string note = "")
+        internal static DataTable StrikeBalanceSheet(string strikeType, BalanceSheetTypeEnum sheetType, double value, string sourceID, string note = "")
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("VALUE", value));
             parameters.Add(new SqlParameter("TYPE", sheetType.ToString()));
             parameters.Add(new SqlParameter("NOTE", note));
-            parameters.Add(new SqlParameter("TARGET", (strikeType == StrikeTypeEnum.Bank)? "B" : "C"));
+            parameters.Add(new SqlParameter("TARGET", strikeType));
             parameters.Add(new SqlParameter("SOURCE_ID", sourceID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);

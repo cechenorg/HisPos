@@ -17,7 +17,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
     {
         #region Properties
 
-        private List<AccountsAccount> CashFlowAccountsSource => new List<AccountsAccount> { new AccountsAccount(CashFlowType.Expenses, "雜支"), new AccountsAccount(CashFlowType.Income, "額外收入") };
+        private List<AccountsAccount> CashFlowAccountsSource => new List<AccountsAccount> { new AccountsAccount(CashFlowType.Expenses, "雜支","1"), new AccountsAccount(CashFlowType.Income, "額外收入","2") };
 
         private List<AccountsAccount> cashFlowAccounts;
         public List<AccountsAccount> CashFlowAccounts

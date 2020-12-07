@@ -192,13 +192,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             CashFlowAccountsSource = new List<AccountsAccount>();
             foreach (DataRow R in Right.Rows)
             {
-                CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Expenses, R["Accounts_Name"].ToString()));
+                CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Expenses, R["Accounts_Name"].ToString(), R["Accounts_ID"].ToString()));
                 
             }
 
             foreach (DataRow L in Left.Rows)
             {
-                CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Income, L["Accounts_Name"].ToString()));
+                CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Income, L["Accounts_Name"].ToString(), L["Accounts_ID"].ToString()));
 
             }
 

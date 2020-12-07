@@ -76,7 +76,7 @@
                 <DataGridTemplateColumn Width="90" Header="沖帳來源" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding StrikeTypes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <ComboBox HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding StrikeTypes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

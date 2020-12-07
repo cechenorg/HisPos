@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +29,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         public PayableViewModel PayableViewModel { get; set; }
         public PayViewModel PayViewModel { get; set; }
         public NormalViewModel NormalViewModel { get; set; }
+        public NormalNoEditViewModel NormalNoEditViewModel { get; set; }
+        public BankViewModel BankViewModel { get; set; }
         #endregion
 
         #region ----- Define Commands -----
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand ShowHistoryCommand { get; set; }
+        public RelayCommand FirstCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -95,6 +99,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 RaisePropertyChanged(nameof(RightBalanceSheetDatas));
             }
         }
+        public double firstValue;
+        public double FirstValue
+        {
+            get { return firstValue; }
+            set
+            {
+                firstValue = value;
+                RaisePropertyChanged(nameof(FirstValue));
+            }
+        }
         public double RightTotal
         {
             get { return rightTotal; }
@@ -104,6 +118,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 RaisePropertyChanged(nameof(RightTotal));
             }
         }
+
+        
         public double LeftTotal
         {
             get { return leftTotal; }
@@ -125,7 +141,57 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
             ReloadCommand = new RelayCommand(ReloadAction);
             ShowHistoryCommand = new RelayCommand(ShowHistoryAction);
+            FirstCommand = new RelayCommand(FirstAction);
+            ReloadAction();
+        }
 
+        private void FirstAction()
+        {
+            if (LeftSelectedData != null)
+            {
+                try
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    List<SqlParameter> parameters = new List<SqlParameter>();
+                    parameters.Add(new SqlParameter("Name", LeftSelectedData.ID));
+                    parameters.Add(new SqlParameter("CurrentUserId ", ViewModelMainWindow.CurrentUser.ID));
+                    parameters.Add(new SqlParameter("VALUE", FirstValue));
+                    parameters.Add(new SqlParameter("NOTE", "first"));
+                    parameters.Add(new SqlParameter("SourceId", LeftSelectedData.ID));
+                    DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertAccountsRecordFirst]", parameters);
+                    MainWindow.ServerConnection.CloseConnection();
+                
+                }
+                catch
+                {
+                    MessageWindow.ShowMessage("發生錯誤請再試一次", MessageType.SUCCESS);
+                    return;
+                }
+                MessageWindow.ShowMessage("設定成功", MessageType.SUCCESS);
+            }
+            else if (RightSelectedData != null) {
+                try
+                {
+                    MainWindow.ServerConnection.OpenConnection();
+                    List<SqlParameter> parameters = new List<SqlParameter>();
+                    parameters.Add(new SqlParameter("Name", RightSelectedData.ID));
+                    parameters.Add(new SqlParameter("CurrentUserId ", ViewModelMainWindow.CurrentUser.ID));
+                    parameters.Add(new SqlParameter("VALUE", FirstValue));
+                    parameters.Add(new SqlParameter("NOTE", "first"));
+                    parameters.Add(new SqlParameter("SourceId", RightSelectedData.ID));
+                    DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertAccountsRecordFirst]", parameters);
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+                catch {
+                    MessageWindow.ShowMessage("發生錯誤請再試一次", MessageType.SUCCESS);
+                    return;
+                }
+                MessageWindow.ShowMessage("設定成功", MessageType.SUCCESS);
+            }
+            else
+            {
+                MessageWindow.ShowMessage("請選擇正確項目", MessageType.ERROR);
+            }
             ReloadAction();
         }
 
@@ -180,9 +246,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     BalanceSheetType = BalanceSheetTypeEnum.Transfer;
                     TransferViewModel.Target = "現金";
                     TransferViewModel.MaxValue = LeftSelectedData.Value;
-                    NormalViewModel = new NormalViewModel(LeftSelectedData.ID);
+                    BankViewModel = new BankViewModel(LeftSelectedData.ID);
                     BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                    BalanceSheetType = BalanceSheetTypeEnum.Bank;
                 }
                 else if (LeftSelectedData.Name.Contains("申報應收帳款"))
                     BalanceSheetType = BalanceSheetTypeEnum.MedPoint;
@@ -190,9 +256,24 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 {
                     if (LeftSelectedData.ID.Length == 3)
                     {
-                        NormalViewModel = new NormalViewModel(LeftSelectedData.ID);
-                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                        BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                        if (LeftSelectedData.ID == "007")
+                        {
+                            NormalNoEditViewModel = new NormalNoEditViewModel(LeftSelectedData.ID);
+                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                            BalanceSheetType = BalanceSheetTypeEnum.NormalNoEdit;
+                        }
+                        else if (LeftSelectedData.ID == "105")
+                        {
+                            NormalNoEditViewModel = new NormalNoEditViewModel(LeftSelectedData.ID);
+                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                            BalanceSheetType = BalanceSheetTypeEnum.NormalNoEdit;
+                        }
+                        else
+                        {
+                            NormalViewModel = new NormalViewModel(LeftSelectedData.ID);
+                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                            BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                        }
                     }
                     else {
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
@@ -212,11 +293,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 }
                 else
                 {
-                    if (RightSelectedData.ID.Length==3) { 
+                     if (RightSelectedData.ID == "105")
+                    {
+                        NormalNoEditViewModel = new NormalNoEditViewModel(RightSelectedData.ID);
+                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                        BalanceSheetType = BalanceSheetTypeEnum.NormalNoEdit;
+                    }
+                    else if(RightSelectedData.ID.Length==3) { 
                     NormalViewModel = new NormalViewModel(RightSelectedData.ID);
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                         BalanceSheetType = BalanceSheetTypeEnum.Normal;
                 }
+                    
                     else
                 {
                     BalanceSheetType = BalanceSheetTypeEnum.NoDetail;

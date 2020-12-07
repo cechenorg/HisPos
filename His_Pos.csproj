@@ -1352,6 +1352,14 @@
       <DependentUpon>MedPointControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\MedPointViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\BankControl.xaml.cs">
+      <DependentUpon>BankControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\NormalNoEditControl.xaml.cs">
+      <DependentUpon>NormalNoEditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\NormalNoEditViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\BankViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\PayableControl.xaml.cs">
       <DependentUpon>PayableControl.xaml</DependentUpon>
     </Compile>
@@ -2237,6 +2245,14 @@
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\MedPointControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\BankControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\NormalNoEditControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\PayableControl.xaml">
       <SubType>Designer</SubType>

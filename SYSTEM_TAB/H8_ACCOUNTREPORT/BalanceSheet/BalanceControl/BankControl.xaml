@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl.NormalControl"
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl.BankControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
              mc:Ignorable="d" >
-    <Grid DataContext="{Binding NormalViewModel}">
+    <Grid DataContext="{Binding BankViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="690"/>
@@ -69,12 +69,11 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Background="{StaticResource GridDarkerBackGround}"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}" Visibility="Collapsed">
-            <Label Content="沖帳金額" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
-
-            <TextBox Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="150" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
-            <ComboBox HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding StrikeTypes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center"  />
-            <Button Width="120" Content="沖帳" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding StrikeCommand}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
+            <Label Content="轉至" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <Label Content="現金" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="100" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
+            <Button Width="120" Content="轉帳" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding StrikeCommand}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         </StackPanel>
     </Grid>
 </UserControl>

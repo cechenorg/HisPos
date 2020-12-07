@@ -12,7 +12,9 @@ namespace His_Pos.NewClass.Report.Accounts
     {
         public AccountsReport()
         {
-
+      
         }
+
+      
     }
 }

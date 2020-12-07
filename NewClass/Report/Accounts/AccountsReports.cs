@@ -16,7 +16,16 @@ namespace His_Pos.NewClass.Report.Accounts
 
             Name = r.Field<string>("Name");
             Value = r.Field<decimal>("Value");
-          
+            ID= r.Field<string>("ID");
+
+        }
+        public AccountsReports(string name, decimal value , string id)
+        {
+
+            Name = name;
+            Value = value;
+            ID = id;
+
         }
 
         public AccountsReports()
@@ -30,6 +39,15 @@ namespace His_Pos.NewClass.Report.Accounts
             set
             {
                 Set(() => Name, ref name, value);
+            }
+        }
+        private string iD;
+        public string ID
+        {
+            get => iD;
+            set
+            {
+                Set(() => Name, ref iD, value);
             }
         }
         private decimal valuee;

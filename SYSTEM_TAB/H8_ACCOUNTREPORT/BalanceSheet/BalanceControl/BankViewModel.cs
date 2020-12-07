@@ -17,17 +17,17 @@ using His_Pos.NewClass.Report.CashReport;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
-    public class NormalViewModel : ViewModelBase
+    public class BankViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
         public RelayCommand InsertCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
-        public RelayCommand StrikeCommand { get; set; }
+        public RelayCommand<RelayCommand> StrikeCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
         private string transferValue;
-        private int strikeValue;
+        private string strikeValue;
         private string target;
         public string IDClone;
         public double MaxValue { get; set; } = 0;
@@ -49,7 +49,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(TransferValue));
             }
         }
-        public int StrikeValue
+        public string StrikeValue
         {
             get { return strikeValue; }
             set
@@ -58,7 +58,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeValue));
             }
         }
-
         private AccountsReport accData;
         public AccountsReport AccData
         {
@@ -77,35 +76,22 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => Selected, ref selected, value);
             }
         }
-
-        private List<string> selectedType;
-        public List<string> SelectedType
-        {
-            get => selectedType;
-            set
-            {
-                Set(() => SelectedType, ref selectedType, value);
-            }
-        }
         #endregion
-        public NormalViewModel(string ID)
+        public BankViewModel(string ID)
         {
-            SelectedType = new List<string>();
-            SelectedType.Add("現金");
-               AccData = new AccountsReport();
+            AccData = new AccountsReport();
             IDClone = ID;
             Init();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
-            StrikeCommand = new RelayCommand(StrikeAction);
+            StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
         }
-        public NormalViewModel()
+        public BankViewModel()
         {
-            SelectedType = new List<string>();
-            SelectedType.Add("現金");
             AccData = new AccountsReport();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
+            StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
         }
         public void Init()
         {
@@ -154,33 +140,63 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             Init();
 
         }
-        public void StrikeAction()
+        private void StrikeAction(RelayCommand command)
         {
-            if (Selected == null)
-            {
-                MessageWindow.ShowMessage("錯誤", MessageType.ERROR);
-                return;
-            }
-            if (StrikeValue == 0)
-            {
-                MessageWindow.ShowMessage("不得為零", MessageType.ERROR);
-                return;
-            }
+            if (!TransferValueIsValid()) return;
+
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("VALUE", StrikeValue));
+            parameters.Add(new SqlParameter("VALUE", double.Parse(StrikeValue)));
             parameters.Add(new SqlParameter("TYPE", "0"));
-            parameters.Add(new SqlParameter("NOTE", Selected.Name)) ;
-            parameters.Add(new SqlParameter("TARGET", "現金"));
+            parameters.Add(new SqlParameter("NOTE", "現金"));
+            parameters.Add(new SqlParameter("TARGET", "001001"));
             parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
-             MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
-            MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
+            DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByBank]", parameters);
             MainWindow.ServerConnection.CloseConnection();
-            StrikeValue = 0;
-            Selected = null;
-            Init();
-        }
 
+            if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            {
+                MessageWindow.ShowMessage("轉帳成功", MessageType.SUCCESS);
+            }
+            else
+            {
+                MessageWindow.ShowMessage("轉帳失敗", MessageType.ERROR);
+            }
+            TransferValue = "";
+            command.Execute(null);
+        }
+        private bool TransferValueIsValid()
+        {
+            double temp;
+            if (Selected == null) {
+                MessageWindow.ShowMessage("請選擇項目", MessageType.ERROR);
+                return false;
+            }
+            MaxValue = (double)Selected.Value;
+
+         
+            if (double.TryParse(StrikeValue, out temp))
+            {
+                if (temp <= 0)
+                {
+                    MessageWindow.ShowMessage("轉帳金額不可小於等於0", MessageType.ERROR);
+                    return false;
+                }
+
+                if (temp > MaxValue)
+                {
+                    MessageWindow.ShowMessage("轉帳金額超過餘額", MessageType.ERROR);
+                    return false;
+                }
+            }
+            else
+            {
+                MessageWindow.ShowMessage("輸入金額非數字", MessageType.ERROR);
+                return false;
+            }
+
+            return true;
+        }
     }
 }

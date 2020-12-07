@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
@@ -17,17 +16,15 @@ using His_Pos.NewClass.Report.CashReport;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
-    public class NormalViewModel : ViewModelBase
+    public class NormalNoEditViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
         public RelayCommand InsertCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
-        public RelayCommand StrikeCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
         private string transferValue;
-        private int strikeValue;
         private string target;
         public string IDClone;
         public double MaxValue { get; set; } = 0;
@@ -49,23 +46,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(TransferValue));
             }
         }
-        public int StrikeValue
-        {
-            get { return strikeValue; }
-            set
-            {
-                strikeValue = value;
-                RaisePropertyChanged(nameof(StrikeValue));
-            }
-        }
 
         private AccountsReport accData;
-        public AccountsReport AccData
+        public AccountsReport AccDataNoEdit
         {
             get => accData;
             set
             {
-                Set(() => AccData, ref accData, value);
+                Set(() => AccDataNoEdit, ref accData, value);
             }
         }
         private AccountsReports selected;
@@ -77,39 +65,24 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => Selected, ref selected, value);
             }
         }
-
-        private List<string> selectedType;
-        public List<string> SelectedType
-        {
-            get => selectedType;
-            set
-            {
-                Set(() => SelectedType, ref selectedType, value);
-            }
-        }
         #endregion
-        public NormalViewModel(string ID)
+        public NormalNoEditViewModel(string ID)
         {
-            SelectedType = new List<string>();
-            SelectedType.Add("現金");
-               AccData = new AccountsReport();
+            AccDataNoEdit = new AccountsReport();
             IDClone = ID;
             Init();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
-            StrikeCommand = new RelayCommand(StrikeAction);
         }
-        public NormalViewModel()
+        public NormalNoEditViewModel()
         {
-            SelectedType = new List<string>();
-            SelectedType.Add("現金");
-            AccData = new AccountsReport();
+            AccDataNoEdit = new AccountsReport();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
         }
         public void Init()
         {
-            AccData = new AccountsReport();
+            AccDataNoEdit = new AccountsReport();
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", IDClone));
@@ -117,7 +90,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
             foreach (DataRow r in Data.Rows)
             {
-                AccData.Add(new AccountsReports(r));
+                AccDataNoEdit.Add(new AccountsReports(r));
             }
             MainWindow.ServerConnection.CloseConnection();
         }
@@ -153,33 +126,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             TransferValue = "";
             Init();
 
-        }
-        public void StrikeAction()
-        {
-            if (Selected == null)
-            {
-                MessageWindow.ShowMessage("錯誤", MessageType.ERROR);
-                return;
-            }
-            if (StrikeValue == 0)
-            {
-                MessageWindow.ShowMessage("不得為零", MessageType.ERROR);
-                return;
-            }
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("VALUE", StrikeValue));
-            parameters.Add(new SqlParameter("TYPE", "0"));
-            parameters.Add(new SqlParameter("NOTE", Selected.Name)) ;
-            parameters.Add(new SqlParameter("TARGET", "現金"));
-            parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
-             MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
-            MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
-            MainWindow.ServerConnection.CloseConnection();
-            StrikeValue = 0;
-            Selected = null;
-            Init();
         }
 
     }

@@ -13,6 +13,8 @@ namespace His_Pos.NewClass.BalanceSheet
         Payable = 3,
         Pay = 4,
         Transfer = 5,
-        Normal=6
+        Normal=6,
+        NormalNoEdit=7,
+        Bank=8
     }
 }

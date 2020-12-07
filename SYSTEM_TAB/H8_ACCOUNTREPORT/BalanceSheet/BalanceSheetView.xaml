@@ -24,6 +24,13 @@
         <DataTemplate x:Key="NormalControl" DataType="UserControl">
             <balanceControl:NormalControl/>
         </DataTemplate>
+        <DataTemplate x:Key="NormalNoEditControl" DataType="UserControl">
+            <balanceControl:NormalNoEditControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="BankControl" DataType="UserControl">
+            <balanceControl:BankControl/>
+        </DataTemplate>
+        
         <DataTemplate x:Key="NoControl" DataType="UserControl">
             <StackPanel Background="{StaticResource GridDarkerBackGround}">
             </StackPanel>
@@ -47,8 +54,13 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                     <Label Content="資產負債表" FontFamily="Segoe UI Semibold" FontSize="35" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    <Button Width="150" Content="重新整理" Margin="260,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}"/>
-                    <Button Width="150" Content="沖帳歷程" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ShowHistoryCommand}"/>
+
+                    <TextBox Width="100" Text="{Binding FirstValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="18" Margin="10,0,0,0" TextAlignment="Center" InputScope="Number"/>
+
+                    <Button Width="130" Content="輸入期初" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="RoyalBlue" Command="{Binding FirstCommand}"/>
+                    
+                    <Button Width="130" Content="重新整理" Margin="50,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}"/>
+                    <Button Width="130" Content="沖帳歷程" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ShowHistoryCommand}"/>
                 </StackPanel>
                 <DataGrid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding LeftBalanceSheetDatas, UpdateSourceTrigger=PropertyChanged}"
@@ -204,6 +216,12 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding BalanceSheetType, UpdateSourceTrigger=PropertyChanged}" Value="Normal">
                                 <Setter Property="ContentTemplate" Value="{StaticResource NormalControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding BalanceSheetType, UpdateSourceTrigger=PropertyChanged}" Value="NormalNoEdit">
+                                <Setter Property="ContentTemplate" Value="{StaticResource NormalNoEditControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding BalanceSheetType, UpdateSourceTrigger=PropertyChanged}" Value="Bank">
+                                <Setter Property="ContentTemplate" Value="{StaticResource BankControl}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

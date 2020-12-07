@@ -5,15 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Report.Accounts;
 
 namespace His_Pos.NewClass.BalanceSheet
 {
     public class StrikeData : ObservableObject
     {
         #region ----- Define Variables -----
-        private string selectedType;
+        private AccountsReports selectedType;
 
-        public string SelectedType
+        public AccountsReports SelectedType
         {
             get { return selectedType; }
             set
@@ -29,7 +30,7 @@ namespace His_Pos.NewClass.BalanceSheet
         public double Value { get; set; }
         public string StrikeValue { get; set; }
 
-        public string[] StrikeTypes { get; } = {"銀行", "現金"};
+        public List<AccountsReports> StrikeTypes { get; set; } =new List<AccountsReports>();
         #endregion
 
         public StrikeData(DataRow row)
@@ -37,8 +38,17 @@ namespace His_Pos.NewClass.BalanceSheet
             ID = row.Field<string>("ID");
             Name = row.Field<string>("HEADER");
             Value = (double)row.Field<decimal>("VALUE");
-
-            SelectedType = StrikeTypes[0];
+            SelectedType = new AccountsReports();
+            StrikeTypes.Add(new AccountsReports("現金",0,"001001"));
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
+            MainWindow.ServerConnection.CloseConnection();
+            foreach (DataRow c in result.Rows)
+            {
+                StrikeTypes.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+            }
+            //SelectedType.ID = StrikeTypes[0].ID.ToString();
+        
         }
     }
 }
