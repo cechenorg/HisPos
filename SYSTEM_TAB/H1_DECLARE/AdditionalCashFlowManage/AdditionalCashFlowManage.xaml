@@ -25,7 +25,7 @@
             <RadioButton Content="收入" Tag="3" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding GainCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <RadioButton Content="支出" Tag="4" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding PayCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="科目" FontSize="18" VerticalAlignment="Center"/>
-            <ComboBox Width="100" Margin="10,0,0,0" FontSize="16" ItemsSource="{Binding CashFlowAccounts,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="AccountName" SelectedItem="{Binding SelectedCashFlowAccount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Width="230" Margin="10,0,0,0" FontSize="16" ItemsSource="{Binding CashFlowAccounts,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="AccountName" SelectedItem="{Binding SelectedCashFlowAccount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="金額" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <TextBox Width="80" Text="{Binding CashFlowValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
             <Label Content="備註" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
@@ -34,7 +34,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1">
             <StackPanel Orientation="Horizontal">
-                <Label Content="收支歷程" FontSize="20" Margin="10,0,0,0"/>
+                <Label Content="額外收支歷程" FontSize="20" Margin="10,0,0,0"/>
                 <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" Margin="10,0,0,0"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" PreviewKeyDown="StartDate_OnPreviewKeyDown">
                     <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
@@ -112,7 +112,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760"       
-                          ItemsSource="{Binding SelectedCashFlowRecord.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0.4,10,9.8,-0.4" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2">
+                          ItemsSource="{Binding SelectedCashFlowRecord.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0.4,10,9.8,-0.4" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2"  CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" GridLinesVisibility="Horizontal" SelectionUnit="Cell">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -132,7 +132,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="100" Header="科目" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn Width="300" Header="科目" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>

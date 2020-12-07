@@ -192,7 +192,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 RaisePropertyChanged(nameof(CurrentShelfStockValue));
 
                 TotalStockValue = dataTable.Rows[0].Field<double>("TOTALSTOCK");
-                ShelfStockValue = CurrentShelfStockValue;
+                ShelfStockValue = dataTable.Rows[0].Field<double>("SHELF_STOCK");
                 MedBagStockValue = dataTable.Rows[0].Field<double>("MEDBAG_STOCK");
                 ErrorStockValue = dataTable.Rows[0].Field<double>("ERROR_STOCK");
 
@@ -310,8 +310,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private bool MEDFilter(object product)
         {
             var tempProduct = product as ProductManageStruct;
-            return tempProduct.ProductType == (ProductTypeEnum)1;
-            }
+            return tempProduct.ProductType != (ProductTypeEnum)2 ;
+        }
 
         private bool OTCFilter(object product)
         {
@@ -342,7 +342,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                         case ProductManageFilterEnum.ZERO:
                             return tempProduct.IsZero == 0 && tempProduct.ProductType == (ProductTypeEnum)1;
                         default:
-                            return tempProduct.ProductType == (ProductTypeEnum)1;
+                            return tempProduct.ProductType != (ProductTypeEnum)2;
                     }
                 }
 

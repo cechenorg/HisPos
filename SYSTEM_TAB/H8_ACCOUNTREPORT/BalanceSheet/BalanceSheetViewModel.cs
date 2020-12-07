@@ -260,7 +260,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         {
                             NormalNoEditViewModel = new NormalNoEditViewModel(LeftSelectedData.ID);
                             BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                            BalanceSheetType = BalanceSheetTypeEnum.NormalNoEdit;
+                            BalanceSheetType = BalanceSheetTypeEnum.Normal;
                         }
                         else if (LeftSelectedData.ID == "105")
                         {

@@ -51,5 +51,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             var regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
+
+        private void tb_Value_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
+        }
     }
 }

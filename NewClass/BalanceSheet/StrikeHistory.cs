@@ -46,7 +46,7 @@ namespace His_Pos.NewClass.BalanceSheet
             }
         }
 
-        public string StrikeTypeName => (StrikeType.Equals("Bank"))? "銀行" : "現金";
+        public string StrikeTypeName => StrikeType;
 
         private string strikeName;
         public string StrikeName
