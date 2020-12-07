@@ -295,9 +295,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 {
                      if (RightSelectedData.ID == "105")
                     {
-                        NormalNoEditViewModel = new NormalNoEditViewModel(RightSelectedData.ID);
+                        NormalViewModel = new NormalViewModel(RightSelectedData.ID);
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                        BalanceSheetType = BalanceSheetTypeEnum.NormalNoEdit;
+                        BalanceSheetType = BalanceSheetTypeEnum.Normal;
                     }
                     else if(RightSelectedData.ID.Length==3) { 
                     NormalViewModel = new NormalViewModel(RightSelectedData.ID);

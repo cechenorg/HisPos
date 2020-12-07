@@ -78,8 +78,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
         }
 
-        private List<string> selectedType;
-        public List<string> SelectedType
+        private List<AccountsReports> selectedType;
+        public List<AccountsReports> SelectedType
         {
             get => selectedType;
             set
@@ -87,11 +87,28 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => SelectedType, ref selectedType, value);
             }
         }
+        private AccountsReports selectedBank;
+        public AccountsReports SelectedBank
+        {
+            get => selectedBank;
+            set
+            {
+                Set(() => SelectedBank, ref selectedBank, value);
+            }
+        }
         #endregion
         public NormalViewModel(string ID)
         {
-            SelectedType = new List<string>();
-            SelectedType.Add("現金");
+            SelectedType = new List<AccountsReports>();
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
+            MainWindow.ServerConnection.CloseConnection();
+            SelectedType = new List<AccountsReports>();
+            SelectedType.Add(new AccountsReports("現金", 0, "001001"));
+            foreach (DataRow c in result.Rows)
+            {
+                SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+            }
                AccData = new AccountsReport();
             IDClone = ID;
             Init();
@@ -101,8 +118,15 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
         public NormalViewModel()
         {
-            SelectedType = new List<string>();
-            SelectedType.Add("現金");
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
+            MainWindow.ServerConnection.CloseConnection();
+            SelectedType = new List<AccountsReports>();
+            SelectedType.Add(new AccountsReports("現金", 0, "001001"));
+            foreach (DataRow c in result.Rows)
+            {
+                SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+            }
             AccData = new AccountsReport();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
@@ -166,13 +190,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("不得為零", MessageType.ERROR);
                 return;
             }
+            if (SelectedBank == null)
+            {
+                MessageWindow.ShowMessage("請選擇沖帳目標", MessageType.ERROR);
+                return;
+            }
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("VALUE", StrikeValue));
             parameters.Add(new SqlParameter("TYPE", "0"));
             parameters.Add(new SqlParameter("NOTE", Selected.Name)) ;
-            parameters.Add(new SqlParameter("TARGET", "現金"));
+            parameters.Add(new SqlParameter("TARGET", SelectedBank.ID));
             parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
              MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
             MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
