@@ -33,7 +33,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if (selectedItem == null) 
                 {
-                    MessageBox.Show("123");
+                    
                 }
             }
         }
