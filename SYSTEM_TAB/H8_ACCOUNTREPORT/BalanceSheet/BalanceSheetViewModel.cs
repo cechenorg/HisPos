@@ -299,6 +299,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                         BalanceSheetType = BalanceSheetTypeEnum.Normal;
                     }
+                    else if (RightSelectedData.ID == "201"|| RightSelectedData.ID == "202"|| RightSelectedData.ID == "203" || RightSelectedData.ID == "204")
+                    {
+                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                    }
                     else if(RightSelectedData.ID.Length==3) { 
                     NormalViewModel = new NormalViewModel(RightSelectedData.ID);
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;

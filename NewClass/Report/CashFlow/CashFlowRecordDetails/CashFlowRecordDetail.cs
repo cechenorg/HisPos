@@ -20,6 +20,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
             Date = r.Field<DateTime>("CashFlow_Time");
             EmpName = r.Field<string>("Emp_Name");
             CanEdit = DateTime.Compare(Date, DateTime.Today) >= 0 || ViewModelMainWindow.CurrentUser.ID == 1;
+            Bank = r.Field<string>("BANK");
         }
 
         private int id;
@@ -39,6 +40,15 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
             set
             {
                 Set(() => Name, ref name, value);
+            }
+        }
+        private string bank;
+        public string Bank
+        {
+            get => bank;
+            set
+            {
+                Set(() => Bank, ref bank, value);
             }
         }
         private string note;

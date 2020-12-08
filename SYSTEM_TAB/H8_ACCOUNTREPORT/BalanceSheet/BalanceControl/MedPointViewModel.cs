@@ -72,7 +72,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
         private void StrikeFinalAction(RelayCommand command)
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認結案\r\n(此月份前的所有金額將會結案)", "", false);
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認結案", "", false);
 
             if (!(bool)confirmWindow.DialogResult) return;
 

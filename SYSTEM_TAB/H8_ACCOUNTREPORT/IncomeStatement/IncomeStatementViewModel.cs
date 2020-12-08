@@ -44,6 +44,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
             }
         }
 
+        private PointLostMatrix pointLostMatrix;
+        public PointLostMatrix PointLostMatrix
+        {
+            get => pointLostMatrix;
+            set
+            {
+                Set(() => PointLostMatrix, ref pointLostMatrix, value);
+            }
+        }
+
         private PharmacyIncomeMatrix pharmacyIncomeMatrix;
         public PharmacyIncomeMatrix PharmacyIncomeMatrix
         {
@@ -143,6 +153,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
             PrescribeProfitMatrix = new ProfitSummaryMatrix("調劑營業毛利", IncomeStatementMatrix.GetPrescribeProfits());
             CostAndInventoryMatrix = new CostAndInventoryMatrix(incomeStatementDataSet.Tables[5]);
             HISProfitMatrix = new ProfitSummaryMatrix("調劑台營業毛利", IncomeStatementMatrix.GetHISProfits());
+            PointLostMatrix = new PointLostMatrix(incomeStatementDataSet.Tables[8]);
             MainWindow.ServerConnection.CloseConnection();
         }
 

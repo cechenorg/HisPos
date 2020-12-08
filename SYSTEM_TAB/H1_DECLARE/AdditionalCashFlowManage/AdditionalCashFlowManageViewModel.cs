@@ -10,6 +10,7 @@ using His_Pos.NewClass.Report.CashFlow;
 using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
 using His_Pos.NewClass.Report.CashFlow.CashFlowRecords;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
+using His_Pos.NewClass.Report.Accounts;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
 {
@@ -42,6 +43,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             }
         }
 
+
+        private List<AccountsReports> selectedType;
+        public List<AccountsReports> SelectedType
+        {
+            get => selectedType;
+            set
+            {
+                Set(() => SelectedType, ref selectedType, value);
+            }
+        }
+
         private CashFlowAccount selectedCashFlowAccount;
         public CashFlowAccount SelectedCashFlowAccount
         {
@@ -51,7 +63,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => SelectedCashFlowAccount, ref selectedCashFlowAccount, value);
             }
         }
-
+        private AccountsReports selectedBank;
+        public AccountsReports SelectedBank
+        {
+            get => selectedBank;
+            set
+            {
+                Set(() => SelectedBank, ref selectedBank, value);
+            }
+        }
         private CashFlowRecords cashFlowRecords;
         public CashFlowRecords CashFlowRecords
         {
@@ -149,13 +169,24 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public RelayCommand Search { get; set; }
         public RelayCommand EditCashFlowRecord { get; set; }
         public RelayCommand DeleteCashFlowRecord { get; set; }
+      
         #endregion
 
         public AdditionalCashFlowManageViewModel()
         {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
+            MainWindow.ServerConnection.CloseConnection();
+            SelectedType = new List<AccountsReports>();
+            SelectedType.Add(new AccountsReports("現金", 0, "001001"));
+            foreach (DataRow c in result.Rows)
+            {
+                SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+            }
             InitCommand();
             CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
             SelectedCashFlowAccount = CashFlowAccounts[0];
+            SelectedBank = SelectedType[0];
             CashFlowRecords = new CashFlowRecords();
             StartDate = DateTime.Today;
             EndDate = DateTime.Today;
@@ -173,7 +204,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
 
         private void SubmitAction() {
             MainWindow.ServerConnection.OpenConnection();
-            CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue);
+            CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue,SelectedBank.ID);
             MainWindow.ServerConnection.CloseConnection();
             SearchAction();
         }

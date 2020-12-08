@@ -617,6 +617,7 @@
     <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReport.cs" />
     <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReportDb.cs" />
     <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReports.cs" />
+    <Compile Include="NewClass\Report\IncomeStatement\PointLostMatrix.cs" />
     <Compile Include="NewClass\Report\ReportTypeEnum.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReportDb.cs" />
@@ -2305,6 +2306,10 @@
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\IncomeStatement\PrescribeProfitMatrixTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\IncomeStatement\PointLostMatrixTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\IncomeStatement\PrescriptionCountMatrixTemplate.xaml">
       <SubType>Designer</SubType>
