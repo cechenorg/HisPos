@@ -205,7 +205,7 @@
                         </Border>
                     </StackPanel>
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="成本" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="耗用" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <StackPanel x:Name="MedCostCoopBack" Grid.Row="2" Grid.Column="1"  Background="Transparent" PreviewMouseDown="MedCostCoopBack_PreviewMouseDown">
                                 <StackPanel.InputBindings>
                                     <MouseBinding Gesture="LeftClick" Command="{Binding CooperativePrescriptionSelectionChangedCommand}"/>
@@ -232,7 +232,7 @@
                             <Label Content="{Binding TotalCashFlow.TotalMedUse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="200" Margin="0,10,0,0"/>
                         </Border>
                     </StackPanel>
-                    <Label x:Name="MedCash" Grid.Row="4" Grid.Column="0" Content="現金帳" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                    <Label x:Name="MedCash" Grid.Row="4" Grid.Column="0" Content="自費" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
                     <StackPanel x:Name="MedCashCoop" Grid.Row="4" Grid.Column="1"  Orientation="Horizontal" Background="Transparent" PreviewMouseDown="MedCashCoop_PreviewMouseDown">
                         <StackPanel.InputBindings>
                             <MouseBinding Gesture="LeftClick" Command="{Binding CashNotCoopSelectionChangedCommand}"/>
@@ -461,7 +461,7 @@
                         <StackPanel.InputBindings>
                             <MouseBinding Gesture="LeftClick" Command="{Binding TradeProfitReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
-                        <Label  Content="成本" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Label  Content="耗用" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel x:Name="OTCCost" Grid.Row="2" Grid.Column="1"  Orientation="Horizontal" Background="Transparent" PreviewMouseDown="OTCCost_PreviewMouseDown" >
                         <StackPanel.InputBindings>
@@ -476,7 +476,7 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding TradeProfitReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding TotalTradeProfitReport.CardFee,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label Content="0" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                         </Border>
                     </StackPanel>
                     <StackPanel  Grid.Row="2" Grid.Column="3"  Orientation="Horizontal" Background="Transparent"  PreviewMouseDown="OTCCost_PreviewMouseDown">
