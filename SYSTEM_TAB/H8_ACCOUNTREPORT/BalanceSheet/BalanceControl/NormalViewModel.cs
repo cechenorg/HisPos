@@ -23,6 +23,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         public RelayCommand InsertCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand StrikeCommand { get; set; }
+        public RelayCommand DetailChangeCommand { get; set; }
+        public RelayCommand StrikeFinalCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -68,6 +70,25 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => AccData, ref accData, value);
             }
         }
+
+        private AccountsDetailReport accDataDetail;
+        public AccountsDetailReport AccDataDetail
+        {
+            get => accDataDetail;
+            set
+            {
+                Set(() => AccDataDetail, ref accDataDetail, value);
+            }
+        }
+        private AccountsDetailReports selectedDetail;
+        public AccountsDetailReports SelectedDetail
+        {
+            get => selectedDetail;
+            set
+            {
+                Set(() => SelectedDetail, ref selectedDetail, value);
+            }
+        }
         private AccountsReports selected;
         public AccountsReports Selected
         {
@@ -99,6 +120,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #endregion
         public NormalViewModel(string ID)
         {
+            AccDataDetail = new AccountsDetailReport();
             SelectedType = new List<AccountsReports>();
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
@@ -115,7 +137,51 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
             StrikeCommand = new RelayCommand(StrikeAction);
+            DetailChangeCommand = new RelayCommand(DetailChangeAction);
+            StrikeFinalCommand = new RelayCommand(StrikeFinalAction);
         }
+
+        private void StrikeFinalAction()
+        {
+            if (Selected == null)
+            {
+                MessageWindow.ShowMessage("錯誤", MessageType.ERROR);
+                return;
+            }
+            if (SelectedDetail == null)
+            {
+                MessageWindow.ShowMessage("請選擇細目", MessageType.ERROR);
+                return;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Emp", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("Detail", SelectedDetail.ID));
+            parameters.Add(new SqlParameter("ID", Selected.ID));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[DeclareClosed]", parameters);
+            MessageWindow.ShowMessage("結案成功", MessageType.SUCCESS);
+            MainWindow.ServerConnection.CloseConnection();
+
+        }
+
+        private void DetailChangeAction()
+        {
+            if (Selected == null) {
+                return;
+            }
+            AccDataDetail = new AccountsDetailReport();
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", Selected.ID));
+            DataTable Data = new DataTable();
+            Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetailDetailReport]", parameters);
+            foreach (DataRow r in Data.Rows)
+            {
+                AccDataDetail.Add(new AccountsDetailReports(r));
+            }
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
         public NormalViewModel()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -185,7 +251,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("錯誤", MessageType.ERROR);
                 return;
             }
-            if (StrikeValue == 0)
+            if (SelectedDetail.StrikeValue == 0|| SelectedDetail==null)
             {
                 MessageWindow.ShowMessage("不得為零", MessageType.ERROR);
                 return;
@@ -198,8 +264,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("VALUE", StrikeValue));
-            parameters.Add(new SqlParameter("TYPE", "0"));
+            parameters.Add(new SqlParameter("VALUE", SelectedDetail.StrikeValue));
+            parameters.Add(new SqlParameter("TYPE", SelectedDetail.ID));
             parameters.Add(new SqlParameter("NOTE", Selected.Name)) ;
             parameters.Add(new SqlParameter("TARGET", SelectedBank.ID));
             parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));

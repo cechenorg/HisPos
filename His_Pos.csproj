@@ -603,7 +603,9 @@
     <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProduct.cs" />
     <Compile Include="NewClass\Product\TypeManage\TypeManageProducts.cs" />
+    <Compile Include="NewClass\Report\Accounts\AccountsDetailReport.cs" />
     <Compile Include="NewClass\Report\Accounts\AccountsReport.cs" />
+    <Compile Include="NewClass\Report\Accounts\AccountsDetailReports.cs" />
     <Compile Include="NewClass\Report\Accounts\AccountsReports.cs" />
     <Compile Include="NewClass\Report\Accounts\AccountsAccount.cs" />
     <Compile Include="NewClass\Report\Accounts\AccountsDb.cs" />
