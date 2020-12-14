@@ -176,7 +176,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             InitCommand();
             InitAccounts();
             CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
-            SelectedCashFlowAccount = CashFlowAccounts[0];
+            if (CashFlowAccounts.Count>0)
+            {
+                SelectedCashFlowAccount = CashFlowAccounts[0];
+            }
             CashFlowRecords = new AccountsRecords();
             StartDate = DateTime.Today;
             EndDate = DateTime.Today;
