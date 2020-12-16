@@ -28,18 +28,31 @@
                 </ComboBox>
             </StackPanel>
         </Grid>
-        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760" ItemsSource="{Binding AccData,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2">
+        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760" ItemsSource="{Binding AccData,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False"  Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Disabled">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding DetailChangeCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Resources>
-                <Style TargetType="ScrollBar">
-                    <Setter Property="Background" Value="#FFA8A8A8" />
-                    <Setter Property="Foreground"  Value="#FF535353" />
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Setter Property="Width" Value="100"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto"/>
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
-                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+                <!--<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>-->
                 
             </DataGrid.Resources>
             <DataGrid.RowStyle>

@@ -1,23 +1,20 @@
-﻿using His_Pos.Database;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.Database;
+using His_Pos.NewClass.BalanceSheet;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.BalanceSheet;
 
 namespace His_Pos.NewClass.Report.CashReport
 {
-   public static class CashReportDb
+    public static class CashReportDb
     {
         public static DataTable GetDataByDate(DateTime sDate, DateTime eDate)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate); 
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CashReportByDate]", parameterList);
         }
 
@@ -25,10 +22,11 @@ namespace His_Pos.NewClass.Report.CashReport
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "YEAR", year);
-            return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[YearIncomeStatementForExport]",parameterList);
+            return MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[YearIncomeStatementForExport]", parameterList);
         }
 
-        public static DataTable GetPerDayDataByDate(DateTime sDate, DateTime eDate,string insID) {
+        public static DataTable GetPerDayDataByDate(DateTime sDate, DateTime eDate, string insID)
+        {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
@@ -71,7 +69,7 @@ namespace His_Pos.NewClass.Report.CashReport
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("StrikeID", selectedHistory.StrikeID));
             parameters.Add(new SqlParameter("Source", selectedHistory.StrikeType));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStrikeHistory]",parameters);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStrikeHistory]", parameters);
         }
 
         public static DataTable GetInventoryDifferenceByDate(DateTime sDate, DateTime eDate)

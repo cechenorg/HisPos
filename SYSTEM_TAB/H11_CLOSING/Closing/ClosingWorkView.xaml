@@ -53,6 +53,7 @@
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -82,6 +83,10 @@
                         <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal"  >
                             <Label Content="慢箋+其他收入" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                             <Label x:Name="OtherMed" Content="{Binding Other,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="230"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="7" Grid.Column="0" Orientation="Horizontal"  >
+                            <Label Content="自費調劑現金帳" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label x:Name="CashTotal" Content="{Binding CashTotal,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="230"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>

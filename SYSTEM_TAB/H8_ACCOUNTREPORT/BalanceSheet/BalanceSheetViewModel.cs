@@ -283,7 +283,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             else if (RightSelectedData != null)
             {
                 if (RightSelectedData.Name.Contains("應付帳款"))
-                    BalanceSheetType = BalanceSheetTypeEnum.Payable;
+                {
+                    NormalViewModel = new NormalViewModel(RightSelectedData.ID);
+                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                }
                 else if (RightSelectedData.Name.Contains("代付"))
                 {
                     var ins = ViewModelMainWindow.Institutions.Single(i => i.ID.Equals(RightSelectedData.ID));
@@ -293,27 +297,28 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 }
                 else
                 {
-                     if (RightSelectedData.ID == "105")
+                    if (RightSelectedData.ID == "105")
                     {
                         NormalViewModel = new NormalViewModel(RightSelectedData.ID);
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                         BalanceSheetType = BalanceSheetTypeEnum.Normal;
                     }
-                    else if (RightSelectedData.ID == "201"|| RightSelectedData.ID == "202"|| RightSelectedData.ID == "203" || RightSelectedData.ID == "204")
+                    else if (RightSelectedData.ID == "201" || RightSelectedData.ID == "202" || RightSelectedData.ID == "203" || RightSelectedData.ID == "204")
                     {
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                     }
-                    else if(RightSelectedData.ID.Length==3) { 
-                    NormalViewModel = new NormalViewModel(RightSelectedData.ID);
+                    else if (RightSelectedData.ID.Length == 3)
+                    {
+                        NormalViewModel = new NormalViewModel(RightSelectedData.ID);
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                         BalanceSheetType = BalanceSheetTypeEnum.Normal;
-                }
-                    
+                    }
+
                     else
-                {
-                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                    {
+                        BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                    }
                 }
-            }
             }
         }
         #endregion

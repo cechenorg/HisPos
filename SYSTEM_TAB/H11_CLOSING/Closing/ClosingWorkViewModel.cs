@@ -54,6 +54,15 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Other, ref other, value);
             }
         }
+        private int cashTotal;
+        public int CashTotal
+        {
+            get => cashTotal;
+            set
+            {
+                Set(() => CashTotal, ref cashTotal, value);
+            }
+        }
         private int self;
         public int Self
         {
@@ -103,6 +112,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             Self= (int)result.Rows[0]["selff"];
             Other = (int)result.Rows[0]["other"];
             Count= (int)result.Rows[0]["count"];
+            CashTotal=(int)result.Rows[0]["CashTotal"];
 
         }
     }
