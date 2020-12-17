@@ -28,7 +28,8 @@
                 </ComboBox>
             </StackPanel>
         </Grid>
-        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="300" ItemsSource="{Binding AccData,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False"  Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Disabled">
+        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                   Height="300" ItemsSource="{Binding AccData,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False"  Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Disabled" >
          
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -98,7 +99,7 @@
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid Grid.Row="3" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760" ItemsSource="{Binding AccDataDetail,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2">
+        <DataGrid Grid.Row="3" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Height="760" ItemsSource="{Binding AccDataDetail,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" CurrentItem="{Binding SelectedDetailCopy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -158,7 +159,7 @@
                 <DataGridTemplateColumn Width="80" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="沖帳" Padding="0" Margin="20,0,0,0" Width="80" HorizontalAlignment="Center" Background="RoyalBlue" BorderThickness="0"  Command="{Binding DataContext.NormalViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"  CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <Button x:Name="StrikeBtn" Content="沖帳" Padding="0" Margin="20,0,0,0" Width="80" HorizontalAlignment="Center" Background="RoyalBlue" BorderThickness="0"  Command="{Binding DataContext.NormalViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"  CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

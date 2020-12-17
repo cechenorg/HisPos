@@ -60,7 +60,7 @@
                     <Button Width="130" Content="輸入期初" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="RoyalBlue" Command="{Binding FirstCommand}" Visibility="Hidden"/>
                     
                     <Button Width="130" Content="重新整理" Margin="50,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}"/>
-                    <Button Width="130" Content="沖帳歷程" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ShowHistoryCommand}"/>
+                    <Button Width="130" Content="歷程紀錄" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding ShowHistoryCommand}"/>
                 </StackPanel>
                 <DataGrid x:Name="dg_Left" Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False"     CanUserResizeColumns="False" ItemsSource="{Binding LeftBalanceSheetDatas, UpdateSourceTrigger=PropertyChanged}"

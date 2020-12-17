@@ -218,8 +218,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
             MainWindow.ServerConnection.CloseConnection();
 
-            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-            ChangeDetail();
+
         }
         private void ShowHistoryAction()
         {
@@ -258,9 +257,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     {
                         if (LeftSelectedData.ID == "007")
                         {
-                            NormalNoEditViewModel = new NormalNoEditViewModel(LeftSelectedData.ID);
+                            BankViewModel = new BankViewModel(LeftSelectedData.ID);
                             BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
-                            BalanceSheetType = BalanceSheetTypeEnum.Normal;
+                            BalanceSheetType = BalanceSheetTypeEnum.Bank;
                         }
                         else if (LeftSelectedData.ID == "105")
                         {
