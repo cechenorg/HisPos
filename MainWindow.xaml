@@ -42,7 +42,7 @@
     xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage"
     xmlns:companyWeb="clr-namespace:His_Pos.SYSTEM_TAB.H10_WEB.CompanyWeb"
     xmlns:systemtutorial="clr-namespace:His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial"
-    xmlns:incomeStatement="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
+    xmlns:incomeStatement="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement"
     xmlns:balanceSheet="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet" xmlns:closingWork="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.Closing"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
@@ -155,8 +155,8 @@
         <DataTemplate DataType="{x:Type systemtutorial:TutorialViewModel}">
             <systemtutorial:Tutorial/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type incomeStatement:IncomeStatementViewModel}">
-            <incomeStatement:IncomeStatementView/>
+        <DataTemplate DataType="{x:Type incomeStatement:NewIncomeStatementViewModel}">
+            <incomeStatement:NewIncomeStatementView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type balanceSheet:BalanceSheetViewModel}">
             <balanceSheet:BalanceSheetView/>
@@ -286,8 +286,7 @@
                     <chromeTabs:ChromeTabControl x:Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab" PinnedTabWidth="120"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White" PinTabCommand="{Binding PinTabCommand}"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
-                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900"  
-                             ContainerItemPreparedForOverride="TabControl_ContainerItemPreparedForOverride">
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900"  ContainerItemPreparedForOverride="TabControl_ContainerItemPreparedForOverride">
                     <chromeTabs:ChromeTabControl.Template>
                         <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
                             <ControlTemplate.Resources>
