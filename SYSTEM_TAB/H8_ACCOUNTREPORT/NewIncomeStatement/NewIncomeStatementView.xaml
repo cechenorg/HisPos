@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement.NewIncomeStatementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement"
+             mc:Ignorable="d"
+             FontFamily="Segoe UI Semibold"
+             FontSize="20"
+             d:DesignHeight="450" d:DesignWidth="1365">
+    <ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Label Content="查詢月份" Margin="10,0,0,0" Height="60" VerticalContentAlignment="Center"></Label>
+                <DatePicker Width="100" materialDesign:HintAssist.Hint="Pick Date" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <Label Content="處方張數" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
+            </StackPanel>
+            <StackPanel Grid.Row="2">
+                <DataGrid x:Name="dgPreCount">
+                    
+                </DataGrid>
+            </StackPanel>
+            <StackPanel Grid.Row="3">
+                <Label Content="收入" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
+            </StackPanel>
+            <StackPanel Grid.Row="4">
+                <DataGrid x:Name="dgIncome">
+
+                </DataGrid>
+            </StackPanel>
+            <StackPanel Grid.Row="5">
+                <Label Content="支出" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
+            </StackPanel>
+            <StackPanel Grid.Row="6">
+                <DataGrid x:Name="dgExpense">
+
+                </DataGrid>
+            </StackPanel>
+            <StackPanel Grid.Row="7">
+                <Label Content="結案差額" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
+            </StackPanel>
+            <StackPanel Grid.Row="8">
+                <DataGrid x:Name="dgDiff">
+
+                </DataGrid>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+
+</UserControl>

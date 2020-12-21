@@ -38,6 +38,7 @@ using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport;
+using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement;
 using His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial;
 using His_Pos.SYSTEM_TAB.INDEX;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage;
@@ -365,7 +366,7 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new InstitutionDeclarePointReportViewModel() { TabName = MainWindow.HisFeatures[8].Functions[0], Icon = MainWindow.HisFeatures[8].Icon };
                     break;
                 case nameof(FeatureItem.損益報表):
-                    newTab = new IncomeStatementViewModel() { TabName = MainWindow.HisFeatures[8].Functions[1], Icon = MainWindow.HisFeatures[8].Icon };
+                    newTab = new NewIncomeStatementViewModel() { TabName = MainWindow.HisFeatures[8].Functions[1], Icon = MainWindow.HisFeatures[8].Icon };
                     break;
                 case nameof(FeatureItem.資產負債表):
                     newTab = new BalanceSheetViewModel() { TabName = MainWindow.HisFeatures[8].Functions[2], Icon = MainWindow.HisFeatures[8].Icon };
