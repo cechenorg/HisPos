@@ -36,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
         public string SelectClone;
         public string SelectDetailClone;
+        public bool IsFirst=true;
         public double MaxValue { get; set; } = 0;
         public string Target
         {
@@ -207,7 +208,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeclareClosed]", parameters);
             MessageWindow.ShowMessage("結案成功", MessageType.SUCCESS);
             MainWindow.ServerConnection.CloseConnection();
+            StrikeValue = 0;
             DetailChangeAction();
+            Init();
             command.Execute(null);
         }
 
@@ -279,6 +282,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                     index++;
                 }
                 Selectedindex = nowindex;
+                if (IsFirst == true)
+                {
+                    IsFirst = false;
+                    Selected = AccData[0];
+                    DetailChangeAction();
+                }
             }
             MainWindow.ServerConnection.CloseConnection();
         }

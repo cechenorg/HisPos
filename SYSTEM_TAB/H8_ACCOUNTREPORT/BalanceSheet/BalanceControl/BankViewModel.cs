@@ -86,11 +86,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         private int selectedIndex;
         public int SelectedIndex
         {
-            get => selectedIndex;
+            get { return selectedIndex; }
             set
             {
-                Set(() => SelectedIndex, ref selectedIndex, value);
+                if (Equals(value, selectedIndex)) return;
+                selectedIndex = value;
+                OnPropertyChanged();
             }
+
         }
         private ObservableCollection<AccountsReports> bank;
         public ObservableCollection<AccountsReports> Bank
@@ -120,7 +123,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => SelectBank, ref selectBank, value);
             }
         }
-       
+
         #endregion
         public BankViewModel(string ID)
         {
@@ -131,9 +134,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
             StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
-            DetailChangeCommand= new RelayCommand(DetailChangeAction);
+            DetailChangeCommand = new RelayCommand(DetailChangeAction);
+
             SelectedIndex = 0;
+            if (Selected != null) 
+            { 
             Selected = AccData[0];
+            }
             DetailChangeAction();
         }
 
@@ -177,6 +184,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             SelectedIndex = -1;
             SelectedIndex = 0;
             Selected = AccData[0];
+            SelectedIndex = 0;
             DetailChangeAction();
             MainWindow.ServerConnection.CloseConnection();
         }
@@ -232,6 +240,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
                 MessageWindow.ShowMessage("轉帳成功", MessageType.SUCCESS);
+                Init();
             }
             else
             {

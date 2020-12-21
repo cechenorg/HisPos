@@ -14,7 +14,7 @@
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Label Content="新增會計科目" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding TransferValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="230" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
+                <TextBox x:Name="tb_New" Text="{Binding TransferValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="230" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" PreviewMouseLeftButtonDown="tb_New_PreviewMouseLeftButtonDown"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="120" Content="新增" Margin="20,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding InsertCommand}"/>
@@ -24,13 +24,13 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Label Content="轉至" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <ComboBox HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding Bank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath="Name" SelectedItem="{Binding SelectBank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="180" IsSynchronizedWithCurrentItem="True"/>
-                <TextBox Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="120" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" GotFocus="TextBox_GotFocus"/>
+                <TextBox  Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="120" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown"  InputScope="Number" PreviewTextInput="TextBox_PreviewTextInput"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="120" Content="轉帳" Margin="20,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding StrikeCommand}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
             </StackPanel>
         </Grid>
-        <DataGrid Grid.Row="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760" ItemsSource="{Binding AccData,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2">
+        <DataGrid Grid.Row="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="700" ItemsSource="{Binding AccData,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding DetailChangeCommand}"/>

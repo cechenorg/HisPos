@@ -15,7 +15,7 @@
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Label Content="新增會計科目" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding TransferValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="230" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18"/>
+                <TextBox x:Name="tb_New" Text="{Binding TransferValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" Width="230" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" PreviewMouseLeftButtonDown="tb_New_PreviewMouseLeftButtonDown"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="120" Content="新增" Margin="0,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" BorderThickness="0" Background="DimGray" Command="{Binding InsertCommand}"/>
@@ -140,7 +140,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="金額" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value, StringFormat=N2}">
+                <DataGridTextColumn  Header="金額" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value, StringFormat=N2 }">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -151,7 +151,7 @@
                 <DataGridTemplateColumn Width="100" Header="沖帳金額" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Amount" Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="100" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            <TextBox x:Name="Amount" Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged  ,StringFormat='{}{0:#}'}" InputMethod.IsInputMethodEnabled="False" Width="100" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewMouseLeftButtonDown="Amount_PreviewMouseLeftButtonDown"  InputScope="Number" PreviewTextInput="Amount_PreviewTextInput"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
