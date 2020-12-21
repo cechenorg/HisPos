@@ -98,7 +98,7 @@
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid Grid.Row="3" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedDetailindex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Height="760" ItemsSource="{Binding AccDataDetail,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" CurrentItem="{Binding SelectedDetailCopy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid Grid.Row="3" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedDetailindex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Height="380" ItemsSource="{Binding AccDataDetail,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" CurrentItem="{Binding SelectedDetailCopy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -140,7 +140,15 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn  Header="金額" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value, StringFormat=N2 }">
+                <DataGridTextColumn Header="單號" Width="140" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ID}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment"  Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="金額" Width="60" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value, StringFormat=N2 }">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Right"/>
@@ -155,17 +163,17 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="80" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button x:Name="StrikeBtn" Content="沖帳" Padding="0" Margin="20,0,0,0" Width="80" HorizontalAlignment="Center" Background="RoyalBlue" BorderThickness="0"  Command="{Binding DataContext.NormalViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"  CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="70" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="結案" Padding="0" Margin="10,0,0,0" Background="IndianRed" BorderThickness="0" Command="{Binding DataContext.NormalViewModel.StrikeFinalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <Button x:Name="StrikeBtn" Content="沖帳" Padding="0" Margin="10,0,0,0" Width="70" HorizontalAlignment="Center" Background="RoyalBlue" BorderThickness="0"  Command="{Binding DataContext.NormalViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"  CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="65" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="結案" Padding="0" Margin="5,0,0,0" Width="60" Background="IndianRed" HorizontalAlignment="Center" BorderThickness="0" Command="{Binding DataContext.NormalViewModel.StrikeFinalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

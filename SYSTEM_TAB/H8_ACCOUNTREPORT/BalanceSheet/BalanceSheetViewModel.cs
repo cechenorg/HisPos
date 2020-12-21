@@ -255,7 +255,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 {
                     if (LeftSelectedData.ID.Length == 3)
                     {
-                        if (LeftSelectedData.ID == "007")
+                        if (LeftSelectedData.ID == "006")
+                        {
+                            //BankViewModel = new BankViewModel(LeftSelectedData.ID);
+                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                        }
+                        else if (LeftSelectedData.ID == "007")
                         {
                             BankViewModel = new BankViewModel(LeftSelectedData.ID);
                             BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
