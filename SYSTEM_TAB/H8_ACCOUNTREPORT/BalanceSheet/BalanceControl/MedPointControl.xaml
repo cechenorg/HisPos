@@ -14,7 +14,7 @@
             <Label Content="申報應收" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
             
         </StackPanel>
-        <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
+        <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" SelectedIndex="0"
                   AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StrikeDatas, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding SelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>

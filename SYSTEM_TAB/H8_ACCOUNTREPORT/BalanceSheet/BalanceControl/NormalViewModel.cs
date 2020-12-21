@@ -141,6 +141,27 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => SelectedBank, ref selectedBank, value);
             }
         }
+
+        private int  selectedindex;
+        public int Selectedindex
+        {
+            get => selectedindex;
+            set
+            {
+                Set(() => Selectedindex, ref selectedindex, value);
+            }
+        }
+
+        private int selectedDetailindex;
+        public int SelectedDetailindex
+        {
+            get => selectedDetailindex;
+            set
+            {
+                Set(() => SelectedDetailindex, ref selectedDetailindex, value);
+            }
+        }
+        
         #endregion
         public NormalViewModel(string ID)
         {
@@ -202,12 +223,20 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             parameters.Add(new SqlParameter("ID", Selected.ID));
             DataTable Data = new DataTable();
             Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetailDetailReport]", parameters);
+            int index = 0;
+            int nowindex = 0;
             foreach (DataRow r in Data.Rows)
             {
+                if (r["ID"].ToString() == SelectDetailClone)
+                {
+                    nowindex = index;
+                }
                 AccDataDetail.Add(new AccountsDetailReports(r));
+                index++;
             }
             //SelectedDetailCopy = SelectDetailClone;
             MainWindow.ServerConnection.CloseConnection();
+            SelectedDetailindex = nowindex;
         }
 
         public NormalViewModel()
@@ -225,21 +254,35 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
         }
+
         public void Init()
         {
             AccData = new AccountsReport();
+            Selectedindex = -1;
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", IDClone));
             DataTable Data = new DataTable();
             Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
-            foreach (DataRow r in Data.Rows)
+            int index = 0;
+            int nowindex = 0;
+            if (Data.Rows.Count > 0) 
             {
-                AccData.Add(new AccountsReports(r));
+                foreach (DataRow r in Data.Rows)
+                {
+                    AccData.Add(new AccountsReports(r));
+
+                    if (r["ID"].ToString() == SelectClone) 
+                    {
+                        nowindex = index;
+                    }
+                    index++;
+                }
+                Selectedindex = nowindex;
             }
-            //SelectedCopy = SelectClone;
             MainWindow.ServerConnection.CloseConnection();
         }
+
         public void DeleteAction()
         {
             if ( Selected == null) {
@@ -305,8 +348,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             }
             else {
-                /*SelectDetailClone = SelectedDetail.ID;
-                SelectClone = Selected.ID;*/
+                SelectDetailClone = SelectedDetail.ID;
+                SelectClone = Selected.ID;
             }
             StrikeValue = 0;
             DetailChangeAction();

@@ -28,8 +28,7 @@
                 </ComboBox>
             </StackPanel>
         </Grid>
-        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                   Height="300" ItemsSource="{Binding AccData,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False"  Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Disabled" >
+        <DataGrid Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding Selected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding Selectedindex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="300" ItemsSource="{Binding AccData,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False" CanUserAddRows="False" Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Disabled" >
          
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -99,7 +98,7 @@
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid Grid.Row="3" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Height="760" ItemsSource="{Binding AccDataDetail,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" CurrentItem="{Binding SelectedDetailCopy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid Grid.Row="3" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedDetailindex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Height="760" ItemsSource="{Binding AccDataDetail,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" CurrentItem="{Binding SelectedDetailCopy,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>

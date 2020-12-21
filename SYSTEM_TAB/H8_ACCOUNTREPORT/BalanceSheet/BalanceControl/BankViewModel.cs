@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,12 +20,13 @@ using His_Pos.NewClass.Report.CashReport;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
-    public class BankViewModel : ViewModelBase
+    public class BankViewModel : ViewModelBase ,INotifyPropertyChanged
     {
         #region ----- Define Commands -----
         public RelayCommand InsertCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
+        public RelayCommand DetailChangeCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -58,13 +62,15 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeValue));
             }
         }
-        private AccountsReport accData;
-        public AccountsReport AccData
+        private ObservableCollection<AccountsReports> accData;
+        public ObservableCollection<AccountsReports> AccData
         {
-            get => accData;
+            get { return accData; }
             set
             {
-                Set(() => AccData, ref accData, value);
+                if (Equals(value, accData)) return;
+                accData = value;
+                OnPropertyChanged();
             }
         }
         private AccountsReports selected;
@@ -76,22 +82,85 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => Selected, ref selected, value);
             }
         }
+
+        private int selectedIndex;
+        public int SelectedIndex
+        {
+            get => selectedIndex;
+            set
+            {
+                Set(() => SelectedIndex, ref selectedIndex, value);
+            }
+        }
+        private ObservableCollection<AccountsReports> bank;
+        public ObservableCollection<AccountsReports> Bank
+        {
+
+            get { return bank; }
+            set
+            {
+                if (Equals(value, bank)) return;
+                bank = value;
+                OnPropertyChanged();
+            }
+
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private AccountsReports selectBank;
+        public AccountsReports SelectBank
+        {
+            get => selectBank;
+            set
+            {
+                Set(() => SelectBank, ref selectBank, value);
+            }
+        }
+       
         #endregion
         public BankViewModel(string ID)
         {
             AccData = new AccountsReport();
             IDClone = ID;
             Init();
+            SelectedIndex = -1;
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
             StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
+            DetailChangeCommand= new RelayCommand(DetailChangeAction);
+            SelectedIndex = 0;
+            Selected = AccData[0];
+            DetailChangeAction();
         }
+
+        private void DetailChangeAction()
+        {
+           
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
+            MainWindow.ServerConnection.CloseConnection();
+            Bank = new ObservableCollection<AccountsReports>();
+            Bank.Add(new AccountsReports("現金", 0, "001001"));
+            foreach (DataRow c in result.Rows)
+            {
+                if (Selected != null && Selected.ID != c["ID"].ToString())
+                {
+                    Bank.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+                }
+            }
+        }
+
         public BankViewModel()
         {
             AccData = new AccountsReport();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
             StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
+            DetailChangeCommand = new RelayCommand(DetailChangeAction);
         }
         public void Init()
         {
@@ -105,6 +174,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             {
                 AccData.Add(new AccountsReports(r));
             }
+            SelectedIndex = -1;
+            SelectedIndex = 0;
+            Selected = AccData[0];
+            DetailChangeAction();
             MainWindow.ServerConnection.CloseConnection();
         }
         public void DeleteAction()
@@ -122,6 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             Selected = null;
             Init();
         }
+
         public void InsertAction()
         {
             if (TransferValue == "" || TransferValue == null)
@@ -138,8 +212,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             MessageWindow.ShowMessage("新增成功", MessageType.SUCCESS);
             TransferValue = "";
             Init();
-
         }
+
         private void StrikeAction(RelayCommand command)
         {
             if (!TransferValueIsValid()) return;
@@ -149,8 +223,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("VALUE", double.Parse(StrikeValue)));
             parameters.Add(new SqlParameter("TYPE", "0"));
-            parameters.Add(new SqlParameter("NOTE", "現金"));
-            parameters.Add(new SqlParameter("TARGET", "001001"));
+            parameters.Add(new SqlParameter("NOTE", SelectBank.Name));
+            parameters.Add(new SqlParameter("TARGET", SelectBank.ID));
             parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
             DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByBank]", parameters);
             MainWindow.ServerConnection.CloseConnection();
@@ -193,6 +267,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             else
             {
                 MessageWindow.ShowMessage("輸入金額非數字", MessageType.ERROR);
+                return false;
+            }
+            if (SelectBank == null) {
+                MessageWindow.ShowMessage("請選擇轉帳目標", MessageType.ERROR);
                 return false;
             }
 
