@@ -23,14 +23,14 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <Label Content="查詢月份" Margin="10,0,0,0" Height="60" VerticalContentAlignment="Center"></Label>
-                <DatePicker Width="100" materialDesign:HintAssist.Hint="Pick Date" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                <Label Content="查詢年份" Margin="10,0,0,0" Height="60" VerticalContentAlignment="Center"></Label>
+                <TextBox  Margin="10,0,0,0" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black"></TextBox>
             </StackPanel>
             <StackPanel Grid.Row="1">
                 <Label Content="處方張數" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
             </StackPanel>
             <StackPanel Grid.Row="2">
-                <DataGrid x:Name="dgPreCount">
+                <DataGrid x:Name="dgPreCount" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
                     
                 </DataGrid>
             </StackPanel>
@@ -38,7 +38,7 @@
                 <Label Content="收入" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
             </StackPanel>
             <StackPanel Grid.Row="4">
-                <DataGrid x:Name="dgIncome">
+                <DataGrid x:Name="dgIncome" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
 
                 </DataGrid>
             </StackPanel>
@@ -46,7 +46,7 @@
                 <Label Content="支出" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
             </StackPanel>
             <StackPanel Grid.Row="6">
-                <DataGrid x:Name="dgExpense">
+                <DataGrid x:Name="dgExpense" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
 
                 </DataGrid>
             </StackPanel>
@@ -54,7 +54,7 @@
                 <Label Content="結案差額" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
             </StackPanel>
             <StackPanel Grid.Row="8">
-                <DataGrid x:Name="dgDiff">
+                <DataGrid x:Name="dgDiff" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
 
                 </DataGrid>
             </StackPanel>
