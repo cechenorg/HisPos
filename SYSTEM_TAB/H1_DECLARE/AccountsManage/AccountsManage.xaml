@@ -112,7 +112,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <DataGrid Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760"       
-                          ItemsSource="{Binding SelectedCashFlowRecord.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0.4,10,9.8,-0.4" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2"  CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" GridLinesVisibility="Horizontal" SelectionUnit="Cell">
+                          ItemsSource="{Binding SelectedCashFlowRecord.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0.4,10,9.8,-0.4" HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2"  CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" GridLinesVisibility="Horizontal">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
