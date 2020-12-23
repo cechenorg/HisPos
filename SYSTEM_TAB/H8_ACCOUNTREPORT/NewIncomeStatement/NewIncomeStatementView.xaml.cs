@@ -24,5 +24,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
         {
             InitializeComponent();
         }
+
     }
 }

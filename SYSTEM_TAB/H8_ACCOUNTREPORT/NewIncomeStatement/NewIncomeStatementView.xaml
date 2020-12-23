@@ -9,56 +9,58 @@
              FontFamily="Segoe UI Semibold"
              FontSize="20"
              d:DesignHeight="450" d:DesignWidth="1365">
+    <UserControl.Resources>
+        <DataTemplate x:Key="expanderHeader">
+            <TextBlock Text="{Binding}"   
+               Foreground="Green"   
+               FontSize="16"   
+               FontWeight="Bold" 
+               FontStyle="Italic" 
+               TextWrapping="Wrap"/>
+        </DataTemplate>
+    </UserControl.Resources>
     <ScrollViewer>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition/>
-                <RowDefinition Height="40"/>
-                <RowDefinition/>
-                <RowDefinition Height="40"/>
-                <RowDefinition/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <Label Content="查詢年份" Margin="10,0,0,0" Height="60" VerticalContentAlignment="Center"></Label>
                 <TextBox  Margin="10,0,0,0" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semi" FontSize="16" Foreground="Black"></TextBox>
             </StackPanel>
-            <StackPanel Grid.Row="1">
-                <Label Content="處方張數" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
-            </StackPanel>
-            <StackPanel Grid.Row="2">
-                <DataGrid x:Name="dgPreCount" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
-                    
-                </DataGrid>
-            </StackPanel>
-            <StackPanel Grid.Row="3">
-                <Label Content="收入" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
-            </StackPanel>
-            <StackPanel Grid.Row="4">
-                <DataGrid x:Name="dgIncome" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
+            <Expander Grid.Row="1" HorizontalAlignment="Stretch" Header="處方張數" HeaderTemplate="{StaticResource expanderHeader}" Background="{x:Null}" >
+                <StackPanel Orientation="Vertical" Margin="24,0,24,0">
+                    <DataGrid x:Name="dgPreCount" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
 
-                </DataGrid>
-            </StackPanel>
-            <StackPanel Grid.Row="5">
-                <Label Content="支出" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
-            </StackPanel>
-            <StackPanel Grid.Row="6">
-                <DataGrid x:Name="dgExpense" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
+                    </DataGrid>
+                </StackPanel>
+            </Expander>
+            <Expander Grid.Row="2" HorizontalAlignment="Stretch" Header="收入" Background="{x:Null}" FontSize="20">
+                <StackPanel Orientation="Vertical" Margin="24,0,24,0">
+                    <DataGrid x:Name="dgIncome" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
 
-                </DataGrid>
-            </StackPanel>
-            <StackPanel Grid.Row="7">
-                <Label Content="結案差額" Margin="10,0,0,0" Height="40" VerticalContentAlignment="Center"></Label>
-            </StackPanel>
-            <StackPanel Grid.Row="8">
-                <DataGrid x:Name="dgDiff" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
+                    </DataGrid>
+                </StackPanel>
+            </Expander>
+            <Expander Grid.Row="3" HorizontalAlignment="Stretch" Header="支出" Background="{x:Null}">
+                <StackPanel Orientation="Vertical" Margin="24,0,24,0">
+                    <DataGrid x:Name="dgExpense" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
 
-                </DataGrid>
-            </StackPanel>
+                    </DataGrid>
+                </StackPanel>
+            </Expander>
+            <Expander Grid.Row="4" HorizontalAlignment="Stretch" Header="結案差額" Background="{x:Null}">
+                <StackPanel Orientation="Vertical" Margin="24,0,24,0">
+                    <DataGrid x:Name="dgDiff" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
+
+                    </DataGrid>
+                </StackPanel>
+            </Expander>
         </Grid>
     </ScrollViewer>
-
 </UserControl>
