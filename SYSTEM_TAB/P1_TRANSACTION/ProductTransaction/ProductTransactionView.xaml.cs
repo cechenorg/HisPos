@@ -333,11 +333,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         TradeAddProductWindow tapw = new TradeAddProductWindow(result);
                         tapw.ShowDialog();
                         DataRow NewProduct = tapw.SelectedProduct; 
-                        int amt = 0;
                         if (NewProduct != null)
                         {
                             newRow.ItemArray = NewProduct.ItemArray; 
-                            amt = int.Parse(NewProduct["Available_Amount"].ToString());
+                            int amt = int.Parse(NewProduct["Available_Amount"].ToString());
                             if (amt < 1)
                             {
                                 MessageWindow.ShowMessage("該品項可用量不足", MessageType.WARNING);
