@@ -67,8 +67,13 @@ namespace His_Pos.NewClass.Report.CashReport
         public static void DeleteStrikeHistory(StrikeHistory selectedHistory)
         {
             var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("Values", selectedHistory.StrikeValue));
+            parameters.Add(new SqlParameter("StrikeSource", selectedHistory.StrikeSource));
             parameters.Add(new SqlParameter("StrikeID", selectedHistory.StrikeID));
-            parameters.Add(new SqlParameter("Source", selectedHistory.StrikeType));
+            parameters.Add(new SqlParameter("Source", selectedHistory.StrikeWay));
+            parameters.Add(new SqlParameter("StrikeSourceID", selectedHistory.StrikeSourceID));
+            parameters.Add(new SqlParameter("StrikeNote", selectedHistory.StrikeNote));
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStrikeHistory]", parameters);
         }
 

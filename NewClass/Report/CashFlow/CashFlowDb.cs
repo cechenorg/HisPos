@@ -32,7 +32,7 @@ namespace His_Pos.NewClass.Report.CashFlow
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Name", account.AccountName);
             DataBaseFunction.AddSqlParameter(parameterList, "Value", cashFlowValue);
-            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", 0);
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", account.AccountID);
             DataBaseFunction.AddSqlParameter(parameterList, "CurrentUserId", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "Note", note);
             DataBaseFunction.AddSqlParameter(parameterList, "Bank", ID);

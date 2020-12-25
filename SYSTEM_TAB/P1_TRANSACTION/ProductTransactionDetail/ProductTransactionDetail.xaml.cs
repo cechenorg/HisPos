@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -274,7 +275,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             NewFunction.FindChildGroup(ProductDataGrid, "cbCashier", ref CashierList);
             foreach (DataRow dr in detail.Rows)
             {
-                
                 int index = detail.Rows.IndexOf(dr);
                 CashierList[index].SelectedIndex = 0;
                 if (!string.IsNullOrEmpty(dr["TraDet_RewardPersonnel"].ToString()))

@@ -19,19 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             return this;
         }
 
-        private List<CashFlowAccount> CashFlowAccountsSource => 
-            new List<CashFlowAccount> 
-            { 
-                new CashFlowAccount(CashFlowType.Expenses, "雜支"),
-                new CashFlowAccount(CashFlowType.Expenses, "水/電費"),
-                new CashFlowAccount(CashFlowType.Expenses, "電話/網路費"),
-                new CashFlowAccount(CashFlowType.Expenses, "薪資"),
-                new CashFlowAccount(CashFlowType.Expenses, "租金"),
-                new CashFlowAccount(CashFlowType.Expenses, "設備"),
-                new CashFlowAccount(CashFlowType.Expenses, "文具用品"),
-                new CashFlowAccount(CashFlowType.Expenses, "其他耗材"),
-                new CashFlowAccount(CashFlowType.Income, "額外收入") 
-            };
+        private List<CashFlowAccount> CashFlowAccountsSource;
 
         private List<CashFlowAccount> cashFlowAccounts;
         public List<CashFlowAccount> CashFlowAccounts
@@ -184,6 +172,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
             }
             InitCommand();
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable Accu = MainWindow.ServerConnection.ExecuteProc("[Get].[ExpanseByAccountsID]");
+            MainWindow.ServerConnection.CloseConnection();
+            CashFlowAccountsSource = new List<CashFlowAccount>();
+            foreach (DataRow c in Accu.Rows)
+            {
+                CashFlowAccountsSource.Add(new CashFlowAccount(CashFlowType.Expenses, c["Name"].ToString(), (int)c["ID"]));
+            }
+            CashFlowAccountsSource.Add(new CashFlowAccount(CashFlowType.Income, "額外收入", 0));
+            InitCommand();
+
             CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
             SelectedCashFlowAccount = CashFlowAccounts[0];
             SelectedBank = SelectedType[0];

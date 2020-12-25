@@ -17,7 +17,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
     {
         #region Properties
 
-        private List<CashFlowAccount> CashFlowAccountsSource => new List<CashFlowAccount> { new CashFlowAccount(CashFlowType.Expenses, "雜支"), new CashFlowAccount(CashFlowType.Income, "額外收入") };
+        private List<CashFlowAccount> CashFlowAccountsSource => new List<CashFlowAccount> { new CashFlowAccount(CashFlowType.Expenses, "雜支",0), new CashFlowAccount(CashFlowType.Income, "額外收入",1) };
 
         private List<CashFlowAccount> cashFlowAccounts;
         public List<CashFlowAccount> CashFlowAccounts

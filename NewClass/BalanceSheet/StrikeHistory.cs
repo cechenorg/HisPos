@@ -25,6 +25,7 @@ namespace His_Pos.NewClass.BalanceSheet
             StrikeNote = r.Field<string>("StrikeNote");
             CanDelete = r.Field<bool>("CAN_DELETE");
             StrikeWay = r.Field<string>("StrikeWay");
+            EMP= r.Field<string>("Emp_Name");
         }
 
         private int strikeID;
@@ -44,6 +45,15 @@ namespace His_Pos.NewClass.BalanceSheet
             set
             {
                 Set(() => StrikeType, ref strikeType, value);
+            }
+        }
+        private string emp;
+        public string EMP
+        {
+            get => emp;
+            set
+            {
+                Set(() => EMP, ref emp, value);
             }
         }
         private string strikeWay;
