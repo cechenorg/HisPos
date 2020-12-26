@@ -58,6 +58,7 @@ namespace His_Pos.NewClass.Report.Accounts
         {
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowId", selectedDetail.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "EMP", ViewModelMainWindow.CurrentUser.ID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteAccountsRecord]", parameterList);
         }
     }
