@@ -1,4 +1,6 @@
-﻿using System;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,10 +17,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
     public partial class NewIncomeStatementView : UserControl
     {
         private BackgroundWorker bgWorker = new BackgroundWorker();
+        private int year;
 
         public NewIncomeStatementView()
         {
             InitializeComponent();
+            tbYear.Text = DateTime.Now.Year.ToString();
             InitBackgroundWorker();
             InitData();
         }
@@ -27,8 +31,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
         {
             bgWorker.DoWork += (sender, args) =>
             {
-                Dispatcher.BeginInvoke(new Action(() => bi.BusyContent = "取得損益資料..."));
-                GetData(2020);
+                Dispatcher.BeginInvoke(new Action(() => { 
+                    bi.BusyContent = "取得損益資料...";
+                }));
+                GetData(year);
             };
 
             bgWorker.RunWorkerCompleted += (sender, args) =>
@@ -39,6 +45,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 
         private void InitData()
         {
+            int.TryParse(tbYear.Text, out year);
+
             bi.IsBusy = true;
             if (!bgWorker.IsBusy)
                 bgWorker.RunWorkerAsync();
@@ -59,13 +67,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 
             DataTable count = MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCountByYear]", paraCount);
             DataTable income = MainWindow.ServerConnection.ExecuteProc("[Get].[IncomeByYear]", paraIncome);
-            //DataTable income = MainWindow.ServerConnection.ExecuteProc("[Get].[IncomeByYear]", parameters);
+            DataTable expanse = MainWindow.ServerConnection.ExecuteProc("[Get].[ExpanseByYear]", paraExpanse);
             DataTable closed = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsClosedByYear]", paraClosed);
 
             Dispatcher.BeginInvoke(new Action(() => {
                 dgPreCount.ItemsSource = count.DefaultView;
                 dgIncome.ItemsSource = income.DefaultView;
-                //dgIncome.ItemsSource = income.DefaultView;
+                dgExpanse.ItemsSource = expanse.DefaultView;
                 dgDiff.ItemsSource = closed.DefaultView;
             }));
 
