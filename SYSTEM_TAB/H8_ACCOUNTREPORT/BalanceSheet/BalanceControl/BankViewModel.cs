@@ -183,7 +183,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
             SelectedIndex = -1;
             SelectedIndex = 0;
+            if (AccData.Count > 1)
+            { 
             Selected = AccData[0];
+            }
             SelectedIndex = 0;
             DetailChangeAction();
             MainWindow.ServerConnection.CloseConnection();
