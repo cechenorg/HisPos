@@ -2545,6 +2545,8 @@
     <Resource Include="Images\up.png" />
     <Resource Include="Images\up24.png" />
     <Resource Include="Images\down24.png" />
+    <Resource Include="Images\left.png" />
+    <Resource Include="Images\right.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

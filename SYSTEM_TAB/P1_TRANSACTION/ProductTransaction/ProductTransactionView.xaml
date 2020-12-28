@@ -186,7 +186,6 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
-            
             <Grid Grid.Row="3" Grid.Column="0" Margin="0,0,10,0" DataContext="{Binding TradeViewModel}">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
