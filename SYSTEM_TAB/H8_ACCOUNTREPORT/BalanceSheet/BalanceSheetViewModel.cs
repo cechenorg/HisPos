@@ -236,9 +236,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             {
                 if (LeftSelectedData.Name.Contains("現金"))
                 {
-                    BalanceSheetType = BalanceSheetTypeEnum.Transfer;
-                    TransferViewModel.Target = "銀行";
-                    TransferViewModel.MaxValue = LeftSelectedData.Value;
+                    NormalViewModel = new NormalViewModel("001");
+                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
                 }
                 else if (LeftSelectedData.Name.Contains("銀行"))
                 {

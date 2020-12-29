@@ -81,6 +81,82 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Count, ref count, value);
             }
         }
+        //-------------
+
+        private int tradeCard;
+        public int TradeCard
+        {
+            get => tradeCard;
+            set
+            {
+                Set(() => TradeCard, ref tradeCard, value);
+            }
+        }
+        private int tradeCash;
+        public int TradeCash
+        {
+            get => tradeCash;
+            set
+            {
+                Set(() => Count, ref tradeCash, value);
+            }
+        }
+        private int tradeCashCoupon;
+        public int TradeCashCoupon
+        {
+            get => tradeCashCoupon;
+            set
+            {
+                Set(() => TradeCashCoupon, ref tradeCashCoupon, value);
+            }
+        }
+        private int tradeDiscount;
+        public int TradeDiscount
+        {
+            get => tradeDiscount;
+            set
+            {
+                Set(() => TradeDiscount, ref tradeDiscount, value);
+            }
+        }
+        private int tradeReward;
+        public int TradeReward
+        {
+            get => tradeReward;
+            set
+            {
+                Set(() => TradeReward, ref tradeReward, value);
+            }
+        }
+        private int extra;
+        public int Extra
+        {
+            get => extra;
+            set
+            {
+                Set(() => Extra, ref extra, value);
+            }
+        }
+
+        private int total;
+        public int Total
+        {
+            get => total;
+            set
+            {
+                Set(() => Total, ref total, value);
+            }
+        }
+
+        private int checkTotal;
+        public int CheckTotal
+        {
+            get => checkTotal;
+            set
+            {
+                Set(() => CheckTotal, ref checkTotal, value);
+            }
+        }
         public override TabBase getTab()
         {
             return this;
@@ -88,6 +164,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 
         #region ----- Define Commands -----
         public RelayCommand ReloadCommand { get; set; }
+        public RelayCommand ConfirmCommand { get; set; }
         #endregion
 
 
@@ -95,6 +172,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         public ClosingWorkViewModel()
         {
             ReloadCommand = new RelayCommand(ReloadAction);
+            ConfirmCommand = new RelayCommand(ConfirmAction);
             ReloadAction();
         }
 
@@ -113,7 +191,34 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             Other = (int)result.Rows[0]["other"];
             Count= (int)result.Rows[0]["count"];
             CashTotal=(int)result.Rows[0]["CashTotal"];
+            TradeCard = (int)result.Rows[0]["tradeCard"];
+            TradeCash = (int)result.Rows[0]["tradeCash"];
+            TradeCashCoupon = (int)result.Rows[0]["tradeCashCoupon"];
+            TradeDiscount = (int)result.Rows[0]["tradeDiscount"];
+            TradeReward = (int)result.Rows[0]["tradeReward"];
+            Extra = (int)result.Rows[0]["Extra"];
+            Total = TradeCash + CashTotal + TradeReward + Extra;
 
+        }
+        private void ConfirmAction()
+        {
+            if (CheckTotal == 0 || CheckTotal == null) {
+                return;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMP", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("Value", (int)(Total- CheckTotal)));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCloseCash]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            if (result.Rows[0]["RESULT"].ToString() == "FAIL")
+            {
+                MessageWindow.ShowMessage("今日已輸入過", MessageType.ERROR);
+            }
+            else 
+            {
+                MessageWindow.ShowMessage("成功", MessageType.SUCCESS);
+            }
         }
     }
 }

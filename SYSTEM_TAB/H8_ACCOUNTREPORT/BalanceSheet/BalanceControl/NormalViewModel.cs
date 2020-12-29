@@ -194,6 +194,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("請選擇細目", MessageType.ERROR);
                 return;
             }
+            if (SelectedDetail.Name == "20000101" || SelectedDetail.ID == "0")
+            {
+                MessageWindow.ShowMessage("不得結案該項目", MessageType.ERROR);
+                return;
+            }
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("Emp", ViewModelMainWindow.CurrentUser.ID));
@@ -336,6 +341,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("請選擇沖帳目標", MessageType.ERROR);
                 return;
             }
+            
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
