@@ -166,7 +166,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
             MainWindow.ServerConnection.CloseConnection();
             SelectedType = new List<AccountsReports>();
-            SelectedType.Add(new AccountsReports("現金", 0, "001001"));
+            if (ID != "001001")
+            {
+                SelectedType.Add(new AccountsReports("現金", 0, "001001"));
+            }
             foreach (DataRow c in result.Rows)
             {
                 SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
