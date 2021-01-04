@@ -9,7 +9,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Report.CashReport;
-
+using System.Windows.Media;
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 {
     public class ClosingWorkViewModel : TabBase
@@ -98,7 +98,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             get => tradeCash;
             set
             {
-                Set(() => Count, ref tradeCash, value);
+                Set(() => TradeCash, ref tradeCash, value);
             }
         }
         private int tradeCashCoupon;
@@ -157,6 +157,25 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CheckTotal, ref checkTotal, value);
             }
         }
+        private string checkClosed;
+        public string CheckClosed
+        {
+            get => checkClosed;
+            set
+            {
+                Set(() => CheckClosed, ref checkClosed, value);
+            }
+        }
+
+        private Brush checkColor;
+        public Brush CheckColor
+        {
+            get => checkColor;
+            set
+            {
+                Set(() => CheckColor, ref checkColor, value);
+            }
+        }
         public override TabBase getTab()
         {
             return this;
@@ -197,12 +216,25 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             TradeDiscount = (int)result.Rows[0]["tradeDiscount"];
             TradeReward = (int)result.Rows[0]["tradeReward"];
             Extra = (int)result.Rows[0]["Extra"];
-            Total = TradeCash + CashTotal + TradeReward + Extra;
+            CheckClosed = result.Rows[0]["CheckClosed"].ToString();
+            CheckColor = Brushes.Green;
+            if (CheckClosed == null || CheckClosed == "") {
+                CheckClosed = "未關班";
+                CheckColor = Brushes.Red;
+            }
+
+
+            Total = TradeCash + CashTotal + TradeReward;
 
         }
         private void ConfirmAction()
         {
             if (CheckTotal == 0 || CheckTotal == null) {
+                MessageWindow.ShowMessage("請輸入", MessageType.ERROR);
+                return;
+            }
+            if (StartDate != DateTime.Today) {
+                MessageWindow.ShowMessage("僅能關今天的班", MessageType.ERROR);
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
@@ -219,6 +251,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             {
                 MessageWindow.ShowMessage("成功", MessageType.SUCCESS);
             }
+            ReloadAction();
         }
     }
 }
