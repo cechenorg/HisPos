@@ -554,7 +554,9 @@
                             <MouseBinding Gesture="LeftClick" Command="{Binding TradeChangeReportSelectionChangedCommand}"/>
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Content="{Binding TotalTradeProfitReport.TotalCostTotalAmt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
+                            <Label 
+                                Content="{Binding TotalTradeProfitReport.TotalCostTotalAmt,
+                                Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
                             </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="6" Orientation="Horizontal"  Background="Transparent" PreviewMouseDown="OTCFee_PreviewMouseDown">

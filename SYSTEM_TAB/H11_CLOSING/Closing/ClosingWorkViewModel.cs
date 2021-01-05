@@ -224,7 +224,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
 
 
-            Total = TradeCash + CashTotal + TradeReward;
+            Total = TradeCash + CashTotal + TradeReward + Extra;
 
         }
         private void ConfirmAction()

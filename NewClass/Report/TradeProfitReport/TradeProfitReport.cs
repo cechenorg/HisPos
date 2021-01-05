@@ -227,7 +227,7 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             get => totalChangeCostAmt;
             set
             {
-                Set(() => TotalChangeCostAmt, ref totalDeleteCostAmt, value);
+                Set(() => TotalChangeCostAmt, ref totalChangeCostAmt, value);
             }
         }
         private int totalDeleteDiscountAmt;
