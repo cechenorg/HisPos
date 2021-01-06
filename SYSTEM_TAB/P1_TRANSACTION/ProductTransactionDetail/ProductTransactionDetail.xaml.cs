@@ -12,7 +12,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -29,6 +28,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         string payMethod;
         public int ID;
         public CustomerSearchCondition Con;
+
         public NewClass.Prescription.Prescription CurrentPrescription
         {
             get; set;
@@ -48,7 +48,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             foreach (DataRow dr in detail.Rows)
             {
                 int PerPrice = Math.Abs((int)dr["TraDet_Price"]);
-                //int index = detail.Rows.IndexOf(dr);
                 if (GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_MemberPrice"].ToString() == PerPrice.ToString() || GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_RetailPrice"].ToString() == PerPrice.ToString()|| dr["TraDet_IsGift"].ToString()=="1")
                 {
                     dr["Irr"] = "";
@@ -66,6 +65,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 }
             }
         }
+
         private void GetEmployeeList()
         {
             
@@ -76,14 +76,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             result.Rows.InsertAt(toInsert, 0);
             var CashierList = new List<ComboBox>();
             NewFunction.FindChildGroup(ProductDataGrid, "cbCashier", ref CashierList);
-            
+
+            string res = string.Join(Environment.NewLine, result.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
+
             foreach (DataRow dr in detail.Rows) 
             {
                 int index = detail.Rows.IndexOf(dr);
                 CashierList[index].ItemsSource = result.DefaultView;
                 CashierList[index].SelectedIndex = 0;
+                if (!string.IsNullOrEmpty(dr["TraDet_RewardPersonnel"].ToString()))
+                {
+                    CashierList[index].SelectedValue = dr["TraDet_RewardPersonnel"];
+                }
             }
-            
         }
 
         private void AssignMasterValue(DataRow masterRow, string PriceType) 
@@ -125,9 +130,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbCashCoupon.Content = masterRow["TraMas_CashCoupon"].ToString();
             lblTradeTime.Content = masterRow["TransTime_Format"];
             tbNote.Text = masterRow["TraMas_Note"].ToString();
+
             /* string ogTransTime = masterRow["TraMas_UpdateTime"].ToString();
              DateTime dTime = DateTime.Parse(ogTransTime);
              string formatTransTime = dTime.ToString("yyyy-MM-dd HH:mm");*/
+
             if (masterRow["TraMas_UpdateTime"] != DBNull.Value)
             {
                 lblUpdateTime.Content = Convert.ToDateTime(masterRow["TraMas_UpdateTime"]).ToString("MM/dd/yyyy h:mm tt");
@@ -138,46 +145,27 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             }
         }
 
-        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            /*int index = GetRowIndex(e);
-            if (ProductList.Rows.Count > 0 && index < ProductList.Rows.Count)
-            {
-                ProductList.Rows.Remove(ProductList.Rows[index]);
-            }
-            CalculateTotal("AMT");*/
-        }
-
-        private void lblProductName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            /*int index = GetRowIndex(e);
-            if (index < ProductList.Rows.Count)
-            {
-                string proID = ProductList.Rows[index]["Pro_ID"].ToString();
-                ProductDetailWindow.ShowProductDetailWindow();
-                Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
-            }*/
-        }
-
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             ConfirmWindow cw = new ConfirmWindow("是否刪除交易紀錄?", "刪除紀錄確認");
             if (!(bool)cw.DialogResult) { return; }
-            else { 
+            else 
+            { 
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("MasterID", masID));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDelete]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
 
-            if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-            {
-                MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
-                Close();
-            }
-            else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
+                if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                {
+                    MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
+                    Close();
+                }
+                else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
             }
         }
+
         private void btnReturn_Click(object sender, RoutedEventArgs e)
         {
             ConfirmWindow cw = new ConfirmWindow("是否進行退貨?", "退貨確認");
@@ -198,6 +186,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 else { MessageWindow.ShowMessage("退貨失敗！", MessageType.ERROR); }
             }
         }
+
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -261,8 +250,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     dr["TraDet_PriceSum"],
                     dr["TraDet_IsGift"],
                     dr["TraDet_DepositAmount"],
-                    Id
-                    );
+                    Id);
             }
             return dt;
         }
@@ -270,19 +258,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             GetEmployeeList();
-
-            var CashierList = new List<ComboBox>();
-            NewFunction.FindChildGroup(ProductDataGrid, "cbCashier", ref CashierList);
-            foreach (DataRow dr in detail.Rows)
-            {
-                int index = detail.Rows.IndexOf(dr);
-                CashierList[index].SelectedIndex = 0;
-                if (!string.IsNullOrEmpty(dr["TraDet_RewardPersonnel"].ToString()))
-                {
-                    CashierList[index].SelectedValue = dr["TraDet_RewardPersonnel"];
-                }
-            }
         }
+
         private DataTable GetPriceList(string id)
         {
             int war = 0;
@@ -294,6 +271,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             MainWindow.ServerConnection.CloseConnection();
             return result;
         }
+
         private void tb_TextChanged(object sender, TextChangedEventArgs e)
         {
             btnSubmit.IsEnabled = true;
@@ -311,7 +289,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         private async void ProductDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             int index = GetRowIndex(e);
-            if (index < detail.Rows.Count)
+            if (index < detail.Rows.Count && index >= 0)
             {
                 string proID = detail.Rows[index]["TraDet_ProductID"].ToString();
                 ProductDetailWindow.ShowProductDetailWindow();
@@ -320,6 +298,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 ProductDetailWindow.ActivateProductDetailWindow();
             }
         }
+
         private int GetRowIndex(MouseButtonEventArgs e)
         {
             DataGridRow dgr = null;
@@ -336,13 +315,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
         private void lbCusName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (cusID == "0") { 
-            CustomerSearchWindow customerSearch;
-            Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
-            customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, null);
-            Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+            if (cusID == "0") 
+            { 
+                CustomerSearchWindow customerSearch;
+                Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, null);
+                Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
             }
         }
+
         private void GetSelectedCustomer(NotificationMessage<NewClass.Person.Customer.Customer> receiveSelectedCustomer)
         {
             Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
@@ -353,31 +334,24 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             else
             {
                 CurrentPrescription = new NewClass.Prescription.Prescription();
-
                 CurrentPrescription.Patient = new NewClass.Person.Customer.Customer();
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
-
                 cusID = CurrentPrescription.Patient.ID.ToString();
-
-
                 
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("Cus_Id", Int32.Parse(cusID)));
+                parameters.Add(new SqlParameter("Cus_Id", int.Parse(cusID)));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
                 if (result.Rows.Count > 0)
                 {
                     lbCusName.Content = result.Rows[0]["Person_Name"].ToString();
-
-
                     MainWindow.ServerConnection.CloseConnection();
                     btnSubmit.IsEnabled = true;
                     lblChanged.Content = "已修改";
                     lblChanged.Foreground = Brushes.Red;
                 }
             }
-
         }
     }
 }

@@ -92,7 +92,7 @@
                 <Label x:Name="lblPriceType" Content="" Width="95" HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Foreground="Black"/>
             </StackPanel>
         </Grid>
-        <DataGrid Name="ProductDataGrid" Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="False" SelectionUnit="Cell" MouseDoubleClick="ProductDataGrid_MouseDoubleClick">
+        <DataGrid Name="ProductDataGrid" Grid.Row="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="False" SelectionUnit="Cell" EnableRowVirtualization="False" MouseDoubleClick="ProductDataGrid_MouseDoubleClick">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -154,7 +154,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <generalCustomControl:ProductStatusIcon IsCommon="{Binding IsCommon}"/>
-                                <Label x:Name="lblProductName" Width="320" FontSize="16" FontFamily="Segoe UI Semibold" Content="{Binding Path=TraDet_ProductName}" VerticalAlignment="Center" Margin="0,0,20,0" MouseDoubleClick="lblProductName_MouseDoubleClick"/>
+                                <Label x:Name="lblProductName" Width="320" FontSize="16" FontFamily="Segoe UI Semibold" Content="{Binding Path=TraDet_ProductName}" VerticalAlignment="Center" Margin="0,0,20,0"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

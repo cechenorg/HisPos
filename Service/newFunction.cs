@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -17,7 +18,6 @@ using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
@@ -27,6 +27,30 @@ namespace His_Pos.Service
 {
     public static class NewFunction
     {
+        public static List<T> GetLogicalChildCollection<T>(this DependencyObject parent) where T : DependencyObject
+        {
+            List<T> logicalCollection = new List<T>();
+            GetLogicalChildCollection(parent, logicalCollection);
+            return logicalCollection;
+        }
+
+        private static void GetLogicalChildCollection<T>(DependencyObject parent, List<T> logicalCollection) where T : DependencyObject
+        {
+            IEnumerable children = LogicalTreeHelper.GetChildren(parent);
+            foreach (object child in children)
+            {
+                if (child is DependencyObject)
+                {
+                    DependencyObject depChild = child as DependencyObject;
+                    if (child is T)
+                    {
+                        logicalCollection.Add(child as T);
+                    }
+                    GetLogicalChildCollection(depChild, logicalCollection);
+                }
+            }
+        }
+
         public static void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
         {
             // Checks should be made, but preferably one time before calling.
@@ -34,8 +58,9 @@ namespace His_Pos.Service
             // account all of these conditions and checks are not needed.
             //if ((parent == null) || (childName == null) || (<Type T is not inheritable from FrameworkElement>))
             //{
-            //    return;
+            ///    return;
             //}
+
             int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
 
             for (int i = 0; i < childrenCount; i++)
