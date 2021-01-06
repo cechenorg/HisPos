@@ -72,6 +72,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
             MainWindow.ServerConnection.CloseConnection();
+            DataTable noEmpty = result.Copy();
             DataRow toInsert = result.NewRow();
             result.Rows.InsertAt(toInsert, 0);
             var CashierList = new List<ComboBox>();
@@ -79,13 +80,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
             string res = string.Join(Environment.NewLine, result.Rows.OfType<DataRow>().Select(x => string.Join(" ; ", x.ItemArray)));
 
-            foreach (DataRow dr in detail.Rows) 
+            foreach (DataRow dr in detail.Rows)
             {
                 int index = detail.Rows.IndexOf(dr);
                 CashierList[index].ItemsSource = result.DefaultView;
                 CashierList[index].SelectedIndex = 0;
                 if (!string.IsNullOrEmpty(dr["TraDet_RewardPersonnel"].ToString()))
                 {
+                    CashierList[index].ItemsSource = noEmpty.DefaultView;
                     CashierList[index].SelectedValue = dr["TraDet_RewardPersonnel"];
                 }
             }
