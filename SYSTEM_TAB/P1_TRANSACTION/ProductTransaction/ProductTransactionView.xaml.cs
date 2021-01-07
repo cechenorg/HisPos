@@ -651,6 +651,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (tb.Text == "") 
                 {
                     tbDiscountAmt.Focus();
+                    e.Handled = true;
                 }
                 else 
                 {
@@ -843,8 +844,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }, DispatcherPriority.ApplicationIdle);
         }
 
-        #endregion
-
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int index = GetRowIndex(e);
@@ -854,6 +853,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             CalculateTotal();
         }
+
+        #endregion
+
 
         private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -1359,10 +1361,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             else
             {
                 DataRowView row = (DataRowView)HISRecordGrid.SelectedItems[0];
-                //DataRow masterRow = row.Row;
-                //int index = GetRowIndex(e);
                 int TradeID = (int)row["SourceId"];
-                //string Type = row["Type"].ToString();
                 PrescriptionService.ShowPrescriptionEditWindow(TradeID,0);
             }
         }
@@ -1378,6 +1377,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter) 
             {
                 btnCheckout.Focus();
+                e.Handled = true;
             }
         }
     }
