@@ -237,6 +237,11 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 MessageWindow.ShowMessage("僅能關今天的班", MessageType.ERROR);
                 return;
             }
+
+            ConfirmWindow cw = new ConfirmWindow("是否進行關班作業?", "關班確認");
+            if (!(bool)cw.DialogResult) { return; }
+
+
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP", ViewModelMainWindow.CurrentUser.ID));

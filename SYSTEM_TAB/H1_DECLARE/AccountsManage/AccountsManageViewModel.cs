@@ -217,6 +217,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         }
 
         private void SubmitAction() {
+
+            ConfirmWindow cw = new ConfirmWindow("是否進行輸入科目金額", "確認");
+            if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
             AccountsDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue);
             MainWindow.ServerConnection.CloseConnection();
@@ -273,6 +276,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
 
         private void DeleteCashFlowRecordAction()
         {
+            ConfirmWindow cw = new ConfirmWindow("是否刪除選擇項目", "確認");
+            if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
             AccountsDb.DeleteCashFlow(SelectedCashFlowRecord.SelectedDetail);
             MainWindow.ServerConnection.CloseConnection();

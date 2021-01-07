@@ -197,6 +197,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("錯誤", MessageType.ERROR);
                 return;
             }
+
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", Selected.ID));
@@ -214,6 +215,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("請輸入名稱", MessageType.ERROR);
                 return;
             }
+
+            ConfirmWindow cw = new ConfirmWindow("是否新增會計科目?", "確認");
+            if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", IDClone));
@@ -228,6 +232,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         private void StrikeAction(RelayCommand command)
         {
             if (!TransferValueIsValid()) return;
+
+            ConfirmWindow cw = new ConfirmWindow("是否進行科目沖帳?", "確認");
+            if (!(bool)cw.DialogResult) { return; }
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();

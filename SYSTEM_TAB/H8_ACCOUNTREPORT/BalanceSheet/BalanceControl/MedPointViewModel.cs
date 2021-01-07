@@ -55,6 +55,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         {
             if (!StrikeValueIsValid()) return;
             if (SelectedData.SelectedType.ID == null) { MessageWindow.ShowMessage("請選擇正確的沖帳對象", MessageType.ERROR); return; }
+            ConfirmWindow cw = new ConfirmWindow("是否進行沖帳?", "確認");
+            if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
             DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.SelectedType.ID, BalanceSheetTypeEnum.MedPoint, Double.Parse(SelectedData.StrikeValue), SelectedData.Name);
             MainWindow.ServerConnection.CloseConnection();

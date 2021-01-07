@@ -105,8 +105,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         #region ----- Define Actions -----
         private void StrikeAction(RelayCommand command)
         {
-            if(!TransferValueIsValid()) return;
-
+            if (!TransferValueIsValid()) return;
+            ConfirmWindow cw = new ConfirmWindow("是否進行沖帳", "確認");
+            if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Report.CashFlow;
 using His_Pos.NewClass.Report.CashReport;
@@ -60,6 +61,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
         private void DeleteStrikeHistoryAction()
         {
+
+
+            ConfirmWindow cw = new ConfirmWindow("是否進行刪除", "確認");
+            if (!(bool)cw.DialogResult) { return; }
+
             MainWindow.ServerConnection.OpenConnection();
             CashReportDb.DeleteStrikeHistory(SelectedHistory);
             Init();
