@@ -130,8 +130,8 @@
                         </StackPanel>
                         <StackPanel Grid.Row="16" Grid.Column="0" Orientation="Horizontal"  >
                             <Label Content="點算現金" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="230"/>
-                            <TextBox Text="{Binding CheckTotal,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="100"/>
-                            <Button Width="150" Content="確認現金" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ConfirmCommand}" Height="40"/>
+                            <TextBox x:Name="KeyIn" Text="{Binding CheckTotal,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="100" PreviewMouseLeftButtonDown="KeyIn_PreviewMouseLeftButtonDown" IsEnabled="{Binding Enable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Width="150" Content="確認現金" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ConfirmCommand}" Height="40" IsEnabled="{Binding Enable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="17" Grid.Column="0" Orientation="Horizontal"  >
                             <Label Content="當日已關班" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="230"/>

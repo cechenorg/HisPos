@@ -24,7 +24,7 @@
         <Grid Grid.Row="2">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Label Content="沖帳帳戶" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                <ComboBox Margin="10,0,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedBank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" DisplayMemberPath="Name">
+                <ComboBox Margin="10,0,0,0" HorizontalContentAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedBank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="300" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" DisplayMemberPath="Name">
                 </ComboBox>
             </StackPanel>
         </Grid>

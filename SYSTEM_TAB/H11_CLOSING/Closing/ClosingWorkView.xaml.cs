@@ -24,5 +24,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         {
             InitializeComponent();
         }
+
+        private void KeyIn_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            e.Handled = true;
+            textBox.Focus();
+            ((TextBox)sender).SelectAll();
+
+        }
     }
 }
