@@ -181,7 +181,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 SelectedCashFlowAccount = CashFlowAccounts[0];
             }
             CashFlowRecords = new AccountsRecords();
-            StartDate = DateTime.Today;
+            StartDate = DateTime.Now.AddDays(1 - DateTime.Now.Day);
             EndDate = DateTime.Today;
             SearchAction();
         }
