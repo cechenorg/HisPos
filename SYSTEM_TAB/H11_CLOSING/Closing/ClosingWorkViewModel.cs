@@ -194,6 +194,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         #region ----- Define Commands -----
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand ConfirmCommand { get; set; }
+        public RelayCommand HistoryCommand { get; set; }
+        
         #endregion
 
 
@@ -202,7 +204,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         {
             ReloadCommand = new RelayCommand(ReloadAction);
             ConfirmCommand = new RelayCommand(ConfirmAction);
-            ReloadAction();
+            HistoryCommand = new RelayCommand(HistoryAction);
+        ReloadAction();
+        }
+
+        private void HistoryAction()
+        {
+            var historyWindow = new ClosingHistoryWindow();
+            historyWindow.ShowDialog();
         }
 
         private void ReloadAction()

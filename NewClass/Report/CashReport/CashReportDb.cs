@@ -18,6 +18,12 @@ namespace His_Pos.NewClass.Report.CashReport
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CashReportByDate]", parameterList);
         }
 
+        internal static DataTable GetClosingHistories()
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ClosingWorkHistory]", parameterList);
+        }
+
         internal static DataSet GetYearIncomeStatementForExport(int year)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
