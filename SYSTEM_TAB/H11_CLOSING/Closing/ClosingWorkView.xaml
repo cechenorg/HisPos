@@ -19,7 +19,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="70"/>
                     <RowDefinition/>
-                    <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -39,12 +38,13 @@
                             </Binding>
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
-                    <Button Width="150" Content="搜尋" Margin="260,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}" Height="40"/>
+                    <Button Width="150" Content="搜尋" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReloadCommand}" Height="40"/>
+                    <Button IsEnabled="False" Width="150" Content="關班紀錄" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="DimGray" Command="{Binding ReloadCommand}" Height="40"/>
                 </StackPanel>
-
                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="40"/>
@@ -133,86 +133,12 @@
                             <TextBox x:Name="KeyIn" Text="{Binding CheckTotal,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="100" PreviewMouseLeftButtonDown="KeyIn_PreviewMouseLeftButtonDown" IsEnabled="{Binding Enable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                             <Button Width="150" Content="確認現金" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" FontSize="20" BorderThickness="0" Background="RoyalBlue" Command="{Binding ConfirmCommand}" Height="40" IsEnabled="{Binding Enable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
-                        <StackPanel Grid.Row="17" Grid.Column="0" Orientation="Horizontal"  >
+                        <StackPanel Grid.Row="18" Grid.Column="0" Orientation="Horizontal"  >
                             <Label Content="當日已關班" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="230"/>
                             <Label Content="{Binding CheckClosed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Foreground="{Binding CheckColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="230"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
-
-                <!--<StackPanel Grid.Row="1" Grid.Column="1">
-                <DataGrid  Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding RightBalanceSheetDatas, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding RightSelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGrid.Resources>
-                        <Style TargetType="{x:Type ScrollBar}">
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                            <Setter Property="OverridesDefaultStyle" Value="true"/>
-                            <Setter Property="Width" Value="100"/>
-                            <Style.Triggers>
-                                <Trigger Property="Orientation" Value="Horizontal">
-                                    <Setter Property="Width" Value="Auto" />
-                                    <Setter Property="Height" Value="15" />
-                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                                </Trigger>
-                                <Trigger Property="Orientation" Value="Vertical">
-                                    <Setter Property="Width" Value="15"/>
-                                    <Setter Property="Height" Value="Auto" />
-                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.Resources>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="Height" Value="41"/>
-                        </Style>
-                    </DataGrid.RowStyle>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="科目名稱" Width="180" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Left"/>
-                                    <Setter Property="Margin"  Value="10,0,0,0"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="類別" Width="50" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Type}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="金額" Width="150" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value, StringFormat=N2}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Right"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="{StaticResource GridBackGround}">
-                    <Label Content="資產總額 $" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding LeftTotal, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Background="{StaticResource GridBackGround}">
-                    <Label Content="負債及股東權益 $" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding RightTotal, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                </StackPanel>-->
             </Grid>
         </Grid>
     </xctk:BusyIndicator>
