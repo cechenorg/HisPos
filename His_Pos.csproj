@@ -2551,12 +2551,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Resource Include="Images\down.png" />
-    <Resource Include="Images\up.png" />
-    <Resource Include="Images\up24.png" />
-    <Resource Include="Images\down24.png" />
-    <Resource Include="Images\left.png" />
-    <Resource Include="Images\right.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -2570,6 +2564,12 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\down.png" />
+    <Resource Include="Images\up.png" />
+    <Resource Include="Images\up24.png" />
+    <Resource Include="Images\down24.png" />
+    <Resource Include="Images\left.png" />
+    <Resource Include="Images\right.png" />
     <Resource Include="Images\minus.png" />
     <Resource Include="Images\more.png" />
     <Resource Include="LOGO_HISPOS%28test%29.ico" />

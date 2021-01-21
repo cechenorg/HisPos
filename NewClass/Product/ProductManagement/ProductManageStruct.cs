@@ -27,6 +27,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
             InventoryError = row.Field<bool>("ERROR_FLAG");
             IsZero = row.Field<decimal>("NHIMED_PRICE");
             DepRec_Amount = row.Field<int>("DepRec_Amount");
+            SINGINV = row.Field<int>("inv_qty");
+            
         }
 
         public ProductTypeEnum ProductType { get; set; }
@@ -44,6 +46,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 return !string.IsNullOrEmpty(ChineseName) ? ChineseName : string.Empty;
             }
         }
+
+        public int SINGINV { get; set; }
         public double Inventory { get; set; }
         public double ShelfAmount { get; set; }
         public double MedBagAmount { get; set; }
