@@ -260,7 +260,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
            
             filterType = (ProductManageFilterEnum) int.Parse(type);
             
-            ProductCollectionView.Filter += ProductFilter;
+            ProductCollectionView.Filter += ProductTitleFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
             RaisePropertyChanged(nameof(CurrentShelfStockValue));
             
@@ -281,7 +281,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 OTCDeposit = Visibility.Collapsed;
                 ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
             }
-            ProductCollectionView.Filter += ProductFilter;
+            ProductCollectionView.Filter += ProductTitleFilter;
             RaisePropertyChanged(nameof(CurrentStockValue));
             RaisePropertyChanged(nameof(CurrentShelfStockValue));
             
