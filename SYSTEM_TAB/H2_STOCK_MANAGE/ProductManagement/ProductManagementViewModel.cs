@@ -28,6 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         public RelayCommand<string> FilterCommand { get; set; }
 
         public RelayCommand<string> FilterIsOTCCommand { get; set; }
+        public RelayCommand<string> IsOTCCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -43,6 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
         private ProductManageStructs searchProductCollection;
         private bool isBusy;
+        private string isOTC;
         private string busyContent;
         private double totalStockValue;
         private double medBagStockValue;
@@ -55,7 +57,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private ProductSearchTypeEnum searchType = ProductSearchTypeEnum.ALL;
         private ProductSearchTypeEnum searchConditionType = ProductSearchTypeEnum.ALL;
 
-
+        public string IsOTC
+        {
+            get => isOTC;
+            set { Set(() => IsOTC, ref isOTC, value); }
+        }
         private Visibility mEDDeposit;
         public Visibility MEDDeposit
         {
@@ -156,8 +162,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             get { return oTCStockValue; }
             set { Set(() => OTCStockValue, ref oTCStockValue, value); }
         }
-
-        private BackgroundWorker bgWorker = new BackgroundWorker();
 
 
         #endregion
@@ -268,8 +272,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private void FilterIsOTCAction(string type)
         {
 
-           
-            filterIsOTC = (ProductManageFilterEnum)int.Parse(type);
+            if (IsOTC == null)
+            {
+                filterIsOTC = (ProductManageFilterEnum)int.Parse("9");
+            }
+            else 
+            {
+                filterIsOTC = (ProductManageFilterEnum)int.Parse(IsOTC);
+            }
+            
             if (filterIsOTC == (ProductManageFilterEnum)8)
             {
                 MEDDeposit = Visibility.Collapsed;
@@ -297,7 +308,40 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             InsertProductCommand = new RelayCommand(InsertProductAction);
             FilterCommand = new RelayCommand<string>(FilterAction);
             FilterIsOTCCommand = new RelayCommand<string>(FilterIsOTCAction);
+            IsOTCCommand = new RelayCommand<string>(IsOTCAction);
         }
+
+        private void IsOTCAction(string obj)
+        {
+
+            filterIsOTC = (ProductManageFilterEnum)int.Parse(obj);
+            if (obj == "8")
+            {
+                IsOTC = "8";
+            }
+            else if (obj == "9") 
+            {
+                IsOTC = "9";
+            }
+
+            if (filterIsOTC == (ProductManageFilterEnum)8)
+            {
+                MEDDeposit = Visibility.Collapsed;
+                OTCDeposit = Visibility.Visible;
+                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+            }
+            else if (filterIsOTC == (ProductManageFilterEnum)9)
+            {
+                MEDDeposit = Visibility.Visible;
+                OTCDeposit = Visibility.Collapsed;
+                ErrorStockValue = TotalStockValue - ShelfStockValue - MedBagStockValue;
+            }
+            ProductCollectionView.Filter += ProductTitleFilter;
+            RaisePropertyChanged(nameof(CurrentStockValue));
+            RaisePropertyChanged(nameof(CurrentShelfStockValue));
+
+        }
+
         private void InsertProductAction() {
             InsertProductWindow.InsertProductWindow insertProductWindow = new InsertProductWindow.InsertProductWindow();
         }
