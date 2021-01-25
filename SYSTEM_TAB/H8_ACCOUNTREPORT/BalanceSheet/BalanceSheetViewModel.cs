@@ -307,7 +307,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                         BalanceSheetType = BalanceSheetTypeEnum.Normal;
                     }
-                    else if (RightSelectedData.ID == "201" || RightSelectedData.ID == "202" || RightSelectedData.ID == "203" || RightSelectedData.ID == "204")
+                    else if (RightSelectedData.ID == "201" || RightSelectedData.ID == "202"  || RightSelectedData.ID == "204")
                     {
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                     }
