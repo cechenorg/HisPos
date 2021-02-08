@@ -38,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         public RelayCommand StockTakingCommand { get; set; }
         public RelayCommand RecycleCommand { get; set; }
         public RelayCommand ScrapCommand { get; set; }
+        public RelayCommand ChangeCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -111,6 +112,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
             }
         }
+        private void ChangeAction()
+        {
+            ChangeWindow stockTakingWindow = new ChangeWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail);
+            stockTakingWindow.ShowDialog();
+
+            if (stockTakingWindow.DialogResult != null && (bool)stockTakingWindow.DialogResult)
+            {
+                ReloadData();
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
+            }
+        }
         #endregion
 
         #region ----- Define Functions -----
@@ -128,6 +140,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             StockTakingCommand = new RelayCommand(StockTakingAction);
             ScrapCommand = new RelayCommand(ScrapAction);
             RecycleCommand = new RelayCommand(RecycleAction);
+            ChangeCommand = new RelayCommand(ChangeAction);
         }
         private void ReloadData()
         {

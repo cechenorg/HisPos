@@ -22,6 +22,7 @@ namespace His_Pos.NewClass.Product
             IsFrozen = row.Field<bool>("Med_IsFrozen");
             ControlLevel = row.Field<byte?>("Med_Control");
             IsEnable = row.Field<bool>("Pro_IsEnable");
+            OTCFromSingde= row.Field<bool>("OTCFromSingde");
 
             /*if (Type == ProductTypeEnum.OTCMedicine)
                 SellPrice = 0;*/
@@ -51,5 +52,6 @@ namespace His_Pos.NewClass.Product
         public bool IsCommon { get; set; }
         public bool IsFrozen { get; set; }
         public bool IsEnable { get; set; }
+        public bool OTCFromSingde { get; set; }
     }
 }

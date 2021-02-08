@@ -1060,6 +1060,9 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\ScrapWindow.xaml.cs">
       <DependentUpon>ScrapWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\ChangeWindow.xaml.cs">
+      <DependentUpon>ChangeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\StockTakingWindow.xaml.cs">
       <DependentUpon>StockTakingWindow.xaml</DependentUpon>
     </Compile>
@@ -1902,6 +1905,10 @@
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\ScrapWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\ChangeWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\SharedWindow\ProductManageWindows\StockTakingWindow.xaml">
       <SubType>Designer</SubType>

@@ -64,6 +64,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 }
             }
         }
+        public bool OTCFromSingde { get; set; }
         #endregion
 
         public ProductManageMedicine() { }
@@ -84,7 +85,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SelfPayPrice = (double?)row.Field<decimal?>("Pro_SelfPayPrice");
             SelfPayMultiplier = row.Field<double>("SysPar_Value");
             RewardPercent= row.Field<double>("Pro_RewardPercent").ToString();
-            
+            OTCFromSingde= row.Field<bool>("OTCFromSingde");
         }
 
         #region ----- Define Functions -----

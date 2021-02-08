@@ -90,6 +90,16 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddSqlParameter(parameterList, "ProductIDs", SetStockTakingPlanProducts(stockTaking.StockTakingProductCollection));
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStockTaking]", parameterList); 
         }
+        internal static void InsertStockChange(StockTaking.StockTaking stockTaking, string typeName,string Number)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "EmpID", ChromeTabViewModel.ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", stockTaking.WareHouse.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "TypeName", typeName);
+            DataBaseFunction.AddSqlParameter(parameterList, "ProductIDs", SetStockTakingPlanProducts(stockTaking.StockTakingProductCollection));
+            DataBaseFunction.AddSqlParameter(parameterList, "Number", Number);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStockChange]", parameterList);
+        }
         internal static DataTable GetStockTakingTotalPrice(StockTakingProduct.StockTakingProduct stockTakingProduct,string warID) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
