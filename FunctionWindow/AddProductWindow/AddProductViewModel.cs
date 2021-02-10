@@ -117,7 +117,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                             break;
                         case 1:
                             SelectedProductStruct = (ProductStruct)ProStructCollectionView.Cast<object>().First();
-                            if (SelectedProductStruct.OTCFromSingde == true) {
+                            if (SelectedProductStruct.OTCFromSingde == true && addProEnum== AddProductEnum.ProductPurchase) {
                                 MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
                                 return;
                             }
@@ -184,6 +184,8 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             switch (addProEnum)
             {
                 case AddProductEnum.ProductReturn:
+                    Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
+                    break;
                 case AddProductEnum.ProductPurchase:
                     if (SelectedProductStruct.OTCFromSingde == true)
                     {
