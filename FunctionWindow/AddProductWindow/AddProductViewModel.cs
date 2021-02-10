@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
@@ -35,7 +36,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         private bool isEditing = true;
         private AddProductEnum addProEnum;
         private string wareID;
-
+        private OrderStatusEnum orderStatus= (OrderStatusEnum)1;
         private CollectionViewSource ProStructCollectionViewSource
         {
             get => proStructCollectionViewSource;
@@ -68,7 +69,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         public ProductStructs ProductStructCollection { get; set; }
         #endregion
 
-        public AddProductViewModel(AddProductEnum addProductEnum, string wareHouseID)
+        public AddProductViewModel(AddProductEnum addProductEnum, string wareHouseID, OrderStatusEnum OrderStatus)
         {
             addProEnum = addProductEnum;
             RegisterCommand();
@@ -76,8 +77,28 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             
             SearchString = "";
             wareID = wareHouseID;
+            orderStatus = OrderStatus;
         }
+        public AddProductViewModel(AddProductEnum addProductEnum, string wareHouseID)
+        {
+            addProEnum = addProductEnum;
+            RegisterCommand();
+            RegisterFilter();
 
+            SearchString = "";
+            wareID = wareHouseID;
+        }
+        public AddProductViewModel(string searchString, AddProductEnum addProductEnum, string wareHouseID , OrderStatusEnum OrderStatus)
+        {
+            addProEnum = addProductEnum;
+            RegisterCommand();
+            RegisterFilter();
+
+            SearchString = searchString;
+            wareID = wareHouseID;
+            orderStatus = OrderStatus;
+            GetRelatedDataAction();
+        }
         public AddProductViewModel(string searchString, AddProductEnum addProductEnum, string wareHouseID)
         {
             addProEnum = addProductEnum;
@@ -88,7 +109,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             wareID = wareHouseID;
             GetRelatedDataAction();
         }
-        
+
         ~AddProductViewModel()
         {
             SearchString = string.Empty;
@@ -117,7 +138,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                             break;
                         case 1:
                             SelectedProductStruct = (ProductStruct)ProStructCollectionView.Cast<object>().First();
-                            if (SelectedProductStruct.OTCFromSingde == true && addProEnum== AddProductEnum.ProductPurchase) {
+                            if (SelectedProductStruct.OTCFromSingde == true && addProEnum== AddProductEnum.ProductPurchase && orderStatus==OrderStatusEnum.SINGDE_UNPROCESSING) {
                                 MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
                                 return;
                             }
@@ -187,7 +208,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
                     break;
                 case AddProductEnum.ProductPurchase:
-                    if (SelectedProductStruct.OTCFromSingde == true)
+                    if (SelectedProductStruct.OTCFromSingde == true&& orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
                     {
                         MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
                         return;
