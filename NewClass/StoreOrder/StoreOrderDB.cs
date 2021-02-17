@@ -427,7 +427,7 @@ namespace His_Pos.NewClass.StoreOrder
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", drug.Substring(0, 12).Trim());
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", Math.Abs(Double.Parse(drug.Substring(12, 10).Trim())));
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", Math.Abs(Double.Parse(drug.Substring(13, 9).Trim())));
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", "基本單位");
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", 1);
                     DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", 0);
@@ -576,7 +576,7 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", row.Field<string>("sht_no")));
             parameters.Add(new SqlParameter("NOTE", row.Field<string>("sht_memo")));
             parameters.Add(new SqlParameter("CREATE_DATE", row.Field<DateTime>("upload_date")));
-            double num = Double.Parse(row.Field<string>("drug_list").Substring(12, 10).Trim());
+            double num = Double.Parse(row.Field<string>("drug_list").Substring(13, 9).Trim());
             parameters.Add(new SqlParameter("STOORD_TYPE", num < 0 ? "R" : "P"));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(row.Field<string>("drug_list"), row.Field<string>("sht_no"), false)));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderFromSingde]", parameters);
