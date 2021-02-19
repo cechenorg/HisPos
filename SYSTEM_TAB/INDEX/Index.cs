@@ -424,7 +424,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void InitStatusstring() {
             PhoneCallStatusString = new List<string>() { "未處理", "已聯絡", "電話未接" };
             MedPrepareStatusCollection = new List<string>() { "未處理","已備藥","不備藥" };
-            ProductTypeCollection = new List<string>() { "藥品", "OTC藥" };
+            ProductTypeCollection = new List<string>() { "藥品", "OTC" };
         }
         private void StatusChangedAction() {
             if (IndexReserveSelectedItem is null) return;
@@ -467,7 +467,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                     }
 
                 }
-                else if(ProductTypeStatusSelectedItem == "OTC藥") { 
+                else if(ProductTypeStatusSelectedItem == "OTC") { 
                     DataTable table = StoreOrderDB.StoreOrderOTCMedicine();
 
                     if (table.Rows.Count > 0)
@@ -543,7 +543,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 e.Accepted = false;
             e.Accepted = false;
             CommonProduct commonProducts = ((CommonProduct)e.Item);
-            if (commonProducts.TypeID == 2 && ProductTypeStatusSelectedItem == "OTC藥")
+            if (commonProducts.TypeID == 2 && ProductTypeStatusSelectedItem == "OTC")
                 e.Accepted = true;
             else if (commonProducts.TypeID == 1 && ProductTypeStatusSelectedItem == "藥品")
                 e.Accepted = true;

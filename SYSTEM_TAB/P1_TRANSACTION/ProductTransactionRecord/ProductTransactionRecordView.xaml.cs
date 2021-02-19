@@ -20,6 +20,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
     public partial class ProductTransactionRecordView : UserControl
     {
         public DataTable RecordList;
+        public DataTable RecordDetailList;
 
         public ProductTransactionRecordView()
         {
@@ -28,6 +29,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             EndDate.Value = GetDefaultDate();
             RecordList = new DataTable();
             GetEmployeeList();
+
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable resultdetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]");
+            MainWindow.ServerConnection.CloseConnection();
+            FormatData(resultdetail);
+            RecordDetailList = resultdetail.Copy();
+            RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
         }
         private void GetEmployeeList()
         {
@@ -116,6 +125,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             lblCount.Content = RecordList.Rows.Count;
             lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
             if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
+
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable resultdetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]");
+            MainWindow.ServerConnection.CloseConnection();
+            FormatData(resultdetail);
+            RecordDetailList = resultdetail.Copy();
+            RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
         }
 
         private void FormatData(DataTable result)
@@ -200,6 +216,27 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             StartInvoice.Text = "";
             EndInvoice.Text = "";
             cbCashier.SelectedIndex = -1;
+        }
+
+        private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnTradeDetail.Background = Brushes.Transparent;
+            btnTradeDetail.Foreground = Brushes.DimGray;
+            btnTrade.Foreground = Brushes.White;
+            btnTrade.Background = Brushes.DimGray;
+            RecordGrid.Visibility = Visibility.Visible;
+            RecordDetailGrid.Visibility = Visibility.Collapsed;
+
+        }
+
+        private void btnTradeDetail_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnTrade.Background = Brushes.Transparent;
+            btnTrade.Foreground = Brushes.DimGray;
+            btnTradeDetail.Foreground = Brushes.White;
+            btnTradeDetail.Background = Brushes.DimGray;
+            RecordGrid.Visibility = Visibility.Collapsed;
+            RecordDetailGrid.Visibility = Visibility.Visible;
         }
     }
 }
