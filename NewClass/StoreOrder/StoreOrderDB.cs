@@ -758,12 +758,13 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 foreach (var product in ((ReturnOrder)storeOrder).ReturnProducts)
                 {
+
                     if (product.ID.Length > 12)
-                        orderOTC += product.ID.Substring(0, 12);
+                        orderOTC += product.ID.Substring(0, 13);
                     else
                         orderOTC += product.ID.PadRight(12, ' ');
 
-                    orderOTC += (-product.ReturnAmount).ToString().PadLeft(10, ' ');
+                    orderOTC += (-product.ReturnAmount).ToString().PadLeft(9, ' ');
 
                     if (product.ID.Length > 12)
                         orderOTC += product.ID.Substring(13);
