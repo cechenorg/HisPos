@@ -314,7 +314,6 @@
                                 </DataTrigger>
                             </Style.Triggers>
                             <Setter Property="Background" Value="Transparent"/>
-                            <EventSetter Event="MouseDoubleClick" Handler="ShowSelectedDetailWindow"/>
                             <Setter Property="FontSize" Value="18"/>
                             <Setter Property="Height" Value="40"/>
                         </Style>

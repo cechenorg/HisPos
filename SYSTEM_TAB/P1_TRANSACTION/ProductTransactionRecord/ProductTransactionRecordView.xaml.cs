@@ -30,14 +30,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             EndDate.Value = GetDefaultDate();
             RecordList = new DataTable();
             GetEmployeeList();
-
-
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable resultdetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]");
-            MainWindow.ServerConnection.CloseConnection();
-            FormatData(resultdetail);
-            RecordDetailList = resultdetail.Copy();
-            RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
         }
         private void GetEmployeeList()
         {
@@ -129,12 +121,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
 
             MainWindow.ServerConnection.OpenConnection();
-            DataTable resultdetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]");
+            List<SqlParameter> parametersDetail= new List<SqlParameter>();
+            parametersDetail.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parametersDetail.Add(new SqlParameter("MasterID", DBNull.Value));
+            parametersDetail.Add(new SqlParameter("sDate", sDate));
+            parametersDetail.Add(new SqlParameter("eDate", eDate));
+            parametersDetail.Add(new SqlParameter("sInvoice", sInvoice));
+            parametersDetail.Add(new SqlParameter("eInvoice", eInvoice));
+            parametersDetail.Add(new SqlParameter("flag", "0"));
+            parametersDetail.Add(new SqlParameter("ShowIrregular", isIrregular));
+            parametersDetail.Add(new SqlParameter("ShowReturn", isReturn));
+            parametersDetail.Add(new SqlParameter("Cashier", Cashier));
+            DataTable resultDetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]", parametersDetail);
             MainWindow.ServerConnection.CloseConnection();
-            FormatData(resultdetail);
-            RecordDetailList = resultdetail.Copy();
+            FormatData(resultDetail);
+            RecordDetailList = resultDetail.Copy();
             RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
-
 
 
             MainWindow.ServerConnection.OpenConnection();
@@ -181,8 +183,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         private void ShowSelectedDetailWindow(object sender, MouseButtonEventArgs e)
         {
             int index = GetRowIndex(e);
-            DataRow masterRow = RecordList.Rows[index];
-            string TradeID = RecordList.Rows[index]["TraMas_ID"].ToString();
+            string TradeID;
+            DataRow masterRow;
+            if (RecordGrid.Visibility == Visibility.Visible)
+            {
+                masterRow = RecordList.Rows[index];
+                TradeID = RecordList.Rows[index]["TraMas_ID"].ToString();
+            }
+            else  
+            {
+                masterRow = RecordDetailList.Rows[index];
+                TradeID = RecordDetailList.Rows[index]["TraMas_ID"].ToString();
+            }
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
