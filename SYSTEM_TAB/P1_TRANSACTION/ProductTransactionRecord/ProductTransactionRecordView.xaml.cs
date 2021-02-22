@@ -21,6 +21,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
     {
         public DataTable RecordList;
         public DataTable RecordDetailList;
+        public DataTable RecordSumList;
 
         public ProductTransactionRecordView()
         {
@@ -86,8 +87,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             {
                 Cashier = -1;
             }
-            else {
-                Cashier=(int)cbCashier.SelectedValue;
+            else
+            {
+                Cashier = (int)cbCashier.SelectedValue;
             }
             if (sInvoice.Length == 8 || sInvoice.Length == 0 || sInvoice == "" || int.TryParse(sInvoice, out int S))
             {
@@ -97,7 +99,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
                 return;
             }
-            if (eInvoice.Length == 8 || eInvoice.Length == 0 || eInvoice=="" || int.TryParse(eInvoice, out int E))
+            if (eInvoice.Length == 8 || eInvoice.Length == 0 || eInvoice == "" || int.TryParse(eInvoice, out int E))
             {
             }
             else
@@ -107,8 +109,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             }
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MasterID", DBNull.Value));
             parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parameters.Add(new SqlParameter("MasterID", DBNull.Value));
             parameters.Add(new SqlParameter("sDate", sDate));
             parameters.Add(new SqlParameter("eDate", eDate));
             parameters.Add(new SqlParameter("sInvoice", sInvoice));
@@ -132,9 +134,30 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             FormatData(resultdetail);
             RecordDetailList = resultdetail.Copy();
             RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
+
+
+
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parametersSum = new List<SqlParameter>();
+            parametersSum.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parametersSum.Add(new SqlParameter("MasterID", DBNull.Value));
+            parametersSum.Add(new SqlParameter("sDate", sDate));
+            parametersSum.Add(new SqlParameter("eDate", eDate));
+            parametersSum.Add(new SqlParameter("sInvoice", sInvoice));
+            parametersSum.Add(new SqlParameter("eInvoice", eInvoice));
+            parametersSum.Add(new SqlParameter("flag", "0"));
+            parametersSum.Add(new SqlParameter("ShowIrregular", isIrregular));
+            parametersSum.Add(new SqlParameter("ShowReturn", isReturn));
+            parametersSum.Add(new SqlParameter("Cashier", Cashier));
+            DataTable resultSum = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordSum]", parametersSum);
+            MainWindow.ServerConnection.CloseConnection();
+            RecordSumList = resultSum.Copy();
+            RecordSumGrid.ItemsSource = RecordSumList.DefaultView;
+
+            
         }
 
-        private void FormatData(DataTable result)
+         private void FormatData(DataTable result)
         {
             result.Columns.Add("TransTime_Format", typeof(string));
             foreach (DataRow dr in result.Rows)
@@ -227,6 +250,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             RecordGrid.Visibility = Visibility.Visible;
             RecordDetailGrid.Visibility = Visibility.Collapsed;
 
+            btnTradeSum.Foreground = Brushes.DimGray;
+            btnTradeSum.Background = Brushes.Transparent;
+            RecordSumGrid.Visibility = Visibility.Collapsed;
+
         }
 
         private void btnTradeDetail_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -237,6 +264,25 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             btnTradeDetail.Background = Brushes.DimGray;
             RecordGrid.Visibility = Visibility.Collapsed;
             RecordDetailGrid.Visibility = Visibility.Visible;
+
+            btnTradeSum.Foreground = Brushes.DimGray;
+            btnTradeSum.Background = Brushes.Transparent;
+            RecordSumGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void btnTradeSum_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+            btnTrade.Background = Brushes.Transparent;
+            btnTrade.Foreground = Brushes.DimGray;
+            btnTradeDetail.Foreground = Brushes.DimGray;
+            btnTradeDetail.Background = Brushes.Transparent;
+            RecordGrid.Visibility = Visibility.Collapsed;
+            RecordDetailGrid.Visibility = Visibility.Collapsed;
+
+            btnTradeSum.Foreground = Brushes.White;
+            btnTradeSum.Background = Brushes.DimGray;
+            RecordSumGrid.Visibility = Visibility.Visible;
         }
     }
 }

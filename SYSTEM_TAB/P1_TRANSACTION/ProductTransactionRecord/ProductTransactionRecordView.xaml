@@ -62,8 +62,9 @@
                     <Button x:Name="btnQuery" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16" Click="btnQuery_Click" HorizontalAlignment="Right" Width="100"/>
                 </StackPanel>
                 <StackPanel  Grid.Row="1"  Grid.ColumnSpan="2" Orientation="Horizontal"  Background="Transparent">
-                    <Button x:Name="btnTrade" Content="銷售紀錄" Background="DimGray" BorderThickness="0" Height="25" Width="690" Margin="10,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13"  Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="P" PreviewMouseDown="btnTrade_PreviewMouseDown"/>
-                    <Button x:Name="btnTradeDetail" Content="銷售明細" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="690" Margin="0,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13" Command="{Binding DataContext.ChangeUiTypeCommand }" CommandParameter="T" PreviewMouseDown="btnTradeDetail_PreviewMouseDown"/>
+                    <Button x:Name="btnTrade" Content="銷售紀錄" Background="DimGray" BorderThickness="0" Height="25" Width="460" Margin="10,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13"  Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="P" PreviewMouseDown="btnTrade_PreviewMouseDown"/>
+                    <Button x:Name="btnTradeDetail" Content="銷售明細" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="460" Margin="0,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13" Command="{Binding DataContext.ChangeUiTypeCommand }" CommandParameter="T" PreviewMouseDown="btnTradeDetail_PreviewMouseDown"/>
+                    <Button x:Name="btnTradeSum" Content="銷售彙總" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="460" Margin="0,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13" Command="{Binding DataContext.ChangeUiTypeCommand }" CommandParameter="S" PreviewMouseDown="btnTradeSum_PreviewMouseDown"/>
                 </StackPanel>
                 <DataGrid x:Name="RecordGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
@@ -281,6 +282,90 @@
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+
+                <DataGrid x:Name="RecordSumGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed">
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollBar">
+                            <Setter Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground"  Value="#FF535353" />
+
+                        </Style>
+
+                    </DataGrid.Resources>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding Path=TraDet_IsGift}" Value="1">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="ForestGreen" Opacity="0.5"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <EventSetter Event="MouseDoubleClick" Handler="ShowSelectedDetailWindow"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Height" Value="40"/>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="60" Header="序" IsReadOnly="True" Binding="{Binding Path=ROWID}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="0,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="190" Header="商品代碼" IsReadOnly="True" Binding="{Binding Path=TraDet_ProductID}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="25,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="400" Header="商品名稱" IsReadOnly="True" Binding="{Binding Path=Pro_ChineseName}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="0,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                       
+                        <DataGridTextColumn Width="60" Header="數量" IsReadOnly="True"  Binding="{Binding Path=TraDet_Amount}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Header="總售價" IsReadOnly="True" Binding="{Binding Path=TraDet_PriceSum}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Irr}" Value="Yes">
+                                            <Setter Property="Foreground" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
