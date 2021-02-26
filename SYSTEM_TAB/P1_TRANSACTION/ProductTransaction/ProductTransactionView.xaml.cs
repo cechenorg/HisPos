@@ -975,6 +975,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
             parameters.Add(new SqlParameter("Cashier", -1));
+            parameters.Add(new SqlParameter("ProID", DBNull.Value));
+            parameters.Add(new SqlParameter("ProName", DBNull.Value));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             FormatTradeTime(result);
@@ -1324,6 +1326,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
                 parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
                 parameters.Add(new SqlParameter("Cashier", -1));
+                parameters.Add(new SqlParameter("ProID", DBNull.Value));
+                parameters.Add(new SqlParameter("ProName", DBNull.Value));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
 

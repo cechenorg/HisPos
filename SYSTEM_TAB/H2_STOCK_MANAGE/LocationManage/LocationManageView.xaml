@@ -337,7 +337,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="440" Header="商品名稱" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Pro_ChineseName}">
+                    <DataGridTextColumn Width="300" Header="商品名稱" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Pro_ChineseName}">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -370,6 +370,38 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn Width="100" Header="庫存量" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Inv_Inventory}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="22"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="FontSize" Value="25"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="平均成本" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding AvgPrice}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="22"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="FontSize" Value="25"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="庫存現值" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Total}">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>

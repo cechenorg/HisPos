@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClosedXML.Excel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
@@ -17,12 +20,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
     /// <summary>
     /// ProductTransactionRecordView.xaml 的互動邏輯
     /// </summary>
-    public partial class ProductTransactionRecordView : UserControl
+    public partial class ProductTransactionRecordView : System.Windows.Controls.UserControl
     {
         public DataTable RecordList;
         public DataTable RecordDetailList;
         public DataTable RecordSumList;
-
+        public DataTable RecordPrint;
+        public DataTable RecordDetailListPrint;
         public ProductTransactionRecordView()
         {
             InitializeComponent();
@@ -75,6 +79,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             string sInvoice = StartInvoice.Text;
             string eInvoice = EndInvoice.Text;
             int Cashier;
+            string proID = ProId.Text;
+            string proNAME = ProName.Text;
             if (cbCashier.SelectedValue == null)
             {
                 Cashier = -1;
@@ -111,6 +117,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parameters.Add(new SqlParameter("ShowIrregular", isIrregular));
             parameters.Add(new SqlParameter("ShowReturn", isReturn));
             parameters.Add(new SqlParameter("Cashier", Cashier));
+            parameters.Add(new SqlParameter("ProID", proID));
+            parameters.Add(new SqlParameter("ProName", proNAME));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             FormatData(result);
@@ -119,6 +127,28 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             lblCount.Content = RecordList.Rows.Count;
             lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
             if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
+
+
+
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parametersPrint = new List<SqlParameter>();
+            parametersPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parametersPrint.Add(new SqlParameter("MasterID", DBNull.Value));
+            parametersPrint.Add(new SqlParameter("sDate", sDate));
+            parametersPrint.Add(new SqlParameter("eDate", eDate));
+            parametersPrint.Add(new SqlParameter("sInvoice", sInvoice));
+            parametersPrint.Add(new SqlParameter("eInvoice", eInvoice));
+            parametersPrint.Add(new SqlParameter("flag", "0"));
+            parametersPrint.Add(new SqlParameter("ShowIrregular", isIrregular));
+            parametersPrint.Add(new SqlParameter("ShowReturn", isReturn));
+            parametersPrint.Add(new SqlParameter("Cashier", Cashier));
+            parametersPrint.Add(new SqlParameter("ProID", proID));
+            parametersPrint.Add(new SqlParameter("ProName", proNAME));
+    
+            DataTable resultprint = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQueryPrint]", parametersPrint);
+            MainWindow.ServerConnection.CloseConnection();
+            RecordPrint = resultprint.Copy();
+
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersDetail= new List<SqlParameter>();
@@ -132,11 +162,33 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parametersDetail.Add(new SqlParameter("ShowIrregular", isIrregular));
             parametersDetail.Add(new SqlParameter("ShowReturn", isReturn));
             parametersDetail.Add(new SqlParameter("Cashier", Cashier));
+            parametersDetail.Add(new SqlParameter("ProID", proID));
+            parametersDetail.Add(new SqlParameter("ProName", proNAME));
             DataTable resultDetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]", parametersDetail);
             MainWindow.ServerConnection.CloseConnection();
             FormatData(resultDetail);
             RecordDetailList = resultDetail.Copy();
             RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
+
+
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parametersDetailPrint = new List<SqlParameter>();
+            parametersDetailPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
+            parametersDetailPrint.Add(new SqlParameter("MasterID", DBNull.Value));
+            parametersDetailPrint.Add(new SqlParameter("sDate", sDate));
+            parametersDetailPrint.Add(new SqlParameter("eDate", eDate));
+            parametersDetailPrint.Add(new SqlParameter("sInvoice", sInvoice));
+            parametersDetailPrint.Add(new SqlParameter("eInvoice", eInvoice));
+            parametersDetailPrint.Add(new SqlParameter("flag", "0"));
+            parametersDetailPrint.Add(new SqlParameter("ShowIrregular", isIrregular));
+            parametersDetailPrint.Add(new SqlParameter("ShowReturn", isReturn));
+            parametersDetailPrint.Add(new SqlParameter("Cashier", Cashier));
+            parametersDetailPrint.Add(new SqlParameter("ProID", proID));
+            parametersDetailPrint.Add(new SqlParameter("ProName", proNAME));
+            DataTable resultDetailPrint = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQueryPrint]", parametersDetailPrint);
+            MainWindow.ServerConnection.CloseConnection();
+
+            RecordDetailListPrint = resultDetailPrint.Copy();
 
 
             MainWindow.ServerConnection.OpenConnection();
@@ -151,6 +203,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parametersSum.Add(new SqlParameter("ShowIrregular", isIrregular));
             parametersSum.Add(new SqlParameter("ShowReturn", isReturn));
             parametersSum.Add(new SqlParameter("Cashier", Cashier));
+            parametersSum.Add(new SqlParameter("ProID", proID));
+            parametersSum.Add(new SqlParameter("ProName", proNAME));
             DataTable resultSum = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordSum]", parametersSum);
             MainWindow.ServerConnection.CloseConnection();
             RecordSumList = resultSum.Copy();
@@ -208,6 +262,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
             parameters.Add(new SqlParameter("Cashier", -1));
+            parameters.Add(new SqlParameter("ProID", DBNull.Value));
+            parameters.Add(new SqlParameter("ProName", DBNull.Value));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
@@ -222,7 +278,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             GetData();
         }
 
-        private void StartDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        private void StartDate_OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (sender is MaskedTextBox t && e.Key == Key.Enter)
             {
@@ -232,7 +288,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             }
         }
 
-        private void EndDate_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        private void EndDate_OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (sender is MaskedTextBox t && e.Key == Key.Enter)
             {
@@ -266,6 +322,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             btnTradeSum.Background = Brushes.Transparent;
             RecordSumGrid.Visibility = Visibility.Collapsed;
 
+            btnPrint1.Visibility = Visibility.Visible;
+            btnPrint2.Visibility = Visibility.Collapsed;
+            btnPrint3.Visibility = Visibility.Collapsed;
         }
 
         private void btnTradeDetail_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -280,6 +339,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             btnTradeSum.Foreground = Brushes.DimGray;
             btnTradeSum.Background = Brushes.Transparent;
             RecordSumGrid.Visibility = Visibility.Collapsed;
+            btnPrint1.Visibility = Visibility.Collapsed;
+            btnPrint2.Visibility = Visibility.Visible;
+            btnPrint3.Visibility = Visibility.Collapsed;
         }
 
         private void btnTradeSum_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -295,6 +357,205 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             btnTradeSum.Foreground = Brushes.White;
             btnTradeSum.Background = Brushes.DimGray;
             RecordSumGrid.Visibility = Visibility.Visible;
+            btnPrint1.Visibility = Visibility.Collapsed;
+            btnPrint2.Visibility = Visibility.Collapsed;
+            btnPrint3.Visibility = Visibility.Visible;
+        }
+
+        private void btnPrint1_Click(object sender, RoutedEventArgs e)
+        {
+
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "銷售紀錄";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName ="銷售紀錄";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                var ws = wb.Worksheets.Add("銷售紀錄");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                var col1 = ws.Column("A");
+                col1.Width = 20;
+                var col2 = ws.Column("B");
+                col2.Width = 10;
+                var col3 = ws.Column("C");
+                col3.Width = 10;
+                var col4 = ws.Column("D");
+                col4.Width = 10;
+                var col5 = ws.Column("E");
+                col5.Width = 10;
+                var col6 = ws.Column("F");
+                col6.Width = 10;
+                var col7 = ws.Column("G");
+                col7.Width = 10;
+                ws.Cell(1, 1).Value = "銷售紀錄";
+                ws.Range(1, 1, 1, 7).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "結帳時間";
+                ws.Cell("B2").Value = "顧客姓名";
+                ws.Cell("C2").Value = "結帳金額";
+                ws.Cell("D2").Value = "付款方式";
+                ws.Cell("E2").Value = "統一編號";
+                ws.Cell("F2").Value = "發票號碼";
+                ws.Cell("G2").Value = "收銀員";
+                
+                var rangeWithData = ws.Cell(3, 1).InsertData(RecordPrint.AsEnumerable());
+
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                wb.SaveAs(fdlg.FileName);
+            }
+            try
+            {
+                myProcess.StartInfo.UseShellExecute = true;
+                myProcess.StartInfo.FileName = (fdlg.FileName);
+                myProcess.StartInfo.CreateNoWindow = true;
+                //myProcess.StartInfo.Verb = "print";
+                myProcess.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
+        }
+
+        private void btnPrint2_Click(object sender, RoutedEventArgs e)
+        {
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "銷售明細";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName = "銷售明細";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                var ws = wb.Worksheets.Add("銷售明細");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                var col1 = ws.Column("A");
+                col1.Width = 20;
+                var col2 = ws.Column("B");
+                col2.Width = 10;
+                var col3 = ws.Column("C");
+                col3.Width = 10;
+                var col4 = ws.Column("D");
+                col4.Width = 10;
+                var col5 = ws.Column("E");
+                col5.Width = 10;
+                var col6 = ws.Column("F");
+                col6.Width = 10;
+                var col7 = ws.Column("G");
+                col7.Width = 10;
+                var col8 = ws.Column("H");
+                col8.Width = 10;
+                var col9 = ws.Column("I");
+                col9.Width = 10;
+                ws.Cell(1, 1).Value = "銷售明細";
+                ws.Range(1, 1, 1, 9).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "結帳時間";
+                ws.Cell("B2").Value = "顧客姓名";
+                ws.Cell("C2").Value = "商品代碼";
+                ws.Cell("D2").Value = "商品名稱";
+                ws.Cell("E2").Value = "售價";
+                ws.Cell("F2").Value = "數量";
+                ws.Cell("G2").Value = "小計";
+                ws.Cell("H2").Value = "獎勵";
+                ws.Cell("I2").Value = "收銀員";
+                var rangeWithData = ws.Cell(3, 1).InsertData(RecordDetailListPrint.AsEnumerable());
+
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                wb.SaveAs(fdlg.FileName);
+            }
+            try
+            {
+                myProcess.StartInfo.UseShellExecute = true;
+                myProcess.StartInfo.FileName = (fdlg.FileName);
+                myProcess.StartInfo.CreateNoWindow = true;
+                //myProcess.StartInfo.Verb = "print";
+                myProcess.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
+        }
+
+        private void btnPrint3_Click(object sender, RoutedEventArgs e)
+        {
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "銷售彙總";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName = "銷售彙總";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                var ws = wb.Worksheets.Add("銷售彙總");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                var col1 = ws.Column("A");
+                col1.Width = 20;
+                var col2 = ws.Column("B");
+                col2.Width = 33;
+                var col3 = ws.Column("C");
+                col3.Width = 10;
+                var col4 = ws.Column("D");
+                col4.Width = 10;
+ 
+                ws.Cell(1, 1).Value = "銷售彙總";
+                ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "商品代碼";
+                ws.Cell("B2").Value = "商品名稱";
+                ws.Cell("C2").Value = "數量";
+                ws.Cell("D2").Value = "總售價";
+
+         
+                var rangeWithData = ws.Cell(3, 1).InsertData(RecordSumList.AsEnumerable());
+
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                wb.SaveAs(fdlg.FileName);
+            }
+            try
+            {
+                myProcess.StartInfo.UseShellExecute = true;
+                myProcess.StartInfo.FileName = (fdlg.FileName);
+                myProcess.StartInfo.CreateNoWindow = true;
+               //myProcess.StartInfo.Verb = "print";
+                myProcess.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
         }
     }
 }

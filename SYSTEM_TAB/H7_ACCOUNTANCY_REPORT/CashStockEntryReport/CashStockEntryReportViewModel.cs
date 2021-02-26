@@ -1477,6 +1477,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
             parameters.Add(new SqlParameter("Cashier", -1));
+            parameters.Add(new SqlParameter("ProID", DBNull.Value));
+            parameters.Add(new SqlParameter("ProName", DBNull.Value));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
@@ -1523,6 +1525,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
             parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
             parameters.Add(new SqlParameter("Cashier", -1));
+            parameters.Add(new SqlParameter("ProID", DBNull.Value));
+            parameters.Add(new SqlParameter("ProName", DBNull.Value));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             DataRow masterRow = result.Rows[0];

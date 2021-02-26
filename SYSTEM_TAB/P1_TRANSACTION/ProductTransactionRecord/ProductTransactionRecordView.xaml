@@ -29,7 +29,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="350"/>
+                    <ColumnDefinition Width="700"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <Label Content="銷售日期" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"></Label>
@@ -61,12 +61,21 @@
                     <Button x:Name="btnClear" Background="DimGray" BorderBrush="DimGray" Content="清除" Margin="80,0,0,0" FontSize="16" Click="btnClear_Click" HorizontalAlignment="Right" Width="100"/>
                     <Button x:Name="btnQuery" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16" Click="btnQuery_Click" HorizontalAlignment="Right" Width="100"/>
                 </StackPanel>
-                <StackPanel  Grid.Row="1"  Grid.ColumnSpan="2" Orientation="Horizontal"  Background="Transparent">
-                    <Button x:Name="btnTrade" Content="銷售紀錄" Background="DimGray" BorderThickness="0" Height="25" Width="460" Margin="10,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13"  Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="P" PreviewMouseDown="btnTrade_PreviewMouseDown"/>
-                    <Button x:Name="btnTradeDetail" Content="銷售明細" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="460" Margin="0,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13" Command="{Binding DataContext.ChangeUiTypeCommand }" CommandParameter="T" PreviewMouseDown="btnTradeDetail_PreviewMouseDown"/>
-                    <Button x:Name="btnTradeSum" Content="銷售彙總" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="460" Margin="0,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13" Command="{Binding DataContext.ChangeUiTypeCommand }" CommandParameter="S" PreviewMouseDown="btnTradeSum_PreviewMouseDown"/>
+
+                <StackPanel  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" Orientation="Horizontal"  Background="Transparent">
+                    <Label Content="商品代碼" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                    <TextBox x:Name="ProId" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False">
+                    </TextBox>
+                    <Label Content="商品名稱" Style="{StaticResource BoldLabelContent18}" Margin="10,0,0,0"/>
+                    <TextBox x:Name="ProName" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False">
+                    </TextBox>
                 </StackPanel>
-                <DataGrid x:Name="RecordGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Orientation="Horizontal"  Background="Transparent">
+                    <Button x:Name="btnTrade" Content="銷售紀錄" Background="DimGray" BorderThickness="0" Height="25" Width="220" Margin="10,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13"  Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="P" PreviewMouseDown="btnTrade_PreviewMouseDown"/>
+                    <Button x:Name="btnTradeDetail" Content="銷售明細" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="220" Margin="0,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13" Command="{Binding DataContext.ChangeUiTypeCommand }" CommandParameter="T" PreviewMouseDown="btnTradeDetail_PreviewMouseDown"/>
+                    <Button x:Name="btnTradeSum" Content="銷售彙總" Background="Transparent" Foreground="DimGray" BorderThickness="0" Height="25" Width="220" Margin="0,10,5,5" FontFamily="Segoe UI Semibold" FontSize="13" Command="{Binding DataContext.ChangeUiTypeCommand }" CommandParameter="S" PreviewMouseDown="btnTradeSum_PreviewMouseDown"/>
+                </StackPanel>
+                <DataGrid x:Name="RecordGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}" EnableRowVirtualization="False">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -87,7 +96,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="60" Header="序" IsReadOnly="True" Binding="{Binding Path=ROWID}">
+                        <DataGridTextColumn Width="60" Header="序" IsReadOnly="True" Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -164,9 +173,9 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                
-                
-                <DataGrid x:Name="RecordDetailGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed">
+
+
+                <DataGrid x:Name="RecordDetailGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}" EnableRowVirtualization="False">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -197,7 +206,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="60" Header="序" IsReadOnly="True" Binding="{Binding Path=ROWID}">
+                        <DataGridTextColumn Width="60" Header="序" IsReadOnly="True" Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -289,7 +298,7 @@
                 </DataGrid>
 
 
-                <DataGrid x:Name="RecordSumGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed">
+                <DataGrid x:Name="RecordSumGrid" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,0" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}" EnableRowVirtualization="False">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -319,7 +328,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="60" Header="序" IsReadOnly="True" Binding="{Binding Path=ROWID}">
+                        <DataGridTextColumn Width="60" Header="序" IsReadOnly="True" Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -375,6 +384,9 @@
                     <Label x:Name="lblCount" Width="150" Height="35" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="銷售總額:" Height="35" Style="{StaticResource BoldLabelContent18}"/>
                     <Label x:Name="lblTotal" Width="150" Height="35" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
+                    <Button Content="列印表單" x:Name="btnPrint1" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="800,0,0,0" Width="100" Click="btnPrint1_Click"></Button>
+                    <Button  Content="列印表單" x:Name="btnPrint2" Background="RoyalBlue" BorderBrush="RoyalBlue"  Margin="800,0,0,0" Width="100" Visibility="Collapsed" Click="btnPrint2_Click"></Button>
+                    <Button  Content="列印表單" x:Name="btnPrint3" Background="RoyalBlue" BorderBrush="RoyalBlue"  Margin="800,0,0,0" Width="100" Visibility="Collapsed" Click="btnPrint3_Click"></Button>
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>
