@@ -384,9 +384,9 @@
                     <Label x:Name="lblCount" Width="150" Height="35" Content="{Binding TotalCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
                     <Label Content="銷售總額:" Height="35" Style="{StaticResource BoldLabelContent18}"/>
                     <Label x:Name="lblTotal" Width="150" Height="35" Content="{Binding ChronicCount,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}"/>
-                    <Button Content="列印表單" x:Name="btnPrint1" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="800,0,0,0" Width="100" Click="btnPrint1_Click"></Button>
-                    <Button  Content="列印表單" x:Name="btnPrint2" Background="RoyalBlue" BorderBrush="RoyalBlue"  Margin="800,0,0,0" Width="100" Visibility="Collapsed" Click="btnPrint2_Click"></Button>
-                    <Button  Content="列印表單" x:Name="btnPrint3" Background="RoyalBlue" BorderBrush="RoyalBlue"  Margin="800,0,0,0" Width="100" Visibility="Collapsed" Click="btnPrint3_Click"></Button>
+                    <Button Content="匯出紀錄" x:Name="btnPrint1" Background="RoyalBlue" BorderBrush="RoyalBlue" Margin="800,0,0,0" Width="100" Click="btnPrint1_Click"></Button>
+                    <Button  Content="匯出紀錄" x:Name="btnPrint2" Background="RoyalBlue" BorderBrush="RoyalBlue"  Margin="800,0,0,0" Width="100" Visibility="Collapsed" Click="btnPrint2_Click"></Button>
+                    <Button  Content="匯出紀錄" x:Name="btnPrint3" Background="RoyalBlue" BorderBrush="RoyalBlue"  Margin="800,0,0,0" Width="100" Visibility="Collapsed" Click="btnPrint3_Click"></Button>
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>

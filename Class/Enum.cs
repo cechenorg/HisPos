@@ -626,4 +626,13 @@ namespace His_Pos.Class
         Expenses = 0,
         Income = 1
     }
+
+    public enum ServicePoint
+    { 
+        CODE_05202B=54,
+        CODE_05234D = 20,
+        CODE_05206B = 65,
+        CODE_05223B = 54,
+        CODE_05210B = 75
+    }
 }

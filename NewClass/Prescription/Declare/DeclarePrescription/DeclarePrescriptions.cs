@@ -145,28 +145,28 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                             {
                                 if (days >= 28)
                                 {
-                                    servicePoint = 69;
+                                    servicePoint = (int)ServicePoint.CODE_05210B; ;
                                     pre.MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
                                 }
                                 else if (days > 7 && days < 14)
                                 {
-                                    servicePoint = 48;
+                                    servicePoint = (int)ServicePoint.CODE_05223B;
                                     pre.MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
                                 }
                                 else if (days >= 14 && days < 28)
                                 {
-                                    servicePoint = 59;
+                                    servicePoint = (int)ServicePoint.CODE_05206B;
                                     pre.MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
                                 }
                                 else
                                 {
-                                    servicePoint = 48;
+                                    servicePoint = (int)ServicePoint.CODE_05202B;
                                     pre.MedicalServiceID = "05202B";//一般處方給付(7天以內)
                                 }
                             }
                             else if (j > 80 && j <= 100)
                             {
-                                servicePoint = 18;
+                                servicePoint = (int)ServicePoint.CODE_05234D;
                                 pre.MedicalServiceID = "05234D";//門診藥事服務費－每人每日81-100件內
                             }
                             else

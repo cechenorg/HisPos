@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using His_Pos.Class;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
 using His_Pos.Service;
@@ -386,16 +387,16 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                     {
                         case "05202B":
                         case "05223B":
-                            P8 = $"{48:0000000.00}";
-                            P9 = $"{48 * percentage * 0.01:00000000}";
+                            P8 = $"{(int)ServicePoint.CODE_05223B:0000000.00}";
+                            P9 = $"{(int)ServicePoint.CODE_05223B * percentage * 0.01:00000000}";
                             break;
                         case "05210B":
-                            P8 = $"{69:0000000.00}";
-                            P9 = $"{69 * percentage * 0.01:00000000}";
+                            P8 = $"{(int)ServicePoint.CODE_05210B:0000000.00}";
+                            P9 = $"{(int)ServicePoint.CODE_05210B * percentage * 0.01:00000000}";
                             break;
                         case "05206B":
-                            P8 = $"{59:0000000.00}";
-                            P9 = $"{59 * percentage * 0.01:00000000}";
+                            P8 = $"{(int)ServicePoint.CODE_05206B:0000000.00}";
+                            P9 = $"{(int)ServicePoint.CODE_05206B * percentage * 0.01:00000000}";
                             break;
                     }
 
