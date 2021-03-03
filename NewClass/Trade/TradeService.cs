@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.NewClass.Person.Customer.ProductTransactionCustomer;
+﻿using His_Pos.NewClass.Person.Customer.ProductTransactionCustomer;
 using His_Pos.NewClass.Person.Employee.ProductTransaction;
+using System;
 
 namespace His_Pos.NewClass.Trade
 {

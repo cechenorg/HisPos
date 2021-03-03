@@ -2,7 +2,7 @@
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
-    class LocationManage : TabBase
+    internal class LocationManage : TabBase
     {
         public override TabBase getTab()
         {

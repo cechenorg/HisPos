@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using JetBrains.Annotations;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using JetBrains.Annotations;
 
 namespace His_Pos.GeneralCustomControl
 {
@@ -12,6 +12,7 @@ namespace His_Pos.GeneralCustomControl
     public partial class ProductStatusIcon : UserControl, INotifyPropertyChanged
     {
         #region ----- Define DependencyProperty -----
+
         public bool IsCommon
         {
             get { return (bool)GetValue(IsCommonProperty); }
@@ -73,9 +74,11 @@ namespace His_Pos.GeneralCustomControl
             userControl.OnPropertyChanged(nameof(IsControl));
             userControl.OnPropertyChanged(nameof(ShowSafeAmount));
         }
-        #endregion
+
+        #endregion ----- Define DependencyProperty -----
 
         #region ----- Define Variables -----
+
         public bool IsControl { get { return ControlLevel > 0; } }
         public bool ShowSafeAmount { get { return CommonSafeAmount > 0; } }
 
@@ -86,7 +89,9 @@ namespace His_Pos.GeneralCustomControl
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
+
         public ProductStatusIcon()
         {
             InitializeComponent();

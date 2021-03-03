@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.StockTaking.StockTaking;
-using His_Pos.NewClass.StockTaking.StockTakingProduct;
 using His_Pos.NewClass.WareHouse;
+using System.ComponentModel;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductManageWindows
 {
@@ -29,6 +15,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public partial class ChangeWindow : Window, INotifyPropertyChanged
     {
         #region ----- Define Variables -----
+
         private string productID;
         private WareHouse wareHouse;
         private MedicineStockDetail stockDetail;
@@ -38,6 +25,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         public int Min { get; set; } = 1;
         public string CHANGE { get; set; } = "轉讓";
         public string NewPrice { get; set; }
+
         public string NewInventory
         {
             get { return newInventory; }
@@ -47,6 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 OnPropertyChanged(nameof(NewInventory));
             }
         }
+
         public string Number
         {
             get { return number; }
@@ -66,7 +55,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 OnPropertyChanged(nameof(IsOverage));
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ChangeWindow(string proID, WareHouse ware, MedicineStockDetail stock)
         {
@@ -81,6 +71,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #region ----- Define Functions -----
+
         private bool IsNewInventoryValid()
         {
             if (NewInventory.Equals(""))
@@ -111,7 +102,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 MessageWindow.ShowMessage("盤點單價不得為空!", MessageType.ERROR);
                 return false;
             }
-            else if(IsOverage)
+            else if (IsOverage)
             {
                 double newCheckedPrice = 0;
                 bool isDouble = double.TryParse(NewPrice, out newCheckedPrice);
@@ -125,28 +116,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             return true;
         }
+
         private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
             if (!IsNewInventoryValid()) return;
 
-            if (Number == null || Number == "") 
+            if (Number == null || Number == "")
             {
                 MessageWindow.ShowMessage("必須輸入批號!", MessageType.ERROR);
                 return;
             }
 
-
             double finalInv = double.Parse(NewInventory);
             double tempShelfInv = stockDetail.TotalInventory - stockDetail.ShelfInventory + double.Parse(NewInventory) - stockDetail.MedBagInventory;
             double shelfInv = (tempShelfInv < 0) ? 0 : tempShelfInv;
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否{CHANGE}: {finalInv}","確認",true);
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否{CHANGE}: {finalInv}", "確認", true);
 
             if (!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
             StockTaking stockTaking = new StockTaking();
-            stockTaking.SingleStockChange(productID, stockDetail.TotalInventory, stockDetail.TotalInventory+(finalInv*Min), double.Parse(NewPrice), wareHouse, Number);
+            stockTaking.SingleStockChange(productID, stockDetail.TotalInventory, stockDetail.TotalInventory + (finalInv * Min), double.Parse(NewPrice), wareHouse, Number);
             MainWindow.ServerConnection.CloseConnection();
 
             ProductDetailDB.UpdateProductLastPrice(productID, double.Parse(NewPrice), wareHouse.ID);
@@ -154,9 +145,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             DialogResult = true;
             Close();
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
 
         #region ----- Define PropertyChanged -----
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -167,7 +160,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        #endregion
+
+        #endregion ----- Define PropertyChanged -----
 
         private void OUT_Checked(object sender, RoutedEventArgs e)
         {

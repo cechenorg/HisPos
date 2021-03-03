@@ -1,4 +1,13 @@
-﻿using System;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using Microsoft.International.Formatters;
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -11,15 +20,6 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Xml.Linq;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
-using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
-using Microsoft.International.Formatters;
-using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -94,21 +94,23 @@ namespace His_Pos.Service
                 }
             }
         }
+
         public static bool DocumentPrinter(FixedDocument document, string documentName)
         {
             PrintDialog pd = new PrintDialog();
 
-            if ((bool) pd.ShowDialog())
+            if ((bool)pd.ShowDialog())
             {
                 pd.PrintDocument(document.DocumentPaginator, documentName);
                 return true;
             }
             return false;
         }
+
         public static T FindChild<T>(DependencyObject parent, string childName)
             where T : DependencyObject
         {
-            // Confirm parent and childName are valid. 
+            // Confirm parent and childName are valid.
             if (parent == null) return null;
 
             T foundChild = null;
@@ -124,7 +126,7 @@ namespace His_Pos.Service
                     // recursively drill down the tree
                     foundChild = FindChild<T>(child, childName);
 
-                    // If the child is found, break so we do not overwrite the found child. 
+                    // If the child is found, break so we do not overwrite the found child.
                     if (foundChild != null) break;
                 }
                 else if (!string.IsNullOrEmpty(childName))
@@ -148,6 +150,7 @@ namespace His_Pos.Service
 
             return foundChild;
         }
+
         public static T FindParent<T>(DependencyObject child) where T : DependencyObject
         {
             //get parent item
@@ -163,7 +166,9 @@ namespace His_Pos.Service
             else
                 return FindParent<T>(parentObject);
         }
-        public static int HowManyChinese(string words) {
+
+        public static int HowManyChinese(string words)
+        {
             string TmmP;
             int count = 0;
             for (int i = 0; i < words.Length; i++)
@@ -195,7 +200,6 @@ namespace His_Pos.Service
             }
             else
             { return default(T); }
-
         }
 
         public static string ConvertToAsiaMoneyFormat(int cost)
@@ -222,14 +226,16 @@ namespace His_Pos.Service
                 return new NewClass.Prescription.Treatment.Division.Division();
             return ViewModelMainWindow.Divisions.SingleOrDefault(d => d.ID.Equals(divisionId));
         }
-        public static void ExceptionLog(string log) {
+
+        public static void ExceptionLog(string log)
+        {
             string logpath = @"C:\Program Files\HISPOS\ExceptionLog.txt";
             StreamWriter str = new StreamWriter(logpath, true);
             str.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  Event:" + log);
             str.Close();
         }
 
-        public static List<bool?> CheckPrint(Prescription p,bool? focus = null)
+        public static List<bool?> CheckPrint(Prescription p, bool? focus = null)
         {
             var print = focus ?? true;
             var result = new List<bool?>();
@@ -307,7 +313,7 @@ namespace His_Pos.Service
             return table.Rows.Count == 0 || !table.Rows[0].Field<bool>("Result");
         }
 
-        public static bool CheckNotIntMedicalNumber(string medicalNumber,string adjustCaseID,int? chronicSeq)
+        public static bool CheckNotIntMedicalNumber(string medicalNumber, string adjustCaseID, int? chronicSeq)
         {
             if (medicalNumber.StartsWith("IC")) return true;
             switch (medicalNumber)
@@ -336,19 +342,20 @@ namespace His_Pos.Service
                 case "Z001":
                 case "J000" when adjustCaseID.Equals("2") && chronicSeq != null && chronicSeq >= 2:
                     return true;
+
                 case "J000" when !adjustCaseID.Equals("2") || chronicSeq is null || chronicSeq < 2:
-                    MessageWindow.ShowMessage("卡序:J000 僅可使用於慢箋第二次以後調劑處方無填載就醫序號",MessageType.ERROR);
+                    MessageWindow.ShowMessage("卡序:J000 僅可使用於慢箋第二次以後調劑處方無填載就醫序號", MessageType.ERROR);
                     return false;
             }
             int number;
             var conversionSuccessful = int.TryParse(medicalNumber, out number);
             if (conversionSuccessful)
                 return true;
-            MessageWindow.ShowMessage("就醫序號格式錯誤",MessageType.ERROR);
+            MessageWindow.ShowMessage("就醫序號格式錯誤", MessageType.ERROR);
             return false;
         }
 
-        public static bool CheckHomeCareMedicalNumber(string medicalNumber,AdjustCase adjust)
+        public static bool CheckHomeCareMedicalNumber(string medicalNumber, AdjustCase adjust)
         {
             switch (medicalNumber)
             {
@@ -366,7 +373,7 @@ namespace His_Pos.Service
             }
         }
 
-        public static void ShowMessageFromDispatcher(string message,MessageType type)
+        public static void ShowMessageFromDispatcher(string message, MessageType type)
         {
             Application.Current.Dispatcher.Invoke(delegate
             {

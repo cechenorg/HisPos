@@ -1,7 +1,7 @@
-﻿using System;
-using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
+using System;
+using System.Data;
 
 namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
 {
@@ -9,8 +9,8 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
     {
         public AccountsRecordDetail()
         {
-
         }
+
         public AccountsRecordDetail(DataRow r)
         {
             ID = r.Field<int>("CashFlow_ID");
@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
         }
 
         private int id;
+
         public int ID
         {
             get => id;
@@ -33,6 +34,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
         }
 
         private string name;
+
         public string Name
         {
             get => name;
@@ -41,7 +43,9 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
                 Set(() => Name, ref name, value);
             }
         }
+
         private string note;
+
         public string Note
         {
             get => note;
@@ -50,7 +54,9 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
                 Set(() => Note, ref note, value);
             }
         }
+
         private int cashFlowValue;
+
         public int CashFlowValue
         {
             get => cashFlowValue;
@@ -61,6 +67,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
         }
 
         private DateTime date;
+
         public DateTime Date
         {
             get => date;
@@ -71,6 +78,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
         }
 
         private string empName;
+
         public string EmpName
         {
             get => empName;
@@ -81,6 +89,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
         }
 
         private bool isSelected;
+
         public bool IsSelected
         {
             get => isSelected;
@@ -91,6 +100,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
         }
 
         private bool canEdit;
+
         public bool CanEdit
         {
             get => canEdit;

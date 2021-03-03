@@ -1,20 +1,16 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.CashReport
 {
-    public class CashReport: ObservableObject
+    public class CashReport : ObservableObject
     {
         public CashReport()
         {
-             
         }
-        public CashReport(DataRow r) {
+
+        public CashReport(DataRow r)
+        {
             TypeId = r.Field<string>("TypeId");
             TypeName = r.Field<string>("TypeName");
             CopayMentPrice = r.Field<int>("CopayMentPrice");
@@ -24,7 +20,9 @@ namespace His_Pos.NewClass.Report.CashReport
             OtherPrice = r.Field<int>("OtherPrice");
             TotalPrice = r.Field<int>("TotalPrice");
         }
+
         public string typeId;
+
         public string TypeId
         {
             get => typeId;
@@ -33,7 +31,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TypeId, ref typeId, value);
             }
         }
+
         public string typeName;
+
         public string TypeName
         {
             get => typeName;
@@ -42,7 +42,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TypeName, ref typeName, value);
             }
         }
+
         private int copayMentPrice;
+
         public int CopayMentPrice
         {
             get => copayMentPrice;
@@ -51,7 +53,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => CopayMentPrice, ref copayMentPrice, value);
             }
         }
+
         private int paySelfPrice;
+
         public int PaySelfPrice
         {
             get => paySelfPrice;
@@ -60,7 +64,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => PaySelfPrice, ref paySelfPrice, value);
             }
         }
+
         private int allPaySelfPrice;
+
         public int AllPaySelfPrice
         {
             get => allPaySelfPrice;
@@ -69,7 +75,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => AllPaySelfPrice, ref allPaySelfPrice, value);
             }
         }
+
         private int depositPrice;
+
         public int DepositPrice
         {
             get => depositPrice;
@@ -78,7 +86,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => DepositPrice, ref depositPrice, value);
             }
         }
+
         private int otherPrice;
+
         public int OtherPrice
         {
             get => otherPrice;
@@ -87,7 +97,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => OtherPrice, ref otherPrice, value);
             }
         }
+
         private int totalPrice;
+
         public int TotalPrice
         {
             get => totalPrice;
@@ -96,7 +108,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalPrice, ref totalPrice, value);
             }
         }
+
         private double total;
+
         public double Total
         {
             get => total;
@@ -107,6 +121,7 @@ namespace His_Pos.NewClass.Report.CashReport
         }
 
         private double totalOTC;
+
         public double TotalOTC
         {
             get => totalOTC;
@@ -115,7 +130,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalOTC, ref totalOTC, value);
             }
         }
+
         private double totalMedProfit;
+
         public double TotalMedProfit
         {
             get => totalMedProfit;
@@ -124,7 +141,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalMedProfit, ref totalMedProfit, value);
             }
         }
+
         private double totalMedUse;
+
         public double TotalMedUse
         {
             get => totalMedUse;
@@ -133,7 +152,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalMedUse, ref totalMedUse, value);
             }
         }
+
         private double totalMedCash;
+
         public double TotalMedCash
         {
             get => totalMedCash;
@@ -142,7 +163,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalMedCash, ref totalMedCash, value);
             }
         }
+
         private double totalMed;
+
         public double TotalMed
         {
             get => totalMed;
@@ -151,7 +174,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalMed, ref totalMed, value);
             }
         }
+
         private double totalMedChange;
+
         public double TotalMedChange
         {
             get => totalMedChange;
@@ -160,7 +185,9 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalMedChange, ref totalMedChange, value);
             }
         }
+
         private double totalOTCChange;
+
         public double TotalOTCChange
         {
             get => totalOTCChange;

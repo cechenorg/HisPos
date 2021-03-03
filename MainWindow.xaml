@@ -69,7 +69,7 @@
             <productManagement:ProductManagementView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
-            <productPurchaseReturn:ProductPurchaseReturnView/>
+            <productPurchaseReturn:ProductPurchaseReturnView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type productPurchaseRecord:ProductPurchaseRecordViewModel}">
             <productPurchaseRecord:ProductPurchaseRecordView />
@@ -93,7 +93,7 @@
             <employeeManage:EmployeeManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type customerManage:CustomerManageViewModel}">
-            <customerManage:CustomerManageView/>
+            <customerManage:CustomerManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type workScheduleManage:WorkScheduleManage}">
             <workScheduleManage:WorkScheduleManageView />
@@ -102,73 +102,73 @@
             <authenticationManage:AuthenticationManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type index:Index}">
-            <index:IndexView/>
+            <index:IndexView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type declareFile:DeclareFileManageViewModel}">
-            <declareFile:DeclareFileManageView/>
+            <declareFile:DeclareFileManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type entrySearch:EntrySearchViewModel}">
-            <entrySearch:EntrySearchView/>
+            <entrySearch:EntrySearchView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
-            <purchaseReturnReport:PurchaseReturnReportView/>
+            <purchaseReturnReport:PurchaseReturnReportView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type cooperativeEntry:CooperativeEntry}">
-            <cooperativeEntry:CooperativeEntryView/>
+            <cooperativeEntry:CooperativeEntryView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type cashStockEntryReport:CashStockEntryReportViewModel}">
-            <cashStockEntryReport:CashStockEntryReport/>
+            <cashStockEntryReport:CashStockEntryReport />
         </DataTemplate>
         <DataTemplate DataType="{x:Type cooperativeEntryReport:CooperativeEntryReportViewModel }">
-            <cooperativeEntryReport:CooperativeEntryReport/>
+            <cooperativeEntryReport:CooperativeEntryReport />
         </DataTemplate>
         <DataTemplate DataType="{x:Type controlMedicineDeclare:ControlMedicineDeclareViewModel }">
-            <controlMedicineDeclare:ControlMedicineDeclare/>
+            <controlMedicineDeclare:ControlMedicineDeclare />
         </DataTemplate>
         <DataTemplate DataType="{x:Type  AdditionalCashFlowManage:AdditionalCashFlowManageViewModel}">
-            <AdditionalCashFlowManage:AdditionalCashFlowManage/>
+            <AdditionalCashFlowManage:AdditionalCashFlowManage />
         </DataTemplate>
         <DataTemplate DataType="{x:Type  AccountsManage:AccountsManageViewModel}">
-            <AccountsManage:AccountsManage/>
+            <AccountsManage:AccountsManage />
         </DataTemplate>
         <DataTemplate DataType="{x:Type  InstitutionDeclarePointReport:InstitutionDeclarePointReportViewModel}">
-            <InstitutionDeclarePointReport:InstitutionDeclarePointReport/>
+            <InstitutionDeclarePointReport:InstitutionDeclarePointReport />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTakingPlan:StockTakingPlanViewModel}">
-            <stockTakingPlan:StockTakingPlanView/>
+            <stockTakingPlan:StockTakingPlanView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type productTransaction:ProductTransactionViewModel}">
-            <productTransaction:ProductTransactionView/>
+            <productTransaction:ProductTransactionView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type productTransactionRecord:ProductTransactionRecordViewModel}">
-            <productTransactionRecord:ProductTransactionRecordView/>
+            <productTransactionRecord:ProductTransactionRecordView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type activityManage:ActivityManageViewModel}">
-            <activityManage:ActivityManageView/>
+            <activityManage:ActivityManageView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type medBagManage:MedBagViewModel}">
-            <medBagManage:MedBagView/>
+            <medBagManage:MedBagView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type companyWeb:CompanyWebViewModel}">
-            <companyWeb:CompanyWeb/>
+            <companyWeb:CompanyWeb />
         </DataTemplate>
         <DataTemplate DataType="{x:Type systemtutorial:TutorialViewModel}">
-            <systemtutorial:Tutorial/>
+            <systemtutorial:Tutorial />
         </DataTemplate>
         <DataTemplate DataType="{x:Type incomeStatement:NewIncomeStatementViewModel}">
-            <incomeStatement:NewIncomeStatementView/>
+            <incomeStatement:NewIncomeStatementView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type balanceSheet:BalanceSheetViewModel}">
-            <balanceSheet:BalanceSheetView/>
+            <balanceSheet:BalanceSheetView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type closingWork:ClosingWorkViewModel}">
-            <closingWork:ClosingWorkView/>
+            <closingWork:ClosingWorkView />
         </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="IsTabStop" Value="false"/>
-            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -178,24 +178,24 @@
             </Setter>
         </Style>
         <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="IsTabStop" Value="false"/>
-            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border Background="LightGray"/>
+                        <Border Background="LightGray" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
         <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
-            <Grid >
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="0"/>
+                    <RowDefinition Height="0" />
+                    <RowDefinition />
+                    <RowDefinition Height="0" />
                 </Grid.RowDefinitions>
                 <Border Grid.RowSpan="3" Background="DimGray" />
                 <Track x:Name="PART_Track" Grid.Row="1" IsDirectionReversed="True">
@@ -203,7 +203,7 @@
                         <RepeatButton Style="{DynamicResource ScrollBarPageButton}" Command="ScrollBar.PageUpCommand" />
                     </Track.DecreaseRepeatButton>
                     <Track.Thumb>
-                        <Thumb Style="{DynamicResource ScrollBarThumb}" Margin="0" Width="8"/>
+                        <Thumb Style="{DynamicResource ScrollBarThumb}" Margin="0" Width="8" />
                     </Track.Thumb>
                     <Track.IncreaseRepeatButton>
                         <RepeatButton Style="{DynamicResource ScrollBarPageButton}" Command="ScrollBar.PageDownCommand" />
@@ -211,22 +211,21 @@
                 </Track>
             </Grid>
         </ControlTemplate>
-
     </Window.Resources>
     <Window.DataContext>
-        <Binding Path="ViewModelMainWindow" Source="{StaticResource Locator}"/>
+        <Binding Path="ViewModelMainWindow" Source="{StaticResource Locator}" />
     </Window.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <command:EventToCommand Command="{Binding InitialData}"/>
+            <command:EventToCommand Command="{Binding InitialData}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Viewbox Stretch="Fill">
         <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
             <Grid x:Name="MainGrid" Background="#FF333337">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="25" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="230" />
@@ -241,12 +240,12 @@
                 <ScrollViewer x:Name="HisMenu" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="760">
                     <ScrollViewer.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                            <Setter Property="OverridesDefaultStyle" Value="true"/>
-                            <Setter Property="Width" Value="100"/>
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="OverridesDefaultStyle" Value="true" />
+                            <Setter Property="Width" Value="100" />
                             <Style.Triggers>
                                 <Trigger Property="Orientation" Value="Vertical">
-                                    <Setter Property="Width" Value="8"/>
+                                    <Setter Property="Width" Value="8" />
                                     <Setter Property="Height" Value="Auto" />
                                     <Setter Property="Template" Value="{DynamicResource VerticalScrollBar}" />
                                 </Trigger>
@@ -254,28 +253,28 @@
                         </Style>
                     </ScrollViewer.Resources>
                     <StackPanel Orientation="Vertical" Height="Auto">
-                        <generalCustomControl:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature8" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature9" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature10" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <generalCustomControl:MenuListItem x:Name="HisFeature11" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                            <generalCustomControl:MenuListItem x:Name="HisFeature12" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature8" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature9" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature10" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                        <generalCustomControl:MenuListItem x:Name="HisFeature11" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem x:Name="HisFeature12" MouseDown="FeatureMouseDown" Visibility="Collapsed" />
                         </StackPanel>
                 </ScrollViewer>
             </StackPanel>
                 <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalAlignment="Bottom" Background="#FF333337" Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <Label x:Name="UserName" Margin="10,10,0,0" FontFamily="Arial" FontSize="18" Width="90" FontWeight="Bold" Foreground="White" />
-                        <Label x:Name="PharmacyName" Margin="0,10,0,0" FontSize="18" Foreground="CornflowerBlue"  Width="120" HorizontalContentAlignment="Right"/>
+                        <Label x:Name="PharmacyName" Margin="0,10,0,0" FontSize="18" Foreground="CornflowerBlue"  Width="120" HorizontalContentAlignment="Right" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Image Height="20" Margin="10,5,0,10" Source="Images/Settings.png" MouseLeftButtonDown="Settings_OnMouseLeftButtonDown"/>
+                        <Image Height="20" Margin="10,5,0,10" Source="Images/Settings.png" MouseLeftButtonDown="Settings_OnMouseLeftButtonDown" />
                         <TextBlock x:Name="SystemTime" Margin="10,5,10,10" VerticalAlignment="Center" FontSize="15" Foreground="DarkGray" TextWrapping="Wrap" />
                     </StackPanel>
                 </StackPanel>
@@ -329,27 +328,27 @@
                     <ItemsPanelTemplate>
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                         </Grid>
                     </ItemsPanelTemplate>
                 </StatusBar.ItemsPanel>
                 <StatusBarItem>
                     <TextBlock Foreground="White" FontFamily="Segoe UI Semi"
-                               FontSize="14" Margin="10,0,0,0" Text="{Binding CardReaderStatus, UpdateSourceTrigger=PropertyChanged}"/>
+                               FontSize="14" Margin="10,0,0,0" Text="{Binding CardReaderStatus, UpdateSourceTrigger=PropertyChanged}" />
                 </StatusBarItem>
                 <StatusBarItem Grid.Column="1">
                     <TextBlock Foreground="White" FontFamily="Segoe UI Semi"
-                               FontSize="14" Margin="10,0,0,0" Text="{Binding SamDcStatus, UpdateSourceTrigger=PropertyChanged}"/>
+                               FontSize="14" Margin="10,0,0,0" Text="{Binding SamDcStatus, UpdateSourceTrigger=PropertyChanged}" />
                 </StatusBarItem>
                 <StatusBarItem Grid.Column="2">
                     <TextBlock Foreground="White" FontFamily="Segoe UI Semi"
-                               FontSize="14" Margin="10,0,0,0" Text="{Binding HpcCardStatus, UpdateSourceTrigger=PropertyChanged}"/>
+                               FontSize="14" Margin="10,0,0,0" Text="{Binding HpcCardStatus, UpdateSourceTrigger=PropertyChanged}" />
                 </StatusBarItem>
             </StatusBar>
         </Grid>

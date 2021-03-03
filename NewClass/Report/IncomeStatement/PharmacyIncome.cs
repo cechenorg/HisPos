@@ -1,10 +1,6 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
@@ -91,6 +87,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         }
 
         public decimal ChronicProfit => CountDeclareIncome() - CountDeclareCost();
+
         private decimal CountDeclareIncome()
         {
             return ChronicIncome + NormalIncome + OtherIncome + CooperativeInstitutionsIncome.Sum(c => c.TotalIncome);

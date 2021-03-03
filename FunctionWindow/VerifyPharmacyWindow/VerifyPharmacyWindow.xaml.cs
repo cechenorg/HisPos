@@ -23,7 +23,8 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
             ShowDialog();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
             Messenger.Default.Unregister<NotificationMessage>(this);
         }
     }

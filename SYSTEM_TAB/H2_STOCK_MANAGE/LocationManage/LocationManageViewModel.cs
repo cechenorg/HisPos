@@ -1,29 +1,29 @@
-﻿using GalaSoft.MvvmLight.Command;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.ProductType;
+﻿using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
-    class LocationManageViewModel : TabBase
+    internal class LocationManageViewModel : TabBase
     {
         public override TabBase getTab()
         {
             return this;
         }
+
         /*public override TabBase getTab()
         {
             return this;
         }
 
         #region ----- Define Commands -----
+
         public RelayCommand AddTypeCommand { get; set; }
         public RelayCommand EditTypeCommand { get; set; }
         public RelayCommand DeleteTypeCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private ProductTypeManageMasters typeManageCollection;
         private ProductTypeManageMaster currentType;
         public ProductTypeManageMasters TypeManageCollection
@@ -42,7 +42,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 Set(() => CurrentType, ref currentType, value);
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public LocationManageViewModel()
         {
@@ -51,6 +52,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         }
 
         #region ----- Define Actions -----
+
         private void AddTypeAction()
         {
             AddLocationWindow addTypeWindow = new AddLocationWindow();
@@ -84,9 +86,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
             InitData();
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void RegisterCommand()
         {
             AddTypeCommand = new RelayCommand(AddTypeAction);
@@ -101,6 +105,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
             CurrentType = TypeManageCollection[0];
         }
-        #endregion*/
+
+        #endregion ----- Define Functions -----
+
+        */
     }
 }

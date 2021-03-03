@@ -1,25 +1,81 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage.EditTypeWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage"
-        mc:Ignorable="d"
-        Title="編輯類別" Height="200" Width="400" WindowStartupLocation="CenterScreen">
-    <Grid Height="150" Width="390" VerticalAlignment="Top" HorizontalAlignment="Left">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage.EditTypeWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="編輯類別"
+    Width="400"
+    Height="200"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid
+        Width="390"
+        Height="150"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top">
         <Grid.RowDefinitions>
-            <RowDefinition Height="45"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
+            <RowDefinition Height="45" />
+            <RowDefinition Height="40" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="大類別" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
-        <Label Grid.Row="0" Grid.Column="1" Content="小類別" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
-        <TextBox Text="{Binding SelectedType.Name}" Grid.Row="1" Grid.Column="0" FontSize="20" Foreground="DimGray" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <TextBox Name="SmallTypeTextBox" Text="{Binding SelectedType.CurrentDetailType.Name}" Grid.Row="1" Grid.Column="1" FontSize="20" Foreground="DimGray" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Top" IsEnabled="False"/>
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="50" Content="確認" FontFamily="Segoe UI Semibold" FontSize="25" Background="IndianRed" BorderThickness="0" VerticalAlignment="Bottom" Click="Confirm_OnClick"/>
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            VerticalContentAlignment="Center"
+            Content="大類別"
+            FontFamily="Segoe UI Semibold"
+            FontSize="30"
+            Foreground="{StaticResource ForeGround}" />
+        <Label
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            VerticalContentAlignment="Center"
+            Content="小類別"
+            FontFamily="Segoe UI Semibold"
+            FontSize="30"
+            Foreground="{StaticResource ForeGround}" />
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontFamily="Segoe UI SemiBold"
+            FontSize="20"
+            Foreground="DimGray"
+            Text="{Binding SelectedType.Name}" />
+        <TextBox
+            Name="SmallTypeTextBox"
+            Grid.Row="1"
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontFamily="Segoe UI SemiBold"
+            FontSize="20"
+            Foreground="DimGray"
+            IsEnabled="False"
+            Text="{Binding SelectedType.CurrentDetailType.Name}" />
+        <Button
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Width="250"
+            Height="50"
+            VerticalAlignment="Bottom"
+            Background="IndianRed"
+            BorderThickness="0"
+            Click="Confirm_OnClick"
+            Content="確認"
+            FontFamily="Segoe UI Semibold"
+            FontSize="25" />
     </Grid>
 </Window>

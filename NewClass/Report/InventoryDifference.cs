@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Report
 {
@@ -12,7 +8,6 @@ namespace His_Pos.NewClass.Report
     {
         public InventoryDifference()
         {
-
         }
 
         public InventoryDifference(DataRow r)
@@ -23,6 +18,7 @@ namespace His_Pos.NewClass.Report
         }
 
         private decimal inventoryOverage;
+
         public decimal InventoryOverage
         {
             get => inventoryOverage;
@@ -33,6 +29,7 @@ namespace His_Pos.NewClass.Report
         }
 
         private decimal inventoryShortage;
+
         public decimal InventoryShortage
         {
             get => inventoryShortage;
@@ -43,6 +40,7 @@ namespace His_Pos.NewClass.Report
         }
 
         private decimal inventoryScrap;
+
         public decimal InventoryScrap
         {
             get => inventoryScrap;
@@ -53,6 +51,7 @@ namespace His_Pos.NewClass.Report
         }
 
         private double inventoryTotal;
+
         public double InventoryTotal
         {
             get => inventoryTotal;
@@ -61,7 +60,6 @@ namespace His_Pos.NewClass.Report
                 Set(() => InventoryTotal, ref inventoryTotal, value);
             }
         }
-
 
         public void GetInventoryDifference(DateTime startDate, DateTime endDate)
         {

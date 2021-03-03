@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.StoreOrder.Report
 {
     public class ManufactoryOrderDetail : ObservableObject
     {
         #region ----- Define Variables -----
+
         private double unTaxPrice;
         private double tax;
         private double taxPrice;
@@ -21,32 +18,38 @@ namespace His_Pos.NewClass.StoreOrder.Report
         public DateTime DoneTime { get; set; }
         private double InitialPrice { get; set; }
         public double ReturnStockValue { get; set; }
+
         public double UnTaxPrice
         {
             get { return unTaxPrice; }
             set { Set(() => UnTaxPrice, ref unTaxPrice, value); }
         }
+
         public double Tax
         {
             get { return tax; }
             set { Set(() => Tax, ref tax, value); }
         }
+
         public double TaxPrice
         {
             get { return taxPrice; }
             set { Set(() => TaxPrice, ref taxPrice, value); }
         }
+
         public string Name
         {
             get { return name; }
             set { Set(() => Name, ref name, value); }
         }
+
         public double ReturnDiff { get { return TaxPrice - ReturnStockValue; } }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ManufactoryOrderDetail(DataRow dataRow)
         {
-            Type = dataRow.Field<string>("StoOrd_Type").Equals("P")? OrderTypeEnum.PURCHASE : OrderTypeEnum.RETURN;
+            Type = dataRow.Field<string>("StoOrd_Type").Equals("P") ? OrderTypeEnum.PURCHASE : OrderTypeEnum.RETURN;
             ID = dataRow.Field<string>("StoOrd_ID");
             DoneTime = dataRow.Field<DateTime>("StoOrd_ReceiveTime");
             InitialPrice = (double)dataRow.Field<decimal>("PRICE");
@@ -56,6 +59,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
         }
 
         #region ----- Define Functions -----
+
         internal void CalculateTax()
         {
             TaxPrice = InitialPrice;
@@ -64,6 +68,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
 
             Tax = TaxPrice - UnTaxPrice;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

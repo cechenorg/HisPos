@@ -1,12 +1,15 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
 {
     public class ControlMedicineDetail : ObservableObject
     {
-        public ControlMedicineDetail() { }
+        public ControlMedicineDetail()
+        {
+        }
+
         public ControlMedicineDetail(DataRow r)
         {
             MedID = r.Field<string>("Pro_ID");
@@ -19,7 +22,8 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             ManufactoryName = r.Field<string>("ManName");
             ManufactoryControlMedicinesID = r.Field<string>("ManID");
         }
-        public ControlMedicineDetail(DataRow r, double stock,string medID)
+
+        public ControlMedicineDetail(DataRow r, double stock, string medID)
         {
             MedID = medID;
             Date = r.Field<DateTime>("Date");
@@ -35,6 +39,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             else
                 FinalStock = stock;
         }
+
         public DateTime Date { get; set; }
         public string MedID { get; set; }
         public string TypeName { get; set; }

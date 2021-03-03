@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.NewClass.StockTaking.StockTaking;
-using His_Pos.NewClass.StockTaking.StockTakingProduct;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl;
@@ -20,33 +11,40 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedC
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductManageWindows;
+using System;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
     public class MedicineManageViewModel : ViewModelBase
     {
         #region ----- Define ViewModels -----
+
         public GroupInventoryControlViewModel GroupViewModel { get; set; }
         public SingdePriceControlViewModel PriceViewModel { get; set; }
         public ProductRecordDetailControlViewModel RecordViewModel { get; set; }
         public MedicineStockViewModel StockViewModel { get; set; }
         public OTCStockViewModel OTCStockViewModel { get; set; }
         public PrescriptionViewModel PrescriptionViewModel { get; set; }
-        #endregion
+
+        #endregion ----- Define ViewModels -----
 
         #region ----- Define Commands -----
+
         public RelayCommand StockTakingCommand { get; set; }
         public RelayCommand RecycleCommand { get; set; }
         public RelayCommand ScrapCommand { get; set; }
         public RelayCommand ChangeCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private string medicineID;
         private ProductTypeEnum productType;
         private WareHouse selectedWareHouse;
 
         public WareHouses WareHouseCollection { get; set; }
+
         public WareHouse SelectedWareHouse
         {
             get { return selectedWareHouse; }
@@ -56,12 +54,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 ReloadData();
             }
         }
+
         public ProductTypeEnum ProductType
         {
             get { return productType; }
             set { Set(() => ProductType, ref productType, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public MedicineManageViewModel()
         {
@@ -79,17 +79,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
 
         #region ----- Define Actions -----
+
         private void ScrapAction()
         {
             ScrapWindow scrapWindow = new ScrapWindow(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail.TotalInventory);
             scrapWindow.ShowDialog();
 
-            if (scrapWindow.DialogResult != null && (bool) scrapWindow.DialogResult)
+            if (scrapWindow.DialogResult != null && (bool)scrapWindow.DialogResult)
             {
                 ReloadData();
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
             }
         }
+
         private void RecycleAction()
         {
             RecycleWindow recycleWindow = new RecycleWindow(medicineID, selectedWareHouse.ID, StockViewModel.StockDetail.TotalInventory);
@@ -101,17 +103,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
             }
         }
+
         private void StockTakingAction()
         {
             StockTakingWindow stockTakingWindow = new StockTakingWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail);
             stockTakingWindow.ShowDialog();
 
-            if(stockTakingWindow.DialogResult != null && (bool)stockTakingWindow.DialogResult)
+            if (stockTakingWindow.DialogResult != null && (bool)stockTakingWindow.DialogResult)
             {
                 ReloadData();
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
             }
         }
+
         private void ChangeAction()
         {
             ChangeWindow stockTakingWindow = new ChangeWindow(medicineID, selectedWareHouse, StockViewModel.StockDetail);
@@ -123,9 +127,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("UpdateUsableAmountMessage"));
             }
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void InitViewModels()
         {
             GroupViewModel = new GroupInventoryControlViewModel();
@@ -135,6 +141,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             OTCStockViewModel = new OTCStockViewModel();
             PrescriptionViewModel = new PrescriptionViewModel();
         }
+
         private void RegisterCommand()
         {
             StockTakingCommand = new RelayCommand(StockTakingAction);
@@ -142,6 +149,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             RecycleCommand = new RelayCommand(RecycleAction);
             ChangeCommand = new RelayCommand(ChangeAction);
         }
+
         private void ReloadData()
         {
             PriceViewModel.ReloadData(medicineID, selectedWareHouse.ID, productType);
@@ -151,14 +159,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             RecordViewModel.ReloadData(medicineID, selectedWareHouse.ID);
             PrescriptionViewModel.ReloadData(medicineID, selectedWareHouse.ID);
         }
+
         private void GetReloadMessage(NotificationMessage<string> message)
         {
             if (message.Sender is GroupInventoryControlViewModel || message.Sender is ProductRecordDetailControlViewModel)
             {
-                if(message.Notification.Equals("RELOAD") && message.Content.Equals(medicineID))
+                if (message.Notification.Equals("RELOAD") && message.Content.Equals(medicineID))
                     ReloadData();
             }
         }
+
         public void ReloadData(string proID, string wareID, ProductTypeEnum type)
         {
             if (!wareID.Equals(String.Empty))
@@ -169,6 +179,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             ReloadData();
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

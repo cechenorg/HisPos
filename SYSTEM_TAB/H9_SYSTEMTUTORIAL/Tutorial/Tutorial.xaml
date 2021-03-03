@@ -1,38 +1,47 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial.Tutorial"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial"
-             mc:Ignorable="d" 
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial.Tutorial"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.DataContext>
-        <local:TutorialViewModel/>
+        <local:TutorialViewModel />
     </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="50" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <DataGrid   HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
-                 ItemsSource="{Binding TutorialCollection,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding TutorialSelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
+            <DataGrid
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                CanUserAddRows="False"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                HeadersVisibility="None"
+                HorizontalScrollBarVisibility="Hidden"
+                ItemsSource="{Binding TutorialCollection, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding TutorialSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                VerticalScrollBarVisibility="Hidden">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="250">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="{StaticResource ForeGround}"/>
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{StaticResource ForeGround}" />
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                        <Setter Property="Background" Value="{StaticResource GridSelected}" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -40,7 +49,13 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="{Binding Title,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="200" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label
+                                        Width="200"
+                                        VerticalAlignment="Center"
+                                        HorizontalContentAlignment="Center"
+                                        Content="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        FontFamily="Segoe UI Semibold"
+                                        FontSize="25" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -48,14 +63,11 @@
                 </DataGrid.Columns>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </DataGrid>
-            <Grid Grid.Column="1">
-               
-            </Grid>
+            <Grid Grid.Column="1" />
         </Grid>
-       
     </Grid>
 </UserControl>

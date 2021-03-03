@@ -1,9 +1,7 @@
-﻿using System.Data;
-using System.Windows;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
+﻿using His_Pos.FunctionWindow;
 using His_Pos.NewClass.ProductLocation;
-using His_Pos.NewClass.ProductType;
+using System.Data;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
@@ -13,8 +11,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     public partial class DeleteLocationWindow : Window
     {
         #region ----- Define Variables -----
-        int ID;
-        #endregion
+
+        private int ID;
+
+        #endregion ----- Define Variables -----
 
         public DeleteLocationWindow(int i)
         {
@@ -26,7 +26,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
         private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
-
             MainWindow.ServerConnection.OpenConnection();
             DataTable dataTable = ProductLocationDB.DeleteLocation(ID);
             MainWindow.ServerConnection.CloseConnection();

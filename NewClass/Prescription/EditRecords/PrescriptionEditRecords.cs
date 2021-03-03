@@ -1,12 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
 
 namespace His_Pos.NewClass.Prescription.EditRecords
 {
     public class PrescriptionEditRecords : ObservableCollection<PrescriptionEditRecord>
     {
-        public PrescriptionEditRecords(){ }
+        public PrescriptionEditRecords()
+        {
+        }
 
         public void GetData(string prescriptionID)
         {

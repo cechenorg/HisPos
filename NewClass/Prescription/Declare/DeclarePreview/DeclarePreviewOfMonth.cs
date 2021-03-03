@@ -1,4 +1,11 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.AccountReport.InstitutionDeclarePoint;
+using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
+using His_Pos.Service;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -7,18 +14,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
-using System.Windows.Forms;
-using System.Windows.Threading;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using GalaSoft.MvvmLight;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.AccountReport.InstitutionDeclarePoint;
-using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
-using His_Pos.Properties;
-using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
 {
@@ -111,9 +108,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             get => totalDeclarePoint;
             set { Set(() => TotalDeclarePoint, ref totalDeclarePoint, value); }
         }
+
         public DateTime DeclareDate { get; set; }
 
-        internal void GetSearchPrescriptions(DateTime sDate, DateTime eDate,string pharmacyID)
+        internal void GetSearchPrescriptions(DateTime sDate, DateTime eDate, string pharmacyID)
         {
             DeclarePreviews = new ObservableCollection<DeclarePreviewOfDay>();
             DeclarePres = new DeclarePrescriptions();
@@ -125,7 +123,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 preview.AddPresOfDay(pres);
                 DeclarePreviews.Add(preview);
             }
-            DecPreOfDaysViewSource = new CollectionViewSource {Source = DeclarePreviews};
+            DecPreOfDaysViewSource = new CollectionViewSource { Source = DeclarePreviews };
             DecPreOfDaysCollectionView = DecPreOfDaysViewSource.View;
         }
 
@@ -151,9 +149,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 d.NotDeclareCount = d.PresOfDay.Count(p => !p.IsDeclare);
                 d.CheckNotDeclareCount();
             }
-            
         }
-        public void CreateDeclareFile(DeclareFile.DeclareFile doc,DateTime declareStart, DateTime declareEnd)
+
+        public void CreateDeclareFile(DeclareFile.DeclareFile doc, DateTime declareStart, DateTime declareEnd)
         {
             XDocument result;
             var xmlSerializer = new XmlSerializer(doc.GetType());
@@ -173,27 +171,28 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             //DeclarePrescriptionDb.UpdateDeclareFileID(declareFileId, declareList);
             //匯出xml檔案
             var fileName = ViewModelMainWindow.CurrentPharmacy.Name + declareStart.Date.Month + "月申報檔";
-            var filePath = Function.ExportXml(result, "每月申報檔", declareStart,fileName);
-            ExportExcelAction(declareStart, declareEnd, filePath.Replace("\\DRUGT",""));
+            var filePath = Function.ExportXml(result, "每月申報檔", declareStart, fileName);
+            ExportExcelAction(declareStart, declareEnd, filePath.Replace("\\DRUGT", ""));
         }
 
-        public void GetNotAdjustPrescriptionCount(DateTime? start, DateTime? end,string pharmacyID)
+        public void GetNotAdjustPrescriptionCount(DateTime? start, DateTime? end, string pharmacyID)
         {
             Debug.Assert(start != null, nameof(start) + " != null");
             Debug.Assert(end != null, nameof(end) + " != null");
-            var sDate = (DateTime) start;
-            var eDate = (DateTime) end;
+            var sDate = (DateTime)start;
+            var eDate = (DateTime)end;
             var table = PrescriptionDb.GetNotAdjustPrescriptionCount(sDate, eDate, pharmacyID);
             if (table.Rows.Count > 0)
             {
                 var count = table.Rows[0].Field<int>("NotAdjustCount");
                 var declareDateStr = sDate.Year - 1911 + " 年 " + sDate.Month.ToString().PadLeft(2, '0') + " 月 ";
                 if (count > 0)
-                    MessageWindow.ShowMessage(declareDateStr + "尚有 " + count + " 張慢箋未調劑結案",MessageType.WARNING);
+                    MessageWindow.ShowMessage(declareDateStr + "尚有 " + count + " 張慢箋未調劑結案", MessageType.WARNING);
             }
         }
 
-        private void ExportExcelAction( DateTime declareStart, DateTime declareEnd, string filePath) {
+        private void ExportExcelAction(DateTime declareStart, DateTime declareEnd, string filePath)
+        {
             var institutionDeclarePoints = new InstitutionDeclarePoints();
             institutionDeclarePoints.GetDataByDate(declareStart, declareEnd);
             try
@@ -206,9 +205,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             }
         }
 
-        private void CreateInstitutionSummaryFile(InstitutionDeclarePoints institutionDeclarePoints, DateTime decDate,string filePath)
+        private void CreateInstitutionSummaryFile(InstitutionDeclarePoints institutionDeclarePoints, DateTime decDate, string filePath)
         {
-            using (var file = new StreamWriter(filePath+"\\"+ViewModelMainWindow.CurrentPharmacy.Name+decDate.Month+"月院所申報統計表.csv", false, Encoding.UTF8))
+            using (var file = new StreamWriter(filePath + "\\" + ViewModelMainWindow.CurrentPharmacy.Name + decDate.Month + "月院所申報統計表.csv", false, Encoding.UTF8))
             {
                 file.WriteLine(ViewModelMainWindow.CurrentPharmacy.Name);
                 file.WriteLine("院所申報統計表");

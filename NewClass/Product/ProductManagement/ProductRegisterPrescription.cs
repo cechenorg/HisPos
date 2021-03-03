@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
@@ -18,7 +14,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
 
         public ProductRegisterPrescription(DataRow row)
         {
-            Type = row.Field<string>("TYPE").Equals("P")? ProductRegisterPrescriptionTypeEnum.PRESCRIPTION : ProductRegisterPrescriptionTypeEnum.REGISTER;
+            Type = row.Field<string>("TYPE").Equals("P") ? ProductRegisterPrescriptionTypeEnum.PRESCRIPTION : ProductRegisterPrescriptionTypeEnum.REGISTER;
             ID = row.Field<int>("PreMas_ID");
             PreparedStatus = row.Field<string>("PREPARE_STATUS");
             Name = row.Field<string>("Cus_Name");

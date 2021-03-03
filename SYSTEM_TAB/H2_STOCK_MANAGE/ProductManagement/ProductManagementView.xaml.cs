@@ -2,9 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 {
@@ -53,7 +50,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
             tbErrorAmt.Visibility = Visibility.Visible;
             MedGroup.Visibility = Visibility.Visible;
             OTCGroup.Visibility = Visibility.Collapsed;
-
         }
 
         private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)

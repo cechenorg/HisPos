@@ -1,21 +1,25 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Manufactory
 {
     public class Manufactory : ObservableObject, ICloneable
     {
-        protected Manufactory() { }
+        protected Manufactory()
+        {
+        }
+
         public Manufactory(DataRow row)
         {
             ID = row.Field<int>("Man_ID").ToString();
             Name = row.Field<string>("Man_Name");
             NickName = row.Field<string>("Man_NickName");
-            Telephone = row.Field<string>("Man_Telephone"); 
+            Telephone = row.Field<string>("Man_Telephone");
         }
 
         #region ----- Define Variables -----
+
         private string id;
         private string name;
         private string nickName;
@@ -26,6 +30,7 @@ namespace His_Pos.NewClass.Manufactory
             get { return id; }
             set { Set(() => ID, ref id, value); }
         }
+
         public string Name
         {
             get { return name; }
@@ -35,6 +40,7 @@ namespace His_Pos.NewClass.Manufactory
                 RaisePropertyChanged(nameof(GetName));
             }
         }
+
         public string NickName
         {
             get { return nickName; }
@@ -44,17 +50,19 @@ namespace His_Pos.NewClass.Manufactory
                 RaisePropertyChanged(nameof(GetName));
             }
         }
+
         public string Telephone
         {
             get { return telephone; }
             set { Set(() => Telephone, ref telephone, value); }
         }
-      
+
         public string GetName
         {
-            get { return  string.IsNullOrEmpty(NickName)? Name : NickName ; }
+            get { return string.IsNullOrEmpty(NickName) ? Name : NickName; }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public object Clone()
         {
@@ -67,6 +75,5 @@ namespace His_Pos.NewClass.Manufactory
 
             return manufactory;
         }
-
     }
 }

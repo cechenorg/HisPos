@@ -9,9 +9,9 @@ namespace His_Pos.Class.Employee
             var table = new DataTable();
             return table;
         }
+
         public static void DeleteEmployee()
         {
-
         }
     }
 }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
@@ -12,7 +8,6 @@ namespace His_Pos.NewClass.Report.IncomeStatement
     {
         public PharmacyIncomeMatrix()
         {
-            
         }
 
         public PharmacyIncomeMatrix(DataTable declareIncomeTable, DataTable pharmacyCostTable, DataTable cooperativeHeaderTable)
@@ -27,14 +22,17 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             PopulateCellValueProviderMap();
         }
 
-
         #region Fields
 
-        readonly PharmacyIncome[] pharmacyIncomes;
-        readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
+        private readonly PharmacyIncome[] pharmacyIncomes;
+        private readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
+
         private delegate object CellValueProvider(PharmacyIncome pharmacyIncome);
+
         private DataTable cooperativeInstitutionIncomeHeaderTable { get; set; }
-        #endregion
+
+        #endregion Fields
+
         protected override IEnumerable<PharmacyIncome> GetColumnHeaderValues()
         {
             return pharmacyIncomes;
@@ -50,7 +48,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             return rowHeaderToValueProviderMap[rowHeaderValue](columnHeaderValue);
         }
 
-        void PopulateCellValueProviderMap()
+        private void PopulateCellValueProviderMap()
         {
             rowHeaderToValueProviderMap.Add("慢箋健保收入", income => income.ChronicIncome);
             rowHeaderToValueProviderMap.Add("一般箋健保收入", income => income.NormalIncome);
@@ -62,7 +60,6 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                 var headerName = row.Field<string>("IncomeName");
                 if (headerName.Contains("合作藥服"))
                 {
-                    
                     rowHeaderToValueProviderMap.Add(
                         row.Field<string>("IncomeName"), income => income.CooperativeInstitutionsIncome[index].MedicalServiceIncome);
                 }
@@ -119,12 +116,15 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                 case 0:
                     income.ChronicIncome = row.Field<decimal>($"{month}");
                     break;
+
                 case 1:
                     income.NormalIncome = row.Field<decimal>($"{month}");
                     break;
+
                 case 2:
                     income.OtherIncome = row.Field<decimal>($"{month}");
                     break;
+
                 default:
                     SetCooperativeDeclareIncome(income, row, rowCount, month);
                     break;
@@ -138,6 +138,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                 case 0:
                     income.ChronicCost = row.Field<decimal>($"{month}");
                     break;
+
                 case 1:
                     income.NormalCost = row.Field<decimal>($"{month}");
                     break;
@@ -155,9 +156,11 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                     c.MedicalServiceIncome = row.Field<decimal>($"{month}");
                     income.CooperativeInstitutionsIncome.Add(c);
                     break;
+
                 case 1:
                     income.CooperativeInstitutionsIncome[insIndex].MedicineIncome = row.Field<decimal>($"{month}");
                     break;
+
                 case 2:
                     income.CooperativeInstitutionsIncome[insIndex].OtherIncome = row.Field<decimal>($"{month}");
                     break;

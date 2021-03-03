@@ -27,11 +27,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
             InitData();
         }
 
-        private void InitBackgroundWorker() 
+        private void InitBackgroundWorker()
         {
             bgWorker.DoWork += (sender, args) =>
             {
-                Dispatcher.BeginInvoke(new Action(() => { 
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
                     bi.BusyContent = "取得損益資料...";
                 }));
                 GetData(year);
@@ -55,13 +56,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
                     bgWorker.RunWorkerAsync();
                 }
             }
-            else 
+            else
             {
                 MessageWindow.ShowMessage("查詢範圍有誤", MessageType.ERROR);
             }
         }
 
-        private void GetData(int year) 
+        private void GetData(int year)
         {
             MainWindow.ServerConnection.OpenConnection();
 
@@ -79,7 +80,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
             DataTable expanse = MainWindow.ServerConnection.ExecuteProc("[Get].[ExpanseByYear]", paraExpanse);
             DataTable closed = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsClosedByYear]", paraClosed);
 
-            Dispatcher.BeginInvoke(new Action(() => {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
                 dgPreCount.ItemsSource = count.DefaultView;
                 dgIncome.ItemsSource = income.DefaultView;
                 dgExpanse.ItemsSource = expanse.DefaultView;
@@ -156,7 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 
         private void tbYear_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) 
+            if (e.Key == Key.Enter)
             {
                 InitData();
             }

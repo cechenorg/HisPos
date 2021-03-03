@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
     public class ProfitSummaryMatrix : MatrixLib.Matrix.MatrixBase<string, decimal>
     {
-        public ProfitSummaryMatrix(string header,IReadOnlyList<decimal> profitList)
+        public ProfitSummaryMatrix(string header, IReadOnlyList<decimal> profitList)
         {
             rowHeader = header;
             rowHeaderToValueProviderMap = new Dictionary<string, CellValueProvider>();
@@ -21,11 +17,16 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         }
 
         #region Fields
+
         private readonly decimal[] profits;
         private readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
+
         private delegate object CellValueProvider(decimal chronicProfit);
+
         private readonly string rowHeader;
-        #endregion
+
+        #endregion Fields
+
         protected override IEnumerable<decimal> GetColumnHeaderValues()
         {
             return profits;
@@ -41,7 +42,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             return rowHeaderToValueProviderMap[rowHeaderValue](columnHeaderValue);
         }
 
-        void PopulateCellValueProviderMap()
+        private void PopulateCellValueProviderMap()
         {
             rowHeaderToValueProviderMap.Add(rowHeader, profit => profit);
         }

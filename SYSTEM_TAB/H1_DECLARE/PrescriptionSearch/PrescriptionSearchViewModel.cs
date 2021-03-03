@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Data;
-using System.Windows.Forms;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -24,6 +13,17 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Properties;
 using His_Pos.Service;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows.Data;
+using System.Windows.Forms;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -35,11 +35,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
     {
         #region Properties
 
-        public Collection<string> TimeIntervalTypes => new Collection<string> {"調劑日","登錄日","預約日"};
-        public Collection<string> PatientConditions => new Collection<string> { "姓名", "身分證"};
+        public Collection<string> TimeIntervalTypes => new Collection<string> { "調劑日", "登錄日", "預約日" };
+        public Collection<string> PatientConditions => new Collection<string> { "姓名", "身分證" };
         public Collection<string> MedicineConditions => new Collection<string> { "藥品代碼", "藥品名稱" };
         private PrescriptionType searchType { get; set; }
         private bool isBusy;
+
         public bool IsBusy
         {
             get => isBusy;
@@ -48,7 +49,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => IsBusy, ref isBusy, value);
             }
         }
+
         private string busyContent;
+
         public string BusyContent
         {
             get => busyContent;
@@ -57,7 +60,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+
         private string selectedTimeIntervalType;
+
         public string SelectedTimeIntervalType
         {
             get => selectedTimeIntervalType;
@@ -73,7 +78,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 RaisePropertyChanged("NoBuckleFilterEnable");
             }
         }
+
         private string selectedPatientCondition;
+
         public string SelectedPatientCondition
         {
             get => selectedPatientCondition;
@@ -82,7 +89,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedPatientCondition, ref selectedPatientCondition, value);
             }
         }
+
         private string patientCondition;
+
         public string PatientCondition
         {
             get => patientCondition;
@@ -91,7 +100,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => PatientCondition, ref patientCondition, value);
             }
         }
+
         private string selectedMedicineCondition;
+
         public string SelectedMedicineCondition
         {
             get => selectedMedicineCondition;
@@ -100,7 +111,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedMedicineCondition, ref selectedMedicineCondition, value);
             }
         }
+
         private string medicineCondition;
+
         public string MedicineCondition
         {
             get => medicineCondition;
@@ -109,7 +122,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => MedicineCondition, ref medicineCondition, value);
             }
         }
+
         private DateTime? patientBirth;
+
         public DateTime? PatientBirth
         {
             get => patientBirth;
@@ -118,7 +133,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => PatientBirth, ref patientBirth, value);
             }
         }
+
         private AdjustCase selectedAdjustCase;
+
         public AdjustCase SelectedAdjustCase
         {
             get => selectedAdjustCase;
@@ -129,7 +146,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedAdjustCase, ref selectedAdjustCase, value);
             }
         }
+
         private Division selectedDivision;
+
         public Division SelectedDivision
         {
             get => selectedDivision;
@@ -140,7 +159,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedDivision, ref selectedDivision, value);
             }
         }
+
         private PrescriptionSearchPreview selectedPrescription;
+
         public PrescriptionSearchPreview SelectedPrescription
         {
             get => selectedPrescription;
@@ -149,7 +170,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
+
         private int? editedPrescription;
+
         public int? EditedPrescription
         {
             get => editedPrescription;
@@ -158,10 +181,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => EditedPrescription, ref editedPrescription, value);
             }
         }
+
         public PrescriptionSearchInstitutions Institutions { get; set; }
         public AdjustCases AdjustCases { get; set; }
         public Divisions Divisions { get; set; }
         private PrescriptionSearchPreviews searchPrescriptions;
+
         public PrescriptionSearchPreviews SearchPrescriptions
         {
             get => searchPrescriptions;
@@ -170,7 +195,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SearchPrescriptions, ref searchPrescriptions, value);
             }
         }
+
         private CollectionViewSource prescriptionCollectionVS;
+
         private CollectionViewSource PrescriptionCollectionVS
         {
             get => prescriptionCollectionVS;
@@ -179,7 +206,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => PrescriptionCollectionVS, ref prescriptionCollectionVS, value);
             }
         }
+
         private ICollectionView prescriptionCollectionView;
+
         public ICollectionView PrescriptionCollectionView
         {
             get => prescriptionCollectionView;
@@ -188,7 +217,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => PrescriptionCollectionView, ref prescriptionCollectionView, value);
             }
         }
+
         private DateTime? startDate;
+
         public DateTime? StartDate
         {
             get => startDate;
@@ -197,7 +228,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => StartDate, ref startDate, value);
             }
         }
+
         private DateTime? endDate;
+
         public DateTime? EndDate
         {
             get => endDate;
@@ -206,7 +239,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => EndDate, ref endDate, value);
             }
         }
+
         private string selectedInstitutionCount;
+
         public string SelectedInstitutionCount
         {
             get => selectedInstitutionCount;
@@ -215,12 +250,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => SelectedInstitutionCount, ref selectedInstitutionCount, value);
             }
         }
+
         public override TabBase getTab()
         {
             return this;
         }
+
         private BackgroundWorker worker;
         private int totalCount;
+
         public int TotalCount
         {
             get => totalCount;
@@ -229,7 +267,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => TotalCount, ref totalCount, value);
             }
         }
+
         private int chronicCount;
+
         public int ChronicCount
         {
             get => chronicCount;
@@ -238,7 +278,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => ChronicCount, ref chronicCount, value);
             }
         }
+
         private int totalPoint;
+
         public int TotalPoint
         {
             get => totalPoint;
@@ -247,7 +289,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => TotalPoint, ref totalPoint, value);
             }
         }
+
         private int medicinePoint;
+
         public int MedicinePoint
         {
             get => medicinePoint;
@@ -256,7 +300,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => MedicinePoint, ref medicinePoint, value);
             }
         }
+
         private int medicalServicePoint;
+
         public int MedicalServicePoint
         {
             get => medicalServicePoint;
@@ -265,7 +311,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => MedicalServicePoint, ref medicalServicePoint, value);
             }
         }
+
         private int copaymentPoint;
+
         public int CopaymentPoint
         {
             get => copaymentPoint;
@@ -274,7 +322,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Set(() => CopaymentPoint, ref copaymentPoint, value);
             }
         }
+
         private int applyPoint;
+
         public int ApplyPoint
         {
             get => applyPoint;
@@ -287,6 +337,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public bool NoBuckleFilterEnable => SelectedTimeIntervalType.Equals("調劑日");
 
         private bool filterNoBuckle;
+
         public bool FilterNoBuckle
         {
             get => filterNoBuckle;
@@ -300,7 +351,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 }
             }
         }
+
         private bool filterNotAdjust;
+
         public bool FilterNotAdjust
         {
             get => filterNotAdjust;
@@ -314,7 +367,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 }
             }
         }
+
         private bool filterNoGetCard;
+
         public bool FilterNoGetCard
         {
             get => filterNoGetCard;
@@ -328,9 +383,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 }
             }
         }
-        public bool IsNotBuckle=false;
-        #endregion
+
+        public bool IsNotBuckle = false;
+
+        #endregion Properties
+
         #region Commands
+
         public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
         public RelayCommand FilterAdjustedInstitution { get; set; }
         public RelayCommand Search { get; set; }
@@ -339,8 +398,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand ExportPrescriptionCsv { get; set; }
         public RelayCommand ExportMedicineCsv { get; set; }
         public RelayCommand SearchNotBuckleCommad { get; set; }
-        
-        #endregion
+
+        #endregion Commands
+
         public PrescriptionSearchViewModel()
         {
             InitProperties();
@@ -349,6 +409,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         }
 
         #region InitFunctions
+
         private void InitProperties()
         {
             AdjustCases = new AdjustCases(false) { new AdjustCase() };
@@ -362,6 +423,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 Divisions.Add(division);
             }
         }
+
         private void InitCondition()
         {
             SearchPrescriptions = new PrescriptionSearchPreviews();
@@ -398,11 +460,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ShowPrescriptionEdit = new RelayCommand(ShowPrescriptionEditAction);
             ExportPrescriptionCsv = new RelayCommand(ExportPrescriptionCsvAction);
             ExportMedicineCsv = new RelayCommand(ExportMedicineCsvAction);
-            SearchNotBuckleCommad = new RelayCommand(SearchNotBuckleAction); 
+            SearchNotBuckleCommad = new RelayCommand(SearchNotBuckleAction);
         }
-        #endregion
+
+        #endregion InitFunctions
 
         #region CommandAction
+
         private void DateMouseDoubleClickAction(MaskedTextBox sender)
         {
             switch (sender.Name)
@@ -410,6 +474,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 case "StartDate":
                     StartDate = DateTime.Today;
                     break;
+
                 case "EndDate":
                     EndDate = DateTime.Today;
                     break;
@@ -421,7 +486,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             IsNotBuckle = false;
             if (CheckSearchConditionsEmpty())
             {
-                MessageWindow.ShowMessage("請至少填寫一個查詢條件",MessageType.WARNING);
+                MessageWindow.ShowMessage("請至少填寫一個查詢條件", MessageType.WARNING);
                 return;
             }
             worker = new BackgroundWorker();
@@ -488,7 +553,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             Messenger.Default.Register<NotificationMessage>(this, Refresh);
             PrescriptionService.ShowPrescriptionEditWindow(SelectedPrescription.ID, SelectedPrescription.Type);
             Messenger.Default.Unregister<NotificationMessage>(this, Refresh);
-      
         }
 
         private void ExportPrescriptionCsvAction()
@@ -519,7 +583,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     file.WriteLine($"{sAdjust},{s.StoStatus},{insName}," +
                             $"{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber}," +
                             $"{((DateTime)s.Patient.Birthday).AddYears(-1911):yyy/MM/dd}," +
-                            $"{treatDate}," + $"{adjDate},{s.InsertDate},{s.RegisterDate},{s.MedicinePoint},{s.SpecialMaterialPoint},{s.MedicalServicePoint},{s.CopaymentPoint},{s.TotalPoint}")  ;
+                            $"{treatDate}," + $"{adjDate},{s.InsertDate},{s.RegisterDate},{s.MedicinePoint},{s.SpecialMaterialPoint},{s.MedicalServicePoint},{s.CopaymentPoint},{s.TotalPoint}");
                 }
                 file.Close();
                 file.Dispose();
@@ -556,7 +620,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }
-
             }
         }
 
@@ -606,7 +669,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             return idList;
         }
 
-        #endregion
+        #endregion CommandAction
 
         private void SearchByConditions()
         {
@@ -634,6 +697,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MainWindow.ServerConnection.CloseConnection();
             searchType = SelectedTimeIntervalType.Equals("預約日") ? PrescriptionType.ChronicReserve : PrescriptionType.Normal;
         }
+
         private void SearchNotBuckle()
         {
             BusyContent = "處方查詢中...";
@@ -641,13 +705,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             MainWindow.ServerConnection.OpenConnection();
             SearchPrescriptions.GetNoBucklePrescriptions();
             MainWindow.ServerConnection.CloseConnection();
-
         }
-
 
         private void EndSearch()
         {
-            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions};
+            PrescriptionCollectionVS = new CollectionViewSource { Source = SearchPrescriptions };
             PrescriptionCollectionView = PrescriptionCollectionVS.View;
             TotalCount = SearchPrescriptions.Count;
             ChronicCount = SearchPrescriptions.Count(p => p.AdjustCase.ID.Equals("2"));
@@ -668,24 +730,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             switch (SelectedTimeIntervalType)
             {
                 case "調劑日":
-                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription ("InsertDate", ListSortDirection.Descending));
+                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription("InsertDate", ListSortDirection.Descending));
                     PrescriptionCollectionVS.View.Refresh();
                     break;
+
                 case "登錄日":
-                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription ("RegisterDate", ListSortDirection.Descending));
+                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription("RegisterDate", ListSortDirection.Descending));
                     PrescriptionCollectionVS.View.Refresh();
                     break;
+
                 default:
-                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription ("AdjustDate", ListSortDirection.Descending));
+                    PrescriptionCollectionVS.SortDescriptions.Add(new SortDescription("AdjustDate", ListSortDirection.Descending));
                     PrescriptionCollectionVS.View.Refresh();
                     break;
             }
-            
         }
 
         private void Refresh(NotificationMessage msg)
         {
-            if (msg.Notification.Equals("PrescriptionEdited")) {
+            if (msg.Notification.Equals("PrescriptionEdited"))
+            {
                 if (IsNotBuckle)
                 {
                     SearchNotBuckleAction();
@@ -695,7 +759,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     SearchAction();
                 }
             }
-            
         }
 
         private void SetPrescriptionsSummary()
@@ -703,7 +766,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             var summary = searchType.Equals(PrescriptionType.ChronicReserve) ? GetReserveSummary() : GetSummary();
             TotalCount = PrescriptionCollectionView.Cast<object>().Count();
             ChronicCount = PrescriptionCollectionView.Cast<object>()
-                .Count(p => ((PrescriptionSearchPreview) p).AdjustCase.ID.Equals("2"));
+                .Count(p => ((PrescriptionSearchPreview)p).AdjustCase.ID.Equals("2"));
             MedicinePoint = summary[0];
             CopaymentPoint = summary[1];
             MedicalServicePoint = summary[2];
@@ -740,21 +803,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 e.Accepted = false;
             else
             {
-                e.Accepted = !FilterNoGetCard || src.IsDeposit && 
+                e.Accepted = !FilterNoGetCard || src.IsDeposit &&
                              (!FilterNoBuckle || src.NoBuckleStatus != null && src.NoBuckleStatus.Equals(1));
             }
         }
 
         public List<int> GetSummary()
         {
-            var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview) p).ID).ToList();
+            var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview)p).ID).ToList();
             var table = PrescriptionDb.GetSearchPrescriptionsSummary(presID);
             return (from DataColumn c in table.Rows[0].Table.Columns select table.Rows[0].Field<int>(c.ColumnName)).ToList();
         }
 
         public List<int> GetReserveSummary()
         {
-            var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview) p).ID).ToList();
+            var presID = (from object p in PrescriptionCollectionView select ((PrescriptionSearchPreview)p).ID).ToList();
             var table = PrescriptionDb.GetSearchReservesSummary(presID);
             return (from DataColumn c in table.Rows[0].Table.Columns select table.Rows[0].Field<int>(c.ColumnName)).ToList();
         }

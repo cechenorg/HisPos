@@ -2,7 +2,6 @@
 using His_Pos.FunctionWindow;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -43,7 +42,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private bool IsPayAmountEnough = false;
 
         private static readonly Regex _regex = new Regex("^[0-9]+$");
-        private static bool IsTextAllowed(string text) { return _regex.IsMatch(text); }
+
+        private static bool IsTextAllowed(string text)
+        {
+            return _regex.IsMatch(text);
+        }
 
         public CheckoutWindowView(int total, int linecount, int itemcount)
         {
@@ -65,7 +68,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             MainWindow.ServerConnection.CloseConnection();
         }
 
-        private bool IsEmployeeIDValid() 
+        private bool IsEmployeeIDValid()
         {
             string empCashierID = tbEmployee.Text;
             bool contains = EmployeeList.AsEnumerable().Any(row => empCashierID == row.Field<string>("Emp_CashierID"));
@@ -102,7 +105,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return result;
         }
 
-        private void CardNumberControl() 
+        private void CardNumberControl()
         {
             if (!int.TryParse(tbCard.Text, out int tmp)) { return; }
             bool isCard = int.Parse(tbCard.Text) > 0 ? true : false;
@@ -113,7 +116,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 tbCardNum3.IsEnabled = true;
                 tbCardNum4.IsEnabled = true;
             }
-            else 
+            else
             {
                 tbCardNum1.IsEnabled = false;
                 tbCardNum2.IsEnabled = false;
@@ -122,7 +125,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private bool CheckCardNumber() 
+        private bool CheckCardNumber()
         {
             string FullCard = tbCardNum1.Text + tbCardNum2.Text + tbCardNum3.Text + tbCardNum4.Text;
             if (FullCard.Length == 16)
@@ -130,7 +133,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 cardNumber = FullCard;
                 return true;
             }
-            else 
+            else
             {
                 return false;
             }
@@ -148,9 +151,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 change = cash;
             }
-            else 
+            else
             {
-                change = (cash + voucher + cashcoupon + card) - Total;                
+                change = (cash + voucher + cashcoupon + card) - Total;
             }
             tbChange.Content = change;
             paid = cash + voucher + cashcoupon + card;
@@ -166,14 +169,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private void SubmitCheckout() 
+        private void SubmitCheckout()
         {
             if (!IsPayAmountEnough)
             {
                 MessageWindow.ShowMessage("支付金額不足！", MessageType.WARNING);
                 return;
             }
-            if (!IsEmployeeIDValid()) 
+            if (!IsEmployeeIDValid())
             {
                 MessageWindow.ShowMessage("結帳人員輸入錯誤！", MessageType.WARNING);
                 return;
@@ -184,15 +187,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("信用卡號輸入有誤！", MessageType.WARNING);
                 return;
             }
-            if (card == 0) 
+            if (card == 0)
             {
                 cardNumber = "";
             }
 
             DialogResult = true;
-        }        
+        }
 
-        private void TextBoxLostFocus(object sender) 
+        private void TextBoxLostFocus(object sender)
         {
             TextBox tb = (TextBox)sender;
             if (!IsTextAllowed(tb.Text)) { tb.Text = "0"; }
@@ -203,9 +206,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void tbTaxNum_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            if (e.Key == Key.Enter || e.Key == Key.Down) 
+            if (e.Key == Key.Enter || e.Key == Key.Down)
             {
-                if (tb.Text.Length != 0 && tb.Text.Length != 8) 
+                if (tb.Text.Length != 0 && tb.Text.Length != 8)
                 {
                     if (!IsTextAllowed(tb.Text))
                     {
@@ -215,7 +218,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     MessageWindow.ShowMessage("統一編號位數有誤", MessageType.WARNING);
                     return;
                 }
-                
+
                 tbCash.Focus();
             }
         }
@@ -277,7 +280,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     tbCashCoupon.Focus();
                 }
             }
-            else 
+            else
             {
                 if (e.Key == Key.Enter || e.Key == Key.Down)
                 {
@@ -330,14 +333,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        #endregion
+        #endregion PreviewKeyDown
 
         #region CardNum
 
         private void tbCardNum1_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            if (tb.Text.Length == 4) 
+            if (tb.Text.Length == 4)
             {
                 tbCardNum2.Focus();
             }
@@ -370,7 +373,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        #endregion
+        #endregion CardNum
 
         #region GotFocus
 
@@ -398,7 +401,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
         }
 
-        #endregion
+        #endregion GotFocus
 
         #region LostFocus
 
@@ -423,7 +426,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CardNumberControl();
         }
 
-        #endregion
+        #endregion LostFocus
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
@@ -433,7 +436,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbCard_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (IsLoaded) 
+            if (IsLoaded)
             {
                 CardNumberControl();
             }

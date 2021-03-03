@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Windows;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Medicine.MedBag;
+using His_Pos.NewClass.Medicine.ReserveMedicine;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.ICCard;
+using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -19,38 +14,55 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medicines
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameDeclareConfirmWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
 using Microsoft.Reporting.WinForms;
-using Employee = His_Pos.NewClass.Person.Employee.Employee;
-using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
-using HisAPI = His_Pos.HisApi.HisApiFunction;
-using His_Pos.NewClass.Product.PrescriptionSendData;
-using His_Pos.NewClass.Medicine.ReserveMedicine;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using System.Windows;
+using Employee = His_Pos.NewClass.Person.Employee.Employee;
+using HisAPI = His_Pos.HisApi.HisApiFunction;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
     public abstract class PrescriptionService : ObservableObject
     {
         #region AbstractFunctions
-        public abstract bool CheckPrescription(bool noCard,bool errorAdjust);
+
+        public abstract bool CheckPrescription(bool noCard, bool errorAdjust);
+
         public abstract bool CheckEditPrescription(bool hasCard);
+
         public abstract bool NormalAdjust();
+
         public abstract bool ErrorAdjust();
+
         public abstract bool DepositAdjust();
+
         public abstract bool Register();
+
         public abstract bool PrescribeAdjust();
+
         public abstract bool CheckCustomerSelected();
-        #endregion
+
+        #endregion AbstractFunctions
+
         public PrescriptionService()
         {
-
         }
+
         protected MedicinesSendSingdeViewModel vm { get; set; } = null;
         protected Prescription Current { get; set; }
         protected Prescription TempPre { get; set; }
         protected Prescription TempPrint { get; set; }
         protected List<bool?> PrintResult { get; set; }
+
         #region Functions
+
         public static PrescriptionService CreateService(Prescription p)
         {
             var ps = PrescriptionServiceProvider.CreateService(p.Type);
@@ -152,10 +164,12 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.Pharmacist = selectedPharmacist;
             return true;
         }
+
         public void SetPharmacistWithoutCheckCount(Employee selectedPharmacist)
         {
             Current.Pharmacist = selectedPharmacist;
         }
+
         public void SetCard(IcCard c)
         {
             Current.Card = c;
@@ -170,7 +184,7 @@ namespace His_Pos.NewClass.Prescription.Service
             {
                 var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
-                if ((bool) confirm.DialogResult)
+                if ((bool)confirm.DialogResult)
                 {
                     Current.Patient = Customer.GetCustomerByCusId(0);
                     return true;
@@ -209,7 +223,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 Debug.Assert(medicalNumberEmptyConfirm.DialogResult != null, "medicalNumberEmptyConfirm.DialogResult != null");
                 return (bool)medicalNumberEmptyConfirm.DialogResult;
             }
-            return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber,Current.AdjustCase.ID,Current.ChronicSeq);
+            return Current.TempMedicalNumber.Length != 4 ? NewFunction.CheckHomeCareMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase) : NewFunction.CheckNotIntMedicalNumber(Current.TempMedicalNumber, Current.AdjustCase.ID, Current.ChronicSeq);
         }
 
         protected bool CheckAdjustAndTreatDate()
@@ -231,9 +245,11 @@ namespace His_Pos.NewClass.Prescription.Service
             {
                 case null when Current.AdjustCase.ID.Equals("D"):
                     return true;
+
                 case null:
                     MessageWindow.ShowMessage(Resources.TreatDateError, MessageType.WARNING);
                     return false;
+
                 default:
                     return true;
             }
@@ -258,7 +274,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 return false;
             }
             if (Current.AdjustCase.IsChronic()) return true;
-            if (DateTime.Compare((DateTime) Current.AdjustDate, DateTime.Today) > 0)
+            if (DateTime.Compare((DateTime)Current.AdjustDate, DateTime.Today) > 0)
             {
                 MessageWindow.ShowMessage("非登錄慢箋調劑日不可超過今天", MessageType.WARNING);
                 return false;
@@ -333,7 +349,7 @@ namespace His_Pos.NewClass.Prescription.Service
             bool? focus = null;
             if (vm?.PrescriptionSendData != null)
             {
-                var printSendData = vm.PrescriptionSendData; 
+                var printSendData = vm.PrescriptionSendData;
                 var allSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
                 var allPrepareCount = printSendData.Count(p => p.SendAmount == 0);
                 if (printSendData.Count == allSendCount)
@@ -341,7 +357,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (printSendData.Count == allPrepareCount)
                     focus = true;
             }
-            PrintResult = NewFunction.CheckPrint(Current,focus);
+            PrintResult = NewFunction.CheckPrint(Current, focus);
             var printMedBag = PrintResult[0];
             var printSingle = PrintResult[1];
             var printReceipt = PrintResult[2];
@@ -362,7 +378,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p,string orderNumber,int medDays)
+        public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p, string orderNumber, int medDays)
         {
             var adjustDate = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(p.AdjustDate, true);
             var adjustDateNext = string.Empty;
@@ -425,6 +441,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("ChronicSeq", p.ChronicSeq is null ? string.Empty : ((int)p.ChronicSeq).ToString())
                     };
         }
+
         public static IEnumerable<ReportParameter> CreateMultiMedBagParameter(Prescription p)
         {
             var treatmentDate =
@@ -468,7 +485,8 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("PatientTel", patientTel)
             };
         }
-        #endregion
+
+        #endregion Functions
 
         public static IEnumerable<ReportParameter> CreateDepositSheetParameters(Prescription p)
         {
@@ -563,7 +581,8 @@ namespace His_Pos.NewClass.Prescription.Service
 
             if (Current.WriteCardSuccess != 0)
             {
-                Application.Current.Dispatcher.Invoke(delegate {
+                Application.Current.Dispatcher.Invoke(delegate
+                {
                     var description = MainWindow.GetEnumDescription((ErrorCode)Current.WriteCardSuccess);
                     MessageWindow.ShowMessage("寫卡異常 " + Current.WriteCardSuccess + ":" + description, MessageType.WARNING);
                 });
@@ -599,7 +618,6 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
-            
             if (TempPre.Institution.ID == "3532082753")
             {
                 TempPrint.Division.Name = "";
@@ -628,7 +646,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
-            var printSendData = vm.PrescriptionSendData.DeepCloneViaJson(); 
+            var printSendData = vm.PrescriptionSendData.DeepCloneViaJson();
             var sendData = vm.PrescriptionSendData;
             if (sendData.Count(s => s.SendAmount == 0) != sendData.Count)
             {
@@ -638,28 +656,29 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (Current.PrescriptionStatus.IsSendToSingde)
                 {
                     PurchaseOrder.UpdatePrescriptionOrder(Current, sendData);
-                }//更新傳送藥健康  
+                }//更新傳送藥健康
             }
             else
             {
                 if (!string.IsNullOrEmpty(Current.OrderID))
                 {
-                    var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(Current.OrderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS");;
+                    var removeSingdeOrder = StoreOrderDB.RemoveSingdeStoreOrderByID(Current.OrderID).Rows[0].Field<string>("RESULT").Equals("SUCCESS"); ;
                     if (!removeSingdeOrder)
-                        NewFunction.ShowMessageFromDispatcher("處方訂單已出貨或網路異常，訂單更改失敗",MessageType.ERROR);
+                        NewFunction.ShowMessageFromDispatcher("處方訂單已出貨或網路異常，訂單更改失敗", MessageType.ERROR);
                     else
                     {
                         var dataTable = StoreOrderDB.RemoveStoreOrderToSingdeByID(Current.OrderID);
                         var removeLocalOrder = dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
                         if (!removeLocalOrder)
-                            NewFunction.ShowMessageFromDispatcher("處方訂單更改失敗",MessageType.ERROR);
+                            NewFunction.ShowMessageFromDispatcher("處方訂單更改失敗", MessageType.ERROR);
                     }
                 }
             }
             var selfcoSendCount = printSendData.Count(p => p.SendAmount > 0 && p.SendAmount < p.TreatAmount); //部分傳送
             var selfallSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
             //部分傳送的品項 > 0 或是 全傳送的品項 > 0 且 < 處方總量
-            if (selfcoSendCount > 0 ||  (selfallSendCount < printSendData.Count && selfallSendCount > 0)) {
+            if (selfcoSendCount > 0 || (selfallSendCount < printSendData.Count && selfallSendCount > 0))
+            {
                 var rptViewer = new ReportViewer();
                 SetReserveMedicinesSheetReportViewer(rptViewer, printSendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
@@ -669,6 +688,7 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             Current.PrescriptionStatus.UpdateStatus(Current.ID);
         }
+
         public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer, PrescriptionSendDatas prescriptionSendDatas)
         {
             rptViewer.LocalReport.DataSources.Clear();
@@ -682,6 +702,7 @@ namespace His_Pos.NewClass.Prescription.Service
                     rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet_A5.rdlc";
                     parameters = CreateReserveMedicinesSheetParametersA5();
                     break;
+
                 default:
                     rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
                     parameters = CreateReserveMedicinesSheetParameters();
@@ -694,6 +715,7 @@ namespace His_Pos.NewClass.Prescription.Service
             rptViewer.LocalReport.DataSources.Add(rd);
             rptViewer.LocalReport.Refresh();
         }
+
         private List<ReportParameter> CreateReserveMedicinesSheetParameters()
         {
             return new List<ReportParameter>
@@ -709,6 +731,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("AdjustDay", ((DateTime)Current.AdjustDate).Day.ToString())
             };
         }
+
         private List<ReportParameter> CreateReserveMedicinesSheetParametersA5()
         {
             return new List<ReportParameter>
@@ -724,6 +747,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("AdjustDay", ((DateTime)Current.AdjustDate).Day.ToString())
             };
         }
+
         public void SetMedicalNumberByErrorCode(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
             Current.TempMedicalNumber = errorCode.ID;
@@ -774,10 +798,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
-            if (TempPre.Institution.ID == "3532082753") {
+            if (TempPre.Institution.ID == "3532082753")
+            {
                 TempPrint = (Prescription)Current.PrintClone();
             }
-            
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
@@ -791,6 +815,7 @@ namespace His_Pos.NewClass.Prescription.Service
                     var title = "預約瀏覽 ResMasID:" + selected.SourceId;
                     var edit = new ReservePrescriptionWindow(selected, title);
                     break;
+
                 default:
                     selected = GetPrescriptionByID(preID, type);
                     CheckAdminLogin(selected);
@@ -800,7 +825,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private static void CheckAdminLogin(Prescription selected)
         {
-            if(selected is null) return;
+            if (selected is null) return;
             if (VM.CurrentUser.ID == 1)
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
@@ -821,7 +846,7 @@ namespace His_Pos.NewClass.Prescription.Service
             }
         }
 
-        private static Prescription GetPrescriptionByID(int preID,PrescriptionType type)
+        private static Prescription GetPrescriptionByID(int preID, PrescriptionType type)
         {
             MainWindow.ServerConnection.OpenConnection();
             var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];

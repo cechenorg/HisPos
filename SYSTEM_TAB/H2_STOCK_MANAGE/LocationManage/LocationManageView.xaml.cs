@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using His_Pos.Class;
-using His_Pos.Class.Location;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.ProductLocation;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
@@ -29,9 +22,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     /// </summary>
     public partial class LocationManageView : System.Windows.Controls.UserControl
     {
-        DataTable master;
-        DataTable detail;
-        int SelectedValue;
+        private DataTable master;
+        private DataTable detail;
+        private int SelectedValue;
 
         public LocationManageView()
         {
@@ -44,7 +37,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             AddLocationWindow addTypeWindow = new AddLocationWindow();
             addTypeWindow.ShowDialog();
             InitLocationLoad();
-
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
@@ -54,12 +46,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             editTypeWindow.ChiName.Text = row["ProLoc_Name"].ToString();
             editTypeWindow.ShowDialog();
             InitLocationLoad();
-            
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-           
             var deleteMsg = "確定刪除選取櫃位?";
             var delete = new ConfirmWindow(deleteMsg, "刪除確認");
             if ((bool)delete.DialogResult)
@@ -73,12 +63,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                     MessageWindow.ShowMessage("刪除失敗 請稍後再試", Class.MessageType.ERROR);
                     return;
                 }
-
             }
-
 
             InitLocationLoad();
         }
+
         private void InitLocation()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -88,6 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             ProductLocationDataGrid.ItemsSource = dataTable.DefaultView;
             if (SelectedValue > 0) { ProductLocationDataGrid.SelectedValue = SelectedValue; }
         }
+
         private void InitLocationLoad()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -97,33 +87,32 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             ProductLocationDataGrid.ItemsSource = dataTable.DefaultView;
             ProductLocationDataGrid.SelectedIndex = 0;
         }
+
         private void InitLocationDetail()
         {
             if (ProductLocationDataGrid.SelectedValue == null)
             {
                 return;
             }
-            else {
-                
+            else
+            {
                 MainWindow.ServerConnection.OpenConnection();
                 DataTable dataTable = ProductLocationDB.GetProductLocationDetails(SelectedValue);
                 MainWindow.ServerConnection.CloseConnection();
                 detail = dataTable;
                 ProductLocationDetailDataGrid.ItemsSource = dataTable.DefaultView;
             }
-           
-
         }
 
         private void ProductLocationDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            
             InsertButton.Visibility = Visibility.Visible;
             PrintButton.Visibility = Visibility.Visible;
             lbInsertID.Visibility = Visibility.Visible;
             InsertID.Visibility = Visibility.Visible;
             DeleteDetailButton.Visibility = Visibility.Visible;
-            if (ProductLocationDataGrid.SelectedValue==null) {
+            if (ProductLocationDataGrid.SelectedValue == null)
+            {
                 Newbtn.Visibility = Visibility.Visible;
                 Editbtn.Visibility = Visibility.Visible;
                 Deletebtn.Visibility = Visibility.Visible;
@@ -140,7 +129,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 DeleteDetailButton.Visibility = Visibility.Hidden;
                 SelectedValue = (int)ProductLocationDataGrid.SelectedValue;
             }
-            else {
+            else
+            {
                 Newbtn.IsEnabled = true;
                 Editbtn.IsEnabled = true;
                 Deletebtn.IsEnabled = true;
@@ -168,7 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             fdlg.Title = "儲位管理";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName = DateTime.Now.ToString("yyyy-MM-dd")+"_"+row["ProLoc_Name"].ToString() +"_"+ "櫃位管理";
+            fdlg.FileName = DateTime.Now.ToString("yyyy-MM-dd") + "_" + row["ProLoc_Name"].ToString() + "_" + "櫃位管理";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -176,7 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 XLWorkbook wb = new XLWorkbook();
                 var style = XLWorkbook.DefaultStyle;
                 style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
-           
+
                 var ws = wb.Worksheets.Add(row["ProLoc_Name"].ToString() + "儲位管理");
                 ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
 
@@ -191,7 +181,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 var col5 = ws.Column("E");
                 col5.Width = 10;
 
-                ws.Cell(1, 1).Value = "櫃位名稱："+row["ProLoc_Name"].ToString();
+                ws.Cell(1, 1).Value = "櫃位名稱：" + row["ProLoc_Name"].ToString();
                 ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "商品代碼";
                 ws.Cell("B2").Value = "商品名稱";
@@ -240,16 +230,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                         file.WriteLine("商品代碼,品名,庫存,盤點量");
                         foreach (DataRow c in detail.Rows)
                         {
-
-                            
                             file.WriteLine($"\t{c["Pro_ID"]},{c["Pro_ChineseName"]},{c["Inv_Inventory"]},");
                         }
-                        
+
                         file.Close();
                         file.Dispose();
                     }
                     MessageWindow.ShowMessage("匯出Excel 開始列印", MessageType.SUCCESS);
-                   
                 }
                 catch (Exception ex)
                 {
@@ -268,7 +255,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }*/
-
         }
 
         private void InsertID_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -278,6 +264,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 AddProductByInputAction(InsertID.Text);
             }
         }
+
         private void AddProductByInputAction(string searchString)
         {
             if (string.IsNullOrEmpty(searchString)) return;
@@ -340,7 +327,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                         {
                             InsertID.Text = NewProduct["Pro_ID"].ToString();
                         }
-
                     }
                 }
                 else
@@ -368,7 +354,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                     return;
                 }
                 {
-                    if (dataTable.Rows[0]["RESULT"].ToString() == "DOUBLE") {
+                    if (dataTable.Rows[0]["RESULT"].ToString() == "DOUBLE")
+                    {
                         MessageWindow.ShowMessage("商品已在櫃位內 請先執行刪除", Class.MessageType.ERROR);
                         return;
                     }
@@ -379,6 +366,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 }
             }
         }
+
         private bool CheckEmptyData()
         {
             string error = "";
@@ -399,7 +387,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         private void DeleteDetailButton_Click(object sender, RoutedEventArgs e)
         {
             string Pro_id;
-            Pro_id=ProductLocationDetailDataGrid.SelectedValue.ToString();
+            Pro_id = ProductLocationDetailDataGrid.SelectedValue.ToString();
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("Pro_ID", Pro_id));
@@ -415,134 +403,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 InitLocationDetail();
                 InitLocation();
             }
-
-
         }
     }
-        /*public static LocationManageView Instance;
-        public LocationControl selectItem;
-        public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();
-        public static int id = 0;
-        public LocationManageView()
-        {
-            InitializeComponent();
-            //InitLocation();
-            Instance = this;
-        }
-
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            NewLocationView newLocationView = new NewLocationView();
-            newLocationView.ShowDialog();
-        }
-        public void NewLocation(string locid = null,string locname = null,double height = 0,double width = 0,double top = 0,double left = 0) {
-        
-            ContentControl contentControl = new ContentControl();
-            contentControl.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
-            LocationControl newLocation = null;
-            if (locid != null)
-            {
-                newLocation = new LocationControl(Convert.ToInt32(locid));
-                newLocation.Name = locname;
-                newLocation.locationName.Content = locname;
-                id = Convert.ToInt32(locid);
-                id++;
-            }
-            else {
-                newLocation = new LocationControl(id);
-                newLocation.Name = locname;
-                newLocation.locationName.Content = locname;
-                id++;
-            }
-            contentControl.Height = (height == 0) ? 50 : height;
-            contentControl.Width = (width == 0) ? 50 : width;
-            contentControl.Content = newLocation;
-            //LocationCanvus.Children.Add(contentControl);
-            Canvas.SetTop(contentControl, top == 0 ? 360 : top);
-            Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
-            SaveLocation();
-        }
-        public void SaveLocation() {
-            locationCollection.Clear();
-            foreach (ContentControl contentControl in LocationCanvus.Children) {
-                LocationControl locationControl = (LocationControl)contentControl.Content;
-                locationCollection.Add(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(contentControl), Canvas.GetTop(contentControl), contentControl.Width, contentControl.Height));
-            }
-            ///LocationDb.SaveLocationData(locationCollection);
-        }
-        //public void InitLocation()
-        //{
-        //    LoadingWindow loadingWindow = new LoadingWindow();
-        //    loadingWindow.GetLocation(this);
-        //    loadingWindow.Topmost = true;
-        //    loadingWindow.Show();
-        //}
-        private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
-        {
-            SaveLocation();
-            var control = (MoveThumb)sender;
-            foreach (ContentControl item in LocationCanvus.Children) {
-                if ((LocationControl)item.Content == selectItem)
-                {
-                    LocationControl locationControl = (LocationControl)item.Content;
-                    selectItem = locationControl;
-                    LocationDetailWindow locationDetailWindow = new LocationDetailWindow(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(item), Canvas.GetTop(item), item.Width, item.Height));
-                   locationDetailWindow.Show();
-                    locationDetailWindow.Focus();
-                    return;
-                }
-            }
-        }
-       
-        private void MoveThumb_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            foreach (ContentControl contentcontrol in LocationCanvus.Children) {
-                var child = VisualTreeHelper.GetChild(contentcontrol,0);
-                var thumb = VisualTreeHelper.GetChild(child, 1);
-                ((Control)thumb).Visibility = Visibility.Collapsed;
-            }
-            (((Grid)(sender as MoveThumb).Parent).Children.OfType<Control>().ToList())[1].Visibility = Visibility.Visible;
-           
-            var grid = VisualTreeHelper.GetChild(((Grid)(sender as MoveThumb).Parent),2);
-            var locationcontrol = VisualTreeHelper.GetChild(grid,0);
-            selectItem = (LocationControl)locationcontrol;
-        }
-
-        private void ButtonDeleteLocation_Click(object sender, RoutedEventArgs e)
-        {
-            ContentControl deleteControl = null;
-           foreach (ContentControl contentcontrol in LocationCanvus.Children){
-                if ((LocationControl)contentcontrol.Content == selectItem)
-                     deleteControl = contentcontrol;
-            }
-           ///if (LocationDb.CheckProductExist(selectItem.id.ToString()))
-           ///{
-           ///    LocationCanvus.Children.Remove(deleteControl);
-           ///    LocationDb.DeleteLocation(selectItem.id.ToString());
-           ///}
-           ///else {
-           ///    MessageWindow.ShowMessage("此櫃位尚有商品，無法刪除",MessageType.ERROR, true);
-           ///    
-           ///}
-           
-        }
-
-        private void ButtonCopyLocation_Click(object sender, RoutedEventArgs e)
-        {
-            ContentControl copyControl = null;
-            foreach (ContentControl contentcontrol in LocationCanvus.Children)
-            {
-                if ((LocationControl)contentcontrol.Content == selectItem)
-                    copyControl = contentcontrol;
-            }
-            NewLocation(null, selectItem.Name + "new" + id, copyControl.Height, copyControl.Width, Canvas.GetTop(copyControl)+30, Canvas.GetLeft(copyControl)+30);
-        }
-
-        private void ButtonChangeLocation_Click(object sender, RoutedEventArgs e)
-        {
-            ItemChangeWindow itemChangeWindow = new ItemChangeWindow("Location");
-            itemChangeWindow.ShowDialog();
-        }*/
-    
 }
-

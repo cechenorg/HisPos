@@ -36,7 +36,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             textBox.Focus();
             ((TextBox)sender).SelectAll();
         }
-        bool textCanceled = false;
+
+        private bool textCanceled = false;
+
         private void TextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (!Char.IsDigit((char)e.Key))

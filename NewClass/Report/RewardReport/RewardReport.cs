@@ -1,10 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.RewardReport
 {
@@ -13,12 +8,15 @@ namespace His_Pos.NewClass.Report.RewardReport
         public RewardReport()
         {
         }
-        public RewardReport(DataRow r) {
+
+        public RewardReport(DataRow r)
+        {
             RewardAmount = r.Field<double>("RewardAmount");
             Free = r.Field<double>("Free");
         }
 
         private double rewardAmount;
+
         public double RewardAmount
         {
             get => rewardAmount;
@@ -29,6 +27,7 @@ namespace His_Pos.NewClass.Report.RewardReport
         }
 
         private double rewardAmountSum;
+
         public double RewardAmountSum
         {
             get => rewardAmountSum;
@@ -37,7 +36,9 @@ namespace His_Pos.NewClass.Report.RewardReport
                 Set(() => RewardAmountSum, ref rewardAmountSum, value);
             }
         }
+
         private double free;
+
         public double Free
         {
             get => free;

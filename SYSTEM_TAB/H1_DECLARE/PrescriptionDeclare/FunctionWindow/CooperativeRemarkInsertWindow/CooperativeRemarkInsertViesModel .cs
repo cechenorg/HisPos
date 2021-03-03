@@ -3,26 +3,34 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow {
-    public class CooperativeRemarkInsertViesModel :ViewModelBase{
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow
+{
+    public class CooperativeRemarkInsertViesModel : ViewModelBase
+    {
         private string remark;
-        public string Remark {
+
+        public string Remark
+        {
             get => remark;
-            set { Set(() => Remark, ref remark, value);  }
+            set { Set(() => Remark, ref remark, value); }
         }
+
         public RelayCommand SubmitCommand { get; set; }
-        public CooperativeRemarkInsertViesModel() {
+
+        public CooperativeRemarkInsertViesModel()
+        {
             SubmitCommand = new RelayCommand(SubmitAction);
         }
 
-        private void SubmitAction() {
+        private void SubmitAction()
+        {
             if (Remark.Trim().Length != 16)
                 MessageWindow.ShowMessage("單號須為16碼 請重新確認 ^皿^", Class.MessageType.ERROR);
-            else {
+            else
+            {
                 MessageWindow.ShowMessage("叮咚叮咚 輸入完成~", Class.MessageType.SUCCESS);
                 Messenger.Default.Send(new NotificationMessage("CooperativeRemarkInsert"));
             }
-
         }
     }
 }

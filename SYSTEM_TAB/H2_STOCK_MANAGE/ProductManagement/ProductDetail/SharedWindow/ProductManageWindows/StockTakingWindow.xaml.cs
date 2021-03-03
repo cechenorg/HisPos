@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.StockTaking.StockTaking;
-using His_Pos.NewClass.StockTaking.StockTakingProduct;
 using His_Pos.NewClass.WareHouse;
+using System.ComponentModel;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductManageWindows
 {
@@ -29,12 +15,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public partial class StockTakingWindow : Window, INotifyPropertyChanged
     {
         #region ----- Define Variables -----
+
         private string productID;
         private WareHouse wareHouse;
         private MedicineStockDetail stockDetail;
         private string newInventory;
 
         public string NewPrice { get; set; }
+
         public string NewInventory
         {
             get { return newInventory; }
@@ -44,6 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 OnPropertyChanged(nameof(IsOverage));
             }
         }
+
         public bool IsOverage
         {
             get
@@ -57,7 +46,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 else return false;
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public StockTakingWindow(string proID, WareHouse ware, MedicineStockDetail stock)
         {
@@ -72,6 +62,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #region ----- Define Functions -----
+
         private bool IsNewInventoryValid()
         {
             if (NewInventory.Equals(""))
@@ -102,7 +93,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 MessageWindow.ShowMessage("盤點單價不得為空!", MessageType.ERROR);
                 return false;
             }
-            else if(IsOverage)
+            else if (IsOverage)
             {
                 double newCheckedPrice = 0;
                 bool isDouble = double.TryParse(NewPrice, out newCheckedPrice);
@@ -116,6 +107,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             return true;
         }
+
         private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
             if (!IsNewInventoryValid()) return;
@@ -138,9 +130,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             DialogResult = true;
             Close();
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
 
         #region ----- Define PropertyChanged -----
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -151,6 +145,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        #endregion
+
+        #endregion ----- Define PropertyChanged -----
     }
 }

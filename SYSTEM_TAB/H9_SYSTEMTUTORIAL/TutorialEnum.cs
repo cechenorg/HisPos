@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL
+﻿namespace His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL
 {
     public enum TutorialEnum
     {
@@ -16,6 +10,6 @@ namespace His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL
         申報教學 = 6,
         合作診所接收處方設定 = 7,
         報表查詢 = 8,
-        讀卡機異常處理 = 9 
+        讀卡機異常處理 = 9
     }
 }

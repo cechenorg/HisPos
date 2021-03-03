@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
@@ -12,9 +9,10 @@ using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.NewClass.Prescription.ICCard;
 using His_Pos.NewClass.Prescription.Service;
-using His_Pos.NewClass.StoreOrder;
 using His_Pos.Properties;
 using His_Pos.Service;
+using System;
+using System.ComponentModel;
 using Application = System.Windows.Application;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
@@ -26,10 +24,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         Register = 2,
         Reserve = 3
     }
+
     public class CustomerPrescriptionViewModel : ViewModelBase
     {
         #region Variable
+
         private string windowTitle;
+
         public string WindowTitle
         {
             get => windowTitle;
@@ -38,7 +39,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => WindowTitle, ref windowTitle, value);
             }
         }
+
         private string selectedRadioButton;
+
         public string SelectedRadioButton
         {
             get => selectedRadioButton;
@@ -51,16 +54,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                     case "Option1":
                         SelectedType = CustomerPrescriptionType.Cooperative;
                         break;
+
                     case "Option2":
                         SelectedType = CustomerPrescriptionType.Register;
                         break;
+
                     case "Option3":
                         SelectedType = CustomerPrescriptionType.Reserve;
                         break;
                 }
             }
         }
+
         private bool isBusy;
+
         public bool IsBusy
         {
             get => isBusy;
@@ -69,7 +76,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => IsBusy, ref isBusy, value);
             }
         }
+
         private string busyContent;
+
         public string BusyContent
         {
             get => busyContent;
@@ -78,6 +87,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+
         public IcCard Card { get; set; }
         private Customer patient;
 
@@ -91,6 +101,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
         }
 
         private string cooperativeContent;
+
         public string CooperativeContent
         {
             get => cooperativeContent;
@@ -99,7 +110,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => CooperativeContent, ref cooperativeContent, value);
             }
         }
+
         private string registerContent;
+
         public string RegisterContent
         {
             get => registerContent;
@@ -108,7 +121,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => RegisterContent, ref registerContent, value);
             }
         }
+
         private string reserveContent;
+
         public string ReserveContent
         {
             get => reserveContent;
@@ -128,50 +143,57 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => SelectedType, ref selectedType, value);
             }
         }
+
         public bool NoCardGridVisible => NoCardPres != null && NoCardPres.Count > 0;
         public bool CooperativeRadioBtnEnable => CooperativePres != null && CooperativePres.Count > 0;
         public bool RegisterRadioBtnEnable => ChronicRegisterPres != null && ChronicRegisterPres.Count > 0;
         public bool ReserveRadioBtnEnable => ChronicReservePres != null && ChronicReservePres.Count > 0;
         private CusPrePreviewBases cooperativePres;
-        public CusPrePreviewBases CooperativePres 
-        { 
-            get => cooperativePres; 
+
+        public CusPrePreviewBases CooperativePres
+        {
+            get => cooperativePres;
             set
             {
                 Set(() => CooperativePres, ref cooperativePres, value);
             }
         }
+
         private CusPrePreviewBases chronicRegisterPres;
 
         public CusPrePreviewBases ChronicRegisterPres
         {
-            get => chronicRegisterPres; 
+            get => chronicRegisterPres;
             set
             {
                 Set(() => ChronicRegisterPres, ref chronicRegisterPres, value);
             }
         }
+
         private CusPrePreviewBases chronicReservePres;
 
         public CusPrePreviewBases ChronicReservePres
         {
-            get => chronicReservePres; 
+            get => chronicReservePres;
             set
             {
                 Set(() => ChronicReservePres, ref chronicReservePres, value);
             }
         }
+
         private CusPrePreviewBases noCardPres;
 
         public CusPrePreviewBases NoCardPres
         {
-            get => noCardPres; 
+            get => noCardPres;
             set
             {
                 Set(() => NoCardPres, ref noCardPres, value);
             }
         }
+
         private CusPrePreviewBase selectedPrescription;
+
         public CusPrePreviewBase SelectedPrescription
         {
             get => selectedPrescription;
@@ -186,7 +208,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
+
         private CusPrePreviewBase makeUpPrescription;
+
         public CusPrePreviewBase MakeUpPrescription
         {
             get => makeUpPrescription;
@@ -195,7 +219,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => MakeUpPrescription, ref makeUpPrescription, value);
             }
         }
+
         private bool showDialog;
+
         public bool ShowDialog
         {
             get => showDialog;
@@ -204,13 +230,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 Set(() => ShowDialog, ref showDialog, value);
             }
         }
+
         private ErrorUploadWindowViewModel.IcErrorCode ErrorCode;
         private BackgroundWorker worker;
         private PrescriptionService currentService;
-        #endregion
+
+        #endregion Variable
+
         public RelayCommand MakeUp { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
         public RelayCommand DeleteRegisterPrescription { get; set; }
+
         public CustomerPrescriptionViewModel(Customer customer, IcCard card)
         {
             Patient = customer;
@@ -234,52 +264,52 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             switch (SelectedPrescription)
             {
                 case null:
-                    MessageWindow.ShowMessage("請選擇欲刪除之處方。",MessageType.WARNING);
+                    MessageWindow.ShowMessage("請選擇欲刪除之處方。", MessageType.WARNING);
                     return;
+
                 case ChronicPreview pre:
-                {
-                    if (pre.Type.Equals(PrescriptionType.ChronicRegister))
                     {
-                        var deleteConfirm = new ConfirmWindow("確定刪除此處方?", "刪除確認");
-                        var delete = deleteConfirm.DialogResult;
-                        if ((bool)delete)
+                        if (pre.Type.Equals(PrescriptionType.ChronicRegister))
                         {
-                            worker = new BackgroundWorker();
-                            worker.DoWork += (o, ea) =>
+                            var deleteConfirm = new ConfirmWindow("確定刪除此處方?", "刪除確認");
+                            var delete = deleteConfirm.DialogResult;
+                            if ((bool)delete)
                             {
-                                BusyContent = "刪除處方...";
-                                MainWindow.ServerConnection.OpenConnection();
-                                MainWindow.SingdeConnection.OpenConnection();
-                                SelectedPrescription.CreatePrescription().Delete();
-                                BusyContent = "刪除處方相關訂單...";
-                                ((ChronicPreview)SelectedPrescription).DeleteOrder();
-                                BusyContent = "取得顧客處方...";
-                                Application.Current.Dispatcher.Invoke(InitVariable);
-                                MainWindow.ServerConnection.CloseConnection();
-                                MainWindow.SingdeConnection.CloseConnection();
-                                
-                            };
-                            worker.RunWorkerCompleted += (o, ea) =>
-                            {
-                                IsBusy = false;
-                                SelectedRadioButton = "Option2";
-                                RaisePropertyChanged("CooperativeRadioBtnEnable");
-                                RaisePropertyChanged("RegisterRadioBtnEnable");
-                                RaisePropertyChanged("ReserveRadioBtnEnable");
-                                RaisePropertyChanged("SelectedRadioButton");
-                            };
-                            IsBusy = true;
-                            worker.RunWorkerAsync();
+                                worker = new BackgroundWorker();
+                                worker.DoWork += (o, ea) =>
+                                {
+                                    BusyContent = "刪除處方...";
+                                    MainWindow.ServerConnection.OpenConnection();
+                                    MainWindow.SingdeConnection.OpenConnection();
+                                    SelectedPrescription.CreatePrescription().Delete();
+                                    BusyContent = "刪除處方相關訂單...";
+                                    ((ChronicPreview)SelectedPrescription).DeleteOrder();
+                                    BusyContent = "取得顧客處方...";
+                                    Application.Current.Dispatcher.Invoke(InitVariable);
+                                    MainWindow.ServerConnection.CloseConnection();
+                                    MainWindow.SingdeConnection.CloseConnection();
+                                };
+                                worker.RunWorkerCompleted += (o, ea) =>
+                                {
+                                    IsBusy = false;
+                                    SelectedRadioButton = "Option2";
+                                    RaisePropertyChanged("CooperativeRadioBtnEnable");
+                                    RaisePropertyChanged("RegisterRadioBtnEnable");
+                                    RaisePropertyChanged("ReserveRadioBtnEnable");
+                                    RaisePropertyChanged("SelectedRadioButton");
+                                };
+                                IsBusy = true;
+                                worker.RunWorkerAsync();
+                            }
                         }
+                        else
+                        {
+                            MessageWindow.ShowMessage("非登錄處方不能刪除。", MessageType.WARNING);
+                        }
+                        break;
                     }
-                    else
-                    {
-                        MessageWindow.ShowMessage("非登錄處方不能刪除。",MessageType.WARNING);
-                    }
-                    break;
-                }
                 default:
-                    MessageWindow.ShowMessage("非登錄處方不能刪除。",MessageType.WARNING);
+                    MessageWindow.ShowMessage("非登錄處方不能刪除。", MessageType.WARNING);
                     return;
             }
         }
@@ -311,7 +341,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
             CooperativePres.GetCooperativeByCusIDNumber(Patient.IDNumber);
             ChronicRegisterPres.GetRegisterByCusId(Patient.ID);
             ChronicReservePres.GetReserveByCusId(Patient.ID);
-            if(!Patient.IsAnonymous())
+            if (!Patient.IsAnonymous())
                 NoCardPres.GetNoCardByCusId(Patient.ID);
         }
 
@@ -351,6 +381,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
             }
         }
+
         private void MakeUpAction()
         {
             if (MakeUpPrescription is null)
@@ -359,7 +390,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                     MakeUpPrescription = NoCardPres[0];
                 else
                 {
-                    MessageWindow.ShowMessage("請選擇欲補卡處方。",MessageType.WARNING);
+                    MessageWindow.ShowMessage("請選擇欲補卡處方。", MessageType.WARNING);
                     return;
                 }
             }
@@ -452,7 +483,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
                 currentService = PrescriptionService.CreateService(pre);
                 WriteCard();
                 currentService.MakeUpComplete();
-                Application.Current.Dispatcher.Invoke(delegate {
+                Application.Current.Dispatcher.Invoke(delegate
+                {
                     NoCardPres.GetNoCardByCusId(Patient.ID);
                 });
                 IsBusy = false;

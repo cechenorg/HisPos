@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
@@ -23,6 +18,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         }
 
         private decimal expense;
+
         public decimal Expense
         {
             get => expense;
@@ -33,6 +29,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         }
 
         private decimal inventoryShortage;
+
         public decimal InventoryShortage
         {
             get => inventoryShortage;
@@ -43,6 +40,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         }
 
         private decimal inventoryOverage;
+
         public decimal InventoryOverage
         {
             get => inventoryOverage;
@@ -53,6 +51,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
         }
 
         private decimal inventoryScrapped;
+
         public decimal InventoryScrapped
         {
             get => inventoryScrapped;

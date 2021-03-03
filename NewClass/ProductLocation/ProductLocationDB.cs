@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.ProductLocation
 {
@@ -22,7 +18,8 @@ namespace His_Pos.NewClass.ProductLocation
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductLocationDetails]", parameters);
         }
-        internal static DataTable InsertProductLocationDetails(int typeID,string proid)
+
+        internal static DataTable InsertProductLocationDetails(int typeID, string proid)
         {
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", typeID));
@@ -30,7 +27,6 @@ namespace His_Pos.NewClass.ProductLocation
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[ProductLocationDetailsInsert]", parameters);
         }
-
 
         internal static DataTable GetTypeProducts(int typeID)
         {

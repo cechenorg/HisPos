@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
@@ -16,6 +10,11 @@ using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
 using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -40,7 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand ExportOrderDataCommand { get; set; }
         public RelayCommand<string> RealAmountMouseDoubleClickCommand { get; set; }
 
-        #endregion
+        #endregion ----- Define Command -----
 
         #region ----- Define Variables -----
 
@@ -93,7 +92,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             set { Set(() => SearchString, ref searchString, value); }
         }
 
-        #endregion
+        #endregion ----- Define Variables -----
 
         public NormalViewModel()
         {
@@ -102,6 +101,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ----- Define Actions -----
+
         private void ReturnOrderRePurchaseAction()
         {
             if (CurrentStoreOrder.CheckOrder())
@@ -114,15 +114,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 storeOrderCollection.ReloadCollection();
             }
         }
+
         private void ReturnOrderCalculateReturnAmountAction()
         {
             (CurrentStoreOrder as ReturnOrder).CalculateReturnAmount();
         }
+
         private void DoubleClickRealAmount(string id)
         {
             CurrentStoreOrder.SetRealAmount(id);
         }
-        
+
         private void CalculateTotalPriceAction()
         {
             CurrentStoreOrder.CalculateTotalPrice();
@@ -174,7 +176,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         private void ToNextStatusAction()
         {
-            if (!CurrentStoreOrder.ChkPrice()) {
+            if (!CurrentStoreOrder.ChkPrice())
+            {
                 MessageWindow.ShowMessage("本次進價與上次進價不同", MessageType.WARNING);
             }
 
@@ -236,23 +239,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow("", addProductEnum, CurrentStoreOrder.OrderWarehouse.ID);
             productPurchaseReturnAddProductWindow.ShowDialog();
             Messenger.Default.Unregister(this);
-            
         }
 
         private void DeleteProductAction()
         {
             CurrentStoreOrder.DeleteSelectedProduct();
         }
+
         private void FilterOrderAction(string filterCondition)
         {
             if (filterCondition != null)
                 filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
             StoreOrderCollectionView.Filter += OrderFilter;
         }
+
         private void SplitBatchAction(string productID)
         {
             (CurrentStoreOrder as PurchaseOrder).SplitBatch(productID);
         }
+
         private void MergeBatchAction(PurchaseProduct product)
         {
             (CurrentStoreOrder as PurchaseOrder).MergeBatch(product);
@@ -303,7 +308,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             backgroundWorker.RunWorkerAsync();
         }
 
-        #endregion
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
 
@@ -346,8 +351,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             ReturnOrderCalculateReturnAmountCommand = new RelayCommand(ReturnOrderCalculateReturnAmountAction);
             ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
             ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
-            RealAmountMouseDoubleClickCommand= new RelayCommand<string>(DoubleClickRealAmount);
+            RealAmountMouseDoubleClickCommand = new RelayCommand<string>(DoubleClickRealAmount);
         }
+
         private void RegisterMessengers()
         {
             Messenger.Default.Register<NotificationMessage<string>>(this, ShowOrderDetailByOrderID);
@@ -397,7 +403,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             }
         }
 
-        #endregion
+        #endregion ///// Messenger Functions /////
 
         #region ///// Filter Functions /////
 
@@ -461,14 +467,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 case OrderFilterStatusEnum.ALL:
                     break;
+
                 case OrderFilterStatusEnum.UNPROCESSING:
                     if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING))
                         returnValue = false;
                     break;
+
                 case OrderFilterStatusEnum.WAITING:
                     if (tempOrder.OrderStatus != OrderStatusEnum.WAITING)
                         returnValue = false;
                     break;
+
                 case OrderFilterStatusEnum.PROCESSING:
                     if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
                         returnValue = false;
@@ -478,8 +487,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             return returnValue;
         }
 
-        #endregion
+        #endregion ///// Filter Functions /////
 
-        #endregion
+        #endregion ----- Define Functions -----
     }
 }

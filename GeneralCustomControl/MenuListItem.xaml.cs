@@ -18,6 +18,7 @@ namespace His_Pos.GeneralCustomControl
         private double _listMaxMenuHeight = 0;
         private bool _listMenuHided = true;
         public int _count = 0;
+
         public MenuListItem()
         {
             InitializeComponent();
@@ -96,7 +97,7 @@ namespace His_Pos.GeneralCustomControl
             return ListMenu.Items.Count;
         }
 
-        void ListMenuTimerTick(object sender, EventArgs e)
+        private void ListMenuTimerTick(object sender, EventArgs e)
         {
             if (_listMenuHided)
             {

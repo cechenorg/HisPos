@@ -1,6 +1,6 @@
-﻿using System;
+﻿using His_Pos.Service;
+using System;
 using System.Collections.Generic;
-using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.ICCard
 {
@@ -31,7 +31,8 @@ namespace His_Pos.NewClass.Prescription.ICCard
          * 住院部分負擔費用【當次急性30天， 慢性180天以下】(140-146)
          * 住院部分負擔費用【當次急性31天， 慢性181天以上】(147-153)
          */
-        public TreatmentDataNoNeedHpc(byte[] pBuffer, int startIndex,bool isMakeUp)
+
+        public TreatmentDataNoNeedHpc(byte[] pBuffer, int startIndex, bool isMakeUp)
         {
             treCatDictionary = new Dictionary<string, string>();
             var treCat = Function.ByteArrayToString(2, pBuffer, startIndex);
@@ -53,35 +54,35 @@ namespace His_Pos.NewClass.Prescription.ICCard
 
         private void CreateTreatmentCategoryDictionary()
         {
-            treCatDictionary.Add("01","西醫門診");
-            treCatDictionary.Add("02","牙醫門診");
-            treCatDictionary.Add("03","中醫門診");
-            treCatDictionary.Add("04","急診");
-            treCatDictionary.Add("05","住院");
-            treCatDictionary.Add("06","門診轉診就醫");
-            treCatDictionary.Add("07","門診手術回診");
-            treCatDictionary.Add("08","住院患者出院回診");
-            treCatDictionary.Add("AA","同療程(6次以內治療)");
-            treCatDictionary.Add("AB","同療程(非6次以內治療)");
-            treCatDictionary.Add("AC","預防保健");
-            treCatDictionary.Add("AD","職業傷害/職業病門(急)診");
-            treCatDictionary.Add("AE","慢性病連續處方箋領藥");
-            treCatDictionary.Add("AF","藥局調劑");
-            treCatDictionary.Add("AG","排程檢劑");
-            treCatDictionary.Add("AH","居家照護(第二次以後)");
-            treCatDictionary.Add("AI","同日同醫師看診(第二次以後)");
-            treCatDictionary.Add("BA","門(急)診當次轉住院入院");
-            treCatDictionary.Add("BB","出院");
-            treCatDictionary.Add("BC","急診/住院中執行項目");
-            treCatDictionary.Add("BD","急診第二日(含)以後離院");
-            treCatDictionary.Add("BE","職業傷害/職業病住院");
-            treCatDictionary.Add("BF","繼續住院依規定分段結清，切帳申報");
-            treCatDictionary.Add("CA","其他規定不須累計就醫序號急不扣除就醫次數");
-            treCatDictionary.Add("DA","門診轉出");
-            treCatDictionary.Add("DB","門診日術後須於七日內之一次回診");
-            treCatDictionary.Add("DC","住院患者出院後七日內之一次回診");
-            treCatDictionary.Add("ZA","取消24小時內所有就醫類別");
-            treCatDictionary.Add("ZB","取消24小時內部份就醫類別");
+            treCatDictionary.Add("01", "西醫門診");
+            treCatDictionary.Add("02", "牙醫門診");
+            treCatDictionary.Add("03", "中醫門診");
+            treCatDictionary.Add("04", "急診");
+            treCatDictionary.Add("05", "住院");
+            treCatDictionary.Add("06", "門診轉診就醫");
+            treCatDictionary.Add("07", "門診手術回診");
+            treCatDictionary.Add("08", "住院患者出院回診");
+            treCatDictionary.Add("AA", "同療程(6次以內治療)");
+            treCatDictionary.Add("AB", "同療程(非6次以內治療)");
+            treCatDictionary.Add("AC", "預防保健");
+            treCatDictionary.Add("AD", "職業傷害/職業病門(急)診");
+            treCatDictionary.Add("AE", "慢性病連續處方箋領藥");
+            treCatDictionary.Add("AF", "藥局調劑");
+            treCatDictionary.Add("AG", "排程檢劑");
+            treCatDictionary.Add("AH", "居家照護(第二次以後)");
+            treCatDictionary.Add("AI", "同日同醫師看診(第二次以後)");
+            treCatDictionary.Add("BA", "門(急)診當次轉住院入院");
+            treCatDictionary.Add("BB", "出院");
+            treCatDictionary.Add("BC", "急診/住院中執行項目");
+            treCatDictionary.Add("BD", "急診第二日(含)以後離院");
+            treCatDictionary.Add("BE", "職業傷害/職業病住院");
+            treCatDictionary.Add("BF", "繼續住院依規定分段結清，切帳申報");
+            treCatDictionary.Add("CA", "其他規定不須累計就醫序號急不扣除就醫次數");
+            treCatDictionary.Add("DA", "門診轉出");
+            treCatDictionary.Add("DB", "門診日術後須於七日內之一次回診");
+            treCatDictionary.Add("DC", "住院患者出院後七日內之一次回診");
+            treCatDictionary.Add("ZA", "取消24小時內所有就醫類別");
+            treCatDictionary.Add("ZB", "取消24小時內部份就醫類別");
         }
     }
 }

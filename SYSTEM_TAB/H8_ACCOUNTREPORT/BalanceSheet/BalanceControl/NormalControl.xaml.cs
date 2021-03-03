@@ -23,10 +23,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
         private void Amount_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            
             ((TextBox)sender).SelectAll();
             ((TextBox)sender).Focus();
-
         }
 
         private void Amount_GotFocus(object sender, RoutedEventArgs e)

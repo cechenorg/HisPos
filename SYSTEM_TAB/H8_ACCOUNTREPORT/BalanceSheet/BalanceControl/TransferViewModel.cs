@@ -1,34 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Report.Accounts;
-using His_Pos.NewClass.Report.CashReport;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
     public class TransferViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private string transferValue;
         private string target;
 
         public double MaxValue { get; set; } = 0;
+
         public string Target
         {
             get { return target; }
@@ -38,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(Target));
             }
         }
+
         public string TransferValue
         {
             get { return transferValue; }
@@ -49,6 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private List<AccountsReports> bank;
+
         public List<AccountsReports> Bank
         {
             get { return bank; }
@@ -60,6 +60,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private AccountsReports selectBank;
+
         public AccountsReports SelectBank
         {
             get { return selectBank; }
@@ -69,7 +70,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(SelectBank));
             }
         }
+
         private CollectionViewSource bankCollectionViewSource;
+
         private CollectionViewSource BankCollectionViewSource
         {
             get => bankCollectionViewSource;
@@ -77,23 +80,24 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private ICollectionView bankCollectionView;
+
         public ICollectionView BankCollectionView
         {
             get => bankCollectionView;
             private set { Set(() => BankCollectionView, ref bankCollectionView, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public TransferViewModel()
         {
-
             SelectBank = new AccountsReports();
             StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
 
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
             MainWindow.ServerConnection.CloseConnection();
-            Bank =new List<AccountsReports>();
+            Bank = new List<AccountsReports>();
             foreach (DataRow c in result.Rows)
             {
                 Bank.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
@@ -103,6 +107,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         #region ----- Define Actions -----
+
         private void StrikeAction(RelayCommand command)
         {
             if (!TransferValueIsValid()) return;
@@ -116,7 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             parameters.Add(new SqlParameter("NOTE", SelectBank.Name));
             parameters.Add(new SqlParameter("TARGET", SelectBank.ID));
             parameters.Add(new SqlParameter("SOURCE_ID", "001001"));
-             DataTable dataTable=MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByBank]", parameters);
+            DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByBank]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -132,9 +137,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             command.Execute(null);
         }
 
-        #endregion
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private bool TransferValueIsValid()
         {
             double temp;
@@ -157,9 +163,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("輸入金額非數字", MessageType.ERROR);
                 return false;
             }
-            
+
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

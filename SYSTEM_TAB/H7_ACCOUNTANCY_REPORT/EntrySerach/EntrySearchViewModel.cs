@@ -13,52 +13,67 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
     public class EntrySearchViewModel : TabBase
     {
         #region Var
+
         public override TabBase getTab()
         {
             return this;
         }
+
         public StockValue SelectStockValue { get; set; }
         private StockValues dailyStockValueCollection = new StockValues();
+
         public StockValues DailyStockValueCollection
         {
             get { return dailyStockValueCollection; }
             set { Set(() => DailyStockValueCollection, ref dailyStockValueCollection, value); }
         }
+
         private StockValue totalDailyStock = new StockValue();
+
         public StockValue TotalDailyStock
         {
             get { return totalDailyStock; }
             set { Set(() => TotalDailyStock, ref totalDailyStock, value); }
         }
+
         private DateTime startDate = DateTime.Now.AddDays(-DateTime.Now.Day + 1);
 
         //10.21
         public StockValue SelectOTCStockValue { get; set; }
+
         private StockValues dailyOTCStockValueCollection = new StockValues();
+
         public StockValues DailyOTCStockValueCollection
         {
             get { return dailyOTCStockValueCollection; }
             set { Set(() => DailyOTCStockValueCollection, ref dailyOTCStockValueCollection, value); }
         }
+
         private StockValue totalOTCDailyStock = new StockValue();
+
         public StockValue TotalOTCDailyStock
         {
             get { return totalOTCDailyStock; }
             set { Set(() => TotalOTCDailyStock, ref totalOTCDailyStock, value); }
         }
+
         //10.21^^^
         public DateTime StartDate
         {
             get { return startDate; }
             set { Set(() => StartDate, ref startDate, value); }
         }
+
         private DateTime endDate = DateTime.Now;
+
         public DateTime EndDate
         {
             get { return endDate; }
             set { Set(() => EndDate, ref endDate, value); }
         }
+
         private WareHouses wareHouseCollection;
+
         public WareHouses WareHouseCollection
         {
             get { return wareHouseCollection; }
@@ -67,21 +82,28 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 Set(() => WareHouseCollection, ref wareHouseCollection, value);
             }
         }
+
         private WareHouse selectedWareHouse;
+
         public WareHouse SelectedWareHouse
         {
             get { return selectedWareHouse; }
             set
             {
-                Set(() => SelectedWareHouse, ref selectedWareHouse, value); 
+                Set(() => SelectedWareHouse, ref selectedWareHouse, value);
             }
         }
-        #endregion
+
+        #endregion Var
+
         #region Command
+
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand ExportCsvCommand { get; set; }
         public RelayCommand ShowEntryDetailCommand { set; get; }
-        #endregion
+
+        #endregion Command
+
         public EntrySearchViewModel()
         {
             WareHouseCollection = WareHouses.GetWareHouses();
@@ -91,11 +113,16 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             ExportCsvCommand = new RelayCommand(ExportCsv);
             ShowEntryDetailCommand = new RelayCommand(ShowEntryDetailAction);
         }
-        #region Function 
-        private void ShowEntryDetailAction() {
-           EntryDetailWindow.EntryDetailWindow entryDetailWindow = new EntryDetailWindow.EntryDetailWindow(SelectStockValue.Date); 
+
+        #region Function
+
+        private void ShowEntryDetailAction()
+        {
+            EntryDetailWindow.EntryDetailWindow entryDetailWindow = new EntryDetailWindow.EntryDetailWindow(SelectStockValue.Date);
         }
-        private void ExportCsv() { 
+
+        private void ExportCsv()
+        {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.Filter = "csv|*.csv ";
             saveFileDialog1.FilterIndex = 2;
@@ -113,10 +140,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                     sw.Close();
                 }
             }
+        }
 
-        } 
-        
-        private void Search() { 
+        private void Search()
+        {
             DailyStockValueCollection.Clear();
             DailyOTCStockValueCollection.Clear();
             DailyStockValueCollection.GetDataByDate(StartDate, EndDate, SelectedWareHouse.ID);
@@ -124,19 +151,22 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             CaculateTotalStock();
             CaculateOTCTotalStock();
         }
-        private void CaculateTotalStock() {
-            if (DailyStockValueCollection.Count > 0) {
+
+        private void CaculateTotalStock()
+        {
+            if (DailyStockValueCollection.Count > 0)
+            {
                 TotalDailyStock.InitStockValue = DailyStockValueCollection[0].InitStockValue;
                 TotalDailyStock.PurchaseValue = DailyStockValueCollection.Sum(d => d.PurchaseValue);
                 TotalDailyStock.ReturnValue = DailyStockValueCollection.Sum(d => d.ReturnValue);
                 TotalDailyStock.MedUseValue = DailyStockValueCollection.Sum(d => d.MedUseValue);
-                TotalDailyStock.MinusStockAdjustValue = DailyStockValueCollection.Sum(d => d.MinusStockAdjustValue); 
+                TotalDailyStock.MinusStockAdjustValue = DailyStockValueCollection.Sum(d => d.MinusStockAdjustValue);
                 TotalDailyStock.StockCheckValue = DailyStockValueCollection.Sum(d => d.StockCheckValue);
                 TotalDailyStock.TrashValue = DailyStockValueCollection.Sum(d => d.TrashValue);
                 TotalDailyStock.FinalStockValue = DailyStockValueCollection[DailyStockValueCollection.Count - 1].FinalStockValue;
             }
-       
         }
+
         private void CaculateOTCTotalStock()
         {
             if (DailyOTCStockValueCollection.Count > 0)
@@ -150,9 +180,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalOTCDailyStock.TrashValue = DailyOTCStockValueCollection.Sum(d => d.TrashValue);
                 TotalOTCDailyStock.FinalStockValue = DailyOTCStockValueCollection[DailyOTCStockValueCollection.Count - 1].FinalStockValue;
             }
-
         }
-        #endregion
+
+        #endregion Function
     }
-} 
- 
+}

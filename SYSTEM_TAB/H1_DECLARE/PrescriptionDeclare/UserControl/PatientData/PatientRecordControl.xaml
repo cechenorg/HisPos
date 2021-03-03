@@ -1,14 +1,16 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData.PatientRecordControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData"
-             xmlns:newClass="clr-namespace:His_Pos.NewClass"
-             xmlns:service="clr-namespace:His_Pos.Service"
-             mc:Ignorable="d" 
-             x:Name="Root"
-             d:DesignHeight="250" d:DesignWidth="980">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData.PatientRecordControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:newClass="clr-namespace:His_Pos.NewClass"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    x:Name="Root"
+    d:DesignHeight="250"
+    d:DesignWidth="980"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="CusHistoryColumnHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -19,29 +21,47 @@
         </Style>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
-    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-        <DataGrid AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding Patient.RecordCollectionView,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
-                  ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  CanUserAddRows="False" SelectedItem="{Binding SelectedRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="250" >
+    <StackPanel Background="{StaticResource GridBackGround}" Orientation="Horizontal">
+        <DataGrid
+            Height="250"
+            AutoGenerateColumns="False"
+            Background="Transparent"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="False"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{DynamicResource CusHistoryColumnHeaderStyle}"
+            HorizontalScrollBarVisibility="Disabled"
+            ItemsSource="{Binding Patient.RecordCollectionView, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+            SelectedItem="{Binding SelectedRecord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            VerticalScrollBarVisibility="Auto">
             <DataGrid.ContextMenu>
-                <ContextMenu TextBlock.TextAlignment="Left" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                    <MenuItem Header="複製" Command="{Binding CopyPrescription}"/>
+                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" TextBlock.TextAlignment="Left">
+                    <MenuItem Command="{Binding CopyPrescription}" Header="複製" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
                         </Trigger>
                     </Style.Triggers>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <EventSetter Event="MouseDoubleClick" Handler="ShowPrescriptionEditWindow"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Height" Value="35"/>
+                    <Setter Property="Background" Value="Transparent" />
+                    <EventSetter Event="MouseDoubleClick" Handler="ShowPrescriptionEditWindow" />
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Height" Value="35" />
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn MinWidth="200" Header="日期" Width="200" MaxWidth="200" IsReadOnly="True" CanUserResize="False">
+                <DataGridTextColumn
+                    Width="200"
+                    MinWidth="200"
+                    MaxWidth="200"
+                    CanUserResize="False"
+                    Header="日期"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -51,7 +71,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="450" Header="品名" Width="450" MaxWidth="450" IsReadOnly="True" CanUserResize="False">
+                <DataGridTextColumn
+                    Width="450"
+                    MinWidth="450"
+                    MaxWidth="450"
+                    CanUserResize="False"
+                    Header="品名"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -61,7 +87,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="150" MaxWidth="150" Width="150" Header="數量" IsReadOnly="True" CanUserResize="False">
+                <DataGridTextColumn
+                    Width="150"
+                    MinWidth="150"
+                    MaxWidth="150"
+                    CanUserResize="False"
+                    Header="數量"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -71,7 +103,12 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="200" MaxWidth="200" Header="金額" IsReadOnly="True" CanUserResize="False">
+                <DataGridTextColumn
+                    Width="200"
+                    MaxWidth="200"
+                    CanUserResize="False"
+                    Header="金額"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -81,7 +118,6 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                
             </DataGrid.Columns>
         </DataGrid>
         <!--<DataGrid Height="250" AutoGenerateColumns="False" Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False"  ItemsSource="{Binding Products,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
@@ -91,12 +127,12 @@
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
                         </Trigger>
                     </Style.Triggers>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Height" Value="40" />
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>

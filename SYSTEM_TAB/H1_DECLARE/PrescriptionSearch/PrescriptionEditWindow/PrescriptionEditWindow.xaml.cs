@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Medicine.Base;
+using His_Pos.Service;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Medicine.Base;
-using His_Pos.Service;
 using Xceed.Wpf.Toolkit;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
@@ -17,14 +17,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
     /// </summary>
     public partial class PrescriptionEditWindow : Window
     {
-        int prevRowIndex = -1;
+        private int prevRowIndex = -1;
+
         public delegate Point GetDragDropPosition(IInputElement theElement);
+
         public PrescriptionEditWindow()
         {
             InitializeComponent();
         }
 
-        public PrescriptionEditWindow(Prescription p,string title)
+        public PrescriptionEditWindow(Prescription p, string title)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -94,7 +96,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             {
                 ChronicSequence.Focus();
                 ChronicSequence.SelectionStart = 0;
-
             }
         }
 
@@ -142,6 +143,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 PrescriptionMedicines.SelectedItem = PrescriptionMedicines.Items[0];
             }
         }
+
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //按 Enter 下一欄
@@ -150,6 +152,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             e.Handled = true;
             MoveFocusNext(sender);
         }
+
         private void MoveFocusNext(object sender)
         {
             if (sender is TextBox box)
@@ -222,7 +225,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-            if(PrescriptionMedicines.CurrentCell.Item is null) return;
+            if (PrescriptionMedicines.CurrentCell.Item is null) return;
             if (PrescriptionMedicines.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = PrescriptionMedicines.Items.Count;
@@ -253,6 +256,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             if (firstChild is TextBox)
                 firstChild.Focus();
         }
+
         private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox t = sender as TextBox;
@@ -287,7 +291,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void MedicalNumber_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Space)
+            if (e.Key == Key.Space)
                 e.Handled = true;
         }
 
@@ -295,14 +299,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (prevRowIndex < 0)
                 return;
-           
+
             var index = GetDataGridItemCurrentRowIndex(e.GetPosition);
 
             if (index < 0)
                 return;
             if (index == prevRowIndex)
                 return;
-            if (index == PrescriptionMedicines.Items.Count-1)
+            if (index == PrescriptionMedicines.Items.Count - 1)
                 return;
 
             var medicines = ((PrescriptionEditViewModel)DataContext).EditedPrescription.Medicines;
@@ -310,7 +314,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             medicines.RemoveAt(prevRowIndex);
             medicines.Insert(index, movedMedicine);
             ((PrescriptionEditViewModel)DataContext).EditedPrescription.Medicines.ReOrder();
-            ((PrescriptionEditViewModel) DataContext).IsEdit = true;
+            ((PrescriptionEditViewModel)DataContext).IsEdit = true;
         }
 
         private void PrescriptionMedicines_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -364,7 +368,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void ChangeMedicineIDToMostPriced(object sender, MouseButtonEventArgs e)
         {
             PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
-            ((PrescriptionEditViewModel) DataContext).ChangeMedicineIDToMostPriced.Execute(null);
+            ((PrescriptionEditViewModel)DataContext).ChangeMedicineIDToMostPriced.Execute(null);
         }
 
         private void BuckleAmount_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

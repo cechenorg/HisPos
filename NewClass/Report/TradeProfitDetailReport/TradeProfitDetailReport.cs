@@ -1,10 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.TradeProfitDetailReport
 {
@@ -14,7 +10,8 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         {
         }
 
-        public TradeProfitDetailReport(DataRow r) {
+        public TradeProfitDetailReport(DataRow r)
+        {
             Id = r.Field<int>("TraMas_ID");
             Name = r.Field<string>("PosCus_Name");
             RealTotal = r.Field<int>("TraMas_RealTotal");
@@ -23,10 +20,11 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             CashAmount = r.Field<int>("CashAmount");
             CardAmount = r.Field<int>("CardAmount");
             DiscountAmt = r.Field<int>("DiscountAmt");
-            TypeId= r.Field<string>("TypeId");
+            TypeId = r.Field<string>("TypeId");
             CardFee = r.Field<decimal>("CardFee");
             CashCoupon = r.Field<int>("CashCoupon");
         }
+
         private int id;
         private string name;
         private int realTotal;
@@ -39,6 +37,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private int count;
         private decimal cardFee;
         private int cashCoupon;
+
         public string TypeId
         {
             get => typeId;
@@ -48,7 +47,6 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             }
         }
 
-
         public int Id
         {
             get => id;
@@ -57,6 +55,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => Id, ref id, value);
             }
         }
+
         public int Count
         {
             get => count;
@@ -65,6 +64,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => Count, ref count, value);
             }
         }
+
         public string Name
         {
             get => name;
@@ -73,6 +73,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => Name, ref name, value);
             }
         }
+
         public int RealTotal
         {
             get => realTotal;
@@ -81,6 +82,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => RealTotal, ref realTotal, value);
             }
         }
+
         public decimal ValueDifference
         {
             get => valueDifference;
@@ -89,6 +91,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => ValueDifference, ref valueDifference, value);
             }
         }
+
         public int Profit
         {
             get => profit;
@@ -97,6 +100,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => Profit, ref profit, value);
             }
         }
+
         public int CashAmount
         {
             get => cashAmount;
@@ -105,6 +109,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => CashAmount, ref cashAmount, value);
             }
         }
+
         public int CardAmount
         {
             get => cardAmount;
@@ -113,6 +118,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => CardAmount, ref cardAmount, value);
             }
         }
+
         public int DiscountAmt
         {
             get => discountAmt;
@@ -121,6 +127,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => DiscountAmt, ref discountAmt, value);
             }
         }
+
         public int CashCoupon
         {
             get => cashCoupon;
@@ -138,7 +145,5 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => CardFee, ref cardFee, value);
             }
         }
-
-
     }
 }

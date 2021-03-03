@@ -1,15 +1,16 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.Service;
+using System;
+using System.ComponentModel;
+using System.Windows.Data;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
+
 // ReSharper disable InconsistentNaming
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow
@@ -17,8 +18,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
     public class CooperativePrescriptionViewModel : ViewModelBase
     {
         #region Variables
+
         private CusPrePreviewBases cooperativePres { get; set; }
         private CollectionViewSource cooPreCollectionViewSource;
+
         private CollectionViewSource CooPreCollectionViewSource
         {
             get => cooPreCollectionViewSource;
@@ -29,6 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
 
         private ICollectionView cooPreCollectionView;
+
         public ICollectionView CooPreCollectionView
         {
             get => cooPreCollectionView;
@@ -37,7 +41,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 Set(() => CooPreCollectionView, ref cooPreCollectionView, value);
             }
         }
+
         private bool isBusy;
+
         public bool IsBusy
         {
             get => isBusy;
@@ -46,7 +52,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 Set(() => IsBusy, ref isBusy, value);
             }
         }
+
         private string busyContent;
+
         public string BusyContent
         {
             get => busyContent;
@@ -55,7 +63,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 Set(() => BusyContent, ref busyContent, value);
             }
         }
+
         private CusPrePreviewBase selectedPrescription;
+
         public CusPrePreviewBase SelectedPrescription
         {
             get => selectedPrescription;
@@ -66,6 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
 
         private DateTime? startDate = DateTime.Today;
+
         public DateTime? StartDate
         {
             get => startDate;
@@ -78,6 +89,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
 
         private DateTime? endDate = DateTime.Today;
+
         public DateTime? EndDate
         {
             get => endDate;
@@ -90,6 +102,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
 
         private string idNumber;
+
         // ReSharper disable once InconsistentNaming
         public string IDNumber
         {
@@ -103,18 +116,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
 
         private bool isRead;
+
         public bool IsRead
         {
             get => isRead;
             set
             {
                 Set(() => IsRead, ref isRead, value);
-                if(CooPreCollectionViewSource != null)
+                if (CooPreCollectionViewSource != null)
                     CooPreCollectionViewSource.Filter += Filter;
             }
         }
 
         private bool isNotRead;
+
         public bool IsNotRead
         {
             get => isNotRead;
@@ -125,12 +140,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                     CooPreCollectionViewSource.Filter += Filter;
             }
         }
-        #endregion
+
+        #endregion Variables
+
         #region Commands
+
         public RelayCommand PrintMedBag { get; set; }
         public RelayCommand PrescriptionSelected { get; set; }
         public RelayCommand Refresh { get; set; }
-        #endregion
+
+        #endregion Commands
+
         public CooperativePrescriptionViewModel()
         {
             InitVariables();
@@ -176,6 +196,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
 
         #region Actions
+
         private void PrintAction()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -197,7 +218,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 MessageWindow.ShowMessage("代入處方發生問題，為確保處方資料完整請重新取得病患資料並代入處方。", MessageType.WARNING);
             }
         }
-        #endregion
+
+        #endregion Actions
 
         private void Filter(object sender, FilterEventArgs e)
         {

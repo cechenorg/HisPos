@@ -9,209 +9,64 @@
     d:DesignWidth="1365"
     mc:Ignorable="d">
     <UserControl.Resources>
-
-        <!--  MoveThumb Template  --><!--
-        <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type s:MoveThumb}">
-            <Rectangle Fill="Transparent" />
-        </ControlTemplate>
-
-        <ControlTemplate x:Key="LineThumbTemplate" TargetType="{x:Type s:ResizeThumb}">
-            <Rectangle Fill="DodgerBlue" />
-        </ControlTemplate>
-
-        <ControlTemplate x:Key="CornerThumbTemplate" TargetType="{x:Type s:ResizeThumb}">
-            <Ellipse Fill="DarkBlue" />
-        </ControlTemplate>
-
-        --><!--  ResizeDecorator Template  --><!--
-        <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
-            <Grid>
-                <s:ResizeThumb
-                    Height="3"
-                    Margin="0,-4,0,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top"
-                    Cursor="SizeNS"
-                    Template="{StaticResource LineThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="3"
-                    Margin="-4,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Stretch"
-                    Cursor="SizeWE"
-                    Template="{StaticResource LineThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="3"
-                    Margin="0,0,-4,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Stretch"
-                    Cursor="SizeWE"
-                    Template="{StaticResource LineThumbTemplate}" />
-                <s:ResizeThumb
-                    Height="3"
-                    Margin="0,0,0,-4"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Bottom"
-                    Cursor="SizeNS"
-                    Template="{StaticResource LineThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="20"
-                    Height="20"
-                    Margin="-12,-12,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Cursor="SizeNWSE"
-                    Template="{StaticResource CornerThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="20"
-                    Height="20"
-                    Margin="0,-12,-12,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Cursor="SizeNESW"
-                    Template="{StaticResource CornerThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="20"
-                    Height="20"
-                    Margin="-12,0,0,-12"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Bottom"
-                    Cursor="SizeNESW"
-                    Template="{StaticResource CornerThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="20"
-                    Height="20"
-                    Margin="0,0,-12,-12"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Cursor="SizeNWSE"
-                    Template="{StaticResource CornerThumbTemplate}" />
-            </Grid>
-        </ControlTemplate>
-
-        --><!--  Designer Item Template  --><!--
-        <ControlTemplate x:Key="DesignerItemTemplate" TargetType="ContentControl">
-            <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                <s:MoveThumb
-                    x:Name="MoveThumb"
-                    Cursor="SizeAll"
-                    Template="{StaticResource MoveThumbTemplate}">
-                    <s:MoveThumb.Style>
-                        <Style TargetType="s:MoveThumb">
-                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="MoveThumb_MouseLeftButtonDown" />
-                            <EventSetter Event="MouseDoubleClick" Handler="ShowLocationDetail" />
-                        </Style>
-                    </s:MoveThumb.Style>
-                </s:MoveThumb>
-                <Control Template="{StaticResource ResizeDecoratorTemplate}">
-                    <Control.Style>
-                        <Style TargetType="Control">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </Style>
-                    </Control.Style>
-                </Control>
-                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
-            </Grid>
-        </ControlTemplate>
-    </UserControl.Resources>
-    <Viewbox Stretch="Fill">
-        <Grid Width="1365" Height="839">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="50" />
-            </Grid.RowDefinitions>
-            <Canvas
-                Name="LocationCanvus"
-                Grid.Row="0"
-                Margin="10">
-                --><!--<Canvas.Background>
-                    <ImageBrush ImageSource="../../Images/blueprint.png" />
-                </Canvas.Background>--><!--
-            </Canvas>
-            <StackPanel
-                Grid.Row="1"
-                Background="{StaticResource GridDarkerBackGround}"
-                Orientation="Horizontal">
-                <Button
-                    Width="120"
-                    Margin="15,9,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Click="ButtonBase_OnClick"
-                    Content="+ 新增櫃位"
-                    FontFamily="Segoe UI Semibold"
-                    Foreground="Black" />
-                <Button
-                    Name="ButtonDeleteLocation"
-                    Width="120"
-                    Margin="15,9,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Click="ButtonDeleteLocation_Click"
-                    Content="- 刪除櫃位"
-                    FontFamily="Segoe UI Semibold"
-                    Foreground="Black" />
-                <Button
-                    Name="ButtonCopyLocation"
-                    Width="120"
-                    Margin="15,9,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Click="ButtonCopyLocation_Click"
-                    Content="複製櫃位"
-                    FontFamily="Segoe UI Semibold"
-                    Foreground="Black" />
-                <Button
-                    Name="ButtonChangeLocation"
-                    Width="120"
-                    Margin="15,9,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Click="ButtonChangeLocation_Click"
-                    Content="換櫃"
-                    FontFamily="Segoe UI Semibold"
-                    Foreground="Black" />
-            </StackPanel>
-        </Grid>
-    </Viewbox>
-</UserControl>-->
         <DataTemplate x:Key="DataNotChanged" DataType="UserControl">
-            <Label Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+            <Label
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="未修改"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
         </DataTemplate>
         <DataTemplate x:Key="DataChanged" DataType="UserControl">
-            <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
+            <Label
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="已修改"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Red" />
         </DataTemplate>
     </UserControl.Resources>
-    <Grid Width="1345" Height="849" Margin="10">
+    <Grid
+        Width="1345"
+        Height="849"
+        Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="829"/>
-            <RowDefinition/>
+            <RowDefinition Height="829" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="350"/>
-                <!--<ColumnDefinition Width="350"/>-->
-                <ColumnDefinition/>
+                <ColumnDefinition Width="350" />
+                <!--<ColumnDefinition Width="350" />-->
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="60"/>
+                <RowDefinition />
+                <RowDefinition Height="60" />
             </Grid.RowDefinitions>
-            <DataGrid  Name="ProductLocationDataGrid" Grid.Column="0" Grid.Row="0" HeadersVisibility="None" Background="{StaticResource GridDarkerBackGround}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
-                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"   IsSynchronizedWithCurrentItem="False" 
-                       SelectedValuePath="ProLoc_ID"  SelectedCellsChanged="ProductLocationDataGrid_SelectedCellsChanged">
-                 <DataGrid.RowStyle>
+            <DataGrid
+                Name="ProductLocationDataGrid"
+                Grid.Row="0"
+                Grid.Column="0"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridDarkerBackGround}"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                HeadersVisibility="None"
+                IsSynchronizedWithCurrentItem="False"
+                SelectedCellsChanged="ProductLocationDataGrid_SelectedCellsChanged"
+                SelectedValuePath="ProLoc_ID"
+                VerticalScrollBarVisibility="Hidden">
+                <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}" />
                             </Trigger>
                         </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Background" Value="Transparent" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
@@ -220,15 +75,41 @@
                             <DataTemplate>
                                 <Grid Height="77">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="45"/>
-                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="45" />
+                                        <RowDefinition Height="30" />
                                     </Grid.RowDefinitions>
-                                    <Label  Content="{Binding ProLoc_Name, UpdateSourceTrigger=PropertyChanged}" FontSize="30" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="20,0,0,0" />
-                                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <Label Content="{Binding COUNT_ID, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="N0" FontSize="18" FontFamily="Segoe UI Semi" Width="60" HorizontalContentAlignment="Right"/>
-                                        <Label Content="個商品" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="庫存現值 $ " FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="{Binding total, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="N0" FontSize="18" FontFamily="Segoe UI Semi" Width="60" HorizontalContentAlignment="Right"/>
+                                    <Label
+                                        Grid.Row="0"
+                                        Margin="20,0,0,0"
+                                        Content="{Binding ProLoc_Name, UpdateSourceTrigger=PropertyChanged}"
+                                        FontFamily="Segoe UI SemiBold"
+                                        FontSize="30" />
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                        <Label
+                                            Width="60"
+                                            HorizontalContentAlignment="Right"
+                                            Content="{Binding COUNT_ID, UpdateSourceTrigger=PropertyChanged}"
+                                            ContentStringFormat="N0"
+                                            FontFamily="Segoe UI Semi"
+                                            FontSize="18" />
+                                        <Label
+                                            Content="個商品"
+                                            FontFamily="Segoe UI Semi"
+                                            FontSize="18" />
+                                        <Label
+                                            Content="庫存現值 $ "
+                                            FontFamily="Segoe UI Semi"
+                                            FontSize="18" />
+                                        <Label
+                                            Width="60"
+                                            HorizontalContentAlignment="Right"
+                                            Content="{Binding total, UpdateSourceTrigger=PropertyChanged}"
+                                            ContentStringFormat="N0"
+                                            FontFamily="Segoe UI Semi"
+                                            FontSize="18" />
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -236,13 +117,23 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <!--<DataGrid Grid.Column="1" Grid.Row="0" HeadersVisibility="None" Background="{StaticResource GridDarkestBackGround}" AutoGenerateColumns="False" SelectedItem="{Binding CurrentType.CurrentDetailType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding CurrentType.ProductTypeDetails, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid
+                Name="ProductLocationDetailDataGrid"
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="10,0,0,0"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridDarkerBackGround}"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                HorizontalScrollBarVisibility="Disabled"
+                SelectedValuePath="Pro_ID">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Horizontal">
                                 <Setter Property="Width" Value="Auto" />
@@ -250,7 +141,7 @@
                                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                             </Trigger>
                             <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Width" Value="15" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                             </Trigger>
@@ -261,181 +152,252 @@
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}" />
                             </Trigger>
                         </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Height" Value="40" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="340">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid Height="77">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="45"/>
-                                        <RowDefinition Height="30"/>
-                                    </Grid.RowDefinitions>
-                                    <Label Content="{Binding Name, UpdateSourceTrigger=PropertyChanged}" FontSize="30" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="20,0,0,0"/>
-                                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <Label Content="共" FontSize="16" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="{Binding ItemCount, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontFamily="Segoe UI Semi" Width="60" HorizontalContentAlignment="Center"/>
-                                        <Label Content="個商品" FontSize="16" FontFamily="Segoe UI Semi"/>
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>-->
-            <DataGrid  Name="ProductLocationDetailDataGrid" Grid.Row="0" Grid.Column="2" Margin="10,0,0,0" Background="{StaticResource GridDarkerBackGround}"  CanUserAddRows="False"
-                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled" AutoGenerateColumns="False" SelectedValuePath="Pro_ID">
-                <DataGrid.Resources>
-                    <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
-                        <Style.Triggers>
-                            <Trigger Property="Orientation" Value="Horizontal">
-                                <Setter Property="Width" Value="Auto" />
-                                <Setter Property="Height" Value="15" />
-                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                            </Trigger>
-                            <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
-                                <Setter Property="Height" Value="Auto" />
-                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.Resources>
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Style.Triggers>
-                            <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                            </Trigger>
-                        </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Height" Value="40"/>
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Width="250" Header="商品代碼" FontSize="18" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Pro_ID}">
+                    <DataGridTextColumn
+                        Width="250"
+                        Binding="{Binding Pro_ID}"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="18"
+                        Header="商品代碼"
+                        IsReadOnly="True">
                         <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontSize" Value="22"/>
+                            <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="22" />
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Left"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Margin" Value="20,0,0,0"/>
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="20,0,0,0" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="300" Header="商品名稱" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Pro_ChineseName}">
+                    <DataGridTextColumn
+                        Width="300"
+                        Binding="{Binding Pro_ChineseName}"
+                        FontFamily="Segoe UI SemiBold"
+                        FontSize="20"
+                        Header="商品名稱"
+                        IsReadOnly="True">
                         <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontSize" Value="22"/>
+                            <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="22" />
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment"  Value="Left"/>
-                                <Setter Property="FontSize" Value="25"/>
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="FontSize" Value="25" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="寄庫量" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding DepRec_Amount}">
+                    <DataGridTextColumn
+                        Width="100"
+                        Binding="{Binding DepRec_Amount}"
+                        FontFamily="Segoe UI SemiBold"
+                        FontSize="20"
+                        Header="寄庫量"
+                        IsReadOnly="True">
                         <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontSize" Value="22"/>
+                            <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="22" />
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="FontSize" Value="25"/>
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="25" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="庫存量" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Inv_Inventory}">
+                    <DataGridTextColumn
+                        Width="100"
+                        Binding="{Binding Inv_Inventory}"
+                        FontFamily="Segoe UI SemiBold"
+                        FontSize="20"
+                        Header="庫存量"
+                        IsReadOnly="True">
                         <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontSize" Value="22"/>
+                            <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="22" />
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="FontSize" Value="25"/>
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="25" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="平均成本" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding AvgPrice}">
+                    <DataGridTextColumn
+                        Width="100"
+                        Binding="{Binding AvgPrice}"
+                        FontFamily="Segoe UI SemiBold"
+                        FontSize="20"
+                        Header="平均成本"
+                        IsReadOnly="True">
                         <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontSize" Value="22"/>
+                            <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="22" />
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="FontSize" Value="25"/>
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="25" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="庫存現值" FontSize="20" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Total}">
+                    <DataGridTextColumn
+                        Width="100"
+                        Binding="{Binding Total}"
+                        FontFamily="Segoe UI SemiBold"
+                        FontSize="20"
+                        Header="庫存現值"
+                        IsReadOnly="True">
                         <DataGridTextColumn.HeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontSize" Value="22"/>
+                            <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="22" />
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="FontSize" Value="25"/>
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="25" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="1" Margin="0,0,0,10" Background="{StaticResource GridBackGround}">
-                <Button Margin="10,0,0,0" Width="80" Content="新增" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Command="{Binding AddTypeCommand}" Click="NewButton_Click" x:Name="Newbtn"/>
-                <Button Margin="10,0,0,0" Width="80" Content="編輯" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Command="{Binding EditTypeCommand}" Click="EditButton_Click" x:Name="Editbtn"/>
-                <Button Margin="20,0,0,0" Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding DeleteTypeCommand}" Click="DeleteButton_Click" x:Name="Deletebtn"/>
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="1"
+                Margin="0,0,0,10"
+                Background="{StaticResource GridBackGround}"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="Newbtn"
+                    Width="80"
+                    Margin="10,0,0,0"
+                    Background="DimGray"
+                    BorderThickness="0"
+                    Click="NewButton_Click"
+                    Command="{Binding AddTypeCommand}"
+                    Content="新增"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16" />
+                <Button
+                    x:Name="Editbtn"
+                    Width="80"
+                    Margin="10,0,0,0"
+                    Background="DimGray"
+                    BorderThickness="0"
+                    Click="EditButton_Click"
+                    Command="{Binding EditTypeCommand}"
+                    Content="編輯"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16" />
+                <Button
+                    x:Name="Deletebtn"
+                    Width="120"
+                    Margin="20,0,0,0"
+                    Background="IndianRed"
+                    BorderThickness="0"
+                    Click="DeleteButton_Click"
+                    Command="{Binding DeleteTypeCommand}"
+                    Content="刪除"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="1" Margin="10,0,0,10" Background="{StaticResource GridBackGround}">
-                <Button Margin="280,0,0,0" Width="120" Content="商品換類" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Command="{Binding AddTypeCommand}" Visibility="Hidden"/>
-
-                <Label x:Name="lbInsertID" Content="商品代碼:" Margin="0,10,0,0" FontFamily="Segoe UI Semibold" FontSize="16" Visibility="Hidden"></Label>
-                <TextBox x:Name="InsertID" Width="130"  FontSize="16" Margin="0,0,0,10" KeyDown="InsertID_KeyDown" Visibility="Hidden"></TextBox>
-                <Button x:Name="InsertButton" Margin="20,0,0,0" Width="100" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"  Click="InsertButton_Click_1" Visibility="Hidden"/>
-
-                <Button x:Name="DeleteDetailButton" Margin="20,0,0,0" Width="100" Content="刪除商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0"  Click="DeleteDetailButton_Click" Visibility="Hidden"/>
-                
-                <Button x:Name="PrintButton" Margin="20,0,0,0" Width="100" Content="列印表單" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"  Click="PrintButton_Click" Visibility="Hidden"/>
-                
-                
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="10,0,0,10"
+                Background="{StaticResource GridBackGround}"
+                Orientation="Horizontal">
+                <Button
+                    Width="120"
+                    Margin="280,0,0,0"
+                    Background="RoyalBlue"
+                    BorderThickness="0"
+                    Command="{Binding AddTypeCommand}"
+                    Content="商品換類"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Visibility="Hidden" />
+                <Label
+                    x:Name="lbInsertID"
+                    Margin="0,10,0,0"
+                    Content="商品代碼:"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Visibility="Hidden" />
+                <TextBox
+                    x:Name="InsertID"
+                    Width="130"
+                    Margin="0,0,0,10"
+                    FontSize="16"
+                    KeyDown="InsertID_KeyDown"
+                    Visibility="Hidden" />
+                <Button
+                    x:Name="InsertButton"
+                    Width="100"
+                    Margin="20,0,0,0"
+                    Background="DimGray"
+                    BorderThickness="0"
+                    Click="InsertButton_Click_1"
+                    Content="新增商品"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Visibility="Hidden" />
+                <Button
+                    x:Name="DeleteDetailButton"
+                    Width="100"
+                    Margin="20,0,0,0"
+                    Background="IndianRed"
+                    BorderThickness="0"
+                    Click="DeleteDetailButton_Click"
+                    Content="刪除商品"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Visibility="Hidden" />
+                <Button
+                    x:Name="PrintButton"
+                    Width="100"
+                    Margin="20,0,0,0"
+                    Background="DimGray"
+                    BorderThickness="0"
+                    Click="PrintButton_Click"
+                    Content="列印表單"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Visibility="Hidden" />
             </StackPanel>
         </Grid>
     </Grid>

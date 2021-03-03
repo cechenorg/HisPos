@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using His_Pos.NewClass.Product.ProductManagement;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.NewClass.Product.ProductManagement;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -21,8 +9,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
     public partial class NHIMedicineHistoryPriceWindow : Window
     {
         #region ----- Define Variables -----
+
         public HistoryPrices HistoryPriceCollection { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public NHIMedicineHistoryPriceWindow(string medicineID)
         {
@@ -33,10 +23,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         }
 
         #region ----- Define Functions -----
+
         private void InitData(string medicineID)
         {
             HistoryPriceCollection = HistoryPrices.GetHistoryPrices(medicineID);
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

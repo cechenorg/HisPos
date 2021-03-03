@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Windows;
-using System.Windows.Input;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.ProductLocation;
-using His_Pos.NewClass.ProductType;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
@@ -18,18 +16,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     /// </summary>
     public partial class InsertLocationDetailWindow : Window
     {
-        int ID;
+        private int ID;
 
         public InsertLocationDetailWindow(int i)
         {
-           
             InitializeComponent();
             ID = i;
             DataContext = this;
         }
 
         #region ----- Define Functions -----
-       
+
         private bool CheckEmptyData()
         {
             string error = "";
@@ -46,10 +43,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
 
         #region ----- Define Events -----
- 
+
         private void ConfrimClick(object sender, RoutedEventArgs e)
         {
             if (CheckEmptyData())
@@ -70,11 +68,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 Close();
             }
         }
-        #endregion
+
+        #endregion ----- Define Events -----
 
         private void ProID_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) {
+            if (e.Key == Key.Enter)
+            {
                 AddProductByInputAction(ProID.Text);
             }
         }
@@ -141,10 +141,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                         {
                             ProID.Text = NewProduct["Pro_ID"].ToString();
                         }
-                     
                     }
                 }
-                else { MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
+                else
+                {
+                    MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
                     ProID.Text = "";
                     return;
                 }

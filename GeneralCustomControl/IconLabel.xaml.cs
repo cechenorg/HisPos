@@ -11,6 +11,7 @@ namespace His_Pos.GeneralCustomControl
         {
             InitializeComponent();
         }
+
         public void SetIconLabel(double labelWidth, double labelHeight, string labelContent)
         {
             Width = labelWidth;
@@ -18,14 +19,17 @@ namespace His_Pos.GeneralCustomControl
             Label.Text = labelContent;
             UpdateLayout();
         }
+
         public void SetIconSource(BitmapImage iconsource)
         {
             Icon.Source = iconsource;
         }
+
         public void SetLabelContent(string content)
         {
             Label.Text = content;
         }
+
         public void SetLabelSize(double labelWidth, double labelHeight)
         {
             Width = labelWidth;

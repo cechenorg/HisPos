@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
@@ -223,7 +216,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         //                                                  || (m as ManageManufactory).NickName.Contains(SearchName.Text)
         //                                                  || (m as ManageManufactory).ManufactoryPrincipals.Count(p => p.Name.Contains(SearchName.Text)) > 0
         //                                                  || (m as ManageManufactory).ManufactoryPrincipals.Count(p => p.ResponsibleDepartment.Contains(SearchName.Text)) > 0;
-
 
         //    ManageManufactoryDataGrid.SelectedIndex = 0;
         //}

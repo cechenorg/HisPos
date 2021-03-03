@@ -1,8 +1,8 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductTypeResultControl
 {
@@ -33,7 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductTypeResult
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new [] {((ProductManageStruct)row.Item).ID, ((ProductManageStruct)row.Item).WareHouseID.ToString() }, "ShowProductDetail"));
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((ProductManageStruct)row.Item).ID, ((ProductManageStruct)row.Item).WareHouseID.ToString() }, "ShowProductDetail"));
         }
     }
 }

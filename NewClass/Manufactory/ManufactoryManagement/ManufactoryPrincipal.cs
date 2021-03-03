@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
     public class ManufactoryPrincipal : ObservableObject, ICloneable
     {
         #region ----- Define Variables -----
+
         private int id;
         private string name;
         private string telephone;
@@ -24,37 +21,44 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             get { return id; }
             set { Set(() => ID, ref id, value); }
         }
+
         public string Name
         {
             get { return name; }
             set { Set(() => Name, ref name, value); }
         }
+
         public string Telephone
         {
             get { return telephone; }
             set { Set(() => Telephone, ref telephone, value); }
         }
+
         public string Fax
         {
             get { return fax; }
             set { Set(() => Fax, ref fax, value); }
         }
+
         public string Email
         {
             get { return email; }
             set { Set(() => Email, ref email, value); }
         }
+
         public string Line
         {
             get { return line; }
             set { Set(() => Line, ref line, value); }
         }
+
         public string Note
         {
             get { return note; }
             set { Set(() => Note, ref note, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ManufactoryPrincipal()
         {
@@ -66,6 +70,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             Note = "";
             Telephone = "";
         }
+
         public ManufactoryPrincipal(DataRow row)
         {
             ID = row.Field<int>("ManPri_ID");
@@ -78,6 +83,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         }
 
         #region ----- Define Functions -----
+
         public object Clone()
         {
             ManufactoryPrincipal newPrincipal = new ManufactoryPrincipal();
@@ -92,6 +98,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
             return newPrincipal;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

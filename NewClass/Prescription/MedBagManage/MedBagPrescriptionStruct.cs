@@ -6,6 +6,7 @@ namespace His_Pos.NewClass.Prescription.MedBagManage
     public struct MedBagPrescriptionStruct
     {
         #region ----- Define Variables -----
+
         public int ID { get; set; }
         public string Status { get; set; }
         public string CustomerName { get; set; }
@@ -13,7 +14,8 @@ namespace His_Pos.NewClass.Prescription.MedBagManage
         public string Division { get; set; }
         public DateTime AdjustDate { get; set; }
         public double StockValue { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public MedBagPrescriptionStruct(DataRow row)
         {

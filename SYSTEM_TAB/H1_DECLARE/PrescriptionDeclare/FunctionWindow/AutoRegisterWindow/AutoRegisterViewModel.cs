@@ -1,29 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription;
-using His_Pos.Service;
+using System;
+using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow
 {
     public class AutoRegisterViewModel : ViewModelBase
     {
         #region Variables
+
         public Prescription CurrentPrescription { get; }
         public Prescriptions RegisterList { get; set; }
-        #endregion
+
+        #endregion Variables
 
         #region Command
+
         public RelayCommand Submit { get; set; }
         public RelayCommand Cancel { get; set; }
-        #endregion
+
+        #endregion Command
 
         public AutoRegisterViewModel(Prescription current, Prescriptions registerList)
         {
@@ -37,7 +37,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
         {
             if (RegisterList.Count(p => p.AdjustDate != null) == 0)
             {
-                MessageWindow.ShowMessage("請填寫欲一併登錄處方之調劑日。",MessageType.ERROR);
+                MessageWindow.ShowMessage("請填寫欲一併登錄處方之調劑日。", MessageType.ERROR);
                 return;
             }
             var adjustDateOutOfRange = false;
@@ -46,9 +46,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
                 if (r.AdjustDate != null && DateTime.Compare((DateTime)r.AdjustDate, (DateTime)CurrentPrescription.AdjustDate) < 0)
                     adjustDateOutOfRange = true;
             }
-            if(adjustDateOutOfRange)
+            if (adjustDateOutOfRange)
             {
-                MessageWindow.ShowMessage("自動登錄之預約處方調劑日不可小於目前處方",MessageType.ERROR);
+                MessageWindow.ShowMessage("自動登錄之預約處方調劑日不可小於目前處方", MessageType.ERROR);
                 return;
             }
             Messenger.Default.Send(new NotificationMessage("AutoRegisterSubmit"));

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.StoreOrder.Report
 {
@@ -22,9 +18,10 @@ namespace His_Pos.NewClass.StoreOrder.Report
         {
             return new ManufactoryOrderDetails(StoreOrderDB.GetManufactoryOrderDetails(manufactoryID, searchStartDate, searchEndDate, wareID));
         }
+
         internal static ManufactoryOrderDetails GetOrderTotalDetails(DateTime searchStartDate, DateTime searchEndDate, string wareID)
         {
-            return new ManufactoryOrderDetails(StoreOrderDB.GetOrderDetails( searchStartDate, searchEndDate, wareID));
+            return new ManufactoryOrderDetails(StoreOrderDB.GetOrderDetails(searchStartDate, searchEndDate, wareID));
         }
     }
 }

@@ -1,24 +1,26 @@
-﻿using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Interface;
 using His_Pos.NewClass.Product;
+using System.Data;
 
 namespace His_Pos.NewClass.Medicine.MedicineSet
 {
-    public class MedicineSet:ObservableObject
+    public class MedicineSet : ObservableObject
     {
         public MedicineSet()
-        { 
+        {
             MedicineSetItems = new MedicineSetItems();
         }
 
         public MedicineSet(DataRow r)
         {
             ID = r.Field<int>("MedSet_ID");
-            Name = r.Field<string>("MedSet_Name"); 
+            Name = r.Field<string>("MedSet_Name");
         }
+
         public int ID { get; set; }
         private string name;
+
         public string Name
         {
             get => name;
@@ -27,7 +29,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 Set(() => Name, ref name, value);
             }
         }
+
         private MedicineSetItems medicineSetItems;
+
         public MedicineSetItems MedicineSetItems
         {
             get => medicineSetItems;
@@ -36,7 +40,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 Set(() => MedicineSetItems, ref medicineSetItems, value);
             }
         }
+
         private MedicineSetItem selectedMedicine;
+
         public MedicineSetItem SelectedMedicine
         {
             get => selectedMedicine;

@@ -7,12 +7,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
     /// <summary>
     /// EntrySearchView.xaml 的互動邏輯
     /// </summary>
-    public partial class EntrySearchView : UserControl 
-        {
-      
+    public partial class EntrySearchView : UserControl
+    {
         public EntrySearchView()
         {
-            InitializeComponent(); 
+            InitializeComponent();
         }
 
         private void btnTrade_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -21,13 +20,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             btnMed.Foreground = Brushes.DimGray;
             btnTrade.Foreground = Brushes.White;
             btnTrade.Background = Brushes.DimGray;
-            OTC.Visibility= Visibility.Visible;
+            OTC.Visibility = Visibility.Visible;
             OTCDG.Visibility = Visibility.Visible;
             OTCPrint.Visibility = Visibility.Visible;
             Print.Visibility = Visibility.Collapsed;
             Med.Visibility = Visibility.Collapsed;
             MedDG.Visibility = Visibility.Collapsed;
-
         }
 
         private void btnMed_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -42,7 +40,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             OTCPrint.Visibility = Visibility.Collapsed;
             OTC.Visibility = Visibility.Collapsed;
             Print.Visibility = Visibility.Visible;
-
         }
     }
 }

@@ -1,20 +1,6 @@
-﻿using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
 {
@@ -40,7 +26,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             {
                 ProductTransactionView.InvoiceNumLable.Content = InvoiceNum.Text;
             }
-            else {
+            else
+            {
                 ProductTransactionView.InvoiceNumLable.Content = "";
             }
         }
@@ -70,7 +57,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 InvoiceNum.IsEnabled = true;
                 InvoiceCOM.IsEnabled = true;
             }
-            else {
+            else
+            {
                 InvoiceNum.IsEnabled = false;
                 InvoiceCOM.IsEnabled = false;
             }

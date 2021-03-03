@@ -1,21 +1,18 @@
 ﻿using His_Pos.ChromeTabViewModel;
-using His_Pos.FunctionWindow;
-using His_Pos.Service;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Xml;
 using His_Pos.Class;
 using His_Pos.NewClass.Cooperative.CooperativeClinicJson;
+using His_Pos.Service;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Xml;
 using CooperativeClinicJson = His_Pos.NewClass.Cooperative.CooperativeClinicJson.CooperativeClinicJson;
-
 
 namespace His_Pos.NewClass
 {
-   public static class WebApi
+    public static class WebApi
     {
-
-        internal static void SendToCooperClinic() {
+        internal static void SendToCooperClinic()
+        {
             CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson();
             string json = JsonConvert.SerializeObject(cooperativeClinicJson);
             Dictionary<string, string> keyValues;
@@ -24,7 +21,7 @@ namespace His_Pos.NewClass
                      {"json",json }
                 };
             if (json.Equals(@"{""sHospId"":null,""sRxId"":null,""sMedList"":[]}"))
-               return;
+                return;
             HttpMethod httpMethod = new HttpMethod();
             if (httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/SendToCooperClinic", keyValues))
             {
@@ -35,8 +32,10 @@ namespace His_Pos.NewClass
             {
                 NewFunction.ShowMessageFromDispatcher("骨科回傳扣庫失敗, 請通知資訊人員", MessageType.ERROR);
             }
-        } 
-        internal static string GetCooperativeClinicId(string medicalNum) {
+        }
+
+        internal static string GetCooperativeClinicId(string medicalNum)
+        {
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {
                      {"medicalNum", medicalNum }
@@ -47,7 +46,9 @@ namespace His_Pos.NewClass
                 return string.Empty;
             return table[0].SelectSingleNode("ArrayOfString/string").InnerText;
         }
-        internal static XmlDocument GetPharmacyInfoByVerify(string verifyKey) {
+
+        internal static XmlDocument GetPharmacyInfoByVerify(string verifyKey)
+        {
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {
                      {"verifyKey", verifyKey }
@@ -55,9 +56,10 @@ namespace His_Pos.NewClass
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetPharmacyInfoByRemark", keyValues);
             return table[0];
-
         }
-        internal static void UpdatePharmacyMedicalNum(string medicalNum) {
+
+        internal static void UpdatePharmacyMedicalNum(string medicalNum)
+        {
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {
                      {"VerifyKey", Properties.Settings.Default.SystemSerialNumber },
@@ -66,6 +68,7 @@ namespace His_Pos.NewClass
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/UpdatePharmacyMedicalNum", keyValues);
         }
+
         internal static bool SendToCooperClinicLoop100()
         {
             CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson("Loop");

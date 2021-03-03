@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using System;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.Service;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
     public class ManufactoryManageDetail : Manufactory, ICloneable
     {
         #region ----- Define Variables -----
+
         private ManufactoryPrincipal currentPrincipal;
         private string responsibleName;
         private string responsibleTelephone;
@@ -41,53 +38,64 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             get { return responsibleName; }
             set { Set(() => ResponsibleName, ref responsibleName, value); }
         }
+
         public string ResponsibleTelephone
         {
             get { return responsibleTelephone; }
             set { Set(() => ResponsibleTelephone, ref responsibleTelephone, value); }
         }
+
         public string ResponsibleLINE
         {
             get { return responsibleLINE; }
             set { Set(() => ResponsibleLINE, ref responsibleLINE, value); }
         }
+
         public string Address
         {
             get { return address; }
             set { Set(() => Address, ref address, value); }
         }
+
         public string Fax
         {
             get { return fax; }
             set { Set(() => Fax, ref fax, value); }
         }
+
         public string EIN
         {
             get { return ein; }
             set { Set(() => EIN, ref ein, value); }
         }
+
         public string Email
         {
             get { return email; }
             set { Set(() => Email, ref email, value); }
         }
+
         public string MedicalID
         {
             get { return medicalID; }
             set { Set(() => MedicalID, ref medicalID, value); }
         }
+
         public string ControlMedicineID
         {
             get { return controlMedicineID; }
             set { Set(() => ControlMedicineID, ref controlMedicineID, value); }
         }
+
         public string Note
         {
             get { return note; }
             set { Set(() => Note, ref note, value); }
         }
+
         public ManufactoryPrincipals Principals { get; set; }
         public ManufactoryTradeRecords TradeRecords { get; set; }
+
         public ManufactoryPrincipal CurrentPrincipal
         {
             get { return currentPrincipal; }
@@ -102,10 +110,14 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
                     IsDataChanged = false;
             }
         }
-        public bool HasPrincipal => !(CurrentPrincipal is null);
-        #endregion
 
-        private ManufactoryManageDetail() { }
+        public bool HasPrincipal => !(CurrentPrincipal is null);
+
+        #endregion ----- Define Variables -----
+
+        private ManufactoryManageDetail()
+        {
+        }
 
         public ManufactoryManageDetail(DataRow row) : base(row)
         {
@@ -123,6 +135,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         }
 
         #region ----- Define Functions -----
+
         public void GetManufactoryDetailData()
         {
             Principals = ManufactoryPrincipals.GetManufactoryPrincipals(ID);
@@ -131,6 +144,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             if (Principals.Count > 0)
                 CurrentPrincipal = Principals[0];
         }
+
         public bool DeleteManufactory()
         {
             DataTable dataTable = ManufactoryDB.DeleteManufactory(ID);
@@ -140,6 +154,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             else
                 return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
+
         internal void ResetData(ManufactoryManageDetail currentManufactoryBackUp)
         {
             ID = currentManufactoryBackUp.ID;
@@ -164,6 +179,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             else
                 CurrentPrincipal = null;
         }
+
         internal bool UpdateManufactoryDetail()
         {
             DataTable dataTable = ManufactoryDB.UpdateManufactoryDetail(this);
@@ -173,6 +189,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             else
                 return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
+
         internal bool CheckUpdateDataValid()
         {
             if (Name.Equals(""))
@@ -194,11 +211,13 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         }
 
         #region ///// Principal Functions /////
+
         internal void AddManufactoryPrincipal()
         {
             Principals.AddNewPrincipal();
             CurrentPrincipal = Principals.Last();
         }
+
         public void DeleteManufactoryPrincipal()
         {
             Principals.Remove(CurrentPrincipal);
@@ -208,7 +227,8 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             else
                 CurrentPrincipal = null;
         }
-        #endregion
+
+        #endregion ///// Principal Functions /////
 
         public object Clone()
         {
@@ -233,6 +253,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
             return newManufactoryManageDetail;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

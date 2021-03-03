@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.NewClass.StoreOrder.SingdeTotalOrder;
+using System.ComponentModel;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
     public class SingdeTotalViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand<string> ToDoneCommand { get; set; }
         public RelayCommand AllToDoneCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private SingdeTotalOrder currenTotalOrder;
         private bool isBusy;
         private string busyContent;
@@ -27,11 +25,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => isBusy;
             set { Set(() => IsBusy, ref isBusy, value); }
         }
+
         public string BusyContent
         {
             get => busyContent;
             set { Set(() => BusyContent, ref busyContent, value); }
         }
+
         public SingdeTotalOrder CurrenTotalOrder
         {
             get { return currenTotalOrder; }
@@ -43,23 +43,26 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 Set(() => CurrenTotalOrder, ref currenTotalOrder, value);
             }
         }
+
         public SingdeTotalOrders TotalOrders { get; set; }
-        public bool HasOrder { get { return CurrenTotalOrder != null;} }
-        #endregion
+        public bool HasOrder { get { return CurrenTotalOrder != null; } }
+
+        #endregion ----- Define Variables -----
 
         public SingdeTotalViewModel()
         {
             InitCommands();
-
         }
 
         #region ----- Define Actions -----
+
         private void ToDoneAction(string id)
         {
             MainWindow.ServerConnection.OpenConnection();
             CurrenTotalOrder.OrderToDone(id);
             MainWindow.ServerConnection.CloseConnection();
         }
+
         private void AllToDoneAction()
         {
             BackgroundWorker backgroundWorker = new BackgroundWorker();
@@ -81,14 +84,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             backgroundWorker.RunWorkerAsync();
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         public void InitCommands()
         {
             ToDoneCommand = new RelayCommand<string>(ToDoneAction);
             AllToDoneCommand = new RelayCommand(AllToDoneAction);
         }
+
         internal void InitData()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -104,6 +110,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             RaisePropertyChanged(nameof(HasOrder));
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

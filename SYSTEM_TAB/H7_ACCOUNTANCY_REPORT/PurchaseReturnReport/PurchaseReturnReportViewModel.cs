@@ -1,15 +1,14 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.StoreOrder.Report;
+using His_Pos.NewClass.WareHouse;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using GalaSoft.MvvmLight.CommandWpf;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.StoreOrder;
-using His_Pos.NewClass.StoreOrder.Report;
-using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 {
@@ -21,15 +20,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         }
 
         #region ----- Define Commands -----
+
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand ExportCSVCommand { get; set; }
         public RelayCommand ExportCSVTotalCommand { get; set; }
         public RelayCommand ExportCSVDetailTotalCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
 
         #region ///// Search Variables /////
+
         private DateTime? startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
         private DateTime? endDate = DateTime.Today;
         private string manufactoryName = "";
@@ -40,28 +42,33 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             get { return startDate; }
             set { Set(() => StartDate, ref startDate, value); }
         }
+
         public DateTime? EndDate
         {
             get { return endDate; }
             set { Set(() => EndDate, ref endDate, value); }
         }
+
         public string ManufactoryName
         {
             get { return manufactoryName; }
             set { Set(() => ManufactoryName, ref manufactoryName, value); }
         }
+
         public WareHouse SelectedWareHouse
         {
             get { return selectedWareHouse; }
             set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
         }
-        #endregion
+
+        #endregion ///// Search Variables /////
 
         private ManufactoryOrders manufactoryOrderCollection;
         private ManufactoryOrder currentManufactoryOrder;
 
         private DateTime SearchStartDate { get; set; }
         private DateTime SearchEndDate { get; set; }
+
         public ManufactoryOrders ManufactoryOrderCollection
         {
             get { return manufactoryOrderCollection; }
@@ -74,6 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
                 RaisePropertyChanged(nameof(ManufactoryOrdersReturnCount));
             }
         }
+
         public ManufactoryOrder CurrentManufactoryOrder
         {
             get { return currentManufactoryOrder; }
@@ -87,13 +95,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
                 RaisePropertyChanged("HasManufactory");
             }
         }
+
         public WareHouses WareHouseCollection { get; set; }
         public bool HasManufactory { get { return CurrentManufactoryOrder != null; } }
         public double ManufactoryOrdersPurchaseCount { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.PurchaseCount); } }
-        public double ManufactoryOrdersPurchaseTotal { get { return (ManufactoryOrderCollection is null)? 0 : ManufactoryOrderCollection.Sum(m => m.PurchasePrice); } }
+        public double ManufactoryOrdersPurchaseTotal { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.PurchasePrice); } }
         public double ManufactoryOrdersReturnCount { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.ReturnCount); } }
         public double ManufactoryOrdersReturnTotal { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.ReturnPrice); } }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public PurchaseReturnReportViewModel()
         {
@@ -104,9 +114,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         }
 
         #region ----- Define Actions -----
+
         private void SearchAction()
         {
-            if(!IsSearchConditionValid()) return;
+            if (!IsSearchConditionValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
             ManufactoryOrderCollection = ManufactoryOrders.GetManufactoryOrdersBySearchCondition(StartDate, EndDate, ManufactoryName, SelectedWareHouse.ID);
@@ -115,16 +126,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             SearchStartDate = (DateTime)StartDate;
             SearchEndDate = (DateTime)EndDate;
         }
+
         private void ExportCSVAction()
         {
             CurrentManufactoryOrder.ExportToCSV(SearchStartDate, SearchEndDate);
         }
+
         private void ExportCSVDetailTotalAction()
         {
             CurrentManufactoryOrder.ExportToCSVTotalDetail(SearchStartDate, SearchEndDate, SelectedWareHouse.ID);
         }
-        private void ExportCSVTotalAction() {
 
+        private void ExportCSVTotalAction()
+        {
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "進退貨報表存檔";
             fdlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -141,7 +155,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
                         file.WriteLine("廠商,進貨單數,進貨金額,退貨單數,退貨金額");
                         foreach (var order in ManufactoryOrderCollection)
                         {
-                            
                             file.WriteLine($"{order.ManufactoryName},{order.PurchaseCount},{order.PurchasePrice},{order.ReturnCount},{order.ReturnPrice}");
                         }
                         file.Close();
@@ -155,9 +168,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
                 }
             }
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void RegisterCommands()
         {
             SearchCommand = new RelayCommand(SearchAction);
@@ -165,6 +180,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             ExportCSVTotalCommand = new RelayCommand(ExportCSVTotalAction);
             ExportCSVDetailTotalCommand = new RelayCommand(ExportCSVDetailTotalAction);
         }
+
         private bool IsSearchConditionValid()
         {
             if (StartDate is null || EndDate is null)
@@ -181,6 +197,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

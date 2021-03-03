@@ -2,7 +2,6 @@
 {
     public interface IPrincipal
     {
-
         string Id { get; set; }
         string Name { get; set; }
         string NickName { get; set; }

@@ -10,6 +10,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
     public partial class MedBagSelectionWindow : Window
     {
         public bool? result { get; set; }
+
         public MedBagSelectionWindow()
         {
             InitializeComponent();
@@ -34,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
             {
                 SingleMode.Focus();
             }
-            else if(e.Key == Key.Enter)
+            else if (e.Key == Key.Enter)
             {
                 result = false;
                 Close();

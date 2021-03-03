@@ -1,11 +1,14 @@
-﻿using System;
+﻿using His_Pos.ChromeTabViewModel;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson {
-    public class CooperativeClinicJson {
-        public CooperativeClinicJson() { 
+namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson
+{
+    public class CooperativeClinicJson
+    {
+        public CooperativeClinicJson()
+        {
             List<CooperativeClinicJsonClass> newCollection = new List<CooperativeClinicJsonClass>();
             DataTable masterTable = CooperativeClinicJsonDb.GetCooperAdjust();
             foreach (DataRow r in masterTable.Rows)
@@ -15,7 +18,7 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson {
                 newCollection.Add(temp);
             }
             if (newCollection.Count > 0)
-            { 
+            {
                 sHospId = ViewModelMainWindow.CooperativeInstitutionID;
                 sRxId = ViewModelMainWindow.CurrentPharmacy.ID;
 
@@ -26,16 +29,16 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson {
                     msMedList.sShtId = c.Remark;
                     foreach (var med in c.MedicineCollection)
                     {
-                         
-                            msList msList = new msList();
-                            msList.sOrder = med.Id;
-                            msList.sTqty = Convert.ToInt32(med.Amount).ToString();
-                            msMedList.sList.Add(msList); 
+                        msList msList = new msList();
+                        msList.sOrder = med.Id;
+                        msList.sTqty = Convert.ToInt32(med.Amount).ToString();
+                        msMedList.sList.Add(msList);
                     }
                     sMedList.Add(msMedList);
                 }
             }
         }
+
         public CooperativeClinicJson(string loop)
         {
             List<CooperativeClinicJsonClass> newCollection = new List<CooperativeClinicJsonClass>();
@@ -58,7 +61,6 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson {
                     msMedList.sShtId = c.Remark;
                     foreach (var med in c.MedicineCollection)
                     {
-
                         msList msList = new msList();
                         msList.sOrder = med.Id;
                         msList.sTqty = Convert.ToInt32(med.Amount).ToString();
@@ -68,15 +70,20 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson {
                 }
             }
         }
-        public class msList {
+
+        public class msList
+        {
             public string sOrder { get; set; }
             public string sTqty { get; set; }
         }
-        public class msMedList {
+
+        public class msMedList
+        {
             public string sMedDate { get; set; }
             public string sShtId { get; set; }
             public List<msList> sList { get; set; } = new List<msList>();
         }
+
         public string sHospId { get; set; }
         public string sRxId { get; set; }
         public List<msMedList> sMedList { get; set; } = new List<msMedList>();

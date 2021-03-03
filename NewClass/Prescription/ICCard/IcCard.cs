@@ -1,54 +1,72 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription.ICCard.Upload;
 using His_Pos.Service;
+using System;
+using System.ComponentModel;
+using System.Threading;
 using ZeroFormatter;
-using Application = System.Windows.Application;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.NewClass.Prescription.ICCard
 {
     [ZeroFormattable]
-    public class IcCard : ObservableObject,ICloneable
+    public class IcCard : ObservableObject, ICloneable
     {
-        public IcCard() { }
+        public IcCard()
+        {
+        }
+
         [Index(0)]
         public virtual string CardNumber { get; set; }//卡片號碼
+
         [Index(1)]
         public virtual string Name { get; set; }
+
         [Index(2)]
         public virtual DateTime Birthday { get; set; }
+
         [Index(3)]
         public virtual string Gender { get; set; }
+
         [Index(4)]
         public virtual string IDNumber { get; set; }//身分證字號
+
         [Index(5)]
         public virtual DateTime CardReleaseDate { get; set; }//發卡日期
+
         [Index(6)]
         public virtual DateTime ValidityPeriod { get; set; }//卡片有效期限
+
         [Index(7)]
         public virtual int? AvailableTimes { get; set; }//就醫可用次數
+
         [Index(8)]
         public virtual string NewBornBirthday { get; set; }//卡片有效期限
+
         [Index(9)]
         public virtual BasicData PatientBasicData { get; set; }
+
         [Index(10)]
         public virtual SeqNumber MedicalNumberData { get; set; }
+
         [IgnoreFormat]
         public virtual TreatRecords TreatRecords { get; set; }
+
         [Index(11)]
         public virtual bool IsGetMedicalNumber { get; set; }
+
         [Index(12)]
         public virtual string TreatDateTime { get; set; } = string.Empty;
+
         [Index(13)]
         public virtual string Tel { get; set; }
+
         [Index(14)]
         public virtual bool IsRead { get; set; }
+
         public bool Read()
         {
             if (HisApiFunction.OpenCom())
@@ -116,10 +134,12 @@ namespace His_Pos.NewClass.Prescription.ICCard
                         IsGetMedicalNumber = true;
                         TreatDateTime = DateTimeExtensions.ToStringWithSecond(MedicalNumberData.TreatDateTime);
                         break;
+
                     case 5003:
                         UpdateCard();
                         GetMedicalNumber(makeUp);
                         break;
+
                     default:
                         ShowHISAPIErrorMessage(res, "取得就醫序號異常 ");
                         break;

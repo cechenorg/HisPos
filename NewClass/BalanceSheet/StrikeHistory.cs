@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
+using System;
+using System.Data;
 
 namespace His_Pos.NewClass.BalanceSheet
 {
     public class StrikeHistory : ObservableObject
     {
-        public StrikeHistory(){}
+        public StrikeHistory()
+        {
+        }
 
         public StrikeHistory(DataRow r)
         {
@@ -25,10 +23,11 @@ namespace His_Pos.NewClass.BalanceSheet
             StrikeNote = r.Field<string>("StrikeNote");
             CanDelete = r.Field<bool>("CAN_DELETE");
             StrikeWay = r.Field<string>("StrikeWay");
-            EMP= r.Field<string>("Emp_Name");
+            EMP = r.Field<string>("Emp_Name");
         }
 
         private int strikeID;
+
         public int StrikeID
         {
             get => strikeID;
@@ -39,6 +38,7 @@ namespace His_Pos.NewClass.BalanceSheet
         }
 
         private string strikeType;
+
         public string StrikeType
         {
             get => strikeType;
@@ -47,7 +47,9 @@ namespace His_Pos.NewClass.BalanceSheet
                 Set(() => StrikeType, ref strikeType, value);
             }
         }
+
         private string emp;
+
         public string EMP
         {
             get => emp;
@@ -56,7 +58,9 @@ namespace His_Pos.NewClass.BalanceSheet
                 Set(() => EMP, ref emp, value);
             }
         }
+
         private string strikeWay;
+
         public string StrikeWay
         {
             get => strikeWay;
@@ -65,9 +69,11 @@ namespace His_Pos.NewClass.BalanceSheet
                 Set(() => StrikeWay, ref strikeWay, value);
             }
         }
+
         public string StrikeTypeName => StrikeType;
 
         private string strikeName;
+
         public string StrikeName
         {
             get => strikeName;
@@ -78,6 +84,7 @@ namespace His_Pos.NewClass.BalanceSheet
         }
 
         private double strikeValue;
+
         public double StrikeValue
         {
             get => strikeValue;
@@ -88,6 +95,7 @@ namespace His_Pos.NewClass.BalanceSheet
         }
 
         private string strikeSource;
+
         public string StrikeSource
         {
             get => strikeSource;
@@ -98,6 +106,7 @@ namespace His_Pos.NewClass.BalanceSheet
         }
 
         private string strikeSourceID;
+
         public string StrikeSourceID
         {
             get => strikeSourceID;
@@ -108,6 +117,7 @@ namespace His_Pos.NewClass.BalanceSheet
         }
 
         private DateTime strikeTime;
+
         public DateTime StrikeTime
         {
             get => strikeTime;
@@ -118,6 +128,7 @@ namespace His_Pos.NewClass.BalanceSheet
         }
 
         private string strikeNote;
+
         public string StrikeNote
         {
             get => strikeNote;
@@ -128,6 +139,7 @@ namespace His_Pos.NewClass.BalanceSheet
         }
 
         private bool isSelected;
+
         public bool IsSelected
         {
             get => isSelected;
@@ -137,7 +149,7 @@ namespace His_Pos.NewClass.BalanceSheet
                 RaisePropertyChanged(nameof(CanEdit));
             }
         }
-        
+
         public bool CanEdit
         {
             get => (StrikeTime >= DateTime.Today || ViewModelMainWindow.CurrentUser.ID == 1) && CanDelete;

@@ -1,8 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using His_Pos.FunctionWindow;
+using His_Pos.NewClass.ProductType;
 using System.Data;
 using System.Windows;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.ProductType;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
@@ -12,9 +11,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
     public partial class AddTypeWindow : Window
     {
         #region ----- Define Variables -----
+
         public ProductTypeManageMasters TypeManageCollection { get; set; }
         public ProductTypeManageMaster SelectedType { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public AddTypeWindow(ProductTypeManageMasters typeManageCollection)
         {
@@ -26,6 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         }
 
         #region ----- Define Functions -----
+
         private void UpdateUi()
         {
             if (SelectionHint is null) return;
@@ -41,13 +43,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                 BigTypeCombo.Visibility = Visibility.Collapsed;
             }
         }
+
         private bool CheckEmptyData()
         {
             string error = "";
 
             if ((bool)SmallTypeRadioButton.IsChecked && SelectedType is null)
                 error += "未選擇所屬大類別!\n";
-            else if((bool)SmallTypeRadioButton.IsChecked && SelectedType.ID == 0)
+            else if ((bool)SmallTypeRadioButton.IsChecked && SelectedType.ID == 0)
                 error += "藥品無法新增小類別!\n";
 
             if (ChiName.Text.Equals(""))
@@ -62,19 +65,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
 
         #region ----- Define Events -----
+
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             UpdateUi();
         }
+
         private void ConfrimClick(object sender, RoutedEventArgs e)
         {
             if (CheckEmptyData())
             {
                 MainWindow.ServerConnection.OpenConnection();
-                DataTable dataTable = ProductTypeDB.AddNewProductType(ChiName.Text, (SelectedType is null)? -1 : SelectedType.ID);
+                DataTable dataTable = ProductTypeDB.AddNewProductType(ChiName.Text, (SelectedType is null) ? -1 : SelectedType.ID);
                 MainWindow.ServerConnection.CloseConnection();
 
                 if (dataTable is null || dataTable.Rows.Count == 0)
@@ -86,6 +92,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                 Close();
             }
         }
-        #endregion
+
+        #endregion ----- Define Events -----
     }
 }

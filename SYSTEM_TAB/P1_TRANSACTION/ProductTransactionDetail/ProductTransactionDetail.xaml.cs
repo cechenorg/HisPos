@@ -22,10 +22,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
     /// </summary>
     public partial class ProductTransactionDetail : Window
     {
-        string masID;
-        DataTable detail;
-        string cusID;
-        string payMethod;
+        private string masID;
+        private DataTable detail;
+        private string cusID;
+        private string payMethod;
         public int ID;
         public CustomerSearchCondition Con;
 
@@ -48,19 +48,21 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             foreach (DataRow dr in detail.Rows)
             {
                 int PerPrice = Math.Abs((int)dr["TraDet_Price"]);
-                if (GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_MemberPrice"].ToString() == PerPrice.ToString() || GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_RetailPrice"].ToString() == PerPrice.ToString()|| dr["TraDet_IsGift"].ToString()=="1")
+                if (GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_MemberPrice"].ToString() == PerPrice.ToString() || GetPriceList(dr["TraDet_ProductID"].ToString()).Rows[0]["Pro_RetailPrice"].ToString() == PerPrice.ToString() || dr["TraDet_IsGift"].ToString() == "1")
                 {
                     dr["Irr"] = "";
                 }
-                else {
+                else
+                {
                     dr["Irr"] = "Yes";
                 }
-                
+
                 if ((bool)dr["Pro_IsReward"] == false)
                 {
                     dr["IsReward_Format"] = false;
                 }
-                else {
+                else
+                {
                     dr["IsReward_Format"] = true;
                 }
             }
@@ -68,7 +70,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
         private void GetEmployeeList()
         {
-            
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetEmployee]");
             MainWindow.ServerConnection.CloseConnection();
@@ -93,7 +94,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             }
         }
 
-        private void AssignMasterValue(DataRow masterRow, string PriceType) 
+        private void AssignMasterValue(DataRow masterRow, string PriceType)
         {
             string PriceTypeConverted;
             switch (PriceType)
@@ -101,15 +102,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 case "Pro_RetailPrice":
                     PriceTypeConverted = "零售價";
                     break;
+
                 case "Pro_MemberPrice":
                     PriceTypeConverted = "會員價";
                     break;
+
                 case "Pro_EmployeePrice":
                     PriceTypeConverted = "員工價";
                     break;
+
                 case "Pro_SpecialPrice":
                     PriceTypeConverted = "特殊價";
                     break;
+
                 default:
                     PriceTypeConverted = "零售價";
                     break;
@@ -125,7 +130,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbDiscountAmt.Content = masterRow["TraMas_DiscountAmt"].ToString();
             lblPriceType.Content = PriceTypeConverted;
             cusID = masterRow["TraMas_CustomerID"].ToString();
-            payMethod= masterRow["TraMas_PayMethod"].ToString();
+            payMethod = masterRow["TraMas_PayMethod"].ToString();
             lbCash.Content = masterRow["TraMas_CashAmount"].ToString();
             lbCard.Content = masterRow["TraMas_CardAmount"].ToString();
             lbVoucher.Content = masterRow["TraMas_VoucherAmount"].ToString();
@@ -151,8 +156,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         {
             ConfirmWindow cw = new ConfirmWindow("是否刪除交易紀錄?", "刪除紀錄確認");
             if (!(bool)cw.DialogResult) { return; }
-            else 
-            { 
+            else
+            {
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("MasterID", masID));
@@ -195,7 +200,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", masID));
             parameters.Add(new SqlParameter("CustomerID", cusID));
-            parameters.Add(new SqlParameter("PayMethod",payMethod));
+            parameters.Add(new SqlParameter("PayMethod", payMethod));
             parameters.Add(new SqlParameter("PreTotal", lblPreTotal.Content));
             parameters.Add(new SqlParameter("DiscountAmt", lbDiscountAmt.Content));
             parameters.Add(new SqlParameter("RealTotal", lblRealTotal.Content));
@@ -237,7 +242,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 int index = detail.Rows.IndexOf(dr);
                 var CashierList = new List<ComboBox>();
                 NewFunction.FindChildGroup(ProductDataGrid, "cbCashier", ref CashierList);
-                string Id=null;
+                string Id = null;
                 if (CashierList[index].SelectedItem != null)
                 {
                     DataRowView drv = (DataRowView)CashierList[index].SelectedItem;
@@ -317,8 +322,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
         private void lbCusName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (cusID == "0") 
-            { 
+            if (cusID == "0")
+            {
                 CustomerSearchWindow customerSearch;
                 Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
                 customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, null);
@@ -339,7 +344,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 CurrentPrescription.Patient = new NewClass.Person.Customer.Customer();
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
                 cusID = CurrentPrescription.Patient.ID.ToString();
-                
+
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("Cus_Id", int.Parse(cusID)));

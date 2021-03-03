@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
@@ -16,21 +11,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public class GroupInventoryControlViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand ShowProductGroupWindowCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private string medicineID;
         private string wareHouseID;
         private double inventory;
         private ProductGroupSettings productGroupSettingCollection;
-        
+
         public ProductGroupSettings ProductGroupSettingCollection
         {
             get { return productGroupSettingCollection; }
             set { Set(() => ProductGroupSettingCollection, ref productGroupSettingCollection, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public GroupInventoryControlViewModel()
         {
@@ -38,6 +37,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #region ----- Define Actions -----
+
         private void ShowProductGroupWindowAction()
         {
             if (inventory < 0)
@@ -51,9 +51,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             Messenger.Default.Send(new NotificationMessage<string>(this, medicineID, "RELOAD"));
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         public void ReloadData(string medID, string wareID, double totalInventory)
         {
             inventory = totalInventory;
@@ -62,6 +64,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             ProductGroupSettingCollection = ProductGroupSettings.GetProductGroupSettingsByID(medicineID, wareHouseID);
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

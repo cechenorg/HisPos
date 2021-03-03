@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.StockTakingReport
 {
     public class StockTakingReports : ObservableCollection<StockTakingReport>
     {
-        public StockTakingReports() {
+        public StockTakingReports()
+        {
         }
 
         public StockTakingReports(DateTime sDate, DateTime eDate)
@@ -18,7 +15,8 @@ namespace His_Pos.NewClass.Report.StockTakingReport
             GetDataByDate(sDate, eDate);
         }
 
-        public void GetDataByDate(DateTime sDate,DateTime eDate) {
+        public void GetDataByDate(DateTime sDate, DateTime eDate)
+        {
             Clear();
             DataTable table = StockTakingReportDb.GetDataByDate(sDate, eDate);
             foreach (DataRow r in table.Rows)

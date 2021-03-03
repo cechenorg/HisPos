@@ -1,7 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
-using His_Pos.ChromeTabViewModel;
-using System;
-using System.Linq;
+﻿using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
 {
@@ -11,10 +8,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         {
             return this;
         }
-   
-       
-        public CooperativeEntry() {
+
+        public CooperativeEntry()
+        {
         }
-     
     }
 }

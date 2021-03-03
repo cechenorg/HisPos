@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using Castle.MicroKernel;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
@@ -15,7 +13,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             }
         }
 
-        internal static ProductManageStructs SearchProductByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID,bool searchIsSingdeInventory)
+        internal static ProductManageStructs SearchProductByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID, bool searchIsSingdeInventory)
         {
             DataTable dataTable = ProductDetailDB.GetProductManageStructsByConditions(searchID, searchName, searchIsEnable, searchIsInventoryZero, wareID, searchIsSingdeInventory);
 

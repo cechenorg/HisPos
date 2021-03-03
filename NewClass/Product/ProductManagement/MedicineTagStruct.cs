@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using His_Pos.NewClass.Medicine;
+﻿using His_Pos.NewClass.Medicine;
 using Microsoft.VisualBasic;
+using System.Data;
+using System.Text.RegularExpressions;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
     public class MedicineTagStruct
     {
         #region ----- Define Variables -----
+
         public string ID { get; set; }
         public string FirstLetter { get; set; }
         public string ChineseName { get; set; }
@@ -21,7 +17,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int? ControlLevel { get; set; }
         public string Ingredient { get; set; }
         public string Unit { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         private MedicineTagStruct(string iD, string chineseName, string englishName, bool isControl, int? controlLevel, string ingredient)
         {
@@ -40,7 +37,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 FirstLetter = "";
                 EnglishName = "";
             }
-            
+
             ID = iD;
             ChineseName = Strings.StrConv(chineseName, VbStrConv.Narrow, 0).Replace("\"", "");
             IsControl = isControl;
@@ -55,7 +52,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             foreach (var i in splitIngredient)
             {
                 match = regex.Match(i.Trim());
-                if(string.IsNullOrEmpty(match.Groups[1].Value)) continue;
+                if (string.IsNullOrEmpty(match.Groups[1].Value)) continue;
                 double amount = double.Parse(match.Groups[1].Value);
 
                 if (!Unit.Equals("")) Unit += "/";
@@ -68,15 +65,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
         internal static MedicineTagStruct GetDataByID(string productID)
         {
             DataTable dataTable = MedicineDb.GetTagDataByID(productID);
-            
-            if(dataTable is null || dataTable.Rows.Count == 0) return null;
+
+            if (dataTable is null || dataTable.Rows.Count == 0) return null;
 
             string name = dataTable.Rows[0].Field<string>("Pro_ChineseName");
             string engName = dataTable.Rows[0].Field<string>("Pro_EnglishName");
             bool isControl = dataTable.Rows[0].Field<bool>("IS_CONTROL");
             int? controlLevel = dataTable.Rows[0].Field<int?>("Med_Control");
             string ingredient = dataTable.Rows[0].Field<string>("Med_Ingredient");
-            
+
             return new MedicineTagStruct(productID, name, engName, isControl, controlLevel, ingredient);
         }
     }

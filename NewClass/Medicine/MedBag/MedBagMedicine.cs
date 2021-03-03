@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using His_Pos.ChromeTabViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Medicine.Base;
 using Microsoft.VisualBasic;
+using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace His_Pos.NewClass.Medicine.MedBag
 {
@@ -61,6 +61,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
                 Usage = usagePrint;
             }
         }
+
         public MedBagMedicine(MedicineOTC m, bool isSingle)
         {
             Id = m.ID;
@@ -125,6 +126,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
                 Note = string.Empty;
             }
         }
+
         public MedBagMedicine(MedicineSpecialMaterial m, bool isSingle)
         {
             Id = m.ID;
@@ -168,6 +170,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
                 Usage = string.Empty;
             }
         }
+
         public string MedNo { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
@@ -182,12 +185,13 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public string Form { get; set; }
         public string Note { get; set; }
         public int Order { get; set; }
+
         private string GetPositionPrintName(string mPosition)
         {
             var positionName = ViewModelMainWindow.GetPosition(mPosition).Name;
             if (string.IsNullOrEmpty(positionName))
                 return string.Empty;
-            return "【"+positionName.Replace("  ", string.Empty) + "】";
+            return "【" + positionName.Replace("  ", string.Empty) + "】";
         }
 
         private string GetUsagePrintName(Usage.Usage usage)

@@ -1,6 +1,6 @@
-﻿using System.Data;
+﻿using GalaSoft.MvvmLight;
+using System.Data;
 using System.Linq;
-using GalaSoft.MvvmLight;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.PrescriptionCase
@@ -8,20 +8,27 @@ namespace His_Pos.NewClass.Prescription.Treatment.PrescriptionCase
     [ZeroFormattable]
     public class PrescriptionCase : ObservableObject
     {
-        private readonly string[] freeCopaymentCases = { "007","11","12","13","14","15","16","19","C1"};
-        public PrescriptionCase() {
+        private readonly string[] freeCopaymentCases = { "007", "11", "12", "13", "14", "15", "16", "19", "C1" };
+
+        public PrescriptionCase()
+        {
         }
+
         public PrescriptionCase(DataRow r)
         {
             ID = r.Field<string>("PreCase_ID");
             Name = r.Field<string>("PreCase_Name");
             FullName = r.Field<string>("PreCase_FullName");
         }
+
         [Index(0)]
         public virtual string ID { get; set; } = string.Empty;
+
         [Index(1)]
         public virtual string Name { get; set; } = string.Empty;
+
         private string fullName = string.Empty;
+
         [Index(2)]
         public virtual string FullName
         {

@@ -1,14 +1,17 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product.ProductGroupSetting;
+using System.Windows.Controls;
+using System.Windows.Input;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl {
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.GroupControl
+{
     /// <summary>
     /// GroupInventoryControl.xaml 的互動邏輯
     /// </summary>
-    public partial class GroupInventoryControl : UserControl {
-        public GroupInventoryControl() {
+    public partial class GroupInventoryControl : UserControl
+    {
+        public GroupInventoryControl()
+        {
             InitializeComponent();
         }
 

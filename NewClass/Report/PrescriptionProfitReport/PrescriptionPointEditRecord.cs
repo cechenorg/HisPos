@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Report.PrescriptionProfitReport
 {
@@ -12,8 +7,8 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
     {
         public PrescriptionPointEditRecord()
         {
-
         }
+
         public PrescriptionPointEditRecord(DataRow r)
         {
             ID = r.Field<int>("PreRec_ID");
@@ -22,19 +17,23 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 case "2":
                     TypeID = "2";
                     break;
+
                 case "0":
                     TypeID = "4";
                     break;
+
                 default:
                     TypeID = "1";
                     break;
             }
             MedicalServiceDifference = r.Field<int>("PreRec_MedicalServiceDifference");
             MedicineDifference = r.Field<int>("PreRec_MedicineDifference");
-            PaySelfDifference= r.Field<int>("PreRec_PaySelfDifference");
+            PaySelfDifference = r.Field<int>("PreRec_PaySelfDifference");
             ProfitDifference = MedicalServiceDifference + MedicineDifference + PaySelfDifference;
         }
+
         private int id;
+
         public int ID
         {
             get => id;
@@ -45,6 +44,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
         }
 
         private string typeID;
+
         public string TypeID
         {
             get => typeID;
@@ -55,6 +55,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
         }
 
         private int medicalServiceDifference;
+
         public int MedicalServiceDifference
         {
             get => medicalServiceDifference;
@@ -65,6 +66,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
         }
 
         private int medicineDifference;
+
         public int MedicineDifference
         {
             get => medicineDifference;
@@ -75,6 +77,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
         }
 
         private int paySelfDifference;
+
         public int PaySelfDifference
         {
             get => paySelfDifference;
@@ -85,6 +88,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
         }
 
         private int profitDifference;
+
         public int ProfitDifference
         {
             get => profitDifference;

@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Medicine.Base;
+using His_Pos.NewClass.Prescription;
+using His_Pos.Service;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Medicine.Base;
-using His_Pos.NewClass.Prescription;
-using His_Pos.Service;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
@@ -17,12 +17,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
     /// </summary>
     public partial class PrescriptionRecordWindow : Window
     {
-        int prevRowIndex = -1;
+        private int prevRowIndex = -1;
+
         public delegate Point GetDragDropPosition(IInputElement theElement);
+
         public PrescriptionRecordWindow()
         {
             InitializeComponent();
         }
+
         public PrescriptionRecordWindow(Prescription p, string title)
         {
             InitializeComponent();
@@ -36,6 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DataContext = new PrescriptionEditViewModel(p, title);
             ShowDialog();
         }
+
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
@@ -52,6 +56,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var index = textBoxList.IndexOf((TextBox)sender);
             PrescriptionMedicines.SelectedItem = (PrescriptionMedicines.Items[index] as Medicine);
         }
+
         private void InputTextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
@@ -59,6 +64,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             e.Handled = true;
             textBox.Focus();
         }
+
         private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox t = sender as TextBox;
@@ -68,6 +74,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 t.CaretIndex++;
             }
         }
+
         private void DateControl_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
@@ -83,7 +90,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             if (prevRowIndex < 0)
                 return;
-           
+
             var index = GetDataGridItemCurrentRowIndex(e.GetPosition);
 
             if (index < 0)
@@ -98,7 +105,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             medicines.RemoveAt(prevRowIndex);
             medicines.Insert(index, movedMedicine);
             ((PrescriptionEditViewModel)DataContext).EditedPrescription.Medicines.ReOrder();
-            ((PrescriptionEditViewModel) DataContext).IsEdit = true;
+            ((PrescriptionEditViewModel)DataContext).IsEdit = true;
         }
 
         private void PrescriptionMedicines_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

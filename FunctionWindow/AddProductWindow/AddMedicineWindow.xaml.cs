@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System.ComponentModel;
 using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
 {
@@ -9,7 +9,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     /// </summary>
     public partial class AddMedicineWindow : Window
     {
-        public AddMedicineWindow(string search, AddProductEnum addView,string wareHouseID)
+        public AddMedicineWindow(string search, AddProductEnum addView, string wareHouseID)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -19,12 +19,12 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             });
             DataContext = new AddProductViewModel(search, addView, wareHouseID);
             SearchStringTextBox.Focus();
-            this.Closing+= (sender, e) => Messenger.Default.Unregister(this);
+            this.Closing += (sender, e) => Messenger.Default.Unregister(this);
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true;  // cancels the window close    
+            e.Cancel = true;  // cancels the window close
             this.Hide();      // Programmatically hides the window
         }
     }

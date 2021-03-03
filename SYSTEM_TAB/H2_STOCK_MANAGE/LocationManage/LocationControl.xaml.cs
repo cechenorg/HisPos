@@ -8,6 +8,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     public partial class LocationControl : UserControl
     {
         public int id;
+
         public LocationControl(int locId)
         {
             InitializeComponent();

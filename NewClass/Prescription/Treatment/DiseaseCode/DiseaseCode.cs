@@ -1,8 +1,7 @@
-﻿using System.Data;
-using System.Windows.Forms;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System.Data;
 using ZeroFormatter;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -17,16 +16,22 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
             Name = string.Empty;
             FullName = string.Empty;
         }
-        public DiseaseCode(DataRow r) {
+
+        public DiseaseCode(DataRow r)
+        {
             ID = r.Field<string>("DisCode_ID");
             Name = r.Field<string>("DisCode_ChiName");
             FullName = ID + " " + Name;
         }
+
         [Index(0)]
         public virtual string ID { get; set; }
+
         [Index(1)]
         public virtual string Name { get; set; }
+
         private string fullName;
+
         [Index(2)]
         public virtual string FullName
         {
@@ -41,10 +46,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
                 }
             }
         }
+
         [Index(3)]
         public virtual string ICD9_ID { get; set; }
 
-        public bool GetData() {
+        public bool GetData()
+        {
             if (string.IsNullOrEmpty(ID)) return false;
             var table = DiseaseCodeDb.GetDataByCodeId(ID);
             if (table.Rows.Count <= 0)
@@ -65,9 +72,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
             FullName = ID + " " + Name;
             return true;
         }
+
         public static DiseaseCode GetDiseaseCodeByID(string id)
         {
-            var d = new DiseaseCode {ID = id};
+            var d = new DiseaseCode { ID = id };
             MainWindow.ServerConnection.OpenConnection();
             if (!d.GetData()) return null;
             MainWindow.ServerConnection.CloseConnection();

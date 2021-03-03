@@ -12,7 +12,7 @@
         public string FreeAmount { get; }
         public string ManufactoryName { get; }
 
-        public OTCStoreOrderOverview(string storeOrderId, string manufactoryName ,string storeOrderDate,string storeValidDate, string orderEmployee, string storeReceiveDate, string price, string amount,string freeAmount)
+        public OTCStoreOrderOverview(string storeOrderId, string manufactoryName, string storeOrderDate, string storeValidDate, string orderEmployee, string storeReceiveDate, string price, string amount, string freeAmount)
         {
             StoreOrderId = storeOrderId;
             ManufactoryName = manufactoryName;

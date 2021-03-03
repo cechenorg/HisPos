@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -15,42 +13,51 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
     public class AddNewOrderWindowViewModel : ViewModelBase
     {
         #region ----- Define Command -----
+
         public RelayCommand ToPurchaseCommand { get; set; }
         public RelayCommand ToReturnCommand { get; set; }
         public RelayCommand ConfirmAddCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Command -----
 
         #region ----- Define Variables -----
+
         private OrderTypeEnum orderType = OrderTypeEnum.PURCHASE;
         private Manufactory purchaseOrderManufactory;
         private Manufactory returnOrderManufactory;
         private WareHouse selectedWareHouse;
 
         public StoreOrder NewStoreOrder { get; set; }
+
         public OrderTypeEnum OrderType
         {
             get { return orderType; }
             set { Set(() => OrderType, ref orderType, value); }
         }
+
         public Manufactory PurchaseOrderManufactory
         {
             get { return purchaseOrderManufactory; }
             set { Set(() => PurchaseOrderManufactory, ref purchaseOrderManufactory, value); }
         }
+
         public Manufactory ReturnOrderManufactory
         {
             get { return returnOrderManufactory; }
             set { Set(() => ReturnOrderManufactory, ref returnOrderManufactory, value); }
         }
+
         public WareHouse SelectedWareHouse
         {
             get { return selectedWareHouse; }
             set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
         }
+
         public Manufactories ManufactoryCollection { get; set; }
         public WareHouses WareHouseCollection { get; set; }
         public StoreOrders DonePurchaseOrders { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public AddNewOrderWindowViewModel()
         {
@@ -62,17 +69,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         }
 
         #region ----- Define Actions -----
+
         private void ToPurchaseAction()
         {
             OrderType = OrderTypeEnum.PURCHASE;
         }
+
         private void ToReturnAction()
         {
             OrderType = OrderTypeEnum.RETURN;
         }
+
         private void ConfirmAddAction()
         {
-            if(!CheckInputValid()) return;
+            if (!CheckInputValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
             NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID, int.Parse(SelectedWareHouse.ID));
@@ -80,9 +90,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
 
             Messenger.Default.Send(new NotificationMessage("CloseAddNewOrderWindow"));
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void InitVariables()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -96,15 +108,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
 
             SelectedWareHouse = WareHouseCollection[0];
         }
+
         private bool CheckInputValid()
         {
             bool isValid = false;
-            
+
             switch (OrderType)
             {
                 case OrderTypeEnum.PURCHASE:
                     isValid = CheckPurchaseValid();
                     break;
+
                 case OrderTypeEnum.RETURN:
                     isValid = CheckReturnValid();
                     break;
@@ -134,6 +148,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

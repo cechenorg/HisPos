@@ -1,8 +1,8 @@
-﻿using System;
+﻿using His_Pos.Interface;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Media.Imaging;
-using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
@@ -20,6 +20,7 @@ namespace His_Pos.Class.Product
             WareHouse = dataRow["PROWAR_NAME"].ToString();
             BarCode = dataRow["PRO_BARCODE"].ToString();
         }
+
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }
@@ -29,6 +30,7 @@ namespace His_Pos.Class.Product
         public string WareHouse { get; set; }
         public string BarCode { get; set; }
         private string stockValue;
+
         public string StockValue
         {
             get
@@ -41,7 +43,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("StockValue");
             }
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)

@@ -9,9 +9,9 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
     {
         public ControlMedicineDetails()
         {
-
         }
-        public void GetDataById(string medId, DateTime sDate, DateTime eDate, double stock,string warID)
+
+        public void GetDataById(string medId, DateTime sDate, DateTime eDate, double stock, string warID)
         {
             double tempstock = stock;
             Clear();
@@ -21,15 +21,16 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             rowOne.TypeName = "上次結存";
             rowOne.MedID = medId;
             Add(rowOne);
-            DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate, eDate,  warID);
+            DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate, eDate, warID);
             foreach (DataRow r in table.Rows)
             {
-                ControlMedicineDetail controlMedicineDetail = new ControlMedicineDetail(r, tempstock,medId);
+                ControlMedicineDetail controlMedicineDetail = new ControlMedicineDetail(r, tempstock, medId);
                 tempstock = controlMedicineDetail.FinalStock;
                 Add(controlMedicineDetail);
             }
         }
-        public static ControlMedicineDetails GetDeclareData( DateTime sDate, DateTime eDate,  List<string> warIDs)
+
+        public static ControlMedicineDetails GetDeclareData(DateTime sDate, DateTime eDate, List<string> warIDs)
         {
             ControlMedicineDetails controlMedicineDetails = new ControlMedicineDetails();
             DataTable table = ControlMedicineDetailDb.GetDeclareData(sDate, eDate, warIDs);
@@ -39,6 +40,5 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             }
             return controlMedicineDetails;
         }
-        
     }
 }

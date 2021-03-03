@@ -1,40 +1,37 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Report.Accounts;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.BalanceSheet;
-using His_Pos.NewClass.Report.Accounts;
-using His_Pos.NewClass.Report.CashReport;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
-    public class BankViewModel : ViewModelBase ,INotifyPropertyChanged
+    public class BankViewModel : ViewModelBase, INotifyPropertyChanged
     {
         #region ----- Define Commands -----
+
         public RelayCommand InsertCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
         public RelayCommand DetailChangeCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private string transferValue;
         private string strikeValue;
         private string target;
         public string IDClone;
         public double MaxValue { get; set; } = 0;
+
         public string Target
         {
             get { return target; }
@@ -44,6 +41,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(Target));
             }
         }
+
         public string TransferValue
         {
             get { return transferValue; }
@@ -53,6 +51,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(TransferValue));
             }
         }
+
         public string StrikeValue
         {
             get { return strikeValue; }
@@ -62,7 +61,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeValue));
             }
         }
+
         private ObservableCollection<AccountsReports> accData;
+
         public ObservableCollection<AccountsReports> AccData
         {
             get { return accData; }
@@ -73,7 +74,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 OnPropertyChanged();
             }
         }
+
         private AccountsReports selected;
+
         public AccountsReports Selected
         {
             get => selected;
@@ -84,6 +87,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private int selectedIndex;
+
         public int SelectedIndex
         {
             get { return selectedIndex; }
@@ -93,12 +97,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 selectedIndex = value;
                 OnPropertyChanged();
             }
-
         }
+
         private ObservableCollection<AccountsReports> bank;
+
         public ObservableCollection<AccountsReports> Bank
         {
-
             get { return bank; }
             set
             {
@@ -106,15 +110,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 bank = value;
                 OnPropertyChanged();
             }
-
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
+
         private AccountsReports selectBank;
+
         public AccountsReports SelectBank
         {
             get => selectBank;
@@ -124,7 +131,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
         }
 
-        #endregion
+        #endregion ----- Define Variables -----
+
         public BankViewModel(string ID)
         {
             AccData = new AccountsReport();
@@ -137,16 +145,15 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             DetailChangeCommand = new RelayCommand(DetailChangeAction);
 
             SelectedIndex = 0;
-            if (Selected != null) 
-            { 
-            Selected = AccData[0];
+            if (Selected != null)
+            {
+                Selected = AccData[0];
             }
             DetailChangeAction();
         }
 
         private void DetailChangeAction()
         {
-           
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
             MainWindow.ServerConnection.CloseConnection();
@@ -169,6 +176,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             StrikeCommand = new RelayCommand<RelayCommand>(StrikeAction);
             DetailChangeCommand = new RelayCommand(DetailChangeAction);
         }
+
         public void Init()
         {
             AccData = new AccountsReport();
@@ -184,16 +192,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             SelectedIndex = -1;
             SelectedIndex = 0;
             if (AccData.Count > 1)
-            { 
-            Selected = AccData[0];
+            {
+                Selected = AccData[0];
             }
             SelectedIndex = 0;
             DetailChangeAction();
             MainWindow.ServerConnection.CloseConnection();
         }
+
         public void DeleteAction()
         {
-            if ( Selected == null) {
+            if (Selected == null)
+            {
                 MessageWindow.ShowMessage("錯誤", MessageType.ERROR);
                 return;
             }
@@ -259,16 +269,17 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             TransferValue = "";
             command.Execute(null);
         }
+
         private bool TransferValueIsValid()
         {
             double temp;
-            if (Selected == null) {
+            if (Selected == null)
+            {
                 MessageWindow.ShowMessage("請選擇項目", MessageType.ERROR);
                 return false;
             }
             MaxValue = (double)Selected.Value;
 
-         
             if (double.TryParse(StrikeValue, out temp))
             {
                 if (temp <= 0)
@@ -288,7 +299,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("輸入金額非數字", MessageType.ERROR);
                 return false;
             }
-            if (SelectBank == null) {
+            if (SelectBank == null)
+            {
                 MessageWindow.ShowMessage("請選擇轉帳目標", MessageType.ERROR);
                 return false;
             }

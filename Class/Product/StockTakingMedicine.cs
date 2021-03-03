@@ -1,12 +1,12 @@
-﻿using System;
+﻿using His_Pos.Interface;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class StockTakingMedicine : AbstractClass.Product, IStockTaking, IDeletable,INotifyPropertyChanged
+    public class StockTakingMedicine : AbstractClass.Product, IStockTaking, IDeletable, INotifyPropertyChanged
     {
         public StockTakingMedicine(DataRow dataRow) : base(dataRow)
         {
@@ -27,6 +27,7 @@ namespace His_Pos.Class.Product
             BatchNumbers batchNumber = new BatchNumbers(dataRow);
             BatchNumbersCollection.Add(batchNumber);
         }
+
         public bool Frozen { get; set; }
         public bool Control { get; set; }
         public string Category { get; set; }
@@ -39,6 +40,7 @@ namespace His_Pos.Class.Product
         public string Location { get; set; }
         private ObservableCollection<BatchNumbers> batchNumbersCollection = new ObservableCollection<BatchNumbers>();
         private string takingReason;
+
         public string TakingReason
         {
             get
@@ -64,7 +66,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("BatchNumbersCollection");
             }
         }
+
         private string takingResult;
+
         public string TakingResult
         {
             get
@@ -80,6 +84,7 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("TakingResult");
             }
         }
+
         private void CountValueDiff()
         {
             if (takingResult.Equals(String.Empty)) return;
@@ -127,6 +132,7 @@ namespace His_Pos.Class.Product
         }
 
         private string source;
+
         public string Source
         {
             get
@@ -139,7 +145,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Source");
             }
         }
+
         private bool isChecked;
+
         public bool IsChecked
         {
             get
@@ -154,6 +162,7 @@ namespace His_Pos.Class.Product
         }
 
         private bool isEqual;
+
         public bool IsEqual
         {
             get
@@ -166,7 +175,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("IsEqual");
             }
         }
+
         private double valueDiff;
+
         public double ValueDiff
         {
             get { return valueDiff; }

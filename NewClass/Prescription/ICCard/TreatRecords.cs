@@ -2,7 +2,7 @@
 
 namespace His_Pos.NewClass.Prescription.ICCard
 {
-    public class TreatRecords:Collection<TreatmentDataNoNeedHpc>
+    public class TreatRecords : Collection<TreatmentDataNoNeedHpc>
     {
         public TreatRecords(byte[] pBuffer)
         {

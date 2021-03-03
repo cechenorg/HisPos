@@ -1,46 +1,119 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl.NHIMedicinePriceControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:sharedControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
-             xmlns:priceControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl"
-             mc:Ignorable="d" >
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl.NHIMedicinePriceControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:priceControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl"
+    xmlns:sharedControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
+    mc:Ignorable="d">
     <Grid Background="{StaticResource GridBackGround}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Label Content="健保價" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Label Content="{Binding MedicineDetail.NHIPrice, StringFormat=N2}" Width="150" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <!--<generalCustomControl:DecimalControl Decimal="{Binding MedicineDetail.NHIPrice}" VerticalAlignment="Center" Width="120" FontSize="35" Foreground="Black" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>-->
-            <Button Content="歷史健保價" BorderThickness="0"  FontSize="20" FontFamily="Segoe UI Semi" Height="40" Background="DimGray" Margin="50,0,0,0" Command="{Binding ViewHistoryPriceCommand}"/>
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="健保價"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="Black" />
+            <Label
+                Width="150"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="{Binding MedicineDetail.NHIPrice, StringFormat=N2}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="Black" />
+            <!--<generalCustomControl:DecimalControl Decimal="{Binding MedicineDetail.NHIPrice}" VerticalAlignment="Center" Width="120" FontSize="35" Foreground="Black" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" />-->
+            <Button
+                Height="40"
+                Margin="50,0,0,0"
+                Background="DimGray"
+                BorderThickness="0"
+                Command="{Binding ViewHistoryPriceCommand}"
+                Content="歷史健保價"
+                FontFamily="Segoe UI Semi"
+                FontSize="20" />
         </StackPanel>
-        <priceControl:SingdePriceControl Grid.Row="1"/>
+        <priceControl:SingdePriceControl Grid.Row="1" />
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Label Content="劑型" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Label Content="{Binding MedicineDetail.Form}" Foreground="{StaticResource ForeGround}" Width="130" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Label Content="{Binding MedicineDetail.SC}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Label Content="ATC" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="35,0,0,0"/>
-            <Label Content="{Binding MedicineDetail.ATC}" Foreground="{StaticResource ForeGround}" Width="100" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="劑型"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <Label
+                Width="130"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="{Binding MedicineDetail.Form}"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}" />
+            <Label
+                Width="80"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="{Binding MedicineDetail.SC}"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}" />
+            <Label
+                Margin="35,0,0,0"
+                VerticalAlignment="Center"
+                Content="ATC"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <Label
+                Width="100"
+                Margin="0,0,0,0"
+                VerticalAlignment="Center"
+                Content="{Binding MedicineDetail.ATC}"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}" />
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Label Content="製造商" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Label Content="{Binding MedicineDetail.Manufactory}" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="製造商"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="{Binding MedicineDetail.Manufactory}"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}" />
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
-            <Label Content="成分" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="90">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="成分"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <ScrollViewer Height="90" VerticalScrollBarVisibility="Auto">
                 <ScrollViewer.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Horizontal">
                                 <Setter Property="Width" Value="Auto" />
@@ -48,16 +121,34 @@
                                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                             </Trigger>
                             <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Width" Value="15" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </ScrollViewer.Resources>
-                <TextBlock Text="{Binding MedicineDetail.Ingredient}" Foreground="{StaticResource ForeGround}" Width="400" TextWrapping="Wrap" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBlock
+                    Width="400"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="18"
+                    Foreground="{StaticResource ForeGround}"
+                    Text="{Binding MedicineDetail.Ingredient}"
+                    TextWrapping="Wrap" />
             </ScrollViewer>
         </StackPanel>
-        <Button Content="列印藥品標籤" BorderThickness="0" Grid.Row="5" Foreground="{StaticResource ForeGround}" FontSize="15" Width="455" FontFamily="Segoe UI Semi" Height="36" Background="{StaticResource Shadow}" Command="{Binding PrintMedicineLabelCommand}"/>
+        <Button
+            Grid.Row="5"
+            Width="455"
+            Height="36"
+            Background="{StaticResource Shadow}"
+            BorderThickness="0"
+            Command="{Binding PrintMedicineLabelCommand}"
+            Content="列印藥品標籤"
+            FontFamily="Segoe UI Semi"
+            FontSize="15"
+            Foreground="{StaticResource ForeGround}" />
     </Grid>
 </UserControl>

@@ -1,9 +1,5 @@
-﻿
-using System;
-using System.Data;
+﻿using System.Data;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
@@ -18,7 +14,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         public TradeAddProductWindow(DataTable dt)
         {
             InitializeComponent();
-            
+
             ResultGrid.ItemsSource = dt.DefaultView;
         }
 
@@ -29,7 +25,6 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             dataGrid.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
-
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
         {
             DataRowView drv = (DataRowView)ResultGrid.SelectedItem;
@@ -37,11 +32,8 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             Close();
         }
 
-
-
-        private  void ResultGrid_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void ResultGrid_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;

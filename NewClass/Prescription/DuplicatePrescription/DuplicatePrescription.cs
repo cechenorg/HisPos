@@ -1,10 +1,11 @@
-﻿using System;
-using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using System;
+using System.Data;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+
 // ReSharper disable All
 
 namespace His_Pos.NewClass.Prescription.DuplicatePrescription
@@ -12,6 +13,7 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
     public class DuplicatePrescription : ObservableObject
     {
         private int id;
+
         public int ID
         {
             get => id;
@@ -22,6 +24,7 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
         }
 
         private Customer patient;
+
         public Customer Patient
         {
             get => patient;
@@ -30,7 +33,9 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
                 Set(() => Patient, ref patient, value);
             }
         }
+
         private string patientData;
+
         public string PatientData
         {
             get => patientData;
@@ -41,6 +46,7 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
         }
 
         private Institution institution;
+
         public Institution Institution
         {
             get => institution;
@@ -51,6 +57,7 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
         }
 
         private Division division;
+
         public Division Division
         {
             get => division;
@@ -61,6 +68,7 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
         }
 
         private DateTime treatDate;
+
         public DateTime TreatDate
         {
             get => treatDate;
@@ -71,6 +79,7 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
         }
 
         private DateTime adjustDate;
+
         public DateTime AdjustDate
         {
             get => adjustDate;

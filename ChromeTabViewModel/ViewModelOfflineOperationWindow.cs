@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Data;
-using His_Pos.NewClass.Medicine.Position;
+﻿using His_Pos.NewClass.Medicine.Position;
 using His_Pos.NewClass.Medicine.Usage;
 using His_Pos.NewClass.OfflineDataSet;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -17,12 +8,16 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
-using His_Pos.SYSTEM_TAB.OfflineOperation;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Data;
 using ZeroFormatter;
 
 namespace His_Pos.ChromeTabViewModel
 {
-    public class ViewModelOfflineOperationWindow:OfflineOperationWindowViewModel, IChromeTabViewModel
+    public class ViewModelOfflineOperationWindow : OfflineOperationWindowViewModel, IChromeTabViewModel
     {
         private bool _canMoveTabs;
         private bool _showAddButton;
@@ -41,6 +36,7 @@ namespace His_Pos.ChromeTabViewModel
         public static Usages Usages { get; set; }
         public static Positions Positions { get; set; }
         public static OfflineDataSet OfflineDataSet { get; set; }
+
         public bool CanMoveTabs
         {
             get { return _canMoveTabs; }
@@ -52,6 +48,7 @@ namespace His_Pos.ChromeTabViewModel
                 }
             }
         }
+
         public bool ShowAddButton
         {
             get { return _showAddButton; }

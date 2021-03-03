@@ -5,7 +5,9 @@ namespace His_Pos.AbstractClass
 {
     public class Product : INotifyPropertyChanged
     {
-        public Product() {}
+        public Product()
+        {
+        }
 
         public Product(DataRow dataRow)
         {
@@ -25,6 +27,7 @@ namespace His_Pos.AbstractClass
 
         public string Id { get; set; }
         public string name;
+
         public string Name
         {
             get
@@ -37,10 +40,12 @@ namespace His_Pos.AbstractClass
                 NotifyPropertyChanged("name");
             }
         }
+
         public string ChiName { get; set; }
         public string EngName { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)

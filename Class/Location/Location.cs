@@ -6,7 +6,8 @@ namespace His_Pos.Class.Location
 {
     public class Location
     {
-        public Location(DataRow row) {
+        public Location(DataRow row)
+        {
             id = row["LOC_ID"].ToString();
             name = row["LOC_NAME"].ToString();
             pathX = Convert.ToDouble(row["LOC_X"].ToString());
@@ -14,7 +15,9 @@ namespace His_Pos.Class.Location
             width = Convert.ToDouble(row["LOC_WIDTH"].ToString());
             heigh = Convert.ToDouble(row["LOC_HEIGHT"].ToString());
         }
-        public Location(int locId,string locName,double locpathX, double locpathY, double locWidth, double locHeigh) {
+
+        public Location(int locId, string locName, double locpathX, double locpathY, double locWidth, double locHeigh)
+        {
             id = locId.ToString();
             name = locName;
             pathX = locpathX;
@@ -22,12 +25,12 @@ namespace His_Pos.Class.Location
             width = locWidth;
             heigh = locHeigh;
         }
-       
-        public string id{ get; }
+
+        public string id { get; }
         public string name { get; }
-        public double pathX{ get; }
-        public double pathY{ get; }
-        public double width{ get; }
+        public double pathX { get; }
+        public double pathY { get; }
+        public double width { get; }
         public double heigh { get; }
         public ObservableCollection<LocationDetail> locationDetailCollection = new ObservableCollection<LocationDetail>();
     }

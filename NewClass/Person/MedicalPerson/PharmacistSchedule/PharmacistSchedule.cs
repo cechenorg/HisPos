@@ -6,7 +6,9 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
     public class PharmacistSchedule : ObservableCollection<PharmacistScheduleItem>
     {
-        public PharmacistSchedule() { }
+        public PharmacistSchedule()
+        {
+        }
 
         public void GetPharmacistScheduleWithCount(DateTime start, DateTime end)
         {
@@ -30,7 +32,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 
         public void SaveSchedule(DateTime start, DateTime end)
         {
-            PharmacistScheduleDb.InsertSchedule(start,end,this);
+            PharmacistScheduleDb.InsertSchedule(start, end, this);
         }
     }
 }

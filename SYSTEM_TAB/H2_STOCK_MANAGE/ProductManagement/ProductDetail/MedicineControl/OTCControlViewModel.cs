@@ -1,17 +1,16 @@
-﻿using System;
-using System.Data;
-using System.Windows;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetSelfPayMultiplierWindow;
+using System;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTCControl
 {
-    class OTCControlViewModel : TabBase
+    internal class OTCControlViewModel : TabBase
     {
         public override TabBase getTab()
         {
@@ -19,21 +18,26 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
         }
 
         #region ----- Define ViewModels -----
+
         public MedicineManageViewModel ManageViewModel { get; set; }
-        #endregion
+
+        #endregion ----- Define ViewModels -----
 
         #region ----- Define Commands -----
+
         public RelayCommand ConfirmChangeCommand { get; set; }
         public RelayCommand CancelChangeCommand { get; set; }
         public RelayCommand SyncDataCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
         public RelayCommand SetSelfPayMultiplierCommand { get; set; }
         public RelayCommand SetPricesCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
 
         #region ///// DataChanged Variables /////
+
         private bool isDataChanged;
 
         public bool IsDataChanged
@@ -46,7 +50,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
                 ConfirmChangeCommand.RaiseCanExecuteChanged();
             }
         }
-        #endregion
+
+        #endregion ///// DataChanged Variables /////
 
         private ProductManageMedicine medicine;
         private ProductTypeEnum productType;
@@ -57,17 +62,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             get { return medicine; }
             set { Set(() => Medicine, ref medicine, value); }
         }
+
         public ProductTypeEnum ProductType
         {
             get { return productType; }
             set { Set(() => ProductType, ref productType, value); }
         }
+
         public bool IsNHIProduct
         {
             get { return isNHIProduct; }
             set { Set(() => IsNHIProduct, ref isNHIProduct, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public OTCControlViewModel(string proID, ProductTypeEnum type, string wareHouseID)
         {
@@ -82,6 +90,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
         }
 
         #region ----- Define Actions -----
+
         private void ConfirmChangeAction()
         {
             if (!IsMedicineDataValid()) return;
@@ -97,18 +106,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             if (isSuccess)
                 IsDataChanged = false;
         }
+
         private void CancelChangeAction()
         {
             InitMedicineData(Medicine.ID);
             IsDataChanged = false;
         }
+
         private void SyncDataAction()
         {
         }
+
         private void DataChangedAction()
         {
             IsDataChanged = true;
         }
+
         private void SetSelfPayMultiplierAction()
         {
             SetSelfPayMultiplierWindow selfPayMultiplierWindow = new SetSelfPayMultiplierWindow(Medicine.SelfPayMultiplier);
@@ -125,9 +138,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
         //    ProductConsumeRecordWindow productConsumeRecordWindow = new ProductConsumeRecordWindow(Medicine.ID, SelectedWareHouse);
         //    productConsumeRecordWindow.ShowDialog();
         //}
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void RegisterCommand()
         {
             ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsMedicineDataChanged);
@@ -136,6 +151,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             DataChangedCommand = new RelayCommand(DataChangedAction);
             SetSelfPayMultiplierCommand = new RelayCommand(SetSelfPayMultiplierAction);
         }
+
         private void InitMedicineData(string proID, string wareHouseID = "")
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -151,10 +167,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
 
             Medicine = new ProductManageMedicine(manageMedicineDataTable.Rows[0]);
         }
+
         private bool IsMedicineDataChanged()
         {
             return IsDataChanged;
         }
+
         private bool IsMedicineDataValid()
         {
             if (Medicine.IsCommon)
@@ -206,7 +224,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
                     return false;
                 }*/
                 bool notNumber = Double.TryParse(Medicine.RewardPercent.ToString(), out double i);
-                if (notNumber==false)
+                if (notNumber == false)
                 {
                     MessageWindow.ShowMessage("績效輸入錯誤", MessageType.ERROR);
                     Medicine.RewardPercent = "0";
@@ -219,15 +237,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
                     Medicine.RewardPercent = "0";
                     return false;
                 }*/
-                
-              
-              
-                    Medicine.RewardPercent = System.Math.Round(i, 2, MidpointRounding.AwayFromZero).ToString();
-                }
-            
+
+                Medicine.RewardPercent = System.Math.Round(i, 2, MidpointRounding.AwayFromZero).ToString();
+            }
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

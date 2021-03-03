@@ -1,20 +1,17 @@
-﻿using His_Pos.NewClass.Report.TradeProfitDetailReport.TradeProfitDetailRecordReport;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.TradeProfitDetailReport.ExtraMoneyDetailRecordReport
 {
     public class ExtraMoneyDetailRecordReports : ObservableCollection<ExtraMoneyDetailRecordReport>
     {
-        public ExtraMoneyDetailRecordReports() {
+        public ExtraMoneyDetailRecordReports()
+        {
         }
 
-        public void GetDateByDate(string typeId, DateTime sDate, DateTime eDate) {
+        public void GetDateByDate(string typeId, DateTime sDate, DateTime eDate)
+        {
             DataTable table = ExtraMoneyDetailRecordReportDb.GetDataByDate(typeId, sDate, eDate);
             Clear();
             foreach (DataRow r in table.Rows)

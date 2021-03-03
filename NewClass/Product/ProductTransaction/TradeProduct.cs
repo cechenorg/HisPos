@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using His_Pos.Interface;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Product.ProductTransaction
 {
     public class TradeProduct : Product, IDeletableProduct
     {
         #region ----- Define Variables -----
+
         private bool isSelected = false;
 
         public int OrderNumber { get; set; }
@@ -22,21 +18,21 @@ namespace His_Pos.NewClass.Product.ProductTransaction
         public int Point { get; set; }
         public string Doctor { get; set; }
         public double Inventory { get; set; }
+
         public bool IsSelected
         {
             get { return isSelected; }
             set { Set(() => IsSelected, ref isSelected, value); }
         }
-        #endregion
 
-        public TradeProduct() { }
+        #endregion ----- Define Variables -----
+
+        public TradeProduct()
+        {
+        }
 
         public TradeProduct(DataRow row) : base(row)
         {
-
         }
-
-        #region ----- Define Functions -----
-        #endregion
     }
 }

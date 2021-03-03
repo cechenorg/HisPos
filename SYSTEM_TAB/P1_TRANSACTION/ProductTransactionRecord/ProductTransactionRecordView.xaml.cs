@@ -1,4 +1,8 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.Service;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -9,10 +13,6 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClosedXML.Excel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.Service;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
@@ -27,6 +27,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         public DataTable RecordSumList;
         public DataTable RecordPrint;
         public DataTable RecordDetailListPrint;
+
         public ProductTransactionRecordView()
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             RecordList = new DataTable();
             GetEmployeeList();
         }
+
         private void GetEmployeeList()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -42,6 +44,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.CloseConnection();
             cbCashier.ItemsSource = result.DefaultView;
         }
+
         private int GetRowIndex(MouseButtonEventArgs e)
         {
             DataGridRow dgr = null;
@@ -128,8 +131,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
             if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
 
-
-
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersPrint = new List<SqlParameter>();
             parametersPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -144,14 +145,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             parametersPrint.Add(new SqlParameter("Cashier", Cashier));
             parametersPrint.Add(new SqlParameter("ProID", proID));
             parametersPrint.Add(new SqlParameter("ProName", proNAME));
-    
+
             DataTable resultprint = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQueryPrint]", parametersPrint);
             MainWindow.ServerConnection.CloseConnection();
             RecordPrint = resultprint.Copy();
 
-
             MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parametersDetail= new List<SqlParameter>();
+            List<SqlParameter> parametersDetail = new List<SqlParameter>();
             parametersDetail.Add(new SqlParameter("CustomerID", DBNull.Value));
             parametersDetail.Add(new SqlParameter("MasterID", DBNull.Value));
             parametersDetail.Add(new SqlParameter("sDate", sDate));
@@ -169,7 +169,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             FormatData(resultDetail);
             RecordDetailList = resultDetail.Copy();
             RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
-
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersDetailPrint = new List<SqlParameter>();
@@ -190,7 +189,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
             RecordDetailListPrint = resultDetailPrint.Copy();
 
-
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersSum = new List<SqlParameter>();
             parametersSum.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -209,11 +207,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.CloseConnection();
             RecordSumList = resultSum.Copy();
             RecordSumGrid.ItemsSource = RecordSumList.DefaultView;
-
-            
         }
 
-         private void FormatData(DataTable result)
+        private void FormatData(DataTable result)
         {
             result.Columns.Add("TransTime_Format", typeof(string));
             foreach (DataRow dr in result.Rows)
@@ -244,7 +240,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 masterRow = RecordList.Rows[index];
                 TradeID = RecordList.Rows[index]["TraMas_ID"].ToString();
             }
-            else  
+            else
             {
                 masterRow = RecordDetailList.Rows[index];
                 TradeID = RecordDetailList.Rows[index]["TraMas_ID"].ToString();
@@ -346,7 +342,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         private void btnTradeSum_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-
             btnTrade.Background = Brushes.Transparent;
             btnTrade.Foreground = Brushes.DimGray;
             btnTradeDetail.Foreground = Brushes.DimGray;
@@ -364,13 +359,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         private void btnPrint1_Click(object sender, RoutedEventArgs e)
         {
-
             Process myProcess = new Process();
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "銷售紀錄";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName ="銷售紀錄";
+            fdlg.FileName = "銷售紀錄";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -405,7 +399,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 ws.Cell("E2").Value = "統一編號";
                 ws.Cell("F2").Value = "發票號碼";
                 ws.Cell("G2").Value = "收銀員";
-                
+
                 var rangeWithData = ws.Cell(3, 1).InsertData(RecordPrint.AsEnumerable());
 
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
@@ -526,7 +520,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 col3.Width = 10;
                 var col4 = ws.Column("D");
                 col4.Width = 10;
- 
+
                 ws.Cell(1, 1).Value = "銷售彙總";
                 ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "商品代碼";
@@ -534,7 +528,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 ws.Cell("C2").Value = "數量";
                 ws.Cell("D2").Value = "總售價";
 
-         
                 var rangeWithData = ws.Cell(3, 1).InsertData(RecordSumList.AsEnumerable());
 
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
@@ -549,7 +542,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 myProcess.StartInfo.UseShellExecute = true;
                 myProcess.StartInfo.FileName = (fdlg.FileName);
                 myProcess.StartInfo.CreateNoWindow = true;
-               //myProcess.StartInfo.Verb = "print";
+                //myProcess.StartInfo.Verb = "print";
                 myProcess.Start();
             }
             catch (Exception ex)

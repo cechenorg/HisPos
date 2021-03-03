@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using His_Pos.NewClass.StoreOrder;
+using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
     public struct ManufactoryTradeRecord
     {
         #region ----- Define Variables -----
+
         public OrderTypeEnum OrderType { get; set; }
         public string OrderID { get; set; }
         public string RecOrderID { get; set; }
         public DateTime ReceiveTime { get; set; }
         public double TotalPrice { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ManufactoryTradeRecord(DataRow row)
         {

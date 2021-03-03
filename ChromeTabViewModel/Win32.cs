@@ -5,7 +5,6 @@ namespace His_Pos.ChromeTabViewModel
 {
     public class Win32
     {
-
         #region image preview api
 
         [DllImport("user32.dll", SetLastError = true)]
@@ -18,17 +17,20 @@ namespace His_Pos.ChromeTabViewModel
 
         [DllImport("user32.dll")]
         internal static extern IntPtr MonitorFromPoint(W32Point pt, uint dwFlags);
-        #endregion
+
+        #endregion image preview api
 
         #region window api
+
         internal const uint GwHwndnext = 2;
 
         [DllImport("User32")]
         internal static extern IntPtr GetTopWindow(IntPtr hWnd);
+
         [DllImport("User32")]
         internal static extern IntPtr GetWindow(IntPtr hWnd, uint wCmd);
 
-        #endregion
+        #endregion window api
     }
 
     [StructLayout(LayoutKind.Sequential)]

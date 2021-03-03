@@ -1,16 +1,20 @@
-﻿using System.Data;
-using His_Pos.Service;
+﻿using His_Pos.Service;
+using System.Data;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
     public class PurchaseMedicine : PurchaseProduct
     {
         #region ----- Define Variables -----
+
         public int? IsControl { get; set; }
         public bool IsFrozen { get; set; }
-        #endregion
 
-        public PurchaseMedicine() { }
+        #endregion ----- Define Variables -----
+
+        public PurchaseMedicine()
+        {
+        }
 
         public PurchaseMedicine(DataRow dataRow) : base(dataRow)
         {

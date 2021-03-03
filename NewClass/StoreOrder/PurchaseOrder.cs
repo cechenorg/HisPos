@@ -1,39 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Product.PurchaseReturn;
-using His_Pos.Service;
-
+using System;
+using System.Data;
+using System.Linq;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public class PurchaseOrder: StoreOrder
+    public class PurchaseOrder : StoreOrder
     {
         #region ----- Define Variables -----
+
         private PurchaseProducts orderProducts;
 
         public string PreOrderCustomer { get; set; }
         public string TargetPreOrderCustomer { get; set; }
-        
+
         public DateTime? PlanArriveDate { get; set; }
         public string PatientData { get; set; }
         public bool HasPatient => !string.IsNullOrEmpty(PatientData);
         public bool HasCustomer => !string.IsNullOrEmpty(PreOrderCustomer);
         public DateTime Day { get; set; }
+
         public PurchaseProducts OrderProducts
         {
             get { return orderProducts; }
             set { Set(() => OrderProducts, ref orderProducts, value); }
         }
+
         public int ProductCount
         {
             get
@@ -42,9 +39,13 @@ namespace His_Pos.NewClass.StoreOrder
                 else return OrderProducts.Count;
             }
         }
-        #endregion
 
-        private PurchaseOrder() { }
+        #endregion ----- Define Variables -----
+
+        private PurchaseOrder()
+        {
+        }
+
         public PurchaseOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.PURCHASE;
@@ -52,12 +53,12 @@ namespace His_Pos.NewClass.StoreOrder
             PreOrderCustomer = row.Field<string>("StoOrd_CustomerName");
             TargetPreOrderCustomer = row.Field<string>("StoOrd_TargetCustomerName");
             PlanArriveDate = row.Field<DateTime?>("StoOrd_PlanArrivalDate");
-            
         }
 
         #region ----- Override Function -----
 
         #region ///// Check Function /////
+
         protected override bool CheckUnProcessingOrder()
         {
             var flagNotOTC = 0;
@@ -93,7 +94,8 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
                     return false;
                 }
-                else if (product.Type == 2) {
+                else if (product.Type == 2)
+                {
                     flagOTC = 1;
                 }
                 else if (product.Type != 2)
@@ -111,6 +113,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             return (bool)confirmWindow.DialogResult;
         }
+
         protected override bool CheckNormalProcessingOrder()
         {
             bool isLowerThenOrderAmount = false;
@@ -174,13 +177,16 @@ namespace His_Pos.NewClass.StoreOrder
 
             return (bool)confirmWindow1.DialogResult;
         }
+
         protected override bool CheckSingdeProcessingOrder()
         {
             return true;
         }
-        #endregion
+
+        #endregion ///// Check Function /////
 
         #region ///// Product Function /////
+
         public override void CalculateTotalPrice()
         {
             TotalPrice = OrderProducts.Sum(p => p.SubTotal);
@@ -191,13 +197,13 @@ namespace His_Pos.NewClass.StoreOrder
             OrderProducts.SetToProcessing();
         }
 
-        public override int GetOrderProductsIsOTC() {
+        public override int GetOrderProductsIsOTC()
+        {
             PurchaseProducts purchaseProductsOTC = new PurchaseProducts();
             purchaseProductsOTC = PurchaseProducts.GetProductsByStoreOrderID(ID);
             int type = purchaseProductsOTC[0].Type;
             return type;
         }
-
 
         public override void GetOrderProducts()
         {
@@ -214,6 +220,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             CalculateTotalPrice();
         }
+
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
             if (OrderProducts.Count(p => p.ID == iD) > 0)
@@ -231,9 +238,11 @@ namespace His_Pos.NewClass.StoreOrder
                 case "O":
                     purchaseProduct = new PurchaseOTC(dataTable.Rows[0]);
                     break;
+
                 case "M":
                     purchaseProduct = new PurchaseMedicine(dataTable.Rows[0]);
                     break;
+
                 default:
                     purchaseProduct = null;
                     break;
@@ -262,7 +271,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             RaisePropertyChanged(nameof(ProductCount));
         }
-        #endregion
+
+        #endregion ///// Product Function /////
 
         public override void SaveOrder()
         {
@@ -271,11 +281,9 @@ namespace His_Pos.NewClass.StoreOrder
 
             //backgroundWorker.DoWork += (sender, args) =>
             //{
-
             StoreOrderDB.SavePurchaseOrder(this);
-
-
         }
+
         public override object Clone()
         {
             PurchaseOrder purchaseOrder = new PurchaseOrder();
@@ -284,10 +292,11 @@ namespace His_Pos.NewClass.StoreOrder
 
             purchaseOrder.OrderProducts = OrderProducts.Clone() as PurchaseProducts;
             purchaseOrder.PatientData = PatientData;
-            
+
             return purchaseOrder;
         }
-        #endregion
+
+        #endregion ----- Override Function -----
 
         #region ----- Define Function -----
 
@@ -304,6 +313,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
         }
+
         private PurchaseProduct AddNewProductBySplit(PurchaseProduct purchaseProduct)
         {
             PurchaseProduct newProduct;
@@ -360,8 +370,9 @@ namespace His_Pos.NewClass.StoreOrder
 
             RaisePropertyChanged(nameof(ProductCount));
         }
-        #endregion
-        
+
+        #endregion ///// Batch Function /////
+
         private bool AddNewStoreOrderLowerThenOrderAmount()
         {
             DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, OrderManufactory.ID, OrderWarehouse.ID, OrderProducts);
@@ -377,6 +388,7 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
         }
+
         public static bool InsertPrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
         {
             string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
@@ -398,8 +410,9 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
         }
-        
-        public static void UpdatePrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData) {
+
+        public static void UpdatePrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
+        {
             string stoordId = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.ID).Rows[0][0].ToString();
             try
             {
@@ -413,7 +426,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             catch (Exception)
             {
-                MessageWindow.ShowMessage("更新藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR); 
+                MessageWindow.ShowMessage("更新藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
             }
         }
 
@@ -451,7 +464,7 @@ namespace His_Pos.NewClass.StoreOrder
             int flag = 0;
             for (int x = 0; x < OrderProducts.Count; x++)
             {
-                if (OrderProducts[x].LastPrice!= OrderProducts[x].Price)
+                if (OrderProducts[x].LastPrice != OrderProducts[x].Price)
                 {
                     flag = 1;
                 }
@@ -460,12 +473,12 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 return false;
             }
-            else {
+            else
+            {
                 return true;
             }
-           
         }
     }
-    #endregion
-}
 
+    #endregion ----- Define Function -----
+}

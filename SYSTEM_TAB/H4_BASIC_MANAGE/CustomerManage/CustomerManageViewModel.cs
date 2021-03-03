@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person;
@@ -9,19 +10,21 @@ using His_Pos.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows.Data;
-using GalaSoft.MvvmLight.Messaging;
-using System.Data;
 
-namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
+{
     public class CustomerManageViewModel : TabBase
     {
         public override TabBase getTab()
         {
             return this;
         }
-        #region -----Define Command-----  
+
+        #region -----Define Command-----
+
         public RelayCommand SelectionChangedCommand { get; set; }
         public RelayCommand DataChangeCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
@@ -29,10 +32,13 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
         public RelayCommand ShowMedicinesDetailCommand { get; set; }
-        
-        #endregion
+
+        #endregion -----Define Command-----
+
         #region ----- Define Variables -----
+
         private List<string> prescriptionCaseString;
+
         public List<string> PrescriptionCaseString
         {
             get => prescriptionCaseString;
@@ -41,7 +47,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 Set(() => PrescriptionCaseString, ref prescriptionCaseString, value);
             }
         }
+
         private string prescriptionCaseSelectItem;
+
         public string PrescriptionCaseSelectItem
         {
             get => prescriptionCaseSelectItem;
@@ -52,73 +60,97 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 PrescriptionDetailViewSource.Filter += AdjustTypeFilter;
             }
         }
+
         private string textCusName;
+
         public string TextCusName
         {
             get { return textCusName; }
             set { Set(() => TextCusName, ref textCusName, value); }
         }
+
         private string phoneNumber;
+
         public string PhoneNumber
         {
             get { return phoneNumber; }
             set { Set(() => PhoneNumber, ref phoneNumber, value); }
         }
+
         private string idNumber;
+
         public string IdNumber
         {
             get { return idNumber; }
             set { Set(() => IdNumber, ref idNumber, value); }
         }
+
         private DateTime? textCusBirthDay;
+
         public DateTime? TextCusBirthDay
         {
             get { return textCusBirthDay; }
             set { Set(() => TextCusBirthDay, ref textCusBirthDay, value); }
         }
+
         public bool isDataChanged;
+
         public bool IsDataChanged
         {
             get { return isDataChanged; }
             set { Set(() => IsDataChanged, ref isDataChanged, value); }
         }
+
         public bool btnCancelEnable;
+
         public bool BtnCancelEnable
         {
             get { return btnCancelEnable; }
             set { Set(() => BtnCancelEnable, ref btnCancelEnable, value); }
         }
+
         public bool btnSubmitEnable;
+
         public bool BtnSubmitEnable
         {
             get { return btnSubmitEnable; }
             set { Set(() => BtnSubmitEnable, ref btnSubmitEnable, value); }
         }
+
         public string changeText;
+
         public string ChangeText
         {
             get { return changeText; }
             set { Set(() => ChangeText, ref changeText, value); }
         }
+
         public string changeForeground;
+
         public string ChangeForeground
         {
             get { return changeForeground; }
             set { Set(() => ChangeForeground, ref changeForeground, value); }
         }
-        
+
         public Customers customerCollection = new Customers();
+
         public Customers CustomerCollection
         {
             get { return customerCollection; }
-            set { Set(() => CustomerCollection, ref customerCollection, value); 
+            set
+            {
+                Set(() => CustomerCollection, ref customerCollection, value);
             }
         }
+
         public Customer customer;
+
         public Customer Customer
         {
             get { return customer; }
-            set { 
+            set
+            {
                 Set(() => Customer, ref customer, value);
                 if (Customer is null) return;
                 CustomerDetailPrescriptionCollection.GetDataByID(Customer.ID);
@@ -127,7 +159,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 {
                     CustomerDetailPrescriptionSelectedItem = CustomerDetailPrescriptionCollection[0];
                 }
-                else {
+                else
+                {
                     CustomerDetailPrescriptionMedicines.Clear();
                 }
                 PrescriptionDetailViewSource = new CollectionViewSource { Source = CustomerDetailPrescriptionCollection };
@@ -135,15 +168,20 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 PrescriptionDetailViewSource.Filter += AdjustTypeFilter;
             }
         }
+
         public Genders genders = new Genders();
+
         public Genders Genders
         {
             get { return genders; }
-            set {
+            set
+            {
                 Set(() => Genders, ref genders, value);
             }
         }
+
         private CollectionViewSource prescriptionDetailViewSource;
+
         private CollectionViewSource PrescriptionDetailViewSource
         {
             get => prescriptionDetailViewSource;
@@ -154,6 +192,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
         }
 
         private ICollectionView prescriptionDetailView;
+
         public ICollectionView PrescriptionDetailView
         {
             get => prescriptionDetailView;
@@ -162,7 +201,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 Set(() => PrescriptionDetailView, ref prescriptionDetailView, value);
             }
         }
+
         private CustomerDetailPrescriptions customerDetailPrescriptionCollection = new CustomerDetailPrescriptions();
+
         public CustomerDetailPrescriptions CustomerDetailPrescriptionCollection
         {
             get => customerDetailPrescriptionCollection;
@@ -171,7 +212,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 Set(() => CustomerDetailPrescriptionCollection, ref customerDetailPrescriptionCollection, value);
             }
         }
+
         private CustomerDetailPrescription customerDetailPrescriptionSelectedItem = new CustomerDetailPrescription();
+
         public CustomerDetailPrescription CustomerDetailPrescriptionSelectedItem
         {
             get => customerDetailPrescriptionSelectedItem;
@@ -180,7 +223,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 Set(() => CustomerDetailPrescriptionSelectedItem, ref customerDetailPrescriptionSelectedItem, value);
             }
         }
+
         private CustomerDetailPrescriptionMedicines customerDetailPrescriptionMedicines = new CustomerDetailPrescriptionMedicines();
+
         public CustomerDetailPrescriptionMedicines CustomerDetailPrescriptionMedicines
         {
             get => customerDetailPrescriptionMedicines;
@@ -189,8 +234,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 Set(() => CustomerDetailPrescriptionMedicines, ref customerDetailPrescriptionMedicines, value);
             }
         }
-        #endregion
-        public CustomerManageViewModel() {
+
+        #endregion ----- Define Variables -----
+
+        public CustomerManageViewModel()
+        {
             TabName = MainWindow.HisFeatures[5].Functions[4];
             Icon = MainWindow.HisFeatures[5].Icon;
             Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedCustomer);
@@ -203,7 +251,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             ShowMedicinesDetailCommand = new RelayCommand(ShowMedicinesDetailAction);
             PrescriptionCaseString = new List<string>() { "全部", "調劑", "登錄", "預約" };
             PrescriptionCaseSelectItem = PrescriptionCaseString[0];
-            
         }
 
         private void GetSelectedCustomer(NotificationMessage<string> notificationMessage)
@@ -214,48 +261,58 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                 IdNumber = notificationMessage.Content;
                 SearchAction();
             }
-            
         }
 
         #region Action
-        private void ClearAction() {
+
+        private void ClearAction()
+        {
             TextCusName = string.Empty;
             TextCusBirthDay = null;
             IdNumber = string.Empty;
-            PhoneNumber= string.Empty;
+            PhoneNumber = string.Empty;
         }
-        private void SearchAction() {
-            if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null && string.IsNullOrEmpty(IdNumber) && string.IsNullOrEmpty(PhoneNumber)) {
-                MessageWindow.ShowMessage("查詢欄位不可全空",Class.MessageType.WARNING);
+
+        private void SearchAction()
+        {
+            if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null && string.IsNullOrEmpty(IdNumber) && string.IsNullOrEmpty(PhoneNumber))
+            {
+                MessageWindow.ShowMessage("查詢欄位不可全空", Class.MessageType.WARNING);
                 return;
             }
 
-            MainWindow.ServerConnection.OpenConnection(); 
-            CustomerCollection.GetDataByNameOrBirth(TextCusName,TextCusBirthDay,IdNumber, PhoneNumber);
+            MainWindow.ServerConnection.OpenConnection();
+            CustomerCollection.GetDataByNameOrBirth(TextCusName, TextCusBirthDay, IdNumber, PhoneNumber);
             MainWindow.ServerConnection.CloseConnection();
             if (CustomerCollection.Count > 0)
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
-            InitDataChanged(); 
+            InitDataChanged();
         }
+
         public void SelectionChangedAction()
         {
             if (Customer is null) return;
             Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
-            InitDataChanged(); 
+            InitDataChanged();
         }
-        public void DataChangeAction() {
+
+        public void DataChangeAction()
+        {
             DataChanged();
         }
-        public void CancelAction() {
-            Customer =  NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
-            InitDataChanged(); 
+
+        public void CancelAction()
+        {
+            Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
+            InitDataChanged();
         }
+
         public void SubmitAction()
         {
-          
-            for (int i = 0; i < CustomerCollection.Count;i ++)
-            {  
-                if (CustomerCollection[i].ID == Customer.ID) { 
+            for (int i = 0; i < CustomerCollection.Count; i++)
+            {
+                if (CustomerCollection[i].ID == Customer.ID)
+                {
                     CustomerCollection[i] = Customer;
                     Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == CustomerCollection[i].ID));
                     break;
@@ -263,11 +320,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             }
 
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable= CustomerDb.CheckCustomerByPhone(Customer.CellPhone, Customer.Tel);
+            DataTable dataTable = CustomerDb.CheckCustomerByPhone(Customer.CellPhone, Customer.Tel);
             MainWindow.ServerConnection.CloseConnection();
             if (dataTable.Rows.Count == 1)
             {
-                CustomerDb.UpdateCustomerByPhone((int)dataTable.Rows[0]["Person_Id"],Customer.ID, Customer.CellPhone, Customer.Tel);
+                CustomerDb.UpdateCustomerByPhone((int)dataTable.Rows[0]["Person_Id"], Customer.ID, Customer.CellPhone, Customer.Tel);
                 MessageWindow.ShowMessage("POS顧客已併入HIS!", Class.MessageType.SUCCESS);
             }
 
@@ -279,24 +336,26 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
                     Customer.Save();
                     MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
                 }
-            } 
+            }
             else
-                Customer.Save(); 
+                Customer.Save();
             InitDataChanged();
-            MessageWindow.ShowMessage("更新成功!",Class.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
         }
+
         private void ShowMedicinesDetailAction()
         {
             if (CustomerDetailPrescriptionSelectedItem is null) return;
             CustomerDetailPrescriptionMedicines.GetDataByID(CustomerDetailPrescriptionSelectedItem.ID, CustomerDetailPrescriptionSelectedItem.TypeName);
         }
-        #endregion
 
-        #region Function 
+        #endregion Action
+
+        #region Function
+
         private void DataChanged()
         {
-
-            IsDataChanged = true; 
+            IsDataChanged = true;
             BtnCancelEnable = true;
             BtnSubmitEnable = true;
         }
@@ -307,6 +366,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             BtnCancelEnable = false;
             BtnSubmitEnable = false;
         }
+
         private void AdjustTypeFilter(object sender, FilterEventArgs e)
         {
             if (e.Item is null) return;
@@ -320,6 +380,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage {
             else if (PrescriptionCaseSelectItem == "全部")
                 e.Accepted = true;
         }
-        #endregion
+
+        #endregion Function
     }
 }

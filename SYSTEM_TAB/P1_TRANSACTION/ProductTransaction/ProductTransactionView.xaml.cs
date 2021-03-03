@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.IO.Ports;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
@@ -28,13 +14,27 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.NotEnoughOTCPurchaseWindow;
 using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.IO.Ports;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
     /// <summary>
     /// ProductTransactionView.xaml 的互動邏輯
     /// </summary>
-    /// 
+    ///
     public partial class ProductTransactionView : UserControl
     {
         public static Label InvoiceNumLable;
@@ -56,29 +56,32 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public int ID;
         public CustomerSearchCondition Con;
 
-
         private static readonly Regex _regex = new Regex("^[0-9]+$");
-        private static bool IsTextAllowed(string text) { return !_regex.IsMatch(text); }
+
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
+        }
 
         public Pharmacy MyPharmacy;
         public NewClass.Prescription.Prescription CurrentPrescription { get; set; }
 
-
         public ProductTransactionView()
         {
             InitializeComponent();
-            
+
             InvoiceNumLable = tbInvoiceNum;
             Cuslblcheck = tbCUS;
             FromHISCuslblcheck = tbFromHIS;
             ProductList = new DataTable();
             ProductDataGrid.ItemsSource = ProductList.DefaultView;
-          
+
             if (Properties.Settings.Default.InvoiceCheck == "1")
             {
                 tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
             }
-            else {
+            else
+            {
                 tbInvoiceNum.Content = "";
             }
         }
@@ -142,9 +145,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 var inventory = dr["Inv_Inventory"].ToString();
                 if (int.Parse(amount) > int.Parse(inventory))
                 {
-                    var foundRow = check.Select("OTC_Code= '"+dr["Pro_ID"].ToString()+"'");
-                    var foundRowBar = check.Select("OTC_Barcode= '"+dr["Pro_ID"].ToString()+"'");
-                    if (foundRow.Length> 0 || foundRowBar.Length>0) {
+                    var foundRow = check.Select("OTC_Code= '" + dr["Pro_ID"].ToString() + "'");
+                    var foundRowBar = check.Select("OTC_Barcode= '" + dr["Pro_ID"].ToString() + "'");
+                    if (foundRow.Length > 0 || foundRowBar.Length > 0)
+                    {
                         int buckle;
                         if (int.Parse(inventory) <= 0)
                         {
@@ -270,7 +274,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("WAREHOUSE_ID", WareID));
                     DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[SearchProductsByID]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
-                    
+
                     if (ProductList.Rows.Count == 0) // Add Columns
                     {
                         ProductList = result.Clone();
@@ -309,7 +313,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     }
 
                     DataRow newRow = ProductList.NewRow();
-                    
+
                     if (result.Rows.Count == 1)
                     {
                         DataRow NewProduct = result.Rows[0];
@@ -332,10 +336,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     {
                         TradeAddProductWindow tapw = new TradeAddProductWindow(result);
                         tapw.ShowDialog();
-                        DataRow NewProduct = tapw.SelectedProduct; 
+                        DataRow NewProduct = tapw.SelectedProduct;
                         if (NewProduct != null)
                         {
-                            newRow.ItemArray = NewProduct.ItemArray; 
+                            newRow.ItemArray = NewProduct.ItemArray;
                             int amt = int.Parse(NewProduct["Available_Amount"].ToString());
                             if (amt < 1)
                             {
@@ -429,7 +433,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 MessageWindow.ShowMessage("折扣後金額小於0！", MessageType.ERROR);
                 tbDiscountAmt.Text = "0";
-                CalculateTotal(); 
+                CalculateTotal();
                 await Task.Delay(20);
                 tbDiscountAmt.Focus();
             }
@@ -481,7 +485,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (chkWindow == null) { return; }
             GetNotEnoughOTCs();
 
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認" , true);
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認", true);
             if (!(bool)confirmWindow.DialogResult) { return; }
 
             try
@@ -506,7 +510,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("DETAILS", TransferDetailTable()));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordInsert]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
-               
+
                 if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 {
                     DepositInsert();
@@ -527,7 +531,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 //MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
-        
+
         private void InvoicePrint(DataTable detail) //9.16發票
         {
             MyPharmacy = Pharmacy.GetCurrentPharmacy();
@@ -613,7 +617,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             port.Write("" + Convert.ToChar(29) + Convert.ToChar(86) + Convert.ToChar(66) + cr + lf);
             port.Close();
         }
-        
+
         private void DepositInsert() //9.24寄庫
         {
             foreach (DataRow dr in ProductList.Rows)
@@ -648,12 +652,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             if (e.Key == Key.Enter)
             {
-                if (tb.Text == "") 
+                if (tb.Text == "")
                 {
                     tbDiscountAmt.Focus();
                     e.Handled = true;
                 }
-                else 
+                else
                 {
                     AddProductByInputAction(tb.Text, currentRowIndex);
                     foreach (DataRow dr in ProductList.Rows)
@@ -696,7 +700,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        #endregion
+        #endregion ProductID
 
         #region Amount
 
@@ -705,7 +709,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TextBox tb = (TextBox)sender;
             if (IsTextAllowed(tb.Text)) { tb.Text = ""; }
             if (tb.Text == "") { tb.Text = "0"; }
-            CalculateTotal(); 
+            CalculateTotal();
         }
 
         private void Amount_TextChanged(object sender, TextChangedEventArgs e)
@@ -716,15 +720,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
             int.TryParse(ProductList.Rows[index]["Available_Amount"].ToString(), out int stock);
-            if (amt > stock) 
+            if (amt > stock)
             {
                 MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
-                tb.Text = stock.ToString(); 
+                tb.Text = stock.ToString();
             }
             CalculateTotal();
         }
 
-        #endregion
+        #endregion Amount
 
         #region Price
 
@@ -765,7 +769,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             //}
         }
 
-        #endregion
+        #endregion Price
 
         #region Discount
 
@@ -789,7 +793,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (!IsTextAllowed(tb.Text)) { CalculateTotal(); }
         }
 
-        #endregion
+        #endregion Discount
 
         #region Buttons
 
@@ -823,7 +827,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount);
             chkWindow.ShowDialog();
-            if ((bool)chkWindow.DialogResult) 
+            if ((bool)chkWindow.DialogResult)
             {
                 CheckoutSubmit();
             }
@@ -854,8 +858,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal();
         }
 
-        #endregion
-
+        #endregion Buttons
 
         private void PriceCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -864,15 +867,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 case 0:
                     AppliedPrice = "Pro_RetailPrice";
                     break;
+
                 case 1:
                     AppliedPrice = "Pro_MemberPrice";
                     break;
+
                 case 2:
                     AppliedPrice = "Pro_EmployeePrice";
                     break;
+
                 case 3:
                     AppliedPrice = "Pro_SpecialPrice";
                     break;
+
                 default:
                     AppliedPrice = "Pro_RetailPrice";
                     break;
@@ -899,16 +906,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Deposit_TextChanged(object sender, TextChangedEventArgs e)
         {
-
         }
 
         private void Deposit_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-
         }
 
-
-        #endregion
+        #endregion ----- Events -----
 
         #region ----- CustomerControl -----
 
@@ -943,7 +947,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 lbBirthDay.Content = "";
             }
-            else {
+            else
+            {
                 DateTime dt = (DateTime)result.Rows[0]["Cus_Birthday"];
                 CultureInfo culture = new CultureInfo("zh-TW");
                 culture.DateTimeFormat.Calendar = new TaiwanCalendar();
@@ -982,6 +987,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             FormatTradeTime(result);
             TradeRecordGrid.ItemsSource = result.DefaultView;
         }
+
         private void GetCustomerHISRecord()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -1000,6 +1006,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             HISRecordGrid.ItemsSource = result.DefaultView;
         }
+
         private void FormatTradeTime(DataTable result)
         {
             result.Columns.Add("TransTime_Format", typeof(string));
@@ -1040,7 +1047,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (tb.Text.Length == 0)
                 {
                     MessageWindow.ShowMessage("查詢位數不足！", MessageType.ERROR);
-                   return;
+                    return;
                 }
 
                 MainWindow.ServerConnection.OpenConnection();
@@ -1068,10 +1075,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("@Cus_Name", tb.Text));
                     Con = CustomerSearchCondition.Name;
                 }
-                else {
+                else
+                {
                     parameters.Add(new SqlParameter("@Cus_Name", DBNull.Value));
                 }
-                if (tb.Text.Length == 6 )
+                if (tb.Text.Length == 6)
                 {
                     int.TryParse(tb.Text.Substring(0, 2), out int year);
                     int.TryParse(tb.Text.Substring(2, 2), out int month);
@@ -1082,7 +1090,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
                     Con = CustomerSearchCondition.Birthday;
                 }
-                else if ((tb.Text.Length == 7 && tb.Text.StartsWith("1"))) {
+                else if ((tb.Text.Length == 7 && tb.Text.StartsWith("1")))
+                {
                     int.TryParse(tb.Text.Substring(0, 3), out int year);
                     int.TryParse(tb.Text.Substring(3, 2), out int month);
                     int.TryParse(tb.Text.Substring(5, 2), out int day);
@@ -1091,7 +1100,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
                     Con = CustomerSearchCondition.Birthday;
                 }
-                else {
+                else
+                {
                     parameters.Add(new SqlParameter("@Cus_Birthday", DBNull.Value));
                 }
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
@@ -1101,10 +1111,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
                 }
-                else if (result.Rows.Count > 1) {
-
+                else if (result.Rows.Count > 1)
+                {
                     CustomerSearchWindow customerSearch;
-                    if (Con == CustomerSearchCondition.Birthday) {        Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                    if (Con == CustomerSearchCondition.Birthday)
+                    {
+                        Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
                         var twCulture = new System.Globalization.CultureInfo("zh-TW", true);
                         twCulture.DateTimeFormat.Calendar = new System.Globalization.TaiwanCalendar();
 
@@ -1113,19 +1125,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         var date = DateTime.ParseExact(dateString, "yMMdd", twCulture);
 
                         customerSearch = new CustomerSearchWindow(date);
-                    Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this); }
-                    else {
+                        Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                    }
+                    else
+                    {
                         Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
                         customerSearch = new CustomerSearchWindow(Con, 0, tb.Text.Trim());
                         Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
                     }
 
-                    if (ID != 0) {
-                    MainWindow.ServerConnection.OpenConnection();
-                    List<SqlParameter> parameters1 = new List<SqlParameter>();
-                    parameters1.Add(new SqlParameter("ID", ID));
-                    DataTable result1 = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQueryByID]", parameters1);
-                    MainWindow.ServerConnection.CloseConnection();
+                    if (ID != 0)
+                    {
+                        MainWindow.ServerConnection.OpenConnection();
+                        List<SqlParameter> parameters1 = new List<SqlParameter>();
+                        parameters1.Add(new SqlParameter("ID", ID));
+                        DataTable result1 = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQueryByID]", parameters1);
+                        MainWindow.ServerConnection.CloseConnection();
                         FillInCustomerData(result1);
                         GetCustomerTradeRecord();
                         GetCustomerHISRecord();
@@ -1155,7 +1170,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
             }
-            else 
+            else
             {
                 CurrentPrescription = new NewClass.Prescription.Prescription();
 
@@ -1166,6 +1181,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MainWindow.ServerConnection.CloseConnection();
             }
         }
+
         private void SearchCustomerFromHIS(string phone)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -1182,7 +1198,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
                 parameters.Add(new SqlParameter("Cus_Telephone", phone));
             }
-            else {
+            else
+            {
                 parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
                 parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
             }
@@ -1232,8 +1249,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        public void FillCustomerDirect() {
-
+        public void FillCustomerDirect()
+        {
             MainWindow.ServerConnection.OpenConnection();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[NewestCustomerQuery]");
             MainWindow.ServerConnection.CloseConnection();
@@ -1244,11 +1261,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             else
             {
-               FillInCustomerData(result);
-               GetCustomerTradeRecord();
+                FillInCustomerData(result);
+                GetCustomerTradeRecord();
                 GetCustomerHISRecord();
             }
         }
+
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
             NewClass.Person.Customer.Customer customer = null;
@@ -1259,12 +1277,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             //acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
             //acw.ShowDialog();
         }
-        private void SetContentHandler(object sender, EventArgs e) {
+
+        private void SetContentHandler(object sender, EventArgs e)
+        {
             addCustomerWindow = null;
             FillCustomerDirect();
-            
         }
-    
+
         private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
         {
             ClearCustomerView();
@@ -1280,11 +1299,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             cdmv.ShowDialog();
         }
 
-        #endregion
+        #endregion ----- CustomerControl -----
 
         private void tbCUS_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (tbCUS.Text == "1") {
+            if (tbCUS.Text == "1")
+            {
                 FillCustomerDirect();
                 tbSearch.Text = "";
                 tbCUS.Text = "0";
@@ -1293,7 +1313,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbFromHIS_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (tbFromHIS.Text.Length>1)
+            if (tbFromHIS.Text.Length > 1)
             {
                 SearchCustomerFromHIS(tbFromHIS.Text);
                 tbSearch.Text = "";
@@ -1307,7 +1327,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 return;
             }
-            else 
+            else
             {
                 DataRowView row = (DataRowView)TradeRecordGrid.SelectedItems[0];
                 DataRow masterRow = row.Row;
@@ -1366,7 +1386,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 DataRowView row = (DataRowView)HISRecordGrid.SelectedItems[0];
                 int TradeID = (int)row["SourceId"];
-                PrescriptionService.ShowPrescriptionEditWindow(TradeID,0);
+                PrescriptionService.ShowPrescriptionEditWindow(TradeID, 0);
             }
         }
 
@@ -1378,7 +1398,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void tbDiscountAmt_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) 
+            if (e.Key == Key.Enter)
             {
                 btnCheckout.Focus();
                 e.Handled = true;

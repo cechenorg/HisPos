@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
     public class ManufactoryPrincipals : ObservableCollection<ManufactoryPrincipal>, ICloneable
     {
-        private ManufactoryPrincipals() { }
+        private ManufactoryPrincipals()
+        {
+        }
+
         public ManufactoryPrincipals(DataTable dataTable)
         {
             foreach (DataRow row in dataTable.Rows)
@@ -22,11 +21,13 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         #region ----- Define Functions -----
 
         #region ///// Static Functions /////
+
         internal static ManufactoryPrincipals GetManufactoryPrincipals(string manufactoryID)
         {
             return new ManufactoryPrincipals(ManufactoryDB.GetManufactoryPrincipals(manufactoryID));
         }
-        #endregion
+
+        #endregion ///// Static Functions /////
 
         internal void AddNewPrincipal()
         {
@@ -42,6 +43,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
                 Add(principal.Clone() as ManufactoryPrincipal);
             }
         }
+
         public object Clone()
         {
             ManufactoryPrincipals principals = new ManufactoryPrincipals();
@@ -51,6 +53,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
             return principals;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

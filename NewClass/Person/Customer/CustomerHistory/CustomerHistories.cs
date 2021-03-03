@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
-    public class CustomerHistories:Collection<CustomerHistory>
+    public class CustomerHistories : Collection<CustomerHistory>
     {
         public CustomerHistories()
         {
-
         }
 
         public CustomerHistories(int id)

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using His_Pos.NewClass.Medicine.MedBag;
+﻿using His_Pos.NewClass.Medicine.MedBag;
+using System.Collections.Generic;
 
 namespace His_Pos.Class.ReportClass
 {
@@ -10,6 +10,7 @@ namespace His_Pos.Class.ReportClass
             Usage = u;
             Medicines = new List<MedBagMedicine>();
         }
+
         public string Usage { get; set; }
         public List<MedBagMedicine> Medicines { get; set; }
     }

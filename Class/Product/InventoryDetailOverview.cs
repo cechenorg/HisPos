@@ -15,16 +15,19 @@ namespace His_Pos.Class.Product
                     TypeIcon = "/Images/OrangeDot.png";
                     Type = InventoryDetailOverviewType.Treatment;
                     break;
+
                 case "進貨":
                 case "退貨":
                     TypeIcon = "/Images/BlueDot.png";
                     Type = InventoryDetailOverviewType.PurchaseReturn;
                     break;
+
                 case "盤點":
                 case "單品盤點":
                     TypeIcon = "/Images/GreenDot.png";
                     Type = InventoryDetailOverviewType.StockTaking;
                     break;
+
                 default:
                     TypeIcon = "";
                     Type = InventoryDetailOverviewType.Error;

@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow
 {
@@ -9,7 +9,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
     /// </summary>
     public partial class MedicinesSendSingdeWindow : Window
     {
-        public MedicinesSendSingdeWindow(Prescription p,bool autoRegister = false)
+        public MedicinesSendSingdeWindow(Prescription p, bool autoRegister = false)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -18,7 +18,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                     Close();
             });
             this.Closing += (sender, e) => Messenger.Default.Unregister(this);
-            DataContext = new MedicinesSendSingdeViewModel(p,autoRegister);
+            DataContext = new MedicinesSendSingdeViewModel(p, autoRegister);
             ShowDialog();
         }
     }

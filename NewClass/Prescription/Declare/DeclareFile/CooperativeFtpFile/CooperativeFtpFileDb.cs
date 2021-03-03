@@ -1,15 +1,15 @@
 ﻿using His_Pos.Service;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
-namespace His_Pos.NewClass.Prescription.Declare.DeclareFile.CooperativeFtpFile {
-   public class CooperativeFtpFileDb {
-        public XmlDocument GetData(DateTime dateTime) {
+
+namespace His_Pos.NewClass.Prescription.Declare.DeclareFile.CooperativeFtpFile
+{
+    public class CooperativeFtpFileDb
+    {
+        public XmlDocument GetData(DateTime dateTime)
+        {
             string filepath = "MDA" + dateTime.AddYears(-1911).ToString("yyyMM"); //"MDA10710";
             string filename = filepath + ".ZIP";
             string path = @"C:\Program Files\HISPOS\CooperativeFtpFile\" + filepath;

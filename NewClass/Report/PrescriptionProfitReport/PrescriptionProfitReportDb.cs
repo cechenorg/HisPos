@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.PrescriptionProfitReport
 {
@@ -34,6 +31,7 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionPointEditRecordsByDates]", parameterList);
         }
+
         public static DataTable GetExtraMoneyByDates(DateTime sDate, DateTime eDate)
         {
             var parameterList = new List<SqlParameter>();

@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
-using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave;
+﻿using System.Windows.Controls;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
@@ -165,7 +153,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         //    ComboMonth.Text = DateTime.Now.Month + "月";
         //    ComboYear.ItemsSource = years;
         //    ComboYear.Text = DateTime.Now.Year + "年";
-            
+
         //    IsFirst = false;
         //}
 
@@ -181,7 +169,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         //    int wcount = 0;
 
         //    ///Collection<SpecialData> specialDates = WorkScheduleDb.GetSpecialData(selectDateTime.Year, selectDateTime.Month);
-            
+
         //    while (TheMonthStart != TheMonthEnd.AddDays(1))
         //    {
         //        string today = TheMonthStart.DayOfWeek.ToString("d");
@@ -317,7 +305,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         //    else
         //    {
         //        MessageWindow.ShowMessage("日期已過 無法排班!", Class.MessageType.ERROR);
-                
+
         //    }
         //}
 
@@ -407,7 +395,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         //    if (leaveWindow.LeaveComplete)
         //    {
         //        MessageWindow.ShowMessage(leaveWindow.CompleteResult, (leaveWindow.CompleteResult.Contains("無法新增"))? MessageType.ERROR:MessageType.SUCCESS);
-                
 
         //        AuthenticationManageView.DataChanged = true;
         //        InitCalendar();

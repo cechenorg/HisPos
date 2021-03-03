@@ -1,24 +1,28 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.FunctionWindow;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Report.Accounts;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
 using His_Pos.NewClass.Report.Accounts.AccountsRecords;
-using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
 {
-    public class AccountsManageViewModel : TabBase {
-        public override TabBase getTab() {
+    public class AccountsManageViewModel : TabBase
+    {
+        public override TabBase getTab()
+        {
             return this;
         }
+
         private DataTable left;
+
         public DataTable Left
         {
             get => left;
@@ -27,7 +31,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 Set(() => Left, ref left, value);
             }
         }
+
         private DataTable right;
+
         public DataTable Right
         {
             get => right;
@@ -36,9 +42,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 Set(() => Right, ref right, value);
             }
         }
+
         private List<AccountsAccount> CashFlowAccountsSource;
 
         private List<AccountsAccount> cashFlowAccounts;
+
         public List<AccountsAccount> CashFlowAccounts
         {
             get => cashFlowAccounts;
@@ -49,6 +57,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         }
 
         private AccountsAccount selectedCashFlowAccount;
+
         public AccountsAccount SelectedCashFlowAccount
         {
             get => selectedCashFlowAccount;
@@ -59,6 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         }
 
         private AccountsRecords cashFlowRecords;
+
         public AccountsRecords CashFlowRecords
         {
             get => cashFlowRecords;
@@ -69,6 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         }
 
         private AccountsRecord selectedCashFlowRecord;
+
         public AccountsRecord SelectedCashFlowRecord
         {
             get => selectedCashFlowRecord;
@@ -79,6 +90,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         }
 
         private DateTime? startDate;
+
         public DateTime? StartDate
         {
             get => startDate;
@@ -87,7 +99,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 Set(() => StartDate, ref startDate, value);
             }
         }
+
         private DateTime? endDate;
+
         public DateTime? EndDate
         {
             get => endDate;
@@ -96,7 +110,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 Set(() => EndDate, ref endDate, value);
             }
         }
+
         private bool payCheck;
+
         public bool PayCheck
         {
             get => payCheck;
@@ -117,7 +133,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 Set(() => PayCheck, ref payCheck, value);
             }
         }
+
         private bool gainCheck = true;
+
         public bool GainCheck
         {
             get => gainCheck;
@@ -138,22 +156,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 Set(() => GainCheck, ref gainCheck, value);
             }
         }
+
         private string typeName;
+
         public string TypeName
         {
             get => typeName;
             set { Set(() => TypeName, ref typeName, value); }
         }
+
         private string cashFlowNote;
-        public string CashFlowNote 
+
+        public string CashFlowNote
         {
             get => cashFlowNote;
             set
             {
-                Set(() => CashFlowNote,ref cashFlowNote,value);
+                Set(() => CashFlowNote, ref cashFlowNote, value);
             }
         }
+
         private int cashFlowValue;
+
         public int CashFlowValue
         {
             get => cashFlowValue;
@@ -164,19 +188,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         }
 
         #region Commands
+
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
         public RelayCommand Search { get; set; }
         public RelayCommand EditCashFlowRecord { get; set; }
         public RelayCommand DeleteCashFlowRecord { get; set; }
-        #endregion
+
+        #endregion Commands
 
         public AccountsManageViewModel()
         {
             InitCommand();
             InitAccounts();
             CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
-            if (CashFlowAccounts.Count>0)
+            if (CashFlowAccounts.Count > 0)
             {
                 SelectedCashFlowAccount = CashFlowAccounts[0];
             }
@@ -185,28 +211,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             EndDate = DateTime.Today;
             SearchAction();
         }
+
         private void InitAccounts()
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             Right = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsRight]");
-            Left= MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsLeft]");
+            Left = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsLeft]");
             MainWindow.ServerConnection.CloseConnection();
             CashFlowAccountsSource = new List<AccountsAccount>();
             foreach (DataRow R in Right.Rows)
             {
                 CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Expenses, R["Accounts_Name"].ToString(), R["Accounts_ID"].ToString()));
-                
             }
 
             foreach (DataRow L in Left.Rows)
             {
                 CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Income, L["Accounts_Name"].ToString(), L["Accounts_ID"].ToString()));
-
             }
-
-
         }
+
         private void InitCommand()
         {
             SubmitCommand = new RelayCommand(SubmitAction);
@@ -216,8 +240,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             DeleteCashFlowRecord = new RelayCommand(DeleteCashFlowRecordAction);
         }
 
-        private void SubmitAction() {
-
+        private void SubmitAction()
+        {
             ConfirmWindow cw = new ConfirmWindow("是否進行輸入科目金額", "確認");
             if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
@@ -233,6 +257,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
                 case "StartDate":
                     StartDate = DateTime.Today;
                     break;
+
                 case "EndDate":
                     EndDate = DateTime.Today;
                     break;
@@ -243,12 +268,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         {
             if (StartDate is null)
             {
-                MessageWindow.ShowMessage("請填寫起始日期",MessageType.ERROR);
+                MessageWindow.ShowMessage("請填寫起始日期", MessageType.ERROR);
                 return;
             }
             if (EndDate is null)
             {
-                MessageWindow.ShowMessage("請填寫結束日期",MessageType.ERROR);
+                MessageWindow.ShowMessage("請填寫結束日期", MessageType.ERROR);
                 return;
             }
             CashFlowRecords.Clear();
@@ -261,12 +286,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             var editWindow = new AccountsRecordEditWindow.AccountsRecordEditWindow(SelectedCashFlowRecord.SelectedDetail);
             editWindow.ShowDialog();
             var result = editWindow.EditResult;
-            if(!result) 
+            if (!result)
                 return;
             SearchAction();
             foreach (var rec in CashFlowRecords)
             {
-                if (rec.Details.SingleOrDefault(det => det.ID.Equals(selectedId)) is null) 
+                if (rec.Details.SingleOrDefault(det => det.ID.Equals(selectedId)) is null)
                     continue;
                 SelectedCashFlowRecord = rec;
                 SelectedCashFlowRecord.SelectedDetail = SelectedCashFlowRecord.Details.Single(det => det.ID.Equals(selectedId));
@@ -302,7 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             var result = tempDetails.GroupBy(x => x.Date.Date);
             foreach (var group in result)
             {
-                var rec = new AccountsRecord { Date = @group.Key};
+                var rec = new AccountsRecord { Date = @group.Key };
                 foreach (var det in group)
                 {
                     rec.Details.Add(det);

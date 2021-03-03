@@ -1,56 +1,93 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.CustomerDetailBase"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl"
-             xmlns:detailBaseControls="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.DetailBaseControls"
-             mc:Ignorable="d" >
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.CustomerDetailBase"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:detailBaseControls="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.DetailBaseControls"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="TransactionRecordControl" DataType="UserControl">
-            <detailBaseControls:TransactionRecordControl/>
+            <detailBaseControls:TransactionRecordControl />
         </DataTemplate>
         <DataTemplate x:Key="ProductRecordControl" DataType="UserControl">
-            <detailBaseControls:ProductRecordControl/>
+            <detailBaseControls:ProductRecordControl />
         </DataTemplate>
         <DataTemplate x:Key="PrescriptionRecordControl" DataType="UserControl">
-            <detailBaseControls:PrescriptionRecordControl/>
+            <detailBaseControls:PrescriptionRecordControl />
         </DataTemplate>
         <DataTemplate x:Key="PointRecordControl" DataType="UserControl">
-            <detailBaseControls:PointRecordControl/>
+            <detailBaseControls:PointRecordControl />
         </DataTemplate>
         <DataTemplate x:Key="LeaveProductRecordControl" DataType="UserControl">
-            <detailBaseControls:LeaveProductRecordControl/>
+            <detailBaseControls:LeaveProductRecordControl />
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="50" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-            <RadioButton Content="消費紀錄" VerticalAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0" IsChecked="True" Command="{Binding ChangeTabCommand, ConverterParameter=1}"/>
-            <RadioButton Content="商品紀錄" VerticalAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0" Command="{Binding ChangeTabCommand, ConverterParameter=2}"/>
-            <RadioButton Content="處方紀錄" VerticalAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0" Command="{Binding ChangeTabCommand, ConverterParameter=3}"/>
-            <RadioButton Content="寄庫紀錄" VerticalAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0" Command="{Binding ChangeTabCommand, ConverterParameter=4}"/>
-            <!--<RadioButton Content="集點卡紀錄" VerticalAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0" Command="{Binding ChangeTabCommand, ConverterParameter=5}"/>-->
+        <StackPanel
+            Grid.Row="0"
+            Background="{StaticResource GridBackGround}"
+            Orientation="Horizontal">
+            <RadioButton
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding ChangeTabCommand, ConverterParameter=1}"
+                Content="消費紀錄"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black"
+                IsChecked="True" />
+            <RadioButton
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding ChangeTabCommand, ConverterParameter=2}"
+                Content="商品紀錄"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <RadioButton
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding ChangeTabCommand, ConverterParameter=3}"
+                Content="處方紀錄"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <RadioButton
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Command="{Binding ChangeTabCommand, ConverterParameter=4}"
+                Content="寄庫紀錄"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <!--<RadioButton Content="集點卡紀錄" VerticalAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Black" Margin="20,0,0,0" Command="{Binding ChangeTabCommand, ConverterParameter=5}" />-->
         </StackPanel>
         <ContentControl Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource TransactionRecordControl}"/>
+                    <Setter Property="ContentTemplate" Value="{StaticResource TransactionRecordControl}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding TabEnum, UpdateSourceTrigger=PropertyChanged}" Value="ProductTradeRecord">
-                            <Setter Property="ContentTemplate" Value="{StaticResource ProductRecordControl}"/>
+                            <Setter Property="ContentTemplate" Value="{StaticResource ProductRecordControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding TabEnum, UpdateSourceTrigger=PropertyChanged}" Value="PrescriptionRecord">
-                            <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionRecordControl}"/>
+                            <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionRecordControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding TabEnum, UpdateSourceTrigger=PropertyChanged}" Value="LeavingProductRecord">
-                            <Setter Property="ContentTemplate" Value="{StaticResource LeaveProductRecordControl}"/>
+                            <Setter Property="ContentTemplate" Value="{StaticResource LeaveProductRecordControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding TabEnum, UpdateSourceTrigger=PropertyChanged}" Value="Medicine">
-                            <Setter Property="ContentTemplate" Value="{StaticResource PointRecordControl}"/>
+                            <Setter Property="ContentTemplate" Value="{StaticResource PointRecordControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

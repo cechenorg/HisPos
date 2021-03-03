@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace His_Pos.NewClass.Setting
+﻿namespace His_Pos.NewClass.Setting
 {
     public enum SettingTabs
     {
@@ -12,6 +6,6 @@ namespace His_Pos.NewClass.Setting
         Printer = 2,
         CooperativeClinic = 3,
         WareHouse = 4,
-        Invoice=5
+        Invoice = 5
     }
 }

@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
+using System;
+using System.Text.RegularExpressions;
+using System.Windows.Data;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
 {
     public class AddCustomerWindowViewModel : ViewModelBase
     {
         #region Variables
+
         private Customer newCustomer;
+
         public Customer NewCustomer
         {
             get => newCustomer;
@@ -27,6 +25,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 Set(() => NewCustomer, ref newCustomer, value);
             }
         }
+
         public bool IsTelephone(string str_telephone)
         {
             if (string.IsNullOrEmpty(str_telephone))
@@ -34,6 +33,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             else
                 return Regex.IsMatch(str_telephone, @"\d{2,3}\d{3,4}\d{4}");
         }
+
         public bool IsCellphone(string str_handset)
         {
             if (string.IsNullOrEmpty(str_handset))
@@ -43,6 +43,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
         }
 
         private bool isMale;
+
         public bool IsMale
         {
             get => isMale;
@@ -51,7 +52,9 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 Set(() => IsMale, ref isMale, value);
             }
         }
+
         private bool isFemale;
+
         public bool IsFemale
         {
             get => isFemale;
@@ -60,12 +63,15 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 Set(() => IsFemale, ref isFemale, value);
             }
         }
-        #endregion
+
+        #endregion Variables
 
         #region Commands
+
         public RelayCommand Submit { get; set; }
         public RelayCommand Cancel { get; set; }
-        #endregion
+
+        #endregion Commands
 
         public AddCustomerWindowViewModel()
         {
@@ -95,23 +101,26 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                     IsFemale = true;
                     NewCustomer.Gender = Properties.Resources.Female;
                 }
-                else {
+                else
+                {
                     IsMale = true;
                     NewCustomer.Gender = Properties.Resources.Male;
                 }
             }
-            
+
             Submit = new RelayCommand(SubmitAction);
             Cancel = new RelayCommand(CancelAction);
         }
+
         private void SubmitAction()
         {
-            if(!CheckFormat()) return;
+            if (!CheckFormat()) return;
             if (IsMale == true)
             {
                 NewCustomer.Gender = Properties.Resources.Male;
             }
-            else if(IsFemale == true){
+            else if (IsFemale == true)
+            {
                 NewCustomer.Gender = Properties.Resources.Female;
             }
             var insertResult = NewCustomer.InsertData();
@@ -139,7 +148,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 errorString += "身分證格式錯誤\r\n";
 
             if (!string.IsNullOrEmpty(errorString))
-                MessageWindow.ShowMessage(errorString,MessageType.ERROR);
+                MessageWindow.ShowMessage(errorString, MessageType.ERROR);
             return string.IsNullOrEmpty(errorString);
         }
 
@@ -158,6 +167,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 ProductTransactionView.Cuslblcheck.Text = "1";
             }
         }
+
         public class GenderConverter : IValueConverter
         {
             public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

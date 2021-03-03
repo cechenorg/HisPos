@@ -1,17 +1,19 @@
-﻿using System;
+﻿using OfficeOpenXml;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using OfficeOpenXml;
 
 namespace His_Pos.Service.ExportService
 {
     public class ExportExcelService
     {
         #region ----- Define Variables -----
+
         private Collection<object> DataSource { get; }
         private ExportExcelTemplate Template { get; }
         private string ExcelBasePath { get; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ExportExcelService(Collection<object> dataSource, ExportExcelTemplate template, string excelBasePath = "")
         {
@@ -21,13 +23,13 @@ namespace His_Pos.Service.ExportService
         }
 
         #region ----- Define Functions -----
+
         public bool Export(string exportPath)
         {
             try
             {
                 ExcelPackage excel;
                 FileInfo excelFile = new FileInfo(exportPath);
-                
 
                 if (String.IsNullOrEmpty(ExcelBasePath))
                     excel = new ExcelPackage(excelFile);
@@ -47,7 +49,7 @@ namespace His_Pos.Service.ExportService
                     var worksheet = excel.Workbook.Worksheets[Template.GetSheetName()];
                     Template.SetSheetData(worksheet);
                 }
-                
+
                 excel.Save();
 
                 return true;
@@ -56,8 +58,8 @@ namespace His_Pos.Service.ExportService
             {
                 return false;
             }
-            
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

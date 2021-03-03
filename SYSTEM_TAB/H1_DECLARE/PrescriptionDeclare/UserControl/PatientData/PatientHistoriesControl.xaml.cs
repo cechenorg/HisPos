@@ -1,26 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
-using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Service;
-using His_Pos.NewClass.Product.CustomerHistoryProduct;
 using JetBrains.Annotations;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData
 {
@@ -30,12 +17,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
     public partial class PatientHistoriesControl : System.Windows.Controls.UserControl, INotifyPropertyChanged
     {
         #region Prescription
+
         public static readonly DependencyProperty PatientProperty =
             DependencyProperty.Register(
                 "Patient",
                 typeof(Customer),
                 typeof(PatientHistoriesControl),
                 new PropertyMetadata(null));
+
         public Customer Patient
         {
             get { return (Customer)GetValue(PatientProperty); }
@@ -45,15 +34,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
                 OnPropertyChanged(nameof(Patient));
             }
         }
-        #endregion
+
+        #endregion Prescription
 
         #region SelectedHistory
+
         public static readonly DependencyProperty SelectedHistoryProperty =
             DependencyProperty.Register(
                 "SelectedHistory",
                 typeof(CustomerHistory),
                 typeof(PatientHistoriesControl),
                 new PropertyMetadata(null));
+
         public CustomerHistory SelectedHistory
         {
             get { return (CustomerHistory)GetValue(SelectedHistoryProperty); }
@@ -63,8 +55,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
                 OnPropertyChanged(nameof(SelectedHistory));
             }
         }
-        #endregion
-        
+
+        #endregion SelectedHistory
 
         public PatientHistoriesControl()
         {

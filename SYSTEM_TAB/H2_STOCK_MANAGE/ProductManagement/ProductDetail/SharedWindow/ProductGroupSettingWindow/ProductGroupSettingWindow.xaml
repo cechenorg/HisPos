@@ -1,29 +1,45 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:productgroupsetting="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow"
-        mc:Ignorable="d"
-        Title="商品群組設定" Height="400" Width="450" WindowStartupLocation="CenterScreen" >
-    
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:productgroupsetting="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol"
+    Title="商品群組設定"
+    Width="450"
+    Height="400"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
     <Window.Resources>
         <DataTemplate x:Key="MergeProduct" DataType="UserControl">
-            <productgroupsetting:MergeProductUserControl/>
+            <productgroupsetting:MergeProductUserControl />
         </DataTemplate>
         <DataTemplate x:Key="SplitProduct" DataType="UserControl">
-            <productgroupsetting:SplitProductUserControl/>
+            <productgroupsetting:SplitProductUserControl />
         </DataTemplate>
     </Window.Resources>
-    <Grid  Background="{StaticResource GridDarkestBackGround}">
+    <Grid Background="{StaticResource GridDarkestBackGround}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <RadioButton Content="合併品項" IsChecked="{Binding IsMergeProduct, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-            <RadioButton Content="拆分品項" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"  />
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <RadioButton
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="合併品項"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsChecked="{Binding IsMergeProduct, UpdateSourceTrigger=PropertyChanged}" />
+            <RadioButton
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="拆分品項"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18" />
         </StackPanel>
         <ContentControl Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
@@ -31,9 +47,9 @@
                     <Setter Property="ContentTemplate" Value="{StaticResource MergeProduct}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsMergeProduct, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                            <Setter Property="ContentTemplate" Value="{StaticResource SplitProduct}"/>
+                            <Setter Property="ContentTemplate" Value="{StaticResource SplitProduct}" />
                         </DataTrigger>
-                    </Style.Triggers> 
+                    </Style.Triggers>
                 </Style>
             </ContentControl.Style>
         </ContentControl>

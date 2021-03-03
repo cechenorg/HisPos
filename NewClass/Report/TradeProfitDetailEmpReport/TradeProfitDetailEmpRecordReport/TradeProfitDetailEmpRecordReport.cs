@@ -1,19 +1,16 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.TradeProfitDetailEmpReport.TradeProfitDetailEmpRecordReport
 {
     public class TradeProfitDetailEmpRecordReport : ObservableObject
     {
-        public TradeProfitDetailEmpRecordReport(DataRow r) {
+        public TradeProfitDetailEmpRecordReport(DataRow r)
+        {
             TraMas_ID = r.Field<int>("TraMas_ID");
-           
+
             TraMas_RealTotal = r.Field<int>("TraMas_RealTotal");
 
             DateTime dt = r.Field<DateTime>("TraMas_ChkoutTime");
@@ -21,6 +18,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailEmpReport.TradeProfitDetailEm
             culture.DateTimeFormat.Calendar = new TaiwanCalendar();
             TraMas_ChkoutTime = dt.ToString("yyy/MM/dd", culture);
         }
+
         public int TraMas_ID { get; set; }
         public string TraMas_ChkoutTime { get; set; }
         public int TraMas_RealTotal { get; set; }

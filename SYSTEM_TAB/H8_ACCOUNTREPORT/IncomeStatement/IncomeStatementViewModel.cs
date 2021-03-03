@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Report.IncomeStatement;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
+using System;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
 {
     public class IncomeStatementViewModel : TabBase
     {
         private int year;
+
         public int Year
         {
             get => year;
@@ -23,7 +20,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => Year, ref year, value);
             }
         }
+
         private string yearString;
+
         public string YearString
         {
             get => yearString;
@@ -34,7 +33,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Year = result ? parsedYear : -1;
             }
         }
+
         private PrescriptionCountMatrix prescriptionCountMatrix;
+
         public PrescriptionCountMatrix PrescriptionCountMatrix
         {
             get => prescriptionCountMatrix;
@@ -45,6 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
         }
 
         private PointLostMatrix pointLostMatrix;
+
         public PointLostMatrix PointLostMatrix
         {
             get => pointLostMatrix;
@@ -55,6 +57,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
         }
 
         private PharmacyIncomeMatrix pharmacyIncomeMatrix;
+
         public PharmacyIncomeMatrix PharmacyIncomeMatrix
         {
             get => pharmacyIncomeMatrix;
@@ -65,6 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
         }
 
         private ProfitSummaryMatrix chronicProfitMatrix;
+
         public ProfitSummaryMatrix ChronicProfitMatrix
         {
             get => chronicProfitMatrix;
@@ -73,7 +77,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => ChronicProfitMatrix, ref chronicProfitMatrix, value);
             }
         }
+
         private ProfitSummaryMatrix prescribeProfitMatrix;
+
         public ProfitSummaryMatrix PrescribeProfitMatrix
         {
             get => prescribeProfitMatrix;
@@ -82,7 +88,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => PrescribeProfitMatrix, ref prescribeProfitMatrix, value);
             }
         }
+
         private ProfitSummaryMatrix hisProfitMatrix;
+
         public ProfitSummaryMatrix HISProfitMatrix
         {
             get => hisProfitMatrix;
@@ -91,7 +99,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => HISProfitMatrix, ref hisProfitMatrix, value);
             }
         }
+
         private IncomeStatementMatrix incomeStatementMatrix;
+
         public IncomeStatementMatrix IncomeStatementMatrix
         {
             get => incomeStatementMatrix;
@@ -100,7 +110,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => IncomeStatementMatrix, ref incomeStatementMatrix, value);
             }
         }
+
         private CostAndInventoryMatrix costAndInventoryMatrix;
+
         public CostAndInventoryMatrix CostAndInventoryMatrix
         {
             get => costAndInventoryMatrix;
@@ -109,6 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
                 Set(() => CostAndInventoryMatrix, ref costAndInventoryMatrix, value);
             }
         }
+
         public override TabBase getTab()
         {
             return this;
@@ -116,6 +129,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
 
         public RelayCommand Search { get; set; }
         public RelayCommand ExportIncomeStatementCommand { get; set; }
+
         public IncomeStatementViewModel()
         {
             Year = DateTime.Today.Year;
@@ -138,7 +152,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement
             }
             else
             {
-                MessageWindow.ShowMessage("年份超出範圍或格式錯誤",MessageType.ERROR);
+                MessageWindow.ShowMessage("年份超出範圍或格式錯誤", MessageType.ERROR);
             }
         }
 

@@ -21,6 +21,7 @@ namespace His_Pos.GeneralCustomControl
                 new PropertyMetadata(0.0));
 
         public string IntegerPart { get { return ((int)Decimal).ToString(); } }
+
         public string FloatPart
         {
             get

@@ -3,11 +3,10 @@ using System.Data;
 
 namespace His_Pos.NewClass.Medicine.MedicineSet
 {
-    public class MedicineSetItems:ObservableCollection<MedicineSetItem>
+    public class MedicineSetItems : ObservableCollection<MedicineSetItem>
     {
         public MedicineSetItems()
         {
-
         }
 
         public void GetItems(int id)

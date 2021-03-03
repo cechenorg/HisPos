@@ -1,6 +1,5 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow
 {

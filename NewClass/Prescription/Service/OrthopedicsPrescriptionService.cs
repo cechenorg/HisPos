@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using His_Pos.FunctionWindow;
+﻿using His_Pos.FunctionWindow;
 using His_Pos.Properties;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativeRemarkInsertWindow;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicinesSendSingdeWindow;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace His_Pos.NewClass.Prescription.Service
 {
@@ -11,11 +10,10 @@ namespace His_Pos.NewClass.Prescription.Service
     {
         public OrthopedicsPrescriptionService()
         {
-
         }
 
         [SuppressMessage("ReSharper", "FlagArgument")]
-        public override bool CheckPrescription(bool noCard,bool errorAdjust)
+        public override bool CheckPrescription(bool noCard, bool errorAdjust)
         {
             if (!CheckAnonymousPatient()) return false;
             if (!CheckRemarkEmpty()) return false;

@@ -1,16 +1,16 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
 using System.Globalization;
-using GalaSoft.MvvmLight;
-using His_Pos.Class;
-using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Product.CustomerHistoryProduct;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
     public class CustomerRecord : ObservableObject
     {
-        public CustomerRecord() { }
+        public CustomerRecord()
+        {
+        }
+
         public CustomerRecord(DataRow r)
         {
             TraDet_ProductID = r.Field<string>("TraDet_ProductID");
@@ -30,6 +30,5 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
         public int TraDet_Amount { get; }
 
         public string TraMas_ChkoutTime { get; } //日期
-
     }
 }

@@ -1,18 +1,19 @@
-﻿using System.Data;
-using His_Pos.Interface;
+﻿using His_Pos.Interface;
 using His_Pos.NewClass.Product;
 using His_Pos.Service;
+using System.Data;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Medicine.MedicineSet
 {
-   public class MedicineSetItem :Product.Product, IDeletableProduct
+    public class MedicineSetItem : Product.Product, IDeletableProduct
     {
         public MedicineSetItem()
         {
             Usage = new Usage.Usage();
             Position = new Position.Position();
         }
+
         public MedicineSetItem(DataRow r) : base(r)
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
@@ -25,6 +26,7 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
             PaySelf = r.Field<bool>("MedSetDet_IsPaySelf");
             Price = r.Field<double>("MedSetDet_PaySelfPrice");
         }
+
         public MedicineSetItem(ProductStruct p) : base(p)
         {
             Usage = new Usage.Usage();
@@ -32,13 +34,17 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
             Price = p.SellPrice;
             NHIPrice = p.NHIPrice;
         }
+
         private bool isSelected = false;
+
         public bool IsSelected
         {
             get => isSelected;
             set { Set(() => IsSelected, ref isSelected, value); }
         }
+
         private bool frozen;//是否為冷藏藥品
+
         public bool Frozen
         {
             get => frozen;
@@ -50,7 +56,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 }
             }
         }
+
         private double? dosage;//每次用量
+
         public double? Dosage
         {
             get => dosage;
@@ -62,7 +70,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                     CalculateAmount();
             }
         }
+
         private string _usageName;
+
         public string UsageName
         {
             get => _usageName;
@@ -87,7 +97,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 }
             }
         }
+
         private Usage.Usage usage;//用法
+
         public Usage.Usage Usage
         {
             get => usage;
@@ -99,7 +111,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 }
             }
         }
+
         private string positionID;
+
         public string PositionID
         {
             get => positionID;
@@ -116,7 +130,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 }
             }
         }
+
         private Position.Position position;//途徑
+
         public Position.Position Position
         {
             get => position;
@@ -128,7 +144,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 }
             }
         }
+
         private int? days;//給藥天數
+
         public int? Days
         {
             get => days;
@@ -145,6 +163,7 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
         }
 
         private double amount;//總量
+
         public double Amount
         {
             get => amount;
@@ -156,6 +175,7 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
         }
 
         private double nhiPrice;//健保價
+
         public double NHIPrice
         {
             get => nhiPrice;
@@ -169,6 +189,7 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
         }
 
         private double price;//售價
+
         public double Price
         {
             get => price;
@@ -177,7 +198,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 Set(() => Price, ref price, value);
             }
         }
+
         private bool isPriceReadOnly;
+
         public bool IsPriceReadOnly
         {
             get => isPriceReadOnly;
@@ -186,7 +209,9 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 Set(() => IsPriceReadOnly, ref isPriceReadOnly, value);
             }
         }
+
         private bool paySelf;//是否自費
+
         public bool PaySelf
         {
             get => paySelf;
@@ -201,11 +226,13 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
         }
 
         #region Functions
+
         private void CalculateAmount()
         {
             if (Days is null || Dosage is null || string.IsNullOrEmpty(UsageName)) return;
             Amount = (double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage) == 0 ? Amount : (double)Dosage * UsagesFunction.CheckUsage((int)Days, Usage);
         }
+
         private void CheckIsPriceReadOnly()
         {
             if (Amount <= 0)
@@ -215,7 +242,8 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
                 IsPriceReadOnly = !PaySelf;
             }
         }
-        #endregion
+
+        #endregion Functions
 
         public void CopyPrevious(MedicineSetItem previousItem)
         {

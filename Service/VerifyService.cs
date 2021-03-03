@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace His_Pos.Service
 {
@@ -11,7 +7,7 @@ namespace His_Pos.Service
     {
         public static bool VerifyIDNumber(string id)
         {
-            int[] verifyNums = new[] {1, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+            int[] verifyNums = new[] { 1, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
             Dictionary<char, string> verifyKeyDictionary = new Dictionary<char, string>()
                 {
                     { 'A', "10" }, { 'B', "11" }, { 'C', "12" }, { 'D', "13" }, { 'E', "14" }, { 'F', "15" }, { 'G', "16" }, { 'H', "17" }, { 'I', "34" },
@@ -40,9 +36,9 @@ namespace His_Pos.Service
                 if (sumCheck == checkSum)
                     return true;
             }
-            else if(foreignMatch.Success)
+            else if (foreignMatch.Success)
             {
-                string verifyString = verifyKeyDictionary[id[0]] + verifyKeyDictionary[id[1]].Substring(1,1) + id.Substring(2, 8);
+                string verifyString = verifyKeyDictionary[id[0]] + verifyKeyDictionary[id[1]].Substring(1, 1) + id.Substring(2, 8);
                 int sum = 0;
 
                 for (int x = 0; x < verifyNums.Length; x++)
@@ -56,7 +52,7 @@ namespace His_Pos.Service
                 if (sumCheck == checkSum)
                     return true;
             }
-            
+
             return false;
         }
     }

@@ -1,6 +1,4 @@
 ﻿using His_Pos.Database;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
-using His_Pos.NewClass.Product.PrescriptionSendData;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -76,13 +74,17 @@ namespace His_Pos.NewClass.Product
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ReturnProductStructCountBySearchString]", parameters);
         }
-        internal static string GetProductNewID (int ID) {
-            List<SqlParameter> parameterList = new List<SqlParameter>(); 
+
+        internal static string GetProductNewID(int ID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "TypeID", ID);
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[ProductNewIDByType]", parameterList);
-            return  table.Rows[0].Field<string>("NewID"); 
+            return table.Rows[0].Field<string>("NewID");
         }
-        public static DataTable InsertProduct(string typeID,string proID,string proChinese,string proEnglish) {
+
+        public static DataTable InsertProduct(string typeID, string proID, string proChinese, string proEnglish)
+        {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataTable result = new DataTable();
 
@@ -95,7 +97,7 @@ namespace His_Pos.NewClass.Product
                     DataBaseFunction.AddSqlParameter(parameterList, "TypeID", typeID);
                     DataBaseFunction.AddSqlParameter(parameterList, "Pro_ID", proID);
                     DataBaseFunction.AddSqlParameter(parameterList, "Pro_Chinese", proChinese);
-                    DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish); 
+                    DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish);
                     result = MainWindow.ServerConnection.ExecuteProcBySchema(r.Field<string>("SchemaList"), "[Set].[InsertProduct]", parameterList);
                 }
                 return result;
@@ -104,7 +106,7 @@ namespace His_Pos.NewClass.Product
                 DataBaseFunction.AddSqlParameter(parameterList, "TypeID", typeID);
                 DataBaseFunction.AddSqlParameter(parameterList, "Pro_ID", proID);
                 DataBaseFunction.AddSqlParameter(parameterList, "Pro_Chinese", proChinese);
-                DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish); 
+                DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish);
                 return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertProduct]", parameterList);
             }*/
 
@@ -113,16 +115,18 @@ namespace His_Pos.NewClass.Product
             DataBaseFunction.AddSqlParameter(parameterList, "Pro_Chinese", proChinese);
             DataBaseFunction.AddSqlParameter(parameterList, "Pro_English", proEnglish);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertProduct]", parameterList);
-
         }
-        internal static DataTable GetAllInventoryByProIDs(List<string> MedicineIds,string warID) {
+
+        internal static DataTable GetAllInventoryByProIDs(List<string> MedicineIds, string warID)
+        {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Products", SetMedicines(MedicineIds));
             DataBaseFunction.AddSqlParameter(parameterList, "Ware_ID", warID);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[AllInventoryByProIDs]", parameterList); 
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[AllInventoryByProIDs]", parameterList);
         }
 
-        public static DataTable SetMedicines(List<string> MedicineIds) { 
+        public static DataTable SetMedicines(List<string> MedicineIds)
+        {
             DataTable medicineListTable = MedicineListTable();
             foreach (string m in MedicineIds)
             {
@@ -132,14 +136,17 @@ namespace His_Pos.NewClass.Product
             }
             return medicineListTable;
         }
-        public static DataTable MedicineListTable() {
+
+        public static DataTable MedicineListTable()
+        {
             DataTable masterTable = new DataTable();
             masterTable.Columns.Add("MedicineID", typeof(string));
             return masterTable;
         }
-        public static void UpdateAllInventoryMedBagAmount() { 
-           MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateAllInventoryMedBagAmount]");
+
+        public static void UpdateAllInventoryMedBagAmount()
+        {
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateAllInventoryMedBagAmount]");
         }
-        
     }
 }

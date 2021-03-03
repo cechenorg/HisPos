@@ -2,8 +2,10 @@
 
 namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
-    public class DeclareMedicalPersonnels:ObservableCollection<DeclareMedicalPersonnel>
+    public class DeclareMedicalPersonnels : ObservableCollection<DeclareMedicalPersonnel>
     {
-        public DeclareMedicalPersonnels() { }
+        public DeclareMedicalPersonnels()
+        {
+        }
     }
 }

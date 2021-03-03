@@ -4,7 +4,7 @@ using System.Data;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Division
 {
-    public class Divisions:Collection<Division>
+    public class Divisions : Collection<Division>
     {
         public Divisions()
         {

@@ -4,17 +4,13 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.WorkPosition;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 {
     public class EmployeeInsertWindowViewModel : ViewModelBase
     {
         public WorkPositions workPositions = new WorkPositions();
+
         public WorkPositions WorkPositions
         {
             get { return workPositions; }
@@ -23,7 +19,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
                 Set(() => WorkPositions, ref workPositions, value);
             }
         }
-        public Employee employee ;
+
+        public Employee employee;
+
         public Employee Employee
         {
             get { return employee; }
@@ -32,7 +30,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
                 Set(() => Employee, ref employee, value);
             }
         }
+
         public Employees employeeCollection;
+
         public Employees EmployeeCollection
         {
             get { return employeeCollection; }
@@ -41,34 +41,41 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
                 Set(() => EmployeeCollection, ref employeeCollection, value);
             }
         }
+
         public RelayCommand SubbmitCommand { get; set; }
         public RelayCommand CheckIdNumberCommand { get; set; }
-        public EmployeeInsertWindowViewModel() {
+
+        public EmployeeInsertWindowViewModel()
+        {
             Employee = new Employee();
             string acc = Employee.GetEmployeeNewAccount();
             Employee.Account = acc;
             Employee.Password = acc;
             SubbmitCommand = new RelayCommand(SubbmitAction);
-            CheckIdNumberCommand = new RelayCommand(CheckIdNumberAction); 
+            CheckIdNumberCommand = new RelayCommand(CheckIdNumberAction);
         }
-        private void CheckIdNumberAction() {
+
+        private void CheckIdNumberAction()
+        {
             if (Employee.CheckIdNumber())
                 MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
         }
-        private void SubbmitAction() {
-            if (!Employee.CheckIdNumber()) {
+
+        private void SubbmitAction()
+        {
+            if (!Employee.CheckIdNumber())
+            {
                 return;
-            } 
-            if(!Employee.CheckEmployeeAccountSame())
+            }
+            if (!Employee.CheckEmployeeAccountSame())
             {
                 MessageWindow.ShowMessage("此帳號已經存在!", Class.MessageType.ERROR);
                 return;
-            } 
+            }
             Employee.Insert();
-             
+
             MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeInsertWindow"));
-
         }
     }
 }

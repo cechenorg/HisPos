@@ -17,12 +17,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
         {
             TextBlock textBlock = sender as TextBlock;
 
-            if(textBlock is null) return;
+            if (textBlock is null) return;
 
             MainWindow.ServerConnection.OpenConnection();
             (textBlock.DataContext as MedicineStockViewModel).GetStockDetailByID();
             MainWindow.ServerConnection.CloseConnection();
         }
+
         private void GetMedBagDetail(object sender, MouseEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
@@ -33,6 +34,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             (textBlock.DataContext as MedicineStockViewModel).GetMedBagDetailByID();
             MainWindow.ServerConnection.CloseConnection();
         }
+
         private void GetOnTheWayDetail(object sender, MouseEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;

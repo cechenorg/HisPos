@@ -1,5 +1,5 @@
-﻿using System;
-using His_Pos.Service;
+﻿using His_Pos.Service;
+using System;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.ICCard
@@ -9,14 +9,19 @@ namespace His_Pos.NewClass.Prescription.ICCard
     {
         [Index(0)]
         public DateTime TreatDateTime;
+
         [Index(1)]
         public string MedicalNumber;
+
         [Index(2)]
         public string InstitutionId;
+
         [Index(3)]
         public string SecuritySignature;
+
         [Index(4)]
         public string SamId;
+
         [Index(5)]
         public bool SameDayTreat;
 
@@ -30,7 +35,8 @@ namespace His_Pos.NewClass.Prescription.ICCard
             SamId = Function.ByteArrayToString(12, pBuffer, 283);
             SameDayTreat = Function.ByteArrayToString(1, pBuffer, 295).Equals("Y");
         }
-        public SeqNumber(DateTime treat,string medicalNum,string insID,string secSig,string samID,bool samDateTreat)
+
+        public SeqNumber(DateTime treat, string medicalNum, string insID, string secSig, string samID, bool samDateTreat)
         {
             TreatDateTime = treat;
             MedicalNumber = medicalNum;

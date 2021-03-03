@@ -1,4 +1,6 @@
-﻿using System;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -6,9 +8,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
 {
@@ -22,14 +21,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
             public AuthStatus(DataRow dataRow)
             {
                 Name = dataRow["AUTH_NAME"].ToString();
-                Status = Boolean.Parse( dataRow["AUTH_STATUS"].ToString());
+                Status = Boolean.Parse(dataRow["AUTH_STATUS"].ToString());
             }
 
             public string Name { get; }
             public bool Status { get; }
         }
 
-        Collection<AuthStatus> AuthStatuses { get; set; }
+        private Collection<AuthStatus> AuthStatuses { get; set; }
         //private Collection<AuthLeaveRecord> authLeaveRecords;
 
         //public Collection<AuthLeaveRecord> AuthLeaveRecords
@@ -61,6 +60,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -88,7 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
             ToggleButton toggleButton = sender as ToggleButton;
 
             if (toggleButton is null) return;
-            
+
             SetLeaveUi((bool)toggleButton.IsChecked);
 
             ///AuthorityDb.ChangeAuthLeaveStatus((bool)toggleButton.IsChecked);
@@ -130,7 +130,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
             ///AuthorityDb.AuthLeaveConfirm(AuthLeaveRecords.Where(al => al.IsSelected).ToList());
 
             MessageWindow.ShowMessage("審核成功!", MessageType.SUCCESS);
-            
 
             //WorkScheduleManageView.DataChanged = true;
 

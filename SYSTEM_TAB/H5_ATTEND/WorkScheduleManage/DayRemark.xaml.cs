@@ -12,7 +12,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
             InitializeComponent();
 
             Remark.Text = message;
-            LeaveRecord.Text = leaveRecord.Replace('#','\n');
+            LeaveRecord.Text = leaveRecord.Replace('#', '\n');
         }
     }
 }

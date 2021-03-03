@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing.Printing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System;
+using System.IO;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
 {
     public class InvoiceControlViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand ConfirmChangeCommand { get; set; }
         public RelayCommand CancelChangeCommand { get; set; }
         public RelayCommand DataChangedCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private bool isDataChanged;
         private string invoiceCom;
         private string invoiceNumber;
@@ -40,6 +35,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 ConfirmChangeCommand.RaiseCanExecuteChanged();
             }
         }
+
         public string InvoiceCom
         {
             get => invoiceCom;
@@ -51,18 +47,20 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             get => invoiceNumber;
             set { Set(() => InvoiceNumber, ref invoiceNumber, value); }
         }
+
         public bool InvoiceCheck
         {
             get => invoiceCheck;
             set { Set(() => InvoiceCheck, ref invoiceCheck, value); }
         }
+
         public int InvoiceComPick
         {
             get => invoiceComPick;
             set { Set(() => InvoiceComPick, ref invoiceComPick, value); }
         }
 
-        #endregion
+        #endregion ----- Define Variables -----
 
         public InvoiceControlViewModel()
         {
@@ -71,16 +69,19 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
         }
 
         #region ----- Define Actions -----
+
         private void ConfirmChangeAction()
         {
             string ic;
-            if (!InvoiceCheck) {
+            if (!InvoiceCheck)
+            {
                 ic = "0";
             }
-            else {
+            else
+            {
                 ic = "1";
             }
-            
+
             if (InvoiceNumber.Length != 10)
             {
                 MessageWindow.ShowMessage("發票號碼為兩位英文加八位數字！", MessageType.ERROR);
@@ -102,7 +103,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 leftLines += fileReader.ReadLine() + "\r\n";
                 leftLines += fileReader.ReadLine() + "\r\n";
                 leftLines += fileReader.ReadLine();
-
             }
 
             using (TextWriter fileWriter = new StreamWriter(filePath, false))
@@ -111,11 +111,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 fileWriter.WriteLine("ICom " + Properties.Settings.Default.InvoiceComPort);
                 fileWriter.WriteLine("INum " + Properties.Settings.Default.InvoiceNumber);
                 fileWriter.WriteLine("IChk " + Properties.Settings.Default.InvoiceCheck);
-
             }
 
             IsDataChanged = false;
         }
+
         public void InvoiceNumPlusOneAction()
         {
             string eng;
@@ -127,7 +127,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             num = num + 1;
             invnum = eng + num.ToString();
 
-
             Properties.Settings.Default.InvoiceNumber = invnum;
             Properties.Settings.Default.Save();
 
@@ -143,7 +142,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 leftLines += fileReader.ReadLine() + "\r\n";
                 leftLines += fileReader.ReadLine() + "\r\n";
                 leftLines += fileReader.ReadLine();
-
             }
 
             using (TextWriter fileWriter = new StreamWriter(filePath, false))
@@ -151,14 +149,13 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 fileWriter.WriteLine(leftLines);
                 fileWriter.WriteLine("INum " + Properties.Settings.Default.InvoiceNumber);
                 fileWriter.WriteLine("IChk " + Properties.Settings.Default.InvoiceCheck);
-
             }
 
             IsDataChanged = false;
         }
+
         public void InvoiceNumAssignAction(string invnum)
         {
-
             Properties.Settings.Default.InvoiceNumber = invnum;
             Properties.Settings.Default.Save();
 
@@ -174,7 +171,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 leftLines += fileReader.ReadLine() + "\r\n";
                 leftLines += fileReader.ReadLine() + "\r\n";
                 leftLines += fileReader.ReadLine();
-
             }
 
             using (TextWriter fileWriter = new StreamWriter(filePath, false))
@@ -182,23 +178,23 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 fileWriter.WriteLine(leftLines);
                 fileWriter.WriteLine("INum " + Properties.Settings.Default.InvoiceNumber);
                 fileWriter.WriteLine("IChk " + Properties.Settings.Default.InvoiceCheck);
-
             }
 
             IsDataChanged = false;
         }
-
 
         private void CancelChangeAction()
         {
             InitSavedPrinter();
             IsDataChanged = false;
         }
+
         private void DataChangedAction()
         {
             IsDataChanged = true;
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
 
@@ -208,10 +204,12 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             CancelChangeCommand = new RelayCommand(CancelChangeAction, IsPrinterDataChanged);
             DataChangedCommand = new RelayCommand(DataChangedAction);
         }
+
         private bool IsPrinterDataChanged()
         {
             return IsDataChanged;
         }
+
         private void InitSavedPrinter()
         {
             InvoiceNumber = Properties.Settings.Default.InvoiceNumber;
@@ -219,17 +217,20 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             {
                 InvoiceCheck = true;
             }
-            else {
+            else
+            {
                 InvoiceCheck = false;
             }
             if (!string.IsNullOrEmpty(Properties.Settings.Default.InvoiceComPort) && Properties.Settings.Default.InvoiceComPort != "0")
             {
                 InvoiceComPick = int.Parse(Properties.Settings.Default.InvoiceComPort.Substring(3));
             }
-            else {
+            else
+            {
                 return;
             }
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

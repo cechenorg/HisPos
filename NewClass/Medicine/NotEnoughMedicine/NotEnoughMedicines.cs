@@ -1,19 +1,19 @@
-﻿using System;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.StoreOrder;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
-using GalaSoft.MvvmLight;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.Interface;
-using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
 {
-    public class NotEnoughMedicines: ObservableCollection<NotEnoughMedicine>
+    public class NotEnoughMedicines : ObservableCollection<NotEnoughMedicine>
     {
         public string StoreOrderID { get; set; }
 
-        public NotEnoughMedicines() { }
+        public NotEnoughMedicines()
+        {
+        }
 
         private void Init()
         {
@@ -51,19 +51,21 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             DataTable dataTable = StoreOrderDB.SendOTCStoreOrderToSingde(this, note);
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
+
         private bool SendOrderToSingde(string note)
         {
-            DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this,note);
+            DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this, note);
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
-        public void CreateOrder(string note,string cusName)
+        public void CreateOrder(string note, string cusName)
         {
             var result = StoreOrderDB.InsertNotEnoughPurchaseOrder(this, note, cusName);
             if (result.Rows.Count <= 0) return;
             StoreOrderID = result.Rows[0].Field<string>("newStoordId");
             ToWaitingStatus(note);
         }
+
         public void CreateOTCOrder(string note, string cusName)
         {
             var result = StoreOrderDB.InsertNotEnoughOTCOrder(this, note, cusName);

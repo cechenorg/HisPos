@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Service.ExportService;
+﻿using His_Pos.Service.ExportService;
 
 namespace His_Pos.NewClass.Prescription.MedBagManage
 {
@@ -18,8 +13,8 @@ namespace His_Pos.NewClass.Prescription.MedBagManage
         {
             MedBagPrescriptionStructs data = Source as MedBagPrescriptionStructs;
 
-            Settings.Add(new ExportClassExcelSetting(data, 1, 1, new []{ "Status", "CustomerName", "Institution", "Division", "AdjustDate", "StockValue" })
-                                                    .SetHeaders(new []{"備藥狀態", "姓名", "院所", "科別", "調劑日", "預估現值" }));
+            Settings.Add(new ExportClassExcelSetting(data, 1, 1, new[] { "Status", "CustomerName", "Institution", "Division", "AdjustDate", "StockValue" })
+                                                    .SetHeaders(new[] { "備藥狀態", "姓名", "院所", "科別", "調劑日", "預估現值" }));
         }
     }
 }

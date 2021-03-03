@@ -1,8 +1,8 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.ReturnDataGridControl
 {
@@ -15,6 +15,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         {
             InitializeComponent();
         }
+
         private void ShowDetail(object sender, MouseButtonEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;

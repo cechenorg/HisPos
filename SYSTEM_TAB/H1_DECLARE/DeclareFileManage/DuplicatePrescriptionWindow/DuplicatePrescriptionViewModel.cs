@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Prescription.DuplicatePrescription;
+using System;
+using System.ComponentModel;
+using System.Windows.Data;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionWindow
@@ -14,6 +10,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionW
     public class DuplicatePrescriptionViewModel : ViewModelBase
     {
         private DuplicatePrescriptions prescriptions;
+
         public DuplicatePrescriptions Prescriptions
         {
             get => prescriptions; set
@@ -21,7 +18,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionW
                 Set(() => Prescriptions, ref prescriptions, value);
             }
         }
+
         private CollectionViewSource presCollectionViewSource;
+
         public CollectionViewSource PresCollectionViewSource
         {
             get => presCollectionViewSource;
@@ -30,7 +29,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionW
                 Set(() => PresCollectionViewSource, ref presCollectionViewSource, value);
             }
         }
+
         private ICollectionView presCollectionView;
+
         public ICollectionView PresCollectionView
         {
             get => presCollectionView;
@@ -39,7 +40,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionW
                 Set(() => PresCollectionView, ref presCollectionView, value);
             }
         }
+
         private string title;
+
         public string Title
         {
             get => title;
@@ -48,7 +51,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionW
                 Set(() => Title, ref title, value);
             }
         }
+
         private bool showDialog;
+
         public bool ShowDialog
         {
             get => showDialog;
@@ -57,11 +62,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.DuplicatePrescriptionW
                 Set(() => ShowDialog, ref showDialog, value);
             }
         }
+
         public DuplicatePrescriptionViewModel()
         {
-            
         }
-        public DuplicatePrescriptionViewModel(DateTime startDate,DateTime endDate)
+
+        public DuplicatePrescriptionViewModel(DateTime startDate, DateTime endDate)
         {
             Title = VM.CurrentPharmacy.Name + " " + (startDate.Year - 1911) + "年" + startDate.Month + "月 重複處方";
             MainWindow.ServerConnection.OpenConnection();

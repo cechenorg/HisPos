@@ -1,5 +1,4 @@
-﻿
-namespace His_Pos.ChromeTabViewModel
+﻿namespace His_Pos.ChromeTabViewModel
 {
     public interface IChromeTabViewModel
     {

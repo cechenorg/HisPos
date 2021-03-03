@@ -1,9 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using His_Pos.FunctionWindow;
+using His_Pos.NewClass.ProductLocation;
 using System.Data;
 using System.Windows;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.ProductLocation;
-using His_Pos.NewClass.ProductType;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
@@ -12,10 +10,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
     /// </summary>
     public partial class AddLocationWindow : Window
     {
-
         public AddLocationWindow()
         {
-           
             InitializeComponent();
             UpdateUi();
 
@@ -23,9 +19,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         }
 
         #region ----- Define Functions -----
+
         private void UpdateUi()
         {
         }
+
         private bool CheckEmptyData()
         {
             string error = "";
@@ -42,13 +40,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
 
         #region ----- Define Events -----
+
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             UpdateUi();
         }
+
         private void ConfrimClick(object sender, RoutedEventArgs e)
         {
             if (CheckEmptyData())
@@ -66,6 +67,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 Close();
             }
         }
-        #endregion
+
+        #endregion ----- Define Events -----
     }
 }

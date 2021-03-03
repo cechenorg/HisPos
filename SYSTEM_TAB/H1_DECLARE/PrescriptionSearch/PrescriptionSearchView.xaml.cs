@@ -1,8 +1,7 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Prescription.Search;
+﻿using His_Pos.NewClass.Prescription.Search;
 using His_Pos.Service;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch

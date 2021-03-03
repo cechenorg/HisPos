@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEnoughOTCPurchaseWindow;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.NotEnoughOTCPurchaseWindow
 {
@@ -28,7 +17,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.No
             InitializeComponent();
         }
 
-        public NotEnoughOTCPurchaseWindow(string note,string cusName,NotEnoughMedicines purchaseList)
+        public NotEnoughOTCPurchaseWindow(string note, string cusName, NotEnoughMedicines purchaseList)
         {
             InitializeComponent();
             DataContext = new NotEnoughOTCPurchaseViewModel(note, cusName, purchaseList);
@@ -40,6 +29,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.No
                         DialogResult = true;
                         //Close();
                         break;
+
                     case "CloseNotEnoughOTCPurchaseWindowCancel":
                         //DialogResult = false;
                         Close();

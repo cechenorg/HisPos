@@ -28,7 +28,6 @@ namespace His_Pos.NewClass.Product.ProductManagement
             IsZero = row.Field<decimal>("NHIMED_PRICE");
             DepRec_Amount = row.Field<int>("DepRec_Amount");
             SINGINV = row.Field<int>("inv_qty");
-            
         }
 
         public ProductTypeEnum ProductType { get; set; }
@@ -37,6 +36,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int DepRec_Amount { get; set; }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
+
         public string FullName
         {
             get
@@ -55,7 +55,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int BasicAmount { get; set; }
         public double OnTheWayAmount { get; set; }
         public double MedBagOnTheWayAmount { get; set; }
-        public double AllOnTheWayAmount { get {return OnTheWayAmount + MedBagOnTheWayAmount;} }
+        public double AllOnTheWayAmount { get { return OnTheWayAmount + MedBagOnTheWayAmount; } }
         public double StockValue { get; set; }
         public double ShelfStockValue { get; set; }
         public int? ControlLevel { get; set; }

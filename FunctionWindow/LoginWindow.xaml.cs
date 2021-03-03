@@ -1,7 +1,7 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.SYSTEM_TAB.OfflineOperation;
+using System.Windows;
+using System.Windows.Input;
 
 namespace His_Pos.FunctionWindow
 {
@@ -25,8 +25,8 @@ namespace His_Pos.FunctionWindow
         }
 
         private void UserName_OnKeyUp(object sender, KeyEventArgs e)
-        
-            {
+
+        {
             if (e.Key == Key.Enter)
                 Password.Focus();
         }

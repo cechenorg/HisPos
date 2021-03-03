@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
 {
@@ -39,7 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
             if (!errors.Equals(""))
             {
                 MessageWindow.ShowMessage(errors, MessageType.ERROR);
-                
+
                 return;
             }
 
@@ -53,7 +52,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
                 endDateTime = endDateTime.AddHours(((DateTime)EndTime.SelectedTime).Hour);
                 endDateTime = endDateTime.AddMinutes(((DateTime)EndTime.SelectedTime).Minute);
 
-               /// CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, startDateTime, endDateTime, Note.Text);
+                /// CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, startDateTime, endDateTime, Note.Text);
             }
             else
             {
@@ -62,7 +61,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
 
                 ///CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, (DateTime)StartDate.SelectedDate, (DateTime)EndDate.SelectedDate, Note.Text);
             }
-            
+
             LeaveComplete = true;
             Close();
         }
@@ -92,7 +91,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
                     if (EndTime.SelectedTime is null)
                         error += "結束時間未填寫!\n";
 
-                    if(EndTime.SelectedTime < StartTime.SelectedTime)
+                    if (EndTime.SelectedTime < StartTime.SelectedTime)
                         error += "結束時間小於起始時間!\n";
                 }
                 else
@@ -103,9 +102,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
                         error += "結束日期小於起始日期!\n";
                 }
             }
-            
-            
-
 
             return error;
         }
@@ -116,7 +112,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
 
             if (radioButton is null || LeaveDays is null || LeaveHours is null) return;
 
-            if( radioButton.Tag.ToString().Equals("0") )
+            if (radioButton.Tag.ToString().Equals("0"))
             {
                 LeaveDays.Visibility = Visibility.Visible;
                 LeaveHours.Visibility = Visibility.Collapsed;

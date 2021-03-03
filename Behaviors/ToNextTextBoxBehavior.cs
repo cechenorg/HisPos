@@ -1,15 +1,11 @@
-﻿using System;
+﻿using His_Pos.NewClass.Product;
+using His_Pos.Service;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 using System.Windows.Media;
-using His_Pos.NewClass.Product;
-using His_Pos.Service;
 
 namespace His_Pos.Behaviors
 {
@@ -29,9 +25,10 @@ namespace His_Pos.Behaviors
             AssociatedObject.KeyDown -= AssociatedObjectOnKeyDown;
         }
 
-        #endregion
+        #endregion ----- Override Attach -----
 
         #region ----- Define Events -----
+
         private void AssociatedObjectOnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -40,6 +37,7 @@ namespace His_Pos.Behaviors
                 MoveFocusNext(sender);
             }
         }
+
         private void MoveFocusNext(object sender)
         {
             (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
@@ -78,6 +76,7 @@ namespace His_Pos.Behaviors
                 FocusRow(firstChild as TextBox, dataGrid);
             }
         }
+
         private void FocusRow(TextBox textBox, DataGrid dataGrid)
         {
             List<TextBox> textBoxs = new List<TextBox>();
@@ -87,6 +86,7 @@ namespace His_Pos.Behaviors
 
             dataGrid.SelectedItem = (dataGrid.Items[index] as Product);
         }
-        #endregion
+
+        #endregion ----- Define Events -----
     }
 }

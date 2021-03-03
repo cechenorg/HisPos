@@ -1,9 +1,9 @@
-﻿using System;
+﻿using His_Pos.FunctionWindow;
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows;
-using His_Pos.FunctionWindow;
 
 namespace His_Pos
 {
@@ -19,17 +19,18 @@ namespace His_Pos
             CheckAdministrator();
             StartupUri = new Uri("FunctionWindow/LoginWindow.xaml", UriKind.RelativeOrAbsolute);
         }
+
         private void CheckAdministrator()
-        { 
-            var wp = new WindowsPrincipal(WindowsIdentity.GetCurrent()); 
-             
+        {
+            var wp = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+
             if (!wp.IsInRole(WindowsBuiltInRole.Administrator))
             {
                 var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase);
-                
+
                 processInfo.UseShellExecute = true;
                 processInfo.Verb = "runas";
-                
+
                 try
                 {
                     Process.Start(processInfo);

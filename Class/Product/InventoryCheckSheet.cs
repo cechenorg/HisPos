@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Data;
-using Newtonsoft.Json;
 
 namespace His_Pos.Class.Product
 {
@@ -14,7 +14,8 @@ namespace His_Pos.Class.Product
         public double Stock { get; set; }
         public string ValidityPeriod { get; set; }
         public string Location { get; set; }
-        public InventoryObject(string id, string name,  string category,string batchNum,double amount, double stock,string validity,string location)
+
+        public InventoryObject(string id, string name, string category, string batchNum, double amount, double stock, string validity, string location)
         {
             Id = id;
             Name = name;
@@ -29,10 +30,9 @@ namespace His_Pos.Class.Product
 
     public static class InventoryChecking
     {
-        public static DataTable t  = new DataTable("InventoryDataSet");
+        public static DataTable t = new DataTable("InventoryDataSet");
 
         public static List<InventoryObject> InventoryObjectList = new List<InventoryObject>();
-
 
         public static List<InventoryObject> GetInventoryObjectList()
         {
@@ -43,7 +43,6 @@ namespace His_Pos.Class.Product
         {
             var json = JsonConvert.SerializeObject(data);
             t = JsonConvert.DeserializeObject<DataTable>(json);
-          
         }
 
         public static void MergeData(this DataTable table, DataTable toAdd, string segName)
@@ -65,5 +64,4 @@ namespace His_Pos.Class.Product
             }
         }
     }
-
 }

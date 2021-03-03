@@ -8,7 +8,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
         public TradeProfitReport()
         {
         }
-        public TradeProfitReport(DataRow r) {
+
+        public TradeProfitReport(DataRow r)
+        {
             TypeId = r.Field<string>("TypeId");
             TypeName = r.Field<string>("TypeName");
             Count = r.Field<int>("Count");
@@ -21,15 +23,20 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             CardFee = r.Field<decimal>("CardFee");
             CashCoupon = r.Field<int>("CashCoupon");
         }
+
         private string typeId;
-        public string TypeId {
+
+        public string TypeId
+        {
             get => typeId;
             set
             {
                 Set(() => TypeId, ref typeId, value);
             }
         }
+
         private string typeName;
+
         public string TypeName
         {
             get => typeName;
@@ -38,7 +45,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TypeName, ref typeName, value);
             }
         }
+
         private int count;
+
         public int Count
         {
             get => count;
@@ -47,7 +56,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => Count, ref count, value);
             }
         }
+
         private int cashCoupon;
+
         public int CashCoupon
         {
             get => cashCoupon;
@@ -56,7 +67,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => CashCoupon, ref cashCoupon, value);
             }
         }
+
         private int netIncome;
+
         public int NetIncome
         {
             get => netIncome;
@@ -67,6 +80,7 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
         }
 
         private int cost;
+
         public int Cost
         {
             get => cost;
@@ -76,9 +90,8 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
             }
         }
 
-
-
         private int profit;
+
         public int Profit
         {
             get => profit;
@@ -87,7 +100,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => Profit, ref profit, value);
             }
         }
+
         private int cashAmount;
+
         public int CashAmount
         {
             get => cashAmount;
@@ -98,6 +113,7 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
         }
 
         private int cardAmount;
+
         public int CardAmount
         {
             get => cardAmount;
@@ -108,6 +124,7 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
         }
 
         private int discountAmt;
+
         public int DiscountAmt
         {
             get => discountAmt;
@@ -116,7 +133,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => DiscountAmt, ref discountAmt, value);
             }
         }
+
         private int totalAmt;
+
         public int TotalAmt
         {
             get => totalAmt;
@@ -125,7 +144,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalAmt, ref totalAmt, value);
             }
         }
+
         private int totalDeleteAmt;
+
         public int TotalDeleteAmt
         {
             get => totalDeleteAmt;
@@ -134,7 +155,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalDeleteAmt, ref totalDeleteAmt, value);
             }
         }
+
         private int totalChangeAmt;
+
         public int TotalChangeAmt
         {
             get => totalChangeAmt;
@@ -143,7 +166,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalChangeAmt, ref totalChangeAmt, value);
             }
         }
+
         private int totalNormalAmt;
+
         public int TotalNormalAmt
         {
             get => totalNormalAmt;
@@ -154,6 +179,7 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
         }
 
         private int totalChangeCashAmt;
+
         public int TotalChangeCashAmt
         {
             get => totalChangeCashAmt;
@@ -162,7 +188,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalChangeCashAmt, ref totalChangeCashAmt, value);
             }
         }
+
         private int totalChangeCardAmt;
+
         public int TotalChangeCardAmt
         {
             get => totalChangeCardAmt;
@@ -171,7 +199,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalChangeCardAmt, ref totalChangeCardAmt, value);
             }
         }
+
         private int totalChangeDiscountAmt;
+
         public int TotalChangeDiscountAmt
         {
             get => totalChangeDiscountAmt;
@@ -180,7 +210,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalChangeDiscountAmt, ref totalChangeDiscountAmt, value);
             }
         }
+
         private int totalChangeCashCouponAmt;
+
         public int TotalChangeCashCouponAmt
         {
             get => totalChangeCashCouponAmt;
@@ -189,7 +221,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalChangeCashCouponAmt, ref totalChangeCashCouponAmt, value);
             }
         }
+
         private int totalDeleteCashAmt;
+
         public int TotalDeleteCashAmt
         {
             get => totalDeleteCashAmt;
@@ -198,7 +232,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalDeleteCashAmt, ref totalDeleteCashAmt, value);
             }
         }
+
         private int totalDeleteCardAmt;
+
         public int TotalDeleteCardAmt
         {
             get => totalDeleteCardAmt;
@@ -207,7 +243,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalDeleteCardAmt, ref totalDeleteCardAmt, value);
             }
         }
+
         private int totalDeleteCostAmt;
+
         public int TotalDeleteCostAmt
         {
             get => totalDeleteCostAmt;
@@ -216,7 +254,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalDeleteCostAmt, ref totalDeleteCostAmt, value);
             }
         }
+
         private int totalChangeCostAmt;
+
         public int TotalChangeCostAmt
         {
             get => totalChangeCostAmt;
@@ -225,7 +265,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalChangeCostAmt, ref totalChangeCostAmt, value);
             }
         }
+
         private int totalDeleteDiscountAmt;
+
         public int TotalDeleteDiscountAmt
         {
             get => totalDeleteDiscountAmt;
@@ -234,7 +276,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalDeleteDiscountAmt, ref totalDeleteDiscountAmt, value);
             }
         }
+
         private int totalDeleteCashCouponAmt;
+
         public int TotalDeleteCashCouponAmt
         {
             get => totalDeleteCashCouponAmt;
@@ -243,7 +287,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalDeleteCashCouponAmt, ref totalDeleteCashCouponAmt, value);
             }
         }
+
         private int totalDiscountTotalAmt;
+
         public int TotalDiscountTotalAmt
         {
             get => totalDiscountTotalAmt;
@@ -252,16 +298,20 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalDiscountTotalAmt, ref totalDiscountTotalAmt, value);
             }
         }
+
         private int totalCardTotalAmt;
+
         public int TotalCardTotalAmt
         {
             get => totalCardTotalAmt;
             set
             {
-                Set(() => TotalCardTotalAmt , ref totalCardTotalAmt, value);
+                Set(() => TotalCardTotalAmt, ref totalCardTotalAmt, value);
             }
         }
+
         private int totalCashTotalAmt;
+
         public int TotalCashTotalAmt
         {
             get => totalCashTotalAmt;
@@ -270,7 +320,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalCashTotalAmt, ref totalCashTotalAmt, value);
             }
         }
+
         private int totalCostTotalAmt;
+
         public int TotalCostTotalAmt
         {
             get => totalCostTotalAmt;
@@ -279,7 +331,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalCostTotalAmt, ref totalCostTotalAmt, value);
             }
         }
+
         private int totalCostTotal;
+
         public int TotalCostTotal
         {
             get => totalCostTotal;
@@ -288,7 +342,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalCostTotal, ref totalCostTotal, value);
             }
         }
+
         private int totalCashCouponTotalAmt;
+
         public int TotalCashCouponTotalAmt
         {
             get => totalCashCouponTotalAmt;
@@ -297,7 +353,9 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => TotalCashCouponTotalAmt, ref totalCashCouponTotalAmt, value);
             }
         }
+
         private decimal cardFee;
+
         public decimal CardFee
         {
             get => cardFee;
@@ -306,11 +364,12 @@ namespace His_Pos.NewClass.Report.TradeProfitReport
                 Set(() => CardFee, ref cardFee, value);
             }
         }
+
         public void CountEditPoint(DataRow editDataRow)
         {
             Count += editDataRow.Field<int>("Count");
-            NetIncome+= editDataRow.Field<int>("NetIncome");
-            Cost+= editDataRow.Field<int>("Cost");
+            NetIncome += editDataRow.Field<int>("NetIncome");
+            Cost += editDataRow.Field<int>("Cost");
             Profit += editDataRow.Field<int>("Profit");
         }
     }

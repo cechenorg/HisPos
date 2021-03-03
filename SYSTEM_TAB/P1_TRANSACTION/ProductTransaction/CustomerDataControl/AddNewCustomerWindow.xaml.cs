@@ -17,12 +17,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
         {
             msg = s;
         }
+
         private string msg;
+
         public string Message
         {
             get { return msg; }
         }
     }
+
     /// <summary>
     /// AddNewCustomerWindow.xaml 的互動邏輯
     /// </summary>
@@ -64,7 +67,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             InitializeComponent();
         }
 
-        private void FocusNext(KeyEventArgs e) 
+        private void FocusNext(KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -73,9 +76,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             }
         }
 
-        private string GetBirthday() 
+        private string GetBirthday()
         {
-            if (tbYear.Text == "" && tbMonth.Text == "" && tbDay.Text == "") 
+            if (tbYear.Text == "" && tbMonth.Text == "" && tbDay.Text == "")
             {
                 return "";
             }
@@ -91,19 +94,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             {
                 return dateStr;
             }
-            else 
+            else
             {
                 return "ERROR";
             }
         }
 
-        private string GetGender() 
+        private string GetGender()
         {
             if (rbMale.IsChecked == true)
             {
                 return "男";
             }
-            else 
+            else
             {
                 return "女";
             }
@@ -119,12 +122,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             string birthday = GetBirthday();
             string tel = tbTelPhoneCode.Text + tbTelPhone.Text;
 
-            if (tbCellPhone.Text == "" && tbTelPhone.Text == "") 
+            if (tbCellPhone.Text == "" && tbTelPhone.Text == "")
             {
                 MessageWindow.ShowMessage("手機 / 市話 必擇一填寫！", MessageType.ERROR);
                 return;
             }
-            if (!IsCellphone(tbCellPhone.Text) && tbCellPhone.Text != "") 
+            if (!IsCellphone(tbCellPhone.Text) && tbCellPhone.Text != "")
             {
                 MessageWindow.ShowMessage("手機號碼格式錯誤！", MessageType.ERROR);
                 return;
@@ -142,11 +145,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-            if (tbCellPhone.Text == "") 
+            if (tbCellPhone.Text == "")
             {
                 parameters.Add(new SqlParameter("PosCus_Cellphone", DBNull.Value));
             }
-            else 
+            else
             {
                 parameters.Add(new SqlParameter("PosCus_Cellphone", tbCellPhone.Text));
             }
@@ -176,9 +179,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             {
                 MessageWindow.ShowMessage("該電話號碼已登錄會員！", MessageType.WARNING);
             }
-            else 
+            else
             {
-                MessageWindow.ShowMessage("新增失敗！", MessageType.ERROR); 
+                MessageWindow.ShowMessage("新增失敗！", MessageType.ERROR);
             }
         }
 
@@ -186,30 +189,37 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
         {
             if (e.Key == Key.Enter) { tbTelPhoneCode.Focus(); }
         }
+
         private void tbTelPhoneCode_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) { tbTelPhone.Focus(); }
         }
+
         private void tbTelPhone_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) { tbName.Focus(); }
         }
+
         private void tbName_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) { tbYear.Focus(); }
         }
+
         private void tbYear_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) { tbMonth.Focus(); }
         }
+
         private void tbMonth_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) { tbDay.Focus(); }
         }
+
         private void tbDay_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) { tbAddress.Focus(); }
         }
+
         private void tbAddress_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) { tbNote.Focus(); }

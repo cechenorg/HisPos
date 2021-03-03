@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow
 {
@@ -18,7 +18,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         {
             InitializeComponent();
         }
-        public ReservePrescriptionWindow(Prescription p,string title)
+
+        public ReservePrescriptionWindow(Prescription p, string title)
         {
             InitializeComponent();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -30,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DataContext = new PrescriptionEditViewModel(p, title);
             ShowDialog();
         }
+
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
@@ -46,6 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var index = textBoxList.IndexOf((TextBox)sender);
             PrescriptionMedicines.SelectedItem = (PrescriptionMedicines.Items[index] as Medicine);
         }
+
         private void InputTextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
@@ -53,6 +56,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             e.Handled = true;
             textBox.Focus();
         }
+
         private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox t = sender as TextBox;

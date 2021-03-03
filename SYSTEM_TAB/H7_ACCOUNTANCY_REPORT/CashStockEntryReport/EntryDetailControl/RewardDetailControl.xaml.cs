@@ -1,24 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Report.CashDetailReport.CashDetailRecordReport;
-using His_Pos.NewClass.Report.PrescriptionDetailReport.PrescriptionDetailMedicineRepot;
-using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport;
-using His_Pos.NewClass.Report.TradeProfitDetailReport.TradeProfitDetailRecordReport;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDetailControl
 {
@@ -30,7 +12,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
         public RewardDetailControl()
         {
             InitializeComponent();
-            
         }
 
         private void ShowProductDetail(object sender, MouseButtonEventArgs e)
@@ -41,7 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
 
             ProductDetailWindow.ShowProductDetailWindow();
 
-           // Messenger.Default.Send(new NotificationMessage<string>(this, ((TradeProfitDetailRecordReport)row.Item).MasterID, "ShowProductDetail"));
+            // Messenger.Default.Send(new NotificationMessage<string>(this, ((TradeProfitDetailRecordReport)row.Item).MasterID, "ShowProductDetail"));
         }
     }
 }

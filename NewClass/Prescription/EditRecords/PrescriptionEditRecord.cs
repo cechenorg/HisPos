@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Prescription.EditRecords
 {
@@ -24,6 +20,7 @@ namespace His_Pos.NewClass.Prescription.EditRecords
                 case "自費調劑":
                     IconType = "Adjust";
                     break;
+
                 default:
                     IconType = "Edit";
                     break;
@@ -34,7 +31,9 @@ namespace His_Pos.NewClass.Prescription.EditRecords
         }
 
         #region Properties
+
         private string productID;
+
         public string ProductID
         {
             get => productID;
@@ -43,18 +42,22 @@ namespace His_Pos.NewClass.Prescription.EditRecords
                 Set(() => ProductID, ref productID, value);
             }
         }
+
         private readonly string englishName;
         private readonly string chineseName;
+
         public string FullName
         {
             get
-            { 
-                if(!string.IsNullOrEmpty(englishName))
-                    return (englishName.Contains(" ")? englishName.Substring(0, englishName.IndexOf(" ")) : englishName) + chineseName;
+            {
+                if (!string.IsNullOrEmpty(englishName))
+                    return (englishName.Contains(" ") ? englishName.Substring(0, englishName.IndexOf(" ")) : englishName) + chineseName;
                 return !string.IsNullOrEmpty(chineseName) ? chineseName : string.Empty;
             }
         }
+
         private double amount;
+
         public double Amount
         {
             get => amount;
@@ -63,7 +66,9 @@ namespace His_Pos.NewClass.Prescription.EditRecords
                 Set(() => Amount, ref amount, value);
             }
         }
+
         private string note;
+
         public string Note
         {
             get => note;
@@ -72,7 +77,9 @@ namespace His_Pos.NewClass.Prescription.EditRecords
                 Set(() => Note, ref note, value);
             }
         }
+
         private string iconType;
+
         public string IconType
         {
             get => iconType;
@@ -81,7 +88,9 @@ namespace His_Pos.NewClass.Prescription.EditRecords
                 Set(() => IconType, ref iconType, value);
             }
         }
+
         private DateTime time;
+
         public DateTime Time
         {
             get => time;
@@ -90,7 +99,9 @@ namespace His_Pos.NewClass.Prescription.EditRecords
                 Set(() => Time, ref time, value);
             }
         }
+
         private string timeString;
+
         public string TimeString
         {
             get => timeString;
@@ -99,6 +110,7 @@ namespace His_Pos.NewClass.Prescription.EditRecords
                 Set(() => TimeString, ref timeString, value);
             }
         }
-        #endregion
+
+        #endregion Properties
     }
 }

@@ -4,7 +4,7 @@ using System.Data;
 
 namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
 {
-    public class SpecialTreats:Collection<SpecialTreat>
+    public class SpecialTreats : Collection<SpecialTreat>
     {
         public SpecialTreats()
         {

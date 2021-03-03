@@ -5,7 +5,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using His_Pos.RDLC;
 
 namespace His_Pos.Service
 {

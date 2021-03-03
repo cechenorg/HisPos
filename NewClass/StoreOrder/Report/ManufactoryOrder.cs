@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Forms;
-using GalaSoft.MvvmLight;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
 
 namespace His_Pos.NewClass.StoreOrder.Report
 {
     public class ManufactoryOrder : ObservableObject
     {
         #region ----- Define Variables -----
+
         private bool includeTax;
         private ManufactoryOrderDetails orderDetails;
         private ICollectionView purchaseOrderCollectionView;
@@ -28,6 +27,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
         public double PurchasePrice { get; set; }
         public int ReturnCount { get; set; }
         public double ReturnPrice { get; set; }
+
         public ICollectionView PurchaseOrderCollectionView
         {
             get => purchaseOrderCollectionView;
@@ -36,6 +36,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
                 Set(() => PurchaseOrderCollectionView, ref purchaseOrderCollectionView, value);
             }
         }
+
         public ICollectionView ReturnOrderCollectionView
         {
             get => returnOrderCollectionView;
@@ -44,7 +45,8 @@ namespace His_Pos.NewClass.StoreOrder.Report
                 Set(() => ReturnOrderCollectionView, ref returnOrderCollectionView, value);
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ManufactoryOrder(DataRow dataRow)
         {
@@ -57,6 +59,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
         }
 
         #region ----- Define Functions -----
+
         public void GetOrderDetails(DateTime searchStartDate, DateTime searchEndDate, string wareID)
         {
             orderDetails = ManufactoryOrderDetails.GetOrderDetails(ManufactoryID, searchStartDate, searchEndDate, wareID);
@@ -64,6 +67,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
             PurchaseOrderCollectionView = CollectionViewSource.GetDefaultView(orderDetails.Where(o => o.Type == OrderTypeEnum.PURCHASE));
             ReturnOrderCollectionView = CollectionViewSource.GetDefaultView(orderDetails.Where(o => o.Type == OrderTypeEnum.RETURN));
         }
+
         public void ExportToCSV(DateTime searchStartDate, DateTime searchEndDate)
         {
             SaveFileDialog fdlg = new SaveFileDialog();
@@ -96,6 +100,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
                 }
             }
         }
+
         public void ExportToCSVTotalDetail(DateTime searchStartDate, DateTime searchEndDate, string wareID)
         {
             ManufactoryOrderDetails detailTotal = ManufactoryOrderDetails.GetOrderTotalDetails(searchStartDate, searchEndDate, wareID);
@@ -128,7 +133,8 @@ namespace His_Pos.NewClass.StoreOrder.Report
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }
             }
-            #endregion
+
+            #endregion ----- Define Functions -----
         }
     }
 }

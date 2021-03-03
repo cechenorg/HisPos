@@ -1,45 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetPrices;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
-
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetPrices;
+using System.Collections.ObjectModel;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.PriceControl
 {
     public class SingdePriceControlViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand ViewHistoryPriceCommand { get; set; }
         public RelayCommand PrintMedicineLabelCommand { get; set; }
         public RelayCommand SetPricesCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private string productID;
         private string wareHouseID;
 
         private ProductManageDetail medicineDetail;
 
-        public ProductManageDetail MedicineDetail {
+        public ProductManageDetail MedicineDetail
+        {
             get { return medicineDetail; }
             set { Set(() => MedicineDetail, ref medicineDetail, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public SingdePriceControlViewModel()
         {
@@ -49,11 +47,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #region ----- Define Actions -----
+
         private void ViewHistoryPriceAction()
         {
             NHIMedicineHistoryPriceWindow medicineHistoryPriceWindow = new NHIMedicineHistoryPriceWindow(productID);
             medicineHistoryPriceWindow.ShowDialog();
         }
+
         private void PrintMedicineLabelAction()
         {
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認列印藥品標籤?", "");
@@ -67,20 +67,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             else
                 PrintMedBagSingleMode(medicineTagStruct);
         }
+
         private void SetPricesAction()
         {
-            SetPricesWindow setPricesWindow = new SetPricesWindow(productID, MedicineDetail.RetailPrice,MedicineDetail.MemberPrice,MedicineDetail.EmployeePrice,MedicineDetail.SpecialPrice);
+            SetPricesWindow setPricesWindow = new SetPricesWindow(productID, MedicineDetail.RetailPrice, MedicineDetail.MemberPrice, MedicineDetail.EmployeePrice, MedicineDetail.SpecialPrice);
             setPricesWindow.ShowDialog();
 
             if ((bool)setPricesWindow.DialogResult)
             {
                 ReloadData(productID, wareHouseID, ProductTypeEnum.OTCMedicine);
             }
-
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         public void PrintMedBagSingleMode(MedicineTagStruct medicineTagStruct)
         {
             var rptViewer = new ReportViewer();
@@ -91,6 +93,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 ((ViewModelMainWindow)MainWindow.Instance.DataContext).StartPrintMedicineTag(rptViewer);
             });
         }
+
         private void SetSingleModeMedTagReportViewer(ReportViewer rptViewer, MedicineTagStruct medicineTagStruct)
         {
             var medicineList = new Collection<MedicineTagStruct>();
@@ -109,7 +112,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             productID = proID;
             wareHouseID = wareID;
-            
 
             DataTable manageMedicineDetailDataTable = null;
 
@@ -118,9 +120,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 case ProductTypeEnum.OTCMedicine:
                     manageMedicineDetailDataTable = ProductDetailDB.GetProductManageOTCMedicineDetailByID(proID);
                     break;
+
                 case ProductTypeEnum.NHIMedicine:
                     manageMedicineDetailDataTable = ProductDetailDB.GetProductManageNHIMedicineDetailByID(proID);
                     break;
+
                 case ProductTypeEnum.SpecialMedicine:
                     manageMedicineDetailDataTable = ProductDetailDB.GetProductManageSpecialMedicineDetailByID(proID);
                     break;
@@ -137,14 +141,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 case ProductTypeEnum.OTCMedicine:
                     MedicineDetail = new ProductManageDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
+
                 case ProductTypeEnum.NHIMedicine:
                     MedicineDetail = new ProductNHIDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
+
                 case ProductTypeEnum.SpecialMedicine:
                     MedicineDetail = new ProductNHISpecialDetail(manageMedicineDetailDataTable.Rows[0]);
                     break;
             }
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

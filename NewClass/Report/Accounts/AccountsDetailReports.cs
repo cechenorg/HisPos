@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
-using His_Pos.Class;
 
 namespace His_Pos.NewClass.Report.Accounts
 {
@@ -13,20 +7,17 @@ namespace His_Pos.NewClass.Report.Accounts
     {
         public AccountsDetailReports(DataRow r)
         {
-
             Name = r.Field<string>("Date");
             Value = r.Field<decimal>("Value");
-            ID= r.Field<string>("ID");
+            ID = r.Field<string>("ID");
             StrikeValue = r.Field<decimal>("StrikeValue");
-
         }
-        public AccountsDetailReports(string name, decimal value , string id)
-        {
 
+        public AccountsDetailReports(string name, decimal value, string id)
+        {
             Name = name;
             Value = value;
             ID = id;
-
         }
 
         public AccountsDetailReports()
@@ -34,6 +25,7 @@ namespace His_Pos.NewClass.Report.Accounts
         }
 
         private string name;
+
         public string Name
         {
             get => name;
@@ -42,7 +34,9 @@ namespace His_Pos.NewClass.Report.Accounts
                 Set(() => Name, ref name, value);
             }
         }
+
         private string iD;
+
         public string ID
         {
             get => iD;
@@ -51,7 +45,9 @@ namespace His_Pos.NewClass.Report.Accounts
                 Set(() => Name, ref iD, value);
             }
         }
+
         private decimal valuee;
+
         public decimal Value
         {
             get => valuee;
@@ -60,7 +56,9 @@ namespace His_Pos.NewClass.Report.Accounts
                 Set(() => Value, ref valuee, value);
             }
         }
+
         private decimal strikeValue;
+
         public decimal StrikeValue
         {
             get => strikeValue;

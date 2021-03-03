@@ -1,12 +1,12 @@
-﻿using System.Data;
-using System.Windows;
-using System.Data.SqlClient;
-using System.Collections.Generic;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.Class;
-using System.Windows.Controls;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -15,19 +15,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
     /// </summary>
     public partial class CustomerDepositManageView : Window
     {
-        string cus;
-        DataTable detail;
-        DataTable depositTable;
+        private string cus;
+        private DataTable detail;
+        private DataTable depositTable;
+
         public CustomerDepositManageView(string cusID)
         {
             cus = cusID;
             InitializeComponent();
-            detail=new DataTable();
+            detail = new DataTable();
             depositTable = new DataTable();
             CustomerDepositRecord();
             CustomerDepositManage();
         }
-        public void CustomerDepositRecord() {
+
+        public void CustomerDepositRecord()
+        {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TraMas_CustomerID", cus));
@@ -42,8 +45,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 culture.DateTimeFormat.Calendar = new TaiwanCalendar();
                 dr["TransTime_Format"] = dt.ToString("yyy/MM/dd", culture);
             }
-            ProductDepositRecordDataGrid.ItemsSource=detail.DefaultView;
+            ProductDepositRecordDataGrid.ItemsSource = detail.DefaultView;
         }
+
         public void CustomerDepositManage()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -56,27 +60,30 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnWithdraw_Click(object sender, RoutedEventArgs e)
         {
-            foreach (DataRow dr in depositTable.Rows) {
-                if ((int)dr["Amount"] > (int)dr["TraDet_DepositAmount"]) {
+            foreach (DataRow dr in depositTable.Rows)
+            {
+                if ((int)dr["Amount"] > (int)dr["TraDet_DepositAmount"])
+                {
                     MessageWindow.ShowMessage("提取量不得大於寄庫量", MessageType.WARNING);
                     return;
                 }
 
-                if ((int)dr["Amount"] < 0) {
+                if ((int)dr["Amount"] < 0)
+                {
                     MessageWindow.ShowMessage("提取量不得為負", MessageType.WARNING);
                     return;
                 }
             }
             foreach (DataRow dr in depositTable.Rows)
             {
-                if ((int)dr["Amount"]!=0)
+                if ((int)dr["Amount"] != 0)
                 {
                     MainWindow.ServerConnection.OpenConnection();
                     List<SqlParameter> parameters = new List<SqlParameter>();
                     parameters.Add(new SqlParameter("TraDet_ProductID", dr["TraDet_ProductID"]));
                     parameters.Add(new SqlParameter("Amount", dr["Amount"]));
                     parameters.Add(new SqlParameter("cusID", cus));
-                    DataTable result=MainWindow.ServerConnection.ExecuteProc("[POS].[DepositBuckles]", parameters);
+                    DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[DepositBuckles]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
                     if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                     {
@@ -103,5 +110,4 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             textBox.SelectAll();
         }
     }
-    }
-
+}

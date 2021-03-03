@@ -2,7 +2,7 @@
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 {
-    class NewIncomeStatementViewModel : TabBase
+    internal class NewIncomeStatementViewModel : TabBase
     {
         public override TabBase getTab()
         {
@@ -11,7 +11,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 
         public NewIncomeStatementViewModel()
         {
-
         }
     }
 }

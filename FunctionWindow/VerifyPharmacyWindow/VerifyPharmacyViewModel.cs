@@ -1,70 +1,94 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
-using System.Xml;
 using System.IO;
-using GalaSoft.MvvmLight.Messaging;
+using System.Xml;
 
 namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
 {
     public class VerifyPharmacyViewModel : ViewModelBase
     {
         #region Var
+
         private string dbtargetIp;
         public bool isverify;
+
         public bool Isverify
         {
             get { return isverify; }
             set { Set(() => Isverify, ref isverify, value); }
         }
+
         public string verifyNumber;
-        public string VerifyNumber {
-            get { return verifyNumber; } 
+
+        public string VerifyNumber
+        {
+            get { return verifyNumber; }
             set { Set(() => VerifyNumber, ref verifyNumber, value); }
         }
+
         public string pharmacyName;
+
         public string PharmacyName
         {
             get { return pharmacyName; }
             set { Set(() => PharmacyName, ref pharmacyName, value); }
         }
+
         public string medicalNum;
+
         public string MedicalNum
         {
             get { return medicalNum; }
             set { Set(() => MedicalNum, ref medicalNum, value); }
         }
+
         public string pharmacyTel;
+
         public string PharmacyTel
         {
             get { return pharmacyTel; }
             set { Set(() => PharmacyTel, ref pharmacyTel, value); }
         }
+
         public string pharmacyAddress;
+
         public string PharmacyAddress
         {
             get { return pharmacyAddress; }
             set { Set(() => PharmacyAddress, ref pharmacyAddress, value); }
         }
-        #endregion
+
+        #endregion Var
+
         #region Command
+
         public RelayCommand VerifyCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
-        #endregion
-        public VerifyPharmacyViewModel() {
+
+        #endregion Command
+
+        public VerifyPharmacyViewModel()
+        {
             VerifyCommand = new RelayCommand(VerifyAction);
             SubmitCommand = new RelayCommand(SubmitAction);
             Isverify = false;
-        } 
+        }
+
         #region Action
-        private void VerifyAction() {
-            if (string.IsNullOrEmpty(VerifyNumber)) {
-                MessageWindow.ShowMessage("請輸入認證碼",Class.MessageType.WARNING);
+
+        private void VerifyAction()
+        {
+            if (string.IsNullOrEmpty(VerifyNumber))
+            {
+                MessageWindow.ShowMessage("請輸入認證碼", Class.MessageType.WARNING);
                 return;
             }
             XmlDocument xml = WebApi.GetPharmacyInfoByVerify(VerifyNumber);
-            if (string.IsNullOrEmpty(xml.InnerText)) {
+            if (string.IsNullOrEmpty(xml.InnerText))
+            {
                 MessageWindow.ShowMessage("找不到認證藥局 請聯絡工程師", Class.MessageType.WARNING);
                 return;
             }
@@ -75,10 +99,11 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
             dbtargetIp = xml.SelectSingleNode("CurrentPharmacyInfo/DbTargetIp").InnerText;
             Isverify = true;
         }
-        private void SubmitAction() {
-              
+
+        private void SubmitAction()
+        {
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
-            File.Create(filePath).Dispose(); 
+            File.Create(filePath).Dispose();
             using (TextWriter fileWriter = new StreamWriter(filePath))
             {
                 fileWriter.WriteLine("V " + VerifyNumber);
@@ -105,8 +130,9 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
             p.Tel = PharmacyTel;
             p.Address = PharmacyAddress;
             p.InsertPharmacy();
-            Messenger.Default.Send(new NotificationMessage("CloseVerifyPharmacyWindow")); 
+            Messenger.Default.Send(new NotificationMessage("CloseVerifyPharmacyWindow"));
         }
-        #endregion
+
+        #endregion Action
     }
 }

@@ -1,13 +1,15 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
-using GalaSoft.MvvmLight;
-using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
-    public class PharmacistScheduleItem:ObservableObject
+    public class PharmacistScheduleItem : ObservableObject
     {
-        public PharmacistScheduleItem() { }
+        public PharmacistScheduleItem()
+        {
+        }
+
         public PharmacistScheduleItem(DataRow r)
         {
             MedicalPersonnel = new DeclareMedicalPersonnel(r);
@@ -16,6 +18,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
 
         private DeclareMedicalPersonnel medicalPersonnel;
+
         public DeclareMedicalPersonnel MedicalPersonnel
         {
             get => medicalPersonnel;
@@ -26,6 +29,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
 
         private DateTime date;
+
         public DateTime Date
         {
             get => date;
@@ -36,6 +40,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
 
         private DateTime registerTime;
+
         public DateTime RegisterTime
         {
             get => registerTime;

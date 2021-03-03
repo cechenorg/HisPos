@@ -11,7 +11,5 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         {
             InitializeComponent();
         }
-
-       
     }
 }

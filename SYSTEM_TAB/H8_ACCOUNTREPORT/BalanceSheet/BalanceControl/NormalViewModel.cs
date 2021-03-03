@@ -1,27 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Report.Accounts;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
     public class NormalViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand InsertCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
-        
+
         public RelayCommand DetailChangeCommand { get; set; }
         public RelayCommand<RelayCommand> StrikeFinalCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private string transferValue;
         private int strikeValue;
         private string target;
@@ -29,8 +32,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
         public string SelectClone;
         public string SelectDetailClone;
-        public bool IsFirst=true;
+        public bool IsFirst = true;
         public double MaxValue { get; set; } = 0;
+
         public string Target
         {
             get { return target; }
@@ -40,6 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(Target));
             }
         }
+
         public string TransferValue
         {
             get { return transferValue; }
@@ -49,6 +54,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(TransferValue));
             }
         }
+
         public int StrikeValue
         {
             get { return strikeValue; }
@@ -60,6 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private AccountsReport accData;
+
         public AccountsReport AccData
         {
             get => accData;
@@ -70,6 +77,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private AccountsDetailReport accDataDetail;
+
         public AccountsDetailReport AccDataDetail
         {
             get => accDataDetail;
@@ -78,7 +86,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => AccDataDetail, ref accDataDetail, value);
             }
         }
+
         private AccountsDetailReports selectedDetail;
+
         public AccountsDetailReports SelectedDetail
         {
             get => selectedDetail;
@@ -89,6 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private string selectedDetailCopy;
+
         public string SelectedDetailCopy
         {
             get => selectedDetailCopy;
@@ -97,7 +108,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => SelectedDetailCopy, ref selectedDetailCopy, value);
             }
         }
+
         private AccountsReports selected;
+
         public AccountsReports Selected
         {
             get => selected;
@@ -108,6 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private string selectedCopy;
+
         public string SelectedCopy
         {
             get => selectedCopy;
@@ -118,6 +132,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private List<AccountsReports> selectedType;
+
         public List<AccountsReports> SelectedType
         {
             get => selectedType;
@@ -126,7 +141,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => SelectedType, ref selectedType, value);
             }
         }
+
         private AccountsReports selectedBank;
+
         public AccountsReports SelectedBank
         {
             get => selectedBank;
@@ -136,7 +153,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
         }
 
-        private int  selectedindex;
+        private int selectedindex;
+
         public int Selectedindex
         {
             get => selectedindex;
@@ -147,6 +165,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private int selectedDetailindex;
+
         public int SelectedDetailindex
         {
             get => selectedDetailindex;
@@ -155,8 +174,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => SelectedDetailindex, ref selectedDetailindex, value);
             }
         }
-        
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public NormalViewModel(string ID)
         {
@@ -174,7 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             {
                 SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
             }
-               AccData = new AccountsReport();
+            AccData = new AccountsReport();
             IDClone = ID;
             Init();
             InsertCommand = new RelayCommand(InsertAction);
@@ -222,7 +241,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         private void DetailChangeAction()
         {
             if (Selected == null) { return; }
-            
+
             AccDataDetail = new AccountsDetailReport();
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -271,13 +290,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             DataTable Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
             int index = 0;
             int nowindex = 0;
-            if (Data.Rows.Count > 0) 
+            if (Data.Rows.Count > 0)
             {
                 foreach (DataRow r in Data.Rows)
                 {
                     AccData.Add(new AccountsReports(r));
 
-                    if (r["ID"].ToString() == SelectClone) 
+                    if (r["ID"].ToString() == SelectClone)
                     {
                         nowindex = index;
                     }
@@ -296,7 +315,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
         public void DeleteAction()
         {
-            if ( Selected == null) 
+            if (Selected == null)
             {
                 MessageWindow.ShowMessage("錯誤", MessageType.ERROR);
                 return;
@@ -329,7 +348,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             MessageWindow.ShowMessage("新增成功", MessageType.SUCCESS);
             TransferValue = "";
             Init();
-
         }
 
         public void StrikeAction(RelayCommand command)
@@ -339,7 +357,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("請選擇科目", MessageType.ERROR);
                 return;
             }
-            if (SelectedDetail.StrikeValue == 0|| SelectedDetail==null)
+            if (SelectedDetail.StrikeValue == 0 || SelectedDetail == null)
             {
                 MessageWindow.ShowMessage("不得為零", MessageType.ERROR);
                 return;
@@ -356,17 +374,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("VALUE", SelectedDetail.StrikeValue));
             parameters.Add(new SqlParameter("TYPE", SelectedDetail.ID));
-            parameters.Add(new SqlParameter("NOTE", Selected.Name)) ;
+            parameters.Add(new SqlParameter("NOTE", Selected.Name));
             parameters.Add(new SqlParameter("TARGET", SelectedBank.ID));
             parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
-             MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
             MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
             MainWindow.ServerConnection.CloseConnection();
-            if (SelectedDetail.StrikeValue == SelectedDetail.Value) 
+            if (SelectedDetail.StrikeValue == SelectedDetail.Value)
             {
-
             }
-            else 
+            else
             {
                 SelectDetailClone = SelectedDetail.ID;
                 SelectClone = Selected.ID;

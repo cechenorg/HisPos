@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Report.CashReport;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
-    public class BalanceSheetViewModel: TabBase
+    public class BalanceSheetViewModel : TabBase
     {
         public override TabBase getTab()
         {
@@ -24,6 +20,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         }
 
         #region ----- Define ViewModels -----
+
         public MedPointViewModel MedPointViewModel { get; set; }
         public TransferViewModel TransferViewModel { get; set; }
         public PayableViewModel PayableViewModel { get; set; }
@@ -31,15 +28,19 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         public NormalViewModel NormalViewModel { get; set; }
         public NormalNoEditViewModel NormalNoEditViewModel { get; set; }
         public BankViewModel BankViewModel { get; set; }
-        #endregion
+
+        #endregion ----- Define ViewModels -----
 
         #region ----- Define Commands -----
+
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand ShowHistoryCommand { get; set; }
         public RelayCommand FirstCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private BalanceSheetTypeEnum balanceSheetType = BalanceSheetTypeEnum.NoDetail;
         private BalanceSheetData leftSelectedData;
         private BalanceSheetData rightSelectedData;
@@ -57,6 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 RaisePropertyChanged(nameof(BalanceSheetType));
             }
         }
+
         public BalanceSheetData LeftSelectedData
         {
             get { return leftSelectedData; }
@@ -69,6 +71,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 ChangeDetail();
             }
         }
+
         public BalanceSheetData RightSelectedData
         {
             get { return rightSelectedData; }
@@ -81,6 +84,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 ChangeDetail();
             }
         }
+
         public BalanceSheetDatas LeftBalanceSheetDatas
         {
             get { return leftBalanceSheetDatas; }
@@ -90,6 +94,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 RaisePropertyChanged(nameof(LeftBalanceSheetDatas));
             }
         }
+
         public BalanceSheetDatas RightBalanceSheetDatas
         {
             get { return rightBalanceSheetDatas; }
@@ -99,7 +104,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 RaisePropertyChanged(nameof(RightBalanceSheetDatas));
             }
         }
+
         public double firstValue;
+
         public double FirstValue
         {
             get { return firstValue; }
@@ -109,6 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 RaisePropertyChanged(nameof(FirstValue));
             }
         }
+
         public double RightTotal
         {
             get { return rightTotal; }
@@ -119,7 +127,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             }
         }
 
-        
         public double LeftTotal
         {
             get { return leftTotal; }
@@ -129,7 +136,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 RaisePropertyChanged(nameof(LeftTotal));
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public BalanceSheetViewModel()
         {
@@ -160,7 +168,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     parameters.Add(new SqlParameter("SourceId", LeftSelectedData.ID));
                     DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertAccountsRecordFirst]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
-                
                 }
                 catch
                 {
@@ -169,7 +176,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 }
                 MessageWindow.ShowMessage("設定成功", MessageType.SUCCESS);
             }
-            else if (RightSelectedData != null) {
+            else if (RightSelectedData != null)
+            {
                 try
                 {
                     MainWindow.ServerConnection.OpenConnection();
@@ -182,7 +190,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertAccountsRecordFirst]", parameters);
                     MainWindow.ServerConnection.CloseConnection();
                 }
-                catch {
+                catch
+                {
                     MessageWindow.ShowMessage("發生錯誤請再試一次", MessageType.SUCCESS);
                     return;
                 }
@@ -196,6 +205,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         }
 
         #region ----- Define Actions -----
+
         private void ReloadAction()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -206,7 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
                 return;
             }
-            
+
             LeftBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[0]);
             RightBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[1]);
             LeftTotal = (double)dataSet.Tables[2].Rows[0].Field<decimal>("LEFT_TOTAL");
@@ -217,9 +227,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             MedPointViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[6]);
 
             MainWindow.ServerConnection.CloseConnection();
-
-
         }
+
         private void ShowHistoryAction()
         {
             var historyWindow = new StrikeHistoryWindow();
@@ -227,9 +236,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
             ReloadAction();
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void ChangeDetail()
         {
             if (LeftSelectedData != null)
@@ -279,7 +290,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                             BalanceSheetType = BalanceSheetTypeEnum.Normal;
                         }
                     }
-                    else {
+                    else
+                    {
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                     }
                 }
@@ -307,7 +319,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                         BalanceSheetType = BalanceSheetTypeEnum.Normal;
                     }
-                    else if (RightSelectedData.ID == "201" || RightSelectedData.ID == "202"  || RightSelectedData.ID == "204")
+                    else if (RightSelectedData.ID == "201" || RightSelectedData.ID == "202" || RightSelectedData.ID == "204")
                     {
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                     }
@@ -317,7 +329,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
                         BalanceSheetType = BalanceSheetTypeEnum.Normal;
                     }
-
                     else
                     {
                         BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
@@ -325,6 +336,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 }
             }
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

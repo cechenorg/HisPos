@@ -1,12 +1,11 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.StoreOrder;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Windows;
-using GalaSoft.MvvmLight.Command;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -18,16 +17,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ----- Define ViewModel -----
+
         public NormalViewModel NormalViewModel { get; set; }
         public SingdeTotalViewModel SingdeTotalViewModel { get; set; }
-        #endregion
+
+        #endregion ----- Define ViewModel -----
 
         #region ----- Define Command -----
+
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand<string> ChangeUiTypeCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Command -----
 
         #region ----- Define Variables -----
+
         private bool isBusy;
         private string busyContent;
         private BackgroundWorker initBackgroundWorker;
@@ -39,17 +43,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => isBusy;
             set { Set(() => IsBusy, ref isBusy, value); }
         }
+
         public string BusyContent
         {
             get => busyContent;
             set { Set(() => BusyContent, ref busyContent, value); }
         }
+
         public OrderUITypeEnum UiType
         {
             get => uiType;
             set { Set(() => UiType, ref uiType, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductPurchaseReturnViewModel()
         {
@@ -64,10 +71,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ----- Define Actions -----
+
         private void ReloadAction()
         {
             InitVariables();
         }
+
         private void ChangeUiTypeAction(string type)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -77,6 +86,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     UiType = OrderUITypeEnum.NORMAL;
                     NormalViewModel.InitData(StoreOrders.GetOrdersNotDone());
                     break;
+
                 case "SINGDE":
                     UiType = OrderUITypeEnum.SINGDE;
                     SingdeTotalViewModel.InitData();
@@ -84,9 +94,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             }
             MainWindow.ServerConnection.CloseConnection();
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void InitBackgroundWorker()
         {
             initBackgroundWorker = new BackgroundWorker();
@@ -141,6 +153,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 IsBusy = false;
             };
         }
+
         private void InitVariables()
         {
             IsBusy = true;
@@ -148,11 +161,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (!initBackgroundWorker.IsBusy)
                 initBackgroundWorker.RunWorkerAsync();
         }
+
         private void RegisterCommand()
         {
             ReloadCommand = new RelayCommand(ReloadAction);
             ChangeUiTypeCommand = new RelayCommand<string>(ChangeUiTypeAction);
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

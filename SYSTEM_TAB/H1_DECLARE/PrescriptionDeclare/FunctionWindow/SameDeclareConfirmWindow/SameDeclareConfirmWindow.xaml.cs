@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription.SameDeclarePrescriptions;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameDeclareConfirmWindow
 {

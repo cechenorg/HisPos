@@ -1,7 +1,7 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
 using System.Linq;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Report.Accounts.AccountsRecords
 {
@@ -14,10 +14,10 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecords
 
         public AccountsRecord(DataRow r)
         {
-
         }
 
         private decimal totalValue;
+
         public decimal TotalValue
         {
             get => totalValue;
@@ -28,6 +28,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecords
         }
 
         private DateTime? date;
+
         public DateTime? Date
         {
             get => date;
@@ -38,6 +39,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecords
         }
 
         private AccountsRecordDetails.AccountsRecordDetail selectedDetail;
+
         public AccountsRecordDetails.AccountsRecordDetail SelectedDetail
         {
             get => selectedDetail;
@@ -50,11 +52,11 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecords
 
                 if (selectedDetail != null)
                     (selectedDetail).IsSelected = true;
-                
             }
         }
 
         private AccountsRecordDetails.AccountsRecordDetails details;
+
         public AccountsRecordDetails.AccountsRecordDetails Details
         {
             get => details;
@@ -65,6 +67,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecords
         }
 
         private string content;
+
         public string Content
         {
             get => content;

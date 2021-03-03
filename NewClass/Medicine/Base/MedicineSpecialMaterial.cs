@@ -1,18 +1,21 @@
-﻿using System;
+﻿using His_Pos.NewClass.Medicine.MedBag;
+using System;
 using System.Data;
-using His_Pos.NewClass.Medicine.MedBag;
 
 namespace His_Pos.NewClass.Medicine.Base
 {
     public class MedicineSpecialMaterial : Medicine
     {
-        public MedicineSpecialMaterial() { }
+        public MedicineSpecialMaterial()
+        {
+        }
 
         public MedicineSpecialMaterial(DataRow r) : base(r)
         {
             IsBuckle = true;
             CanEdit = true;
         }
+
         public string BigCate { get; set; }//大類碼
         public string BigSmallCate { get; set; }//大小類
         public string BigSmallChiCate { get; set; }//大小類名稱
@@ -34,7 +37,7 @@ namespace His_Pos.NewClass.Medicine.Base
 
         public override MedBagMedicine CreateMedBagMedicine(bool isSingle)
         {
-            return new MedBagMedicine(this,isSingle);
+            return new MedBagMedicine(this, isSingle);
         }
     }
 }

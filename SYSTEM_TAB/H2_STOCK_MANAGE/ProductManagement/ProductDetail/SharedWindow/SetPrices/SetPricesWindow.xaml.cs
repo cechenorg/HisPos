@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
+using System.ComponentModel;
+using System.Data;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetPrices
 {
@@ -25,6 +13,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public partial class SetPricesWindow : Window, INotifyPropertyChanged
     {
         #region ----- Define Variables -----
+
         private string proId;
         private double retailPrice;
         private double memberPrice;
@@ -39,6 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 proId = value;
             }
         }
+
         public double RetailPrice
         {
             get { return retailPrice; }
@@ -48,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 NotifyPropertyChanged(nameof(RetailPrice));
             }
         }
+
         public double MemberPrice
         {
             get { return memberPrice; }
@@ -57,6 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 NotifyPropertyChanged(nameof(MemberPrice));
             }
         }
+
         public double EmployeePrice
         {
             get { return employeePrice; }
@@ -66,6 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 NotifyPropertyChanged(nameof(EmployeePrice));
             }
         }
+
         public double SpecialPrice
         {
             get { return specialPrice; }
@@ -75,7 +68,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 NotifyPropertyChanged(nameof(SpecialPrice));
             }
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -84,7 +79,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public SetPricesWindow(string proid, double retailprice, double memberprice, double employeeprice, double specialprice)
         {
@@ -95,9 +91,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             RetailPrice = retailprice;
             MemberPrice = memberprice;
             EmployeePrice = employeeprice;
-            SpecialPrice = specialprice;            
+            SpecialPrice = specialprice;
         }
+
         #region ----- Define Functions -----
+
         private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
             DataTable dataTable = ProductDetailDB.SetPrices(ProID, RetailPrice, MemberPrice, EmployeePrice, SpecialPrice);
@@ -113,7 +111,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             }
             Close();
         }
-        #endregion
 
+        #endregion ----- Define Functions -----
     }
 }

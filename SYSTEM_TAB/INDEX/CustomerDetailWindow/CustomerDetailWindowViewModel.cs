@@ -4,18 +4,18 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.CustomerDetailPrescription;
 using His_Pos.NewClass.Prescription.CustomerDetailPrescription.CustomerDetailPrescriptionMedicine;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
-    public class CustomerDetailWindowViewModel : ViewModelBase {
+namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow
+{
+    public class CustomerDetailWindowViewModel : ViewModelBase
+    {
         #region Var
+
         private List<string> prescriptionCaseString;
+
         public List<string> PrescriptionCaseString
         {
             get => prescriptionCaseString;
@@ -24,7 +24,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
                 Set(() => PrescriptionCaseString, ref prescriptionCaseString, value);
             }
         }
+
         private string prescriptionCaseSelectItem;
+
         public string PrescriptionCaseSelectItem
         {
             get => prescriptionCaseSelectItem;
@@ -34,7 +36,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
                 PrescriptionDetailViewSource.Filter += AdjustTypeFilter;
             }
         }
+
         private CollectionViewSource prescriptionDetailViewSource;
+
         private CollectionViewSource PrescriptionDetailViewSource
         {
             get => prescriptionDetailViewSource;
@@ -45,6 +49,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
         }
 
         private ICollectionView prescriptionDetailView;
+
         public ICollectionView PrescriptionDetailView
         {
             get => prescriptionDetailView;
@@ -53,7 +58,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
                 Set(() => PrescriptionDetailView, ref prescriptionDetailView, value);
             }
         }
+
         private Customer customerData = new Customer();
+
         public Customer CustomerData
         {
             get => customerData;
@@ -62,7 +69,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
                 Set(() => CustomerData, ref customerData, value);
             }
         }
+
         private CustomerDetailPrescriptions customerDetailPrescriptionCollection = new CustomerDetailPrescriptions();
+
         public CustomerDetailPrescriptions CustomerDetailPrescriptionCollection
         {
             get => customerDetailPrescriptionCollection;
@@ -71,16 +80,20 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
                 Set(() => CustomerDetailPrescriptionCollection, ref customerDetailPrescriptionCollection, value);
             }
         }
+
         private CustomerDetailPrescription customerDetailPrescriptionSelectedItem = new CustomerDetailPrescription();
+
         public CustomerDetailPrescription CustomerDetailPrescriptionSelectedItem
         {
             get => customerDetailPrescriptionSelectedItem;
             set
             {
-                Set(() => CustomerDetailPrescriptionSelectedItem, ref customerDetailPrescriptionSelectedItem, value); 
+                Set(() => CustomerDetailPrescriptionSelectedItem, ref customerDetailPrescriptionSelectedItem, value);
             }
         }
+
         private CustomerDetailPrescriptionMedicines customerDetailPrescriptionMedicines = new CustomerDetailPrescriptionMedicines();
+
         public CustomerDetailPrescriptionMedicines CustomerDetailPrescriptionMedicines
         {
             get => customerDetailPrescriptionMedicines;
@@ -89,15 +102,19 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
                 Set(() => CustomerDetailPrescriptionMedicines, ref customerDetailPrescriptionMedicines, value);
             }
         }
+
         public RelayCommand SaveCommand { get; set; }
         public RelayCommand ShowMedicinesDetailCommand { get; set; }
-        #endregion
-        public CustomerDetailWindowViewModel(int cusID) { 
+
+        #endregion Var
+
+        public CustomerDetailWindowViewModel(int cusID)
+        {
             CustomerData = Customer.GetCustomerByCusId(cusID);
             CustomerDetailPrescriptionCollection.GetDataByID(cusID);
             if (CustomerDetailPrescriptionCollection.Count > 0)
             {
-                CustomerDetailPrescriptionSelectedItem = CustomerDetailPrescriptionCollection[0]; 
+                CustomerDetailPrescriptionSelectedItem = CustomerDetailPrescriptionCollection[0];
             }
             PrescriptionDetailViewSource = new CollectionViewSource { Source = CustomerDetailPrescriptionCollection };
             PrescriptionDetailView = PrescriptionDetailViewSource.View;
@@ -107,16 +124,23 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
             SaveCommand = new RelayCommand(SaveAction);
             ShowMedicinesDetailCommand = new RelayCommand(ShowMedicinesDetailAction);
         }
+
         #region Action
-        private void ShowMedicinesDetailAction() {
+
+        private void ShowMedicinesDetailAction()
+        {
             if (CustomerDetailPrescriptionSelectedItem is null) return;
             CustomerDetailPrescriptionMedicines.GetDataByID(CustomerDetailPrescriptionSelectedItem.ID, CustomerDetailPrescriptionSelectedItem.TypeName);
         }
-        private void SaveAction() {
+
+        private void SaveAction()
+        {
             CustomerData.Save();
-            MessageWindow.ShowMessage("存檔成功",Class.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("存檔成功", Class.MessageType.SUCCESS);
         }
-        private void AdjustTypeFilter(object sender, FilterEventArgs e) {
+
+        private void AdjustTypeFilter(object sender, FilterEventArgs e)
+        {
             if (e.Item is null) return;
             if (!(e.Item is CustomerDetailPrescription src))
                 e.Accepted = false;
@@ -125,9 +149,10 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow {
             CustomerDetailPrescription customerDetailPrescription = (CustomerDetailPrescription)e.Item;
             if (customerDetailPrescription.TypeName == PrescriptionCaseSelectItem)
                 e.Accepted = true;
-            else if(PrescriptionCaseSelectItem == "全部")
-                e.Accepted = true; 
+            else if (PrescriptionCaseSelectItem == "全部")
+                e.Accepted = true;
         }
-        #endregion
+
+        #endregion Action
     }
 }

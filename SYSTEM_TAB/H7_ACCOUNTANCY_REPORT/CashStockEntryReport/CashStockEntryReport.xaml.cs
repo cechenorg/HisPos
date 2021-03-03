@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
+namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
+{
     /// <summary>
     /// CashStockEntryReport.xaml 的互動邏輯
     /// </summary>
-    public partial class CashStockEntryReport : UserControl {
-        public CashStockEntryReport() {
+    public partial class CashStockEntryReport : UserControl
+    {
+        public CashStockEntryReport()
+        {
             InitializeComponent();
             StartDate.Focus();
             StartDate.SelectionStart = 0;
@@ -52,7 +45,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
                 var parent = ((Control)sender).Parent as UIElement;
                 parent?.RaiseEvent(eventArg);
             }
-
         }
 
         private void btnMed_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -186,7 +178,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedCashNotCoop.Background = Brushes.Transparent;
             MedChange.Background = Brushes.Transparent;
             MedCoopChange.Background = Brushes.Transparent;
-
         }
 
         private void MedCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -287,7 +278,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedCashNotCoop.Background = Brushes.Transparent;
             MedChange.Background = Brushes.Transparent;
             MedCoopChange.Background = Brushes.Transparent;
-
         }
 
         private void OTCStock_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -317,7 +307,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             OTCStockBack.Background = Brushes.GhostWhite;
             OTCRewardBack.Background = Brushes.LightGray;
             OTCFeeBack.Background = Brushes.GhostWhite;
-            OTCTicketBack.Background= Brushes.GhostWhite;
+            OTCTicketBack.Background = Brushes.GhostWhite;
             MedCoopPreBack.Background = Brushes.GhostWhite;
             MedSelfPreBack.Background = Brushes.GhostWhite;
             MedCashBack.Background = Brushes.GhostWhite;
@@ -368,7 +358,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedCashNotCoop.Background = Brushes.Transparent;
             MedChange.Background = Brushes.Transparent;
             MedCoopChange.Background = Brushes.Transparent;
-
         }
 
         private void MedCoopPreBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -389,7 +378,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedCashNotCoop.Background = Brushes.Transparent;
             MedChange.Background = Brushes.Transparent;
             MedCoopChange.Background = Brushes.Transparent;
-
         }
 
         private void MedSelfPreBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -430,7 +418,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport {
             MedCashNotCoop.Background = Brushes.Transparent;
             MedChange.Background = Brushes.Transparent;
             MedCoopChange.Background = Brushes.Transparent;
-
         }
 
         private void MedCostSelfBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)

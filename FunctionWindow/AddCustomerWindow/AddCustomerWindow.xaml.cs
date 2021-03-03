@@ -1,9 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
+using System.Windows;
+using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
@@ -23,7 +22,6 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                     case "CloseAddCustomerWindow":
                         Close();
                         break;
-                    
                 }
             });
             this.DataContext = new AddCustomerWindowViewModel();
@@ -41,6 +39,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                     case "CloseAddCustomerWindow":
                         Close();
                         break;
+
                     case "SuccessCloseAddCustomerWindow":
                         Close();
                         break;

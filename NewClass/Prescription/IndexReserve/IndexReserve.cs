@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Medicine.ReserveMedicine;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.INDEX;
@@ -10,18 +12,13 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Class;
-using His_Pos.NewClass.Medicine.ReserveMedicine;
 
 namespace His_Pos.NewClass.Prescription.IndexReserve
 {
     public class IndexReserve : ObservableObject
     {
-        public IndexReserve(DataRow r) {
+        public IndexReserve(DataRow r)
+        {
             IndexReserveDetailCollection = new IndexReserveDetails();
             Id = r.Field<int>("Id");
             CusId = r.Field<int>("Cus_ID");
@@ -35,37 +32,43 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             ChronicSequence = r.Field<byte>("ResMas_ChronicSequence");
             ChronicTotal = r.Field<byte>("ResMas_ChronicTotal");
             IsExpensive = r.Field<bool>("IsExpensive");
-            CusBirth = r.Field<DateTime>("Cus_Birthday"); 
-            switch (r.Field<string>("MedPrepareStatus")) {
+            CusBirth = r.Field<DateTime>("Cus_Birthday");
+            switch (r.Field<string>("MedPrepareStatus"))
+            {
                 case "N":
-                    PrepareMedStatus = IndexPrepareMedType.Unprocess; 
+                    PrepareMedStatus = IndexPrepareMedType.Unprocess;
                     break;
+
                 case "D":
                     PrepareMedStatus = IndexPrepareMedType.Prepare;
                     break;
+
                 case "F":
                     PrepareMedStatus = IndexPrepareMedType.UnPrepare;
                     isNoSend = true;
-                    break; 
+                    break;
             }
             switch (r.Field<string>("CallStatus"))
             {
                 case "N":
                     PhoneCallStatusName = "未處理";
                     break;
+
                 case "D":
                     PhoneCallStatusName = "已聯絡";
                     break;
+
                 case "F":
                     PhoneCallStatusName = "電話未接";
                     break;
-            } 
+            }
         }
+
         public int CusId { get; set; }
         public int Id { get; set; }
         public string StoOrdID { get; set; }
         public string CusName { get; set; }
-        public DateTime CusBirth { get; set; } 
+        public DateTime CusBirth { get; set; }
         public string InsName { get; set; }
         public string DivName { get; set; }
         public int Profit { get; set; }
@@ -75,6 +78,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         public DateTime AdjustDate { get; set; }
         public string PhoneNote { get; set; }
         private ReserveSendType prepareMedType;
+
         public ReserveSendType PrepareMedType
         {
             get => prepareMedType;
@@ -83,7 +87,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Set(() => PrepareMedType, ref prepareMedType, value);
             }
         }
+
         private bool isNoSend;
+
         public bool IsNoSend
         {
             get => isNoSend;
@@ -96,7 +102,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     if (PrepareMedStatus == IndexPrepareMedType.Prepare)
                     {
                         var confirmWindow = new ConfirmWindow("此預約處方已備藥 是否轉不備藥? (如訂單已出貨不會取消)", "預約處方通知");
-                        if ((bool) confirmWindow.DialogResult)
+                        if ((bool)confirmWindow.DialogResult)
                         {
                             PrepareMedStatus = IndexPrepareMedType.UnPrepare;
                             DeleteOrder();
@@ -120,15 +126,20 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
         }
 
         private string phoneCallStatus;
-        public string PhoneCallStatus {
+
+        public string PhoneCallStatus
+        {
             get => phoneCallStatus;
             set
             {
                 Set(() => PhoneCallStatus, ref phoneCallStatus, value);
             }
         }
+
         private string phoneCallStatusName;
-        public string PhoneCallStatusName { 
+
+        public string PhoneCallStatusName
+        {
             get => phoneCallStatusName;
             set
             {
@@ -138,17 +149,20 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     case "未處理":
                         PhoneCallStatus = "N";
                         break;
+
                     case "已聯絡":
                         PhoneCallStatus = "D";
                         break;
+
                     case "電話未接":
-                        PhoneCallStatus  = "F";
+                        PhoneCallStatus = "F";
                         break;
                 }
-                
             }
         }
+
         private IndexReserveDetails indexReserveDetailCollection;
+
         public IndexReserveDetails IndexReserveDetailCollection
         {
             get => indexReserveDetailCollection;
@@ -157,8 +171,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Set(() => IndexReserveDetailCollection, ref indexReserveDetailCollection, value);
             }
         }
-         
+
         private IndexPrepareMedType prepareMedStatus;
+
         public IndexPrepareMedType PrepareMedStatus
         {
             get => prepareMedStatus;
@@ -167,17 +182,26 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                 Set(() => PrepareMedStatus, ref prepareMedStatus, value);
             }
         }
+
         public bool IsExpensive { get; set; }
-        public void SaveStatus() {
-            IndexReserveDb.Save(Id, PhoneCallStatus, PrepareMedStatus,StoOrdID);
+
+        public void SaveStatus()
+        {
+            IndexReserveDb.Save(Id, PhoneCallStatus, PrepareMedStatus, StoOrdID);
         }
-        public void GetIndexDetail() {
+
+        public void GetIndexDetail()
+        {
             IndexReserveDetailCollection.GetDataById(Id);
         }
-        public void GetIndexSendDetail() {
-            IndexReserveDetailCollection.GetSendDataById(Id); 
+
+        public void GetIndexSendDetail()
+        {
+            IndexReserveDetailCollection.GetSendDataById(Id);
         }
-        public bool StoreOrderToSingde() {
+
+        public bool StoreOrderToSingde()
+        {
             int count = StoreOrderDB.GetStoOrdMasterCountByDate().Rows[0].Field<int>("Count");
             bool result = false;
             string newStoOrdID = "P" + DateTime.Today.ToString("yyyyMMdd") + "-" + count.ToString().PadLeft(2, '0');
@@ -186,24 +210,21 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             for (int j = 0; j < this.IndexReserveDetailCollection.Count; j++)
             {
                 IndexReserveDetailCollection[j].StoOrdID = newStoOrdID;
-                note += $"{IndexReserveDetailCollection[j].ID} {IndexReserveDetailCollection[j].FullName.PadRight(20).Substring(0,20)} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
-            } 
+                note += $"{IndexReserveDetailCollection[j].ID} {IndexReserveDetailCollection[j].FullName.PadRight(20).Substring(0, 20)} 傳送 {IndexReserveDetailCollection[j].SendAmount}  自備 {IndexReserveDetailCollection[j].Amount - IndexReserveDetailCollection[j].SendAmount} \r\n";
+            }
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
             if (StoreOrderDB.InsertIndexReserveOrder(this).Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
             {
                 if (StoreOrderDB.SendStoreOrderToSingde(this, note).Rows[0][0].ToString() == "SUCCESS")
                 {
-
-                    
-
                     StoreOrderDB.StoreOrderToWaiting(StoOrdID);
                     PrepareMedStatus = IndexPrepareMedType.Prepare;
                     SaveStatus();
                     result = true;
                 }
                 else
-                    MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR); 
+                    MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR);
             }
             else
                 MessageWindow.ShowMessage(CusName + "預約已傳送過 請重新查詢!", Class.MessageType.ERROR);
@@ -211,7 +232,9 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             MainWindow.SingdeConnection.CloseConnection();
             return result;
         }
-        public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer) { 
+
+        public void SetReserveMedicinesSheetReportViewer(ReportViewer rptViewer)
+        {
             rptViewer.LocalReport.DataSources.Clear();
             var medBagMedicines = new ReserveMedicines(IndexReserveDetailCollection);
             var json = JsonConvert.SerializeObject(medBagMedicines);
@@ -224,6 +247,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet_A5.rdlc";
                     parameters = CreateReserveMedicinesSheetParametersA5();
                     break;
+
                 default:
                     rptViewer.LocalReport.ReportPath = @"RDLC\ReserveSheet.rdlc";
                     parameters = CreateReserveMedicinesSheetParameters();
@@ -236,7 +260,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
             rptViewer.LocalReport.Refresh();
         }
 
-        private List<ReportParameter> CreateReserveMedicinesSheetParameters() 
+        private List<ReportParameter> CreateReserveMedicinesSheetParameters()
         {
             var adjustEnd = AdjustDate.AddYears(-1911).AddDays(20);
             return new List<ReportParameter>

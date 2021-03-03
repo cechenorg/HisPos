@@ -1,27 +1,30 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Report.Accounts;
+using His_Pos.NewClass.Report.CashFlow;
+using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
+using His_Pos.NewClass.Report.CashFlow.CashFlowRecords;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using His_Pos.Class;
-using His_Pos.NewClass.Report.CashFlow;
-using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
-using His_Pos.NewClass.Report.CashFlow.CashFlowRecords;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
-using His_Pos.NewClass.Report.Accounts;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
 {
-    public class AdditionalCashFlowManageViewModel : TabBase {
-        public override TabBase getTab() {
+    public class AdditionalCashFlowManageViewModel : TabBase
+    {
+        public override TabBase getTab()
+        {
             return this;
         }
 
         private List<CashFlowAccount> CashFlowAccountsSource;
 
         private List<CashFlowAccount> cashFlowAccounts;
+
         public List<CashFlowAccount> CashFlowAccounts
         {
             get => cashFlowAccounts;
@@ -31,8 +34,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             }
         }
 
-
         private List<AccountsReports> selectedType;
+
         public List<AccountsReports> SelectedType
         {
             get => selectedType;
@@ -43,6 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         }
 
         private CashFlowAccount selectedCashFlowAccount;
+
         public CashFlowAccount SelectedCashFlowAccount
         {
             get => selectedCashFlowAccount;
@@ -51,7 +55,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => SelectedCashFlowAccount, ref selectedCashFlowAccount, value);
             }
         }
+
         private AccountsReports selectedBank;
+
         public AccountsReports SelectedBank
         {
             get => selectedBank;
@@ -60,7 +66,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => SelectedBank, ref selectedBank, value);
             }
         }
+
         private CashFlowRecords cashFlowRecords;
+
         public CashFlowRecords CashFlowRecords
         {
             get => cashFlowRecords;
@@ -71,6 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         }
 
         private CashFlowRecord selectedCashFlowRecord;
+
         public CashFlowRecord SelectedCashFlowRecord
         {
             get => selectedCashFlowRecord;
@@ -81,6 +90,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         }
 
         private DateTime? startDate;
+
         public DateTime? StartDate
         {
             get => startDate;
@@ -89,7 +99,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => StartDate, ref startDate, value);
             }
         }
+
         private DateTime? endDate;
+
         public DateTime? EndDate
         {
             get => endDate;
@@ -98,7 +110,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => EndDate, ref endDate, value);
             }
         }
+
         private bool payCheck;
+
         public bool PayCheck
         {
             get => payCheck;
@@ -112,7 +126,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => PayCheck, ref payCheck, value);
             }
         }
+
         private bool gainCheck = true;
+
         public bool GainCheck
         {
             get => gainCheck;
@@ -126,22 +142,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => GainCheck, ref gainCheck, value);
             }
         }
+
         private string typeName;
+
         public string TypeName
         {
             get => typeName;
             set { Set(() => TypeName, ref typeName, value); }
         }
+
         private string cashFlowNote;
-        public string CashFlowNote 
+
+        public string CashFlowNote
         {
             get => cashFlowNote;
             set
             {
-                Set(() => CashFlowNote,ref cashFlowNote,value);
+                Set(() => CashFlowNote, ref cashFlowNote, value);
             }
         }
+
         private int cashFlowValue;
+
         public int CashFlowValue
         {
             get => cashFlowValue;
@@ -152,13 +174,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         }
 
         #region Commands
+
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
         public RelayCommand Search { get; set; }
         public RelayCommand EditCashFlowRecord { get; set; }
         public RelayCommand DeleteCashFlowRecord { get; set; }
-      
-        #endregion
+
+        #endregion Commands
 
         public AdditionalCashFlowManageViewModel()
         {
@@ -202,11 +225,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             DeleteCashFlowRecord = new RelayCommand(DeleteCashFlowRecordAction);
         }
 
-        private void SubmitAction() {
+        private void SubmitAction()
+        {
             ConfirmWindow cw = new ConfirmWindow("是否進行輸入額外收支", "確認");
             if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
-            CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue,SelectedBank.ID);
+            CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue, SelectedBank.ID);
             MainWindow.ServerConnection.CloseConnection();
             SearchAction();
         }
@@ -218,6 +242,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 case "StartDate":
                     StartDate = DateTime.Today;
                     break;
+
                 case "EndDate":
                     EndDate = DateTime.Today;
                     break;
@@ -228,12 +253,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         {
             if (StartDate is null)
             {
-                MessageWindow.ShowMessage("請填寫起始日期",MessageType.ERROR);
+                MessageWindow.ShowMessage("請填寫起始日期", MessageType.ERROR);
                 return;
             }
             if (EndDate is null)
             {
-                MessageWindow.ShowMessage("請填寫結束日期",MessageType.ERROR);
+                MessageWindow.ShowMessage("請填寫結束日期", MessageType.ERROR);
                 return;
             }
             CashFlowRecords.Clear();
@@ -246,12 +271,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             var editWindow = new CashFlowRecordEditWindow.CashFlowRecordEditWindow(SelectedCashFlowRecord.SelectedDetail);
             editWindow.ShowDialog();
             var result = editWindow.EditResult;
-            if(!result) 
+            if (!result)
                 return;
             SearchAction();
             foreach (var rec in CashFlowRecords)
             {
-                if (rec.Details.SingleOrDefault(det => det.ID.Equals(selectedId)) is null) 
+                if (rec.Details.SingleOrDefault(det => det.ID.Equals(selectedId)) is null)
                     continue;
                 SelectedCashFlowRecord = rec;
                 SelectedCashFlowRecord.SelectedDetail = SelectedCashFlowRecord.Details.Single(det => det.ID.Equals(selectedId));
@@ -287,7 +312,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             var result = tempDetails.GroupBy(x => x.Date.Date);
             foreach (var group in result)
             {
-                var rec = new CashFlowRecord {Date = @group.Key};
+                var rec = new CashFlowRecord { Date = @group.Key };
                 foreach (var det in group)
                 {
                     rec.Details.Add(det);

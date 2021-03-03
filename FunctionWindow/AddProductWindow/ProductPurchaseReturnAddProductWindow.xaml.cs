@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.StoreOrder;
+using System.Windows;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
 {
@@ -9,7 +9,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
     /// </summary>
     public partial class ProductPurchaseReturnAddProductWindow : Window
     {
-        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum,  OrderStatusEnum OrderStatus, string wareID = "0")
+        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum, OrderStatusEnum OrderStatus, string wareID = "0")
         {
             InitializeComponent();
 
@@ -29,7 +29,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
 
-        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum,  string wareID = "0")
+        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum, string wareID = "0")
         {
             InitializeComponent();
 

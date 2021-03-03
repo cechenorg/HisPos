@@ -1,73 +1,122 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.ManufactoryManageView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
-             xmlns:manufactoryManageControl="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.ManufactoryManageControl"
-             xmlns:command="http://www.galasoft.ch/mvvmlight"
-             xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
-             mc:Ignorable="d" >
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.ManufactoryManageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
+    xmlns:manufactoryManageControl="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.ManufactoryManageControl"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="NoManufactoryControl" DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
             <Grid Background="{StaticResource GridDarkerBackGround}">
-                <Label Content="無供應商資料" Style="{StaticResource BoldLabelHeader30}" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}"/>
+                <Label
+                    HorizontalAlignment="Center"
+                    Content="無供應商資料"
+                    Foreground="{StaticResource ForeGround}"
+                    Style="{StaticResource BoldLabelHeader30}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="SingdeManufactoryControl" DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
-            <manufactoryManageControl:SingdeManufactoryControl/>
+            <manufactoryManageControl:SingdeManufactoryControl />
         </DataTemplate>
         <DataTemplate x:Key="NormalManufactoryControl" DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
-            <manufactoryManageControl:NormalManufactoryControl/>
+            <manufactoryManageControl:NormalManufactoryControl />
         </DataTemplate>
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="10" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center">
-            <Label Content="名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding SearchManufactoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-            <Label Content="聯絡人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding SearchPrincipalName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="130" FontSize="16"/>
-            <Button Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="835,0,0,0" Command="{Binding SearchCommand}"/>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalAlignment="Center"
+            Orientation="Horizontal">
+            <Label
+                Width="Auto"
+                Margin="10,0,5,0"
+                Content="名稱"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}" />
+            <TextBox
+                Width="130"
+                Margin="0,0,10,0"
+                FontSize="16"
+                Text="{Binding SearchManufactoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Width="Auto"
+                Margin="10,0,5,0"
+                Content="聯絡人"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}" />
+            <TextBox
+                Width="130"
+                Margin="0,0,10,0"
+                FontSize="16"
+                Text="{Binding SearchPrincipalName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                Width="100"
+                Height="30"
+                Margin="835,0,0,0"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding SearchCommand}"
+                Content="查詢"
+                FontSize="18"
+                FontWeight="Bold" />
         </StackPanel>
-        <DataGrid Grid.Row="1" Grid.Column="0" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
-                      VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridBackGround}" Margin="10,0,0,0"
-                      ItemsSource="{Binding ManufactoryManageCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="10,0,0,0"
+            AutoGenerateColumns="False"
+            Background="{StaticResource GridBackGround}"
+            CanUserAddRows="False"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            HeadersVisibility="None"
+            ItemsSource="{Binding ManufactoryManageCollection, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding CurrentManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            VerticalScrollBarVisibility="Hidden">
             <i:Interaction.Behaviors>
-                <behaviors:ScrollIntoView/>
+                <behaviors:ScrollIntoView />
             </i:Interaction.Behaviors>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
                         </Trigger>
                     </Style.Triggers>
-                    <EventSetter Event="PreviewMouseDown"  Handler="UIElement_OnMouseDown"/>
-                    <Setter Property="Background" Value="Transparent"/>
+                    <EventSetter Event="PreviewMouseDown" Handler="UIElement_OnMouseDown" />
+                    <Setter Property="Background" Value="Transparent" />
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="190">
                     <DataGridTemplateColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="#FF424040"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="#FF424040" />
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -76,12 +125,24 @@
                         <DataTemplate>
                             <Grid Height="80">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
+                                    <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <Label Content="{Binding GetName}" FontSize="25" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="5,0,0,0"/>
-                                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0">
-                                    <Label Content="{Binding Telephone}" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                <Label
+                                    Grid.Row="0"
+                                    Margin="5,0,0,0"
+                                    Content="{Binding GetName}"
+                                    FontFamily="Segoe UI SemiBold"
+                                    FontSize="25" />
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Margin="0,0,10,0"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                                    <Label
+                                        Content="{Binding Telephone}"
+                                        FontFamily="Segoe UI Semi"
+                                        FontSize="18" />
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
@@ -89,21 +150,40 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Rectangle Grid.Row="2" Grid.Column="0" Fill="{StaticResource GridBackGround}" Margin="10,0,0,0"/>
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" Height="50" Margin="10,0,0,0">
-            <Image Source="/Images/Plus.png" Width="35" Margin="5,0,0,0" HorizontalAlignment="Left">
+        <Rectangle
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="10,0,0,0"
+            Fill="{StaticResource GridBackGround}" />
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Height="50"
+            Margin="10,0,0,0"
+            Background="{StaticResource GridBackGround}"
+            Orientation="Horizontal">
+            <Image
+                Width="35"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Left"
+                Source="/Images/Plus.png">
                 <Image.InputBindings>
-                    <MouseBinding Command="{Binding AddManufactoryCommand}" MouseAction="LeftClick"/>
+                    <MouseBinding Command="{Binding AddManufactoryCommand}" MouseAction="LeftClick" />
                 </Image.InputBindings>
             </Image>
-            <Rectangle Width="115"/>
-            <Image Source="/Images/Delete.png" Width="30">
+            <Rectangle Width="115" />
+            <Image Width="30" Source="/Images/Delete.png">
                 <Image.InputBindings>
-                    <MouseBinding Command="{Binding DeleteManufactoryCommand}" MouseAction="LeftClick"/>
+                    <MouseBinding Command="{Binding DeleteManufactoryCommand}" MouseAction="LeftClick" />
                 </Image.InputBindings>
             </Image>
         </StackPanel>
-        <ContentControl Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,10,0" Content="{Binding}">
+        <ContentControl
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Margin="0,0,10,0"
+            Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource NoManufactoryControl}" />

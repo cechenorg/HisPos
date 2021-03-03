@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos;
-using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
-using His_Pos.NewClass.Report.CashFlow;
-using His_Pos.NewClass.Report.CashReport;
 
 namespace ClosingHistoryViewModelHis_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 {
@@ -30,7 +22,6 @@ namespace ClosingHistoryViewModelHis_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 
                 if (selectedHistory != null)
                     selectedHistory.IsSelected = true;
-                
             }
         }
 
@@ -45,14 +36,16 @@ namespace ClosingHistoryViewModelHis_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 RaisePropertyChanged(nameof(ClosingHistories));
             }
         }
+
         public RelayCommand DeleteStrikeHistory { get; set; }
+
         public ClosingHistoryViewModel()
         {
             DeleteStrikeHistory = new RelayCommand(DeleteStrikeHistoryAction);
             ClosingHistories = new ClosingHistories();
             Init();
         }
-        
+
         private void Init()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -62,8 +55,6 @@ namespace ClosingHistoryViewModelHis_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 
         private void DeleteStrikeHistoryAction()
         {
-
-
             /*ConfirmWindow cw = new ConfirmWindow("是否進行刪除", "確認");
             if (!(bool)cw.DialogResult) { return; }
 

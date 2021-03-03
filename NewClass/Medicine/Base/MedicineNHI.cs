@@ -1,6 +1,6 @@
-﻿using System.Data;
-using His_Pos.NewClass.Medicine.MedBag;
+﻿using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.Service;
+using System.Data;
 
 namespace His_Pos.NewClass.Medicine.Base
 {
@@ -11,7 +11,7 @@ namespace His_Pos.NewClass.Medicine.Base
             Ingredient = r.Field<string>("Med_Ingredient");
             SideEffect = r.Field<string>("Med_SideEffect");
             Indication = r.Field<string>("Med_Indication");
-            if(NewFunction.CheckDataRowContainsColumn(r,"Med_ATC"))
+            if (NewFunction.CheckDataRowContainsColumn(r, "Med_ATC"))
                 ATCCode = r.Field<string>("Med_ATC");
             if (NewFunction.CheckDataRowContainsColumn(r, "Med_SingleCompound"))
                 SingleCompound = r.Field<string>("Med_SingleCompound");
@@ -29,6 +29,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private int? controlLevel;
+
         public int? ControlLevel
         {
             get => controlLevel;
@@ -37,7 +38,9 @@ namespace His_Pos.NewClass.Medicine.Base
                 Set(() => ControlLevel, ref controlLevel, value);
             }
         }
+
         private string atcCode;
+
         public string ATCCode
         {
             get => atcCode;
@@ -48,6 +51,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private string singleCompound;//單複方
+
         public string SingleCompound
         {
             get => singleCompound;
@@ -58,6 +62,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private string form;//劑型
+
         public string Form
         {
             get => form;
@@ -68,6 +73,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private string note;//健保注意事項
+
         public string Note
         {
             get => note;
@@ -76,7 +82,9 @@ namespace His_Pos.NewClass.Medicine.Base
                 Set(() => Note, ref note, value);
             }
         }
+
         private string warning;//用藥注意事項
+
         public string Warning
         {
             get => warning;
@@ -88,6 +96,7 @@ namespace His_Pos.NewClass.Medicine.Base
 
         public bool MostPriced => !string.IsNullOrEmpty(MostPricedID);
         private string mostPricedID;
+
         public string MostPricedID
         {
             get => mostPricedID;

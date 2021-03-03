@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.BalanceSheet;
-using His_Pos.NewClass.Report.CashReport;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Windows.Media;
+
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 {
     public class ClosingWorkViewModel : TabBase
 
-
     {
-
         private DateTime startDate = DateTime.Today;
+
         public DateTime StartDate
         {
             get => startDate;
@@ -26,7 +23,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => StartDate, ref startDate, value);
             }
         }
-        private int trade ;
+
+        private int trade;
+
         public int Trade
         {
             get => trade;
@@ -35,7 +34,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Trade, ref trade, value);
             }
         }
+
         private int coop;
+
         public int Coop
         {
             get => coop;
@@ -46,6 +47,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         }
 
         private int other;
+
         public int Other
         {
             get => other;
@@ -54,7 +56,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Other, ref other, value);
             }
         }
+
         private int cashTotal;
+
         public int CashTotal
         {
             get => cashTotal;
@@ -63,7 +67,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CashTotal, ref cashTotal, value);
             }
         }
+
         private int self;
+
         public int Self
         {
             get => self;
@@ -72,7 +78,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Self, ref self, value);
             }
         }
+
         private int count;
+
         public int Count
         {
             get => count;
@@ -81,9 +89,11 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Count, ref count, value);
             }
         }
+
         //-------------
 
         private int tradeCard;
+
         public int TradeCard
         {
             get => tradeCard;
@@ -92,7 +102,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeCard, ref tradeCard, value);
             }
         }
+
         private int tradeCash;
+
         public int TradeCash
         {
             get => tradeCash;
@@ -101,7 +113,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeCash, ref tradeCash, value);
             }
         }
+
         private int tradeCashCoupon;
+
         public int TradeCashCoupon
         {
             get => tradeCashCoupon;
@@ -110,7 +124,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeCashCoupon, ref tradeCashCoupon, value);
             }
         }
+
         private int tradeDiscount;
+
         public int TradeDiscount
         {
             get => tradeDiscount;
@@ -119,7 +135,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeDiscount, ref tradeDiscount, value);
             }
         }
+
         private int tradeReward;
+
         public int TradeReward
         {
             get => tradeReward;
@@ -128,7 +146,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeReward, ref tradeReward, value);
             }
         }
+
         private int extra;
+
         public int Extra
         {
             get => extra;
@@ -139,6 +159,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         }
 
         private int total;
+
         public int Total
         {
             get => total;
@@ -149,6 +170,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         }
 
         private int checkTotal;
+
         public int CheckTotal
         {
             get => checkTotal;
@@ -157,7 +179,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CheckTotal, ref checkTotal, value);
             }
         }
+
         private string checkClosed;
+
         public string CheckClosed
         {
             get => checkClosed;
@@ -168,6 +192,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         }
 
         private Brush checkColor;
+
         public Brush CheckColor
         {
             get => checkColor;
@@ -178,6 +203,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         }
 
         private bool enable;
+
         public bool Enable
         {
             get => enable;
@@ -186,26 +212,26 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => Enable, ref enable, value);
             }
         }
+
         public override TabBase getTab()
         {
             return this;
         }
 
         #region ----- Define Commands -----
+
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand ConfirmCommand { get; set; }
         public RelayCommand HistoryCommand { get; set; }
-        
-        #endregion
 
-
+        #endregion ----- Define Commands -----
 
         public ClosingWorkViewModel()
         {
             ReloadCommand = new RelayCommand(ReloadAction);
             ConfirmCommand = new RelayCommand(ConfirmAction);
             HistoryCommand = new RelayCommand(HistoryAction);
-        ReloadAction();
+            ReloadAction();
         }
 
         private void HistoryAction()
@@ -224,11 +250,11 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             MainWindow.ServerConnection.CloseConnection();
 
             Trade = (int)result.Rows[0]["trade"];
-            Coop= (int)result.Rows[0]["coop"];
-            Self= (int)result.Rows[0]["selff"];
+            Coop = (int)result.Rows[0]["coop"];
+            Self = (int)result.Rows[0]["selff"];
             Other = (int)result.Rows[0]["other"];
-            Count= (int)result.Rows[0]["count"];
-            CashTotal=(int)result.Rows[0]["CashTotal"];
+            Count = (int)result.Rows[0]["count"];
+            CashTotal = (int)result.Rows[0]["CashTotal"];
             TradeCard = (int)result.Rows[0]["tradeCard"];
             TradeCash = (int)result.Rows[0]["tradeCash"];
             TradeCashCoupon = (int)result.Rows[0]["tradeCashCoupon"];
@@ -238,24 +264,26 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
             CheckColor = Brushes.Green;
             Enable = false;
-            if (CheckClosed == null || CheckClosed == "") {
+            if (CheckClosed == null || CheckClosed == "")
+            {
                 CheckClosed = "未關班";
                 CheckColor = Brushes.Red;
                 Enable = true;
             }
 
-
             Total = TradeCash + CashTotal + TradeReward + Extra;
             CheckTotal = 0;
-
         }
+
         private void ConfirmAction()
         {
-            if (CheckTotal == 0 || CheckTotal == null) {
+            if (CheckTotal == 0 || CheckTotal == null)
+            {
                 MessageWindow.ShowMessage("請輸入", MessageType.ERROR);
                 return;
             }
-            if (StartDate != DateTime.Today) {
+            if (StartDate != DateTime.Today)
+            {
                 MessageWindow.ShowMessage("僅能關今天的班", MessageType.ERROR);
                 return;
             }
@@ -266,23 +294,21 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             DataTable EMPresult = MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeByID]", EMP);
             MainWindow.ServerConnection.CloseConnection();
 
-
-            ConfirmWindow cw = new ConfirmWindow("關班人員："+ EMPresult.Rows[0]["Person_Name"].ToString() 
-                + "\r\n"+"關班金額："+ CheckTotal.ToString()+ "\r\n\r\n資料送出後無法修改，\r\n是否進行關班作業？", "關班確認");
+            ConfirmWindow cw = new ConfirmWindow("關班人員：" + EMPresult.Rows[0]["Person_Name"].ToString()
+                + "\r\n" + "關班金額：" + CheckTotal.ToString() + "\r\n\r\n資料送出後無法修改，\r\n是否進行關班作業？", "關班確認");
             if (!(bool)cw.DialogResult) { return; }
-
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("Value", (int)(Total- CheckTotal)));
+            parameters.Add(new SqlParameter("Value", (int)(Total - CheckTotal)));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCloseCash]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             if (result.Rows[0]["RESULT"].ToString() == "FAIL")
             {
                 MessageWindow.ShowMessage("今日已輸入過", MessageType.ERROR);
             }
-            else 
+            else
             {
                 MessageWindow.ShowMessage("成功", MessageType.SUCCESS);
             }

@@ -1,27 +1,33 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PrescriptionPrepareStatusLabel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl"
-             x:Name="Root"
-             mc:Ignorable="d">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PrescriptionPrepareStatusLabel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="Root"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <Style  x:Key="MyLabelStyle" TargetType="Label">
+        <Style x:Key="MyLabelStyle" TargetType="Label">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Label}">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                Background="{TemplateBinding Background}" 
-                                Padding="{TemplateBinding Padding}" 
-                                SnapsToDevicePixels="true" 
-                                CornerRadius="3">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="3"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -29,61 +35,160 @@
             </Setter>
         </Style>
         <DataTemplate x:Key="LabelNullStatus" DataType="{x:Type Label}">
-            <Label Content="" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Transparent" Foreground="Transparent" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="Transparent"
+                BorderThickness="2"
+                Content=""
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="Transparent"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="LabelNotSend" DataType="{x:Type Label}">
-            <Label Content="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Red" Foreground="Red" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="Red"
+                BorderThickness="2"
+                Content="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="Red"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="LabelIsSend" DataType="{x:Type Label}">
-            <Label Content="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Green" Foreground="Green"  Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="Green"
+                BorderThickness="2"
+                Content="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="Green"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="LabelNotPrepare" DataType="{x:Type Label}">
-            <Label Content="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray"  Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="DimGray"
+                BorderThickness="2"
+                Content="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="DimGray"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="LabelWaitingConfirm" DataType="{x:Type Label}">
-            <Label Content="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="OrangeRed" Foreground="OrangeRed" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="OrangeRed"
+                BorderThickness="2"
+                Content="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="OrangeRed"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="LabelWaiting" DataType="{x:Type Label}">
-            <Label Content="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="RoyalBlue" Foreground="RoyalBlue" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="RoyalBlue"
+                BorderThickness="2"
+                Content="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="RoyalBlue"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="LabelNoOrder" DataType="{x:Type Label}">
-            <Label Content="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Red" Foreground="Red" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="Red"
+                BorderThickness="2"
+                Content="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="Red"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="LabelReceived" DataType="{x:Type Label}">
-            <Label Content="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="Green" Foreground="Green" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="Green"
+                BorderThickness="2"
+                Content="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="Green"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
         <DataTemplate x:Key="LabelObsolete" DataType="{x:Type Label}">
-            <Label Content="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Style="{StaticResource MyLabelStyle}" BorderThickness="2" BorderBrush="DimGray" Foreground="DimGray" Width="173" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Height="35" HorizontalContentAlignment="Center"/>
+            <Label
+                Width="173"
+                Height="35"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                BorderBrush="DimGray"
+                BorderThickness="2"
+                Content="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="DimGray"
+                Style="{StaticResource MyLabelStyle}" />
         </DataTemplate>
     </UserControl.Resources>
     <StackPanel>
         <ContentControl Width="173" Margin="10,7,0,0">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource LabelNullStatus}"/>
+                    <Setter Property="ContentTemplate" Value="{StaticResource LabelNullStatus}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Value="備藥狀態:未處理">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" Value="備藥狀態:未處理">
                             <Setter Property="ContentTemplate" Value="{StaticResource LabelNotSend}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Value="備藥狀態:已備藥">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" Value="備藥狀態:已備藥">
                             <Setter Property="ContentTemplate" Value="{StaticResource LabelIsSend}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Value="備藥狀態:不備藥">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" Value="備藥狀態:不備藥">
                             <Setter Property="ContentTemplate" Value="{StaticResource LabelNotPrepare}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Value="訂單狀態:無訂單">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" Value="訂單狀態:無訂單">
                             <Setter Property="ContentTemplate" Value="{StaticResource LabelNoOrder}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Value="訂單狀態:等待確認">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" Value="訂單狀態:等待確認">
                             <Setter Property="ContentTemplate" Value="{StaticResource LabelWaitingConfirm}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Value="訂單狀態:等待收貨">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" Value="訂單狀態:等待收貨">
                             <Setter Property="ContentTemplate" Value="{StaticResource LabelWaiting}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Value="訂單狀態:已收貨">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" Value="訂單狀態:已收貨">
                             <Setter Property="ContentTemplate" Value="{StaticResource LabelReceived}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus,UpdateSourceTrigger=PropertyChanged,ElementName=Root}" Value="訂單狀態:訂單做廢">
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" Value="訂單狀態:訂單做廢">
                             <Setter Property="ContentTemplate" Value="{StaticResource LabelObsolete}" />
                         </DataTrigger>
                     </Style.Triggers>

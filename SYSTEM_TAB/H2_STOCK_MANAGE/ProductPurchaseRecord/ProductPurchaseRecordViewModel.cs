@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
@@ -11,6 +6,10 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
 using His_Pos.Service.ExportService;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
@@ -22,16 +21,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         }
 
         #region ----- Define Commands -----
+
         public RelayCommand SearchOrderCommand { get; set; }
         public RelayCommand FilterOrderCommand { get; set; }
         public RelayCommand ClearSearchConditionCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
         public RelayCommand<string> ExportOrderDataCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
 
         #region ///// Search Variables /////
+
         private DateTime? searchStartDate = DateTime.Today;
         private DateTime? searchEndDate = DateTime.Today;
         private string searchOrderID = "";
@@ -44,32 +46,38 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             get { return searchStartDate; }
             set { Set(() => SearchStartDate, ref searchStartDate, value); }
         }
+
         public DateTime? SearchEndDate
         {
             get { return searchEndDate; }
             set { Set(() => SearchEndDate, ref searchEndDate, value); }
         }
+
         public string SearchOrderID
         {
             get { return searchOrderID; }
             set { Set(() => SearchOrderID, ref searchOrderID, value); }
         }
+
         public string SearchProductID
         {
             get { return searchProductID; }
             set { Set(() => SearchProductID, ref searchProductID, value); }
         }
+
         public string SearchManufactoryID
         {
             get { return searchManufactoryID; }
             set { Set(() => SearchManufactoryID, ref searchManufactoryID, value); }
         }
+
         public string SearchWareName
         {
             get { return searchWareName; }
             set { Set(() => SearchWareName, ref searchWareName, value); }
         }
-        #endregion
+
+        #endregion ///// Search Variables /////
 
         private StoreOrder currentStoreOrder;
         private StoreOrders storeOrderCollection;
@@ -82,16 +90,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             get => isBusy;
             set { Set(() => IsBusy, ref isBusy, value); }
         }
+
         public string BusyContent
         {
             get => busyContent;
             set { Set(() => BusyContent, ref busyContent, value); }
         }
+
         public StoreOrders StoreOrderCollection
         {
             get { return storeOrderCollection; }
             set { Set(() => StoreOrderCollection, ref storeOrderCollection, value); }
         }
+
         public StoreOrder CurrentStoreOrder
         {
             get { return currentStoreOrder; }
@@ -109,7 +120,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             get { return totalPrice; }
             set { Set(() => TotalPrice, ref totalPrice, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductPurchaseRecordViewModel()
         {
@@ -120,6 +132,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         }
 
         #region ----- Define Actions -----
+
         private void SearchOrderAction()
         {
             if (!IsSearchConditionValid()) return;
@@ -127,7 +140,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             MainWindow.ServerConnection.OpenConnection();
             StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID, SearchWareName);
             MainWindow.ServerConnection.CloseConnection();
-            
+
             if (StoreOrderCollection.Count > 0)
             {
                 CurrentStoreOrder = StoreOrderCollection[0];
@@ -143,10 +156,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 MessageWindow.ShowMessage("無符合條件項目", MessageType.ERROR);
             }
         }
+
         private void FilterOrderAction()
         {
-
         }
+
         private void ClearSearchConditionAction()
         {
             SearchStartDate = null;
@@ -155,11 +169,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             SearchManufactoryID = "";
             SearchProductID = "";
         }
+
         private void DeleteOrderAction()
         {
             DeleteOrderWindow deleteOrderWindow = new DeleteOrderWindow(CurrentStoreOrder.ID, CurrentStoreOrder.ReceiveID);
             deleteOrderWindow.ShowDialog();
         }
+
         private void ExportOrderDataAction(string type)
         {
             IsBusy = true;
@@ -178,9 +194,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                     case "S":
                         tempCollection = new Collection<object>() { CurrentStoreOrder };
                         break;
+
                     case "A":
                         tempCollection = new Collection<object>(StoreOrderCollection.ToArray());
                         break;
+
                     default:
                         MessageWindow.ShowMessage("資料異常 請稍後再試", MessageType.ERROR);
                         return;
@@ -204,9 +222,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
             backgroundWorker.RunWorkerAsync();
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void RegisterCommands()
         {
             SearchOrderCommand = new RelayCommand(SearchOrderAction);
@@ -215,10 +235,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             ExportOrderDataCommand = new RelayCommand<string>(ExportOrderDataAction);
         }
+
         private void RegisterMessengers()
         {
             Messenger.Default.Register<NotificationMessage<string>>(this, ShowOrderDetailByOrderID);
         }
+
         private void ShowOrderDetailByOrderID(NotificationMessage<string> notificationMessage)
         {
             if (notificationMessage.Target == this)
@@ -232,6 +254,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 SearchOrderAction();
             }
         }
+
         private bool IsSearchConditionValid()
         {
             if ((SearchStartDate is null && SearchEndDate != null) || (SearchStartDate != null && SearchEndDate is null))
@@ -255,6 +278,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

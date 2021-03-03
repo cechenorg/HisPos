@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using His_Pos.NewClass.Prescription.Declare.DeclareFile;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using GalaSoft.MvvmLight;
-using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 
 // ReSharper disable InconsistentNaming
 
 namespace His_Pos.NewClass.Prescription
 {
-    public class PrescriptionPoint:ObservableObject
+    public class PrescriptionPoint : ObservableObject
     {
         public PrescriptionPoint()
         {
         }
 
-        public PrescriptionPoint(DataRow r,PrescriptionType type)
+        public PrescriptionPoint(DataRow r, PrescriptionType type)
         {
             ApplyPoint = r.Field<int>("ApplyPoint");
             TotalPoint = r.Field<int>("TotalPoint");
@@ -30,8 +30,9 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public int ApplyPoint { get; set; }//申請點數 
+        public int ApplyPoint { get; set; }//申請點數
         private int totalPoint;//總點數
+
         public int TotalPoint
         {
             get => totalPoint;
@@ -40,7 +41,9 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => TotalPoint, ref totalPoint, value);
             }
         }
+
         private int administrativeAssistanceCopaymentPoint;//行政協助部分負擔點數
+
         public int AdministrativeAssistanceCopaymentPoint
         {
             get => administrativeAssistanceCopaymentPoint;
@@ -49,7 +52,9 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => AdministrativeAssistanceCopaymentPoint, ref administrativeAssistanceCopaymentPoint, value);
             }
         }
+
         private int copaymentPoint;//部分負擔點數
+
         public int CopaymentPoint
         {
             get => copaymentPoint;
@@ -58,7 +63,9 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => CopaymentPoint, ref copaymentPoint, value);
             }
         }
+
         private int copaymentPointPayable;//應付部分負擔
+
         public int CopaymentPointPayable
         {
             get => copaymentPointPayable;
@@ -68,7 +75,9 @@ namespace His_Pos.NewClass.Prescription
                 CountAmountsPay();
             }
         }
+
         private int specialMaterialPoint;//特殊材料費用
+
         public int SpecialMaterialPoint
         {
             get => specialMaterialPoint;
@@ -77,8 +86,10 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => SpecialMaterialPoint, ref specialMaterialPoint, value);
             }
         }
+
         public int TreatmentPoint { get; set; } //診療點數
         private int medicinePoint;//藥品點數
+
         public int MedicinePoint
         {
             get => medicinePoint;
@@ -87,7 +98,9 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => MedicinePoint, ref medicinePoint, value);
             }
         }
+
         private int medicalServicePoint;//藥事服務點數
+
         public int MedicalServicePoint
         {
             get => medicalServicePoint;
@@ -96,7 +109,9 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => MedicalServicePoint, ref medicalServicePoint, value);
             }
         }
+
         private int amountPay;//應付金額
+
         public int AmountsPay
         {
             get => amountPay;
@@ -109,6 +124,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private int deposit;//押金
+
         public int Deposit
         {
             get => deposit;
@@ -117,7 +133,9 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => Deposit, ref deposit, value);
             }
         }
+
         private int? actualReceive;//實付金額
+
         public int? ActualReceive
         {
             get => actualReceive;
@@ -127,7 +145,9 @@ namespace His_Pos.NewClass.Prescription
                 CountChange();
             }
         }
+
         private int? amountSelfPay;//自費金額
+
         public int? AmountSelfPay
         {
             get => amountSelfPay;
@@ -137,7 +157,9 @@ namespace His_Pos.NewClass.Prescription
                 CountAmountsPay();
             }
         }
+
         private int change;//自費金額
+
         public int Change
         {
             get => change;
@@ -146,11 +168,12 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => Change, ref change, value);
             }
         }
+
         private void CountChange()
         {
             Change = (ActualReceive ?? 0) - AmountsPay;
-
         }
+
         public void CountDeposit()
         {
             Deposit = MedicalServicePoint + MedicinePoint - CopaymentPoint;
@@ -181,24 +204,34 @@ namespace His_Pos.NewClass.Prescription
                 {
                     case int n when n <= 100:
                         return 0;
+
                     case int n when n >= 101 && n <= 200:
                         return 20;
+
                     case int n when n >= 201 && n <= 300:
                         return 40;
+
                     case int n when n >= 301 && n <= 400:
                         return 60;
+
                     case int n when n >= 401 && n <= 500:
                         return 80;
+
                     case int n when n >= 501 && n <= 600:
                         return 100;
+
                     case int n when n >= 601 && n <= 700:
                         return 120;
+
                     case int n when n >= 701 && n <= 800:
                         return 140;
+
                     case int n when n >= 801 && n <= 900:
                         return 160;
+
                     case int n when n >= 901 && n <= 1000:
                         return 180;
+
                     default:
                         return 200;
                 }

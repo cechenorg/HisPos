@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Report.Accounts;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
 using His_Pos.Service;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
 {
@@ -17,9 +15,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
     {
         #region Properties
 
-        private List<AccountsAccount> CashFlowAccountsSource => new List<AccountsAccount> { new AccountsAccount(CashFlowType.Expenses, "雜支","1"), new AccountsAccount(CashFlowType.Income, "額外收入","2") };
+        private List<AccountsAccount> CashFlowAccountsSource => new List<AccountsAccount> { new AccountsAccount(CashFlowType.Expenses, "雜支", "1"), new AccountsAccount(CashFlowType.Income, "額外收入", "2") };
 
         private List<AccountsAccount> cashFlowAccounts;
+
         public List<AccountsAccount> CashFlowAccounts
         {
             get => cashFlowAccounts;
@@ -28,7 +27,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
                 Set(() => CashFlowAccounts, ref cashFlowAccounts, value);
             }
         }
+
         private AccountsAccount selectedCashFlowAccount;
+
         public AccountsAccount SelectedCashFlowAccount
         {
             get => selectedCashFlowAccount;
@@ -37,13 +38,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
                 Set(() => SelectedCashFlowAccount, ref selectedCashFlowAccount, value);
             }
         }
+
         private string originContent;
+
         public string OriginContent
         {
             get => originContent;
             set { Set(() => OriginContent, ref originContent, value); }
         }
+
         private bool expensesCheck;
+
         public bool ExpensesCheck
         {
             get => expensesCheck;
@@ -59,6 +64,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
         }
 
         private bool incomeCheck;
+
         public bool IncomeCheck
         {
             get => incomeCheck;
@@ -74,6 +80,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
         }
 
         private AccountsRecordDetail editedCashFlowRecord;
+
         public AccountsRecordDetail EditedCashFlowRecord
         {
             get => editedCashFlowRecord;
@@ -84,6 +91,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
         }
 
         private int cashFlowValue;
+
         public int CashFlowValue
         {
             get => cashFlowValue;
@@ -93,12 +101,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
             }
         }
 
-        #endregion
+        #endregion Properties
+
         #region Commands
+
         public RelayCommand Cancel { get; set; }
         public RelayCommand Submit { get; set; }
 
-        #endregion
+        #endregion Commands
+
         public AccountsRecordDetailEditViewModel(AccountsRecordDetail selectedDetail)
         {
             InitVariables(selectedDetail);
@@ -112,10 +123,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
             IncomeCheck = !ExpensesCheck;
             var type = selectedDetail.CashFlowValue >= 0 ? "收入" : "支出";
             OriginContent =
-                $"類別 : {type}  科目 : {selectedDetail.Name}  金額 : {Math.Abs(selectedDetail.CashFlowValue)} \n備註 : {selectedDetail.Note}  登錄時間 : {DateTimeExtensions.ConvertToTaiwanCalenderWithTime(selectedDetail.Date,true)} 登錄人 : {selectedDetail.EmpName}";
+                $"類別 : {type}  科目 : {selectedDetail.Name}  金額 : {Math.Abs(selectedDetail.CashFlowValue)} \n備註 : {selectedDetail.Note}  登錄時間 : {DateTimeExtensions.ConvertToTaiwanCalenderWithTime(selectedDetail.Date, true)} 登錄人 : {selectedDetail.EmpName}";
             SelectedCashFlowAccount = CashFlowAccounts.Single(acc => acc.AccountName.Equals(selectedDetail.Name));
             CashFlowValue = Math.Abs(EditedCashFlowRecord.CashFlowValue);
         }
+
         private void InitCommands()
         {
             Cancel = new RelayCommand(CancelAction);

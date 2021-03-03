@@ -1,33 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Report.Accounts;
-using His_Pos.NewClass.Report.CashReport;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
     public class NormalNoEditViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand InsertCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private string transferValue;
         private string target;
         public string IDClone;
         public double MaxValue { get; set; } = 0;
+
         public string Target
         {
             get { return target; }
@@ -37,6 +34,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(Target));
             }
         }
+
         public string TransferValue
         {
             get { return transferValue; }
@@ -48,6 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         private AccountsReport accData;
+
         public AccountsReport AccDataNoEdit
         {
             get => accData;
@@ -56,7 +55,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => AccDataNoEdit, ref accData, value);
             }
         }
+
         private AccountsReports selected;
+
         public AccountsReports Selected
         {
             get => selected;
@@ -65,7 +66,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => Selected, ref selected, value);
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
+
         public NormalNoEditViewModel(string ID)
         {
             AccDataNoEdit = new AccountsReport();
@@ -74,12 +77,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
         }
+
         public NormalNoEditViewModel()
         {
             AccDataNoEdit = new AccountsReport();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
         }
+
         public void Init()
         {
             AccDataNoEdit = new AccountsReport();
@@ -94,9 +99,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
             MainWindow.ServerConnection.CloseConnection();
         }
+
         public void DeleteAction()
         {
-            if ( Selected == null) {
+            if (Selected == null)
+            {
                 MessageWindow.ShowMessage("錯誤", MessageType.ERROR);
                 return;
             }
@@ -109,6 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             Selected = null;
             Init();
         }
+
         public void InsertAction()
         {
             if (TransferValue == "" || TransferValue == null)
@@ -125,8 +133,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             MessageWindow.ShowMessage("新增成功", MessageType.SUCCESS);
             TransferValue = "";
             Init();
-
         }
-
     }
 }

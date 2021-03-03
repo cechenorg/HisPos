@@ -1,16 +1,16 @@
-﻿using System;
-using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Service;
+using System;
+using System.Data;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
 {
     public class DeclareMedicalPersonnel : ObservableObject
     {
-        public DeclareMedicalPersonnel(Employee.Employee selectedMedicalPersonnel) 
+        public DeclareMedicalPersonnel(Employee.Employee selectedMedicalPersonnel)
         {
-            if(selectedMedicalPersonnel is null) return;
+            if (selectedMedicalPersonnel is null) return;
             ID = selectedMedicalPersonnel.ID;
             Name = selectedMedicalPersonnel.Name;
             IDNumber = selectedMedicalPersonnel.IDNumber;
@@ -28,11 +28,12 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
             LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
             IsEnable = r.Field<bool>("Emp_IsEnable");
             IsLocal = r.Field<bool>("Emp_IsLocal");
-            if(NewFunction.CheckDataRowContainsColumn(r, "PrescriptionCount"))
+            if (NewFunction.CheckDataRowContainsColumn(r, "PrescriptionCount"))
                 PrescriptionCount = r.Field<int?>("Prescription_Count");
         }
 
         private int id;
+
         public int ID
         {
             get => id;
@@ -42,8 +43,8 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
             }
         }
 
-
         private int? prescriptionCount;
+
         public int? PrescriptionCount
         {
             get => prescriptionCount;
@@ -54,6 +55,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
 
         private string name;
+
         public string Name
         {
             get => name;
@@ -64,6 +66,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
 
         private string idNumber;
+
         public string IDNumber
         {
             get => idNumber;
@@ -74,6 +77,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
 
         private DateTime? startDate;//到職日
+
         public virtual DateTime? StartDate
         {
             get => startDate;
@@ -82,7 +86,9 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
                 Set(() => StartDate, ref startDate, value);
             }
         }
+
         private DateTime? leaveDate;//離職日
+
         public virtual DateTime? LeaveDate
         {
             get => leaveDate;
@@ -93,6 +99,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
 
         private bool isEnable;//備註
+
         [IgnoreFormat]
         public virtual bool IsEnable
         {
@@ -104,6 +111,7 @@ namespace His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule
         }
 
         private bool isLocal;//是否為本店新增
+
         [IgnoreFormat]
         public virtual bool IsLocal
         {

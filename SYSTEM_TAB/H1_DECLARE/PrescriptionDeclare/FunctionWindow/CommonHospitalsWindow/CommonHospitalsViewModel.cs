@@ -1,25 +1,28 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow
 {
-    public class CommonHospitalsViewModel:ViewModelBase
+    public class CommonHospitalsViewModel : ViewModelBase
     {
         public RelayCommand<string> FocusUpDownCommand { get; set; }
         public RelayCommand InstitutionSelected { get; set; }
         private Institution selectedInstitution;
-        public Institution SelectedInstitution {
+
+        public Institution SelectedInstitution
+        {
             get => selectedInstitution;
             set
             {
                 Set(() => SelectedInstitution, ref selectedInstitution, value);
             }
         }
+
         private CollectionViewSource commonHospitalsCollectionViewSource;
 
         private CollectionViewSource CommonHospitalsCollectionViewSource
@@ -32,6 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
         }
 
         private ICollectionView commonHospitalsCollectionView;
+
         public ICollectionView CommonHospitalsCollectionView
         {
             get => commonHospitalsCollectionView;
@@ -40,7 +44,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
                 Set(() => CommonHospitalsCollectionView, ref commonHospitalsCollectionView, value);
             }
         }
+
         private Institutions commonHospitalsCollection;
+
         public Institutions CommonHospitalsCollection
         {
             get => commonHospitalsCollection;
@@ -49,6 +55,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
                 Set(() => CommonHospitalsCollection, ref commonHospitalsCollection, value);
             }
         }
+
         public CommonHospitalsViewModel()
         {
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
@@ -59,6 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
             CommonHospitalsCollectionView = CommonHospitalsCollectionViewSource.View;
             SelectedInstitution = (Institution)CommonHospitalsCollectionView.Cast<object>().First();
         }
+
         private void FocusUpDownAction(string direction)
         {
             if (CommonHospitalsCollection.Count > 0)
@@ -71,6 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
                         if (CommonHospitalsCollectionView.CurrentPosition > 0)
                             CommonHospitalsCollectionView.MoveCurrentToPrevious();
                         break;
+
                     case "DOWN":
                         if (CommonHospitalsCollectionView.CurrentPosition < maxIndex)
                             CommonHospitalsCollectionView.MoveCurrentToNext();
@@ -79,6 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Commo
                 SelectedInstitution = (Institution)CommonHospitalsCollectionView.CurrentItem;
             }
         }
+
         private void InstitutionSelectedAction()
         {
             Messenger.Default.Send(SelectedInstitution, "GetSelectedInstitution");

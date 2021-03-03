@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
     public class ReturnProductInventoryDetail : ObservableObject
     {
         #region ----- Define Variables -----
+
         private double returnAmount;
         private double returnStockValue;
 
@@ -22,17 +18,19 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double Inventory { get; set; }
 
         public int TypeOTC { get; set; }
+
         public double ReturnStockValue
         {
             get { return returnStockValue; }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
+
         public double ReturnAmount
         {
             get { return returnAmount; }
             set
             {
-                if(value > Inventory)
+                if (value > Inventory)
                     Set(() => ReturnAmount, ref returnAmount, Inventory);
                 else
                     Set(() => ReturnAmount, ref returnAmount, value);
@@ -40,7 +38,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 CalculateStockValue();
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ReturnProductInventoryDetail(DataRow row)
         {
@@ -55,10 +54,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         }
 
         #region ----- Define Functions -----
+
         private void CalculateStockValue()
         {
             ReturnStockValue = Price * ReturnAmount;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }
