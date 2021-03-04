@@ -4,7 +4,6 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.ProductLocation;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using System;
@@ -342,7 +341,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             if (error.Length != 0)
             {
                 MessageWindow.ShowMessage(error, Class.MessageType.ERROR);
-
                 return false;
             }
 
@@ -375,10 +373,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             DataGridRow row = sender as DataGridRow;
 
             if (row?.Item is null) return;
-
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ProductLocationDetailDataGrid.SelectedValue.ToString(), "0" }, "ShowProductDetail"));
-
         }
 
         private void Refresh_Click(object sender, RoutedEventArgs e)
@@ -442,7 +438,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
-                wb.SaveAs(fdlg.FileName);
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                    MessageWindow.ShowMessage("儲存成功", Class.MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage("儲存失敗", Class.MessageType.ERROR);
+                    return;
+                }
             }
         }
     }
