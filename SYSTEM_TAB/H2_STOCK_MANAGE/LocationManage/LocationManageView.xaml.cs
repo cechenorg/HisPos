@@ -1,9 +1,12 @@
 ﻿using ClosedXML.Excel;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.ProductLocation;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -108,6 +111,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         {
             InsertButton.Visibility = Visibility.Visible;
             PrintButton.Visibility = Visibility.Visible;
+            ExcelButton.Visibility = Visibility.Visible;
             lbInsertID.Visibility = Visibility.Visible;
             InsertID.Visibility = Visibility.Visible;
             DeleteDetailButton.Visibility = Visibility.Visible;
@@ -124,6 +128,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 Deletebtn.IsEnabled = false;
                 InsertButton.Visibility = Visibility.Hidden;
                 PrintButton.Visibility = Visibility.Visible;
+                ExcelButton.Visibility = Visibility.Visible;
                 lbInsertID.Visibility = Visibility.Hidden;
                 InsertID.Visibility = Visibility.Hidden;
                 DeleteDetailButton.Visibility = Visibility.Hidden;
@@ -180,14 +185,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 col4.Width = 10;
                 var col5 = ws.Column("E");
                 col5.Width = 10;
+                var col6 = ws.Column("F");
+                col6.Width = 10;
+                var col7 = ws.Column("G");
+                col7.Width = 10;
 
                 ws.Cell(1, 1).Value = "櫃位名稱：" + row["ProLoc_Name"].ToString();
-                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
+                ws.Range(1, 1, 1, 7).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "商品代碼";
                 ws.Cell("B2").Value = "商品名稱";
                 ws.Cell("C2").Value = "庫存數量";
                 ws.Cell("D2").Value = "寄庫數量";
                 ws.Cell("E2").Value = "盤點數量";
+                ws.Cell("F2").Value = "平均成本";
+                ws.Cell("G2").Value = "庫存現值";
                 var rangeWithData = ws.Cell(3, 1).InsertData(detail.AsEnumerable());
 
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
@@ -356,6 +367,82 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 MessageWindow.ShowMessage("刪除成功", Class.MessageType.SUCCESS);
                 InitLocationDetail();
                 InitLocation();
+            }
+        }
+
+        private void DataGridRow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow row = sender as DataGridRow;
+
+            if (row?.Item is null) return;
+
+            ProductDetailWindow.ShowProductDetailWindow();
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ProductLocationDetailDataGrid.SelectedValue.ToString(), "0" }, "ShowProductDetail"));
+
+        }
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            InitLocationDetail();
+            InitLocation();
+        }
+
+        private void ExcelButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (master.DefaultView is null) return;
+            if (detail.DefaultView is null) return;
+
+            DataRowView row = (DataRowView)ProductLocationDataGrid.SelectedItem;
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "儲位管理";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? path : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName = DateTime.Now.ToString("yyyy-MM-dd") + "_" + row["ProLoc_Name"].ToString() + "_" + "櫃位管理";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                var ws = wb.Worksheets.Add(row["ProLoc_Name"].ToString() + "儲位管理");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+
+                var col1 = ws.Column("A");
+                col1.Width = 20;
+                var col2 = ws.Column("B");
+                col2.Width = 33;
+                var col3 = ws.Column("C");
+                col3.Width = 10;
+                var col4 = ws.Column("D");
+                col4.Width = 10;
+                var col5 = ws.Column("E");
+                col5.Width = 10;
+                var col6 = ws.Column("F");
+                col6.Width = 10;
+                var col7 = ws.Column("G");
+                col7.Width = 10;
+
+                ws.Cell(1, 1).Value = "櫃位名稱：" + row["ProLoc_Name"].ToString();
+                ws.Range(1, 1, 1, 7).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "商品代碼";
+                ws.Cell("B2").Value = "商品名稱";
+                ws.Cell("C2").Value = "庫存數量";
+                ws.Cell("D2").Value = "寄庫數量";
+                ws.Cell("E2").Value = "盤點數量";
+                ws.Cell("F2").Value = "平均成本";
+                ws.Cell("G2").Value = "庫存現值";
+                var rangeWithData = ws.Cell(3, 1).InsertData(detail.AsEnumerable());
+
+                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                wb.SaveAs(fdlg.FileName);
             }
         }
     }

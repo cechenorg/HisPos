@@ -559,6 +559,8 @@
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSetting.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettingDB.cs" />
     <Compile Include="NewClass\Product\ProductGroupSetting\ProductGroupSettings.cs" />
+    <Compile Include="NewClass\Product\ProductManageCombos.cs" />
+    <Compile Include="NewClass\Product\ProductManageLocCombo.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrice.cs" />
     <Compile Include="NewClass\Product\ProductManagement\HistoryPrices.cs" />
     <Compile Include="NewClass\Product\ProductManagement\MedBagDetail\MedBagDetailStruct.cs" />
@@ -575,6 +577,7 @@
     <Compile Include="NewClass\Product\ProductManagement\ProductManageDetail\ProductNHISpecialDetail.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageFilterEnum.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageMedicine.cs" />
+    <Compile Include="NewClass\Product\ProductManagement\ProductManageLoc.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStruct.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductManageStructs.cs" />
     <Compile Include="NewClass\Product\ProductManagement\ProductRegisterPrescription.cs" />
