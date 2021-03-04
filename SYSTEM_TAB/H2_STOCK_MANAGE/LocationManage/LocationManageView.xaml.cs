@@ -209,52 +209,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             {
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
-            /*Process myProcess = new Process();
-
-            SaveFileDialog fdlg = new SaveFileDialog();
-            fdlg.Title = "儲位管理";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
-            fdlg.Filter = "Csv檔案|*.csv";
-            fdlg.FileName = master.Rows[0]["ProLoc_Name"].ToString() + "儲位管理";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
-                Properties.Settings.Default.DeclareXmlPath = fdlg.FileName;
-                Properties.Settings.Default.Save();
-                try
-                {
-                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
-                    {
-                        file.WriteLine(master.Rows[0]["ProLoc_Name"].ToString() + "儲位管理");
-                        file.WriteLine("商品代碼,品名,庫存,盤點量");
-                        foreach (DataRow c in detail.Rows)
-                        {
-                            file.WriteLine($"\t{c["Pro_ID"]},{c["Pro_ChineseName"]},{c["Inv_Inventory"]},");
-                        }
-
-                        file.Close();
-                        file.Dispose();
-                    }
-                    MessageWindow.ShowMessage("匯出Excel 開始列印", MessageType.SUCCESS);
-                }
-                catch (Exception ex)
-                {
-                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                }
-
-                try
-                {
-                    myProcess.StartInfo.UseShellExecute = true;
-                    myProcess.StartInfo.FileName = (fdlg.InitialDirectory);
-                    myProcess.StartInfo.CreateNoWindow = true;
-                    myProcess.StartInfo.Verb = "print";
-                    myProcess.Start();
-                }
-                catch (Exception ex)
-                {
-                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                }*/
         }
 
         private void InsertID_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
