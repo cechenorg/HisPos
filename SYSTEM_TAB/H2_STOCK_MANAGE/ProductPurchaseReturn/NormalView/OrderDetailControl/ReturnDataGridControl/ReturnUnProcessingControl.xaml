@@ -13,6 +13,7 @@
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
         <service:SentinelConverter x:Key="SentinelConverter" />
         <service:NullableDateConverter x:Key="DateConverter" />
+        <service:SelectedItemConverter x:Key="SelectedItemConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -31,7 +32,7 @@
             FrozenColumnCount="3"
             GridLinesVisibility="Horizontal"
             ItemsSource="{Binding CurrentStoreOrder.ReturnProducts}"
-            SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">
+            SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SelectedItemConverter}}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />

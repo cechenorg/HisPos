@@ -5,6 +5,7 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using System;
 using System.Data;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -20,7 +21,10 @@ namespace His_Pos.NewClass.StoreOrder
 
         public Product.Product SelectedItem
         {
-            get { return selectedItem; }
+            get 
+            {
+                return selectedItem;
+            }
             set
             {
                 if (selectedItem != null)

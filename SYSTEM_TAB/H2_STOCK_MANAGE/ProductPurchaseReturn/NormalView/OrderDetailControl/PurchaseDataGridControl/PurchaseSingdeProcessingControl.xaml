@@ -223,8 +223,8 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="Black" />
-            <!--<Label Content="預定到貨日期" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0" />
-            <Label Content="{Binding CurrentStoreOrder.PlanArriveDate, Converter={StaticResource DateConverter}}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center" />-->
+            <!--<Label Content="預定到貨日期" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <Label Content="{Binding CurrentStoreOrder.PlanArriveDate, Converter={StaticResource DateConverter}}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>-->
         </StackPanel>
         <StackPanel
             Grid.Row="2"

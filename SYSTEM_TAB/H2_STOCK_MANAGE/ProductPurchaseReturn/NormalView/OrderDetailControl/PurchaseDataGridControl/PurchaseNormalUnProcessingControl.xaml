@@ -91,7 +91,6 @@
             <RowDefinition />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <!--<DataGrid Name="ProductDataGrid" Grid.Row="0" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False" ItemsSource="{Binding CurrentStoreOrder.OrderProducts}" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="3" CanUserSortColumns="False" SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SentinelConverter}}">-->
         <DataGrid
             Name="ProductDataGrid"
             Grid.Row="0"
