@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl
 {
@@ -65,8 +64,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             get { return productType; }
             set { Set(() => ProductType, ref productType, value); }
         }
+
         public ProductManageLocCombos LocBindItems { get; set; }
         public int LocBind { get; set; }
+
         #endregion ----- Define Variables -----
 
         public MedicineManageViewModel()
@@ -84,10 +85,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             Messenger.Default.Register<NotificationMessage<string>>(this, GetReloadMessage);
 
             LocBindItems = ProductManageLocCombos.GetProductManageLocCombos();
-
-
-        
-
         }
 
         #region ----- Define Actions -----
@@ -159,7 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             StockTakingCommand = new RelayCommand(StockTakingAction);
             ScrapCommand = new RelayCommand(ScrapAction);
             RecycleCommand = new RelayCommand(RecycleAction);
-            ChangeCommand = new RelayCommand(ChangeAction); 
+            ChangeCommand = new RelayCommand(ChangeAction);
             LocCommand = new RelayCommand(LocAction);
         }
 
@@ -199,19 +196,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             medicineID = proID;
             productType = type;
 
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", medicineID));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[ProductLocationByID]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-
-            if (result.Rows.Count==0)
+            if (productType == ProductTypeEnum.OTCMedicine)
             {
-               
-            }
-            else
-            {
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("ID", medicineID));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[ProductLocationByID]", parameters);
                 LocBind = (int)result.Rows[0]["Pro_Location"];
+                MainWindow.ServerConnection.CloseConnection();
             }
             ReloadData();
         }
