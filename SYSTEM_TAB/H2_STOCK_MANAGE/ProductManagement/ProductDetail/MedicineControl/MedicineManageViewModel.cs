@@ -204,7 +204,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             parameters.Add(new SqlParameter("ID", medicineID));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[ProductLocationByID]", parameters);
             MainWindow.ServerConnection.CloseConnection();
-            LocBind = (int)result.Rows[0]["Pro_Location"];
+
+            if (result.Rows.Count==0)
+            {
+               
+            }
+            else
+            {
+                LocBind = (int)result.Rows[0]["Pro_Location"];
+            }
             ReloadData();
         }
 
