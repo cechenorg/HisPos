@@ -31,6 +31,14 @@ namespace His_Pos.NewClass.StoreOrder
                     ((IDeletableProduct)selectedItem).IsSelected = false;
 
                 Set(() => SelectedItem, ref selectedItem, value);
+
+                if (selectedItem != null)
+                    ((IDeletableProduct)selectedItem).IsSelected = true;
+
+                if (selectedItem == null)
+                {
+
+                }
             }
         }
 
