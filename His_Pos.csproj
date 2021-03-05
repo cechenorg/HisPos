@@ -336,7 +336,6 @@
     <Compile Include="NewClass\BalanceSheet\ClosingHistory.cs" />
     <Compile Include="NewClass\BalanceSheet\StrikeHistory.cs" />
     <Compile Include="NewClass\BalanceSheet\StrikeTypeEnum.cs" />
-    <Compile Include="NewClass\FixDataGrid.cs" />
     <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSetting.cs" />
     <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSettings.cs" />
     <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSettingDb.cs" />
