@@ -1425,7 +1425,7 @@ namespace His_Pos.NewClass.Prescription
         {
             if (!CheckMedicineDays28()) return false;
             MedicalServiceCode = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
-            PrescriptionPoint.MedicalServicePoint = 69;
+            PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05210B;
             return true;
         }
 
@@ -1433,7 +1433,7 @@ namespace His_Pos.NewClass.Prescription
         {
             if (!CheckMedicineDaysBetween14And28()) return false;
             MedicalServiceCode = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
-            PrescriptionPoint.MedicalServicePoint = 59;
+            PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05206B;
             return true;
         }
 
@@ -1441,14 +1441,14 @@ namespace His_Pos.NewClass.Prescription
         {
             if (!CheckMedicineDaysBetween7And14()) return false;
             MedicalServiceCode = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
-            PrescriptionPoint.MedicalServicePoint = 48;
+            PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05223B;
             return true;
         }
 
         private void SetMedicalServiceLessThan7Days()
         {
             MedicalServiceCode = "05202B";//一般處方給付(7天以內)
-            PrescriptionPoint.MedicalServicePoint = 48;
+            PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05202B;
         }
 
         private bool CheckMedicineDaysBetween14And28()
