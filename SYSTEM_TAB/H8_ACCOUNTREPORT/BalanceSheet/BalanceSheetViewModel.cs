@@ -306,10 +306,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 }
                 else if (RightSelectedData.Name.Contains("代付"))
                 {
-                    var ins = ViewModelMainWindow.Institutions.Single(i => i.ID.Equals(RightSelectedData.ID));
+                    //var ins = ViewModelMainWindow.Institutions.Single(i => i.ID.Equals(RightSelectedData.ID));
 
-                    BalanceSheetType = BalanceSheetTypeEnum.Pay;
-                    PayViewModel.Target = ins;
+                    //BalanceSheetType = BalanceSheetTypeEnum.Pay;
+                    //PayViewModel.Target = ins;
+                    NormalViewModel = new NormalViewModel(RightSelectedData.ID);
+                    BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                    BalanceSheetType = BalanceSheetTypeEnum.Normal;
                 }
                 else
                 {
