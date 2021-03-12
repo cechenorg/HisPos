@@ -224,6 +224,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             ConfirmWindow cw = new ConfirmWindow("是否進行結案?", "確認");
             if (!(bool)cw.DialogResult) { return; }
 
+
+            if (SelectedDetail.StrikeValue != 0)
+            {
+                PREStrikeAction();
+            }
+
+
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("Emp", ViewModelMainWindow.CurrentUser.ID));
@@ -393,6 +400,50 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             Init();
 
             command.Execute(null);
+        }
+
+        public void PREStrikeAction()
+        {
+            if (Selected == null)
+            {
+                MessageWindow.ShowMessage("請選擇科目", MessageType.ERROR);
+                return;
+            }
+            if (SelectedDetail.StrikeValue == 0 || SelectedDetail == null)
+            {
+                MessageWindow.ShowMessage("不得為零", MessageType.ERROR);
+                return;
+            }
+            if (SelectedBank == null)
+            {
+                MessageWindow.ShowMessage("請選擇沖帳目標", MessageType.ERROR);
+                return;
+            }
+            ConfirmWindow cw = new ConfirmWindow("是否進行科目沖帳?", "確認");
+            if (!(bool)cw.DialogResult) { return; }
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("VALUE", SelectedDetail.StrikeValue));
+            parameters.Add(new SqlParameter("TYPE", SelectedDetail.ID));
+            parameters.Add(new SqlParameter("NOTE", Selected.Name));
+            parameters.Add(new SqlParameter("TARGET", SelectedBank.ID));
+            parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
+            MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
+            MainWindow.ServerConnection.CloseConnection();
+            if (SelectedDetail.StrikeValue == SelectedDetail.Value)
+            {
+            }
+            else
+            {
+                SelectDetailClone = SelectedDetail.ID;
+                SelectClone = Selected.ID;
+            }
+            StrikeValue = 0;
+            DetailChangeAction();
+            Init();
+
         }
     }
 }

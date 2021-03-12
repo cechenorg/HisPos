@@ -9,6 +9,7 @@ using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
 using His_Pos.Service.ExportService;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 using System;
 using System.Collections.ObjectModel;
@@ -225,9 +226,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum, CurrentStoreOrder.OrderStatus, CurrentStoreOrder.OrderWarehouse.ID);
                 Messenger.Default.Unregister(this);
             }
-            else
+            else if(addProductEnum== AddProductEnum.ProductPurchase && productCount < 1)
             {
                 MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
+                ConfirmWindow confirmWindow = new ConfirmWindow($"是否跳轉至新增商品?", "", true);
+
+                if (!(bool)confirmWindow.DialogResult)
+                    return;
+                InsertProductWindow insertProductWindow = new InsertProductWindow();
+            }
+            else
+            {
+                MessageWindow.ShowMessage("商品存貨量不足或輸入有誤", MessageType.WARNING);
             }
         }
 

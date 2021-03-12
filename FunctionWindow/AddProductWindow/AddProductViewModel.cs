@@ -8,6 +8,7 @@ using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindow;
+
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System;
@@ -15,6 +16,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
+
 
 namespace His_Pos.FunctionWindow.AddProductWindow
 {

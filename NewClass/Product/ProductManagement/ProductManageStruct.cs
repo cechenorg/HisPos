@@ -28,10 +28,14 @@ namespace His_Pos.NewClass.Product.ProductManagement
             IsZero = row.Field<decimal>("NHIMED_PRICE");
             DepRec_Amount = row.Field<int>("DepRec_Amount");
             SINGINV = row.Field<int>("inv_qty");
+            ProLoc_Name= row.Field<string>("ProLoc_Name");
+
+
         }
 
         public ProductTypeEnum ProductType { get; set; }
         public string ID { get; set; }
+        public string ProLoc_Name { get; set; }
         public int WareHouseID { get; set; }
         public int DepRec_Amount { get; set; }
         public string ChineseName { get; set; }
