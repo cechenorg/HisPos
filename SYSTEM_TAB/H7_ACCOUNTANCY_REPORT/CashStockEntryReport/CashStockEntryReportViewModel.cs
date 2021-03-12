@@ -1530,7 +1530,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             fdlg.Title = "績效明細";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName = StartDate.ToString() + "~"+ EndDate.ToString() + "績效明細";
+            fdlg.FileName = StartDate.ToString("yyyyMMdd") + "-"+ EndDate.ToString("yyyyMMdd") + "績效明細";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -1542,13 +1542,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 var ws = wb.Worksheets.Add("績效明細");
                 ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
                 var col1 = ws.Column("A");
-                col1.Width = 20;
+                col1.Width = 10;
                 var col2 = ws.Column("B");
-                col2.Width = 10;
+                col2.Width = 15;
                 var col3 = ws.Column("C");
-                col3.Width = 10;
+                col3.Width = 25;
                 var col4 = ws.Column("D");
-                col4.Width = 10;
+                col4.Width = 25;
                 var col5 = ws.Column("E");
                 col5.Width = 10;
 

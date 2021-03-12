@@ -44,9 +44,9 @@
 
             <Button
                     x:Name="RewardExcel"
-                    Width="120"
+                    Width="150"
                     Height="35"
-                    Margin="185,0,0,0"
+                    Margin="140,0,0,0"
                     Background="RoyalBlue"
                     BorderThickness="0"
                     Command="{Binding RewardExcelCommand}"
