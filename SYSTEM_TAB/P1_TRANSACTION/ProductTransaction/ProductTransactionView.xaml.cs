@@ -634,6 +634,35 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
+        private void CheckoutActions() 
+        {
+            foreach (DataRow dr in ProductList.Rows)
+            {
+                if (int.Parse(dr["Amount"].ToString()) == 0)
+                {
+                    int index = ProductList.Rows.IndexOf(dr);
+                    ProductList.Rows[index].Delete();
+                }
+            }
+            ProductList.AcceptChanges();
+            if (ProductList.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("尚無結帳商品！", MessageType.ERROR);
+                FocusLastRow();
+                return;
+            }
+
+            int rowCount = ProductList.Rows.Count;
+            int amtCount = int.Parse(ProductList.Compute("Sum(Amount)", string.Empty).ToString());
+
+            chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount);
+            chkWindow.ShowDialog();
+            if ((bool)chkWindow.DialogResult)
+            {
+                CheckoutSubmit();
+            }
+        }
+
         #region ----- Events -----
 
         private void ProductDataGrid_Loaded(object sender, RoutedEventArgs e)
@@ -806,31 +835,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnCheckout_Click(object sender, RoutedEventArgs e)
         {
-            foreach (DataRow dr in ProductList.Rows)
-            {
-                if (int.Parse(dr["Amount"].ToString()) == 0)
-                {
-                    int index = ProductList.Rows.IndexOf(dr);
-                    ProductList.Rows[index].Delete();
-                }
-            }
-            ProductList.AcceptChanges();
-            if (ProductList.Rows.Count == 0)
-            {
-                MessageWindow.ShowMessage("尚無結帳商品！", MessageType.ERROR);
-                FocusLastRow();
-                return;
-            }
-
-            int rowCount = ProductList.Rows.Count;
-            int amtCount = int.Parse(ProductList.Compute("Sum(Amount)", string.Empty).ToString());
-
-            chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount);
-            chkWindow.ShowDialog();
-            if ((bool)chkWindow.DialogResult)
-            {
-                CheckoutSubmit();
-            }
+            CheckoutActions();
         }
 
         private void btnGift_Click(object sender, RoutedEventArgs e)
@@ -1401,6 +1406,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter)
             {
                 btnCheckout.Focus();
+                e.Handled = true;
+            }
+        }
+
+        private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape) 
+            {
+                CheckoutActions();
                 e.Handled = true;
             }
         }
