@@ -539,7 +539,7 @@
                                 Foreground="Black"
                                 IsEnabled="{Binding Path=IsReward_Format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectedIndex="0"
-                                SelectedValuePath="Emp_ID"
+                                SelectedValuePath="Emp_CashierID"
                                 Text="{Binding Path=TraDet_RewardPersonnel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
