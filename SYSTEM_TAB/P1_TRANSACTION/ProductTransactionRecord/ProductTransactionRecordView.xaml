@@ -18,6 +18,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <service:NumberConverter x:Key="NumberConverter" />
         <Image x:Key="Add" Source="/Images/cross.png" />
     </UserControl.Resources>
     <Viewbox Width="1363" Stretch="Fill">
@@ -275,7 +276,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="60"
-                            Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
                             Header="序"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -432,7 +433,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="60"
-                            Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
                             Header="序"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -605,7 +606,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="60"
-                            Binding="{Binding AlternationIndex, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
                             Header="序"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>

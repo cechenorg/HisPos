@@ -37,7 +37,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.RetailPrice, Mode=TwoWay, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding MedicineDetail.RetailPrice, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -52,7 +52,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.MemberPrice, Mode=TwoWay, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding MedicineDetail.MemberPrice, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
@@ -80,7 +80,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.EmployeePrice, Mode=TwoWay, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding MedicineDetail.EmployeePrice, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
             <Label
                 Margin="11,0,0,0"
                 VerticalAlignment="Center"
@@ -95,7 +95,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.SpecialPrice, Mode=TwoWay, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding MedicineDetail.SpecialPrice, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
     </Grid>
 </UserControl>

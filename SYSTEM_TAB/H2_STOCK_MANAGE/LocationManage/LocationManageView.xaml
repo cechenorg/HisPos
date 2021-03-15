@@ -5,10 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage"
+        xmlns:service="clr-namespace:His_Pos.Service"
     d:DesignHeight="839"
     d:DesignWidth="1365"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <service:NumberConverter x:Key="NumberConverter" />
         <DataTemplate x:Key="DataNotChanged" DataType="UserControl">
             <Label
                 VerticalAlignment="Center"
@@ -129,6 +131,7 @@
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 HorizontalScrollBarVisibility="Disabled"
                 SelectedValuePath="Pro_ID"
+                    AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
                 >
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -162,6 +165,19 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
+                    <DataGridTextColumn
+                            Width="60"
+                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                            Header="序"
+                            IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="0,0,0,0" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="250"
                         Binding="{Binding Pro_ID}"
