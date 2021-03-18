@@ -71,8 +71,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private bool IsEmployeeIDValid()
         {
             string empCashierID = tbEmployee.Text;
-            bool contains = EmployeeList.AsEnumerable().Any(row => empCashierID == row.Field<string>("Emp_CashierID"));
-            return contains;
+            if (empCashierID == string.Empty)
+            {
+                return false;
+            }
+            else 
+            {
+                bool contains = EmployeeList.AsEnumerable().Any(row => empCashierID == row.Field<string>("Emp_CashierID"));
+                return contains;
+            }
         }
 
         private string GetPayMethod()
