@@ -249,5 +249,27 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => TotalOTCChange, ref totalOTCChange, value);
             }
         }
+
+        private double totalMedCoop;
+
+        public double TotalMedCoop
+        {
+            get => totalMedCoop;
+            set
+            {
+                Set(() => TotalMedCoop, ref totalMedCoop, value);
+            }
+        }
+        private double totalMedNotCoop;
+
+        public double TotalMedNotCoop
+        {
+            get => totalMedNotCoop;
+            set
+            {
+                Set(() => TotalMedNotCoop, ref totalMedNotCoop, value);
+            }
+        }
+
     }
 }

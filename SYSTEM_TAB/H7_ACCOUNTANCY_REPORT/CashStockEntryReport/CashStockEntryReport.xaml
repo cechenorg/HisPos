@@ -367,7 +367,7 @@
                         Background="GhostWhite" />
                     <StackPanel
                         Grid.Row="6"
-                        Grid.Column="3"
+                        Grid.Column="0"
                         Grid.ColumnSpan="10"
                         Background="DarkSeaGreen" />
 
@@ -898,12 +898,60 @@
 
                     <Label
                         Grid.Row="6"
-                        Grid.Column="3"
+                        Grid.Column="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="合計"
                         FontFamily="Segoe UI Semibold"
                         FontSize="20" />
+                    <StackPanel
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Background="Transparent"
+                        Orientation="Horizontal">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="300"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding TotalCashFlow.TotalMedCoop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="6"
+                        Grid.Column="2"
+                        Background="Transparent"
+                        Orientation="Horizontal">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="300"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding TotalCashFlow.TotalMedNotCoop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="6"
+                        Grid.Column="3"
+                        Background="Transparent"
+                        Orientation="Horizontal">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="300"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding TotalStockTakingReport.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
                     <StackPanel
                         Grid.Row="6"
                         Grid.Column="4"
