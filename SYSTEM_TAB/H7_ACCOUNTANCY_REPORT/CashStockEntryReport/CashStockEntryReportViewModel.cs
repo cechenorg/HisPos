@@ -3042,7 +3042,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             TotalCashFlow.TotalOTCCard = TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.TotalCardTotalAmt;
             TotalCashFlow.TotalOTCTicket = TotalTradeProfitReport.DiscountAmt + TotalTradeProfitReport.TotalDiscountTotalAmt;
             TotalCashFlow.TotalOTCCashTicket = TotalTradeProfitReport.CashCoupon + TotalTradeProfitReport.TotalCashCouponTotalAmt;
-            TotalCashFlow.TotalOTCAmount = TotalTradeProfitReport.Cost + TotalTradeProfitReport.TotalCostTotalAmt + (double)TotalStockTakingOTCReport.Price + (double)TotalRewardReport.RewardAmount + (double)DiscountAmt;
+            
 
             TotalCashFlow.TotalMedCoop = CooperativePrescriptionProfitReport.TotalMed + CooperativePrescriptionProfitReport.MedUse + CoopCashProfitReport.TotalPrice + CooperativePrescriptionChangeReport.Profit;
             TotalCashFlow.TotalMedNotCoop = SelfPrescriptionChangeReport.Profit + SelfPrescriptionProfitReport.TotalMed + SelfPrescriptionProfitReport.MedUse + CashProfitReport.TotalPrice;
@@ -3052,6 +3052,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
 
 
             DiscountAmt = -TotalTradeProfitReport.DiscountAmt;
+            TotalCashFlow.TotalOTCAmount = TotalTradeProfitReport.Cost + TotalTradeProfitReport.TotalCostTotalAmt + (double)TotalStockTakingOTCReport.Price + (double)TotalRewardReport.RewardAmount + (double)DiscountAmt;
+
             InventoryDifference.InventoryTotal = (double)(InventoryDifference.InventoryOverage + InventoryDifference.InventoryShortage + InventoryDifference.InventoryScrap);
             TotalCashFlow.TotalOTC = TotalTradeProfitReport.Profit + (int)TotalStockTakingOTCReport.Price + DiscountAmt + TotalRewardReport.RewardAmount + TotalCashFlow.TotalOTCChange;
             TotalCashFlow.TotalMedProfit = CooperativePrescriptionProfitReport.TotalMed + SelfPrescriptionProfitReport.TotalMed;
