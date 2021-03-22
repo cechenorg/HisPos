@@ -13,6 +13,7 @@
     <xctk:BusyIndicator BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Width="1365" Height="870">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="670" />
                 <ColumnDefinition Width="800" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
@@ -114,7 +115,7 @@
                             <RowDefinition Height="40" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
+                            <ColumnDefinition  Width="500"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel
                             Grid.Row="0"
@@ -133,9 +134,10 @@
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日淨利"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -152,9 +154,50 @@
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="當日盤差"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
                                 Width="230"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding TradeTodayStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="當日毛利"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding TradeTodayProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC現金"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -167,13 +210,14 @@
                                 FontSize="20" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="3"
+                            Grid.Row="6"
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC信用卡"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -186,13 +230,14 @@
                                 FontSize="20" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="4"
+                            Grid.Row="7"
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC禮券"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -205,13 +250,14 @@
                                 FontSize="20" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="5"
+                            Grid.Row="8"
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                Width="150"
+                                VerticalAlignment="Center"                                
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC現金券"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -224,13 +270,14 @@
                                 FontSize="20" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="6"
+                            Grid.Row="9"
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC獎金"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -242,124 +289,13 @@
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
                         </StackPanel>
-                        <StackPanel
-                            Grid.Row="7"
-                            Grid.Column="0"
-                            Orientation="Horizontal">
-                            <Label
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
-                                Content="調劑台資料"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="8"
-                            Grid.Column="0"
-                            Orientation="Horizontal">
-                            <Label
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                Content="當月總調劑人數"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                            <Label
-                                x:Name="MedTotal"
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
-                                Content="{Binding Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="9"
-                            Grid.Column="0"
-                            Orientation="Horizontal">
-                            <Label
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                Content="合作診所收入"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                            <Label
-                                x:Name="CoopMed"
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
-                                Content="{Binding Coop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="10"
-                            Grid.Column="0"
-                            Orientation="Horizontal">
-                            <Label
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                Content="配藥毛利收入"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                            <Label
-                                x:Name="SelfMed"
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
-                                Content="{Binding Self, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="11"
-                            Grid.Column="0"
-                            Orientation="Horizontal">
-                            <Label
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                Content="慢箋+其他收入"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                            <Label
-                                x:Name="OtherMed"
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
-                                Content="{Binding Other, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="12"
-                            Grid.Column="0"
-                            Orientation="Horizontal">
-                            <Label
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                Content="自費調劑現金帳"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                            <Label
-                                x:Name="CashTotal"
-                                Width="230"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
-                                Content="{Binding CashTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
-                        </StackPanel>
+             
                         <StackPanel
                             Grid.Row="13"
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
                                 Content="結帳作業"
@@ -371,9 +307,10 @@
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="額外收支"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -390,9 +327,10 @@
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日現金帳"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -409,9 +347,10 @@
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="點算現金"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -420,6 +359,7 @@
                                 Width="100"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="5,0,0,0"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
                                 IsEnabled="{Binding Enable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -428,7 +368,7 @@
                             <Button
                                 Width="150"
                                 Height="40"
-                                Margin="10,0,0,0"
+                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 Background="RoyalBlue"
                                 BorderThickness="0"
@@ -443,7 +383,7 @@
                             Grid.Column="0"
                             Orientation="Horizontal">
                             <Label
-                                Width="230"
+                                Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
                                 Content="當日已關班"
@@ -453,10 +393,160 @@
                                 Width="230"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="{Binding CheckClosed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
                                 Foreground="{Binding CheckColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                 
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="調劑台資料"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="當月總調劑人數"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="MedTotal"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="合作診所收入"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="CoopMed"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding Coop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="配藥毛利收入"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="SelfMed"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding Self, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="慢箋+其他收入"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="OtherMed"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding Other, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="自費調劑現金帳"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="CashTotal"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding CashTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
                         </StackPanel>
                     </Grid>
                 </StackPanel>

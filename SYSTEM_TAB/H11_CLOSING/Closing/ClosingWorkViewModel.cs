@@ -35,6 +35,28 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
         }
 
+        private int tradeTodayStock;
+
+        public int TradeTodayStock
+        {
+            get => tradeTodayStock;
+            set
+            {
+                Set(() => TradeTodayStock, ref tradeTodayStock, value);
+            }
+        }
+        private int tradeTodayProfit;
+
+        public int TradeTodayProfit
+        {
+            get => tradeTodayProfit;
+            set
+            {
+                Set(() => TradeTodayProfit, ref tradeTodayProfit, value);
+            }
+        }
+
+
         private int coop;
 
         public int Coop
@@ -261,6 +283,10 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             TradeDiscount = (int)result.Rows[0]["tradeDiscount"];
             TradeReward = (int)result.Rows[0]["tradeReward"];
             Extra = (int)result.Rows[0]["Extra"];
+            TradeTodayProfit = (int)result.Rows[0]["tradeTodayProfit"];
+            TradeTodayStock= (int)result.Rows[0]["tradeTodayStock"];
+
+
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
             CheckColor = Brushes.Green;
             Enable = false;

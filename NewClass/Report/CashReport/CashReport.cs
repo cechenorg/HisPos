@@ -131,6 +131,59 @@ namespace His_Pos.NewClass.Report.CashReport
             }
         }
 
+        private double totalOTCCash;
+
+        public double TotalOTCCash
+        {
+            get => totalOTCCash;
+            set
+            {
+                Set(() => TotalOTCCash, ref totalOTCCash, value);
+            }
+        }
+
+        private double totalOTCCard;
+
+        public double TotalOTCCard
+        {
+            get => totalOTCCard;
+            set
+            {
+                Set(() => TotalOTCCard, ref totalOTCCard, value);
+            }
+        }
+
+        private double totalOTCTicket;
+
+        public double TotalOTCTicket
+        {
+            get => totalOTCTicket;
+            set
+            {
+                Set(() => TotalOTCTicket, ref totalOTCTicket, value);
+            }
+        }
+        private double totalOTCCashTicket;
+
+        public double TotalOTCCashTicket
+        {
+            get => totalOTCCashTicket;
+            set
+            {
+                Set(() => TotalOTCCashTicket, ref totalOTCCashTicket, value);
+            }
+        }
+
+        private double totalOTCAmount;
+        public double TotalOTCAmount
+        {
+            get => totalOTCAmount;
+            set
+            {
+                Set(() => TotalOTCAmount, ref totalOTCAmount, value);
+            }
+        }
+
         private double totalMedProfit;
 
         public double TotalMedProfit

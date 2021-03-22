@@ -1315,7 +1315,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             }
         }
 
-        private CashDetailReports cashDetailReportCollection;
+        private CashDetailReports cashDetailReportCollection =new CashDetailReports();
 
         public CashDetailReports CashDetailReportCollection
         {
@@ -2600,6 +2600,68 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 CalculateCooperativeChangePrescriptionProfit();
                 CalculateTotal();
 
+
+                if (CashStockEntryReportEnum == CashStockEntryReportEnum.Cash && CashCoopVis == Visibility.Collapsed)
+                {
+                    CashCoopSelectionChangedAction();
+
+                }
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.Cash && CashCoopVis != Visibility.Collapsed)
+                {
+               
+                    CashNotCoopSelectionChangedAction();
+                    CashSelectionChangedAction();
+                }
+
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.Prescription && CoopVis == Visibility.Visible)
+                {
+                    CooperativePrescriptionChangeSelectionChangedAction();
+  
+                }   
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.Prescription && CoopVis != Visibility.Visible)
+                {
+                   
+                    CooperativePrescriptionSelectionChangedAction();
+                    SelfPrescriptionSelectionChangedAction();
+                }
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.StockTaking)
+                {
+                    StockTakingReportSelectionChangedAction();
+                }
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.TradeProfit && ChangeVis != Visibility.Visible)
+                {
+                    TradeProfitReportSelectionChangedAction();
+                }
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.TradeProfit && ChangeVis == Visibility.Visible)
+                {
+                    TradeChangeReportSelectionChangedAction();
+                }
+                
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.ExtraMoney)
+                {
+                    ExtraMoneyReportSelectionChangedAction();
+                }
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.OTCStockTaking)
+                {
+                    StockTakingOTCReportSelectionChangedAction();
+                }
+                else if (CashStockEntryReportEnum == CashStockEntryReportEnum.Reward)
+                {
+                    RewardReportSelectionChangedAction();
+                }
+
+
+
+              
+           
+               
+               
+               
+             
+               
+             
+                
+
                 IsBusy = false;
             };
             IsBusy = true;
@@ -2974,6 +3036,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             TotalTradeProfitReport.TotalCashCouponTotalAmt = TotalTradeProfitReport.TotalDeleteCashCouponAmt + TotalTradeProfitReport.TotalChangeCashCouponAmt;
 
             TotalCashFlow.TotalOTCChange = TotalTradeProfitReport.TotalDeleteAmt + TotalTradeProfitReport.TotalChangeAmt;
+
+
+            TotalCashFlow.TotalOTCCash = TotalTradeProfitReport.CashAmount + TotalTradeProfitReport.TotalCashTotalAmt;
+            TotalCashFlow.TotalOTCCard = TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.TotalCardTotalAmt;
+            TotalCashFlow.TotalOTCTicket = TotalTradeProfitReport.DiscountAmt + TotalTradeProfitReport.TotalDiscountTotalAmt;
+            TotalCashFlow.TotalOTCCashTicket = TotalTradeProfitReport.CashCoupon + TotalTradeProfitReport.TotalCashCouponTotalAmt;
+            TotalCashFlow.TotalOTCAmount = TotalTradeProfitReport.Cost + TotalTradeProfitReport.TotalCostTotalAmt + (double)TotalStockTakingOTCReport.Price + (double)TotalRewardReport.RewardAmount + (double)DiscountAmt;
 
             DiscountAmt = -TotalTradeProfitReport.DiscountAmt;
             InventoryDifference.InventoryTotal = (double)(InventoryDifference.InventoryOverage + InventoryDifference.InventoryShortage + InventoryDifference.InventoryScrap);
