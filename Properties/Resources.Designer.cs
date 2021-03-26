@@ -796,6 +796,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 新每日總帳報表 的當地語系化字串。
+        /// </summary>
+        internal static string TodayCashStockEntryReport {
+            get {
+                return ResourceManager.GetString("TodayCashStockEntryReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 銷售作業 的當地語系化字串。
         /// </summary>
         internal static string Transaction {

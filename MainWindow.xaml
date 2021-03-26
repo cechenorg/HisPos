@@ -27,6 +27,7 @@
     xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
     xmlns:controlMedicineDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare"
     xmlns:cashStockEntryReport ="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport"
+    xmlns:todaycashStockEntryReport ="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport"
     xmlns:cooperativeEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -118,6 +119,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type cashStockEntryReport:CashStockEntryReportViewModel}">
             <cashStockEntryReport:CashStockEntryReport />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type todaycashStockEntryReport:TodayCashStockEntryReportViewModel}">
+            <todaycashStockEntryReport:TodayCashStockEntryReport />
         </DataTemplate>
         <DataTemplate DataType="{x:Type cooperativeEntryReport:CooperativeEntryReportViewModel }">
             <cooperativeEntryReport:CooperativeEntryReport />

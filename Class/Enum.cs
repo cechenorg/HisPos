@@ -65,6 +65,7 @@ namespace His_Pos.Class
         資產負債表 = 39,
         關班作業 = 40,
         會計科目 = 41,
+        新每日總帳報表=42
     }
 
     public enum StoreOrderProductType

@@ -25,6 +25,7 @@ using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement;
@@ -233,7 +234,8 @@ namespace His_Pos.ChromeTabViewModel
 
                 case nameof(FeatureItem.每日總帳報表):
                     break;
-
+                case nameof(FeatureItem.新每日總帳報表):
+                    break;
                 case nameof(FeatureItem.系統函式):
                     break;
 
@@ -393,6 +395,9 @@ namespace His_Pos.ChromeTabViewModel
 
                 case nameof(FeatureItem.每日總帳報表):
                     newTab = new CashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[3], Icon = MainWindow.HisFeatures[7].Icon };
+                    break;
+                case nameof(FeatureItem.新每日總帳報表):
+                    newTab = new TodayCashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[4], Icon = MainWindow.HisFeatures[7].Icon };
                     break;
 
                 //會計報表
