@@ -29,6 +29,34 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         private double meduse;
         private double profit;
         private int count;
+        private int coopCount;
+        private int paySelfCount;
+        private int slowCount;
+        private int normalCount;
+        private double coopProfit;
+        private double paySelfProfit;
+        private double slowProfit;
+        private double normalProfit;
+        private double coopMeduse;
+        private double paySelfMeduse;
+        private double slowMeduse;
+        private double normalMeduse;
+        private double coopIncome;
+        private double paySelfIncome;
+        private double slowIncome;
+        private double normalIncome;
+
+        private double coopChange;
+        private double paySelfChange;
+        private double slowChange;
+        private double normalChange;
+
+        private int medTotalCount;
+        private double medTotalProfit;
+        private double medTotalMeduse;
+        private double medTotalIncome;
+        private double medTotalChange;
+
         public int Id { get; set; }
         public string AdjustCaseID { get; set; }
         public string CusName { get; set; }
@@ -95,5 +123,215 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => Count, ref count, value);
             }
         }
+        public int CoopCount
+        {
+            get => coopCount;
+            set
+            {
+                Set(() => CoopCount, ref coopCount, value);
+            }
+        }
+        public int PaySelfCount
+        {
+            get => paySelfCount;
+            set
+            {
+                Set(() => PaySelfCount, ref paySelfCount, value);
+            }
+        }
+        public int SlowCount
+        {
+            get => slowCount;
+            set
+            {
+                Set(() => SlowCount, ref slowCount, value);
+            }
+        }
+
+        public int NormalCount
+        {
+            get => normalCount;
+            set
+            {
+                Set(() => NormalCount, ref normalCount, value);
+            }
+        }
+        public double CoopProfit
+        {
+            get => coopProfit;
+            set
+            {
+                Set(() => CoopProfit, ref coopProfit, value);
+            }
+        }
+        public double PaySelfProfit
+        {
+            get => paySelfProfit;
+            set
+            {
+                Set(() => PaySelfProfit, ref paySelfProfit, value);
+            }
+        }
+        public double SlowProfit
+        {
+            get => slowProfit;
+            set
+            {
+                Set(() => SlowProfit, ref slowProfit, value);
+            }
+        }
+        public double NormalProfit
+        {
+            get => normalProfit;
+            set
+            {
+                Set(() => NormalProfit, ref normalProfit, value);
+            }
+        }
+        public double CoopMeduse
+        {
+            get => coopMeduse;
+            set
+            {
+                Set(() => CoopMeduse, ref coopMeduse, value);
+            }
+        }
+        public double PaySelfMeduse
+        {
+            get => paySelfMeduse;
+            set
+            {
+                Set(() => PaySelfMeduse, ref paySelfMeduse, value);
+            }
+        }
+        public double SlowMeduse
+        {
+            get => slowMeduse;
+            set
+            {
+                Set(() => SlowMeduse, ref slowMeduse, value);
+            }
+        }
+        public double NormalMeduse
+        {
+            get => normalMeduse;
+            set
+            {
+                Set(() => NormalMeduse, ref normalMeduse, value);
+            }
+        }
+        public double CoopIncome
+        {
+            get => coopIncome;
+            set
+            {
+                Set(() => CoopIncome, ref coopIncome, value);
+            }
+        }
+        public double PaySelfIncome
+        {
+            get => paySelfIncome;
+            set
+            {
+                Set(() => PaySelfIncome, ref paySelfIncome, value);
+            }
+        }
+        public double SlowIncome
+        {
+            get => slowIncome;
+            set
+            {
+                Set(() => SlowIncome, ref slowIncome, value);
+            }
+        }
+        public double NormalIncome
+        {
+            get => normalIncome;
+            set
+            {
+                Set(() => NormalIncome, ref normalIncome, value);
+            }
+        }
+
+
+
+
+        public double CoopChange
+        {
+            get => coopChange;
+            set
+            {
+                Set(() => CoopChange, ref coopChange, value);
+            }
+        }
+        public double PaySelfChange
+        {
+            get => paySelfChange;
+            set
+            {
+                Set(() => PaySelfChange, ref paySelfChange, value);
+            }
+        }
+        public double SlowChange
+        {
+            get => slowChange;
+            set
+            {
+                Set(() => SlowChange, ref slowChange, value);
+            }
+        }
+        public double NormalChange
+        {
+            get => normalChange;
+            set
+            {
+                Set(() => NormalChange, ref normalChange, value);
+            }
+        }
+
+        public int MedTotalCount
+        {
+            get => medTotalCount;
+            set
+            {
+                Set(() => MedTotalCount, ref medTotalCount, value);
+            }
+        }
+        public double MedTotalProfit
+        {
+            get => medTotalProfit;
+            set
+            {
+                Set(() => MedTotalProfit, ref medTotalProfit, value);
+            }
+        }
+        public double MedTotalMeduse
+        {
+            get => medTotalMeduse;
+            set
+            {
+                Set(() => MedTotalMeduse, ref medTotalMeduse, value);
+            }
+        }
+        public double MedTotalIncome
+        {
+            get => medTotalIncome;
+            set
+            {
+                Set(() => MedTotalIncome, ref medTotalIncome, value);
+            }
+        }
+
+        public double MedTotalChange
+        {
+            get => medTotalChange;
+            set
+            {
+                Set(() => MedTotalChange, ref medTotalChange, value);
+            }
+        }
+
+
+
     }
 }

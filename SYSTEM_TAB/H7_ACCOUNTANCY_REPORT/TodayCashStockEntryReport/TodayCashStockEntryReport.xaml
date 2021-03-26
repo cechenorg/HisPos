@@ -515,7 +515,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding  TradeDetailReportSum.TotalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding  EmpProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -672,7 +672,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding PrescriptionDetailReportSumMain.MedTotalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content=""
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -829,7 +829,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopProfit , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content=""
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -986,7 +986,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding PrescriptionDetailReportSumMain.SlowProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content=""
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -1143,7 +1143,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding  PrescriptionDetailReportSumMain.NormalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content=""
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -1281,7 +1281,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content=""
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />

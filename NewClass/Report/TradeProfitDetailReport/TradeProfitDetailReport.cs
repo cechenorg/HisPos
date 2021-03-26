@@ -36,8 +36,10 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private string typeId;
         private int count;
         private decimal cardFee;
+        private int totalCost;
         private int cashCoupon;
-
+        private int totalChange;
+        private int totalProfit;
         public string TypeId
         {
             get => typeId;
@@ -143,6 +145,30 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             set
             {
                 Set(() => CardFee, ref cardFee, value);
+            }
+        }
+        public int TotalCost
+        {
+            get => totalCost;
+            set
+            {
+                Set(() => TotalCost, ref totalCost, value);
+            }
+        }
+        public int TotalChange
+        {
+            get => totalChange;
+            set
+            {
+                Set(() => TotalChange, ref totalChange, value);
+            }
+        }
+        public int TotalProfit
+        {
+            get => totalProfit;
+            set
+            {
+                Set(() => TotalProfit, ref totalProfit, value);
             }
         }
     }
