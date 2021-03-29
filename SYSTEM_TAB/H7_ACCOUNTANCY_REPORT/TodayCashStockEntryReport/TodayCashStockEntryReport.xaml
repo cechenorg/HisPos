@@ -17,8 +17,8 @@
         <DataTemplate x:Key="CashDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
             <entryDetailControl:CashDetailControl />
         </DataTemplate>
-        <DataTemplate x:Key="PrescriptionDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
-            <entryDetailControl:PrescriptionDetailControl />
+        <DataTemplate x:Key="TodayPrescriptionDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+            <entryDetailControl:TodayPrescriptionDetailControl />
         </DataTemplate>
         <DataTemplate x:Key="StockTakingDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
             <entryDetailControl:StockTakingDetailControl />
@@ -115,7 +115,7 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-               
+
                 <Button
                     x:Name="SearchButton"
                     Width="120"
@@ -151,12 +151,13 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="130" />
+                        <ColumnDefinition Width="130" />
+                        <ColumnDefinition Width="130" />
+                        <ColumnDefinition Width="130" />
+                        <ColumnDefinition Width="130" />
+                        <ColumnDefinition Width="130" />
+                        <ColumnDefinition Width="130" />
                         <ColumnDefinition Width="200" />
                     </Grid.ColumnDefinitions>
 
@@ -325,7 +326,7 @@
                         Grid.Row="0"
                         Grid.Column="5"
                         Orientation="Horizontal">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="150"
                                 VerticalAlignment="Center"
@@ -339,7 +340,21 @@
                         Grid.Row="0"
                         Grid.Column="6"
                         Orientation="Horizontal">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,1,0">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="禮券"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="7"
+                        Orientation="Horizontal">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="150"
                                 VerticalAlignment="Center"
@@ -351,7 +366,7 @@
                     </StackPanel>
                     <StackPanel
                         Grid.Row="0"
-                        Grid.Column="7"
+                        Grid.Column="8"
                         Orientation="Horizontal">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -364,13 +379,15 @@
                         </Border>
                     </StackPanel>
                     <StackPanel
-                        x:Name="OTCTrade"
+                        x:Name="OTCAll"
                         Grid.Row="1"
                         Grid.Column="1"
                         Background="Transparent"
                         Orientation="Horizontal"
-                        PreviewMouseDown="OTCTrade_PreviewMouseDown">
-
+                        PreviewMouseDown="OTCAll_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Command="{Binding TradeProfitAllReportSelectionChangedCommand}" Gesture="LeftClick" />
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="150"
@@ -383,13 +400,14 @@
                         </Border>
                     </StackPanel>
                     <StackPanel
+                        x:Name="OTCIncome"
                         Grid.Row="1"
                         Grid.Column="2"
                         Background="Transparent"
                         Orientation="Horizontal"
-                        PreviewMouseDown="OTCTrade_PreviewMouseDown">
+                        PreviewMouseDown="OTCIncome_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding TradeProfitIcomeReportSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -403,13 +421,14 @@
                         </Border>
                     </StackPanel>
                     <StackPanel
+                        x:Name="OTCCost"
                         Grid.Row="1"
                         Grid.Column="3"
                         Background="Transparent"
                         Orientation="Horizontal"
-                        PreviewMouseDown="OTCTrade_PreviewMouseDown">
+                        PreviewMouseDown="OTCCost_PreviewMouseDown_1">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitCostReportSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding TradeProfitCostCostReportSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -469,6 +488,26 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCTrade_PreviewMouseDown">
                         <StackPanel.InputBindings>
+                            <MouseBinding Command="{Binding TradeProfitTicketReportSelectionChangedCommand}" Gesture="LeftClick" />
+                        </StackPanel.InputBindings>
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding   TradeDetailReportSum.DiscountAmt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="7"
+                        Background="Transparent"
+                        Orientation="Horizontal"
+                        PreviewMouseDown="OTCTrade_PreviewMouseDown">
+                        <StackPanel.InputBindings>
                             <MouseBinding Command="{Binding RewardReportSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
@@ -484,7 +523,7 @@
                     </StackPanel>
                     <StackPanel
                         Grid.Row="1"
-                        Grid.Column="7"
+                        Grid.Column="8"
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCTrade_PreviewMouseDown">
@@ -516,14 +555,14 @@
                             FontSize="20" />
                     </StackPanel>
                     <StackPanel
-                        x:Name="OTCCost"
+                       
                         Grid.Row="2"
                         Grid.Column="1"
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommandi}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding AllAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -543,7 +582,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommandi}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding AllIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -563,7 +602,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommandi}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding AllCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -583,7 +622,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommandi}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding AllPrescriptionChangeSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -603,7 +642,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommandi}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding StockTakingReportSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -622,15 +661,13 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
-                        <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommandi}" Gesture="LeftClick" />
-                        </StackPanel.InputBindings>
+
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -639,6 +676,24 @@
                     <StackPanel
                         Grid.Row="2"
                         Grid.Column="7"
+                        Background="Transparent"
+                        Orientation="Horizontal"
+                        PreviewMouseDown="OTCCost_PreviewMouseDown">
+                 
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="-"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="2"
+                        Grid.Column="8"
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
@@ -671,7 +726,9 @@
                             VerticalAlignment="Center"
                             Content="合作"
                             FontFamily="Segoe UI Semibold"
-                            FontSize="20" />
+                            FontSize="20" 
+                            Foreground="Gray"
+                            />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
@@ -680,7 +737,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCFee_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeChangeReportSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding CooperativeAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -700,7 +757,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCFee_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding CooperativePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding CooperativeIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -720,7 +777,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCFee_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding CooperativePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding CooperativeCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -767,7 +824,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -779,15 +836,13 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCFee_PreviewMouseDown">
-                        <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeChangeReportSelectionChangedCommandi}" Gesture="LeftClick" />
-                        </StackPanel.InputBindings>
+
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -796,6 +851,24 @@
                     <StackPanel
                         Grid.Row="3"
                         Grid.Column="7"
+                        Background="Transparent"
+                        Orientation="Horizontal"
+                        PreviewMouseDown="OTCFee_PreviewMouseDown">
+
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="-"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="3"
+                        Grid.Column="8"
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCFee_PreviewMouseDown">
@@ -837,7 +910,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCStock_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding StockTakingOTCReportSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding SelfSlowAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -857,7 +930,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCStock_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfSlowPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding SelfSlowIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -877,7 +950,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCStock_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfSlowPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding SelfSlowCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -924,7 +997,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -936,15 +1009,13 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCStock_PreviewMouseDown">
-                        <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding StockTakingOTCReportSelectionChangedCommandi}" Gesture="LeftClick" />
-                        </StackPanel.InputBindings>
+
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -953,6 +1024,24 @@
                     <StackPanel
                         Grid.Row="4"
                         Grid.Column="7"
+                        Background="Transparent"
+                        Orientation="Horizontal"
+                        PreviewMouseDown="OTCStock_PreviewMouseDown">
+ 
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="-"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="4"
+                        Grid.Column="8"
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCStock_PreviewMouseDown">
@@ -994,7 +1083,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCReward_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding RewardReportSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding SelfNormalAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -1014,7 +1103,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCReward_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfNormalPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding SelfNormalIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -1034,7 +1123,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCReward_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfNormalPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding SelfNormalCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -1081,7 +1170,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -1093,15 +1182,13 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCReward_PreviewMouseDown">
-                        <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding RewardReportSelectionChangedCommandi}" Gesture="LeftClick" />
-                        </StackPanel.InputBindings>
+
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -1110,6 +1197,24 @@
                     <StackPanel
                         Grid.Row="5"
                         Grid.Column="7"
+                        Background="Transparent"
+                        Orientation="Horizontal"
+                        PreviewMouseDown="OTCReward_PreviewMouseDown">
+
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="-"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="5"
+                        Grid.Column="8"
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCReward_PreviewMouseDown">
@@ -1149,6 +1254,9 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCTicket_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Command="{Binding SelfSelfAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="150"
@@ -1167,7 +1275,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCTicket_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfSelfPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding SelfSelfIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -1187,7 +1295,7 @@
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCTicket_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfSelfPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding SelfSelfCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
@@ -1231,7 +1339,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -1248,7 +1356,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content=""
+                                Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -1257,6 +1365,23 @@
                     <StackPanel
                         Grid.Row="6"
                         Grid.Column="7"
+                        Background="Transparent"
+                        Orientation="Horizontal"
+                        PreviewMouseDown="OTCTicket_PreviewMouseDown">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Top"
+                                HorizontalContentAlignment="Center"
+                                Content="-"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" Margin="0,6,0,0" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="6"
+                        Grid.Column="8"
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCTicket_PreviewMouseDown">
@@ -1361,10 +1486,42 @@
                                 FontSize="20" />
                         </Border>
                     </StackPanel>
-
                     <StackPanel
                         Grid.Row="7"
                         Grid.Column="6"
+                        Background="Transparent"
+                        Orientation="Horizontal">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding TotalCashFlow.AllStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="7"
+                        Grid.Column="7"
+                        Background="Transparent"
+                        Orientation="Horizontal">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="150"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding TotalRewardReport.RewardAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="7"
+                        Grid.Column="8"
                         Background="Transparent"
                         Orientation="Horizontal">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
@@ -1391,7 +1548,7 @@
                         <Setter Property="ContentTemplate" Value="{StaticResource CashDetailControl}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="Prescription">
-                                <Setter Property="ContentTemplate" Value="{StaticResource PrescriptionDetailControl}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource TodayPrescriptionDetailControl}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="StockTaking">
                                 <Setter Property="ContentTemplate" Value="{StaticResource StockTakingDetailControl}" />

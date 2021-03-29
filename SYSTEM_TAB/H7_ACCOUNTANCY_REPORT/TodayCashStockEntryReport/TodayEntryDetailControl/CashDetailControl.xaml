@@ -206,7 +206,8 @@
                     Binding="{Binding PaySelfPrescritionPrice}"
                     FontFamily="Segoe UI Semi"
                     Header="配藥"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    Visibility="{Binding test}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment" Value="Right" />

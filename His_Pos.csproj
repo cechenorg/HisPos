@@ -1301,8 +1301,8 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\ExtraMoneyDetailControl.xaml.cs">
       <DependentUpon>ExtraMoneyDetailControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\PrescriptionDetailControl.xaml.cs">
-      <DependentUpon>PrescriptionDetailControl.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\TodayPrescriptionDetailControl.xaml.cs">
+      <DependentUpon>TodayPrescriptionDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\RewardDetailControl.xaml.cs">
       <DependentUpon>RewardDetailControl.xaml</DependentUpon>
@@ -2225,7 +2225,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\PrescriptionDetailControl.xaml">
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\TodayPrescriptionDetailControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

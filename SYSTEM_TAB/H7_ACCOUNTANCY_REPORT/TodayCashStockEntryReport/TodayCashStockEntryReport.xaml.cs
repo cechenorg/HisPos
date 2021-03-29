@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.TodayEntryDetailControl;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -10,6 +11,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
     /// </summary>
     public partial class TodayCashStockEntryReport : UserControl
     {
+        public Visibility test;
+
+
+
         public TodayCashStockEntryReport()
         {
             InitializeComponent();
@@ -191,6 +196,26 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
         private void MedCoopChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
            
+        }
+
+        private void StackPanel_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void OTCAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void OTCIncome_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+           
+        }
+
+        private void OTCCost_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

@@ -9,9 +9,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.Tod
     /// <summary>
     /// PrescriptionDetailControl.xaml 的互動邏輯
     /// </summary>
-    public partial class PrescriptionDetailControl : UserControl
+    public partial class TodayPrescriptionDetailControl : UserControl
     {
-        public PrescriptionDetailControl()
+        public TodayPrescriptionDetailControl()
         {
             InitializeComponent();
         }

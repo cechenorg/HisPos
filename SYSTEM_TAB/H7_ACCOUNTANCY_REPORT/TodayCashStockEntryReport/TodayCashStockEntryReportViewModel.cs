@@ -164,6 +164,51 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             }
         }
 
+        private Visibility incomeVis;
+
+        public Visibility IncomeVis
+        {
+            get => incomeVis;
+            set
+            {
+                Set(() => IncomeVis, ref incomeVis, value);
+            }
+        }
+
+
+        private Visibility costVis;
+
+        public Visibility CostVis
+        {
+            get => costVis;
+            set
+            {
+                Set(() => CostVis, ref costVis, value);
+            }
+        }
+
+        private Visibility profitVis;
+
+        public Visibility ProfitVis
+        {
+            get => profitVis;
+            set
+            {
+                Set(() => ProfitVis, ref profitVis, value);
+            }
+        }
+        private Visibility ticketVis;
+
+        public Visibility TicketVis
+        {
+            get => ticketVis;
+            set
+            {
+                Set(() => TicketVis, ref ticketVis, value);
+            }
+        }
+
+
         private List<string> adjustCaseString;
 
         public List<string> AdjustCaseString
@@ -1548,6 +1593,30 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
         public RelayCommand SelfSelfPrescriptionChangeSelectionChangedCommand { get; set; }
         public RelayCommand SelfSlowPrescriptionChangeSelectionChangedCommand { get; set; }
         public RelayCommand SelfNormalPrescriptionChangeSelectionChangedCommand { get; set; }
+        public RelayCommand TradeProfitIcomeReportSelectionChangedCommand { get; set; }
+        public RelayCommand TradeProfitCostCostReportSelectionChangedCommand { get; set; }
+        public RelayCommand SelfNormalIncomePrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand SelfNormalCostPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand SelfNormalAllPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand SelfSlowIncomePrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand SelfSlowCostPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand SelfSlowAllPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand SelfSelfIncomePrescriptionSelectionChangedCommand { get; set; }
+
+        public RelayCommand SelfSelfCostPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand SelfSelfAllPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand CooperativeIncomePrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand CooperativeCostPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand CooperativeAllPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand TradeProfitAllReportSelectionChangedCommand { get; set; }
+        public RelayCommand AllPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand AllIncomePrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand AllCostPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand AllAllPrescriptionSelectionChangedCommand { get; set; }
+        public RelayCommand AllPrescriptionChangeSelectionChangedCommand { get; set; }
+
+        public RelayCommand TradeProfitTicketReportSelectionChangedCommand { get; set; }
+        
         #endregion Command
 
         public TodayCashStockEntryReportViewModel()
@@ -1555,17 +1624,38 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             SearchCommand = new RelayCommand(SearchAction);
             SelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionSelectionChangedAction);
 
+            AllPrescriptionSelectionChangedCommand = new RelayCommand(AllPrescriptionSelectionChangedAction);
+            AllIncomePrescriptionSelectionChangedCommand = new RelayCommand(AllIncomePrescriptionSelectionChangedAction);
+            AllCostPrescriptionSelectionChangedCommand = new RelayCommand(AllCostPrescriptionSelectionChangedAction);
+            AllAllPrescriptionSelectionChangedCommand = new RelayCommand(AllAllPrescriptionSelectionChangedAction);
+
+
             SelfNormalPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalPrescriptionSelectionChangedAction);
+            SelfNormalIncomePrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalIncomePrescriptionSelectionChangedAction);
+            SelfNormalCostPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalCostPrescriptionSelectionChangedAction);
+            SelfNormalAllPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalAllPrescriptionSelectionChangedAction);
+
             SelfSlowPrescriptionSelectionChangedCommand = new RelayCommand(SelfSlowPrescriptionSelectionChangedAction);
+            SelfSlowIncomePrescriptionSelectionChangedCommand = new RelayCommand(SelfSlowIncomePrescriptionSelectionChangedAction);
+            SelfSlowCostPrescriptionSelectionChangedCommand = new RelayCommand(SelfSlowCostPrescriptionSelectionChangedAction);
+            SelfSlowAllPrescriptionSelectionChangedCommand = new RelayCommand(SelfSlowAllPrescriptionSelectionChangedAction);
+
             SelfSelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionSelectionChangedAction);
+            SelfSelfIncomePrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfIncomePrescriptionSelectionChangedAction);
+            SelfSelfCostPrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfCostPrescriptionSelectionChangedAction);
+            SelfSelfAllPrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfAllPrescriptionSelectionChangedAction);
 
 
+            CooperativeIncomePrescriptionSelectionChangedCommand = new RelayCommand(CooperativeIncomePrescriptionSelectionChangedAction);
+            CooperativeCostPrescriptionSelectionChangedCommand = new RelayCommand(CooperativeCostPrescriptionSelectionChangedAction);
+            CooperativeAllPrescriptionSelectionChangedCommand = new RelayCommand(CooperativeAllPrescriptionSelectionChangedAction);
             CooperativePrescriptionSelectionChangedCommand = new RelayCommand(CooperativePrescriptionSelectionChangedAction);
+
 
             SelfNormalPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfNomalPrescriptionChangeSelectionChangedAction);
             SelfSlowPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfSlowPrescriptionChangeSelectionChangedAction);
             SelfSelfPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionChangeSelectionChangedAction);
-
+            AllPrescriptionChangeSelectionChangedCommand = new RelayCommand(AllPrescriptionChangeSelectionChangedAction);
 
             CooperativePrescriptionChangeSelectionChangedCommand = new RelayCommand(CooperativePrescriptionChangeSelectionChangedAction);
             CashSelectionChangedCommand = new RelayCommand(CashSelectionChangedAction);
@@ -1585,7 +1675,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             StockTakingOTCDetailClickCommand = new RelayCommand(StockTakingOTCDetailClickAction);
             
             TradeProfitReportSelectionChangedCommand = new RelayCommand(TradeProfitReportSelectionChangedAction);
-            TradeProfitCostReportSelectionChangedCommand = new RelayCommand(TradeProfitCostReportSelectionChangedAction);
+            TradeProfitIcomeReportSelectionChangedCommand = new RelayCommand(TradeProfitIncomeReportSelectionChangedAction);
+            TradeProfitCostCostReportSelectionChangedCommand = new RelayCommand(TradeProfitCostCostReportSelectionChangedAction);
+            TradeProfitAllReportSelectionChangedCommand = new RelayCommand(TradeProfitAllReportSelectionChangedAction);
+            TradeProfitTicketReportSelectionChangedCommand = new RelayCommand(TradeProfitTicketReportSelectionChangedAction);
+
 
 
             TradeProfitDetailClickCommand = new RelayCommand(TradeProfitDetailClickAction);
@@ -1960,6 +2054,38 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             StockTakingOTCDetailRecordReportCollection.GetDateByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID, StartDate, EndDate, StockTakingOTCDetailReportSelectItem.Type);
         }
 
+        private void TradeProfitCostCostReportSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Collapsed;
+            ProfitVis = Visibility.Collapsed;
+            TradeProfitReportSelectionChangedAction();
+        }
+        private void TradeProfitIncomeReportSelectionChangedAction()
+        {
+            CostVis = Visibility.Collapsed;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Collapsed;
+            TradeProfitReportSelectionChangedAction();
+        }
+        private void TradeProfitAllReportSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
+            TradeProfitReportSelectionChangedAction();
+        }
+
+        private void TradeProfitTicketReportSelectionChangedAction()
+        {
+            CostVis = Visibility.Collapsed;
+            IncomeVis = Visibility.Collapsed;
+            ProfitVis = Visibility.Collapsed;
+            TicketVis= Visibility.Visible;
+            TradeProfitReportSelectionChangedAction();
+        }
+
+
         private void TradeProfitReportSelectionChangedAction()
         {
             /* if (TradeProfitSelectedItem is null)
@@ -2099,6 +2225,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
        
         private void TradeChangeReportSelectionChangedAction()
         {
+
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
+
             /* if (TradeProfitSelectedItem is null)
              {
                  TradeProfitDetailReportCollection.Clear();
@@ -2440,6 +2571,28 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             StockTakingSelectedItem = null;
         }
 
+        private void CooperativeCostPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Collapsed;
+            ProfitVis = Visibility.Collapsed;
+            CooperativePrescriptionSelectionChangedAction();
+        }
+
+        private void CooperativeAllPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
+            CooperativePrescriptionSelectionChangedAction();
+        }
+        private void CooperativeIncomePrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Collapsed;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Collapsed;
+            CooperativePrescriptionSelectionChangedAction();
+        }
         private void CooperativePrescriptionSelectionChangedAction()
         {
             /*if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) {
@@ -2697,6 +2850,151 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
 
         /******* 各種箋明細 *******/
+        private void SelfNormalAllPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
+            SelfNormalPrescriptionSelectionChangedAction();
+        }
+        private void SelfNormalCostPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Collapsed;
+            ProfitVis = Visibility.Collapsed;
+            SelfNormalPrescriptionSelectionChangedAction();
+        }
+        private void SelfNormalIncomePrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Collapsed;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Collapsed;
+            SelfNormalPrescriptionSelectionChangedAction();
+        }
+
+
+        private void SelfSelfAllPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
+            SelfSelfPrescriptionSelectionChangedAction();
+        }
+        private void SelfSelfCostPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Collapsed;
+            ProfitVis = Visibility.Collapsed;
+            SelfSelfPrescriptionSelectionChangedAction();
+        }
+        private void SelfSelfIncomePrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Collapsed;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Collapsed;
+            SelfSelfPrescriptionSelectionChangedAction();
+        }
+
+        private void SelfSlowAllPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
+            SelfSlowPrescriptionSelectionChangedAction();
+        }
+        private void SelfSlowCostPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Collapsed;
+            ProfitVis = Visibility.Collapsed;
+            SelfSlowPrescriptionSelectionChangedAction();
+        }
+        private void SelfSlowIncomePrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Collapsed;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Collapsed;
+            SelfSlowPrescriptionSelectionChangedAction();
+        }
+
+
+        private void AllAllPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
+            AllPrescriptionSelectionChangedAction();
+        }
+        private void AllCostPrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Collapsed;
+            ProfitVis = Visibility.Collapsed;
+            AllPrescriptionSelectionChangedAction();
+        }
+        private void AllIncomePrescriptionSelectionChangedAction()
+        {
+            CostVis = Visibility.Collapsed;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Collapsed;
+            AllPrescriptionSelectionChangedAction();
+        }
+
+        private void AllPrescriptionSelectionChangedAction()
+        {
+            /*if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) {
+                PrescriptionDetailReportCollection.Clear();
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+            }
+
+            if (SelfPrescriptionSelectedItem is null)
+                return; */
+
+            CoopVis = Visibility.Collapsed;
+            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "報表查詢中";
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports("99", StartDate, EndDate);
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                //if (SelfPrescriptionSelectedItem.TypeId.Equals("5"))
+                //{
+                //    foreach (var r in PrescriptionDetailReportCollection)
+                //    {
+                //        var editRecords = PrescriptionPointEditRecords.Where(e => e.ID.Equals(r.Id));
+                //        var medicalServicePoint = editRecords.Sum(e => e.MedicalServiceDifference);
+                //        var medicinePoint = editRecords.Sum(e => e.MedicineDifference);
+                //        var paySelfPoint = editRecords.Sum(e => e.PaySelfDifference);
+                //        var profit = editRecords.Sum(e => e.ProfitDifference);
+                //        r.MedicalServicePoint += medicalServicePoint;
+                //        r.MedicalPoint += medicinePoint;
+                //        r.PaySelfPoint += paySelfPoint;
+                //        r.Profit += profit;
+                //    }
+                //}
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                CoopSelectItem = "全部";
+                AdjustCaseSelectItem = "全部";
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+            CooperativePrescriptionSelectedItem = null;
+            CashflowSelectedItem = null;
+            StockTakingSelectedItem = null;
+        }
+
 
         private void SelfNormalPrescriptionSelectionChangedAction()
         {
@@ -2864,6 +3162,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
         /******* 各種箋調整明細 *******/
         private void SelfNomalPrescriptionChangeSelectionChangedAction()
         {
+
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
             /*if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) {
                 PrescriptionDetailReportCollection.Clear();
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
@@ -2916,9 +3218,69 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             CashflowSelectedItem = null;
             StockTakingSelectedItem = null;
         }
+        private void AllPrescriptionChangeSelectionChangedAction()
+        {
 
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
+            /*if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) {
+                PrescriptionDetailReportCollection.Clear();
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+            }
+
+            if (SelfPrescriptionSelectedItem is null)
+                return; */
+
+            CoopVis = Visibility.Collapsed;
+            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                BusyContent = "報表查詢中";
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports("88", StartDate, EndDate);
+                MainWindow.ServerConnection.CloseConnection();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                //if (SelfPrescriptionSelectedItem.TypeId.Equals("5"))
+                //{
+                //    foreach (var r in PrescriptionDetailReportCollection)
+                //    {
+                //        var editRecords = PrescriptionPointEditRecords.Where(e => e.ID.Equals(r.Id));
+                //        var medicalServicePoint = editRecords.Sum(e => e.MedicalServiceDifference);
+                //        var medicinePoint = editRecords.Sum(e => e.MedicineDifference);
+                //        var paySelfPoint = editRecords.Sum(e => e.PaySelfDifference);
+                //        var profit = editRecords.Sum(e => e.ProfitDifference);
+                //        r.MedicalServicePoint += medicalServicePoint;
+                //        r.MedicalPoint += medicinePoint;
+                //        r.PaySelfPoint += paySelfPoint;
+                //        r.Profit += profit;
+                //    }
+                //}
+                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+                CoopSelectItem = "全部";
+                AdjustCaseSelectItem = "全部";
+                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+                SumPrescriptionDetailReport();
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
+            CooperativePrescriptionSelectedItem = null;
+            CashflowSelectedItem = null;
+            StockTakingSelectedItem = null;
+        }
         private void SelfSlowPrescriptionChangeSelectionChangedAction()
         {
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
             /*if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) {
                 PrescriptionDetailReportCollection.Clear();
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
@@ -2974,6 +3336,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
         private void SelfSelfPrescriptionChangeSelectionChangedAction()
         {
+
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
             /*if (SelfPrescriptionSelectedItem is null && CooperativePrescriptionSelectedItem is null) {
                 PrescriptionDetailReportCollection.Clear();
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
@@ -3081,6 +3447,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
         private void CooperativePrescriptionChangeSelectionChangedAction()
         {
             CoopVis = Visibility.Visible;
+            CostVis = Visibility.Visible;
+            IncomeVis = Visibility.Visible;
+            ProfitVis = Visibility.Visible;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
 
 
