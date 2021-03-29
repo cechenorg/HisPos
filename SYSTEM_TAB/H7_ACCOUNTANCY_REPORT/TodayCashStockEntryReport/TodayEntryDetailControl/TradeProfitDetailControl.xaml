@@ -235,7 +235,7 @@
                     FontFamily="Segoe UI Semi"
                     Header="禮券"
                     IsReadOnly="True"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}">
+                    Visibility="{Binding DataContext.TicketVis, Source={x:Reference dummyElement}}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
@@ -689,7 +689,7 @@
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.DiscountAmt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     TextAlignment="Right" 
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
+                    Visibility="{Binding DataContext.TicketVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="80"
                     Margin="0,0,0,0"

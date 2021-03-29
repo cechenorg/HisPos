@@ -2059,6 +2059,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
+            TicketVis = Visibility.Collapsed;
             TradeProfitReportSelectionChangedAction();
         }
         private void TradeProfitIncomeReportSelectionChangedAction()
@@ -2066,6 +2067,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
+            TicketVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
         }
         private void TradeProfitAllReportSelectionChangedAction()
@@ -2073,6 +2075,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
+            TicketVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
         }
 
@@ -2083,6 +2086,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             ProfitVis = Visibility.Collapsed;
             TicketVis= Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
+            TradeProfitDetailReportViewSource.Filter += TicketFilter;
         }
 
 
@@ -2100,18 +2104,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                  return;*/
             CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
             ChangeVis = Visibility.Collapsed;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
+        
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
                 TradeProfitDetailReportCollection = new TradeProfitDetailReports("0", StartDate, EndDate);
                 TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
 
                 MainWindow.ServerConnection.CloseConnection();
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
+         
                 TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
                 TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
                 TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
@@ -2126,9 +2126,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
                 EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
                 IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+            
             /*SelfPrescriptionSelectedItem = null;
             CooperativePrescriptionSelectedItem = null;*/
             CashflowSelectedItem = null;
@@ -3982,9 +3980,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
             TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
             TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.RealTotal);
-            TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
+            TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => (int)s.ValueDifference);
             TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
             TradeDetailReportSum.Count = tempCollection.Count();
+            TradeDetailReportSum.ValueDifference = TradeDetailReportSum.Profit - TradeDetailReportSum.RealTotal;
         }
 
 
@@ -4395,6 +4394,21 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             {
                 e.Accepted = true;
             }
+        }
+        private void TicketFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item is null) return;
+            if (!(e.Item is TradeProfitDetailReport src))
+                e.Accepted = false;
+
+            e.Accepted = false;
+
+            TradeProfitDetailReport indexitem = ((TradeProfitDetailReport)e.Item);
+            if (indexitem.DiscountAmt !=0)
+            {
+                e.Accepted = true;
+            }
+
         }
 
         #endregion Action
