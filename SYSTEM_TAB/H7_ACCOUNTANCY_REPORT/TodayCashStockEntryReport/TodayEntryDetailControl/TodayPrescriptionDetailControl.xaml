@@ -42,7 +42,7 @@
                 Content="筆"
                 FontFamily="Segoe UI Semibold"
                 FontSize="25" />
-            <Label
+            <!--<Label
                 Margin="10,0,0,0"
                 Content="調劑案件"
                 FontFamily="Segoe UI Semibold"
@@ -55,8 +55,8 @@
                 FontSize="18"
                 ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                 ItemsSource="{Binding AdjustCaseString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding AdjustCaseSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Label
+                SelectedItem="{Binding AdjustCaseSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
+            <!--<Label
                 Margin="20,0,0,0"
                 Content="合作院所"
                 FontFamily="Segoe UI Semibold"
@@ -71,7 +71,7 @@
                 ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                 ItemsSource="{Binding CoopString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding CoopSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Visibility="{Binding CoopVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Visibility="{Binding CoopVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
         </StackPanel>
         <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
         <DataGrid
@@ -142,7 +142,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="90"
+                    Width="170"
                     Binding="{Binding InsName}"
                     FontFamily="Segoe UI Semi"
                     Header="醫療院所"
@@ -216,7 +216,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="110"
+                    Width="80"
                     Binding="{Binding PaySelfPoint, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="自費"
@@ -305,15 +305,15 @@
                 Background="{StaticResource GridBackGround}"
                 Orientation="Horizontal">
                 <Label
-                    Width="60"
-                    Margin="25,0,0,0"
+                    Width="170"
+                    Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     Content="{Binding PrescriptionDetailReportSum.InsName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20" />
                 <TextBlock
                     Width="55"
-                    Margin="123,0,0,0"
+                    Margin="119,0,0,0"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
@@ -329,7 +329,7 @@
                     TextAlignment="Right" 
                      Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
-                    Width="110"
+                    Width="78"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"

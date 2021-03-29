@@ -593,11 +593,13 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionDetailReportSumMain.MedTotalIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
+                                FontSize="20"
+                                Padding="0,0,20,0"
+                                />
                         </Border>
                     </StackPanel>
                     <StackPanel
