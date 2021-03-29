@@ -320,5 +320,17 @@ namespace His_Pos.NewClass.Report.CashReport
                 Set(() => AllStock, ref allStock, value);
             }
         }
+
+
+        private int allProfit;
+        public int AllProfit
+        {
+            get => allProfit;
+            set
+            {
+                Set(() => AllProfit, ref allProfit, value);
+            }
+        }
     }
+
 }

@@ -4013,7 +4013,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             TotalCashFlow.AllChange= (int)(TradeDetailReportSum.TotalChange + PrescriptionDetailReportSumMain.MedTotalChange);
 
             TotalCashFlow.AllStock= (int)(StockTakingOTCDetailReportSum.Price + StockTakingDetailReportSum.Price);
-  
+
+            TotalCashFlow.AllProfit = (int)(TradeDetailReportSum.TotalProfit + PrescriptionDetailReportSumMain.MedTotalProfit);
+
+
 
 
 
@@ -4036,7 +4039,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 tempCollection = StockTakingOTCDetailReportCollection.Where(p => (p.Type == StockTakingOTCSelectItem));
             }
 
-            StockTakingOTCDetailReportSum.Price = tempCollection.Sum(s => s.Price);
+            StockTakingOTCDetailReportSum.Price = tempCollection.Sum(s => (int)s.Price);
 
             StockTakingOTCDetailReportSum.Count = tempCollection.Count();
         }
@@ -4056,7 +4059,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 tempCollection = StockTakingDetailReportCollection.Where(p => (p.Type == StockTakingSelectItem));
             }
 
-            StockTakingDetailReportSum.Price = tempCollection.Sum(s => s.Price);
+            StockTakingDetailReportSum.Price = tempCollection.Sum(s => (int)s.Price);
 
             StockTakingDetailReportSum.Count = tempCollection.Count();
         }

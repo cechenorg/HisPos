@@ -1503,7 +1503,7 @@
                                 Width="150"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding TotalCashFlow.AllStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding  TradeDetailReportSum.DiscountAmt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -1536,7 +1536,7 @@
                                 Width="200"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding TotalRewardReport.RewardAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding TotalCashFlow.AllProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
