@@ -1943,6 +1943,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 PrescriptionDetailMedicineRepotCollection.Clear();
                 return;
             }
+            PrescriptionDetailMedicineRepotCollection.Clear();
             PrescriptionService.ShowPrescriptionEditWindow(PrescriptionDetailReportSelectItem.Id);
         }
 
@@ -3472,7 +3473,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopChangeDetailReportCollection };
                 PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
                 CoopSelectItem = "全部";
-
+                AdjustCaseSelectItem = "全部";
                 PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
                 SumCoopChangePrescriptionDetailReport();
               
@@ -3781,11 +3782,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 }
             }
 
-            PrescriptionDetailReportSum.MedicalPoint = tempCollection.Sum(s => s.MedicalPoint);
-            PrescriptionDetailReportSum.MedicalServicePoint = tempCollection.Sum(s => s.MedicalServicePoint);
-            PrescriptionDetailReportSum.PaySelfPoint = tempCollection.Sum(s => s.PaySelfPoint);
-            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
-            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            PrescriptionDetailReportSum.MedicalPoint = tempCollection.Sum(s => (int)s.MedicalPoint);
+            PrescriptionDetailReportSum.MedicalServicePoint = tempCollection.Sum(s => (int)s.MedicalServicePoint);
+            PrescriptionDetailReportSum.PaySelfPoint = tempCollection.Sum(s => (int)s.PaySelfPoint);
+            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => (int)s.Meduse);
+            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => (int)s.Profit);
             PrescriptionDetailReportSum.Count = tempCollection.Count();
         }
         private void SumCoopChangePrescriptionDetailReport()
@@ -3839,11 +3840,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 }
             }
 
-            PrescriptionDetailReportSum.MedicalPoint = tempCollection.Sum(s => s.MedicalPoint);
-            PrescriptionDetailReportSum.MedicalServicePoint = tempCollection.Sum(s => s.MedicalServicePoint);
-            PrescriptionDetailReportSum.PaySelfPoint = tempCollection.Sum(s => s.PaySelfPoint);
-            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
-            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            PrescriptionDetailReportSum.MedicalPoint = tempCollection.Sum(s => (int)s.MedicalPoint);
+            PrescriptionDetailReportSum.MedicalServicePoint = tempCollection.Sum(s => (int)s.MedicalServicePoint);
+            PrescriptionDetailReportSum.PaySelfPoint = tempCollection.Sum(s => (int)s.PaySelfPoint);
+            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => (int)s.Meduse);
+            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => (int)s.Profit);
             PrescriptionDetailReportSum.Count = tempCollection.Count();
         }
 
@@ -3863,18 +3864,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             tempCollectionPaySelf = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "0");
 
             PrescriptionDetailReportSumMain.NormalCount = tempCollectionNormal.Count();
-            PrescriptionDetailReportSumMain.NormalMeduse = tempCollectionNormal.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.NormalProfit = tempCollectionNormal.Sum(s => s.Profit);
+            PrescriptionDetailReportSumMain.NormalMeduse = tempCollectionNormal.Sum(s => (int)s.Meduse);
+            PrescriptionDetailReportSumMain.NormalProfit = tempCollectionNormal.Sum(s => (int)s.Profit);
             PrescriptionDetailReportSumMain.NormalIncome = PrescriptionDetailReportSumMain.NormalProfit - PrescriptionDetailReportSumMain.NormalMeduse;
 
             PrescriptionDetailReportSumMain.SlowCount = tempCollectionSlow.Count();
-            PrescriptionDetailReportSumMain.SlowMeduse = tempCollectionSlow.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.SlowProfit = tempCollectionSlow.Sum(s => s.Profit);
+            PrescriptionDetailReportSumMain.SlowMeduse = tempCollectionSlow.Sum(s => (int)s.Meduse);
+            PrescriptionDetailReportSumMain.SlowProfit = tempCollectionSlow.Sum(s => (int)s.Profit);
             PrescriptionDetailReportSumMain.SlowIncome = PrescriptionDetailReportSumMain.SlowProfit - PrescriptionDetailReportSumMain.SlowMeduse;
 
             PrescriptionDetailReportSumMain.PaySelfCount = tempCollectionPaySelf.Count();
-            PrescriptionDetailReportSumMain.PaySelfMeduse = tempCollectionPaySelf.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.PaySelfProfit = tempCollectionPaySelf.Sum(s => s.Profit);
+            PrescriptionDetailReportSumMain.PaySelfMeduse = tempCollectionPaySelf.Sum(s => (int)s.Meduse);
+            PrescriptionDetailReportSumMain.PaySelfProfit = tempCollectionPaySelf.Sum(s => (int)s.Profit);
             PrescriptionDetailReportSumMain.PaySelfIncome = PrescriptionDetailReportSumMain.PaySelfProfit - PrescriptionDetailReportSumMain.PaySelfMeduse;
         }
 
@@ -3892,9 +3893,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             tempCollectionSlowChange = PrescriptionChangeDetailReportCollection.Where(p => p.AdjustCaseID == "2");
             tempCollectionPaySelfChange = PrescriptionChangeDetailReportCollection.Where(p => p.AdjustCaseID == "0");
 
-            PrescriptionDetailReportSumMain.NormalChange = tempCollectionNormalChange.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.SlowChange = tempCollectionSlowChange.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.PaySelfChange = tempCollectionPaySelfChange.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.NormalChange = tempCollectionNormalChange.Sum(s => (int)s.Meduse);
+            PrescriptionDetailReportSumMain.SlowChange = tempCollectionSlowChange.Sum(s => (int)s.Meduse);
+            PrescriptionDetailReportSumMain.PaySelfChange = tempCollectionPaySelfChange.Sum(s => (int)s.Meduse);
         }
 
 
@@ -3909,8 +3910,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             tempCollectionCoop = PrescriptionCoopDetailReportCollection;//.Where(p => p.InsName == CoopSelectItem);
 
             PrescriptionCoopDetailReportSumMain.CoopCount = tempCollectionCoop.Count();
-            PrescriptionCoopDetailReportSumMain.CoopMeduse = tempCollectionCoop.Sum(s => s.Meduse);
-            PrescriptionCoopDetailReportSumMain.CoopProfit = tempCollectionCoop.Sum(s => s.Profit);
+            PrescriptionCoopDetailReportSumMain.CoopMeduse = tempCollectionCoop.Sum(s => (int)s.Meduse);
+            PrescriptionCoopDetailReportSumMain.CoopProfit = tempCollectionCoop.Sum(s => (int)s.Profit);
             PrescriptionCoopDetailReportSumMain.CoopIncome = PrescriptionCoopDetailReportSumMain.CoopProfit - PrescriptionCoopDetailReportSumMain.CoopMeduse;
 
         }
@@ -3921,7 +3922,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
             tempCollectionCoop = PrescriptionCoopChangeDetailReportCollection.Where(p => p.InsName == CoopSelectItem);
 
-            PrescriptionCoopDetailReportSumMain.CoopChange = tempCollectionCoop.Sum(s => s.Meduse);
+            PrescriptionCoopDetailReportSumMain.CoopChange = tempCollectionCoop.Sum(s => (int)s.Meduse);
 
         }
 
