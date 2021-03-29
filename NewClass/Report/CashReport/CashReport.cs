@@ -271,5 +271,54 @@ namespace His_Pos.NewClass.Report.CashReport
             }
         }
 
+        private int allCount;
+        public int AllCount
+        {
+            get => allCount;
+            set
+            {
+                Set(() => AllCount, ref allCount, value);
+            }
+        }
+
+        private int allIncome;
+        public int AllIncome
+        {
+            get => allIncome;
+            set
+            {
+                Set(() => AllIncome, ref allIncome, value);
+            }
+        }
+
+        private int allCost;
+        public int AllCost
+        {
+            get => allCost;
+            set
+            {
+                Set(() => AllCost, ref allCost, value);
+            }
+        }
+
+        private int allChange;
+        public int AllChange
+        {
+            get => allChange;
+            set
+            {
+                Set(() => AllChange, ref allChange, value);
+            }
+        }
+
+        private int allStock;
+        public int AllStock
+        {
+            get => allStock;
+            set
+            {
+                Set(() => AllStock, ref allStock, value);
+            }
+        }
     }
 }
