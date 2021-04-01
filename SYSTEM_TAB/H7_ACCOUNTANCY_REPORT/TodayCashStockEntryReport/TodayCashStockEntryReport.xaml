@@ -696,12 +696,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -715,12 +715,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -761,7 +761,7 @@
                             Content="合作"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20" 
-                            Foreground="Gray"
+                            Foreground="Silver"
                             />
                     </StackPanel>
                     <StackPanel
@@ -783,7 +783,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -800,13 +800,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
-                                VerticalAlignment="Bottom"
+                                VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionCoopDetailReportSumMain.CoopIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" Margin="0,0,0,7.4" 
-                                Foreground="Gray"
+                                FontSize="20" 
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -829,7 +829,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -852,7 +852,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -869,12 +869,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"
+                                Padding="0,0,30,0"
                                 />
                         </Border>
                     </StackPanel>
@@ -889,12 +889,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -908,12 +908,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -934,7 +934,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
@@ -952,7 +952,7 @@
                             Content="慢箋"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20" 
-                            Foreground="Gray"/>
+                            Foreground="Silver"/>
                     </StackPanel>
                     <StackPanel
                         x:Name="SLOWAll"
@@ -973,7 +973,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -996,7 +996,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1019,7 +1019,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1042,7 +1042,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1059,12 +1059,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1078,12 +1078,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1097,12 +1097,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1121,7 +1121,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
@@ -1139,7 +1139,7 @@
                             Content="一般箋"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20" 
-                            Foreground="Gray"/>
+                            Foreground="Silver"/>
                     </StackPanel>
                     <StackPanel
                         x:Name="NORMALAll"
@@ -1160,7 +1160,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1183,7 +1183,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1206,7 +1206,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1229,7 +1229,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1246,12 +1246,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1265,12 +1265,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1284,12 +1284,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1308,7 +1308,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
@@ -1328,7 +1328,7 @@
                             Content="配藥"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20"
-                            Foreground="Gray"/>
+                            Foreground="Silver"/>
                     </StackPanel>
                     <StackPanel
                         x:Name="SELFAll"
@@ -1349,7 +1349,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1372,7 +1372,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1395,7 +1395,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1418,7 +1418,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -1432,12 +1432,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1450,12 +1450,12 @@
                             <Label
                                 Width="130"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1467,13 +1467,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
-                                VerticalAlignment="Top"
-                                HorizontalContentAlignment="Center"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" Margin="0,6,0,0" 
-                                Padding="30,0,0,0"/>
+                                Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1491,7 +1491,7 @@
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
-                                Foreground="Gray"
+                                Foreground="Silver"
                                 Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
