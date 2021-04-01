@@ -51,7 +51,7 @@ namespace His_Pos.Class
         合作診所藥品耗用 = 23,
         系統函式 = 25,
         管制藥品簿冊申報 = 26,
-        每日總帳報表 = 27,
+        舊每日總帳報表 = 27,
         額外收支 = 29,
         申報院所點數總表 = 30,
         盤點計畫 = 31,
@@ -65,7 +65,7 @@ namespace His_Pos.Class
         資產負債表 = 39,
         關班作業 = 40,
         會計科目 = 41,
-        新每日總帳報表=42
+        每日總帳報表=42
     }
 
     public enum StoreOrderProductType

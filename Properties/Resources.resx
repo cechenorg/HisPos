@@ -534,10 +534,10 @@
     <value>藥袋列印中...</value>
   </data>
   <data name="CashStockEntryReport" xml:space="preserve">
-    <value>每日總帳報表</value>
+    <value>舊每日總帳報表</value>
   </data>
 	<data name="TodayCashStockEntryReport" xml:space="preserve">
-    <value>新每日總帳報表</value>
+    <value>每日總帳報表</value>
   </data>
   <data name="CooperativeEntryReport" xml:space="preserve">
     <value>合作診所結帳報表</value>
