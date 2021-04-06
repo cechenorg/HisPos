@@ -15,12 +15,14 @@ namespace His_Pos.NewClass.Report.StockTakingDetailReport
             InvRecSourceID = r.Field<string>("StoTakDet_MasterID");
             Price = Math.Round(r.Field<decimal>("Price"), 2);
             Type = r.Field<string>("TypeID");
+            Time = r.Field<DateTime>("Time");
         }
 
         private string invRecSourceID;
         private string type;
         private decimal price;
         private int count;
+        private DateTime time;
 
         public string InvRecSourceID
         {
@@ -55,6 +57,14 @@ namespace His_Pos.NewClass.Report.StockTakingDetailReport
             set
             {
                 Set(() => Count, ref count, value);
+            }
+        }
+        public DateTime Time
+        {
+            get => time;
+            set
+            {
+                Set(() => Time, ref time, value);
             }
         }
     }

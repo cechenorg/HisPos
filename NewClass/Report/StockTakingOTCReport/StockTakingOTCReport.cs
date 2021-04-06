@@ -16,6 +16,7 @@ namespace His_Pos.NewClass.Report.StockTakingOTCReport
             TypeName = r.Field<string>("TypeName");
             Count = r.Field<int>("Count");
             Price = Math.Round(r.Field<decimal>("Price"), 2);
+           
         }
 
         private string typeId;
@@ -61,5 +62,7 @@ namespace His_Pos.NewClass.Report.StockTakingOTCReport
                 Set(() => Price, ref price, value);
             }
         }
+
+      
     }
 }

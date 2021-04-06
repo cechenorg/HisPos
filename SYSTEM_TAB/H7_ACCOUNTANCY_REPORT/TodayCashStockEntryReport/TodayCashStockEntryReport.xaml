@@ -752,9 +752,7 @@
                         VerticalAlignment="Center"
                         Margin="70,0,0,0"
                         PreviewMouseDown="OTCFee_PreviewMouseDown">
-                        <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeChangeReportSelectionChangedCommand}" Gesture="LeftClick" />
-                        </StackPanel.InputBindings>
+                     
                         <Label
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"

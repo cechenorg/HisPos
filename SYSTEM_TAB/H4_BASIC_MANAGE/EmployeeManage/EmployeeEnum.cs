@@ -4,6 +4,7 @@
     {
         NoEditControl = 1,
         SelfEditControl = 2,
+        NoControl = 4,
         AllEditableControl = 3
     }
 }

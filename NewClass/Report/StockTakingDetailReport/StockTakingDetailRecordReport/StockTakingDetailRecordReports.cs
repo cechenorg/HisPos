@@ -10,9 +10,9 @@ namespace His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecor
         {
         }
 
-        public void GetDateByDate(string typeId, DateTime sDate, DateTime eDate, string type)
+        public void GetDateByDate(string typeId, DateTime sDate, DateTime eDate, string type, DateTime Time)
         {
-            DataTable table = StockTakingDetailRecordReportDb.GetDataByDate(typeId, sDate, eDate, type);
+            DataTable table = StockTakingDetailRecordReportDb.GetDataByDate(typeId, sDate, eDate, type ,Time);
             Clear();
             foreach (DataRow r in table.Rows)
             {

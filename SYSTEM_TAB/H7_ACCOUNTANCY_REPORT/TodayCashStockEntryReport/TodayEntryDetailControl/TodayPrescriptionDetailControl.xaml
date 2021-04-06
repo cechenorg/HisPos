@@ -304,8 +304,16 @@
                 Grid.Column="0"
                 Background="{StaticResource GridBackGround}"
                 Orientation="Horizontal">
+
                 <Label
-                    Width="170"
+                    Width="110"
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    Content=""
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20" />
+                <Label
+                    Width="180"
                     Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     Content="{Binding PrescriptionDetailReportSum.InsName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -313,7 +321,7 @@
                     FontSize="20" />
                 <TextBlock
                     Width="55"
-                    Margin="119,0,0,0"
+                    Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"

@@ -188,7 +188,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             EmployeeCollectionViewSource.Filter += Filter;
 
             if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
+            {
                 ControlType = EmployeeControlEnum.AllEditableControl;
+            }
+            if (EmployeeCollection != null)
+            {
+              
+            }
+            else {
+                ControlType = EmployeeControlEnum.NoControl;
+            }
         }
 
         private void Filter(object sender, FilterEventArgs e)
