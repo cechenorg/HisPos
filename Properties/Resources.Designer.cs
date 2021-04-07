@@ -171,7 +171,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 舊每日總帳報表 的當地語系化字串。
+        ///   查詢類似 會計總帳報表 的當地語系化字串。
         /// </summary>
         internal static string CashStockEntryReport {
             get {

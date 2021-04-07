@@ -310,7 +310,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="200"
+                            Width="400"
                             Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
                             Header="備註"
                             IsReadOnly="True">

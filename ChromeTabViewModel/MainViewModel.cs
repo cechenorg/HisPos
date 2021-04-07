@@ -232,7 +232,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.管制藥品簿冊申報):
                     break;
 
-                case nameof(FeatureItem.舊每日總帳報表):
+                case nameof(FeatureItem.會計總帳報表):
                     break;
                 case nameof(FeatureItem.每日總帳報表):
                     break;
@@ -393,7 +393,7 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ControlMedicineDeclareViewModel() { TabName = MainWindow.HisFeatures[7].Functions[2], Icon = MainWindow.HisFeatures[7].Icon };
                     break;
 
-                case nameof(FeatureItem.舊每日總帳報表):
+                case nameof(FeatureItem.會計總帳報表):
                     newTab = new CashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[3], Icon = MainWindow.HisFeatures[7].Icon };
                     break;
                 case nameof(FeatureItem.每日總帳報表):
