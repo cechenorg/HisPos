@@ -15,19 +15,19 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             CusName = r.Field<string>("Cus_Name");
             InsName = r.Field<string>("Ins_Name");
             AdjustCaseID = r.Field<string>("AdjustCaseID");
-            MedicalServicePoint = r.Field<double>("MedicalServicePoint");
-            MedicalPoint = r.Field<double>("MedicinePoint");
-            Meduse = r.Field<double>("Meduse");
-            Profit = r.Field<double>("Profit");
-            PaySelfPoint = r.Field<double>("PaySelfPoint");
+            MedicalServicePoint = r.Field<int>("MedicalServicePoint");
+            MedicalPoint = r.Field<int>("MedicinePoint");
+            Meduse = r.Field<int>("Meduse");
+            Profit = r.Field<int>("Profit");
+            PaySelfPoint = r.Field<int>("PaySelfPoint");
         }
 
         private string insName;
         private double medicalServicePoint;
         private double medicalPoint;
         private double paySelfPoint;
-        private double meduse;
-        private double profit;
+        private int meduse;
+        private int profit;
         private int count;
         private int coopCount;
         private int paySelfCount;
@@ -97,7 +97,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public double Meduse
+        public int Meduse
         {
             get => meduse;
             set
@@ -106,7 +106,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public double Profit
+        public int Profit
         {
             get => profit;
             set
