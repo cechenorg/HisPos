@@ -655,6 +655,21 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             }
         }
 
+
+        private TradeProfitDetailReports tradeProfitDetailReportCollectionChanged;
+
+        public TradeProfitDetailReports TradeProfitDetailReportCollectionChanged
+        {
+            get => tradeProfitDetailReportCollectionChanged;
+            set
+            {
+                Set(() => TradeProfitDetailReportCollectionChanged, ref tradeProfitDetailReportCollectionChanged, value);
+            }
+        }
+
+
+
+
         private CollectionViewSource tradeProfitDetailReportViewSource;
 
         private CollectionViewSource TradeProfitDetailReportViewSource
@@ -2342,7 +2357,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
-                TradeProfitDetailReportCollection = new TradeProfitDetailReports("1", StartDate, EndDate);
+                TradeProfitDetailReportCollectionChanged = new TradeProfitDetailReports("1", StartDate, EndDate);
                 TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
 
                 MainWindow.ServerConnection.CloseConnection();
@@ -2358,7 +2373,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                     ChangeString.Add(item);
                 }
            
-                TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
+                TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollectionChanged };
                 TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
                 TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
 
@@ -4213,8 +4228,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
         }
         private void SumOTCReportChangeMain(string ID)
         {
-            var tempCollection = TradeProfitDetailReportCollection.Where(p => true);
-            tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId != "1"));
+            var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => true);
+            tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
             TradeDetailReportSum.TotalChange = (int)tempCollection.Sum(s => s.Profit);
                
         }
