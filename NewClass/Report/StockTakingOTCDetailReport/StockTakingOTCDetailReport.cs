@@ -13,14 +13,14 @@ namespace His_Pos.NewClass.Report.StockTakingDetailReport
         public StockTakingOTCDetailReport(DataRow r)
         {
             InvRecSourceID = r.Field<string>("StoTakDet_MasterID");
-            Price = Math.Round(r.Field<decimal>("Price"), 2);
+            Price = r.Field<int>("Price");
             Type = r.Field<string>("TypeID");
             Time = r.Field<DateTime>("Time");
         }
 
         private string invRecSourceID;
         private string type;
-        private decimal price;
+        private int price;
         private int count;
         private DateTime time;
 
@@ -42,7 +42,7 @@ namespace His_Pos.NewClass.Report.StockTakingDetailReport
             }
         }
 
-        public decimal Price
+        public int Price
         {
             get => price;
             set

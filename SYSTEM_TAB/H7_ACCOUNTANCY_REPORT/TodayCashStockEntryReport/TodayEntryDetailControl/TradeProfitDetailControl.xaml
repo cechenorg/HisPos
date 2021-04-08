@@ -42,15 +42,20 @@
                     Margin="20,0,0,0"
                     Content="共"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="25" />
+                    FontSize="25" 
+                     Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    
+                    />
                 <Label
                     Content="{Binding TradeDetailReportSum.Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="25" />
+                    FontSize="25" 
+                     Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label
                     Content="筆"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="25" />
+                    FontSize="25" 
+                     Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label
                     Margin="20,0,0,0"
                     Content="銷售案件"

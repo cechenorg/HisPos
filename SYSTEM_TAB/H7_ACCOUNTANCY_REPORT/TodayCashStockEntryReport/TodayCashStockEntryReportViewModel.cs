@@ -164,6 +164,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             }
         }
 
+
+        private Visibility changeOTCVis;
+
+        public Visibility ChangeOTCVis
+        {
+            get => changeOTCVis;
+            set
+            {
+                Set(() => ChangeOTCVis, ref changeOTCVis, value);
+            }
+        }
+
+
         private Visibility incomeVis;
 
         public Visibility IncomeVis
@@ -2113,6 +2126,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
             TicketVis = Visibility.Collapsed;
+            ChangeOTCVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
         }
         private void TradeProfitIncomeReportSelectionChangedAction()
@@ -2121,6 +2135,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
             TicketVis = Visibility.Visible;
+            ChangeOTCVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
         }
         private void TradeProfitAllReportSelectionChangedAction()
@@ -2129,6 +2144,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
             TicketVis = Visibility.Visible;
+            ChangeOTCVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
         }
 
@@ -2138,6 +2154,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
             TicketVis= Visibility.Visible;
+            ChangeOTCVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
             TradeProfitDetailReportViewSource.Filter += TicketFilter;
         }
@@ -2280,6 +2297,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
+            ChangeOTCVis = Visibility.Collapsed;
 
             /* if (TradeProfitSelectedItem is null)
              {
@@ -2299,12 +2317,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
-                TradeProfitDetailReportCollection = new TradeProfitDetailReports("1", StartDate, EndDate);
+                TradeProfitDetailReportCollectionChanged = new TradeProfitDetailReports("1", StartDate, EndDate);
                 TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
 
                 MainWindow.ServerConnection.CloseConnection();
                 var StringCopy = new List<string>() { };
-                foreach (var r in TradeProfitDetailReportCollection)
+                foreach (var r in TradeProfitDetailReportCollectionChanged)
                 {
                     StringCopy.Add(r.TypeId);
                 }
@@ -2317,7 +2335,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
-                TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
+                TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollectionChanged };
                 TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
                 TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
 
@@ -2326,8 +2344,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 //SumStockTakingDetailReport();
                 TradeChangeSelectItem = "全部";
                 TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-                SumOTCReport("1");
-                TradeDetailCount = TradeProfitDetailReportCollection.Count();
+                SumOTCReportMainChanged("1");
+                TradeDetailCount = TradeProfitDetailReportCollectionChanged.Count();
                 TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
                 EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => (int)e.Profit);
                 IsBusy = false;
@@ -2362,7 +2380,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
                 MainWindow.ServerConnection.CloseConnection();
                 var StringCopy = new List<string>() { };
-                foreach (var r in TradeProfitDetailReportCollection)
+                foreach (var r in TradeProfitDetailReportCollectionChanged)
                 {
                     StringCopy.Add(r.TypeId);
                 }
@@ -4207,7 +4225,24 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
 
 
+        private void SumOTCReportMainChanged(string ID)
+        {
+            var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => true);
+            tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
+            TradeDetailReportSum.TotalChange = (int)tempCollection.Sum(s => s.Profit);
 
+
+            TradeDetailReportSum.CardAmount = tempCollection.Sum(s => s.CardAmount);
+            TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
+            TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => s.DiscountAmt);
+            TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
+            TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            
+            TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
+            TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
+            
+
+        }
 
         private void SumOTCReportMain(string ID)
         {
@@ -4278,8 +4313,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportSumMain.MedTotalCount = PrescriptionDetailReportSumMain.NormalCount + PrescriptionDetailReportSumMain.PaySelfCount + PrescriptionDetailReportSumMain.SlowCount + PrescriptionCoopDetailReportSumMain.CoopCount;
             PrescriptionDetailReportSumMain.MedTotalIncome = PrescriptionDetailReportSumMain.NormalIncome + PrescriptionDetailReportSumMain.PaySelfIncome + PrescriptionDetailReportSumMain.SlowIncome + PrescriptionCoopDetailReportSumMain.CoopIncome;
             PrescriptionDetailReportSumMain.MedTotalMeduse = PrescriptionDetailReportSumMain.NormalMeduse + PrescriptionDetailReportSumMain.PaySelfMeduse + PrescriptionDetailReportSumMain.SlowMeduse + PrescriptionCoopDetailReportSumMain.CoopMeduse;
-            PrescriptionDetailReportSumMain.MedTotalProfit = PrescriptionDetailReportSumMain.NormalProfit + PrescriptionDetailReportSumMain.PaySelfProfit + PrescriptionDetailReportSumMain.SlowProfit + PrescriptionCoopDetailReportSumMain.CoopProfit+ (double)StockTakingDetailReportSum.Price;
-            PrescriptionDetailReportSumMain.MedTotalChange= PrescriptionDetailReportSumMain.NormalChange + PrescriptionDetailReportSumMain.PaySelfChange + PrescriptionDetailReportSumMain.SlowChange + PrescriptionCoopDetailReportSumMain.CoopChange;
+            PrescriptionDetailReportSumMain.MedTotalChange = PrescriptionDetailReportSumMain.NormalChange + PrescriptionDetailReportSumMain.PaySelfChange + PrescriptionDetailReportSumMain.SlowChange + PrescriptionCoopDetailReportSumMain.CoopChange;
+
+
+            PrescriptionDetailReportSumMain.MedTotalProfit = PrescriptionDetailReportSumMain.NormalProfit + PrescriptionDetailReportSumMain.PaySelfProfit + PrescriptionDetailReportSumMain.SlowProfit + PrescriptionCoopDetailReportSumMain.CoopProfit+ (double)StockTakingDetailReportSum.Price+ PrescriptionDetailReportSumMain.MedTotalChange;
+
         }
 
 
@@ -4423,7 +4461,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
         private void CalculateTotalRewardProfit()
         {
-            TotalRewardReport.RewardAmountSum = RewardReportCollection.Sum(c => c.RewardAmount);
+            TotalRewardReport.RewardAmountSum = -RewardReportCollection.Sum(c => c.RewardAmount);
             TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
         }
 
