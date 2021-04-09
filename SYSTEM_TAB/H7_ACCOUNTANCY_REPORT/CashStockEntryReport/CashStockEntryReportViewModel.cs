@@ -1893,7 +1893,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
-                TradeProfitDetailReportCollection = new TradeProfitDetailReports("0", StartDate, EndDate);
+                TradeProfitDetailReportCollection = new TradeProfitDetailReports("000", StartDate, EndDate);
                 TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
 
                 MainWindow.ServerConnection.CloseConnection();
@@ -2244,7 +2244,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
-                PrescriptionDetailReportCollection = new PrescriptionDetailReports("0", StartDate, EndDate);
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports("000", StartDate, EndDate);
 
                 var CoopStringCopy = new List<string>() { };
                 foreach (var r in PrescriptionDetailReportCollection)
