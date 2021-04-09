@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.Report.StockTakingOTCReport
             TypeId = r.Field<string>("TypeId");
             TypeName = r.Field<string>("TypeName");
             Count = r.Field<int>("Count");
-            Price = Math.Round(r.Field<decimal>("Price"), 2);
+            Price = r.Field<int>("Price");
            
         }
 
