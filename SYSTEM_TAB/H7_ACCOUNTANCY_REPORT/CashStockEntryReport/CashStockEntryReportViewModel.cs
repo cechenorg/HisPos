@@ -2923,7 +2923,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 TotalTradeProfitReport.TotalChangeCashAmt += r.CashAmount;
                 TotalTradeProfitReport.TotalChangeDiscountAmt += r.DiscountAmt;
                 TotalTradeProfitReport.TotalChangeCostAmt += r.Cost /*+ (int)(r.CardFee)*/;
-                TotalTradeProfitReport.TotalChangeCashCouponAmt += r.CashCoupon;
+                TotalTradeProfitReport.TotalChangeCashCouponAmt += -r.CashCoupon;
             }
         }
 

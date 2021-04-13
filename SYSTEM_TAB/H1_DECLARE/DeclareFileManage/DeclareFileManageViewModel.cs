@@ -9,6 +9,7 @@ using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
 using His_Pos.NewClass.Prescription.Service;
+using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows.Threading;
 using StringRes = His_Pos.Properties.Resources;
 
 // ReSharper disable InconsistentNaming
@@ -176,6 +178,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void InitialVariables()
         {
             DeclarePharmacies = new DeclarePharmacies();
+            if (DeclarePharmacies.Count==0) 
+            {
+                return;  
+            }
+
             SelectedPharmacy = DeclarePharmacies.SingleOrDefault(p => p.ID.Equals(ViewModelMainWindow.CurrentPharmacy.ID));
             DeclareFile = new DeclarePreviewOfMonth();
             DeclareDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-1);
@@ -400,6 +407,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             Debug.Assert(DeclareDateEnd != null, nameof(DeclareDateEnd) + " != null");
             var sDate = (DateTime)DeclareDateStart;
             var eDate = (DateTime)DeclareDateEnd;
+
+            if (SelectedPharmacy==null) 
+            {
+                NewFunction.ShowMessageFromDispatcher("查無處方！", MessageType.ERROR);
+                //MessageWindow.ShowMessage("查無處方！", MessageType.ERROR);
+                return;
+            }
             DeclareFile.GetSearchPrescriptions(sDate, eDate, SelectedPharmacy.ID);
             DeclareFile.SetSummary();
             DeclareFile.DeclareDate = (DateTime)DeclareDateStart;

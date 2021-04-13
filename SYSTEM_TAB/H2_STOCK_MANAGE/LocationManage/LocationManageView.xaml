@@ -131,6 +131,7 @@
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 HorizontalScrollBarVisibility="Disabled"
                 SelectedValuePath="Pro_ID"
+                EnableRowVirtualization="False"
                     AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
                 >
                 <DataGrid.Resources>

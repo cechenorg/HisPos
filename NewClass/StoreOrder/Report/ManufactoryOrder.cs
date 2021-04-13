@@ -87,7 +87,15 @@ namespace His_Pos.NewClass.StoreOrder.Report
                         foreach (var order in orderDetails)
                         {
                             string typeName = order.Type == OrderTypeEnum.PURCHASE ? "進貨" : "退貨";
-                            file.WriteLine($"{typeName},{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{order.UnTaxPrice},{order.Tax},{order.TaxPrice}");
+
+                            if (typeName == "進貨")
+                            {
+                                file.WriteLine($"{typeName},{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{order.UnTaxPrice},{order.Tax},{order.TaxPrice}");
+                        } else if (typeName == "退貨") {
+
+                                file.WriteLine($"{typeName},{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{-order.UnTaxPrice},{-order.Tax},{-order.TaxPrice}");
+                            }
+                                
                         }
                         file.Close();
                         file.Dispose();
