@@ -564,9 +564,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             strArr = big5.GetBytes("地址:" + MyPharmacy.Address.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
-            strArr = big5.GetBytes("統編:" + MyPharmacy.ID.ToString());
-            port.Write(strArr, 0, strArr.Length);
-            port.Write("" + cr + lf);
+            /*strArr = big5.GetBytes("統編:" + MyPharmacy.ID.ToString());
+            port.Write(strArr, 0, strArr.Length); */
+             port.Write("" + cr + lf);
             strArr = big5.GetBytes("電話:" + MyPharmacy.Tel.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
