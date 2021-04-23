@@ -17,7 +17,7 @@
             CanUserAddRows="False"
             CanUserDeleteRows="False"
             CanUserReorderColumns="False"
-            CanUserSortColumns="False"
+            CanUserSortColumns="True"
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             FrozenColumnCount="2"
