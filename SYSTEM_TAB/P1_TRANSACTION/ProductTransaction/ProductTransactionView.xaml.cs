@@ -712,7 +712,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             if (tb.Text.Length == 13)
             {
-                Send(Key.Enter);
+                //Send(Key.Enter);
             }
         }
 
