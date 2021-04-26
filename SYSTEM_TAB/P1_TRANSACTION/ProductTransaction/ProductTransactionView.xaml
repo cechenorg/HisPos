@@ -437,7 +437,7 @@
                         Foreground="Black" />
                     <Label
                         x:Name="lblRealTotal"
-                        Width="120"
+                        Width="90"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Left"
                         Content="0"
@@ -445,7 +445,41 @@
                         FontSize="34"
                         Foreground="Black" />
                     <Label
-                        Margin="35,0,0,0"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        Content="稅額 $"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="Black" />
+                    <Label
+                        x:Name="TaxNum"
+                        Width="50"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Left"
+                        Content="0"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
+                        Foreground="Black" />
+                    <Label
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        Content="未稅 $"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="Black" />
+                    <Label
+                        Name="NOTaxNum"
+                        Width="60"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Left"
+                        Content="0"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
+                        Foreground="Black" />
+                    <Label
+                        Margin="10,0,0,0"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
                         Content="["
@@ -472,7 +506,7 @@
                         x:Name="btnClear"
                         Width="100"
                         Height="40"
-                        Margin="180,0,0,0"
+                        Margin="10,0,0,0"
                         Background="DimGray"
                         BorderThickness="0"
                         Click="btnClear_Click"
@@ -481,7 +515,7 @@
                         FontSize="20" />
                     <Button
                         x:Name="btnCheckout"
-                        Width="150"
+                        Width="130"
                         Height="40"
                         Margin="10,0,0,0"
                         Background="RoyalBlue"

@@ -137,6 +137,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbCashCoupon.Content = masterRow["TraMas_CashCoupon"].ToString();
             lblTradeTime.Content = masterRow["TransTime_Format"];
             tbNote.Text = masterRow["TraMas_Note"].ToString();
+            tbPhone.Content= masterRow["Cus_Phone"].ToString();
 
             /* string ogTransTime = masterRow["TraMas_UpdateTime"].ToString();
              DateTime dTime = DateTime.Parse(ogTransTime);

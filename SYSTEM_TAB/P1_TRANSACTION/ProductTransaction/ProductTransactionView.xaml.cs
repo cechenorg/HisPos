@@ -40,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public static Label InvoiceNumLable;
         public static TextBox Cuslblcheck;
         public static TextBox FromHISCuslblcheck;
-
+        public string TbText;
         private DataTable ProductList;
         private string AppliedPrice;
         private int preTotal = 0;
@@ -421,6 +421,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             discountAmount = int.Parse(tbDiscountAmt.Text);
             realTotal = preTotal - discountAmount;
             lblRealTotal.Content = realTotal;
+            TaxNum.Content = ((int)(realTotal * 0.05)).ToString();
+            NOTaxNum.Content = (realTotal - ((int)(realTotal * 0.05))).ToString();
+
 
             if (ProductList.Rows.Count > 0)
             {
@@ -534,6 +537,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void InvoicePrint(DataTable detail) //9.16發票
         {
+
+            //MessageBox.Show(detail.Rows[0]["TraDet_ProductName"].ToString());
             MyPharmacy = Pharmacy.GetCurrentPharmacy();
 
             SerialPort port = new SerialPort(Properties.Settings.Default.InvoiceComPort, 9600, Parity.None, 8, StopBits.One);
@@ -1063,6 +1068,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
                     parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
                     Con = CustomerSearchCondition.CellPhone;
+                    
                 }
                 else if (tb.Text.Length >= 7 && tb.Text.Length <= 10 && !tb.Text.StartsWith("1"))
                 {
@@ -1183,7 +1189,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
 
                 ID = CurrentPrescription.Patient.ID;
-                MainWindow.ServerConnection.CloseConnection();
+               
             }
         }
 
@@ -1274,7 +1280,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
-            NewClass.Person.Customer.Customer customer = null;
+            NewClass.Person.Customer.Customer customer = new NewClass.Person.Customer.Customer();
+          
+            if (TbText != null) { }
+            {
+                customer.CellPhone = tbSearch.Text;
+            }
+
             addCustomerWindow = new AddCustomerWindow(customer);
             addCustomerWindow.Closed += new EventHandler(SetContentHandler);
 
