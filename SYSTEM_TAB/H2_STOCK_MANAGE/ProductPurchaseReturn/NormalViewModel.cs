@@ -12,20 +12,13 @@ using His_Pos.Service.ExportService;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
-
     public class NormalViewModel : ViewModelBase
     {
         #region ----- Define Command -----
@@ -50,9 +43,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #endregion ----- Define Command -----
 
         #region ----- Define Variables -----
-
-        
-        public SingdeTotalViewModel SingdeTotalViewModel { get; set; }
 
         private bool isBusy;
         private string busyContent;
@@ -92,24 +82,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.OpenConnection();
                 currentStoreOrder?.SaveOrder();
                 value?.GetOrderProducts();
-
                 MainWindow.ServerConnection.CloseConnection();
-                
-               
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
-                MainWindow.ServerConnection.OpenConnection();
-                
-               
-                if (CurrentStoreOrder == null) { }
-                else
-                {
-                    CurrentStoreOrder.CurrentStoreOrderHis = new StoreOrderHistorys();
-                    CurrentStoreOrder.CurrentStoreOrderHis.getData(CurrentStoreOrder.ID);
-         
-                }
-                MainWindow.ServerConnection.CloseConnection();
             }
-          
         }
 
         public string SearchString
@@ -138,11 +113,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
-
             }
         }
-
-       
 
         private void ReturnOrderCalculateReturnAmountAction()
         {
@@ -221,27 +193,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             }
         }
 
-
-        public bool IsNatural_Number(string str)
+        private void ReloadAction()
         {
-            System.Text.RegularExpressions.Regex reg1 = new System.Text.RegularExpressions.Regex(@"^[A-Za-z0-9]+$");
-            return reg1.IsMatch(str);
+            InitVariables();
         }
 
         private void AddProductByInputAction(string searchString)
         {
             if (CurrentStoreOrder.SelectedItem != null && CurrentStoreOrder.SelectedItem.ID.Equals(searchString)) return;
 
-
-
-            if (IsNatural_Number(searchString) != true) { }
-            else
+            if (searchString.Length < 5)
             {
-                if (searchString.Length < 5)
-                {
-                    MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
-                    return;
-                }
+                MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
+                return;
             }
 
             AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
@@ -369,81 +333,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 StoreOrderCollectionView.MoveCurrentToFirst();
                 CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
             }
-           
         }
-
-        public void InitData(string ID)
-        {
-            SingdeTotalViewModel = new SingdeTotalViewModel();
-            initBackgroundWorker = new BackgroundWorker();
-
-            if (!initBackgroundWorker.IsBusy)
-                initBackgroundWorker.RunWorkerAsync();
-            IsBusy = true;
-
-            initBackgroundWorker.DoWork += (sender, args) =>
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                MainWindow.SingdeConnection.OpenConnection();
-
-                DataTable dataTable;
-
-                if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
-                {
-                    BusyContent = "取得杏德新訂單...";
-                    dataTable = StoreOrderDB.GetNewSingdeOrders();
-                    if (dataTable.Rows.Count > 0)
-                        StoreOrders.AddNewOrdersFromSingde(dataTable);
-
-                    dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
-                    if (dataTable.Rows.Count > 0)
-                        StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
-                }
-
-                BusyContent = "取得訂單資料...";
-                storeOrderCollection = StoreOrders.GetOrdersNotDone();
-
-                if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
-                {
-                    List<StoreOrder> storeOrders1 = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
-                    string dateTime = DateTime.Now.ToString("yyyyMMdd");
-
-                    if (storeOrders1.Count > 0)
-                        dateTime = storeOrders1[0].CreateDateTime.ToString("yyyyMMdd");
-
-                    BusyContent = "取得杏德訂單最新狀態...";
-                    dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
-                        storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
-                    }
-                }
-
-                MainWindow.SingdeConnection.CloseConnection();
-                MainWindow.ServerConnection.CloseConnection();
-            };
-
-            initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                SingdeTotalViewModel.InitData();
-                this.InitData(storeOrderCollection);
-                IsBusy = false;
-            };
-            var storeOrders =StoreOrders.GetOrdersNotDone();
-            storeOrderCollection = storeOrders;
-            StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrders);
-            StoreOrderCollectionView.Filter += OrderFilter;
-
-            if (!StoreOrderCollectionView.IsEmpty)
-            {
-                var newID=storeOrderCollection.Where(x=> x.ID.Equals(ID)).ToList();
-                StoreOrderCollectionView.MoveCurrentTo(newID);
-                CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
-            }
-
-        }
-
 
         private void InitVariables(string searchStr = "")
         {
@@ -452,7 +342,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (!initBackgroundWorker.IsBusy)
                 initBackgroundWorker.RunWorkerAsync();
-           
         }
 
         private void RegisterCommand()
@@ -521,9 +410,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder.SaveOrder();
                 CurrentStoreOrder.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
-                
             }
- 
         }
 
         #endregion ///// Messenger Functions /////
