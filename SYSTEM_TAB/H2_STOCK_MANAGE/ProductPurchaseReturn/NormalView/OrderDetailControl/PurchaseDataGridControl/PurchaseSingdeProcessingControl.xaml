@@ -11,11 +11,12 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="DateConverter" />
+        <service:DateTimeConverter x:Key="DateTimeConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="40" />
+            <RowDefinition  Height="400"/>
+            <RowDefinition Height="240" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <DataGrid
@@ -105,19 +106,22 @@
                         </Style>
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn
-                    Width="70"
-                    Binding="{Binding Price, StringFormat=N2}"
-                    FontFamily="Segoe UI Semi"
+                <DataGridTemplateColumn
+                    MinWidth="70"
                     Header="單價"
                     IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                Width="60"
+                                Margin="0,0,0,2"
+                                HorizontalContentAlignment="Center"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="18"
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Width="90"
                     Binding="{Binding Inventory, StringFormat=N2}"
@@ -133,10 +137,10 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="70"
-                    Binding="{Binding RealAmount}"
+                    Binding="{Binding OrderAmount}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
-                    FontFamily="Segoe UI Semibold"
-                    Header="入庫量"
+                    FontFamily="Segoe UI Semi"
+                    Header="預定量"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -145,6 +149,22 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTemplateColumn
+                    MinWidth="70"
+                    Header="入庫量"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                Width="60"
+                                Margin="0,0,0,2"
+                                HorizontalContentAlignment="Center"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="18"
+                                Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Width="70"
                     Binding="{Binding SubTotal, StringFormat=N2}"
@@ -203,7 +223,105 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
         </DataGrid>
-        <StackPanel
+        <DataGrid
+            x:Name="HISTORYDG"
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            Background="{StaticResource GridDarkestBackGround}"
+            CanUserAddRows="False"
+            CanUserReorderColumns="False"
+            CanUserSortColumns="False"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            FrozenColumnCount="2"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{Binding CurrentStoreOrder.StoreOrderHistory}"
+            PreviewMouseDoubleClick="DataGrid_PreviewMouseDoubleClick">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="Width" Value="100" />
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="100" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15" />
+                            <Setter Property="Height" Value="100" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource Shadow}" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Height" Value="50" />
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn MinWidth="60" MaxWidth="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl Margin="10,0,0,0">
+                            </ContentControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+              
+                <DataGridTextColumn
+                    Width="150"
+                      Binding="{Binding ID}"
+                    FontFamily="Segoe UI Semibold"
+                    Header="訂單編號"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Text" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="200"
+                    Binding="{Binding DoneDateTime,  UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
+                    FontFamily="Segoe UI Semi"
+                    Header="結案時間"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding CreateDateTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
+                    FontFamily="Segoe UI Semi"
+                    Header="建立時間"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--<StackPanel
             Grid.Row="1"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
@@ -223,9 +341,9 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="Black" />
-            <!--<Label Content="預定到貨日期" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <Label Content="{Binding CurrentStoreOrder.PlanArriveDate, Converter={StaticResource DateConverter}}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>-->
-        </StackPanel>
+            --><!--<Label Content="預定到貨日期" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <Label Content="{Binding CurrentStoreOrder.PlanArriveDate, Converter={StaticResource DateConverter}}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>--><!--
+        </StackPanel>-->
         <StackPanel
             Grid.Row="2"
             Background="{StaticResource GridDarkerBackGround}"

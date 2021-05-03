@@ -519,7 +519,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DepositInsert();
                     if (Properties.Settings.Default.InvoiceCheck == "1")
                     {
-                        InvoicePrint(TransferDetailTable());
+                        InvoicePrint();
                         InvoiceControlViewModel vm = new InvoiceControlViewModel();
                         vm.InvoiceNumPlusOneAction();
                         tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
@@ -535,7 +535,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private void InvoicePrint(DataTable detail) //9.16發票
+        private void InvoicePrint() //9.16發票
         {
 
             //MessageBox.Show(detail.Rows[0]["TraDet_ProductName"].ToString());
@@ -586,15 +586,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
 
-            int j = detail.Rows.Count;
+            int j = ProductList.Rows.Count;
+            MessageBox.Show(ProductList.Rows[0]["Pro_ChineseName"].ToString());
             int priceSum = 0;
             for (int i = 0; i < j; i++)
             {
-                strArr = big5.GetBytes(detail.Rows[i]["TraDet_ProductID"].ToString().PadRight(13, ' ')
-                    + " *" + detail.Rows[i]["TraDet_Amount"].ToString()
-                    + "= " + detail.Rows[i]["TraDet_PriceSum"].ToString().PadLeft(4, ' ') + "TX");
+                strArr = big5.GetBytes(ProductList.Rows[i]["Pro_ChineseName"].ToString().PadRight(13, ' ')
+                    + " *" + ProductList.Rows[i]["Amount"].ToString()
+                    + "= " + ProductList.Rows[i]["Calc"].ToString().PadLeft(4, ' ') + "TX");
                 port.Write(strArr, 0, strArr.Length);
-                priceSum += (int)detail.Rows[i]["TraDet_PriceSum"];
+                priceSum += (int)ProductList.Rows[i]["Calc"];
                 port.Write("" + cr + lf);
 
                 if (i != 0 && (i % 7) == 0 && i != j)
@@ -603,6 +604,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     port.Write(strArr, 0, strArr.Length);
                     port.Write("" + Convert.ToChar(12));
                     port.Write(esc + "d" + Convert.ToChar(4));
+                    InvoiceControlViewModel vm = new InvoiceControlViewModel();
+                    vm.InvoiceNumPlusOneAction();
+                    tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
                 }
             }
             port.Write("" + cr + lf);

@@ -743,6 +743,8 @@
     <Compile Include="NewClass\StoreOrder\SingdeTotalOrder\SingdeTotalOrders.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrder.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
+    <Compile Include="NewClass\StoreOrder\StoreOrderHistory.cs" />
+    <Compile Include="NewClass\StoreOrder\StoreOrderHistorys.cs" />
     <Compile Include="NewClass\StoreOrder\StoreOrders.cs" />
     <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordDetail.cs" />
     <Compile Include="NewClass\Trade\ProductTradeRecord\ProductTradeRecordDetails.cs" />

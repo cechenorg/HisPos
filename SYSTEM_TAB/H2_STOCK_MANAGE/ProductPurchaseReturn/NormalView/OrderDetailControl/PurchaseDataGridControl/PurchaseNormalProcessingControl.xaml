@@ -89,7 +89,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
+            <RowDefinition Height="640" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <DataGrid

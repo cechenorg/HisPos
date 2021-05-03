@@ -4,13 +4,16 @@ using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Product.PurchaseReturn;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 using System;
 using System.Data;
 using System.Linq;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public class PurchaseOrder : StoreOrder
+    public  class PurchaseOrder : StoreOrder
     {
         #region ----- Define Variables -----
 
@@ -168,7 +171,7 @@ namespace His_Pos.NewClass.StoreOrder
                 if ((bool)confirmWindow.DialogResult)
                 {
                     bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
-
+                   
                     if (!isSuccess) return false;
                 }
             }
@@ -380,6 +383,12 @@ namespace His_Pos.NewClass.StoreOrder
             if (dataTable.Rows.Count > 0)
             {
                 MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+
+                Properties.Settings.Default.MinusID =(StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0]);
+                NormalViewModel nn = new NormalViewModel();
+                nn.storeOrderCollection = StoreOrders.GetOrdersNotDone();
+                nn.AddOrderByMinus();
+
                 return true;
             }
             else
@@ -388,7 +397,7 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
         }
-
+     
         public static bool InsertPrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
         {
             string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");

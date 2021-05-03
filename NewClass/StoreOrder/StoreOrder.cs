@@ -16,6 +16,9 @@ namespace His_Pos.NewClass.StoreOrder
         private Product.Product selectedItem;
         private OrderStatusEnum orderStatus;
         private double totalPrice;
+        private StoreOrderHistorys storeOrderHistory;
+
+
 
         protected int initProductCount;
 
@@ -40,6 +43,12 @@ namespace His_Pos.NewClass.StoreOrder
 
                 }
             }
+        }
+
+        public StoreOrderHistorys StoreOrderHistory
+        {
+            get { return storeOrderHistory; }
+            set { Set(() => StoreOrderHistory, ref storeOrderHistory, value); }
         }
 
         public OrderStatusEnum OrderStatus
@@ -166,7 +175,7 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
 
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
-                    ToWaitingStatus();
+                    ToNormalProcessingStatus();
                     break;
 
                 case OrderStatusEnum.NORMAL_PROCESSING:
@@ -217,8 +226,12 @@ namespace His_Pos.NewClass.StoreOrder
                     return;
                 }
             }
-
-            OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
+            if (OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+            {
+                OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
+            }
+            else { OrderStatus = OrderStatusEnum.NORMAL_PROCESSING; }
+            
             ReceiveID = ID;
             SetProductToProcessingStatus();
 
@@ -273,7 +286,7 @@ namespace His_Pos.NewClass.StoreOrder
                     return CheckNormalProcessingOrder();
 
                 case OrderStatusEnum.SINGDE_PROCESSING:
-                    return CheckSingdeProcessingOrder();
+                    return CheckNormalProcessingOrder();
 
                 default:
                     return false;

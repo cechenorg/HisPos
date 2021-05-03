@@ -15,6 +15,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
@@ -47,7 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private bool isBusy;
         private string busyContent;
         private StoreOrder currentStoreOrder;
-        private StoreOrders storeOrderCollection;
+        public StoreOrders storeOrderCollection;
         private ICollectionView storeOrderCollectionView;
         private string searchString;
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
@@ -84,6 +85,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 value?.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
+
+                if (CurrentStoreOrder != null) {
+                    CurrentStoreOrder.StoreOrderHistory = new StoreOrderHistorys();
+                    CurrentStoreOrder.StoreOrderHistory.getData(CurrentStoreOrder.ID);
+                }
+
+
             }
         }
 
@@ -100,6 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             RegisterCommand();
             RegisterMessengers();
         }
+   
 
         #region ----- Define Actions -----
 
@@ -130,6 +139,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             CurrentStoreOrder.CalculateTotalPrice();
         }
+
+
+        public  void AddOrderByMinus()
+        {
+
+            StoreOrderCollectionView = CollectionViewSource.GetDefaultView(StoreOrders.GetOrdersNotDone());
+  
+            CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
+        }
+
 
         private void AddOrderAction()
         {
@@ -202,7 +221,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             if (CurrentStoreOrder.SelectedItem != null && CurrentStoreOrder.SelectedItem.ID.Equals(searchString)) return;
 
-            if (searchString.Length < 5)
+            if (searchString.Length < 0)
             {
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
