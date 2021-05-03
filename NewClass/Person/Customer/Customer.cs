@@ -120,10 +120,13 @@ namespace His_Pos.NewClass.Person.Customer
 
         public void Save()
         {
-            if (ID == 0 || IDNumber.Equals("A111111111") || Name.Equals("匿名"))
+            if (IDNumber != null)
             {
-                MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.ERROR);
-                return;
+                if (ID == 0 || IDNumber.Equals("A111111111") || Name.Equals("匿名"))
+                {
+                    MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.ERROR);
+                    return;
+                }
             }
             CustomerDb.Save(this);
         }

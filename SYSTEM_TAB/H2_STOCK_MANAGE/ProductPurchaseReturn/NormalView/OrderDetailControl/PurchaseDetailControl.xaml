@@ -6,10 +6,14 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
+        xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:purchaseDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl"
     DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="UserControl_Loaded"
+    >
     <UserControl.Resources>
+        <service:DateTimeConverter x:Key="DateTimeConverter" />
         <DataTemplate x:Key="PurchaseNormalUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <purchaseDataGridControl:PurchaseNormalUnProcessingControl />
         </DataTemplate>
@@ -52,28 +56,39 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="40" />
-            <RowDefinition />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="900"/>
+
         </Grid.RowDefinitions>
         <StackPanel
             Grid.Row="0"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
-            <ContentControl Content="{Binding}">
+            <!--<ContentControl Content="{Binding}" x:Name="HISTORYID">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
-            </ContentControl>
+            </ContentControl>-->
+            <Label
+                x:Name="HistoryID"
+               Width="320"
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="{Binding ID}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="40"
+                FontWeight="Bold"
+                Foreground="Black"  />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Bottom"
@@ -111,6 +126,32 @@
                 FontSize="28"
                 Foreground="{StaticResource ForeGround}" />
         </StackPanel>
+
+
+        <!--<StackPanel
+            Grid.Row="1"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <ContentControl Content="{Binding}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+            
+        </StackPanel>-->
+
+
+
         <StackPanel
             Grid.Row="1"
             Background="{StaticResource GridDarkerBackGround}"
@@ -163,43 +204,192 @@
             Grid.Row="2"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
-            <Label
-                Margin="20,0,0,0"
+            <Label    
+                Margin="20,0,0,10"
                 VerticalAlignment="Center"
                 Content="備註"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
                 Foreground="Black" />
             <TextBox
-                Width="980"
-                Margin="10,0,0,5"
+                Width="600"
+                Margin="10,0,0,20"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Text="{Binding Note}" />
+            <Label
+                Margin="20,0,0,10"
+                VerticalAlignment="Center"
+                Content="預定客戶"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black" />
+            <Label
+                Width="120"
+                Margin="10,0,0,10"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="{Binding TargetPreOrderCustomer}"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Foreground="Black" />
         </StackPanel>
-        <ContentControl Grid.Row="3">
-            <ContentControl.Style>
-                <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalUnProcessingControl}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
-                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeUnProcessingControl}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="WAITING">
-                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseWaitingControl}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
-                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeProcessingControl}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
-                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
+
+
+
+
+
+        <StackPanel Grid.Row="3">
+            <ContentControl Grid.Row="2"  Height="730">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalUnProcessingControl}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeUnProcessingControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="WAITING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseWaitingControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeProcessingControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+
+            </ContentControl>
+            <!--<DataGrid
+            x:Name="HISTORYDG"
+            Height="200"
+            AutoGenerateColumns="False"
+            Background="Transparent"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            GridLinesVisibility="Horizontal"
+                PreviewMouseDoubleClick="HISTORYDG_PreviewMouseDoubleClick"
+                SelectedValue="{Binding Path=ID , Mode=OneWay}">
+                --><!--<DataGrid.DataContext>
+                <CollectionViewSource Source="{Binding Path=StoreOrderHisViewSource}">
+                </CollectionViewSource>
+            </DataGrid.DataContext>--><!--
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="15" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource Shadow}" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="Height" Value="100" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn
+                    Width="250"
+                    Header="過往單號"
+                    IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label
+                                     x:Name="HISID"
+                                    Width="320"
+                                    Margin="0,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Path=ID , Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    FontFamily="Segoe UI Semibold"
+                                    FontSize="16" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="Foreground" Value="#FF424040" />
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
+                    Width="250"
+                    Header="成立時間"
+                    IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label
+                                    Width="320"
+                                    Margin="0,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Path=CreateDateTime , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    FontFamily="Segoe UI Semibold"
+                                    FontSize="16" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="Foreground" Value="#FF424040" />
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
+                    Width="250"
+                    Header="結案時間"
+                    IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label
+                                    Width="320"
+                                    Margin="0,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Path=DoneDateTime}"
+                                    FontFamily="Segoe UI Semibold"
+                                    FontSize="16" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="Foreground" Value="#FF424040" />
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>-->
+        </StackPanel>
     </Grid>
 </UserControl>

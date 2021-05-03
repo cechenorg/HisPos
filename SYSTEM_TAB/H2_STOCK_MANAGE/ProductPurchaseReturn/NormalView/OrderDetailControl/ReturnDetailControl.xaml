@@ -47,6 +47,7 @@
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
+            <RowDefinition Height="0" />
             <RowDefinition Height="50" />
             <RowDefinition Height="40" />
             <RowDefinition />
@@ -61,10 +62,10 @@
                         <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -107,8 +108,33 @@
                 FontSize="28"
                 Foreground="{StaticResource ForeGround}" />
         </StackPanel>
-        <StackPanel
+
+
+        <!--<StackPanel
             Grid.Row="1"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <ContentControl Content="{Binding}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+            
+        </StackPanel>-->
+
+
+        <StackPanel
+            Grid.Row="2"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <TextBlock
@@ -134,7 +160,7 @@
                 Foreground="Black" />
         </StackPanel>
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
@@ -151,7 +177,7 @@
                 FontSize="18"
                 Text="{Binding Note}" />
         </StackPanel>
-        <ContentControl Grid.Row="3">
+        <ContentControl Grid.Row="4">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource ReturnUnProcessingControl}" />
