@@ -295,7 +295,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             TradeTodayProfit = (int)result.Rows[0]["tradeTodayProfit"];
             TradeTodayStock= (int)result.Rows[0]["tradeTodayStock"];
 
-       
+            Closed = (int)result.Rows[0]["Closed"];
 
 
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
