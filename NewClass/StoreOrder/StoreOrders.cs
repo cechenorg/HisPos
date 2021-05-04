@@ -29,17 +29,9 @@ namespace His_Pos.NewClass.StoreOrder
         {
         }
 
-        public StoreOrders()
-        {
-        }
-
         public static StoreOrders GetOrdersNotDone()
         {
             return new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
-        }
-        internal static  StoreOrders GetOrdersMinus(string ID)
-        {
-            return new StoreOrders(StoreOrderDB.GetNotDoneMinus(ID));
         }
 
         public static StoreOrders GetOrdersDone(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID, string searchWareName)

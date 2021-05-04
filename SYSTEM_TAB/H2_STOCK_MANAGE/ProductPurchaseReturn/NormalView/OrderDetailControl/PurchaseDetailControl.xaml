@@ -5,13 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
     xmlns:purchaseDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl"
     DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <service:DateTimeConverter x:Key="DateTimeConverter" />
         <DataTemplate x:Key="PurchaseNormalUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <purchaseDataGridControl:PurchaseNormalUnProcessingControl />
         </DataTemplate>
@@ -55,9 +53,7 @@
             <RowDefinition Height="70" />
             <RowDefinition Height="50" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="700"/>
-            <RowDefinition Height="40" />
-            
+            <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel
             Grid.Row="0"
@@ -69,10 +65,10 @@
                         <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -175,33 +171,11 @@
                 FontSize="18"
                 Foreground="Black" />
             <TextBox
-                Width="689"
+                Width="980"
                 Margin="10,0,0,5"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Text="{Binding Note}" />
-            <StackPanel
-            Grid.Row="2"
-            Background="Transparent"
-            Orientation="Horizontal">
-                <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="預定客戶"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Foreground="Black" />
-                <Label
-                Width="213"
-                Margin="10,3,0,3"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Center"
-                Content="{Binding TargetPreOrderCustomer}"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="Black" />
-
-            </StackPanel>
         </StackPanel>
         <ContentControl Grid.Row="3">
             <ContentControl.Style>
@@ -226,8 +200,6 @@
                     </Style.Triggers>
                 </Style>
             </ContentControl.Style>
-
         </ContentControl>
-
     </Grid>
 </UserControl>

@@ -137,7 +137,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         {
             if (IsEditing)
             {
-                if (SearchString.Length >0)
+                if (SearchString.Length > 4)
                 {
                     IsEditing = false;
                     HideDisableProduct = false;

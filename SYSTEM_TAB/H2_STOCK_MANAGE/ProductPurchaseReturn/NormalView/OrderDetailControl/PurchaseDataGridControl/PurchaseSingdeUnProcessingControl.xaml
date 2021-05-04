@@ -17,9 +17,9 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="590"/>
+            <RowDefinition />
             <RowDefinition Height="40" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <DataGrid
             Name="ProductDataGrid"
@@ -96,7 +96,7 @@
                                 CharacterCasing="Upper"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
-                                
+                                InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="ProductIDTextbox_OnKeyDown"
                                 Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>

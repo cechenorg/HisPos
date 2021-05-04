@@ -34,8 +34,6 @@ namespace His_Pos.NewClass.StoreOrder
             return masterTable;
         }
 
-       
-
         public static DataTable StoreOrderDetailTable()
         {
             DataTable detailTable = new DataTable();
@@ -554,13 +552,6 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "DETAILS", SetReturnInventoryDetail(order.ReturnProducts));
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToProcessing]", parameters);
-        }
-        internal static DataTable GetNotDoneMinus(string ID)
-        {
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ORDER_ID", ID));
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderMinus]", parameters);
-
         }
 
         internal static DataTable AddStoreOrderLowerThenOrderAmount(string storeOrderID, string manufactoryID, string warehouseID, PurchaseProducts orderProducts)

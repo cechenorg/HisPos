@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using His_Pos.NewClass.StoreOrder;
-
 namespace His_Pos.Properties {
     
     
@@ -163,23 +161,6 @@ namespace His_Pos.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-
-        public StoreOrder MinusID
-        {
-            get
-            {
-                return ((StoreOrder)(this["MinusID"]));
-            }
-            set
-            {
-                this["MinusID"] = value;
-            }
-        }
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-
-
 
         public string InvoiceCheck
         {
