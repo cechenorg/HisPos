@@ -276,7 +276,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="60"
-                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                            Binding="{Binding Path=NO}"
                             Header="序"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -433,7 +433,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="60"
-                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                            Binding="{Binding Path=NO}"
                             Header="序"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -606,7 +606,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="60"
-                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                            Binding="{Binding Path=NO}"
                             Header="序"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>

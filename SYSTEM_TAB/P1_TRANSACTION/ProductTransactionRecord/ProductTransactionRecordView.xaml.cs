@@ -108,6 +108,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
                 return;
             }
+
+            // 銷售紀錄
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -126,11 +128,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.CloseConnection();
             FormatData(result);
             RecordList = result.Copy();
+            RecordList.Columns.Add("NO"); // 序
+            int countRL = 1;
+            foreach (DataRow dr in RecordList.Rows)
+            {
+                dr["NO"] = countRL.ToString();
+                countRL += 1;
+            }
             RecordGrid.ItemsSource = RecordList.DefaultView;
             lblCount.Content = RecordList.Rows.Count;
             lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
             if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
 
+            // 銷售紀錄(列印)
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersPrint = new List<SqlParameter>();
             parametersPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -150,6 +160,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.CloseConnection();
             RecordPrint = resultprint.Copy();
 
+            // 銷售明細
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersDetail = new List<SqlParameter>();
             parametersDetail.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -168,8 +179,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             MainWindow.ServerConnection.CloseConnection();
             FormatData(resultDetail);
             RecordDetailList = resultDetail.Copy();
+
+            RecordDetailList.Columns.Add("NO"); // 序
+            int countDL = 1;
+            foreach (DataRow dr in RecordDetailList.Rows) 
+            {
+                dr["NO"] = countDL.ToString();
+                countDL += 1;
+            }
             RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
 
+            // 銷售明細(列印)
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersDetailPrint = new List<SqlParameter>();
             parametersDetailPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -189,6 +209,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
             RecordDetailListPrint = resultDetailPrint.Copy();
 
+            // 銷售彙總
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parametersSum = new List<SqlParameter>();
             parametersSum.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -206,6 +227,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             DataTable resultSum = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordSum]", parametersSum);
             MainWindow.ServerConnection.CloseConnection();
             RecordSumList = resultSum.Copy();
+
+            RecordSumList.Columns.Add("NO"); // 序
+            int countSUM = 1;
+            foreach (DataRow dr in RecordSumList.Rows)
+            {
+                dr["NO"] = countSUM.ToString();
+                countSUM += 1;
+            }
             RecordSumGrid.ItemsSource = RecordSumList.DefaultView;
         }
 
