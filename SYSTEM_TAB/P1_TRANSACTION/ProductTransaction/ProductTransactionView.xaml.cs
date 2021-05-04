@@ -588,7 +588,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             port.Write("" + cr + lf);
 
             int j = ProductList.Rows.Count;
-            MessageBox.Show(ProductList.Rows[0]["Pro_ChineseName"].ToString());
+            
             int priceSum = 0;
             for (int i = 0; i < j; i++)
             {
