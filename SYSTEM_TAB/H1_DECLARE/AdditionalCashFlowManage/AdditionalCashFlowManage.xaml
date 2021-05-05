@@ -244,9 +244,12 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid
+                <ScrollViewer 
+                    HorizontalScrollBarVisibility="Auto" 
+                    VerticalScrollBarVisibility="Disabled"
                     Grid.Column="1"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="2">
+                    <DataGrid
                     Height="760"
                     Margin="0.4,10,9.8,-0.4"
                     AutoGenerateColumns="False"
@@ -262,112 +265,112 @@
                     HorizontalScrollBarVisibility="Disabled"
                     ItemsSource="{Binding SelectedCashFlowRecord.Details, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <DataGrid.Resources>
-                        <Style TargetType="ScrollBar">
-                            <Setter Property="Background" Value="#FFA8A8A8" />
-                            <Setter Property="Foreground" Value="#FF535353" />
-                        </Style>
-                    </DataGrid.Resources>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
-                                </Trigger>
-                            </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="FontSize" Value="15" />
-                            <Setter Property="Height" Value="35" />
-                        </Style>
-                    </DataGrid.RowStyle>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn
+                        <DataGrid.Resources>
+                            <Style TargetType="ScrollBar">
+                                <Setter Property="Background" Value="#FFA8A8A8" />
+                                <Setter Property="Foreground" Value="#FF535353" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="FontSize" Value="15" />
+                                <Setter Property="Height" Value="35" />
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
                             Width="200"
                             Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                             FontFamily="Segoe UI Semibold"
                             Header="科目"
                             IsReadOnly="True">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Margin" Value="5,0,0,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Margin" Value="5,0,0,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
                             Width="80"
                             Binding="{Binding CashFlowValue, UpdateSourceTrigger=PropertyChanged}"
                             FontFamily="Segoe UI Semibold"
                             Header="金額"
                             IsReadOnly="True">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Margin" Value="5,0,0,0" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Margin" Value="5,0,0,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
                             Width="400"
                             Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
                             Header="備註"
                             IsReadOnly="True">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
                             Width="120"
                             Binding="{Binding EmpName, UpdateSourceTrigger=PropertyChanged}"
                             Header="登錄人"
                             IsReadOnly="True">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
                             Width="120"
                             Binding="{Binding Date, StringFormat='{}{0:MM/dd HH:mm}', UpdateSourceTrigger=PropertyChanged}"
                             Header="登錄時間"
                             IsReadOnly="True">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
                             Width="200"
                             Binding="{Binding Bank, UpdateSourceTrigger=PropertyChanged}"
                             Header="來源"
                             IsReadOnly="True">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <!--<DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <!--<DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button x:Name="EditCashFlowRecordButton" Content="編輯" Background="RoyalBlue" BorderBrush="Transparent" Command="{Binding DataContext.EditCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>-->
-                        <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button
+                            <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
                                         x:Name="DeleteCashFlowRecordButton"
                                         HorizontalAlignment="Center"
                                         HorizontalContentAlignment="Center"
@@ -377,11 +380,13 @@
                                         Content="刪除"
                                         IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+                
             </Grid>
         </StackPanel>
     </Grid>
