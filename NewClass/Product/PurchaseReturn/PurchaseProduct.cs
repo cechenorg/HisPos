@@ -16,7 +16,17 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private bool isProcessing = false;
         private string onTheWayDetail = "";
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
+        private double originPrice;
 
+
+        public double OriginPrice
+        {
+            get { return originPrice; }
+            set
+            {
+                Set(() => OriginPrice, ref originPrice, value);
+            }
+        }
         public bool IsSingde { get; set; } = false;
 
         public bool IsProcessing
@@ -78,6 +88,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             }
         }
 
+
+
+
         public double FreeAmount { get; set; }
 
         public double SubTotal
@@ -85,10 +98,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             get { return subTotal; }
             set
             {
-                if (value == 0.0)
+                //if (value == 0.0)
                     SetStartInputVariable(ProductStartInputVariableEnum.INIT);
-                else
-                    SetStartInputVariable(ProductStartInputVariableEnum.SUBTOTAL);
+                //else
+                //    SetStartInputVariable(ProductStartInputVariableEnum.SUBTOTAL);
 
                 Set(() => SubTotal, ref subTotal, value);
 
@@ -104,10 +117,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             get { return price; }
             set
             {
-                if (value == 0.0)
+                //if (value == 0.0)
                     SetStartInputVariable(ProductStartInputVariableEnum.INIT);
-                else
-                    SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
+                //else
+                    //SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
 
                 Set(() => Price, ref price, value);
 
@@ -156,7 +169,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             ValidDate = dataRow.Field<DateTime?>("StoOrdDet_ValidDate");
             BatchNumber = dataRow.Field<string>("StoOrdDet_BatchNumber");
             Note = dataRow.Field<string>("StoOrdDet_Note");
-
+            OriginPrice= (double)dataRow.Field<decimal>("StoOrdDet_OriginPrice");
             SingdePackageAmount = dataRow.Field<int>("SinData_PackageAmount");
             SingdePackagePrice = (double)dataRow.Field<decimal>("SinData_PackagePrice");
             SingdePrice = (double)dataRow.Field<decimal>("SinData_SinglePrice");
@@ -167,21 +180,21 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         private void CalculatePrice()
         {
-            if (IsSingde)
-            {
-                if (OrderAmount >= SingdePackageAmount && SingdePackageAmount > 0)
-                {
-                    double tempTotal = (OrderAmount % SingdePackageAmount) * SingdePrice + (OrderAmount - (OrderAmount % SingdePackageAmount)) * SingdePackagePrice;
+            //if (IsSingde)
+            //{
+            //    if (OrderAmount >= SingdePackageAmount && SingdePackageAmount > 0)
+            //    {
+            //        double tempTotal = (OrderAmount % SingdePackageAmount) * SingdePrice + (OrderAmount - (OrderAmount % SingdePackageAmount)) * SingdePackagePrice;
 
-                    price = tempTotal / OrderAmount;
-                }
-                else
-                    price = SingdePrice;
+            //        price = tempTotal / OrderAmount;
+            //    }
+            //    else
+            //        price = SingdePrice;
 
-                subTotal = Price * OrderAmount;
-            }
-            else
-            {
+            //    subTotal = Price * OrderAmount;
+            //}
+            //else
+            //{
                 switch (StartInputVariable)
                 {
                     case ProductStartInputVariableEnum.INIT:
@@ -198,7 +211,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                             price = SubTotal / OrderAmount;
                         break;
                 }
-            }
+            //}
 
             RaisePropertyChanged(nameof(Price));
             RaisePropertyChanged(nameof(SubTotal));

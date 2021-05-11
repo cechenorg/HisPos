@@ -7,6 +7,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.WareHouse;
+using System.Collections.Generic;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow
 {
@@ -52,9 +53,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             get { return selectedWareHouse; }
             set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
         }
+        private string selectedType;
+        public string SelectedType
+        {
+            get { return selectedType; }
+            set { Set(() => SelectedType, ref selectedType, value); }
+        }
 
         public Manufactories ManufactoryCollection { get; set; }
         public WareHouses WareHouseCollection { get; set; }
+
+        public List<string> TypeCollection { get; set; }
+
         public StoreOrders DonePurchaseOrders { get; set; }
 
         #endregion ----- Define Variables -----
@@ -64,6 +74,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             ToPurchaseCommand = new RelayCommand(ToPurchaseAction);
             ToReturnCommand = new RelayCommand(ToReturnAction);
             ConfirmAddCommand = new RelayCommand(ConfirmAddAction);
+            TypeCollection = new List<string>();
+            TypeCollection.Add("藥品");
+            TypeCollection.Add("OTC");
+            SelectedType = "藥品";
 
             InitVariables();
         }
@@ -85,7 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             if (!CheckInputValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID, int.Parse(SelectedWareHouse.ID));
+            NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID, int.Parse(SelectedWareHouse.ID),SelectedType);
             MainWindow.ServerConnection.CloseConnection();
 
             Messenger.Default.Send(new NotificationMessage("CloseAddNewOrderWindow"));

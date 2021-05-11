@@ -34,6 +34,8 @@ namespace His_Pos.NewClass.StoreOrder
             return masterTable;
         }
 
+       
+
         public static DataTable StoreOrderDetailTable()
         {
             DataTable detailTable = new DataTable();
@@ -553,6 +555,13 @@ namespace His_Pos.NewClass.StoreOrder
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToProcessing]", parameters);
         }
+        internal static DataTable GetNotDoneMinus(string ID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ORDER_ID", ID));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderMinus]", parameters);
+
+        }
 
         internal static DataTable AddStoreOrderLowerThenOrderAmount(string storeOrderID, string manufactoryID, string warehouseID, PurchaseProducts orderProducts)
         {
@@ -565,13 +574,14 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddLowerThenOrderAmount]", parameters);
         }
 
-        internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID, int wareHouseID)
+        internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID, int wareHouseID,string type)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", orderType.ToString()));
             parameters.Add(new SqlParameter("MANUFACTORY", orderManufactory.ID));
             parameters.Add(new SqlParameter("EMPLOYEE", employeeID));
             parameters.Add(new SqlParameter("WARE_ID", wareHouseID));
+            parameters.Add(new SqlParameter("isOTC", type));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddNewOrder]", parameters);
         }
 

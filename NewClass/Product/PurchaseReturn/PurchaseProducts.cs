@@ -76,8 +76,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         internal void SetStartEditToPrice()
         {
-            foreach (var product in Items)
-                product.StartInputVariable = ProductStartInputVariableEnum.PRICE;
+            //foreach (var product in Items)
+                //product.StartInputVariable = ProductStartInputVariableEnum.PRICE;
         }
 
         public object Clone()

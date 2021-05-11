@@ -201,6 +201,16 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CheckTotal, ref checkTotal, value);
             }
         }
+        private int closed;
+
+        public int Closed
+        {
+            get => closed;
+            set
+            {
+                Set(() => Closed, ref closed, value);
+            }
+        }
 
         private string checkClosed;
 
@@ -285,7 +295,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             Extra = (int)result.Rows[0]["Extra"];
             TradeTodayProfit = (int)result.Rows[0]["tradeTodayProfit"];
             TradeTodayStock= (int)result.Rows[0]["tradeTodayStock"];
-
+            Closed = (int)result.Rows[0]["Closed"];
 
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
             CheckColor = Brushes.Green;
@@ -296,9 +306,15 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 CheckColor = Brushes.Red;
                 Enable = true;
             }
-
+            if (CheckClosed == "未關班")
+            {
+                CheckTotal = 0;
+            }
+            else {
+                CheckTotal = Total - Closed;
+            }
             Total = TradeCash + CashTotal + TradeReward + Extra;
-            CheckTotal = 0;
+            
         }
 
         private void ConfirmAction()

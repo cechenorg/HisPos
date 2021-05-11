@@ -166,7 +166,7 @@
                             <Setter Property="ContentTemplate" Value="{StaticResource ReturnNormalProcessingControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnSingdeProcessingControl}" />
+                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnNormalProcessingControl}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
                             <Setter Property="ContentTemplate" Value="{StaticResource ReturnNormalProcessingControl}" />

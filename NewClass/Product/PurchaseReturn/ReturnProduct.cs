@@ -1,4 +1,6 @@
-﻿using His_Pos.Interface;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.Interface;
 using System;
 using System.Data;
 using System.Linq;
@@ -80,6 +82,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             {
                 Set(() => RealAmount, ref realAmount, value);
                 CalculateRealPrice();
+                if (RealAmount > ReturnAmount) {
+                    MessageWindow.ShowMessage($"實際退貨量不可大於預定量!", MessageType.ERROR);
+                    RealAmount = 0;
+                }
             }
         }
 

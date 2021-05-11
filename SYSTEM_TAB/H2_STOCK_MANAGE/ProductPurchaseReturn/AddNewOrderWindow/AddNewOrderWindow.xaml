@@ -26,6 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
@@ -67,7 +68,27 @@
                 ItemsSource="{Binding WareHouseCollection}"
                 SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
-        <ContentControl Grid.Row="2" Content="{Binding}">
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                Content="選擇單種類:"
+                Foreground="Black"
+                Style="{StaticResource BoldLabelHeader25}" />
+            <ComboBox
+                Width="200"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+           
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+               
+                ItemsSource="{Binding TypeCollection}"
+                SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+        <ContentControl Grid.Row="3" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
                     <Setter Property="ContentTemplate" Value="{StaticResource PurchaseTypeControl}" />
@@ -80,7 +101,7 @@
             </ContentControl.Style>
         </ContentControl>
         <Button
-            Grid.Row="3"
+            Grid.Row="4"
             Width="200"
             Background="RoyalBlue"
             BorderBrush="Transparent"

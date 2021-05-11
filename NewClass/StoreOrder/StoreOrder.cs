@@ -16,6 +16,9 @@ namespace His_Pos.NewClass.StoreOrder
         private Product.Product selectedItem;
         private OrderStatusEnum orderStatus;
         private double totalPrice;
+        private StoreOrderHistorys storeOrderHistory;
+
+
 
         protected int initProductCount;
 
@@ -42,10 +45,23 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
 
+        public StoreOrderHistorys StoreOrderHistory
+        {
+            get { return storeOrderHistory; }
+            set { Set(() => StoreOrderHistory, ref storeOrderHistory, value); }
+        }
+
         public OrderStatusEnum OrderStatus
         {
             get { return orderStatus; }
             set { Set(() => OrderStatus, ref orderStatus, value); }
+        }
+
+        private string orderTypeIsOTC;
+        public string OrderTypeIsOTC
+        {
+            get { return orderTypeIsOTC; }
+            set { Set(() => OrderTypeIsOTC, ref orderTypeIsOTC, value); }
         }
 
         public OrderTypeEnum OrderType { get; set; }
@@ -122,6 +138,7 @@ namespace His_Pos.NewClass.StoreOrder
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
 
             initProductCount = row.Field<int>("ProductCount");
+            OrderTypeIsOTC= row.Field<string>("StoOrd_IsOTCType");
         }
 
         #region ----- Define Functions -----
@@ -167,6 +184,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
                     ToWaitingStatus();
+                    ToNormalProcessingStatus();
                     break;
 
                 case OrderStatusEnum.NORMAL_PROCESSING:
@@ -180,6 +198,33 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
 
+        public void MoveToNextStatusNoSingde()
+        {
+            SaveOrder();
+
+            switch (OrderStatus)
+            {
+                case OrderStatusEnum.NORMAL_UNPROCESSING:
+                    SaveOrderCus();
+                    ToNormalProcessingStatus();
+                    break;
+
+                case OrderStatusEnum.SINGDE_UNPROCESSING:
+                    ToNormalProcessingStatus();
+                    break;
+
+                case OrderStatusEnum.NORMAL_PROCESSING:
+                case OrderStatusEnum.SINGDE_PROCESSING:
+                    ToDoneStatus();
+                    break;
+
+                default:
+                    MessageWindow.ShowMessage("轉單錯誤!", MessageType.ERROR);
+                    break;
+            }
+        }
+
+
         private void ToWaitingStatus()
         {
             bool isSuccess = SendOrderToSingde();
@@ -191,7 +236,8 @@ namespace His_Pos.NewClass.StoreOrder
                 if (OrderType == OrderTypeEnum.RETURN)
                 {
                     DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
-
+                    MessageBox.Show(dataTable.Rows.Count.ToString());
+                    MessageBox.Show(dataTable.Rows[0].Field<string>("RESULT"));
                     if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
                         MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
@@ -207,10 +253,11 @@ namespace His_Pos.NewClass.StoreOrder
 
         private void ToNormalProcessingStatus()
         {
-            if (OrderType == OrderTypeEnum.RETURN)
+            if (OrderType == OrderTypeEnum.RETURN && !OrderManufactory.ID.Equals("0"))
             {
                 DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
-
+                MessageBox.Show(dataTable.Rows.Count.ToString());
+                MessageBox.Show(dataTable.Rows[0].Field<string>("RESULT"));
                 if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                 {
                     MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
@@ -218,7 +265,19 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
+            if (OrderManufactory.ID.Equals("0"))
+            {
+                OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
+            }
+
+          
+            else { OrderStatus = OrderStatusEnum.NORMAL_PROCESSING; }
+
+            if (OrderType == OrderTypeEnum.RETURN && OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+            {
+                OrderStatus = OrderStatusEnum.NORMAL_PROCESSING;
+            }
+
             ReceiveID = ID;
             SetProductToProcessingStatus();
 
@@ -273,7 +332,7 @@ namespace His_Pos.NewClass.StoreOrder
                     return CheckNormalProcessingOrder();
 
                 case OrderStatusEnum.SINGDE_PROCESSING:
-                    return CheckSingdeProcessingOrder();
+                    return CheckNormalProcessingOrder();
 
                 default:
                     return false;
@@ -371,9 +430,9 @@ namespace His_Pos.NewClass.StoreOrder
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
-        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID)
+        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID,string type)
         {
-            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID);
+            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID,type);
 
             switch (orderType)
             {

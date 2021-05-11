@@ -137,7 +137,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         {
             if (IsEditing)
             {
-                if (SearchString.Length > 4)
+                if (SearchString.Length >0)
                 {
                     IsEditing = false;
                     HideDisableProduct = false;
@@ -155,7 +155,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
 
                         case 1:
                             SelectedProductStruct = (ProductStruct)ProStructCollectionView.Cast<object>().First();
-                            if (SelectedProductStruct.OTCFromSingde == true && addProEnum == AddProductEnum.ProductPurchase && orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+                            if (SelectedProductStruct.OTCFromSingde == true && addProEnum == AddProductEnum.ProductPurchase /*&& orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING*/)
                             {
                                 MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
                                 return;
@@ -231,7 +231,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     break;
 
                 case AddProductEnum.ProductPurchase:
-                    if (SelectedProductStruct.OTCFromSingde == true && orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+                    if (SelectedProductStruct.OTCFromSingde == true /*&& orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING*/)
                     {
                         MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
                         return;

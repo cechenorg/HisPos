@@ -135,6 +135,7 @@
                     <RowDefinition Height="40" />
                     <RowDefinition Height="35" />
                     <RowDefinition Height="35" />
+                    <RowDefinition Height="35" />
                     <RowDefinition Height="50" />
                     <RowDefinition />
                     <RowDefinition Height="50" />
@@ -229,8 +230,34 @@
                         Tag="1" />
                     <Image Width="15" Source="/Images/BlueDot.png" />
                 </StackPanel>
+                <StackPanel  Grid.Row="3"
+                    Background="{StaticResource GridBackGround}"
+                    Orientation="Horizontal">
+                    <RadioButton
+                        Margin="15,0,5,0"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding FilterOrderCommand}"
+                        CommandParameter="5"
+                        Content="OTC"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="18"
+                        GroupName="OrderType"
+                        Tag="1" />
+                    <RadioButton
+                        Margin="60,0,5,0"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding FilterOrderCommand}"
+                        CommandParameter="6"
+                        Content="藥品"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="18"
+                        GroupName="OrderType"
+                        Tag="1" />
+                </StackPanel>
                 <StackPanel
-                    Grid.Row="3"
+                    Grid.Row="4"
                     Margin="0,2,0,0"
                     Background="{StaticResource GridBackGround}"
                     Orientation="Horizontal">
@@ -251,7 +278,7 @@
                     </TextBox>
                 </StackPanel>
                 <DataGrid
-                    Grid.Row="4"
+                    Grid.Row="5"
                     AutoGenerateColumns="False"
                     Background="Transparent"
                     CanUserAddRows="False"
@@ -421,7 +448,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Background="{StaticResource GridBackGround}"
                     Orientation="Horizontal">
                     <Image

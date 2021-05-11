@@ -17,9 +17,9 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
+            <RowDefinition Height="590"/>
             <RowDefinition Height="40" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
             Name="ProductDataGrid"
@@ -96,15 +96,15 @@
                                 CharacterCasing="Upper"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
-                                InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="ProductIDTextbox_OnKeyDown"
+                                GotFocus="InputTextbox_OnGotFocus"
                                 Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    MinWidth="200"
-                    MaxWidth="350"
+                 
+                    Width="300"
                     Header="商品名稱"
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
@@ -133,10 +133,11 @@
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
-                    Width="70"
-                    Binding="{Binding Price, StringFormat=N2}"
+                    Width="100"
+                    Binding="{Binding LastPrice}"
+                    CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
-                    Header="單價"
+                    Header="上次單價"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -145,6 +146,29 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                
+                <DataGridTemplateColumn
+                    MinWidth="100"
+                    Header="下訂單價"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                x:Name="ProductPriceTextbox"
+                                Width="60"
+                                Margin="0,0,0,2"
+                                HorizontalContentAlignment="Center"
+                                FontFamily="Segoe UI Semi"
+                                FontSize="18"
+                                InputMethod.IsInputMethodEnabled="False"
+                                GotFocus="InputTextbox_OnGotFocus"
+                                IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"           
+                                Style="{DynamicResource CantEditPrice}"
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                                />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Width="60"
                     Binding="{Binding Inventory}"
@@ -424,7 +448,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black" />
-            <Rectangle Width="295" />
+            <Rectangle Width="190" />
             <Button
                 Width="120"
                 Margin="0,0,10,0"
@@ -435,7 +459,17 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
             <Button
-                Width="150"
+                Width="120"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                 Margin="0,0,10,0"
+                Command="{Binding NoSingdeCommand}"
+                Content="手動入庫"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="White" />
+            <Button
+                Width="120"
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding ToNextStatusCommand}"

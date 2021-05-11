@@ -4,13 +4,16 @@ using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.PrescriptionSendData;
 using His_Pos.NewClass.Product.PurchaseReturn;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 using System;
 using System.Data;
 using System.Linq;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public class PurchaseOrder : StoreOrder
+    public  class PurchaseOrder : StoreOrder
     {
         #region ----- Define Variables -----
 
@@ -108,10 +111,23 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage($"此訂單包含藥品與OTC商品\n請分開建立採購單！", MessageType.ERROR);
                 return false;
             }
+            if (OrderTypeIsOTC == "OTC") {
+                if (flagNotOTC == 1) {
+                    MessageWindow.ShowMessage($"此訂單為OTC單不可包含藥品\n請分開建立採購單！", MessageType.ERROR);
+                    return false;
+                } 
+            }
+            if (OrderTypeIsOTC == "藥品")
+            {
+                if (flagOTC == 1)
+                {
+                    MessageWindow.ShowMessage($"此訂單為藥品單不可包含OTC\n請分開建立採購單！", MessageType.ERROR);
+                    return false;
+                }
+            }
+            //ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
-
-            return (bool)confirmWindow.DialogResult;
+            return true;
         }
 
         protected override bool CheckNormalProcessingOrder()
@@ -163,12 +179,12 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (isLowerThenOrderAmount)
             {
-                ConfirmWindow confirmWindow = new ConfirmWindow($"收貨單中有商品的收貨量低於訂購量\r\n是否將不足的部分轉成新的收貨單?", "", false);
+                ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
 
                 if ((bool)confirmWindow.DialogResult)
                 {
                     bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
-
+                   
                     if (!isSuccess) return false;
                 }
             }
@@ -211,7 +227,7 @@ namespace His_Pos.NewClass.StoreOrder
             TotalPrice = OrderProducts.Sum(p => p.SubTotal);
 
             if (OrderManufactory.ID.Equals("0"))
-                OrderProducts.SetToSingde();
+               // OrderProducts.SetToSingde();
 
             if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.DONE)
                 OrderProducts.SetToProcessing();
@@ -380,6 +396,12 @@ namespace His_Pos.NewClass.StoreOrder
             if (dataTable.Rows.Count > 0)
             {
                 MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+
+                Properties.Settings.Default.MinusID =(StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0]);
+                NormalViewModel nn = new NormalViewModel();
+                nn.storeOrderCollection = StoreOrders.GetOrdersNotDone();
+                nn.AddOrderByMinus();
+
                 return true;
             }
             else
@@ -388,7 +410,7 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
         }
-
+     
         public static bool InsertPrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
         {
             string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");

@@ -180,10 +180,12 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Width="80"
+                    x:Name="PreReturn"
                     Binding="{Binding ReturnAmount}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="退貨量"
+                    
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -364,7 +366,8 @@
                 Command="{Binding ToNextStatusCommand}"
                 Content="未退量作廢"
                 FontFamily="Segoe UI Semibold"
-                FontSize="16" />
+                FontSize="16" 
+                PreviewMouseDown="Button_PreviewMouseDown"/>
         </StackPanel>
     </Grid>
 </UserControl>

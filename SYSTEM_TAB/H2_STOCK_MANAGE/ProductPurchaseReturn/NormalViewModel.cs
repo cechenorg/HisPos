@@ -15,6 +15,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
@@ -37,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand ReturnOrderCalculateReturnAmountCommand { get; set; }
         public RelayCommand ReturnOrderRePurchaseCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
+        public RelayCommand NoSingdeCommand { get; set; }
         public RelayCommand ExportOrderDataCommand { get; set; }
         public RelayCommand<string> RealAmountMouseDoubleClickCommand { get; set; }
 
@@ -47,7 +49,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private bool isBusy;
         private string busyContent;
         private StoreOrder currentStoreOrder;
-        private StoreOrders storeOrderCollection;
+        public StoreOrders storeOrderCollection;
         private ICollectionView storeOrderCollectionView;
         private string searchString;
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
@@ -84,6 +86,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 value?.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
+
+                if (CurrentStoreOrder != null) {
+                    CurrentStoreOrder.StoreOrderHistory = new StoreOrderHistorys();
+                    CurrentStoreOrder.StoreOrderHistory.getData(CurrentStoreOrder.ID);
+                }
+
+
             }
         }
 
@@ -100,6 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             RegisterCommand();
             RegisterMessengers();
         }
+   
 
         #region ----- Define Actions -----
 
@@ -130,6 +140,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             CurrentStoreOrder.CalculateTotalPrice();
         }
+
+
+        public  void AddOrderByMinus()
+        {
+
+            StoreOrderCollectionView = CollectionViewSource.GetDefaultView(StoreOrders.GetOrdersNotDone());
+  
+            CurrentStoreOrder = StoreOrderCollectionView.CurrentItem as StoreOrder;
+        }
+
 
         private void AddOrderAction()
         {
@@ -177,13 +197,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         private void ToNextStatusAction()
         {
-            if (!CurrentStoreOrder.ChkPrice())
-            {
-                MessageWindow.ShowMessage("本次進價與上次進價不同", MessageType.WARNING);
-            }
+            
 
-            if (CurrentStoreOrder.CheckOrder())
+            if (CurrentStoreOrder.CheckOrder() && (CurrentStoreOrder.OrderStatus== OrderStatusEnum.SINGDE_PROCESSING|| CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING))
             {
+                if (!CurrentStoreOrder.ChkPrice())
+                {
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"本次進價與上次進價不同                 是否送出？", "", true);
+
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
+                }
+                else
+                {
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
+                }
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
                 CurrentStoreOrder.MoveToNextStatus();
@@ -202,7 +232,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             if (CurrentStoreOrder.SelectedItem != null && CurrentStoreOrder.SelectedItem.ID.Equals(searchString)) return;
 
-            if (searchString.Length < 5)
+            if (searchString.Length < 0)
             {
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
@@ -350,6 +380,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             DeleteWaitingOrderCommand = new RelayCommand(DeleteWaitingOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
+            NoSingdeCommand = new RelayCommand(NoSingdeAction);
             AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
@@ -362,6 +393,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
             ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
             RealAmountMouseDoubleClickCommand = new RelayCommand<string>(DoubleClickRealAmount);
+        }
+
+        private void NoSingdeAction()
+        {
+            if (CurrentStoreOrder.CheckOrder())
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
+                CurrentStoreOrder.MoveToNextStatusNoSingde();
+                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
+                storeOrderCollection.ReloadCollection();
+            }
         }
 
         private void RegisterMessengers()
@@ -490,6 +534,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 case OrderFilterStatusEnum.PROCESSING:
                     if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                        returnValue = false;
+                    break;
+
+                case OrderFilterStatusEnum.OTC:
+                    if (!(tempOrder.OrderTypeIsOTC =="OTC"))
+                        returnValue = false;
+                    break;
+                case OrderFilterStatusEnum.MED:
+                    if (!(tempOrder.OrderTypeIsOTC == "藥品"))
                         returnValue = false;
                     break;
             }
