@@ -306,6 +306,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 CheckColor = Brushes.Red;
                 Enable = true;
             }
+            Total = TradeCash + CashTotal + TradeReward + Extra;
             if (CheckClosed == "未關班")
             {
                 CheckTotal = 0;
@@ -313,7 +314,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             else {
                 CheckTotal = Total - Closed;
             }
-            Total = TradeCash + CashTotal + TradeReward + Extra;
+            
             
         }
 
