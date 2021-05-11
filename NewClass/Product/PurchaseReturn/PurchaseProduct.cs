@@ -98,10 +98,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             get { return subTotal; }
             set
             {
-                //if (value == 0.0)
+                if (value == 0.0)
                     SetStartInputVariable(ProductStartInputVariableEnum.INIT);
-                //else
-                //    SetStartInputVariable(ProductStartInputVariableEnum.SUBTOTAL);
+                else
+                    SetStartInputVariable(ProductStartInputVariableEnum.SUBTOTAL);
 
                 Set(() => SubTotal, ref subTotal, value);
 
@@ -117,10 +117,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             get { return price; }
             set
             {
-                //if (value == 0.0)
+                if (value == 0.0)
                     SetStartInputVariable(ProductStartInputVariableEnum.INIT);
-                //else
-                    //SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
+                else
+                    SetStartInputVariable(ProductStartInputVariableEnum.PRICE);
 
                 Set(() => Price, ref price, value);
 
