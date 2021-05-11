@@ -385,10 +385,10 @@
                                                         <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
-                                                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                                                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
