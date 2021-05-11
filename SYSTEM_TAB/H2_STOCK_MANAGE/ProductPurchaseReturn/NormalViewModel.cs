@@ -197,9 +197,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         private void ToNextStatusAction()
         {
-            
 
-            if (CurrentStoreOrder.CheckOrder() && (CurrentStoreOrder.OrderStatus== OrderStatusEnum.SINGDE_PROCESSING|| CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING))
+
+            if (CurrentStoreOrder.CheckOrder() && (CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING))
             {
                 if (!CurrentStoreOrder.ChkPrice())
                 {
@@ -214,6 +214,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     if (!(bool)confirmWindow.DialogResult)
                         return;
                 }
+                MainWindow.ServerConnection.OpenConnection();
+                MainWindow.SingdeConnection.OpenConnection();
+                CurrentStoreOrder.MoveToNextStatus();
+                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.ServerConnection.CloseConnection();
+                storeOrderCollection.ReloadCollection();
+            }
+            else {
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
                 CurrentStoreOrder.MoveToNextStatus();
