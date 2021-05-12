@@ -17,8 +17,10 @@ namespace His_Pos.Service
 
             Regex taiwanRegex = new Regex("[A-Z][12][0-9]{8}");
             Regex foreignRegex = new Regex("[A-Z][ABCD][0-9]{8}");
+            Regex newForeignRegex = new Regex("[A-Z][89][0-9]{8}");
             Match taiwanMatch = taiwanRegex.Match(id);
             Match foreignMatch = foreignRegex.Match(id);
+            Match newForeignMatch = newForeignRegex.Match(id);
 
             if (taiwanMatch.Success)
             {
@@ -51,6 +53,10 @@ namespace His_Pos.Service
 
                 if (sumCheck == checkSum)
                     return true;
+            }
+            else if (newForeignMatch.Success)
+            {
+                return true;
             }
 
             return false;
