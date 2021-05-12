@@ -97,7 +97,7 @@
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
                                 KeyDown="ProductIDTextbox_OnKeyDown"
-                                GotFocus="InputTextbox_OnGotFocus"
+                                
                                 Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -161,7 +161,7 @@
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
                                 InputMethod.IsInputMethodEnabled="False"
-                                GotFocus="InputTextbox_OnGotFocus"
+                               
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"           
                                 Style="{DynamicResource CantEditPrice}"
                                 Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
@@ -223,7 +223,7 @@
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
-                                GotFocus="InputTextbox_OnGotFocus"
+                                
                                 InputMethod.IsInputMethodEnabled="False"
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                 KeyDown="OrderAmountTextbox_OnKeyDown"
