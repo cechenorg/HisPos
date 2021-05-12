@@ -157,8 +157,10 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                             SelectedProductStruct = (ProductStruct)ProStructCollectionView.Cast<object>().First();
                             if (SelectedProductStruct.OTCFromSingde == true && addProEnum == AddProductEnum.ProductPurchase /*&& orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING*/)
                             {
-                                MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
-                                return;
+                                if (orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING || orderStatus == OrderStatusEnum.SINGDE_PROCESSING) {
+                                    MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
+                                    return; 
+                                }
                             }
                             ProductSelectedAction();
                             break;
@@ -233,8 +235,11 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                 case AddProductEnum.ProductPurchase:
                     if (SelectedProductStruct.OTCFromSingde == true /*&& orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING*/)
                     {
-                        MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
-                        return;
+                        if (orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING || orderStatus == OrderStatusEnum.SINGDE_PROCESSING)
+                        {
+                            MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
+                            return;
+                        }
                     }
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
                     break;
