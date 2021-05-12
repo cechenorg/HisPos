@@ -11,11 +11,11 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <xctk:BusyIndicator BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-        <Grid Width="1365" Height="870">
+        <Grid Width="2000" Height="870">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="670" />
-                <ColumnDefinition Width="800" />
-                <ColumnDefinition />
+                <ColumnDefinition Width="1300" />
+                <ColumnDefinition Width="500" />
+                <ColumnDefinition Width="500" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Margin="10,0,10,10">
                 <Grid.RowDefinitions>
@@ -23,8 +23,9 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="670" />
+                    <ColumnDefinition Width="500"/>
+                    <ColumnDefinition Width="670"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel
                     Grid.Row="0"
@@ -116,6 +117,9 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition  Width="500"/>
+                            <ColumnDefinition  Width="100"/>
+                            <ColumnDefinition  Width="100"/>
+                            <ColumnDefinition  Width="100"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel
                             Grid.Row="0"
@@ -429,6 +433,7 @@
                                 IsEnabled="{Binding Enable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 PreviewMouseDown="Button_PreviewMouseDown"/>
                         </StackPanel>
+                        
                         <StackPanel
                             Grid.Row="18"
                             Grid.Column="0"
@@ -450,9 +455,146 @@
                                 FontSize="20"
                                 Foreground="{Binding CheckColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
+                      
+                    </Grid>
+                    
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="調劑台資料"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="當月總調劑人數"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="MedTotal"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="合作診所收入"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="CoopMed"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding Coop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="配藥毛利收入"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="SelfMed"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding Self, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
+                                Content="慢箋+其他收入"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                x:Name="OtherMed"
+                                Width="230"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding Other, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+
+                        </StackPanel>
                     </Grid>
                 </StackPanel>
             </Grid>
+            
         </Grid>
     </xctk:BusyIndicator>
 </UserControl>
