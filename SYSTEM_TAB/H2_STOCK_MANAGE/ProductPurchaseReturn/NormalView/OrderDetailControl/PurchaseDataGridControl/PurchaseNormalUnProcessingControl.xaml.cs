@@ -186,9 +186,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             if (!(cell?.DataContext is PurchaseProduct)) return;
 
-            MainWindow.ServerConnection.OpenConnection();
+            /*MainWindow.ServerConnection.OpenConnection();
             ((PurchaseProduct)cell.DataContext).GetOnTheWayDetail();
-            MainWindow.ServerConnection.CloseConnection();
+            MainWindow.ServerConnection.CloseConnection();*/
         }
 
         #endregion ----- Define Functions -----
