@@ -40,6 +40,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private int cashCoupon;
         private int totalChange;
         private int totalProfit;
+        private int discountAmtMinus;
         public string TypeId
         {
             get => typeId;
@@ -127,6 +128,14 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             set
             {
                 Set(() => DiscountAmt, ref discountAmt, value);
+            }
+        }
+        public int DiscountAmtMinus
+        {
+            get => discountAmtMinus;
+            set
+            {
+                Set(() => DiscountAmtMinus, ref discountAmtMinus, value);
             }
         }
 

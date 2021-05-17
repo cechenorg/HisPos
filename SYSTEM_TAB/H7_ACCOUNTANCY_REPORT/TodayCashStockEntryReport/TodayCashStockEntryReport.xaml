@@ -511,7 +511,7 @@
                                 Width="130"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding   TradeDetailReportSum.DiscountAmt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding  TradeDetailReportSum.DiscountAmtMinus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
