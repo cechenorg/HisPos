@@ -437,7 +437,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (TaxNumber.Length != 8)
+            if (TaxNumber.Length != 8&&TaxNumber.Length!=0)
             {
                 MessageWindow.ShowMessage("統一編號位數有誤！", MessageType.ERROR);
                 return;
