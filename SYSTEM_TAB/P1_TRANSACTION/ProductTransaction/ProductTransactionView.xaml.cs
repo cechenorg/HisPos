@@ -491,6 +491,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認", true);
             if (!(bool)confirmWindow.DialogResult) { return; }
 
+
+            
+
             try
             {
                 MainWindow.ServerConnection.OpenConnection();
@@ -519,6 +522,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DepositInsert();
                     if (Properties.Settings.Default.InvoiceCheck == "1")
                     {
+                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
                         InvoicePrint();
                         InvoiceControlViewModel vm = new InvoiceControlViewModel();
                         vm.InvoiceNumPlusOneAction();
@@ -571,18 +575,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             port.Write("" + cr + lf);
             /*strArr = big5.GetBytes("統編:" + MyPharmacy.ID.ToString());
             port.Write(strArr, 0, strArr.Length); */
-             port.Write("" + cr + lf);
+            // port.Write("" + cr + lf);
             strArr = big5.GetBytes("電話:" + MyPharmacy.Tel.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
             strArr = big5.GetBytes(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             port.Write(strArr, 0, strArr.Length);
-            //port.Write("" + cr + lf);
-            //strArr = big5.GetBytes("客編:" + cusID.ToString());
-            //port.Write(strArr, 0, strArr.Length);
-            //port.Write("" + cr + lf);
-            port.Write(esc + "d" + Convert.ToChar(1));
-            strArr = big5.GetBytes("統一編號:" + chkWindow.TaxNumber);
+            port.Write("" + cr + lf);
+            strArr = big5.GetBytes("賣方:" + MyPharmacy.TAXNUM.ToString());
+            port.Write(strArr, 0, strArr.Length);
+            port.Write("" + cr + lf);
+            //port.Write(esc + "d" + Convert.ToChar(1));
+            strArr = big5.GetBytes("買方:" + chkWindow.TaxNumber);
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
             port.Write("" + cr + lf);

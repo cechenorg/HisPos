@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             DataBaseFunction.AddSqlParameter(parameterList, "CurPha_VPN", p.VpnIp);
             DataBaseFunction.AddSqlParameter(parameterList, "CurPha_NewInstitution", p.NewInstitution);
             DataBaseFunction.AddSqlParameter(parameterList, "newStartDate", p.StartDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "PHAMAS_TAXNUM", p.TAXNUM);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCurrentPharmacy]", parameterList);
         }
 

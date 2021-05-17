@@ -25,6 +25,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             VpnIp = r.Field<string>("CurPha_VPN");
             NewInstitution = r.Field<bool>("CurPha_NewInstitution");
             GroupServerName = r.Field<string>("GroupServerName");
+            TAXNUM= r.Field<string>("PHAMAS_TAXNUM");
         }
 
         private string id;
@@ -75,6 +76,16 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             }
         }
 
+        private string tAXNUM;
+        [Index(8)]
+        public virtual string TAXNUM
+        {
+            get => tAXNUM;
+            set
+            {
+                Set(() => TAXNUM, ref tAXNUM, value);
+            }
+        }
         [IgnoreFormat]
         public Employee MedicalPersonnel { get; set; }
 
@@ -142,7 +153,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
                 ReaderCom = ReaderCom,
                 VpnIp = VpnIp,
                 NewInstitution = NewInstitution,
-                GroupServerName = GroupServerName
+                GroupServerName = GroupServerName,
+                TAXNUM= TAXNUM
             };
             return clone;
         }

@@ -122,6 +122,35 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
+
+            <StackPanel
+                Grid.Row="4"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="28"
+                    Foreground="DimGray"
+                    Text="統一編號" />
+                <TextBox
+                    Margin="20,0,0,0"
+                    Width="200"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="25"
+                    Foreground="DimGray"
+                    Text="{Binding TAXNUM}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
             <Grid
                 Grid.Row="5"
                 Margin="10"
