@@ -85,7 +85,7 @@
                     Height="30"
                     Source="/Images/Phone.png" />
                 <TextBox
-                    Width="255"
+                    Width="240"
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
@@ -96,9 +96,10 @@
                 <Image
                     Width="30"
                     Height="30"
+                    Margin="10,0,0,0"
                     Source="/Images/Phone.png" />
                 <TextBox
-                    Width="255"
+                    Width="240"
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
@@ -115,10 +116,10 @@
                 <Image
                     Width="25"
                     Height="25"
-                    Margin="15,0,0,0"
+                    Margin="0,0,0,0"
                     Source="/Images/Telephone.png" />
                 <TextBox
-                    Width="255"
+                    Width="240"
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"

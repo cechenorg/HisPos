@@ -415,6 +415,7 @@
                         Grid.Column="0"
                         Orientation="Horizontal">
                         <Label
+                            Width="60"
                             Margin="20,0,0,0"
                             VerticalAlignment="Center"
                             Content="家電"
@@ -443,7 +444,7 @@
                         Orientation="Horizontal">
                         <TextBlock
                             Width="50"
-                            Margin="10,0,0,0"
+                            Margin="20,0,0,0"
                             VerticalAlignment="Center"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20"
@@ -451,7 +452,7 @@
                             Text="聯絡備註"
                             TextWrapping="Wrap" />
                         <TextBox
-                            Width="555"
+                            Width="540"
                             Height="140"
                             Margin="5,10,0,0"
                             VerticalAlignment="Center"
@@ -477,6 +478,7 @@
                         Grid.Column="0"
                         Orientation="Horizontal">
                         <Label
+                            Width="60"
                             Margin="20,0,0,0"
                             VerticalAlignment="Center"
                             Content="手機1"
@@ -503,6 +505,7 @@
                         Grid.Column="0"
                         Orientation="Horizontal">
                         <Label
+                            Width="60"
                             Margin="20,0,0,0"
                             VerticalAlignment="Center"
                             Content="手機2"
