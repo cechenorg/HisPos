@@ -1131,6 +1131,23 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (result.Rows.Count == 0)
                 {
                     MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
+                    ConfirmWindow cw = new ConfirmWindow("是否新增客戶?", "新增客戶確認");
+                    if (!(bool)cw.DialogResult) { return; }
+                    else
+                    {
+
+
+                        NewClass.Person.Customer.Customer customer = new NewClass.Person.Customer.Customer();
+
+                        if (TbText != null) { }
+                        {
+                            customer.CellPhone = tbSearch.Text;
+                        }
+
+                        addCustomerWindow = new AddCustomerWindow(customer);
+                        addCustomerWindow.Closed += new EventHandler(SetContentHandler);
+                    }
+
                 }
                 else if (result.Rows.Count > 1)
                 {

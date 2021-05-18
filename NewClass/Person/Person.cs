@@ -28,6 +28,7 @@ namespace His_Pos.NewClass.Person
             Email = r.Field<string>("Person_Email");
             Line = r.Field<string>("Person_LINE");
             Note = r.Field<string>("Person_Note");
+            SecondPhone = r.Field<string>("Person_SecondPhone");
         }
 
         [Index(0)]
@@ -95,6 +96,18 @@ namespace His_Pos.NewClass.Person
                 Set(() => CellPhone, ref cellPhone, value);
             }
         }//手機
+
+        private string secondPhone;
+
+        [IgnoreFormat]
+        public virtual string SecondPhone
+        {
+            get => secondPhone;
+            set
+            {
+                Set(() => SecondPhone, ref secondPhone, value);
+            }
+        }//手機2
 
         [IgnoreFormat]
         public virtual string FormattedPhoneNumber

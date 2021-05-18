@@ -80,7 +80,7 @@
                 CaretBrush="Black"
                 FontSize="16"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+                Text="{Binding Patient.SecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
                         <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />

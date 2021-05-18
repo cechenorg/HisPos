@@ -66,7 +66,9 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddColumnValue(newRow, "Cus_LINE", c.Line);
             DataBaseFunction.AddColumnValue(newRow, "Cus_UrgentNote", c.ContactNote);
             DataBaseFunction.AddColumnValue(newRow, "Cus_Note", c.Note);
+            DataBaseFunction.AddColumnValue(newRow, "Cus_SecondPhone", c.SecondPhone);
             DataBaseFunction.AddColumnValue(newRow, "Cus_IsEnable", c.IsEnable);
+            
             customerTable.Rows.Add(newRow);
             return customerTable;
         }
@@ -113,7 +115,9 @@ namespace His_Pos.NewClass.Person.Customer
             customerTable.Columns.Add("Cus_LINE", typeof(String));
             customerTable.Columns.Add("Cus_UrgentNote", typeof(String));
             customerTable.Columns.Add("Cus_Note", typeof(String));
+            customerTable.Columns.Add("Cus_SecondPhone", typeof(String));
             customerTable.Columns.Add("Cus_IsEnable", typeof(bool));
+ 
 
             return customerTable;
         }

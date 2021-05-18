@@ -251,6 +251,7 @@ namespace His_Pos.NewClass.Person.Customer
             c.Name = Name;
             c.Note = Note;
             c.Tel = Tel;
+            c.SecondPhone = SecondPhone;
             c.IsEnable = IsEnable;
             c.Histories = new CustomerHistories();
             if (Histories != null)
@@ -266,11 +267,11 @@ namespace His_Pos.NewClass.Person.Customer
         public bool InsertData()
         {
             var table = CustomerDb.InsertCustomerData(this);
-            if (table.Rows[0].Field<string>("RESULT").Equals("SAME"))
-            {
-                MessageWindow.ShowMessage("電話號碼已存在。", MessageType.ERROR);
-                return false;
-            }
+            //if (table.Rows[0].Field<string>("RESULT").Equals("SAME"))
+            //{
+            //    MessageWindow.ShowMessage("電話號碼已存在。", MessageType.ERROR);
+            //    return false;
+            //}
             if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
             {
                 MessageWindow.ShowMessage("身分證字號已存在。", MessageType.ERROR);
@@ -292,6 +293,7 @@ namespace His_Pos.NewClass.Person.Customer
                 Gender = c.Gender;
                 Line = c.Line;
                 Note = c.Note;
+                SecondPhone = c.SecondPhone;
                 return true;
             }
             MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
