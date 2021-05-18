@@ -10,12 +10,13 @@
         mc:Ignorable="d"
         FontFamily="Segoe UI Semibold"
         WindowStartupLocation="CenterScreen"
-        Title="新增顧客" Height="450" Width="770">
+        Title="新增顧客" Height="500" Width="770">
     <Grid>
         <Grid.Resources>
             <service:NullableDateConverter x:Key="NullableDateConverter" />
         </Grid.Resources>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
@@ -43,20 +44,25 @@
             <TextBox Name="CusIdNumber" Width="120" Height="35" Text="{Binding NewCustomer.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusIdNumber_OnPreviewKeyDown" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" InputScope="AlphanumericHalfWidth" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Label Content="手機 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox  Name="CusCellPhone" Width="110" Height="35" Text="{Binding NewCustomer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown" />
+            <Label Content="手機1 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox  Name="CusCellPhone" Width="120" Height="35" Text="{Binding NewCustomer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown" />
+            <Label Content="手機2 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox  Name="CusSecondPhone" Width="120" Height="35" Text="{Binding NewCustomer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown" />
             <Label Content="家電 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox Name="CusTel" Width="110" Height="35" Text="{Binding NewCustomer.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusTel_OnPreviewKeyDown" />
-            <Label Content="地址 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox Name="CusAddress" Width="300" Height="35" Text="{Binding NewCustomer.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusAddress_OnPreviewKeyDown" />
+            <TextBox Name="CusTel" Width="120" Height="35" Text="{Binding NewCustomer.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusTel_OnPreviewKeyDown" />
+            
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Label Content="地址 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Name="CusAddress" Width="360" Height="35" Text="{Binding NewCustomer.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusAddress_OnPreviewKeyDown" />
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Label Content="LineID : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
             <TextBox Name="CusLine" Width="270" Height="35" Text="{Binding NewCustomer.Line,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusLine_OnPreviewKeyDown" />
             <Label Content="Email : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
             <TextBox Name="CusEmail" Width="275" Height="35" Text="{Binding NewCustomer.Email,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusEmail_OnPreviewKeyDown" />
         </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Vertical">
+        <StackPanel Grid.Row="4" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" Margin="10,10,0,10">
                     <Label Content="聯絡備註" FontSize="20" Foreground="{StaticResource ForeGround}" />
@@ -74,7 +80,7 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
             <Label Content="手機 / 家電至少擇一填寫" Foreground="Red" FontSize="20" VerticalAlignment="Center" Width="565" />
             <Button Content="取消" FontSize="20" Height="35" Width="80" Margin="10,0,10,0" BorderThickness="0" HorizontalAlignment="Right" Background="DimGray" Command="{Binding Cancel}" />
             <Button Content="新增" FontSize="20" Height="35" Width="80" Margin="0,0,10,0" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Command="{Binding Submit}" />
