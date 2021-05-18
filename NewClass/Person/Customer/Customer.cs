@@ -141,6 +141,11 @@ namespace His_Pos.NewClass.Person.Customer
                 string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
                 customer.CellPhone = FormatCell;
             }
+            if (!string.IsNullOrEmpty(customer.SecondPhone) && customer.SecondPhone.Length == 10)
+            {
+                string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
+                customer.SecondPhone = FormatCell;
+            }
             /* 格式化電話 */
             if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 7)
             {
