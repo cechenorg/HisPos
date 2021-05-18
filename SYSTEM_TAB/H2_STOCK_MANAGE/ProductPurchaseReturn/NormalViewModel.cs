@@ -222,12 +222,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 storeOrderCollection.ReloadCollection();
             }
             else {
-                MainWindow.ServerConnection.OpenConnection();
-                MainWindow.SingdeConnection.OpenConnection();
-                CurrentStoreOrder.MoveToNextStatus();
-                MainWindow.SingdeConnection.CloseConnection();
-                MainWindow.ServerConnection.CloseConnection();
-                storeOrderCollection.ReloadCollection();
+                return;
             }
         }
 

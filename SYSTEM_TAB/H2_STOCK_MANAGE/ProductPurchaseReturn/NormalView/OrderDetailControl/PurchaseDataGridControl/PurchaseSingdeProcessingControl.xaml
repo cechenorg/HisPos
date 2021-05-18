@@ -221,19 +221,54 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="120"
-                    Binding="{Binding BatchNumber}"
-                    FontFamily="Segoe UI Semi"
+                <DataGridTemplateColumn
+                    MinWidth="170"
                     Header="批號"
                     IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Width="170"
+                                Orientation="Horizontal"
+                                Tag="NotSkip">
+                                <TextBox
+                                    x:Name="BatchNumber"
+                                    Width="120"
+                                    Margin="0,0,0,2"
+                                    HorizontalContentAlignment="Center"
+                                    FontFamily="Segoe UI Semi"
+                                    FontSize="18"
+                                    
+                            
+                                    
+                                    Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button
+                                    x:Name="Split"
+                                    Width="40"
+                                    Margin="5,0,0,0"
+                                    Padding="0"
+                                    Background="DarkRed"
+                                    BorderThickness="0"
+                                    Command="{Binding Path=DataContext.SplitBatchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                    CommandParameter="{Binding ID}"
+                                    Content="拆批"
+                                    FontFamily="Segoe UI Semi"
+                                    Visibility="{Binding IsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                <Button
+                                    Width="40"
+                                    Margin="5,0,0,0"
+                                    Padding="0"
+                                    Background="IndianRed"
+                                    BorderThickness="0"
+                                    Command="{Binding Path=DataContext.MergeBatchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                    CommandParameter="{Binding}"
+                                    Content="合批"
+                                    FontFamily="Segoe UI Semi"
+                                    Visibility="{Binding IsFirstBatch, Converter={StaticResource InverseBoolToVisConverter}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Width="120"
                     Binding="{Binding ValidDate, Converter={StaticResource DateConverter}}"
@@ -247,6 +282,23 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTemplateColumn
+                    MinWidth="100"
+                    Header="發票號碼"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                x:Name="Invoice"
+                                Width="100"
+                                Margin="0,0,0,2"
+                                HorizontalContentAlignment="Center"
+                                FontFamily="Segoe UI Semi"
+                                FontSize="18"
+                                Text="{Binding Invoice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn MinWidth="120" Header="備註">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

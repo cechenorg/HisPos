@@ -192,6 +192,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 FocusRow(firstChild as TextBox);
             }
         }
+        private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            textBox.SelectAll();
+            FocusRow(textBox);
+        }
+
     }
-       
-    }
+
+}
