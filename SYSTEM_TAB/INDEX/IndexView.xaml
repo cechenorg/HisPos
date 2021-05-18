@@ -383,10 +383,11 @@
                     Grid.Column="0"
                     Background="{StaticResource GridBackGround}">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50" />
-                        <RowDefinition Height="50" />
-                        <RowDefinition Height="50" />
-                        <RowDefinition Height="50" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -395,7 +396,7 @@
                     </Grid.ColumnDefinitions>
                     <Rectangle
                         Grid.Row="0"
-                        Grid.RowSpan="4"
+                        Grid.RowSpan="5"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Margin="10,0,10,0"
@@ -437,7 +438,7 @@
                     </StackPanel>
                     <StackPanel
                         Grid.Row="0"
-                        Grid.RowSpan="3"
+                        Grid.RowSpan="4"
                         Grid.Column="1"
                         Orientation="Horizontal">
                         <TextBlock
@@ -478,7 +479,7 @@
                         <Label
                             Margin="20,0,0,0"
                             VerticalAlignment="Center"
-                            Content="手機"
+                            Content="手機1"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20"
                             Foreground="Black" />
@@ -499,6 +500,32 @@
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
+                        Grid.Column="0"
+                        Orientation="Horizontal">
+                        <Label
+                            Margin="20,0,0,0"
+                            VerticalAlignment="Center"
+                            Content="手機2"
+                            FontFamily="Segoe UI Semibold"
+                            FontSize="20"
+                            Foreground="Black" />
+                        <TextBox
+                            Width="180"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            FontFamily="Segoe UI Semibold"
+                            FontSize="18"
+                            Foreground="Black"
+                            Text="{Binding CustomerData.SecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="4"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Orientation="Horizontal">
@@ -555,7 +582,7 @@
                             IsEnabled="{Binding IsDataChanged, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <DataGrid
-                        Grid.Row="4"
+                        Grid.Row="5"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Margin="10,10,10,10"

@@ -29,7 +29,9 @@
                 Style="{StaticResource BoldLabelHeader25}" />
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type customerSearchWindow:CustomerSearchViewModel}">
-            <DataGrid
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+              VerticalScrollBarVisibility="Disabled">
+                <DataGrid
                 Width="720"
                 HorizontalAlignment="Left"
                 AutoGenerateColumns="False"
@@ -45,87 +47,95 @@
                 PreviewKeyDown="UIElement_OnPreviewKeyDown"
                 PreviewMouseDown="UIElement_OnPreviewMouseDown"
                 SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding CustomerSelected}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <i:Interaction.Behaviors>
-                    <behaviors:ScrollIntoView />
-                </i:Interaction.Behaviors>
-                <DataGrid.Resources>
-                    <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="OverridesDefaultStyle" Value="true" />
-                        <Setter Property="Width" Value="100" />
-                        <Style.Triggers>
-                            <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15" />
-                                <Setter Property="Height" Value="Auto" />
-                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.Resources>
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Style.Triggers>
-                            <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}" />
-                            </Trigger>
-                        </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="FontSize" Value="18" />
-                        <Setter Property="Height" Value="40" />
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTextColumn
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding CustomerSelected}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <i:Interaction.Behaviors>
+                        <behaviors:ScrollIntoView />
+                    </i:Interaction.Behaviors>
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="OverridesDefaultStyle" Value="true" />
+                            <Setter Property="Width" Value="100" />
+                            <Style.Triggers>
+                                <Trigger Property="Orientation" Value="Vertical">
+                                    <Setter Property="Width" Value="15" />
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="FontSize" Value="18" />
+                            <Setter Property="Height" Value="40" />
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
                         Width="120"
                         MaxWidth="120"
                         Binding="{Binding Name}"
                         Header="姓名"
                         IsReadOnly="True">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
                         Width="120"
                         MaxWidth="120"
                         Binding="{Binding Birthday, Converter={StaticResource BirthDayConverter}}"
                         Header="生日"
                         IsReadOnly="True" />
-                    <DataGridTextColumn
+                        <DataGridTextColumn
                         Width="150"
                         MaxWidth="120"
                         Binding="{Binding IDNumber}"
                         Header="身分證"
                         IsReadOnly="True" />
-                    <DataGridTextColumn
+                        <DataGridTextColumn
                         Width="150"
                         MaxWidth="120"
                         Binding="{Binding CellPhone}"
-                        Header="手機"
+                        Header="手機1"
                         IsReadOnly="True" />
-                    <DataGridTextColumn
+                        <DataGridTextColumn
+                        Width="150"
+                        MaxWidth="120"
+                        Binding="{Binding SecondPhone}"
+                        Header="手機2"
+                        IsReadOnly="True" />
+                        <DataGridTextColumn
                         Width="150"
                         MaxWidth="120"
                         Binding="{Binding Tel}"
                         Header="家電"
                         IsReadOnly="True" />
-                    <DataGridTextColumn
+                        <DataGridTextColumn
                         Width="150"
                         MaxWidth="120"
                         Binding="{Binding LastEdit, StringFormat='{}{0:MM/dd HH:mm}'}"
                         Header="編輯時間"
                         IsReadOnly="True" />
-                </DataGrid.Columns>
-            </DataGrid>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+            
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">

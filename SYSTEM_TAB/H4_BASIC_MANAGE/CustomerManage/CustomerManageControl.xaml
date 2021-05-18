@@ -46,11 +46,12 @@
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Grid.ColumnSpan="5"
+            Grid.ColumnSpan="6"
             Orientation="Horizontal">
             <TextBox
                 Margin="20,0,0,0"
@@ -86,9 +87,20 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </CheckBox>
+            <Button
+                Width="120"
+                Margin="720,0,10,0"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding DeleteCommand}"
+                Content="刪除"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                IsEnabled="False"/>
         </StackPanel>
         <StackPanel
             Grid.Row="1"
+            Grid.ColumnSpan="6"
             Grid.Column="0"
             Margin="8"
             Orientation="Horizontal">
@@ -98,7 +110,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <ComboBox
-                Width="140"
+                Width="50"
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 DisplayMemberPath="GenderName"
@@ -114,19 +126,14 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
-        </StackPanel>
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="1"
-            Margin="8"
-            Orientation="Horizontal">
             <Label
                 Content="生日"
+                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <xctk:MaskedTextBox
                 Name="PatientBirthday"
-                Width="140"
+                Width="90"
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 materialDesign:HintAssist.Hint="生日"
@@ -156,36 +163,26 @@
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-        </StackPanel>
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="2"
-            Margin="0"
-            Orientation="Horizontal">
             <Label
                 VerticalAlignment="Center"
                 Content="身分證"
+                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <Label
-                Width="130"
+                Width="100"
                 Margin="10,10,0,10"
                 HorizontalContentAlignment="Center"
                 Content="{Binding Customer.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 FontSize="18" />
-        </StackPanel>
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="3"
-            Margin="8"
-            Orientation="Horizontal">
             <Label
                 VerticalAlignment="Center"
                 Content="家電"
+                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
-                Width="140"
+                Width="120"
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontSize="18"
@@ -196,19 +193,14 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-        </StackPanel>
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="4"
-            Margin="8"
-            Orientation="Horizontal">
             <Label
                 VerticalAlignment="Center"
-                Content="手機"
+                Content="手機1"
+                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
-                Width="140"
+                Width="120"
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontSize="18"
@@ -219,10 +211,29 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
+            <Label
+                VerticalAlignment="Center"
+                Content="手機2"
+                Margin="10,0,0,0"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <TextBox
+                Width="120"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+                FontSize="18"
+                Text="{Binding Customer.SecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:####-######}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </StackPanel>
         <StackPanel
             Grid.Row="2"
             Grid.Column="0"
+            Grid.ColumnSpan="6"
             Margin="8"
             Orientation="Horizontal">
             <Label
@@ -242,16 +253,10 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-        </StackPanel>
-        <StackPanel
-            Grid.Row="2"
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Margin="8"
-            Orientation="Horizontal">
             <Label
                 VerticalAlignment="Center"
                 Content="電子信箱"
+                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
@@ -266,16 +271,10 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-        </StackPanel>
-        <StackPanel
-            Grid.Row="2"
-            Grid.Column="3"
-            Grid.ColumnSpan="2"
-            Margin="8"
-            Orientation="Horizontal">
             <Label
                 VerticalAlignment="Center"
                 Content="住址"
+                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
@@ -294,7 +293,7 @@
         <StackPanel
             Grid.Row="3"
             Grid.Column="0"
-            Grid.ColumnSpan="5"
+            Grid.ColumnSpan="6"
             Background="{StaticResource Shadow}"
             Orientation="Horizontal">
             <Label
@@ -346,7 +345,7 @@
         <StackPanel
             Grid.Row="4"
             Grid.Column="0"
-            Grid.ColumnSpan="5"
+            Grid.ColumnSpan="6"
             Orientation="Horizontal">
             <Rectangle Width="726" />
             <ContentControl>
@@ -379,7 +378,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
-        <Grid Grid.Row="5" Grid.ColumnSpan="8">
+        <Grid Grid.Row="5" Grid.ColumnSpan="6" Margin="0,0,0,0.333">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="570" />
                 <ColumnDefinition />

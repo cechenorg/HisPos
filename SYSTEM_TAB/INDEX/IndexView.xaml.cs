@@ -13,5 +13,10 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         {
             InitializeComponent();
         }
+
+        private void TextBox_TextChanged()
+        {
+
+        }
     }
 }

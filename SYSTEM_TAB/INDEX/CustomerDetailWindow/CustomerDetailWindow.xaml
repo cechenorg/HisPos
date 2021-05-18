@@ -24,7 +24,8 @@
                 <RowDefinition Height="55" />
                 <RowDefinition Height="55" />
                 <RowDefinition Height="55" />
-                <RowDefinition Height="375" />
+                <RowDefinition Height="55" />
+                <RowDefinition Height="325" />
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <StackPanel
@@ -93,6 +94,25 @@
                     Foreground="{StaticResource ForeGround}"
                     Text="{Binding CellPhone}" />
                 <Image
+                    Width="30"
+                    Height="30"
+                    Source="/Images/Phone.png" />
+                <TextBox
+                    Width="255"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="22"
+                    Foreground="{StaticResource ForeGround}"
+                    Text="{Binding SecondPhone}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="2"
+                Margin="10,0,0,0"
+                DataContext="{Binding CustomerData}"
+                Orientation="Horizontal">
+                <Image
                     Width="25"
                     Height="25"
                     Margin="15,0,0,0"
@@ -108,7 +128,7 @@
                     Text="{Binding Tel}" />
             </StackPanel>
             <StackPanel
-                Grid.Row="2"
+                Grid.Row="3"
                 Margin="10,0,0,0"
                 DataContext="{Binding CustomerData}"
                 Orientation="Horizontal">
@@ -123,7 +143,7 @@
                     Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel
-                Grid.Row="3"
+                Grid.Row="4"
                 Margin="10,0,0,0"
                 Orientation="Horizontal">
                 <StackPanel
@@ -140,7 +160,7 @@
                         Foreground="{StaticResource ForeGround}" />
                     <TextBox
                         Width="290"
-                        Height="330"
+                        Height="280"
                         Margin="5,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
@@ -171,7 +191,7 @@
                         Foreground="{StaticResource ForeGround}" />
                     <TextBox
                         Width="290"
-                        Height="330"
+                        Height="280"
                         HorizontalAlignment="Left"
                         VerticalContentAlignment="Top"
                         AcceptsReturn="True"
@@ -185,7 +205,7 @@
                         VerticalScrollBarVisibility="Visible" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <StackPanel Grid.Row="5" Orientation="Horizontal">
                 <Button
                     Width="120"
                     Height="30"
