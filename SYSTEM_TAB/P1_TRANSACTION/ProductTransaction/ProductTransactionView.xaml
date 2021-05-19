@@ -119,6 +119,7 @@
                             x:Name="lbName"
                             Width="80"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -131,6 +132,7 @@
                             x:Name="lbGender"
                             Width="30"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -143,6 +145,7 @@
                             x:Name="lbBirthDay"
                             Width="90"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -151,12 +154,14 @@
                         <Label
                             VerticalContentAlignment="Center"
                             Content="手機1："
+                            Width="65"
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
                         <Label
                             x:Name="lbCellphone"
                             Width="120"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -169,6 +174,7 @@
                             x:Name="lbSecondphone"
                             Width="120"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -177,12 +183,14 @@
                         <Label
                             VerticalContentAlignment="Center"
                             Content="家電："
+                            Width="65"
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
                         <Label
                             x:Name="lbTelephone"
                             Width="120"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -197,6 +205,7 @@
                             x:Name="tbAddress"
                             Width="280"
                             VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
                             FontFamily="Segoe UI Semibold"
                             FontSize="17"
                             Text=""
@@ -212,6 +221,7 @@
                             x:Name="tbCusNote"
                             Width="280"
                             VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
                             FontFamily="Segoe UI Semibold"
                             FontSize="17"
                             Text=""
