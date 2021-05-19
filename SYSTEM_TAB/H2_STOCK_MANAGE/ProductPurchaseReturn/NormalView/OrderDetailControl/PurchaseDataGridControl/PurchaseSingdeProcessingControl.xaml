@@ -160,7 +160,7 @@
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
                                 
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus }" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

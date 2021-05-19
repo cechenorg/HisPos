@@ -944,6 +944,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             lbGender.Content = "";
             lbBirthDay.Content = "";
             lbCellphone.Content = "";
+            lbSecondphone.Content = "";
             lbTelephone.Content = "";
             tbAddress.Text = "";
             tbCusNote.Text = "";
@@ -975,6 +976,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 lbBirthDay.Content = dt.ToString("yyy/MM/dd", culture);
             }
             lbCellphone.Content = result.Rows[0]["Cus_Cellphone"].ToString();
+            lbSecondphone.Content= result.Rows[0]["Cus_Secondphone"].ToString();
             lbTelephone.Content = result.Rows[0]["Cus_Telephone"].ToString();
             tbAddress.Text = result.Rows[0]["Cus_Address"].ToString();
             tbCusNote.Text = result.Rows[0]["Cus_Note"].ToString();
@@ -1135,8 +1137,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (!(bool)cw.DialogResult) { return; }
                     else
                     {
-
-
                         NewClass.Person.Customer.Customer customer = new NewClass.Person.Customer.Customer();
 
                         if (TbText != null) { }
