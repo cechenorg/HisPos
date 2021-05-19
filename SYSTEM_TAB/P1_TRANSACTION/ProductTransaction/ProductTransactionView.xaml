@@ -117,7 +117,7 @@
                             FontSize="17" />
                         <Label
                             x:Name="lbName"
-                            Width="120"
+                            Width="80"
                             VerticalContentAlignment="Center"
                             Content=""
                             FontFamily="Segoe UI Semibold"
@@ -129,6 +129,19 @@
                             FontSize="17" />
                         <Label
                             x:Name="lbGender"
+                            Width="30"
+                            VerticalContentAlignment="Center"
+                            Content=""
+                            FontFamily="Segoe UI Semibold"
+                            FontSize="17" />
+                        <Label
+                            VerticalContentAlignment="Center"
+                            Content="生日："
+                            FontFamily="Segoe UI Semibold"
+                            FontSize="17" />
+                        <Label
+                            x:Name="lbBirthDay"
+                            Width="90"
                             VerticalContentAlignment="Center"
                             Content=""
                             FontFamily="Segoe UI Semibold"
@@ -137,21 +150,7 @@
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
                         <Label
                             VerticalContentAlignment="Center"
-                            Content="生日："
-                            FontFamily="Segoe UI Semibold"
-                            FontSize="17" />
-                        <Label
-                            x:Name="lbBirthDay"
-                            Width="200"
-                            VerticalContentAlignment="Center"
-                            Content=""
-                            FontFamily="Segoe UI Semibold"
-                            FontSize="17" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="2" Orientation="Horizontal">
-                        <Label
-                            VerticalContentAlignment="Center"
-                            Content="手機："
+                            Content="手機1："
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
                         <Label
@@ -161,6 +160,20 @@
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
+                        <Label
+                            VerticalContentAlignment="Center"
+                            Content="手機2："
+                            FontFamily="Segoe UI Semibold"
+                            FontSize="17" />
+                        <Label
+                            x:Name="lbSecondphone"
+                            Width="120"
+                            VerticalContentAlignment="Center"
+                            Content=""
+                            FontFamily="Segoe UI Semibold"
+                            FontSize="17" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
                         <Label
                             VerticalContentAlignment="Center"
                             Content="家電："
