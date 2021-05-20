@@ -312,7 +312,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 CheckTotal = 0;
             }
             else {
-                CheckTotal = Total - Closed;
+                CheckTotal = Closed + Total;
             }
             
             
