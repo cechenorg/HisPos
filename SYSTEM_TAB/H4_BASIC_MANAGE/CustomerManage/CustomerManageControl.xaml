@@ -57,6 +57,7 @@
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.Hint="姓名"
+                Width="300"
                 BorderThickness="0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="40"
@@ -69,7 +70,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <CheckBox
+            <!--<CheckBox
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
                 Content="關閉病歷"
@@ -86,17 +87,17 @@
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" CommandParameter="{Binding}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </CheckBox>
+            </CheckBox>-->
             <Button
                 Width="120"
-                Margin="720,0,10,0"
+                Margin="640,0,10,0"
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding DeleteCommand}"
                 Content="刪除"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16"
-                IsEnabled="False"/>
+                IsEnabled="True"/>
         </StackPanel>
         <StackPanel
             Grid.Row="1"
@@ -169,12 +170,20 @@
                 Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
-            <Label
-                Width="100"
-                Margin="10,10,0,10"
+
+            <TextBox
+                Width="120"
+                Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
-                Content="{Binding Customer.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                FontSize="18" />
+                FontSize="18"
+                Text="{Binding Customer.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            
             <Label
                 VerticalAlignment="Center"
                 Content="家電"

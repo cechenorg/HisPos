@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
@@ -11,6 +12,7 @@ using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.FunctionWindow.NotEnoughOTCPurchaseWindow;
 using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl;
@@ -1224,56 +1226,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
-
-            bool isCell = phone.StartsWith("09");
-            if (isCell)
-            {
-                parameters.Add(new SqlParameter("Cus_Cellphone", phone));
-                parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
-            }
-            else if (phone.Length >= 7 && phone.Length <= 8)
-            {
-                parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
-                parameters.Add(new SqlParameter("Cus_Telephone", phone));
-            }
-            else
-            {
-                parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
-                parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
-            }
-            if (!int.TryParse(phone, out int i))
-            {
-                parameters.Add(new SqlParameter("@Cus_Name", phone));
-            }
-            else
-            {
-                parameters.Add(new SqlParameter("@Cus_Name", DBNull.Value));
-            }
-
-            if (phone.Length == 6)
-            {
-                int.TryParse(phone.Substring(0, 2), out int year);
-                int.TryParse(phone.Substring(2, 2), out int month);
-                int.TryParse(phone.Substring(4, 2), out int day);
-                string yearStr = (year + 1911).ToString();
-                string dateStr = yearStr + month.ToString("00") + day.ToString("00");
-
-                parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
-            }
-            else if ((phone.Length == 7 && phone.StartsWith("1")))
-            {
-                int.TryParse(phone.Substring(0, 3), out int year);
-                int.TryParse(phone.Substring(3, 2), out int month);
-                int.TryParse(phone.Substring(5, 2), out int day);
-                string yearStr = (year + 1911).ToString();
-                string dateStr = yearStr + month.ToString("00") + day.ToString("00");
-                parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
-            }
-            else
-            {
-                parameters.Add(new SqlParameter("@Cus_Birthday", DBNull.Value));
-            }
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
+            parameters.Add(new SqlParameter("ID", phone));
+            
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQueryByID]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
             if (result.Rows.Count == 0)
@@ -1456,6 +1411,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 CheckoutActions();
                 e.Handled = true;
             }
+        }
+
+        private void lbName_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (cusID is null) return;
+
+            CustomerManageViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).CustomerManageView;
+
+            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, cusID, ""));
         }
     }
 }

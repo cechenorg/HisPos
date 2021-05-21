@@ -629,11 +629,14 @@
                 <RowDefinition Height="290" />
                 <RowDefinition />
             </Grid.RowDefinitions>
+           
             <ContentControl Margin="0,10,10,0" Content="{Binding PriceViewModel}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource OTCPriceControl}" />
+                        
                     </Style>
+                    
                 </ContentControl.Style>
             </ContentControl>
             <Grid Grid.Row="1">

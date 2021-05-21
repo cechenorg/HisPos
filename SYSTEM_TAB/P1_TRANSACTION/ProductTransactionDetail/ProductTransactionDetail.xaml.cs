@@ -1,9 +1,11 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -323,13 +325,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
         private void lbCusName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (cusID == "0")
-            {
-                CustomerSearchWindow customerSearch;
-                Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
-                customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, null);
-                Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
-            }
+            if (cusID is null) return;
+
+            CustomerManageViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).CustomerManageView;
+
+            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, cusID, ""));
+            WindowState = WindowState.Minimized;
         }
 
         private void GetSelectedCustomer(NotificationMessage<NewClass.Person.Customer.Customer> receiveSelectedCustomer)

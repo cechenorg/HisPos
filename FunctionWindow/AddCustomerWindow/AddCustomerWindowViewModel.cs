@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
 using System;
 using System.Text.RegularExpressions;
@@ -14,7 +15,8 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
     public class AddCustomerWindowViewModel : ViewModelBase
     {
         #region Variables
-
+        public int ID;
+        public NewClass.Prescription.Prescription CurrentPrescription { get; set; }
         private Customer newCustomer;
 
         public Customer NewCustomer
@@ -126,9 +128,65 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             }
             var insertResult = NewCustomer.InsertData();
             if (insertResult)
+            {
                 NewCustomerInsertSuccess();
-        }
+            }
+            else {
 
+                ConfirmWindow confirmWindow = new ConfirmWindow("有重複電話號碼是否進入選擇?", "重複電話號碼", true);
+
+                if (!(bool)confirmWindow.DialogResult)
+                {
+                    NewCustomer.InsertData("111");
+                    NewCustomerInsertSuccess();
+                    return;
+                }
+
+                CustomerSearchWindow customerSearch;
+               
+                
+                    Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, NewCustomer.CellPhone.Trim());
+                    Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                
+                Messenger.Default.Send(new NotificationMessage("CloseAddCustomerWindow"));
+
+                if (ProductTransactionView.FromHISCuslblcheck == null)
+                {
+                    return;
+                }
+                else if (CurrentPrescription.Patient.CellPhone != null || CurrentPrescription.Patient.CellPhone != "")
+                {
+                    ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.ID.ToString();
+                }
+                else if (CurrentPrescription.Patient.Tel != null || CurrentPrescription.Patient.Tel != "" || ProductTransactionView.FromHISCuslblcheck != null)
+                {
+                    ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.ID.ToString();
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+        private void GetSelectedCustomer(NotificationMessage<NewClass.Person.Customer.Customer> receiveSelectedCustomer)
+        {
+            Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+            if (receiveSelectedCustomer.Content is null)
+            {
+                if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
+            }
+            else
+            {
+                CurrentPrescription = new NewClass.Prescription.Prescription();
+
+                CurrentPrescription.Patient = new NewClass.Person.Customer.Customer();
+                CurrentPrescription.Patient = receiveSelectedCustomer.Content;
+
+                ID = CurrentPrescription.Patient.ID;
+
+            }
+        }
         private bool CheckFormat()
         {
             var errorString = string.Empty;

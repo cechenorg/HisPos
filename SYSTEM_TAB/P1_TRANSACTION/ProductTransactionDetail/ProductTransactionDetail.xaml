@@ -14,6 +14,26 @@
     Loaded="Window_Loaded"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <Window.Resources>
+        <Style x:Key="ActionLabelStyle" TargetType="{x:Type Label}">
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <TextBlock>
+                <ContentPresenter />
+                        </TextBlock>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="TextDecorations" Value="Underline"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Window.Resources>
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg" />
     </Window.Background>
@@ -222,7 +242,8 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black"
-                    MouseDoubleClick="lbCusName_MouseDoubleClick" />
+                    MouseDoubleClick="lbCusName_MouseDoubleClick"
+                    Style="{StaticResource ActionLabelStyle}"/>
             </StackPanel>
             <StackPanel
                 Grid.Row="2"

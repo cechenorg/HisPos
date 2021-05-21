@@ -100,6 +100,13 @@ namespace His_Pos.NewClass.Person.Customer
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByNameOrBirth]", parameterList);
         }
 
+        public static DataTable GetDataByNameOrBirth(string ID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Id", ID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", parameterList);
+        }
+
         public static DataTable CustomerTable()
         {
             DataTable customerTable = new DataTable();
@@ -138,6 +145,13 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertDeclareCustomer]", parameterList);
         }
+        public static DataTable InsertCustomerData(Customer c ,string oo)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertDeclareCustomers]", parameterList);
+        }
+
 
         public static DataTable AddNewCustomer(Customer c)
         {

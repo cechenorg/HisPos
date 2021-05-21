@@ -11,7 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
@@ -32,12 +34,13 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
         public RelayCommand ShowMedicinesDetailCommand { get; set; }
+        public RelayCommand DeleteCommand { get; set; }
 
-        #endregion -----Define Command-----
+    #endregion -----Define Command-----
 
-        #region ----- Define Variables -----
+    #region ----- Define Variables -----
 
-        private List<string> prescriptionCaseString;
+    private List<string> prescriptionCaseString;
 
         public List<string> PrescriptionCaseString
         {
@@ -68,6 +71,15 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             get { return textCusName; }
             set { Set(() => TextCusName, ref textCusName, value); }
         }
+
+        private string searchOrderID;
+
+        public string SearchOrderID
+        {
+            get { return searchOrderID; }
+            set { Set(() => SearchOrderID, ref searchOrderID, value); }
+        }
+
 
         private string phoneNumber;
 
@@ -244,6 +256,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedCustomer);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             CancelCommand = new RelayCommand(CancelAction);
+            DeleteCommand = new RelayCommand(DeleteAction);
             SubmitCommand = new RelayCommand(SubmitAction);
             SelectionChangedCommand = new RelayCommand(SelectionChangedAction);
             SearchCommand = new RelayCommand(SearchAction);
@@ -251,6 +264,27 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             ShowMedicinesDetailCommand = new RelayCommand(ShowMedicinesDetailAction);
             PrescriptionCaseString = new List<string>() { "全部", "調劑", "登錄", "預約" };
             PrescriptionCaseSelectItem = PrescriptionCaseString[0];
+            RegisterMessengers();
+        }
+
+        private void DeleteAction()
+        {
+            if (Customer.ID != null)
+            {
+                ConfirmWindow cw = new ConfirmWindow("是否刪除顧客(無法復原)", "刪除確認");
+                if (!(bool)cw.DialogResult) { return; }
+
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("ID", Customer.ID));
+                 MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteCustomer]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+               
+                MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
+                Customer = new Customer();
+                CustomerCollection = new Customers();
+
+            }
         }
 
         private void GetSelectedCustomer(NotificationMessage<string> notificationMessage)
@@ -258,9 +292,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             if (notificationMessage.Target == this)
             {
                 MainWindow.Instance.AddNewTab(TabName);
-                IdNumber = notificationMessage.Content;
-                SearchAction();
+                SearchOrderID = notificationMessage.Content;
+                SearchIDAction();
             }
+
         }
 
         #region Action
@@ -271,6 +306,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             TextCusBirthDay = null;
             IdNumber = string.Empty;
             PhoneNumber = string.Empty;
+            Customer = new Customer();
+            CustomerCollection = new Customers();
         }
 
         private void SearchAction()
@@ -283,6 +320,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
             MainWindow.ServerConnection.OpenConnection();
             CustomerCollection.GetDataByNameOrBirth(TextCusName, TextCusBirthDay, IdNumber, PhoneNumber);
+            MainWindow.ServerConnection.CloseConnection();
+            if (CustomerCollection.Count > 0)
+                Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
+            InitDataChanged();
+        }
+
+        private void SearchIDAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            CustomerCollection.GetDataByNameOrBirth(SearchOrderID);
             MainWindow.ServerConnection.CloseConnection();
             if (CustomerCollection.Count > 0)
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
@@ -318,7 +365,25 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                     break;
                 }
             }
-
+            if(!String.IsNullOrEmpty(Customer.IDNumber)) 
+            {
+                MessageBox.Show("IN");
+                if (!VerifyService.VerifyIDNumber(Customer.IDNumber))
+                {
+                    MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
+                    return;
+                }
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("Cus_IDNumber", Customer.IDNumber));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerIDs]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+                if (result.Rows.Count == 1)
+                {
+                    MessageWindow.ShowMessage("身分證已存在!", Class.MessageType.ERROR);
+                    return;
+                }
+            }
             MainWindow.ServerConnection.OpenConnection();
             DataTable dataTable = CustomerDb.CheckCustomerByPhone(Customer.CellPhone, Customer.Tel);
             MainWindow.ServerConnection.CloseConnection();
@@ -382,5 +447,21 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         }
 
         #endregion Function
+        private void RegisterMessengers()
+        {
+            Messenger.Default.Register<NotificationMessage<string>>(this, ShowOrderDetailByOrderID);
+        }
+
+        private void ShowOrderDetailByOrderID(NotificationMessage<string> notificationMessage)
+        {
+            if (notificationMessage.Target == this)
+            {
+                MainWindow.Instance.AddNewTab(TabName);
+
+                SearchOrderID = notificationMessage.Content;
+
+                SearchIDAction();
+            }
+        }
     }
 }

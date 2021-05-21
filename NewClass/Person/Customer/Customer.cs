@@ -272,16 +272,16 @@ namespace His_Pos.NewClass.Person.Customer
         public bool InsertData()
         {
             var table = CustomerDb.InsertCustomerData(this);
-            //if (table.Rows[0].Field<string>("RESULT").Equals("SAME"))
-            //{
-            //    MessageWindow.ShowMessage("電話號碼已存在。", MessageType.ERROR);
-            //    return false;
-            //}
-            if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
+            if (table.Rows[0].Field<string>("RESULT").Equals("SAME"))
             {
-                MessageWindow.ShowMessage("身分證字號已存在。", MessageType.ERROR);
+                MessageWindow.ShowMessage("電話號碼已存在。", MessageType.ERROR);
                 return false;
             }
+            //if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
+            //{
+            //    MessageWindow.ShowMessage("身分證字號已存在。", MessageType.ERROR);
+            //    return false;
+            //}
             if (table.Rows.Count > 0)
             {
                 var c = new Customer(table.Rows[0]);
@@ -304,6 +304,34 @@ namespace His_Pos.NewClass.Person.Customer
             MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
             return false;
         }
+
+        public bool InsertData(string ee)
+        {
+            var table = CustomerDb.InsertCustomerData(this,"iii");
+          
+            if (table.Rows.Count > 0)
+            {
+                var c = new Customer(table.Rows[0]);
+                ID = c.ID;
+                Name = c.Name;
+                IDNumber = c.IDNumber;
+                Birthday = c.Birthday;
+                Tel = c.Tel;
+                ContactNote = c.ContactNote;
+                LastEdit = c.LastEdit;
+                Address = c.Address;
+                CellPhone = c.CellPhone;
+                Email = c.Email;
+                Gender = c.Gender;
+                Line = c.Line;
+                Note = c.Note;
+                SecondPhone = c.SecondPhone;
+                return true;
+            }
+            MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
+            return false;
+        }
+
 
         public void GetHistories()
         {
