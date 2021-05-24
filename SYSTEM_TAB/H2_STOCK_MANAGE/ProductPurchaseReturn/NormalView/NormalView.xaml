@@ -188,7 +188,7 @@
                         GroupName="OrderType"
                         IsChecked="True"
                         Tag="3" />
-                    <RadioButton
+                    <!--<RadioButton
                         Margin="58,0,5,0"
                         VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
@@ -199,7 +199,7 @@
                         FontSize="18"
                         GroupName="OrderType"
                         Tag="4" />
-                    <Image Width="15" Source="/Images/GreenDot.png" />
+                    <Image Width="15" Source="/Images/GreenDot.png" />-->
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -211,7 +211,7 @@
                         VerticalContentAlignment="Center"
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="1"
-                        Content="採購待退"
+                        Content="暫存訂單"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         GroupName="OrderType"
@@ -223,7 +223,7 @@
                         VerticalContentAlignment="Center"
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="3"
-                        Content="進退貨單"
+                        Content="成立訂單"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         GroupName="OrderType"
@@ -266,7 +266,7 @@
                         Margin="5"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
-                        materialDesign:HintAssist.Hint="篩選條件 (單號 處方 備註)"
+                        materialDesign:HintAssist.Hint="篩選條件 (單號 姓名 備註)"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
