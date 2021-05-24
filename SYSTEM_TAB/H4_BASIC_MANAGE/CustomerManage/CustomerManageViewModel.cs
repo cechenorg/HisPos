@@ -367,7 +367,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             }
             if(!String.IsNullOrEmpty(Customer.IDNumber)) 
             {
-                MessageBox.Show("IN");
                 if (!VerifyService.VerifyIDNumber(Customer.IDNumber))
                 {
                     MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
