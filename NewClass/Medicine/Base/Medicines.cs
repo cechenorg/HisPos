@@ -401,7 +401,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
                 foreach (var m in medList)
                 {
-                    m.NHIPrice = (double)r.Field<decimal>("Med_Price");
+                    m.NHIPrice = r.Field<decimal?>("Med_Price") is null ? 0 : (double)r.Field<decimal>("Med_Price");
                     m.UsableAmount = r.Field<double?>("CanUseAmount") is null ? 0 : r.Field<double>("CanUseAmount");
                 }
             }
