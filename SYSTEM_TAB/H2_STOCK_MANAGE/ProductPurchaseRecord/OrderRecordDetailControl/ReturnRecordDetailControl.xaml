@@ -266,7 +266,7 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
-                Margin="20,0,0,0"
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="共"
                 FontFamily="Segoe UI Semibold"
@@ -297,7 +297,7 @@
                 FontWeight="Bold"
                 Foreground="{StaticResource ForeGround}" />
             <TextBlock
-                Width="100"
+                Width="70"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
@@ -306,14 +306,14 @@
                 Foreground="{StaticResource ForeGround}"
                 Text="{Binding ReturnStockValue, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
             <Label
-                Margin="20,0,0,0"
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="實收 $"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Foreground="{StaticResource ForeGround}" />
             <TextBlock
-                Width="100"
+                Width="70"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -321,14 +321,14 @@
                 Foreground="{StaticResource ForeGround}"
                 Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
             <Label
-                Margin="20,0,0,0"
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="退貨價差 $"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="100"
+                Width="70"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -344,7 +344,7 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Width="225"
+                Width="200"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Content="{Binding DoneDateTime, Converter={StaticResource DateTimeConverter}}"
@@ -352,7 +352,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black" />
-            <!--<Button Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Margin="10,0,0,0" Foreground="White" Background="IndianRed" Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <Button Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Margin="10,0,0,0" Foreground="White" Background="IndianRed" Command="{Binding DataContext.DeleteOrderReturnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Style.Triggers>
@@ -365,7 +365,7 @@
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
-            </Button>-->
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

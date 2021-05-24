@@ -212,6 +212,19 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
         }
 
+
+        private int closeCash_Total;
+
+        public int CloseCash_Total
+        {
+            get => closeCash_Total;
+            set
+            {
+                Set(() => CloseCash_Total, ref closeCash_Total, value);
+            }
+        }
+
+
         private string checkClosed;
 
         public string CheckClosed
@@ -298,6 +311,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             Closed = (int)result.Rows[0]["Closed"];
 
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
+            CloseCash_Total= (int)result.Rows[0]["CloseCash_Total"];
             CheckColor = Brushes.Green;
             Enable = false;
             if (CheckClosed == null || CheckClosed == "")
@@ -312,7 +326,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 CheckTotal = 0;
             }
             else {
-                CheckTotal = Closed + Total;
+                CheckTotal = CloseCash_Total;
             }
             
             
@@ -345,6 +359,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("Value", (int)(Total - CheckTotal)));
+            parameters.Add(new SqlParameter("Total", (int)CheckTotal));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCloseCash]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             if (result.Rows[0]["RESULT"].ToString() == "FAIL")

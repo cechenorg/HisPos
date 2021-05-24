@@ -7,8 +7,10 @@ using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
 using His_Pos.Service.ExportService;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
@@ -26,6 +28,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         public RelayCommand FilterOrderCommand { get; set; }
         public RelayCommand ClearSearchConditionCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
+
+        public RelayCommand DeleteOrderReturnCommand { get; set; }
         public RelayCommand<string> ExportOrderDataCommand { get; set; }
 
         #endregion ----- Define Commands -----
@@ -233,7 +237,24 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             FilterOrderCommand = new RelayCommand(FilterOrderAction);
             ClearSearchConditionCommand = new RelayCommand(ClearSearchConditionAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
+            DeleteOrderReturnCommand = new RelayCommand(DeleteOrderReturnAction);
             ExportOrderDataCommand = new RelayCommand<string>(ExportOrderDataAction);
+        }
+
+        private void DeleteOrderReturnAction()
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否進行刪除?", "確認");
+            if (!(bool)confirmWindow.DialogResult)
+                return;
+
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", CurrentStoreOrder.ID));
+ 
+             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            MessageWindow.ShowMessage("刪除成功!", MessageType.SUCCESS);
+            SearchOrderAction();
         }
 
         private void RegisterMessengers()

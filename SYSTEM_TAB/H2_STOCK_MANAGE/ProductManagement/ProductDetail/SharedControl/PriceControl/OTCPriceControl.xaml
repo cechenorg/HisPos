@@ -99,7 +99,7 @@
                 Text="{Binding MedicineDetail.SpecialPrice, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Grid.Row="3">
-            <Grid>
+            <Grid Margin="0,10,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />

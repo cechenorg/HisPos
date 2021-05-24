@@ -9,7 +9,11 @@ using His_Pos.NewClass.Report.CashFlow.CashFlowRecords;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
@@ -180,8 +184,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public RelayCommand Search { get; set; }
         public RelayCommand EditCashFlowRecord { get; set; }
         public RelayCommand DeleteCashFlowRecord { get; set; }
+        
+
+        public RelayCommand ToExcel { get; set; }
 
         #endregion Commands
+
+
+
 
         public AdditionalCashFlowManageViewModel()
         {
@@ -223,6 +233,48 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             Search = new RelayCommand(SearchAction);
             EditCashFlowRecord = new RelayCommand(EditCashFlowRecordAction);
             DeleteCashFlowRecord = new RelayCommand(DeleteCashFlowRecordAction);
+            ToExcel = new RelayCommand(ToExcelAct);
+        }
+
+        private void ToExcelAct()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("sDate", StartDate));
+            parameters.Add(new SqlParameter("eDate", EndDate));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[ExtraMoneyByDateExcel]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "額外收支存檔";
+            fdlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            fdlg.Filter = "報表格式|*.csv";
+            fdlg.FileName = $"額外收支_{((DateTime)StartDate).ToString("yyyyMMdd")}-{((DateTime)EndDate).ToString("yyyyMMdd")}";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
+                    {
+                        file.WriteLine("時間,科目,金額,來源,登錄人,備註");
+                        foreach (DataRow order in result.Rows)
+                        {
+                            file.WriteLine($"{order["CashFlow_Time"].ToString()},{order["CashFlow_Name"].ToString()},{order["CashFlow_Value"].ToString()},{order["Accounts_Name"].ToString()},{order["Emp_Name"].ToString()},{order["CashFlow_Note"].ToString()}");
+                        }
+                        file.Close();
+                        file.Dispose();
+                    }
+                    MessageWindow.ShowMessage("匯出成功!", MessageType.SUCCESS);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+            
+        }
         }
 
         private void SubmitAction()

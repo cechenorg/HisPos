@@ -4234,13 +4234,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
             TradeDetailReportSum.CardAmount = tempCollection.Sum(s => s.CardAmount);
             TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
-            TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => s.DiscountAmt);
+
             TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
             TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
             
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
             TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
-            TradeDetailReportSum.DiscountAmtMinus = -TradeDetailReportSum.DiscountAmt;
+
 
         }
 

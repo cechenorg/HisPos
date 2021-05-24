@@ -646,7 +646,8 @@
                         Content="發票號碼"
                         FontFamily="Segoe UI Semibold"
                         FontSize="20"
-                        Foreground="Black" />
+                        Foreground="Black" 
+                        Visibility="Hidden"/>
                     <Label
                         x:Name="tbInvoiceNum"
                         Width="150"
@@ -654,7 +655,8 @@
                         HorizontalContentAlignment="Center"
                         FontFamily="Segoe UI Semi"
                         FontSize="20"
-                        Foreground="Black" />
+                        Foreground="Black" 
+                         Visibility="Hidden"/>
                     <Label
                         Margin="55,0,0,0"
                         VerticalAlignment="Center"

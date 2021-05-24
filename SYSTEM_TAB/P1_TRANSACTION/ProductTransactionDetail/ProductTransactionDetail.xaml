@@ -307,6 +307,7 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" 
+                    
                     />
                 <Label
                     x:Name="tbInvoiceNum"

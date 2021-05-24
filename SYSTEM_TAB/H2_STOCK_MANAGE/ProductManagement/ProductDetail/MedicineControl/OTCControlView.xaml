@@ -649,7 +649,7 @@
                     Grid.Column="0"
                     Margin="0,10,10,0"
                     DataContext="{Binding GroupViewModel}" />
-                <StackPanel Grid.Row="0" Grid.Column="1">
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,10,0,0">
                     <Grid Background="{StaticResource GridBackGround}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50" />
