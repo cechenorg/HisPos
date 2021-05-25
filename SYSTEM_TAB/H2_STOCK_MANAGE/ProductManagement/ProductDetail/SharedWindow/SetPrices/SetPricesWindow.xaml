@@ -32,7 +32,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding RetailPrice, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding RetailPrice, StringFormat='{}{0:0;;#}', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -47,7 +47,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding MemberPrice, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding MemberPrice, StringFormat='{}{0:0;;#}', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label
@@ -64,7 +64,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding EmployeePrice, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding EmployeePrice, StringFormat='{}{0:0;;#}', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -79,7 +79,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding SpecialPrice, StringFormat=N0, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding SpecialPrice, StringFormat='{}{0:0;;#}', Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <Button
             Grid.Row="2"

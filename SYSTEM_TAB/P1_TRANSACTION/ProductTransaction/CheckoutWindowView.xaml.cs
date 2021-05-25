@@ -51,6 +51,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         public CheckoutWindowView(int total, int linecount, int itemcount)
         {
             InitializeComponent();
+
+            // 發票號碼
+            if (Properties.Settings.Default.InvoiceCheck == "1")
+            {
+                tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+            }
+            else
+            {
+                tbInvoiceNum.Content = "";
+            }
+
             Total = total;
             lblTotal.Content = total.ToString();
             lblLineCount.Content = linecount.ToString();
@@ -443,6 +454,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 return;
             }
             ChangeCount();
+
+            if (card > Total) 
+            {
+                MessageWindow.ShowMessage("刷卡金額大於應付金額！", MessageType.ERROR);
+                return;
+            }
             SubmitCheckout();
         }
 
