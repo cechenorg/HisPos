@@ -701,6 +701,7 @@
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 GridLinesVisibility="Horizontal"
                 Loaded="ProductDataGrid_Loaded"
+                PreviewKeyDown="ProductDataGrid_PreviewKeyDown"
                 SelectionUnit="Cell">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -876,6 +877,7 @@
                                     FontFamily="Segoe UI Semi"
                                     FontSize="18"
                                     LostFocus="Amount_LostFocus"
+                                    PreviewKeyDown="Amount_PreviewKeyDown"
                                     Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     TextChanged="Amount_TextChanged">
                                     <TextBox.InputScope>

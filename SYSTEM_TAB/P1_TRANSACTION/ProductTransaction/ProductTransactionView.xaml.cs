@@ -358,7 +358,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         ProductDataGrid.ItemsSource = ProductList.DefaultView;
                     }
 
-                    FocusLastRow();
+                    //FocusLastRow();
                     SetPrice();
 
                     if (isGift)
@@ -378,14 +378,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             if (ProductList != null)
             {
+                int rc = 0;
+                int count = ProductList.Rows.Count;
                 foreach (DataRow dr in ProductList.Rows)
                 {
-                    bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
-                    //if (!tp || ig != 1 && dr["CurrentPrice"].ToString() == "0")
-                    if (!tp || ig != 1)
+                    if (rc == count-1) 
                     {
-                        dr["CurrentPrice"] = dr[AppliedPrice];
+                        bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
+                        //if (!tp || ig != 1 && dr["CurrentPrice"].ToString() == "0")
+                        if (!tp || ig != 1)
+                        {
+                            dr["CurrentPrice"] = dr[AppliedPrice];
+                        }
                     }
+                    rc++;
                 }
             }
         }
@@ -493,9 +499,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             ConfirmWindow confirmWindow = new ConfirmWindow("是否送出結帳資料?", "結帳確認", true);
             if (!(bool)confirmWindow.DialogResult) { return; }
 
-
-            
-
             try
             {
                 MainWindow.ServerConnection.OpenConnection();
@@ -543,7 +546,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void InvoicePrint() //9.16發票
         {
-
             //MessageBox.Show(detail.Rows[0]["TraDet_ProductName"].ToString());
             MyPharmacy = Pharmacy.GetCurrentPharmacy();
 
@@ -710,13 +712,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     {
                         dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
                     }
-                    // Focus Next Row
+                    // Focus On Price
                     Dispatcher.InvokeAsync(() =>
                     {
                         var ProductIDList = new List<TextBox>();
-                        NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
+                        NewFunction.FindChildGroup(ProductDataGrid, "Price",
                             ref ProductIDList);
-                        ProductIDList[ProductIDList.Count - 1].Focus();
+                        ProductIDList[currentRowIndex].Focus();
                     }, DispatcherPriority.ApplicationIdle);
                     tb.Text = "";
                 }
@@ -774,6 +776,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal();
         }
 
+        private void Amount_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            Dispatcher.InvokeAsync(() =>
+            {
+                var ProductIDList = new List<TextBox>();
+                NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
+                    ref ProductIDList);
+                ProductIDList[ProductIDList.Count - 1].Focus();
+            }, DispatcherPriority.ApplicationIdle);
+        }
+
         #endregion Amount
 
         #region Price
@@ -808,11 +821,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Price_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.Key == Key.Enter)
-            //{
-            //    TraversalRequest request = new TraversalRequest(FocusNavigationDirection.Next);
-            //    MoveFocus(request);
-            //}
+            int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
+            Dispatcher.InvokeAsync(() =>
+            {
+                var ProductIDList = new List<TextBox>();
+                NewFunction.FindChildGroup(ProductDataGrid, "Amount",
+                    ref ProductIDList);
+                ProductIDList[currentRowIndex].Focus();
+            }, DispatcherPriority.ApplicationIdle);
         }
 
         #endregion Price
@@ -1421,5 +1437,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, cusID, ""));
         }
+
+        private void ProductDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            /*if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                var TabKey = new KeyEventArgs(e.KeyboardDevice, e.InputSource, e.Timestamp, Key.Tab);
+                TabKey.RoutedEvent = Keyboard.KeyDownEvent;
+                InputManager.Current.ProcessInput(TabKey);
+            }*/
+        }
+
+        
     }
 }
