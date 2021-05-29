@@ -778,13 +778,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Amount_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            Dispatcher.InvokeAsync(() =>
+            if (e.Key == Key.Enter)
             {
-                var ProductIDList = new List<TextBox>();
-                NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
-                    ref ProductIDList);
-                ProductIDList[ProductIDList.Count - 1].Focus();
-            }, DispatcherPriority.ApplicationIdle);
+                Dispatcher.InvokeAsync(() =>
+                {
+                    var ProductIDList = new List<TextBox>();
+                    NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
+                        ref ProductIDList);
+                    ProductIDList[ProductIDList.Count - 1].Focus();
+                }, DispatcherPriority.ApplicationIdle);
+            }
+                
         }
 
         #endregion Amount
@@ -821,14 +825,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void Price_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
-            Dispatcher.InvokeAsync(() =>
+            if (e.Key == Key.Enter)
             {
-                var ProductIDList = new List<TextBox>();
-                NewFunction.FindChildGroup(ProductDataGrid, "Amount",
-                    ref ProductIDList);
-                ProductIDList[currentRowIndex].Focus();
-            }, DispatcherPriority.ApplicationIdle);
+                e.Handled = true;
+                int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
+                Dispatcher.InvokeAsync(() =>
+                {
+                    var ProductIDList = new List<TextBox>();
+                    NewFunction.FindChildGroup(ProductDataGrid, "Amount",
+                        ref ProductIDList);
+                    ProductIDList[currentRowIndex].Focus();
+                }, DispatcherPriority.ApplicationIdle);
+            }
         }
 
         #endregion Price
