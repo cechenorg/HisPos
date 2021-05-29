@@ -780,6 +780,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         {
             if (e.Key == Key.Enter)
             {
+                e.Handled = true;
                 Dispatcher.InvokeAsync(() =>
                 {
                     var ProductIDList = new List<TextBox>();
