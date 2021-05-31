@@ -75,6 +75,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             {
                 Set(() => OrderAmount, ref orderAmount, value);
                 CalculatePrice();
+                //CalculateRealPrice();
             }
         }
 
@@ -109,6 +110,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     CalculateRealPrice();
                 else
                     CalculatePrice();
+
             }
         }
 
@@ -201,14 +203,14 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         break;
 
                     case ProductStartInputVariableEnum.PRICE:
-                        subTotal = Price * OrderAmount;
+                        subTotal = Price * RealAmount;
                         break;
 
                     case ProductStartInputVariableEnum.SUBTOTAL:
                         if (OrderAmount <= 0)
                             price = 0;
                         else
-                            price = SubTotal / OrderAmount;
+                            price = SubTotal / RealAmount;
                         break;
                 }
             //}
