@@ -81,10 +81,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get { return currentStoreOrder; }
             set
             {
-                MainWindow.ServerConnection.OpenConnection();
-                currentStoreOrder?.SaveOrder();
+                //MainWindow.ServerConnection.OpenConnection();
+                //currentStoreOrder?.SaveOrder();
                 value?.GetOrderProducts();
-                MainWindow.ServerConnection.CloseConnection();
+                //MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
 
                 if (CurrentStoreOrder != null) {
