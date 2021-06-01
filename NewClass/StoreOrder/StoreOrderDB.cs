@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -344,8 +345,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
                 catch
                 {
-                    /*MessageBox.Show(row.Field<string>("PRO_ID"));
-                    MessageBox.Show(row.Field<string>("BATCHNUM"));*/
+
                 }
 
                 string realProductID = row.Field<string>("PRO_ID");
@@ -383,8 +383,7 @@ namespace His_Pos.NewClass.StoreOrder
                     case "NCS03A1001.0":
                         realProductID = "NCS03A1000ZZ-1.0";
                         break;
-                }
-
+                } 
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", realProductID);

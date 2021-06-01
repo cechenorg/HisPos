@@ -10,10 +10,10 @@
              DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <service:NullableDateConverter x:Key="NullableDateConverter" />
-        <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
-        <service:SentinelConverter x:Key="SentinelConverter" />
-        <service:SelectedItemConverter x:Key="SelectedItemConverter" />
+        <service:NullableDateConverter x:Key="NullableDateConverter"/>
+        <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
+        <service:SentinelConverter x:Key="SentinelConverter"/>
+        <service:SelectedItemConverter x:Key="SelectedItemConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -164,7 +164,7 @@
                                
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"           
                                 Style="{DynamicResource CantEditPrice}"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                                 />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

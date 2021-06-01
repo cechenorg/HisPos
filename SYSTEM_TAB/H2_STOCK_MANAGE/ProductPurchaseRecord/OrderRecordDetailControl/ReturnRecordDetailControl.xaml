@@ -359,9 +359,7 @@
                             <DataTrigger Binding="{Binding OrderStatus}" Value="SCRAP">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding OrderManufactory.ID}" Value="0">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
+                            
                         </Style.Triggers>
                     </Style>
                 </Button.Style>

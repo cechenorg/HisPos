@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -251,7 +252,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", CurrentStoreOrder.ID));
  
-             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
+           DataTable iii =MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
+            if (iii.Rows.Count >= 1) {
+
+                MessageWindow.ShowMessage("刪除失敗!請勿重複刪除!", MessageType.SUCCESS);
+            }
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage("刪除成功!", MessageType.SUCCESS);
             SearchOrderAction();

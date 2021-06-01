@@ -61,7 +61,11 @@
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource Shadow}" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding IsAssigned,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Value="false">
+                            <Setter Property="Background" Value="LightCoral" />
+                        </DataTrigger>
                     </Style.Triggers>
+                    
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="FontSize" Value="16" />
@@ -203,7 +207,8 @@
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
-                                
+                                InputMethod.InputScope="Number"
+                                InputMethod.IsInputMethodEnabled="False"
                                 Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -238,9 +243,6 @@
                                     HorizontalContentAlignment="Center"
                                     FontFamily="Segoe UI Semi"
                                     FontSize="18"
-                                    
-                            
-                                    
                                     Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
                                     x:Name="Split"

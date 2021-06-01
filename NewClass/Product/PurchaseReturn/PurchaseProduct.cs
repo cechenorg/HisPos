@@ -17,7 +17,16 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private string onTheWayDetail = "";
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
         private double originPrice;
+        public bool isAssigned;
 
+        public bool IsAssigned
+        {
+            get { return isAssigned; }
+            set
+            {
+                Set(() => IsAssigned, ref isAssigned, value);
+            }
+        }
 
         public double OriginPrice
         {
@@ -86,11 +95,22 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             {
                 Set(() => RealAmount, ref realAmount, value);
                 CalculateRealPrice();
+                CalcEqualOrder();
             }
         }
 
-
-
+        private void CalcEqualOrder()
+        {
+            if (OrderAmount - RealAmount == 0)
+            {
+                IsAssigned = true;
+            }
+            else 
+            {
+                IsAssigned = false;
+            }
+            RaisePropertyChanged(nameof(IsAssigned));
+        }
 
         public double FreeAmount { get; set; }
 
