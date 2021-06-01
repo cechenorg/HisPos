@@ -716,9 +716,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     Dispatcher.InvokeAsync(() =>
                     {
                         var ProductIDList = new List<TextBox>();
-                        NewFunction.FindChildGroup(ProductDataGrid, "Price",
+                        NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
                             ref ProductIDList);
-                        ProductIDList[currentRowIndex].Focus();
+                        ProductIDList[ProductIDList.Count - 1].Focus();
+                        //var ProductIDList = new List<TextBox>();
+                        //NewFunction.FindChildGroup(ProductDataGrid, "Price",
+                        //    ref ProductIDList);
+                        //ProductIDList[currentRowIndex].Focus();
                     }, DispatcherPriority.ApplicationIdle);
                     tb.Text = "";
                 }
