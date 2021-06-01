@@ -164,7 +164,7 @@
                                
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"           
                                 Style="{DynamicResource CantEditPrice}"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='{}{0:0;;#}'}"
                                 />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -228,7 +228,7 @@
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                 KeyDown="OrderAmountTextbox_OnKeyDown"
                                 PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
-                                Text="{Binding OrderAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                Text="{Binding OrderAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:0;;#}'}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />

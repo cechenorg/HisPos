@@ -197,7 +197,7 @@
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus }">
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='{}{0:0;;#}' }">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
@@ -246,7 +246,7 @@
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
-                                Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}">
+                                Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:0;;#}'}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />

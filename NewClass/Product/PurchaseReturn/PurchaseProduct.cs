@@ -96,6 +96,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 Set(() => RealAmount, ref realAmount, value);
                 CalculateRealPrice();
                 CalcEqualOrder();
+                CalcSubTotal();
             }
         }
 
@@ -110,6 +111,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 IsAssigned = false;
             }
             RaisePropertyChanged(nameof(IsAssigned));
+        }
+
+        private void CalcSubTotal()
+        {
+            SubTotal = Price * RealAmount;
+            RaisePropertyChanged(nameof(SubTotal));
         }
 
         public double FreeAmount { get; set; }
@@ -150,6 +157,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     CalculateRealPrice();
                 else
                     CalculatePrice();
+                CalcSubTotal();
             }
         }
 
