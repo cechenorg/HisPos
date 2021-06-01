@@ -14,6 +14,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
@@ -42,6 +43,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         private AddProductEnum addProEnum;
         private string wareID;
         private OrderStatusEnum orderStatus = (OrderStatusEnum)1;
+        private string orderTypeIsOTC="全部";
 
         private CollectionViewSource ProStructCollectionViewSource
         {
@@ -65,12 +67,16 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         public bool HideDisableProduct { get; set; }
         public bool ShowOnlyThisManufactory { get; set; }
 
+        public string OrderTypeIsOTC
+        {
+            get => orderTypeIsOTC;
+            set { Set(() => OrderTypeIsOTC, ref orderTypeIsOTC, value); }
+        }
         public string SearchString
         {
             get => searchString;
             set { Set(() => SearchString, ref searchString, value); }
         }
-
         public ProductStruct SelectedProductStruct
         {
             get => selectedProductStruct;
@@ -125,6 +131,19 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             GetRelatedDataAction();
         }
 
+        public AddProductViewModel(string searchString, AddProductEnum addProductEnum, string wareHouseID, OrderStatusEnum OrderStatus, string orderTypeIsOTC)
+        {
+            addProEnum = addProductEnum;
+            RegisterCommand();
+            RegisterFilter();
+
+            SearchString = searchString;
+            wareID = wareHouseID;
+
+            OrderTypeIsOTC = orderTypeIsOTC;
+            GetRelatedDataAction();
+        }
+
         ~AddProductViewModel()
         {
             SearchString = string.Empty;
@@ -147,6 +166,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection };
                     ProStructCollectionView = ProStructCollectionViewSource.View;
                     AddFilter();
+                    ProStructCollectionViewSource.Filter += ProductIsOTCFilter;
                     switch (ProStructCollectionView.Cast<object>().Count())
                     {
                         case 0:
@@ -288,6 +308,24 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                     FilterCommand = new RelayCommand(ProductPurchaseFilterAction);
                     break;
             }
+        }
+        private void ProductIsOTCFilter(object sender, FilterEventArgs e)
+        {
+            if (OrderTypeIsOTC == "OTC")
+            {
+                if (((ProductStruct)e.Item).Type == ProductTypeEnum.NHIMedicine)
+                    e.Accepted = false;
+                else
+                    e.Accepted = true;
+            }
+            else if (OrderTypeIsOTC == "藥品") {
+                if (((ProductStruct)e.Item).Type == ProductTypeEnum.OTC)
+                    e.Accepted = false;
+                else
+                    e.Accepted = true;
+            }
+            else
+                e.Accepted = true;
         }
 
         private void AddFilter()

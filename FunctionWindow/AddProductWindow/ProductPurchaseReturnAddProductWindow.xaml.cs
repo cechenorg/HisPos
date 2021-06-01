@@ -48,5 +48,25 @@ namespace His_Pos.FunctionWindow.AddProductWindow
 
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
+
+        public ProductPurchaseReturnAddProductWindow(string searchString, AddProductEnum addProductEnum, OrderStatusEnum OrderStatus, string wareID, string orderTypeIsOTC ) 
+        {
+            InitializeComponent();
+
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseAddProductView"))
+                    Close();
+            });
+
+            if (searchString.Equals(""))
+                DataContext = new AddProductViewModel(addProductEnum, wareID, OrderStatus);
+            else
+                DataContext = new AddProductViewModel(searchString, addProductEnum, wareID, OrderStatus, orderTypeIsOTC);
+
+            SearchStringTextBox.Focus();
+
+            Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+        }
     }
 }

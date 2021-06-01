@@ -255,7 +255,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
            DataTable iii =MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
             if (iii.Rows.Count >= 1) {
 
-                MessageWindow.ShowMessage("刪除失敗!請勿重複刪除!", MessageType.SUCCESS);
+                MessageWindow.ShowMessage("刪除失敗!請勿重複刪除!", MessageType.ERROR);
             }
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage("刪除成功!", MessageType.SUCCESS);
