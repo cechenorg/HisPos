@@ -87,21 +87,16 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
 
         public InvoiceControlViewModel()
         {
-            string eng;
             int num;
-            string invnum;
-
-            string Seng;
             int Snum;
-            int Count;
-            eng = Properties.Settings.Default.InvoiceNumberEng;
-            num = Int32.Parse(Properties.Settings.Default.InvoiceNumber);
-            Snum = Int32.Parse(Properties.Settings.Default.InvoiceNumberStart);
-            Count = Int32.Parse(Properties.Settings.Default.InvoiceNumberCount);
 
-            InvoiceNumberNowCount = (num - Snum);
-            
-
+            if (Properties.Settings.Default.InvoiceNumber == "" || Properties.Settings.Default.InvoiceNumberStart == "") { }
+            else
+            {
+                num = Int32.Parse(Properties.Settings.Default.InvoiceNumber);
+                Snum = Int32.Parse(Properties.Settings.Default.InvoiceNumberStart);
+                InvoiceNumberNowCount = (num - Snum);
+            }
 
             RegisterCommands();
             InitSavedPrinter();
@@ -120,6 +115,38 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
         }
         private void ConfirmChangeAction()
         {
+
+            string eng;
+            int num;
+            string invnum;
+
+            string Seng;
+            int Snum;
+            int Count;
+
+
+
+            if (Properties.Settings.Default.InvoiceNumber == "" || Properties.Settings.Default.InvoiceNumberStart == "") { }
+            else
+            {
+                num = Int32.Parse(Properties.Settings.Default.InvoiceNumber);
+                Snum = Int32.Parse(Properties.Settings.Default.InvoiceNumberStart);
+                eng = Properties.Settings.Default.InvoiceNumberEng;
+
+                Count = Int32.Parse(Properties.Settings.Default.InvoiceNumberCount);
+                InvoiceNumberNowCount = (num - Snum);
+                if (num < Snum)
+                {
+                    MessageWindow.ShowMessage("當前發票號碼小於起始！", MessageType.ERROR);
+                }
+
+                if (Snum > num + Count)
+                {
+                    MessageWindow.ShowMessage("當前發票號碼大於總張數！", MessageType.ERROR);
+                }
+            }
+
+
             string ic;
             if (!InvoiceCheck)
             {
@@ -162,6 +189,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 MessageWindow.ShowMessage("發票字軌為兩位英文！", MessageType.ERROR);
                 return;
             }
+
+          
+
             if (String.IsNullOrEmpty(InvoiceNumberCount)) {
                 MessageWindow.ShowMessage("請輸入發票張數", MessageType.ERROR);
             }
@@ -224,7 +254,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             num = num + 1;
             invnum = eng + num.ToString();
 
-            Properties.Settings.Default.InvoiceNumber = num.ToString();
+            Properties.Settings.Default.InvoiceNumber = num.ToString().PadLeft(9,'0');
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
