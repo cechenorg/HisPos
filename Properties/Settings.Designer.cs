@@ -164,6 +164,54 @@ namespace His_Pos.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
 
+
+        public string InvoiceNumberStart
+        {
+            get
+            {
+                return ((string)(this["InvoiceNumberStart"]));
+            }
+            set
+            {
+                this["InvoiceNumberStart"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
+
+
+        public string InvoiceNumberCount
+        {
+            get
+            {
+                return ((string)(this["InvoiceNumberCount"]));
+            }
+            set
+            {
+                this["InvoiceNumberCount"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
+        public string InvoiceNumberEng
+        {
+            get
+            {
+                return ((string)(this["InvoiceNumberEng"]));
+            }
+            set
+            {
+                this["InvoiceNumberEng"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
         public StoreOrder MinusID
         {
             get

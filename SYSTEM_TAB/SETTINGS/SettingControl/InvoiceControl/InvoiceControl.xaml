@@ -35,13 +35,17 @@
     </UserControl.Resources>
     <Grid Background="LightGray" Loaded="Grid_Loaded">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="100" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="70" />
             <RowDefinition />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
@@ -149,18 +153,18 @@
                 </i:Interaction.Triggers>
             </CheckBox>
         </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
-                Content="起始發票號碼"
+                Content="當前發票號碼"
                 FontFamily="Segoe UI Semibold"
                 FontSize="30"
                 Foreground="DimGray" />
             <TextBox
                 x:Name="InvoiceNum"
                 Width="215"
-                Margin="20,29,0,29"
+                Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semi"
@@ -174,8 +178,111 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="已使用張數"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <TextBox
+                x:Name="InvoiceCOUNT"
+                Width="215"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="25"
+                Foreground="DimGray"
+                IsEnabled="False"
+                Text="{Binding InvoiceNumberNowCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </StackPanel>
-        <StackPanel Grid.Row="4" Orientation="Horizontal">
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="發票字軌"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <TextBox
+                x:Name="InvoiceNumENG"
+                Width="215"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="25"
+                Foreground="DimGray"
+                IsEnabled="True"
+                Text="{Binding InvoiceNumberEng, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="起始發票號碼"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <TextBox
+                x:Name="InvoiceNumStart"
+                Width="210"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="25"
+                Foreground="DimGray"
+                IsEnabled="True"
+                Text="{Binding InvoiceNumberStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
+            
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="總發票張數"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <TextBox
+                x:Name="InvoiceNumCountt"
+                Width="215"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="25"
+                Foreground="DimGray"
+                IsEnabled="True"
+                Text="{Binding InvoiceNumberCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="6" Orientation="Horizontal">
             <ContentControl Margin="415,0,0,0">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">

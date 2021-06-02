@@ -80,7 +80,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             if (Properties.Settings.Default.InvoiceCheck == "1")
             {
-                tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+                tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString() + Properties.Settings.Default.InvoiceNumber.ToString();
             }
             else
             {
@@ -320,6 +320,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     {
                         DataRow NewProduct = result.Rows[0];
                         newRow.ItemArray = NewProduct.ItemArray;
+
                         int amt = int.Parse(result.Rows[0]["Available_Amount"].ToString());
                         if (amt < 1)
                         {
@@ -527,11 +528,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DepositInsert();
                     if (Properties.Settings.Default.InvoiceCheck == "1")
                     {
-                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString()+Properties.Settings.Default.InvoiceNumber.ToString();
                         InvoicePrint();
                         InvoiceControlViewModel vm = new InvoiceControlViewModel();
                         vm.InvoiceNumPlusOneAction();
-                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+                        tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString() + Properties.Settings.Default.InvoiceNumber.ToString();
                     }
                     ClearPage();
                     MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
@@ -600,9 +601,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int priceSum = 0;
             for (int i = 0; i < j; i++)
             {
-                strArr = big5.GetBytes(ProductList.Rows[i]["Pro_ChineseName"].ToString().PadRight(13, ' ').Substring(0, 13));
-                port.Write(strArr, 0, strArr.Length);
-                port.Write("" + cr + lf);
+                if (ProductList.Rows[i]["Pro_TypeID"].ToString()=="1") {
+                    strArr = big5.GetBytes("配藥".PadRight(13, ' ').Substring(0, 13));
+                    port.Write(strArr, 0, strArr.Length);
+                    port.Write("" + cr + lf);
+                }
+                else {
+                    strArr = big5.GetBytes(ProductList.Rows[i]["Pro_ChineseName"].ToString().PadRight(13, ' ').Substring(0, 13));
+                    port.Write(strArr, 0, strArr.Length);
+                    port.Write("" + cr + lf);
+                }
+                
                 strArr = big5.GetBytes(" *" + ProductList.Rows[i]["Amount"].ToString() + "= " + ProductList.Rows[i]["Calc"].ToString().PadLeft(4, ' ') + "TX");
                 port.Write(strArr, 0, strArr.Length);
                 priceSum += (int)ProductList.Rows[i]["Calc"];
@@ -616,7 +625,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     port.Write(esc + "d" + Convert.ToChar(4));
                     InvoiceControlViewModel vm = new InvoiceControlViewModel();
                     vm.InvoiceNumPlusOneAction();
-                    tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+                    tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString() + Properties.Settings.Default.InvoiceNumber.ToString();
                 }
             }
             port.Write("" + cr + lf);
