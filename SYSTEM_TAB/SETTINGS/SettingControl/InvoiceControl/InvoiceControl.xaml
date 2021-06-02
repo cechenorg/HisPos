@@ -178,30 +178,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="20,0,0,0"
-                VerticalAlignment="Center"
-                Content="已使用張數"
-                FontFamily="Segoe UI Semibold"
-                FontSize="30"
-                Foreground="DimGray" />
-            <TextBox
-                x:Name="InvoiceCOUNT"
-                Width="215"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="25"
-                Foreground="DimGray"
-                IsEnabled="False"
-                Text="{Binding InvoiceNumberNowCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="TextChanged">
-                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
+            
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label
@@ -213,7 +190,7 @@
                 Foreground="DimGray" />
             <TextBox
                 x:Name="InvoiceNumENG"
-                Width="215"
+                Width="60"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -231,7 +208,7 @@
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
-                Content="起始發票號碼"
+                Content="起始號碼"
                 FontFamily="Segoe UI Semibold"
                 FontSize="30"
                 Foreground="DimGray" />
@@ -266,7 +243,7 @@
                 Foreground="DimGray" />
             <TextBox
                 x:Name="InvoiceNumCountt"
-                Width="215"
+                Width="100"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -275,6 +252,30 @@
                 Foreground="DimGray"
                 IsEnabled="True"
                 Text="{Binding InvoiceNumberCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="已使用張數"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <TextBox
+                x:Name="InvoiceCOUNT"
+                Width="100"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="25"
+                Foreground="DimGray"
+                IsEnabled="False"
+                Text="{Binding InvoiceNumberNowCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <command:EventToCommand Command="{Binding DataChangedCommand}" />

@@ -527,7 +527,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     DepositInsert();
                     if (Properties.Settings.Default.InvoiceCheck == "1")
-                    { 
+                    {
+                        if (Properties.Settings.Default.InvoiceNumber.Length != 8)
+                        {
+                            MessageWindow.ShowMessage("請重新設定發票！", MessageType.ERROR);
+                            return;
+                        }
                         tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString()+Properties.Settings.Default.InvoiceNumber.ToString();
                         InvoicePrint();
                         InvoiceControlViewModel vm = new InvoiceControlViewModel();
