@@ -254,7 +254,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             Count = Int32.Parse(Properties.Settings.Default.InvoiceNumberCount);
             if ((Count - (num - Snum)) < 20)
             {
-                MessageWindow.ShowMessage("發票即將耗盡！剩餘："+(Count-(num - Snum)).ToString()+"張", MessageType.ERROR);
+                MessageWindow.ShowMessage("發票即將耗盡！剩餘："+(Count-(num - Snum)-1).ToString()+"張", MessageType.ERROR);
             }
 
 
