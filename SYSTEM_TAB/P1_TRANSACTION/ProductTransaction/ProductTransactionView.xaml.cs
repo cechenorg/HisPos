@@ -527,12 +527,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     DepositInsert();
                     if (Properties.Settings.Default.InvoiceCheck == "1")
-                    {
-                        if (Properties.Settings.Default.InvoiceNumber.Length != 8)
-                        {
-                            MessageWindow.ShowMessage("請確認發票設定！", MessageType.ERROR);
-                            return;
-                        }
+                    { 
                         tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString()+Properties.Settings.Default.InvoiceNumber.ToString();
                         InvoicePrint();
                         InvoiceControlViewModel vm = new InvoiceControlViewModel();
@@ -683,6 +678,29 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("尚無結帳商品！", MessageType.ERROR);
                 FocusLastRow();
                 return;
+            }
+
+            if (Properties.Settings.Default.InvoiceNumber.Length != 8)
+            {
+                MessageWindow.ShowMessage("請確認發票設定！", MessageType.ERROR);
+                return;
+            }
+
+
+            if (Math.Ceiling((double)ProductList.Rows.Count / 7) >= 1)
+            {
+
+                int num;
+                int Snum;
+                int Count;
+                num = Int32.Parse(Properties.Settings.Default.InvoiceNumber);
+                Snum = Int32.Parse(Properties.Settings.Default.InvoiceNumberStart);
+                Count = Int32.Parse(Properties.Settings.Default.InvoiceNumberCount);
+                if ((Count - (num - Snum) - 1) < Math.Ceiling((double)ProductList.Rows.Count / 7))
+                {
+                    MessageWindow.ShowMessage("發票剩餘張數不夠 請檢查設定！", MessageType.ERROR);
+                    return;
+                }
             }
 
             int rowCount = ProductList.Rows.Count;
