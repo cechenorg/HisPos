@@ -195,13 +195,14 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 MessageWindow.ShowMessage("當前發票號碼小於起始！", MessageType.ERROR);
                 return;
             }
-            if (Int32.Parse(InvoiceNumberStart)+Int32.Parse(InvoiceNumberCount)<Int32.Parse(InvoiceNumber))
+            if (Int32.Parse(InvoiceNumberStart)+Int32.Parse(InvoiceNumberCount)-1<Int32.Parse(InvoiceNumber))
             {
                 MessageWindow.ShowMessage("當前發票號碼大於總張數！", MessageType.ERROR);
                 return;
             }
 
             InvoiceNumberNowCount = Int32.Parse(InvoiceNumber) - Int32.Parse(InvoiceNumberStart);
+
             Properties.Settings.Default.InvoiceNumber = InvoiceNumber.ToString();
             Properties.Settings.Default.InvoiceComPort = InvoiceCom.ToString();
             Properties.Settings.Default.InvoiceNumberCount = InvoiceNumberCount.ToString();
