@@ -685,14 +685,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 return;
             }
 
-            if (Properties.Settings.Default.InvoiceNumber.Length != 8)
+            if (Properties.Settings.Default.InvoiceNumber.Length != 8 && Properties.Settings.Default.InvoiceCheck=="1")
             {
                 MessageWindow.ShowMessage("請確認發票設定！", MessageType.ERROR);
                 return;
             }
 
 
-            if (Math.Ceiling((double)ProductList.Rows.Count / 7) >= 1)
+            if (Math.Ceiling((double)ProductList.Rows.Count / 7) >= 1 && Properties.Settings.Default.InvoiceCheck == "1")
             {
 
                 int num;
