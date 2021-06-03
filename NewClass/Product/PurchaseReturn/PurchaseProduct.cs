@@ -36,6 +36,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 Set(() => OriginPrice, ref originPrice, value);
             }
         }
+
         public bool IsSingde { get; set; } = false;
 
         public bool IsProcessing
@@ -84,7 +85,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             {
                 Set(() => OrderAmount, ref orderAmount, value);
                 CalculatePrice();
-                //CalculateRealPrice();
             }
         }
 
@@ -96,7 +96,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 Set(() => RealAmount, ref realAmount, value);
                 CalculateRealPrice();
                 CalcEqualOrder();
-                CalcSubTotal();
             }
         }
 
@@ -157,7 +156,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     CalculateRealPrice();
                 else
                     CalculatePrice();
-                CalcSubTotal();
             }
         }
 
