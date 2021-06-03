@@ -262,7 +262,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             num = num + 1;
             invnum = eng + num.ToString();
 
-            Properties.Settings.Default.InvoiceNumber = num.ToString().PadLeft(9,'0');
+            Properties.Settings.Default.InvoiceNumber = num.ToString().PadLeft(8,'0');
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
