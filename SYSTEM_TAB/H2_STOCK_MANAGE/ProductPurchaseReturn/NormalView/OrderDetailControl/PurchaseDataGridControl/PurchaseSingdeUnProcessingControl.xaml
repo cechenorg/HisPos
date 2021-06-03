@@ -164,7 +164,7 @@
                                
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"           
                                 Style="{DynamicResource CantEditPrice}"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='{}{0:0;;#}'}"
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:0;;#}'}"
                                 />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
