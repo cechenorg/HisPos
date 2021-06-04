@@ -20,7 +20,7 @@ namespace His_Pos.NewClass.Product
             return new ProductStructs(dataTable);
         }
 
-        internal static int GetProductStructCountBySearchString(string searchString, AddProductEnum addProductEnum, string wareID = "0")
+        internal static int GetProductStructCountBySearchString(string searchString, AddProductEnum addProductEnum,string wareID = "0")
         {
             DataTable dataTable;
             switch (addProductEnum)
