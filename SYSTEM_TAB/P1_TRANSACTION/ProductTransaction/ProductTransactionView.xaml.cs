@@ -502,6 +502,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             try
             {
+               
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("CustomerID", cusID));
@@ -515,7 +516,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
                 parameters.Add(new SqlParameter("RealTotal", realTotal));
                 parameters.Add(new SqlParameter("CardNumber", chkWindow.CardNumber));
-                parameters.Add(new SqlParameter("InvoiceNumber", tbInvoiceNum.Content));
+                if (Properties.Settings.Default.InvoiceCheck == "0")
+                {
+                    parameters.Add(new SqlParameter("InvoiceNumber", ""));
+                }
+                else {
+                    parameters.Add(new SqlParameter("InvoiceNumber", Properties.Settings.Default.InvoiceNumberEng+Properties.Settings.Default.InvoiceNumber));
+                }
                 parameters.Add(new SqlParameter("TaxNumber", chkWindow.TaxNumber));
                 parameters.Add(new SqlParameter("Cashier", chkWindow.Employee));
                 parameters.Add(new SqlParameter("Note", tbNote.Text));
