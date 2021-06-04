@@ -258,14 +258,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
                 ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum, CurrentStoreOrder.OrderStatus, CurrentStoreOrder.OrderWarehouse.ID,CurrentStoreOrder.OrderTypeIsOTC);
-                if (productPurchaseReturnAddProductWindow.Activate() == false)
-                {
-
-                }
-                else
-                {
                     productPurchaseReturnAddProductWindow.ShowDialog();
-                }
                 Messenger.Default.Unregister(this);
             }
             else if (productCount == 1)
