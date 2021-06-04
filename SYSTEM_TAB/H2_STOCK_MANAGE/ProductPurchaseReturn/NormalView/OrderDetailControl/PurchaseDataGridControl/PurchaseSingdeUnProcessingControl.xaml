@@ -103,8 +103,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                 
-                    Width="300"
+                    Width="240"
                     Header="商品名稱"
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
@@ -161,10 +160,9 @@
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
                                 InputMethod.IsInputMethodEnabled="False"
-                               
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"           
                                 Style="{DynamicResource CantEditPrice}"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:0;;#}'}"
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='{}{0:0.00;;#}'}"
                                 />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
