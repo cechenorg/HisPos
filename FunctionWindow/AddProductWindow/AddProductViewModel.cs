@@ -173,9 +173,9 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                             MessageWindow.ShowMessage("查無此藥品", MessageType.WARNING);
                             break;
 
-                        case 1:
+                        /*case 1:
                             SelectedProductStruct = (ProductStruct)ProStructCollectionView.Cast<object>().First();
-                            if (SelectedProductStruct.OTCFromSingde == true && addProEnum == AddProductEnum.ProductPurchase /*&& orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING*/)
+                            if (SelectedProductStruct.OTCFromSingde == true && addProEnum == AddProductEnum.ProductPurchase /*&& orderStatus == OrderStatusEnum.SINGDE_UNPROCESSIN)
                             {
                                 if (orderStatus == OrderStatusEnum.SINGDE_UNPROCESSING || orderStatus == OrderStatusEnum.SINGDE_PROCESSING) {
                                     MessageWindow.ShowMessage("非杏德品無法訂貨", MessageType.WARNING);
@@ -183,11 +183,15 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                                 }
                             }
                             ProductSelectedAction();
-                            break;
+                            break;*/
 
                         default:
                             ProStructCollectionViewSource.View.MoveCurrentToFirst();
                             SelectedProductStruct = (ProductStruct)ProStructCollectionViewSource.View.CurrentItem;
+                            if (ProductStructCollection.Count==1) {
+                                ProductSelectedAction();
+                            }
+                            
                             break;
                     }
                 }
