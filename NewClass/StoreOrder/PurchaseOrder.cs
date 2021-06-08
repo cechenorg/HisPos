@@ -125,7 +125,6 @@ namespace His_Pos.NewClass.StoreOrder
                     return false;
                 }
             }
-            //ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
 
             return true;
         }
@@ -188,10 +187,10 @@ namespace His_Pos.NewClass.StoreOrder
                     if (!isSuccess) return false;
                 }
             }
+            //ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
 
-            ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
-
-            return (bool)confirmWindow1.DialogResult;
+            //return (bool)confirmWindow1.DialogResult;
+            return true;
         }
 
         protected override bool CheckSingdeProcessingOrder()

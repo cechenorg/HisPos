@@ -368,7 +368,7 @@ namespace His_Pos.NewClass.StoreOrder
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
             string prescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
 
-            if (orderFlag == 2)
+            /*if (orderFlag == 2)
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(delegate
                 {
@@ -377,7 +377,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 ToScrapStatus();
             }
-            else if (isShipment)
+            else*/ if (isShipment)
             {
                 ReceiveID = prescriptionReceiveID;
 

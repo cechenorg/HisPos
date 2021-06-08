@@ -313,6 +313,7 @@
                         <DataTemplate>
                             <TextBox
                                 x:Name="Notes"
+                                IsReadOnly="True"
                                 Width="120"
                                 Margin="0,0,0,2"
                                 FontFamily="Segoe UI Semi"

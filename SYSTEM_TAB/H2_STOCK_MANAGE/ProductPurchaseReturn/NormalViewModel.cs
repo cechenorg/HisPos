@@ -211,14 +211,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 if (!CurrentStoreOrder.ChkPrice())
                 {
-                    ConfirmWindow confirmWindow = new ConfirmWindow($"本次進價與上次進價不同                 是否送出？", "", true);
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"本次進價與上次進價不同\n是否確認送出進貨單?", "", true);
 
                     if (!(bool)confirmWindow.DialogResult)
                         return;
                 }
                 else
                 {
-                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認送出進貨單?\n(資料內容將不能修改)", "");
                     if (!(bool)confirmWindow.DialogResult)
                         return;
                 }
