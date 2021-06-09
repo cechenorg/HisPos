@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows;
 using System.Windows.Threading;
 using StringRes = His_Pos.Properties.Resources;
 
@@ -182,7 +183,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             {
                 return;  
             }
-
             SelectedPharmacy = DeclarePharmacies.SingleOrDefault(p => p.ID.Equals(ViewModelMainWindow.CurrentPharmacy.ID));
             DeclareFile = new DeclarePreviewOfMonth();
             DeclareDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-1);
