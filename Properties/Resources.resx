@@ -536,7 +536,7 @@
   <data name="CashStockEntryReport" xml:space="preserve">
     <value>會計總帳報表</value>
   </data>
-	<data name="TodayCashStockEntryReport" xml:space="preserve">
+  <data name="TodayCashStockEntryReport" xml:space="preserve">
     <value>每日總帳報表</value>
   </data>
   <data name="CooperativeEntryReport" xml:space="preserve">
@@ -545,7 +545,7 @@
   <data name="AdditionalCashFlowManage" xml:space="preserve">
     <value>額外收支</value>
   </data>
-	<data name="AccountsManage" xml:space="preserve">
+  <data name="AccountsManage" xml:space="preserve">
     <value>會計科目</value>
   </data>
   <data name="代入處方錯誤" xml:space="preserve">
@@ -608,7 +608,7 @@
   <data name="CompanyWeb" xml:space="preserve">
     <value>藥健康網頁</value>
   </data>
-    <data name="ClosingWork" xml:space="preserve">
+  <data name="ClosingWork" xml:space="preserve">
     <value>關班作業</value>
   </data>
   <data name="SystemTutorial" xml:space="preserve">
@@ -622,5 +622,8 @@
   </data>
   <data name="BalanceSheet" xml:space="preserve">
     <value>資產負債表</value>
+  </data>
+  <data name="ClosingCashSelect" xml:space="preserve">
+    <value>關班帳務查詢</value>
   </data>
 </root>

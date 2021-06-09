@@ -97,7 +97,7 @@ namespace His_Pos
             /*HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
                             new[] { StringRes.CompanyWeb }));*/
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.ClosingWork,
-                          new[] { StringRes.ClosingWork }));
+                          new[] { StringRes.ClosingWork,StringRes.ClosingCashSelect }));
         }
 
         private void InitializeMenu()
