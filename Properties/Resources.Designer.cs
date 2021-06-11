@@ -219,6 +219,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 關班帳務查詢 的當地語系化字串。
+        /// </summary>
+        internal static string ClosingCashSelect {
+            get {
+                return ResourceManager.GetString("ClosingCashSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 關班作業 的當地語系化字串。
         /// </summary>
         internal static string ClosingWork {

@@ -10,6 +10,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H11_CLOSING.Closing;
+using His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
@@ -268,6 +269,8 @@ namespace His_Pos.ChromeTabViewModel
 
                 case nameof(FeatureItem.關班作業):
                     break;
+                case nameof(FeatureItem.關班帳務查詢):
+                    break;
 
                 default:
                     return;
@@ -434,7 +437,10 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.關班作業):
                     newTab = new ClosingWorkViewModel() { TabName = MainWindow.HisFeatures[11].Functions[0], Icon = MainWindow.HisFeatures[11].Icon };
                     break;
-
+                //關班帳務查詢
+                case nameof(FeatureItem.關班帳務查詢):
+                    newTab = new ClosingCashSelectViwModel() { TabName = MainWindow.HisFeatures[11].Functions[1], Icon = MainWindow.HisFeatures[11].Icon };
+                    break;
                 default:
                     return;
             }
