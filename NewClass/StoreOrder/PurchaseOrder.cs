@@ -149,7 +149,8 @@ namespace His_Pos.NewClass.StoreOrder
                     hasControlMed = true;
                 }
 
-                if (OrderProducts.Select(g=>g.ID).Count() != OrderProducts.Select(g => g.ID).Distinct().Count() && product.RealAmount != 0 && (product.BatchNumber=="" ||product.BatchNumber==null)) {
+                if (OrderProducts.Where(s => s.ID == product.ID).Count()>1 && product.RealAmount != 0 && (product.BatchNumber=="" ||product.BatchNumber==null)) {
+                    
                      hasNoBatch = true;
                 }
             }
