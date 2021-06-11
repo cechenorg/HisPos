@@ -338,7 +338,7 @@
                                         Converter="{StaticResource NullableDateConverter}"
                                         Mode="TwoWay"
                                         NotifyOnValidationError="True"
-                                        Path="SearchStartDate"
+                                        Path="ValidDate"
                                         UpdateSourceTrigger="PropertyChanged"
                                         ValidatesOnDataErrors="True">
                                         <Binding.ValidationRules>
