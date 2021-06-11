@@ -14,7 +14,7 @@
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="DateConverter" />
         <service:DateTimeConverter x:Key="DateTimeConverter" />
-      
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
         <service:SentinelConverter x:Key="SentinelConverter" />
         <service:SelectedItemConverter x:Key="SelectedItemConverter" />
@@ -314,19 +314,42 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn
-                    Width="120"
-                    Binding="{Binding ValidDate, Converter={StaticResource DateConverter}}"
-                    FontFamily="Segoe UI Semi"
+                <DataGridTemplateColumn
+                    MinWidth="120"
                     Header="效期"
                     IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <xctk:MaskedTextBox
+                                Name="MaskedTextBox"
+                                Width="100"
+                                Height="30"
+                                HorizontalContentAlignment="Center"
+                                FontSize="18"
+                                Foreground="{StaticResource ForeGround}"
+                                InsertKeyMode="Overwrite"
+                                
+                                Mask="000/00/00"
+                                PromptChar="-"
+                                Style="{StaticResource MaterialDesignTextBox}"
+                                ValueDataType="xctk:DateTimeFormat">
+                                <xctk:MaskedTextBox.Text>
+                                    <Binding
+                                        Converter="{StaticResource NullableDateConverter}"
+                                        Mode="TwoWay"
+                                        NotifyOnValidationError="True"
+                                        Path="SearchStartDate"
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        ValidatesOnDataErrors="True">
+                                        <Binding.ValidationRules>
+                                            <service:DateValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox.Text>
+                            </xctk:MaskedTextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     MinWidth="100"
                     Header="發票號碼"

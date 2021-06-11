@@ -303,7 +303,7 @@
                     Binding="{Binding ValidDate, Converter={StaticResource DateConverter}}"
                     FontFamily="Segoe UI Semi"
                     Header="效期"
-                    IsReadOnly="False">
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
