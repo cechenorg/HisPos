@@ -133,7 +133,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             bool isLowerThenOrderAmount = false;
             bool hasControlMed = false;
-
+            bool hasNoBatch = false;
             var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
 
             foreach (var product in OrderProducts)
@@ -148,6 +148,15 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     hasControlMed = true;
                 }
+
+                if (product.IsFirstBatch == false && product.RealAmount != 0 && (product.BatchNumber=="" ||product.BatchNumber==null)) {
+                     hasNoBatch = true;
+                }
+            }
+
+            if (hasNoBatch == true) {
+                MessageWindow.ShowMessage("拆批不可沒有批號!", MessageType.ERROR);
+                return false;
             }
 
             if (hasControlMed)
@@ -174,7 +183,11 @@ namespace His_Pos.NewClass.StoreOrder
                     isLowerThenOrderAmount = true;
                     break;
                 }
+           
+
+
             }
+
 
             if (isLowerThenOrderAmount)
             {
