@@ -203,6 +203,13 @@
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
+                                <TextBox.InputScope>
+                                    <InputScope>
+                                        <InputScope.Names>
+                                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                        </InputScope.Names>
+                                    </InputScope>
+                                </TextBox.InputScope>
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -252,6 +259,13 @@
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
+                                <TextBox.InputScope>
+                                    <InputScope>
+                                        <InputScope.Names>
+                                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                        </InputScope.Names>
+                                    </InputScope>
+                                </TextBox.InputScope>
                             </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -328,7 +342,6 @@
                                 FontSize="18"
                                 Foreground="{StaticResource ForeGround}"
                                 InsertKeyMode="Overwrite"
-                                
                                 Mask="000/00/00"
                                 PromptChar="-"
                                 Style="{StaticResource MaterialDesignTextBox}"
@@ -346,6 +359,13 @@
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </xctk:MaskedTextBox.Text>
+                                <xctk:MaskedTextBox.InputScope>
+                                    <InputScope>
+                                        <InputScope.Names>
+                                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                        </InputScope.Names>
+                                    </InputScope>
+                                </xctk:MaskedTextBox.InputScope>
                             </xctk:MaskedTextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
