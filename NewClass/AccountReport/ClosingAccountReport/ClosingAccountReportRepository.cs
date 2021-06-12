@@ -62,6 +62,21 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
            
         }
 
+        public List<MonthlyAccountTarget> GetMonthTargetByGroupServerName(string groupServerName){
+            List<MonthlyAccountTarget> result = new List<MonthlyAccountTarget>();
+
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+           parameterList.Add(new SqlParameter("groupServerName", groupServerName)); 
+            DataTable table = MainWindow.ServerConnection.ExecuteProcBySchema(
+                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[MonthTargetByGroupServerName]", parameterList);
+
+            foreach( DataRow r in table.Rows)
+            {
+                result.Add(new MonthlyAccountTarget(r));
+            }
+            return result;
+        }
+
         public class PharmacyInfo
         {
             public PharmacyInfo(DataRow r)
@@ -74,5 +89,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 
             public string Name { get; set; }
         }
+
+       
     }
 }
