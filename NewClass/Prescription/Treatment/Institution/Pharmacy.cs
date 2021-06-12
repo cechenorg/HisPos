@@ -25,7 +25,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             VpnIp = r.Field<string>("CurPha_VPN");
             NewInstitution = r.Field<bool>("CurPha_NewInstitution");
             GroupServerName = r.Field<string>("GroupServerName");
-            TAXNUM= r.Field<string>("PHAMAS_TAXNUM");
+            TAXNUM = r.Field<string>("PHAMAS_TAXNUM");
         }
 
         private string id;
@@ -95,6 +95,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         [IgnoreFormat]
         public string GroupServerName { get; set; }
 
+        [IgnoreFormat]
+        public string HISPOS_ServerName { get; set; } = "HIS_POS_Server";
         #region Function
 
         public static Pharmacy GetCurrentPharmacy()

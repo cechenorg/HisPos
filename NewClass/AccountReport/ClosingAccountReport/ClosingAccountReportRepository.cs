@@ -2,6 +2,7 @@
 using His_Pos.ChromeTabViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -10,29 +11,41 @@ using System.Threading.Tasks;
 namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 {
    public class ClosingAccountReportRepository
-    {
-        private string groupServerConnectionString  = $@"Data Source={ViewModelMainWindow.CurrentPharmacy.GroupServerName};Persist Security Info=True;User ID=singde;Password=city1234";
-        
-    
-        public IEnumerable<DailyClosingAccount> GetGroupClosingAccountRecord()
-        { 
-          
-            SqlConnection connection = new SqlConnection(groupServerConnectionString);
-            connection.Open();
-             
-            var sql = "exec [GetPharmacyInfoByVerifyKey] @Phamas_VerifyKey";
-            var values = new { Phamas_VerifyKey = "2017.1.1" };
-            var results = connection.Query<DailyClosingAccount>(sql, values).ToList();
-             
+    { 
+        public List<PharmacyInfo> GetPharmacyInfosByGroupServerName(string groupServerName)
+        {
+            List<PharmacyInfo> result = new List<PharmacyInfo>(); 
+            List<SqlParameter> parameterList = new List<SqlParameter>(); 
+            parameterList.Add(new SqlParameter("groupServerName", groupServerName)); 
+            DataTable table = MainWindow.ServerConnection.ExecuteProcBySchema(
+                  ViewModelMainWindow.CurrentPharmacy.HISPOS_ServerName, "[Get].[PharmacyListByGroupServerName]", parameterList);
 
-            connection.Close();
-            return results;
+            foreach(DataRow r in table.Rows)
+            {
+                result.Add(new PharmacyInfo(r));
+            } 
+            return result;
+        }
+
+        public List<DailyClosingAccount> GetGroupClosingAccountRecord()
+        {
+            DataTable table = MainWindow.ServerConnection.ExecuteProcBySchema(
+                  ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[GroupClosingAccountRecord]");
+
+            List<DailyClosingAccount> result = new List<DailyClosingAccount>();
+            
+            foreach(DataRow r in table.Rows)
+            {
+                DailyClosingAccount data = new DailyClosingAccount(r);
+                result.Add(data);
+
+            }
+           
+            return result;
         }
 
         public void InsertDailyClosingAccountRecord(DailyClosingAccount data)
         {
-            SqlConnection connection = new SqlConnection(groupServerConnectionString);
-           
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Pharmacy_VerifyKey", Properties.Settings.Default.SystemSerialNumber));
             parameterList.Add(new SqlParameter("ClosingDate", data.ClosingDate));
@@ -49,5 +62,17 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
            
         }
 
+        public class PharmacyInfo
+        {
+            public PharmacyInfo(DataRow r)
+            {
+                VerifyKey = r.Field<string>("PHAMAS_VerifyKey");
+                Name = r.Field<string>("PHAMAS_NAME");
+            }
+
+            public string VerifyKey { get; set; }
+
+            public string Name { get; set; }
+        }
     }
 }

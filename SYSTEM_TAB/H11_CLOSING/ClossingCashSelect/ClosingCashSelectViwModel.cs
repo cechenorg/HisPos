@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.AccountReport.ClosingAccountReport;
 using His_Pos.NewClass.Prescription.Search;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +18,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             return this;
         }
 
-        private DateTime startDate;
+        private DateTime startDate = DateTime.Today;
 
         public DateTime StartDate
         {
@@ -27,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
-        private DateTime endDate;
+        private DateTime endDate = DateTime.Today;
 
         public DateTime EndDate
         {
@@ -35,6 +37,17 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             set
             {
                 Set(() => EndDate, ref endDate, value);
+            }
+        }
+
+        private ObservableCollection<DailyClosingAccount> sumDailyClosingAccount = new ObservableCollection<DailyClosingAccount>();
+
+        public ObservableCollection<DailyClosingAccount> SumDailyClosingAccount
+        {
+            get => sumDailyClosingAccount;
+            set
+            {
+                Set(() => SumDailyClosingAccount, ref sumDailyClosingAccount, value);
             }
         }
 
@@ -46,10 +59,32 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
         private void DailyAccountingSearchAction()
         {
-            var SearchPrescriptions = new PrescriptionSearchPreviews();
+            SumDailyClosingAccount.Clear();
+
+            ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
-            SearchPrescriptions.GetNoBucklePrescriptions();
+            var datalist = repo.GetGroupClosingAccountRecord();
+            var pharmacyList = repo.GetPharmacyInfosByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName);
             MainWindow.ServerConnection.CloseConnection();
+
+            var searchData = datalist.Where(_ => _.ClosingDate >= StartDate && _.ClosingDate <= EndDate);
+            foreach (var pharmacy in pharmacyList)
+            {
+                DailyClosingAccount displayDailyClosingAccount = new DailyClosingAccount();
+                displayDailyClosingAccount.PharmacyName = pharmacy.Name;
+                displayDailyClosingAccount.PharmacyVerifyKey = pharmacy.VerifyKey;
+                SumDailyClosingAccount.Add(displayDailyClosingAccount);
+
+                foreach (var pharmacyRecoird in searchData.Where(_ => _.PharmacyVerifyKey == pharmacy.VerifyKey))
+                {
+                    displayDailyClosingAccount.OTCSaleProfit += pharmacyRecoird.OTCSaleProfit;
+                    displayDailyClosingAccount.ChronicAndOtherProfit += pharmacyRecoird.ChronicAndOtherProfit;
+                    displayDailyClosingAccount.CooperativeClinicProfit += pharmacyRecoird.CooperativeClinicProfit;
+                    displayDailyClosingAccount.DailyAdjustAmount += pharmacyRecoird.DailyAdjustAmount;
+                    displayDailyClosingAccount.PrescribeProfit += pharmacyRecoird.PrescribeProfit;
+                    displayDailyClosingAccount.SelfProfit += pharmacyRecoird.SelfProfit;
+                }
+            }
         }
     }
 }

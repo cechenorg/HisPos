@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,24 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 {
     public class DailyClosingAccount
     {
+        public DailyClosingAccount(DataRow r)
+        {
+            ClosingDate = r.Field<DateTime>("ClosingDate");
+            PharmacyVerifyKey = r.Field<string>("Pharmacy_VerifyKey");
+            OTCSaleProfit = r.Field<int>("OTCSaleProfit");
+            DailyAdjustAmount = r.Field<int>("DailyAdjustAmount");
+            CooperativeClinicProfit = r.Field<int>("CooperativeClinicProfit");
+            PrescribeProfit = r.Field<int>("PrescribeProfit");
+            ChronicAndOtherProfit = r.Field<int>("ChronicAndOtherProfit");
+            SelfProfit = r.Field<int>("SelfProfit");
+            TotalProfit = r.Field<int>("TotalProfit"); 
+
+        }
         public DailyClosingAccount()  { }
 
         public DateTime ClosingDate { get; set; }
+
+        public string PharmacyVerifyKey { get; set; }
 
         public string PharmacyName { get; set; }
 

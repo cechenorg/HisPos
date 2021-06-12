@@ -5,12 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect"
              mc:Ignorable="d" 
+              xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <local:ClosingCashSelectViwModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
@@ -34,18 +36,63 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="查詢日期:"  Margin="0,5,0,0"/>
-                <xctk:MaskedTextBox Margin="5,0,0,0"
-                 FontSize="18" Foreground="{StaticResource ForeGround}"
-                InsertKeyMode="Overwrite"  Mask="000/00/00"
-                PromptChar="-"  Style="{StaticResource MaterialDesignTextBox}"
-                ValueDataType="xctk:DateTimeFormat" Text="{Binding StartDate}"/>
-                <TextBlock Text="~"></TextBlock>
-                <xctk:MaskedTextBox Margin="5,0,0,0"
-                 FontSize="18" Foreground="{StaticResource ForeGround}"
-                InsertKeyMode="Overwrite"  Mask="000/00/00"
-                PromptChar="-"  Style="{StaticResource MaterialDesignTextBox}"
-                ValueDataType="xctk:DateTimeFormat" Text="{Binding EndDate}"/>
-                <Button Margin="5,5,0,0" Background="DarkCyan" Content="查詢"></Button>
+                <xctk:MaskedTextBox
+                        x:Name="StartDate"
+                        Width="150"
+                        Margin="20,0,10,5"
+                        HorizontalContentAlignment="Center"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="27"
+                        Foreground="{StaticResource ForeGround}"
+                        InputScope="Number"
+                        InsertKeyMode="Overwrite"
+                        Mask="000/00/00"
+                        PromptChar="-"
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        ValueDataType="xctk:DateTimeFormat">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding
+                                Converter="{StaticResource NullableDateConverter}"
+                                Mode="TwoWay"
+                                NotifyOnValidationError="True"
+                                Path="StartDate"
+                                UpdateSourceTrigger="PropertyChanged"
+                                ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <xctk:MaskedTextBox
+                        x:Name="EndDate"
+                        Width="150"
+                        Margin="20,0,10,5"
+                        HorizontalContentAlignment="Center"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="27"
+                        Foreground="{StaticResource ForeGround}"
+                        InputScope="Number"
+                        InsertKeyMode="Overwrite"
+                        Mask="000/00/00"
+                        PromptChar="-"
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        ValueDataType="xctk:DateTimeFormat">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding
+                                Converter="{StaticResource NullableDateConverter}"
+                                Mode="TwoWay"
+                                NotifyOnValidationError="True"
+                                Path="EndDate"
+                                UpdateSourceTrigger="PropertyChanged"
+                                ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <service:DateValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <Button Margin="5,5,0,0" Background="DarkCyan" Content="查詢" Command="{Binding DailyAccountingSearchCommand}"></Button>
             </StackPanel>
            
         </Grid>
