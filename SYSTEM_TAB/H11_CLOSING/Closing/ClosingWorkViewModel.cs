@@ -2,6 +2,7 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.AccountReport.ClosingAccountReport;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -371,6 +372,28 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 MessageWindow.ShowMessage("成功", MessageType.SUCCESS);
             }
             ReloadAction();
+            InsertToClosingAccoutRecord();
+        }
+
+        private void InsertToClosingAccoutRecord()
+        {
+            DailyClosingAccount data = new DailyClosingAccount()
+            {
+                ClosingDate = StartDate,
+                PharmacyName = ViewModelMainWindow.CurrentPharmacy.Name,
+                OTCSaleProfit = TradeTodayProfit,
+                DailyAdjustAmount = Count,
+                CooperativeClinicProfit = Coop,
+                PrescribeProfit = Self,
+                ChronicAndOtherProfit = Other
+            };
+            data.SelfProfit = data.OTCSaleProfit  + data.CooperativeClinicProfit + data.PrescribeProfit;
+            data.TotalProfit = data.SelfProfit + data.CooperativeClinicProfit;
+
+            ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
+            MainWindow.ServerConnection.OpenConnection();
+            repo.InsertDailyClosingAccountRecord(data); 
+            MainWindow.ServerConnection.CloseConnection();
         }
     }
 }

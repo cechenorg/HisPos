@@ -10,6 +10,8 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
     {
         public DailyClosingAccount()  { }
 
+        public DateTime ClosingDate { get; set; }
+
         public string PharmacyName { get; set; }
 
         public int OTCSaleProfit { get; set; } //OTC銷售毛利
