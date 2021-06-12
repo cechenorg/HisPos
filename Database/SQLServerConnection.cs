@@ -194,6 +194,11 @@ namespace His_Pos.Database
             return dataSet;
         }
 
+        public SqlConnection GetConnection()
+        {
+            return connection;
+        }
+
         private void LogError(string procName, string parameters, string error)
         {
             var parameterList = new List<SqlParameter>();
