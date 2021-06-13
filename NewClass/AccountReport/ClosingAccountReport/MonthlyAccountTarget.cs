@@ -9,6 +9,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 {
     public class MonthlyAccountTarget
     {
+        public MonthlyAccountTarget() { }
         public MonthlyAccountTarget(DataRow r )
         {
             VerifyKey = r.Field<string>("Pharmacy_VerifyKey");

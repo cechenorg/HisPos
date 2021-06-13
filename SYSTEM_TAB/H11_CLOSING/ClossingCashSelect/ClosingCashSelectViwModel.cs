@@ -105,7 +105,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 var sumData = sumRecord.First(_ => _.PharmacyVerifyKey == pharmacy.VerifyKey);
                 pharmacy.PharmacyName = sumData.PharmacyName;
                 pharmacy.MonthlyProfit = sumData.TotalProfit;
+                pharmacy.TargetRatio = pharmacy.MonthlyProfit / pharmacy.MonthlyTarget;
             }
+
+            MonthlyAccountTarget sum = new MonthlyAccountTarget() { PharmacyName = "小計"};
+            sum.MonthlyTarget = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyTarget);
+            sum.MonthlyProfit = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyProfit);
+            sum.TargetRatio = sum.MonthlyProfit / sum.MonthlyTarget;
+            MonthlyAccountTargetCollection.Add(sum);
         }
 
         private void DailyAccountingSearchAction()
