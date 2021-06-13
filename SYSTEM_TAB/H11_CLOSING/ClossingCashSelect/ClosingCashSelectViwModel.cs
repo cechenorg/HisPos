@@ -40,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
-        private DateTime closingAccountMonth = DateTime.Today;
+        private DateTime closingAccountMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
 
         public DateTime ClosingAccountMonth
         {
@@ -105,14 +105,35 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 var sumData = sumRecord.First(_ => _.PharmacyVerifyKey == pharmacy.VerifyKey);
                 pharmacy.PharmacyName = sumData.PharmacyName;
                 pharmacy.MonthlyProfit = sumData.TotalProfit;
-                pharmacy.TargetRatio = pharmacy.MonthlyProfit / pharmacy.MonthlyTarget;
+                pharmacy.TargetRatio = Math.Round( (double)pharmacy.MonthlyProfit / (double)pharmacy.MonthlyTarget * 100,2).ToString() + "%";
             }
 
             MonthlyAccountTarget sum = new MonthlyAccountTarget() { PharmacyName = "小計"};
             sum.MonthlyTarget = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyTarget);
             sum.MonthlyProfit = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyProfit);
-            sum.TargetRatio = sum.MonthlyProfit / sum.MonthlyTarget;
+            sum.TargetRatio =  Math.Round((double)sum.MonthlyProfit / (double)sum.MonthlyTarget * 100,2).ToString() + "%";
             MonthlyAccountTargetCollection.Add(sum);
+
+            MonthlyAccountTarget todayNeedTarget = new MonthlyAccountTarget() { PharmacyName = "應達標準"};
+            
+            int i = 0;
+            int workday = 0;
+            int untilToday = 0;
+            while (firstDayOfMonth.AddDays(i).Month == firstDayOfMonth.Month)
+            {
+                if (firstDayOfMonth.AddDays(i).DayOfWeek != DayOfWeek.Sunday)
+                    workday++;
+
+                if (firstDayOfMonth.AddDays(i) == DateTime.Today)
+                    untilToday = workday;
+
+                i++;
+            }
+            todayNeedTarget.MonthlyTarget = sum.MonthlyTarget / workday * untilToday;
+            todayNeedTarget.MonthlyProfit = sum.MonthlyProfit ;
+            todayNeedTarget.TargetRatio = Math.Round((double)todayNeedTarget.MonthlyProfit / (double)todayNeedTarget.MonthlyTarget * 100, 2).ToString() + "%";
+            MonthlyAccountTargetCollection.Add(todayNeedTarget);
+
         }
 
         private void DailyAccountingSearchAction()
@@ -150,6 +171,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                     displayDailyClosingAccount.DailyAdjustAmount += pharmacyRecoird.DailyAdjustAmount;
                     displayDailyClosingAccount.PrescribeProfit += pharmacyRecoird.PrescribeProfit;
                     displayDailyClosingAccount.SelfProfit += pharmacyRecoird.SelfProfit;
+                    displayDailyClosingAccount.TotalProfit += pharmacyRecoird.TotalProfit;
                 }
             }
             return result;

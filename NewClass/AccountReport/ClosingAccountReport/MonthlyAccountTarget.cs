@@ -26,6 +26,6 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 
         public DateTime Month { get; set; } //加總
 
-        public double TargetRatio { get; set; } //達成率
+        public string TargetRatio { get; set; } //達成率
     }
 }
