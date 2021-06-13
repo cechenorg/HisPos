@@ -1,0 +1,87 @@
+﻿<Window x:Class="His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTargetSettingWindow.ClosingAccountTargetSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTargetSettingWindow"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+          xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="業績月目標設定視窗" Height="450" Width="400">
+    <Window.DataContext>
+        <local:ClosingAccountTargetSettingVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="5,0,0,0" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="月份查詢" VerticalAlignment="Center" FontSize="20"></TextBlock>
+            <xctk:MaskedTextBox
+                        x:Name="A"
+                        Width="120"
+                        Margin="0,0,10,5"
+                        HorizontalContentAlignment="Center"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="27"
+                        Foreground="{StaticResource ForeGround}"
+                        InputScope="Number"
+                        InsertKeyMode="Overwrite"
+                        Mask="000/00/00"
+                        PromptChar="-"
+                        Style="{StaticResource MaterialDesignTextBox}"
+                        ValueDataType="xctk:DateTimeFormat">
+                <xctk:MaskedTextBox.Text>
+                    <Binding
+                                Converter="{StaticResource NullableDateConverter}"
+                                Mode="TwoWay"
+                                NotifyOnValidationError="True"
+                                Path="ClosingAccountMonth"
+                                UpdateSourceTrigger="PropertyChanged"
+                                ValidatesOnDataErrors="True">
+                        <Binding.ValidationRules>
+                            <service:DateValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </xctk:MaskedTextBox.Text> 
+            </xctk:MaskedTextBox>
+            <Button Content="查詢" Background="DarkCyan" Command="{Binding SearchCommand}"/>
+        </StackPanel>
+        <ItemsControl Grid.Row="1" Margin="10"  ItemsSource="{Binding TargetDataCollection}">
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <StackPanel >
+                        <ItemsPresenter/>
+                    </StackPanel>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                         <Label Grid.Column="0" Content="{Binding PharmacyName}"></Label>
+                         <TextBox Grid.Column="1" Text="{Binding MonthlyTarget}"></TextBox> 
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <DockPanel Grid.Row="2">
+            <Button Background="IndianRed" Margin="5" Content="更新" Command="{Binding UpdateCommand}"></Button>
+        </DockPanel>
+    </Grid>
+</Window>

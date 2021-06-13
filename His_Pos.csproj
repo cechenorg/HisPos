@@ -328,9 +328,13 @@
     <Compile Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml.cs">
       <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NewClass\AccountReport\ClosingAccountReport\ClosingAccountReportRepository.cs" />
-    <Compile Include="NewClass\AccountReport\ClosingAccountReport\DailyClosingAccount.cs" />
-    <Compile Include="NewClass\AccountReport\ClosingAccountReport\MonthlyAccountTarget.cs" />
+    <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountReport\ClosingAccountReportRepository.cs" />
+    <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountTargetSettingWindow\ClosingAccountTargetSettingVM.cs" />
+    <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountTargetSettingWindow\ClosingAccountTargetSettingWindow.xaml.cs">
+      <DependentUpon>ClosingAccountTargetSettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountReport\DailyClosingAccount.cs" />
+    <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountReport\MonthlyAccountTarget.cs" />
     <Compile Include="NewClass\AccountReport\ExportIncomeStatementTemplate.cs" />
     <Compile Include="NewClass\BalanceSheet\BalanceSheetData.cs" />
     <Compile Include="NewClass\BalanceSheet\BalanceSheetDatas.cs" />
@@ -1701,6 +1705,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GeneralCustomControl\ProductStatusIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountTargetSettingWindow\ClosingAccountTargetSettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -77,6 +77,19 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             return result;
         }
 
+       
+
+        public void UpdateClosingAccountTarget(MonthlyAccountTarget data)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("verifykey", data.VerifyKey));
+            parameterList.Add(new SqlParameter("TargetMonth", data.Month));
+            parameterList.Add(new SqlParameter("TargetValue", data.MonthlyTarget));
+            MainWindow.ServerConnection.ExecuteProcBySchema(
+               ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertUpdateAccountTarget]", parameterList);
+     
+        }
+
         public class PharmacyInfo
         {
             public PharmacyInfo(DataRow r)

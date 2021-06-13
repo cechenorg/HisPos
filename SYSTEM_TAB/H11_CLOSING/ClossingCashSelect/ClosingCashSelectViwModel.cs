@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.AccountReport.ClosingAccountReport;
+using His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTargetSettingWindow;
 using His_Pos.NewClass.Prescription.Search;
 using System;
 using System.Collections.Generic;
@@ -76,11 +77,18 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
         public RelayCommand DailyAccountingSearchCommand { get; set; }
         public RelayCommand MonthlyClosingAccountSearchCommand { get; set; }
-
+        public RelayCommand MonthlyTargetSettingCommand { get; set; }
 
         public ClosingCashSelectViwModel() {
             DailyAccountingSearchCommand = new RelayCommand(DailyAccountingSearchAction);
             MonthlyClosingAccountSearchCommand = new RelayCommand(MonthlyClosingAccountSearchAction);
+            MonthlyTargetSettingCommand = new RelayCommand(MonthlyTargetSettingAction);
+        }
+
+        private void MonthlyTargetSettingAction()
+        {
+            ClosingAccountTargetSettingWindow settingWin = new ClosingAccountTargetSettingWindow();
+            settingWin.ShowDialog();
         }
 
         private void MonthlyClosingAccountSearchAction()
@@ -89,7 +97,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
             MonthlyAccountTargetCollection.Clear();
-            DailyAccountingSearchAction();
+
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection(); 
             var pharmacyTargetList = repo.GetMonthTargetByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName)
@@ -118,7 +126,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             
             int i = 0;
             int workday = 0;
-            int untilToday = 0;
+            int untilToday = 1;
             while (firstDayOfMonth.AddDays(i).Month == firstDayOfMonth.Month)
             {
                 if (firstDayOfMonth.AddDays(i).DayOfWeek != DayOfWeek.Sunday)
@@ -129,7 +137,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
                 i++;
             }
-            todayNeedTarget.MonthlyTarget = sum.MonthlyTarget / workday * untilToday;
+             
+             
+            if (firstDayOfMonth.Month != DateTime.Today.Month)
+                todayNeedTarget.MonthlyTarget = sum.MonthlyTarget  ;
+            else
+                todayNeedTarget.MonthlyTarget = sum.MonthlyTarget / workday * untilToday;
+
+
             todayNeedTarget.MonthlyProfit = sum.MonthlyProfit ;
             todayNeedTarget.TargetRatio = Math.Round((double)todayNeedTarget.MonthlyProfit / (double)todayNeedTarget.MonthlyTarget * 100, 2).ToString() + "%";
             MonthlyAccountTargetCollection.Add(todayNeedTarget);

@@ -269,7 +269,8 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Button Content="查詢" Background="DarkCyan" Command="{Binding MonthlyClosingAccountSearchCommand}"></Button>
+                <Button Content="查詢" Background="DarkCyan" Command="{Binding MonthlyClosingAccountSearchCommand}"/>
+                <Button Margin="5,0,0,0" Content="設定目標" Background="DarkGray"  Command="{Binding MonthlyTargetSettingCommand}"/>
             </StackPanel>
             <DataGrid
             Grid.Row="3"
