@@ -181,7 +181,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                     return false;
                 }
 
-                if (Medicine.MinOrderAmount < 0)
+                if (Medicine.MinOrderAmount < 1)
                 {
                     MessageWindow.ShowMessage("包裝量不能小於1", MessageType.ERROR);
                     return false;
