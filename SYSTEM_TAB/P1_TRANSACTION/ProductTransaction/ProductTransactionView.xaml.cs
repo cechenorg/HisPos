@@ -708,7 +708,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 num = Int32.Parse(Properties.Settings.Default.InvoiceNumber);
                 Snum = Int32.Parse(Properties.Settings.Default.InvoiceNumberStart);
                 Count = Int32.Parse(Properties.Settings.Default.InvoiceNumberCount);
-                if ((Count - (num - Snum) - 1) < Math.Ceiling((double)ProductList.Rows.Count / 7))
+                if ((Count - (num - Snum)) < Math.Ceiling((double)ProductList.Rows.Count / 7))
                 {
                     MessageWindow.ShowMessage("發票剩餘張數不夠 請檢查設定！", MessageType.ERROR);
                     return;
