@@ -107,22 +107,23 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <!--<DataGridTemplateColumn Width="20" IsReadOnly="True">
+                <DataGridTemplateColumn Width="20" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image
                                 Name="DeleteDot"
                                 Width="18"
                                 Source="/Images/DeleteDot.png"
-                                  Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Image.InputBindings>
+                                Visibility="Collapsed">
+                                  <!--Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"-->
+                                <!--<Image.InputBindings>
                                     
                                     <MouseBinding Command="{Binding Path=DataContext.DeleteProductCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick" />
-                                </Image.InputBindings>
+                                </Image.InputBindings>-->
                             </Image>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Width="150"
                     Header="商品代碼"

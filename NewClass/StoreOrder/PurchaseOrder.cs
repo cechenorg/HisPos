@@ -153,6 +153,11 @@ namespace His_Pos.NewClass.StoreOrder
                     
                      hasNoBatch = true;
                 }
+                if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null))
+                {
+                    MessageWindow.ShowMessage("管藥批號不得為空!", MessageType.ERROR);
+                    return false;
+                }
             }
 
             if (hasNoBatch == true) {
@@ -184,9 +189,6 @@ namespace His_Pos.NewClass.StoreOrder
                     isLowerThenOrderAmount = true;
                     break;
                 }
-           
-
-
             }
 
 

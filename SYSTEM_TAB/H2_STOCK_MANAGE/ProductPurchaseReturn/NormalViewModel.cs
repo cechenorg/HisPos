@@ -412,6 +412,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
+                CurrentStoreOrder.Note += "手動入庫";
                 CurrentStoreOrder.MoveToNextStatusNoSingde();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
