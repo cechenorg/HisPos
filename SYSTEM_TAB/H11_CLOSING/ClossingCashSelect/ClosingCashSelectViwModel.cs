@@ -112,7 +112,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 MonthlyAccountTargetCollection.Add(pharmacy);
                 var sumData = sumRecord.First(_ => _.PharmacyVerifyKey == pharmacy.VerifyKey);
                 pharmacy.PharmacyName = sumData.PharmacyName;
-                pharmacy.MonthlyProfit = sumData.TotalProfit;
+                pharmacy.MonthlyProfit = sumData.SelfProfit;
                 pharmacy.TargetRatio = Math.Round( (double)pharmacy.MonthlyProfit / (double)pharmacy.MonthlyTarget * 100,2).ToString() + "%";
             }
 

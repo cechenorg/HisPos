@@ -134,7 +134,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding PharmacyName}"
+                    Binding="{Binding PharmacyName }"
                     FontFamily="Segoe UI Semi"
                     Header="藥局名稱"
                     IsReadOnly="True">
@@ -148,7 +148,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="60"
-                    Binding="{Binding OTCSaleProfit}"
+                    Binding="{Binding OTCSaleProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="OTC"
                     IsReadOnly="True">
@@ -161,7 +161,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding DailyAdjustAmount}"
+                    Binding="{Binding DailyAdjustAmount, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="調劑人數"
                     IsReadOnly="True">
@@ -174,7 +174,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding CooperativeClinicProfit}"
+                    Binding="{Binding CooperativeClinicProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="合作診所"
                     IsReadOnly="True">
@@ -187,7 +187,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding PrescribeProfit}"
+                    Binding="{Binding PrescribeProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="配藥"
                     IsReadOnly="True">
@@ -200,7 +200,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding ChronicAndOtherProfit}"
+                    Binding="{Binding ChronicAndOtherProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="慢箋+其他"
                     IsReadOnly="True">
@@ -213,7 +213,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="50"
-                    Binding="{Binding SelfProfit}"
+                    Binding="{Binding SelfProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="小計"
                     IsReadOnly="True">
@@ -226,7 +226,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="120"
-                    Binding="{Binding TotalProfit}"
+                    Binding="{Binding TotalProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="總計(含合作)"
                     IsReadOnly="True">
@@ -330,7 +330,7 @@
                     </DataGridTextColumn> 
                     <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding MonthlyTarget}"
+                    Binding="{Binding MonthlyTarget, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="目標"
                     IsReadOnly="True">
@@ -343,7 +343,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding MonthlyProfit}"
+                    Binding="{Binding MonthlyProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="加總"
                     IsReadOnly="True">
@@ -356,7 +356,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding TargetRatio}"
+                    Binding="{Binding TargetRatio, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="達成率"
                     IsReadOnly="True">
