@@ -24,6 +24,8 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
         }
         public DailyClosingAccount()  { }
 
+        public int OrderNumber { get; set; }
+
         public DateTime ClosingDate { get; set; }
 
         public string PharmacyVerifyKey { get; set; }

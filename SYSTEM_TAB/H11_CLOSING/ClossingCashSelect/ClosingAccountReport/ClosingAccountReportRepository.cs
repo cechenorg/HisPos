@@ -57,8 +57,14 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             parameterList.Add(new SqlParameter("SelfProfit", data.SelfProfit));
             parameterList.Add(new SqlParameter("TotalProfit", data.TotalProfit));
 
+            if(ViewModelMainWindow.CurrentPharmacy.GroupServerName != string.Empty)
             MainWindow.ServerConnection.ExecuteProcBySchema(
                 ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertClosingAccountRecord]", parameterList);
+            else
+            {
+                MainWindow.ServerConnection.ExecuteProcBySchema(
+                    ViewModelMainWindow.CurrentPharmacy.HISPOS_ServerName, "[Set].[InsertClosingAccountRecord]", parameterList);
+            }
            
         }
 
@@ -88,6 +94,41 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             MainWindow.ServerConnection.ExecuteProcBySchema(
                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertUpdateAccountTarget]", parameterList);
      
+        }
+
+        public void UpdateWorkingDaySetting(DateTime date,int count)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("@date", date));
+            parameterList.Add(new SqlParameter("@count", count)); 
+            MainWindow.ServerConnection.ExecuteProcBySchema(
+                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateWorkingDaySetting]", parameterList); 
+        }
+
+        public List<WorkingDaySetting> GetWorkingDaySetting()
+        {
+            List<WorkingDaySetting> result = new List<WorkingDaySetting>();
+           DataTable table = MainWindow.ServerConnection.ExecuteProcBySchema(
+                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[WorkingDayRecord]");
+             
+           foreach (DataRow row in table.Rows)
+           {
+               WorkingDaySetting data = new WorkingDaySetting(row);
+               result.Add(data);
+           } 
+           return result;
+        }
+
+        public class WorkingDaySetting
+        {
+            public WorkingDaySetting(DataRow r)
+            {
+                Date = r.Field<DateTime>("WorkingDate");
+                DayCount = Convert.ToInt32(r["WorkingDayCount"].ToString());
+            }
+
+            public DateTime Date { get; set; }
+            public int DayCount { get; set; }
         }
 
         public class PharmacyInfo

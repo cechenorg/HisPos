@@ -4,10 +4,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 {
-    public class MonthlyAccountTarget
+    public class MonthlyAccountTarget:ObservableObject
     {
         public MonthlyAccountTarget() { }
         public MonthlyAccountTarget(DataRow r )
@@ -26,6 +27,15 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 
         public DateTime Month { get; set; } //加總
 
-        public string TargetRatio { get; set; } //達成率
+        private string targetRatio; //達成率
+
+        public string TargetRatio
+        {
+            get => targetRatio;
+            set
+            {
+                Set(() => TargetRatio, ref targetRatio, value);
+            }
+        }
     }
 }

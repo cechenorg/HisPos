@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
               xmlns:service="clr-namespace:His_Pos.Service"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="800" d:DesignWidth="800">
     <UserControl.DataContext>
         <local:ClosingCashSelectViwModel/>
     </UserControl.DataContext>
@@ -25,9 +25,9 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="350"/>
+                <RowDefinition Height="300"/>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="400"/>
+                <RowDefinition Height="350"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
@@ -60,6 +60,7 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
+                <TextBlock Text="~"></TextBlock>
                 <xctk:MaskedTextBox
                         x:Name="EndDate"
                         Width="150"
@@ -133,11 +134,11 @@
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                    Width="130"
-                    Binding="{Binding PharmacyName }"
-                    FontFamily="Segoe UI Semi"
-                    Header="藥局名稱"
-                    IsReadOnly="True">
+                        Width="50"
+                        Binding="{Binding OrderNumber }"
+                        FontFamily="Segoe UI Semi"
+                        Header="排名"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -145,29 +146,49 @@
                                 <Setter Property="Margin" Value="30,0,0,0" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                    </DataGridTextColumn> 
                     <DataGridTextColumn
-                    Width="60"
-                    Binding="{Binding OTCSaleProfit, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="OTC"
+                    Width="130"
+                    Binding="{Binding PharmacyName }"
+                    FontFamily="Segoe UI Semi" 
                     IsReadOnly="True">
+                        <DataGridTextColumn.Header>
+                            <DockPanel>
+                                <TextBlock Text="藥局名稱"  DockPanel.Dock="Right"></TextBlock>
+                            </DockPanel> 
+                        </DataGridTextColumn.Header>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="30,0,0,0" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn> 
+                    <DataGridTextColumn
+                    Width="100" 
+                    Binding="{Binding DailyAdjustAmount, StringFormat={}{0:N0}}"
+                    FontFamily="Segoe UI Semi"
+                    Header="調劑人數"
+                    IsReadOnly="True">
+
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding DailyAdjustAmount, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="調劑人數"
-                    IsReadOnly="True">
+                        Width="100"
+                        Binding="{Binding OTCSaleProfit, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="OTC收入"
+                        IsReadOnly="True"
+                    >
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -180,7 +201,7 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -189,11 +210,11 @@
                     Width="100"
                     Binding="{Binding PrescribeProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
-                    Header="配藥"
+                    Header="配藥收入"
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -206,20 +227,20 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="50"
+                    Width="100"
                     Binding="{Binding SelfProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
-                    Header="小計"
+                    Header="小計金額"
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -232,7 +253,7 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -241,7 +262,11 @@
             </DataGrid>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
                 <TextBlock Text="月業績目標查詢"/>
-                <xctk:MaskedTextBox
+                <TextBox VerticalAlignment="Center" Margin="10,0,0,0" FontSize="18" Text="{Binding MonthlySearchYear}"></TextBox>
+                <TextBlock Text="年"></TextBlock>
+                <TextBox VerticalAlignment="Center" Margin="5,0,0,0" FontSize="18" Text="{Binding MonthlySearchMonth}"></TextBox>
+                <TextBlock Text="月" VerticalAlignment="Center"></TextBlock>
+                <!--<xctk:MaskedTextBox
                         x:Name="A"
                         Width="120"
                         Margin="0,0,10,5"
@@ -268,8 +293,8 @@
                             </Binding.ValidationRules>
                         </Binding>
                     </xctk:MaskedTextBox.Text>
-                </xctk:MaskedTextBox>
-                <Button Content="查詢" Background="DarkCyan" Command="{Binding MonthlyClosingAccountSearchCommand}"/>
+                </xctk:MaskedTextBox>-->
+                <Button Content="查詢" Background="DarkCyan" Margin="5,0,0,0" Command="{Binding MonthlyClosingAccountSearchCommand}"/>
                 <Button Margin="5,0,0,0" Content="設定目標" Background="DarkGray"  Command="{Binding MonthlyTargetSettingCommand}"/>
             </StackPanel>
             <DataGrid
@@ -322,7 +347,7 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="Margin" Value="30,0,0,0" />
                             </Style>
@@ -336,7 +361,7 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -349,7 +374,7 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
@@ -362,13 +387,18 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn> 
                 </DataGrid.Columns>
             </DataGrid>
+            <StackPanel Grid.Row="4" Margin="25,0,0,0" Orientation="Horizontal">
+                <TextBlock Text="應達標準"></TextBlock>
+                 <Rectangle Width="270"></Rectangle>
+                <TextBlock Text="{Binding MonthlyNeedGetTarget.TargetRatio,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

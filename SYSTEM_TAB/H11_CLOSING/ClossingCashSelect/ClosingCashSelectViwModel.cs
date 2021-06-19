@@ -40,18 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 Set(() => EndDate, ref endDate, value);
             }
         }
-
-        private DateTime closingAccountMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-
-        public DateTime ClosingAccountMonth
-        {
-            get => closingAccountMonth;
-            set
-            {
-                Set(() => ClosingAccountMonth, ref closingAccountMonth, value);
-            }
-        }
-
+         
         private ObservableCollection<DailyClosingAccount> sumDailyClosingAccount = new ObservableCollection<DailyClosingAccount>();
 
         public ObservableCollection<DailyClosingAccount> SumDailyClosingAccount
@@ -73,16 +62,63 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 Set(() => MonthlyAccountTargetCollection, ref monthlyAccountTargetCollection, value);
             }
         }
-        
+
+        private MonthlyAccountTarget monthlyNeedGetTarget;
+
+        public MonthlyAccountTarget MonthlyNeedGetTarget
+        {
+            get => monthlyNeedGetTarget;
+            set
+            {
+                Set(() => MonthlyNeedGetTarget, ref monthlyNeedGetTarget, value);
+            }
+        }
+
+        private int monthlySearchMonth = DateTime.Today.Month;
+
+        public int MonthlySearchMonth
+        {
+            get => monthlySearchMonth;
+            set
+            {
+                Set(() => MonthlySearchMonth, ref monthlySearchMonth, value);
+            }
+        }
+
+        private int monthlySearchYear = DateTime.Today.Year - 1911;
+
+        public int MonthlySearchYear
+        {
+            get => monthlySearchYear;
+            set
+            {
+                Set(() => MonthlySearchYear, ref monthlySearchYear, value);
+            }
+        }
+
+        private int monthlyNeedWorkingDayCount;
+
+        public int MonthlyNeedWorkingDayCount
+        {
+            get => monthlyNeedWorkingDayCount;
+            set
+            {
+                Set(() => MonthlyNeedWorkingDayCount, ref monthlyNeedWorkingDayCount, value);
+            }
+        }
 
         public RelayCommand DailyAccountingSearchCommand { get; set; }
         public RelayCommand MonthlyClosingAccountSearchCommand { get; set; }
         public RelayCommand MonthlyTargetSettingCommand { get; set; }
 
-        public ClosingCashSelectViwModel() {
+        public ClosingCashSelectViwModel()
+        { 
             DailyAccountingSearchCommand = new RelayCommand(DailyAccountingSearchAction);
             MonthlyClosingAccountSearchCommand = new RelayCommand(MonthlyClosingAccountSearchAction);
             MonthlyTargetSettingCommand = new RelayCommand(MonthlyTargetSettingAction);
+
+            DailyAccountingSearchAction();
+            MonthlyClosingAccountSearchAction();
         }
 
         private void MonthlyTargetSettingAction()
@@ -93,7 +129,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
         private void MonthlyClosingAccountSearchAction()
         {
-            var firstDayOfMonth = new DateTime(ClosingAccountMonth.Year, ClosingAccountMonth.Month, 1);
+            var firstDayOfMonth = new DateTime(MonthlySearchYear + 1911, MonthlySearchMonth, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
             MonthlyAccountTargetCollection.Clear();
@@ -122,32 +158,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             sum.TargetRatio =  Math.Round((double)sum.MonthlyProfit / (double)sum.MonthlyTarget * 100,2).ToString() + "%";
             MonthlyAccountTargetCollection.Add(sum);
 
-            MonthlyAccountTarget todayNeedTarget = new MonthlyAccountTarget() { PharmacyName = "應達標準"};
-            
-            int i = 0;
-            int workday = 0;
-            int untilToday = 1;
-            while (firstDayOfMonth.AddDays(i).Month == firstDayOfMonth.Month)
-            {
-                if (firstDayOfMonth.AddDays(i).DayOfWeek != DayOfWeek.Sunday)
-                    workday++;
+            var workedDay = repo.GetGroupClosingAccountRecord().Where(_ => _.ClosingDate >= firstDayOfMonth && _.ClosingDate <= lastDayOfMonth).Select(_ => _.ClosingDate).Distinct().Count();
+            var targetratio =  (double)workedDay / (double) monthlyNeedWorkingDayCount*100;
 
-                if (firstDayOfMonth.AddDays(i) == DateTime.Today)
-                    untilToday = workday;
+            MonthlyNeedGetTarget = new MonthlyAccountTarget() { PharmacyName = "應達標準"};
 
-                i++;
-            }
-             
-             
-            if (firstDayOfMonth.Month != DateTime.Today.Month)
-                todayNeedTarget.MonthlyTarget = sum.MonthlyTarget  ;
-            else
-                todayNeedTarget.MonthlyTarget = sum.MonthlyTarget / workday * untilToday;
-
-
-            todayNeedTarget.MonthlyProfit = sum.MonthlyProfit ;
-            todayNeedTarget.TargetRatio = Math.Round((double)todayNeedTarget.MonthlyProfit / (double)todayNeedTarget.MonthlyTarget * 100, 2).ToString() + "%";
-            MonthlyAccountTargetCollection.Add(todayNeedTarget);
+            //MonthlyNeedGetTarget.TargetRatio = Math.Round((double)sum.MonthlyProfit / targetratio * 100, 2).ToString() + "%";
+            MonthlyNeedGetTarget.TargetRatio = targetratio.ToString() + "%";
+            //MonthlyAccountTargetCollection.Add(todayNeedTarget);
 
         }
 
@@ -168,17 +186,32 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             MainWindow.ServerConnection.OpenConnection();
             var datalist = repo.GetGroupClosingAccountRecord();
             var pharmacyList = repo.GetPharmacyInfosByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName);
+
+            var workingSetting = repo.GetWorkingDaySetting();
+            if (workingSetting
+                .Count(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month) == 0)
+            {
+               var lastMonthData = workingSetting.FirstOrDefault(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month - 1);
+               repo.UpdateWorkingDaySetting(DateTime.Today, lastMonthData.DayCount);
+
+               MonthlyNeedWorkingDayCount = lastMonthData.DayCount;
+            }
+            else
+            {
+                MonthlyNeedWorkingDayCount = workingSetting.FirstOrDefault(_ =>
+                    _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month).DayCount; 
+            }
+                
             MainWindow.ServerConnection.CloseConnection();
 
-            var searchData = datalist.Where(_ => _.ClosingDate >= sDate && _.ClosingDate <= eDate);
+            var searchData = datalist.Where(_ => _.ClosingDate >= sDate && _.ClosingDate <= eDate).ToList();
             foreach (var pharmacy in pharmacyList)
             {
                 DailyClosingAccount displayDailyClosingAccount = new DailyClosingAccount();
                 displayDailyClosingAccount.PharmacyName = pharmacy.Name;
                 displayDailyClosingAccount.PharmacyVerifyKey = pharmacy.VerifyKey;
-                result.Add(displayDailyClosingAccount);
-
-                foreach (var pharmacyRecoird in searchData.Where(_ => _.PharmacyVerifyKey == pharmacy.VerifyKey))
+                result.Add(displayDailyClosingAccount); 
+                foreach (var pharmacyRecoird in searchData.Where(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower()))
                 {
                     displayDailyClosingAccount.OTCSaleProfit += pharmacyRecoird.OTCSaleProfit;
                     displayDailyClosingAccount.ChronicAndOtherProfit += pharmacyRecoird.ChronicAndOtherProfit;
@@ -189,6 +222,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                     displayDailyClosingAccount.TotalProfit += pharmacyRecoird.TotalProfit;
                 }
             }
+
+            if(result.Count > 0)
+                result.OrderByDescending(_ => _.SelfProfit);
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i].OrderNumber = i+1;
+            } 
             return result;
         }
     }
