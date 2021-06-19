@@ -96,7 +96,16 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
+        private int monthlyNeedWorkingDayCount;
 
+        public int MonthlyNeedWorkingDayCount
+        {
+            get => monthlyNeedWorkingDayCount;
+            set
+            {
+                Set(() => MonthlyNeedWorkingDayCount, ref monthlyNeedWorkingDayCount, value);
+            }
+        }
 
         public RelayCommand DailyAccountingSearchCommand { get; set; }
         public RelayCommand MonthlyClosingAccountSearchCommand { get; set; }
@@ -149,30 +158,12 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             sum.TargetRatio =  Math.Round((double)sum.MonthlyProfit / (double)sum.MonthlyTarget * 100,2).ToString() + "%";
             MonthlyAccountTargetCollection.Add(sum);
 
+            var workedDay = repo.GetGroupClosingAccountRecord().Where(_ => _.ClosingDate >= firstDayOfMonth && _.ClosingDate <= lastDayOfMonth).Select(_ => _.ClosingDate).Distinct().Count();
+            var targetratio = (double)sum.MonthlyTarget * (double)workedDay / (double) monthlyNeedWorkingDayCount;
+
             MonthlyNeedGetTarget = new MonthlyAccountTarget() { PharmacyName = "應達標準"};
-            
-            int i = 0;
-            int workday = 0;
-            int untilToday = 1;
-            while (firstDayOfMonth.AddDays(i).Month == firstDayOfMonth.Month)
-            {
-                if (firstDayOfMonth.AddDays(i).DayOfWeek != DayOfWeek.Sunday)
-                    workday++;
-
-                if (firstDayOfMonth.AddDays(i) == DateTime.Today)
-                    untilToday = workday;
-
-                i++;
-            }
-
-            //if (firstDayOfMonth.Month != DateTime.Today.Month)
-            //    todayNeedTarget.MonthlyTarget = sum.MonthlyTarget  ;
-            //else
-            //    todayNeedTarget.MonthlyTarget = sum.MonthlyTarget / workday * untilToday;
-
-
-            //todayNeedTarget.MonthlyProfit = sum.MonthlyProfit ;
-            MonthlyNeedGetTarget.TargetRatio = Math.Round((double)sum.MonthlyProfit / (double)sum.MonthlyTarget * 100, 2).ToString() + "%";
+             
+            MonthlyNeedGetTarget.TargetRatio = Math.Round((double)sum.MonthlyProfit / targetratio * 100, 2).ToString() + "%";
             //MonthlyAccountTargetCollection.Add(todayNeedTarget);
 
         }
@@ -194,6 +185,22 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             MainWindow.ServerConnection.OpenConnection();
             var datalist = repo.GetGroupClosingAccountRecord();
             var pharmacyList = repo.GetPharmacyInfosByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName);
+
+            var workingSetting = repo.GetWorkingDaySetting();
+            if (workingSetting
+                .Count(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month) == 0)
+            {
+               var lastMonthData = workingSetting.FirstOrDefault(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month - 1);
+               repo.UpdateWorkingDaySetting(DateTime.Today, lastMonthData.DayCount);
+
+               MonthlyNeedWorkingDayCount = lastMonthData.DayCount;
+            }
+            else
+            {
+                MonthlyNeedWorkingDayCount = workingSetting.FirstOrDefault(_ =>
+                    _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month).DayCount; 
+            }
+                
             MainWindow.ServerConnection.CloseConnection();
 
             var searchData = datalist.Where(_ => _.ClosingDate >= sDate && _.ClosingDate <= eDate).ToList();

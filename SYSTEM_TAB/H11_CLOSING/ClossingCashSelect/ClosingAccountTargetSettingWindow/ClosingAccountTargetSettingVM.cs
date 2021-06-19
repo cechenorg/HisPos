@@ -33,7 +33,17 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
                 Set(() => TargetDataCollection, ref targetDataCollection, value);
             }
         }
-        
+
+        private int currentMonthWorkingDayCount;
+
+        public int CurrentMonthWorkingDayCount
+        {
+            get => currentMonthWorkingDayCount;
+            set
+            {
+                Set(() => CurrentMonthWorkingDayCount, ref currentMonthWorkingDayCount, value);
+            }
+        }
 
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand UpdateCommand { get; set; }
@@ -56,6 +66,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
                 repo.UpdateClosingAccountTarget(data); 
             }
 
+            repo.UpdateWorkingDaySetting(ClosingAccountMonth, CurrentMonthWorkingDayCount);
             MainWindow.ServerConnection.CloseConnection();
         }
 
@@ -81,6 +92,9 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
                 pharmacyTaget.Month = ClosingAccountMonth;
                 TargetDataCollection.Add(pharmacyTaget);
             }
+
+            var thisMonthWorkingSetting = repo.GetWorkingDaySetting().FirstOrDefault(_ => _.Date.Month == ClosingAccountMonth.Month && _.Date.Year == ClosingAccountMonth.Year);
+            CurrentMonthWorkingDayCount = thisMonthWorkingSetting.DayCount;
              
             MainWindow.ServerConnection.CloseConnection();
 

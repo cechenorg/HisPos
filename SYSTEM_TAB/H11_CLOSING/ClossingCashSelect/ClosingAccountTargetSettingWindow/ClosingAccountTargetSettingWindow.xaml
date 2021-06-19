@@ -25,6 +25,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
@@ -80,7 +81,11 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <DockPanel Grid.Row="2">
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Text="本月工作天數" VerticalAlignment="Center"></TextBlock>
+            <TextBox Margin="10,0,0,0" FontSize="18" VerticalAlignment="Center" Text="{Binding CurrentMonthWorkingDayCount}"></TextBox>
+        </StackPanel>
+        <DockPanel Grid.Row="3">
             <Button Background="IndianRed" Margin="5" Content="更新" Command="{Binding UpdateCommand}"></Button>
         </DockPanel>
     </Grid>
