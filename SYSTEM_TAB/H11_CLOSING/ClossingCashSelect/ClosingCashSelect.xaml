@@ -150,9 +150,13 @@
                     <DataGridTextColumn
                     Width="130"
                     Binding="{Binding PharmacyName }"
-                    FontFamily="Segoe UI Semi"
-                    Header="藥局名稱"
+                    FontFamily="Segoe UI Semi" 
                     IsReadOnly="True">
+                        <DataGridTextColumn.Header>
+                            <DockPanel>
+                                <TextBlock Text="藥局名稱"  DockPanel.Dock="Right"></TextBlock>
+                            </DockPanel> 
+                        </DataGridTextColumn.Header>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -162,11 +166,12 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn> 
                     <DataGridTextColumn
-                    Width="120"
+                    Width="100" 
                     Binding="{Binding DailyAdjustAmount, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="調劑人數"
                     IsReadOnly="True">
+
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -175,10 +180,10 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                        Width="120"
+                        Width="100"
                         Binding="{Binding OTCSaleProfit, StringFormat={}{0:N0}}"
                         FontFamily="Segoe UI Semi"
-                        Header="OTC"
+                        Header="OTC收入"
                         IsReadOnly="True"
                     >
                         <DataGridTextColumn.ElementStyle>
@@ -189,7 +194,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="120"
+                    Width="100"
                     Binding="{Binding CooperativeClinicProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="合作診所"
@@ -202,10 +207,10 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="120"
+                    Width="100"
                     Binding="{Binding PrescribeProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
-                    Header="配藥"
+                    Header="配藥收入"
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -215,7 +220,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="120"
+                    Width="100"
                     Binding="{Binding ChronicAndOtherProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="慢箋+其他"
@@ -228,10 +233,10 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="120"
+                    Width="100"
                     Binding="{Binding SelfProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
-                    Header="小計"
+                    Header="小計金額"
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -342,14 +347,14 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="Margin" Value="30,0,0,0" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn> 
                     <DataGridTextColumn
-                    Width="120"
+                    Width="100"
                     Binding="{Binding MonthlyTarget, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="目標"
@@ -362,7 +367,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="120"
+                    Width="100"
                     Binding="{Binding MonthlyProfit, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="加總"
@@ -375,7 +380,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="120"
+                    Width="100"
                     Binding="{Binding TargetRatio, StringFormat={}{0:N0}}"
                     FontFamily="Segoe UI Semi"
                     Header="達成率"
@@ -391,7 +396,7 @@
             </DataGrid>
             <StackPanel Grid.Row="4" Margin="25,0,0,0" Orientation="Horizontal">
                 <TextBlock Text="應達標準"></TextBlock>
-                 <Rectangle Width="330"></Rectangle>
+                 <Rectangle Width="270"></Rectangle>
                 <TextBlock Text="{Binding MonthlyNeedGetTarget.TargetRatio,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBlock>
             </StackPanel>
         </Grid>
