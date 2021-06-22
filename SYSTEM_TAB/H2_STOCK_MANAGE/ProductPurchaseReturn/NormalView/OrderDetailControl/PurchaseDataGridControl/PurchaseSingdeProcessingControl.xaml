@@ -138,8 +138,7 @@
                                 CharacterCasing="Upper"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
-                                
-                                 KeyDown="ProductIDTextbox_OnKeyDown"
+                                KeyDown="ProductIDTextbox_OnKeyDown"
                                 Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

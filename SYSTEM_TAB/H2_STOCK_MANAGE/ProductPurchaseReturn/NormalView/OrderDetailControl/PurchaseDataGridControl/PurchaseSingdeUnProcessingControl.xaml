@@ -472,7 +472,7 @@
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding ToNextStatusCommand}"
-                Content="轉成進貨單"
+                Content="送出採購單"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16"
                 Foreground="White" />
