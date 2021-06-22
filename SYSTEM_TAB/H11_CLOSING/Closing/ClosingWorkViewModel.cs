@@ -269,7 +269,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand ConfirmCommand { get; set; }
         public RelayCommand HistoryCommand { get; set; }
-
+        public RelayCommand UpdateCommand { get; set; }
         #endregion ----- Define Commands -----
 
         public ClosingWorkViewModel()
@@ -277,7 +277,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             ReloadCommand = new RelayCommand(ReloadAction);
             ConfirmCommand = new RelayCommand(ConfirmAction);
             HistoryCommand = new RelayCommand(HistoryAction);
+            UpdateCommand = new RelayCommand(UpdateAction);
             ReloadAction();
+        }
+
+        private void UpdateAction()
+        {
+            ReloadAction();
+            InsertToClosingAccoutRecord();
         }
 
         private void HistoryAction()
