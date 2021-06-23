@@ -399,6 +399,7 @@
                         <StackPanel
                             Grid.Row="16"
                             Grid.Column="0"
+                            Grid.ColumnSpan="3"
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
@@ -432,6 +433,17 @@
                                 FontSize="20"
                                 IsEnabled="{Binding Enable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 PreviewMouseDown="Button_PreviewMouseDown"/>
+                            <Button
+                                Width="150"
+                                Height="40"
+                                Margin="40,0,0,0"
+                                VerticalAlignment="Center"
+                                Background="DarkCyan"
+                                BorderThickness="0"
+                                Command="{Binding UpdateCommand}"
+                                Content="修正上傳"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
                         </StackPanel>
                         
                         <StackPanel
