@@ -388,7 +388,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             {
                 ClosingDate = StartDate,
                 PharmacyName = ViewModelMainWindow.CurrentPharmacy.Name,
-                OTCSaleProfit = TradeTodayProfit,
+                OTCSaleProfit = Trade - TradeTodayStock,
                 DailyAdjustAmount = Count,
                 CooperativeClinicProfit = Coop,
                 PrescribeProfit = Self,
