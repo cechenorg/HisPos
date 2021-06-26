@@ -12,6 +12,7 @@
         <local:ClosingCashSelectViwModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <local:RowIndexConverter x:Key="RowIndexConverter" ></local:RowIndexConverter>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -134,20 +135,13 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="50"
-                        Binding="{Binding OrderNumber }"
-                        FontFamily="Segoe UI Semi"
-                        Header="排名"
-                        IsReadOnly="True">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="Margin" Value="30,0,0,0" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn> 
+                    <DataGridTemplateColumn Header="排名" Width="70">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},  Converter={StaticResource RowIndexConverter}}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn
                     Width="130"
                     Binding="{Binding PharmacyName }"
