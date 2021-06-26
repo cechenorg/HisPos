@@ -29,6 +29,7 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="350"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="查詢日期:"  FontSize="22"  Margin="10,0,0,0"/>
@@ -347,7 +348,7 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="Margin" Value="30,0,0,0" />
                             </Style>
@@ -395,10 +396,19 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="4" Margin="25,0,0,0" Orientation="Horizontal">
+                <TextBlock Text="小計"></TextBlock>
+                <Rectangle Width="90"></Rectangle>
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.MonthlyTarget, StringFormat={}{0:N0},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <Rectangle Width="20"></Rectangle>
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.MonthlyProfit, StringFormat={}{0:N0},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <Rectangle Width="20"></Rectangle>
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.TargetRatio,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+<StackPanel Grid.Row="5" Margin="25,0,0,0" Orientation="Horizontal">
                 <TextBlock Text="應達標準"></TextBlock>
                  <Rectangle Width="270"></Rectangle>
                 <TextBlock Text="{Binding MonthlyNeedGetTarget.TargetRatio,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-            </StackPanel>
+            </StackPanel> 
         </Grid>
     </Grid>
 </UserControl>

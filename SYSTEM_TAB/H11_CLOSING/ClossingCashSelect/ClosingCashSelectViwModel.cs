@@ -107,6 +107,18 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
+        private MonthlyAccountTarget monthlySelfAccount ;
+
+        public MonthlyAccountTarget MonthlySelfAccount
+        {
+            get => monthlySelfAccount;
+            set
+            {
+                Set(() => MonthlySelfAccount, ref monthlySelfAccount, value);
+            }
+        }
+        
+
         public RelayCommand DailyAccountingSearchCommand { get; set; }
         public RelayCommand MonthlyClosingAccountSearchCommand { get; set; }
         public RelayCommand MonthlyTargetSettingCommand { get; set; }
@@ -139,25 +151,30 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             var pharmacyTargetList = repo.GetMonthTargetByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName)
                 .Where(_=>_.Month.Month == firstDayOfMonth.Month).ToList(); 
             MainWindow.ServerConnection.CloseConnection();
-
-        
+             
             var sumRecord = GetSumRecordByDate(firstDayOfMonth, lastDayOfMonth);
             
             foreach (var pharmacy in pharmacyTargetList)
             { 
-                MonthlyAccountTargetCollection.Add(pharmacy);
+               
                 var sumData = sumRecord.First(_ => _.PharmacyVerifyKey == pharmacy.VerifyKey);
                 pharmacy.PharmacyName = sumData.PharmacyName;
                 pharmacy.MonthlyProfit = sumData.SelfProfit;
                 pharmacy.TargetRatio = Math.Round( (double)pharmacy.MonthlyProfit / (double)pharmacy.MonthlyTarget * 100,2).ToString() + "%";
             }
 
+            pharmacyTargetList =  pharmacyTargetList.OrderByDescending(_ => Math.Round((double)_.MonthlyProfit / (double)_.MonthlyTarget * 100, 2)).ToList();
+            foreach (var pharmacy in pharmacyTargetList)
+            {
+                MonthlyAccountTargetCollection.Add(pharmacy); 
+            }
+
             MonthlyAccountTarget sum = new MonthlyAccountTarget() { PharmacyName = "小計"};
             sum.MonthlyTarget = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyTarget);
             sum.MonthlyProfit = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyProfit);
             sum.TargetRatio =  Math.Round((double)sum.MonthlyProfit / (double)sum.MonthlyTarget * 100,2).ToString() + "%";
-            MonthlyAccountTargetCollection.Add(sum);
-
+            //MonthlyAccountTargetCollection.Add(sum);
+            MonthlySelfAccount = sum;
             var workedDay = repo.GetGroupClosingAccountRecord().Where(_ => _.ClosingDate >= firstDayOfMonth && _.ClosingDate <= lastDayOfMonth).Select(_ => _.ClosingDate).Distinct().Count();
             var targetratio =  (double)workedDay / (double) monthlyNeedWorkingDayCount*100;
 
@@ -165,6 +182,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
             //MonthlyNeedGetTarget.TargetRatio = Math.Round((double)sum.MonthlyProfit / targetratio * 100, 2).ToString() + "%";
             MonthlyNeedGetTarget.TargetRatio = targetratio.ToString() + "%";
+             
             //MonthlyAccountTargetCollection.Add(todayNeedTarget);
 
         }
@@ -224,7 +242,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
 
             if(result.Count > 0)
-                result.OrderByDescending(_ => _.SelfProfit);
+                result = result.OrderByDescending(_ => _.SelfProfit).ToList();
 
             for (int i = 0; i < result.Count; i++)
             {
