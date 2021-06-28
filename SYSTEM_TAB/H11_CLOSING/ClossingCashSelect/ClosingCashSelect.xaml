@@ -12,6 +12,7 @@
         <local:ClosingCashSelectViwModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <local:RowIndexConverter x:Key="RowIndexConverter" ></local:RowIndexConverter>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -28,6 +29,7 @@
                 <RowDefinition Height="300"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="350"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
@@ -133,20 +135,13 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="50"
-                        Binding="{Binding OrderNumber }"
-                        FontFamily="Segoe UI Semi"
-                        Header="排名"
-                        IsReadOnly="True">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="Margin" Value="30,0,0,0" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn> 
+                    <DataGridTemplateColumn Header="排名" Width="70">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},  Converter={StaticResource RowIndexConverter}}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn
                     Width="130"
                     Binding="{Binding PharmacyName }"
@@ -347,7 +342,7 @@
                     IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="Margin" Value="30,0,0,0" />
                             </Style>
@@ -395,10 +390,19 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="4" Margin="25,0,0,0" Orientation="Horizontal">
+                <TextBlock Text="小計"></TextBlock>
+                <Rectangle Width="90"></Rectangle>
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.MonthlyTarget, StringFormat={}{0:N0},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <Rectangle Width="20"></Rectangle>
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.MonthlyProfit, StringFormat={}{0:N0},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <Rectangle Width="20"></Rectangle>
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.TargetRatio,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+<StackPanel Grid.Row="5" Margin="25,0,0,0" Orientation="Horizontal">
                 <TextBlock Text="應達標準"></TextBlock>
                  <Rectangle Width="270"></Rectangle>
                 <TextBlock Text="{Binding MonthlyNeedGetTarget.TargetRatio,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-            </StackPanel>
+            </StackPanel> 
         </Grid>
     </Grid>
 </UserControl>
