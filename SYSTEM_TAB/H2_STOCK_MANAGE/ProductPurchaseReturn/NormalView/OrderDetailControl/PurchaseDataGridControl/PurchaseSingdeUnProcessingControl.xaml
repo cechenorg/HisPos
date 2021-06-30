@@ -349,8 +349,10 @@
                 Content="日期"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
-                Foreground="Black" />
+                Foreground="Black"
+                Visibility="Hidden"/>
             <xctk:MaskedTextBox
+                Visibility="Hidden"
                 Width="120"
                 Height="34"
                 Margin="10,0.2,0,5.8"
