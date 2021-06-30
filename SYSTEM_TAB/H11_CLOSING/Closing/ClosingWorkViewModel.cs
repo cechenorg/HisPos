@@ -394,7 +394,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 PrescribeProfit = Self,
                 ChronicAndOtherProfit = Other
             };
-            data.SelfProfit = data.OTCSaleProfit  + data.CooperativeClinicProfit + data.PrescribeProfit;
+            data.SelfProfit = data.OTCSaleProfit  + data.ChronicAndOtherProfit + data.PrescribeProfit;
             data.TotalProfit = data.SelfProfit + data.CooperativeClinicProfit;
 
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
