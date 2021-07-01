@@ -176,7 +176,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             //MonthlyAccountTargetCollection.Add(sum);
             MonthlySelfAccount = sum;
             var workedDay = repo.GetGroupClosingAccountRecord().Where(_ => _.ClosingDate >= firstDayOfMonth && _.ClosingDate <= lastDayOfMonth).Select(_ => _.ClosingDate).Distinct().Count();
-            var targetratio =  (double)workedDay / (double) monthlyNeedWorkingDayCount*100;
+            var targetratio =  Math.Round((double)workedDay / (double) monthlyNeedWorkingDayCount*100,2);
 
             MonthlyNeedGetTarget = new MonthlyAccountTarget() { PharmacyName = "應達標準"};
 
@@ -217,7 +217,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             else
             {
                 MonthlyNeedWorkingDayCount = workingSetting.FirstOrDefault(_ =>
-                    _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month).DayCount; 
+                    _.Date.Year == (MonthlySearchYear+1911) && _.Date.Month == MonthlySearchMonth).DayCount; 
             }
                 
             MainWindow.ServerConnection.CloseConnection();
