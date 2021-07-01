@@ -397,6 +397,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             data.SelfProfit = data.OTCSaleProfit  + data.ChronicAndOtherProfit + data.PrescribeProfit;
             data.TotalProfit = data.SelfProfit + data.CooperativeClinicProfit;
 
+            if( data.OTCSaleProfit == 0 && data.ChronicAndOtherProfit == 0 && data.PrescribeProfit == 0 && data.CooperativeClinicProfit==0)
+                return;
+
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
             repo.InsertDailyClosingAccountRecord(data); 
