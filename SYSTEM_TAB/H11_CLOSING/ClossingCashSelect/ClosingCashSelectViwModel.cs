@@ -157,7 +157,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             foreach (var pharmacy in pharmacyTargetList)
             { 
                
-                var sumData = sumRecord.First(_ => _.PharmacyVerifyKey == pharmacy.VerifyKey);
+                var sumData = sumRecord.First(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower());
                 pharmacy.PharmacyName = sumData.PharmacyName;
                 pharmacy.MonthlyProfit = sumData.SelfProfit;
                 pharmacy.TargetRatio = Math.Round( (double)pharmacy.MonthlyProfit / (double)pharmacy.MonthlyTarget * 100,2).ToString() + "%";
