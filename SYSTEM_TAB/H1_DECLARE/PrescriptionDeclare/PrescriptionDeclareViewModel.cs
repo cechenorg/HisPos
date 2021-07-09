@@ -469,7 +469,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void OpenCustomerManageAction()
         {
             var viewModel = (App.Current.Resources["Locator"] as ViewModelLocator)?.CustomerManageView;
-            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, CurrentPrescription.Patient.IDNumber, "CustomerManageResearch"));
+            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, CurrentPrescription.Patient.ID.ToString(), "CustomerManageResearch"));
         }
 
         private void ScanPrescriptionQRCodeAction()
