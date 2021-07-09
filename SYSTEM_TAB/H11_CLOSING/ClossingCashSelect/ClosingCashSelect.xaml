@@ -93,7 +93,11 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Button Margin="5,5,0,0" Background="DarkCyan" Content="查詢" Command="{Binding DailyAccountingSearchCommand}"></Button>
+                <Button Margin="5,5,0,0"
+                        Background="DarkCyan" Content="查詢"
+                        Command="{Binding DailyAccountingSearchCommand}"
+                        BorderBrush="Transparent"
+                        FontFamily="Segoe UI SemiBold"></Button>
             </StackPanel>
             <DataGrid
             Grid.Row="1"
@@ -291,8 +295,18 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>-->
-                <Button Content="查詢" Background="DarkCyan" Margin="5,0,0,0" Command="{Binding MonthlyClosingAccountSearchCommand}"/>
-                <Button Margin="5,0,0,0" Content="設定目標" Background="DarkGray"  Command="{Binding MonthlyTargetSettingCommand}"/>
+                <Button Content="查詢"
+                        Background="DarkCyan"
+                        Margin="5,0,0,0"
+                        Command="{Binding MonthlyClosingAccountSearchCommand}"
+                        BorderBrush="Transparent"
+                        FontFamily="Segoe UI SemiBold"/>
+                <Button Margin="5,0,0,0" 
+                        Content="設定目標"
+                        Background="DarkGray"
+                        Command="{Binding MonthlyTargetSettingCommand}"
+                        BorderBrush="Transparent"
+                        FontFamily="Segoe UI SemiBold"/>
             </StackPanel>
             <DataGrid
             Grid.Row="3"
@@ -356,6 +370,7 @@
                     FontFamily="Segoe UI Semi"
                     Header="目標"
                     IsReadOnly="True">
+                        
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />

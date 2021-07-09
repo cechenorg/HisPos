@@ -277,11 +277,11 @@ namespace His_Pos.NewClass.Person.Customer
                 MessageWindow.ShowMessage("電話號碼已存在。", MessageType.ERROR);
                 return false;
             }
-            //if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
-            //{
-            //    MessageWindow.ShowMessage("身分證字號已存在。", MessageType.ERROR);
-            //    return false;
-            //}
+            if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
+            {
+                MessageWindow.ShowMessage("身分證字號已存在。", MessageType.ERROR);
+                return false;
+            }
             if (table.Rows.Count > 0)
             {
                 var c = new Customer(table.Rows[0]);

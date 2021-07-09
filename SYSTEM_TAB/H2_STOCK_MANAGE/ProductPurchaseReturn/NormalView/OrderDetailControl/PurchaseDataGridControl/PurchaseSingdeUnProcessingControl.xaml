@@ -339,7 +339,7 @@
                 Foreground="Black" />
             <TextBox
                 Width="120"
-                Margin="10,0,0,5"
+                Margin="10,0,0,15"
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
