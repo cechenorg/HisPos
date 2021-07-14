@@ -302,12 +302,21 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void ClearAction()
         {
-            TextCusName = string.Empty;
+
+            //TextCusName = string.Empty;
+            //TextCusBirthDay = null;
+            //IdNumber = string.Empty;
+            //PhoneNumber = string.Empty;
+            //Customer = new Customer();
+            //CustomerCollection = new Customers();
+
+
+            //edit by shani 2021/07/14
+            TextCusName = null;
             TextCusBirthDay = null;
-            IdNumber = string.Empty;
-            PhoneNumber = string.Empty;
-            Customer = new Customer();
-            CustomerCollection = new Customers();
+            IdNumber = null;
+            PhoneNumber = null;
+
         }
 
         private void SearchAction()
