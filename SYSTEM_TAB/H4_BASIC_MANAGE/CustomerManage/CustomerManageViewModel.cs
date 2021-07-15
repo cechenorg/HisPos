@@ -327,8 +327,13 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 return;
             }
 
+            var name = string.IsNullOrEmpty(TextCusName) ? null : TextCusName;
+            var bday = TextCusBirthDay;
+            var idnum = string.IsNullOrEmpty(IdNumber) ? null : IdNumber;
+            var phone = string.IsNullOrEmpty(PhoneNumber) ? null : PhoneNumber;
+
             MainWindow.ServerConnection.OpenConnection();
-            CustomerCollection.GetDataByNameOrBirth(TextCusName, TextCusBirthDay, IdNumber, PhoneNumber);
+            CustomerCollection.GetDataByNameOrBirth(name, bday, idnum, phone);
             MainWindow.ServerConnection.CloseConnection();
             if (CustomerCollection.Count > 0)
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
