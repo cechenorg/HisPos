@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
@@ -28,9 +29,9 @@ namespace His_Pos.NewClass.Product.ProductManagement
             IsZero = row.Field<decimal>("NHIMED_PRICE");
             DepRec_Amount = row.Field<int>("DepRec_Amount");
             SINGINV = row.Field<int>("inv_qty");
-            ProLoc_Name= row.Field<string>("ProLoc_Name");
+            ProLoc_Name = row.Field<string>("ProLoc_Name");
 
-
+            IsMerged = row.Field<int?>("Cnt") == null ? false : true;
         }
 
         public ProductTypeEnum ProductType { get; set; }
@@ -68,5 +69,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public bool IsEnable { get; set; }
         public bool InventoryError { get; set; }
         public decimal IsZero { get; set; }
+
+        // 子品項
+        public bool IsMerged { get; set; }
     }
 }

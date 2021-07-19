@@ -37,6 +37,12 @@ namespace His_Pos.GeneralCustomControl
             set { SetValue(IsFrozenProperty, value); }
         }
 
+        public bool IsMerged
+        {
+            get { return (bool)GetValue(IsIsMergedProperty); }
+            set { SetValue(IsIsMergedProperty, value); }
+        }
+
         public bool IsInventoryError
         {
             get { return (bool)GetValue(IsInventoryErrorProperty); }
@@ -60,6 +66,9 @@ namespace His_Pos.GeneralCustomControl
 
         public static readonly DependencyProperty IsFrozenProperty =
             DependencyProperty.Register("IsFrozen", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
+
+        public static readonly DependencyProperty IsIsMergedProperty =
+            DependencyProperty.Register("IsMerged", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
 
         public static readonly DependencyProperty IsInventoryErrorProperty =
             DependencyProperty.Register("IsInventoryError", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
