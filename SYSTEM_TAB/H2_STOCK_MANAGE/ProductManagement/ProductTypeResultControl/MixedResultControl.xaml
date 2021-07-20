@@ -119,6 +119,7 @@
                                     IsCommon="{Binding IsCommon}"
                                     IsDisable="{Binding IsEnable, Converter={StaticResource InvertBoolConverter}}"
                                     IsFrozen="{Binding IsFrozen}"
+                                    IsMerged="{Binding IsMerged}"
                                     IsInventoryError="{Binding InventoryError}" />
                                 <Label
                                     Margin="-5,0,0,0"

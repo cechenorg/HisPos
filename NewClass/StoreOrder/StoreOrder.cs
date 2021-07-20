@@ -312,7 +312,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
-                MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+                MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單已完成\r\n請至進退貨記錄查詢", MessageType.ERROR);
         }
 
         #endregion ///// Status Function /////

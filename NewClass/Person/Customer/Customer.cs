@@ -272,16 +272,6 @@ namespace His_Pos.NewClass.Person.Customer
         public bool InsertData()
         {
             var table = CustomerDb.InsertCustomerData(this);
-            if (table.Rows[0].Field<string>("RESULT").Equals("SAME"))
-            {
-                MessageWindow.ShowMessage("電話號碼已存在。", MessageType.ERROR);
-                return false;
-            }
-            /*if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
-            {
-                MessageWindow.ShowMessage("身分證字號已存在。", MessageType.ERROR);
-                return false;
-            }*/
             if (table.Rows.Count > 0)
             {
                 var c = new Customer(table.Rows[0]);
@@ -305,10 +295,21 @@ namespace His_Pos.NewClass.Person.Customer
             return false;
         }
 
-        public bool InsertData(string ee)
+        public string InsertNewData()
         {
-            var table = CustomerDb.InsertCustomerData(this,"iii");
-          
+            var table = CustomerDb.InsertNewCustomerData(this);
+            if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
+            {
+                //MessageWindow.ShowMessage("身分證字號已存在！", MessageType.ERROR);
+                return "ID_SAME";
+            }
+
+            if (table.Rows[0].Field<string>("RESULT").Equals("PHONESAME"))
+            {
+                //MessageWindow.ShowMessage("電話號碼已存在！", MessageType.ERROR);
+                return "PHONE_SAME";
+            }
+
             if (table.Rows.Count > 0)
             {
                 var c = new Customer(table.Rows[0]);
@@ -326,10 +327,10 @@ namespace His_Pos.NewClass.Person.Customer
                 Line = c.Line;
                 Note = c.Note;
                 SecondPhone = c.SecondPhone;
-                return true;
+                return "SUCCESS";
             }
-            MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
-            return false;
+            MessageWindow.ShowMessage("新增顧客資料發生異常，請稍後重試。", MessageType.ERROR);
+            return "FAILED";
         }
 
 

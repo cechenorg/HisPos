@@ -145,11 +145,12 @@ namespace His_Pos.NewClass.Person.Customer
             DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertDeclareCustomer]", parameterList);
         }
-        public static DataTable InsertCustomerData(Customer c ,string oo)
+
+        public static DataTable InsertNewCustomerData(Customer c)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertDeclareCustomers]", parameterList);
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertNewCustomer]", parameterList);
         }
 
 
