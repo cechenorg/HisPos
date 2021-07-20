@@ -3747,7 +3747,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports("99", StartDate, EndDate);
             MainWindow.ServerConnection.CloseConnection();
 
+
+            TradeProfitReportSelectionChangedActionMain();
+            TradeChangeReportSelectionChangedActionMain();
+            
+            CooperativePrescriptionSelectionChangedActionMain();
+            SelfPrescriptionChangeSelectionChangedActionMain();
+            CooperativePrescriptionChangeSelectionChangedActionMain();
             StockTakingOTCReportSelectionChangedAction();
+            StockTakingReportSelectionChangedAction();
+            RewardReportCollection = new RewardReports(StartDate, EndDate);
+            CalculateTotalRewardProfit();
+
+            
+            TradeProfitAllReportSelectionChangedAction();
+            SelfPrescriptionSelectionChangedActionMain();
+
+            SumOTCProfit();
+            SumMedProfit();
+            SumAllProfit();
+
+            /*StockTakingOTCReportSelectionChangedAction();
             StockTakingReportSelectionChangedAction();
             
             TradeProfitReportSelectionChangedActionMain();
@@ -3766,7 +3786,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             SumAllProfit();
 
             RewardReportCollection = new RewardReports(StartDate, EndDate);
-            CalculateTotalRewardProfit();
+            CalculateTotalRewardProfit();*/
         }
 
         private void GetInventoryDifference()
@@ -4224,7 +4244,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
             TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
             TradeDetailReportSum.Count = tempCollection.Count();
-            TradeDetailReportSum.TotalCost = TradeDetailReportSum.Profit - TradeDetailReportSum.RealTotal;
+            //TradeDetailReportSum.TotalCost = TradeDetailReportSum.Profit - TradeDetailReportSum.RealTotal;
+            TradeDetailReportSum.TotalCost = (int)tempCollection.Sum(s => s.ValueDifference);
             TradeDetailReportSum.DiscountAmtMinus = -TradeDetailReportSum.DiscountAmt;
         }
 
@@ -4260,17 +4281,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => (int)s.DiscountAmt);
             TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => (int)s.CashCoupon);
             TradeDetailReportSum.Profit = tempCollection.Sum(s => (int)s.Profit);
-            TradeDetailReportSum.RealTotal = tempCollection.Sum(s => (int)s.RealTotal);
+            //TradeDetailReportSum.RealTotal = tempCollection.Sum(s => (int)s.RealTotal);
+            TradeDetailReportSum.RealTotal = tempCollection.Sum(s => (int)s.CardAmount) + tempCollection.Sum(s => (int)s.CashAmount) + tempCollection.Sum(s => (int)s.DiscountAmt) + tempCollection.Sum(s => (int)s.CashCoupon);
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => (int)s.ValueDifference);
             TradeDetailReportSum.CardFee = tempCollection.Sum(s => (int)s.CardFee);
             TradeDetailReportSum.Count = tempCollection.Count();
-            TradeDetailReportSum.ValueDifference = TradeDetailReportSum.Profit - TradeDetailReportSum.RealTotal;
+            //TradeDetailReportSum.ValueDifference = TradeDetailReportSum.Profit - TradeDetailReportSum.RealTotal;
             TradeDetailReportSum.DiscountAmtMinus = -TradeDetailReportSum.DiscountAmt;
         }
 
         private void SumOTCProfit()
         {
-            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.Profit + TradeDetailReportSum.TotalChange + (int)TotalRewardReport.RewardAmount + (int)StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus;
+            //TradeDetailReportSum.TotalProfit = TradeDetailReportSum.Profit + TradeDetailReportSum.TotalChange + (int)TotalRewardReport.RewardAmount + (int)StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus;
+            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + (int)TradeDetailReportSum.ValueDifference + TradeDetailReportSum.TotalChange + (int)StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
         }
 
         private void SumMedProfit()
@@ -4294,7 +4317,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
             TotalCashFlow.AllStock = (int)(StockTakingOTCDetailReportSum.Price + StockTakingDetailReportSum.Price);
 
-            TotalCashFlow.AllProfit = (int)(TradeDetailReportSum.TotalProfit + PrescriptionDetailReportSumMain.MedTotalProfit) + TradeDetailReportSum.DiscountAmtMinus;
+            TotalCashFlow.AllProfit = (int)(TradeDetailReportSum.TotalProfit + PrescriptionDetailReportSumMain.MedTotalProfit);
         }
 
         private void SumStockTakingOTCDetailReport()
