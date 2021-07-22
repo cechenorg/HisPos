@@ -216,12 +216,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     if (!(bool)confirmWindow.DialogResult)
                         return;
                 }
-                else
+                /*else if (CurrentStoreOrder.OrderType == OrderTypeEnum.RETURN && CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING)
+                {
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認送出退貨單?\n(確認後直接扣除庫存)", "", true);
+
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
+                }*/
+                /*else
                 {
                     ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認送出進貨單?\n(資料內容將不能修改)", "");
                     if (!(bool)confirmWindow.DialogResult)
                         return;
-                }
+                }*/
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
                 CurrentStoreOrder.MoveToNextStatus();

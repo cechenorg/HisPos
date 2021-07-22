@@ -84,7 +84,8 @@
                 Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="23"
-                Foreground="Black" />
+                Foreground="Black">
+            </Label>
         </DataTemplate>
         <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
         <ControlTemplate x:Key="ScrollBar" TargetType="{x:Type ScrollBar}">

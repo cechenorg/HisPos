@@ -128,7 +128,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             ID = row.Field<string>("StoOrd_ID");
-            ReceiveID = row.Field<string>("StoOrd_ReceiveID");
+            ReceiveID = String.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
@@ -255,8 +255,6 @@ namespace His_Pos.NewClass.StoreOrder
             if (OrderType == OrderTypeEnum.RETURN && !OrderManufactory.ID.Equals("0"))
             {
                 DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
-                MessageBox.Show(dataTable.Rows.Count.ToString());
-                MessageBox.Show(dataTable.Rows[0].Field<string>("RESULT"));
                 if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                 {
                     MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
