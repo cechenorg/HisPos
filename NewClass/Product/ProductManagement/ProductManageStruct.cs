@@ -31,7 +31,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SINGINV = row.Field<int>("inv_qty");
             ProLoc_Name = row.Field<string>("ProLoc_Name");
 
-            IsMerged = row.Field<int?>("Cnt") == 0 ? false : true;
+            //IsMerged = row.Field<int?>("Cnt") == 0 ? false : true;
+            IsMerged = false;
         }
 
         public ProductTypeEnum ProductType { get; set; }
