@@ -356,6 +356,21 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="1">
+            <Button
+                Width="120"
+                Margin="450,0,0,0"
+                Background="DarkCyan"
+                BorderBrush="DarkCyan"
+                Command="{Binding PrintTradeProfitDetailCommand}"
+                Content="匯出檔案"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18" />
+        </StackPanel>
+       
         <DataGrid
             x:Name="dgEmp"
             Grid.Row="1"
