@@ -96,11 +96,11 @@
             <Button
                 x:Name="Recordbtn"
                 Width="100"
-                Margin="50,0,0,0"
+                Margin="250,0,0,0"
                 Background="DimGray"
                 BorderThickness="0"
                 Click="Recordbtn_Click"
-                Content="切換"
+                Content="銷售紀錄"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16"
                 Visibility="Collapsed" />
@@ -111,7 +111,7 @@
                 Background="DimGray"
                 BorderThickness="0"
                 Click="Empbtn_Click"
-                Content="切換"
+                Content="人員業績"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
