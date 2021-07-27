@@ -15,11 +15,13 @@ namespace His_Pos.NewClass.StockTaking.StockTakingPlanProduct
             TotalPrice = r.Field<double>("TotalPrice");
             AveragePrice = Inventory == 0 ? 0 : TotalPrice / Inventory;
             IsError = MedBagAmount > Inventory;
+            Type = r.Field<int>("Type");
         }
 
         public bool IsFrozen { get; set; }
         public byte? IsControl { get; set; }
         public int Inv_ID { get; set; }
+        public int Type { get; set; }
         public double Inventory { get; set; }
         public double MedBagAmount { get; set; }
         public double OnTheFrame { get; set; }

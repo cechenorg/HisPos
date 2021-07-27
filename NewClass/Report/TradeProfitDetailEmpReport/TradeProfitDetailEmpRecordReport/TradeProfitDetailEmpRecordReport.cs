@@ -9,7 +9,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailEmpReport.TradeProfitDetailEm
     {
         public TradeProfitDetailEmpRecordReport(DataRow r)
         {
-            TraMas_ID = r.Field<int>("TraMas_ID");
+            TraMas_ID = 1;
 
             TraMas_RealTotal = r.Field<int>("TraMas_RealTotal");
 
