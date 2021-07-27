@@ -41,6 +41,7 @@
             FontSize="18"
             Text="{Binding CheckString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <Button
+            x:Name="btnDelete"
             Grid.Row="3"
             Width="150"
             Command="{Binding DeleteOrderCommand}"
