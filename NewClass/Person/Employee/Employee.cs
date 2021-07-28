@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.Person.Employee
 
         public Employee(DataRow r) : base(r)
         {
+           // EmpID = r.Field<string>("ID");
             Account = r.Field<string>("Emp_Account");
             Password = r.Field<string>("Aut_Password");
             NickName = r.Field<string>("Emp_NickName");
@@ -35,6 +36,8 @@ namespace His_Pos.NewClass.Person.Employee
             CashierID = r.Field<string>("Emp_CashierID");
             WorkPosition = new WorkPosition.WorkPosition(r);
         }
+
+      
 
         private string cashierID;
 

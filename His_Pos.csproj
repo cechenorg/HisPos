@@ -328,6 +328,10 @@
     <Compile Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml.cs">
       <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewClass\Person\Employee\ClockIn\ClockIn.cs" />
+    <Compile Include="NewClass\Person\Employee\ClockIn\ClockInDb.cs" />
+    <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountReport\ClosingAccountReportRepository.cs" />
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountTargetSettingWindow\ClosingAccountTargetSettingVM.cs" />
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountTargetSettingWindow\ClosingAccountTargetSettingWindow.xaml.cs">
@@ -801,7 +805,6 @@
     <Compile Include="Service\ExportService\ExportSpecialExcelSetting.cs" />
     <Compile Include="Service\FtpMethod.cs" />
     <Compile Include="Service\VerifyService.cs" />
-    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
       <DependentUpon>AdminFunctionView.xaml</DependentUpon>
@@ -1288,6 +1291,24 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
       <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\AddClockIn\AddClockInView.xaml.cs">
+      <DependentUpon>AddClockInView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\AddClockIn\AddClockInViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\AddClockInWindow\AddClockInWindow.xaml.cs">
+      <DependentUpon>AddClockInWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\AddClockInWindow\AddClockInWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\ClockInSearchControl\AllClockInLogControl.xaml.cs">
+      <DependentUpon>AllClockInLogControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\ClockInSearchControl\ClockInLogControl.xaml.cs">
+      <DependentUpon>ClockInLogControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\ClockInSearchView.xaml.cs">
+      <DependentUpon>ClockInSearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\ClockInSearchViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\Day.xaml.cs">
       <DependentUpon>Day.xaml</DependentUpon>
     </Compile>
@@ -2213,6 +2234,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H5_ATTEND\AddClockIn\AddClockInView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\AddClockInWindow\AddClockInWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\ClockInSearchControl\AllClockInLogControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\ClockInSearchControl\ClockInLogControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H5_ATTEND\ClockInSearch\ClockInSearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
