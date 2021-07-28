@@ -65,8 +65,9 @@ namespace His_Pos.Class
         資產負債表 = 39,
         關班作業 = 40,
         會計科目 = 41,
-        每日總帳報表=42,
-        關班帳務查詢 = 43
+        每日總帳報表 = 42,
+        關班帳務查詢 = 43,
+        打卡記錄查詢 = 47 // add by SHANI
     }
 
     public enum StoreOrderProductType

@@ -21,6 +21,17 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
+        public void ClockIn(string WYear, string WMonth,int? EmpID)
+        {
+            Clear();
+            var table = EmployeeDb.EmployeeClockInList(WYear, WMonth, EmpID);
+            foreach (DataRow row in table.Rows)
+            {
+                Add(new Employee(row));
+            }
+        }
+
+
         public void GetEnablePharmacist(DateTime selectedDate)
         {
             var table = EmployeeDb.GetData();

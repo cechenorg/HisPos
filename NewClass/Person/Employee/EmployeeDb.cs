@@ -213,5 +213,36 @@ namespace His_Pos.NewClass.Person.Employee
             employeeTable.Columns.Add("Emp_IsEnable", typeof(bool));
             return employeeTable;
         }
+
+
+
+        internal static DataTable AddClockIn(string empID,int type)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Emp_ID", empID));
+            parameters.Add(new SqlParameter("type", type));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertClockInLog]", parameters);
+        }
+
+        public static DataTable EmployeeClockInList(string WYear, string WMonth, int? EmpId)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("WYear", WYear));
+            parameterList.Add(new SqlParameter("WMonth", WMonth));
+            var table = new DataTable();
+            if (EmpId is null)
+            {
+                table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInLogEmp]", parameterList);
+            }
+            else
+            {
+                parameterList.Add(new SqlParameter("EmpId", EmpId));
+                table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInEmployee]", parameterList);
+            }
+            return table;
+        }
+
+
     }
 }

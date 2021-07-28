@@ -46,6 +46,8 @@
     xmlns:incomeStatement="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement"
     xmlns:balanceSheet="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet" xmlns:closingWork="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.Closing"
     xmlns:closingCashSelect="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect"
+    xmlns:clockInSearch="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch"
+    xmlns:addclockIn="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -171,6 +173,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type closingCashSelect:ClosingCashSelectViwModel}">
             <closingCashSelect:ClosingCashSelect />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type clockInSearch:ClockInSearchViewModel}">
+            <clockInSearch:ClockInSearchView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type addclockIn:AddClockInViewModel}">
+            <addclockIn:AddClockInView />
         </DataTemplate>
         
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
