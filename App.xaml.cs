@@ -23,16 +23,16 @@ namespace His_Pos
             StartupUri = new Uri("FunctionWindow/LoginWindow.xaml", UriKind.RelativeOrAbsolute);
 
             // Select the text in a TextBox when it receives focus.
-            EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseLeftButtonDownEvent,
+            /*EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseLeftButtonDownEvent,
                 new MouseButtonEventHandler(SelectivelyIgnoreMouseButton));
             EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotKeyboardFocusEvent,
                 new RoutedEventHandler(SelectAllText));
             EventManager.RegisterClassHandler(typeof(TextBox), TextBox.MouseDoubleClickEvent,
                 new RoutedEventHandler(SelectAllText));
-            base.OnStartup(e);
+            base.OnStartup(e);*/
         }
 
-        void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
+        /*void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
         {
             // Find the TextBox
             DependencyObject parent = e.OriginalSource as UIElement;
@@ -57,7 +57,7 @@ namespace His_Pos
             var textBox = e.OriginalSource as TextBox;
             if (textBox != null)
                 textBox.SelectAll();
-        }
+        }*/
 
         private void CheckAdministrator()
         {
