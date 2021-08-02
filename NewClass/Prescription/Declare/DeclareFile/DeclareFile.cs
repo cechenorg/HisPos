@@ -110,7 +110,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 foreach (var pdata in p.FileContent.Dbody.Pdata)
                 {
                     if (pdata.P1.Equals("3"))
-                        pdata.P2 = pdata.P2.Substring(0, 12);
+                        if (pdata.P2.Length > 12) 
+                        {
+                            pdata.P2 = pdata.P2.Substring(0, 12);
+                        }
                 }
                 tempList.Add(p.FileContent);
             }
