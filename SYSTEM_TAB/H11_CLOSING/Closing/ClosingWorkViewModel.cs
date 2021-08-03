@@ -213,6 +213,16 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
         }
 
+        private int returnPrepay;
+        public int ReturnPrepay
+        {
+            get => closed;
+            set
+            {
+                Set(() => ReturnPrepay, ref closed, value);
+            }
+        }
+
 
         private int closeCash_Total;
 
@@ -317,6 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             TradeTodayProfit = (int)result.Rows[0]["tradeTodayProfit"];
             TradeTodayStock= (int)result.Rows[0]["tradeTodayStock"];
             Closed = (int)result.Rows[0]["Closed"];
+            //ReturnPrepay = (int)result.Rows[0]["ReturnPrepay"];
 
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
             CloseCash_Total= (int)result.Rows[0]["CloseCash_Total"];
@@ -328,16 +339,15 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 CheckColor = Brushes.Red;
                 Enable = true;
             }
-            Total = TradeCash + CashTotal + TradeReward + Extra;
+            Total = TradeCash + CashTotal + TradeReward + Extra - ReturnPrepay;
             if (CheckClosed == "未關班")
             {
                 CheckTotal = 0;
             }
-            else {
+            else 
+            {
                 CheckTotal = CloseCash_Total;
             }
-            
-            
         }
 
         private void ConfirmAction()
