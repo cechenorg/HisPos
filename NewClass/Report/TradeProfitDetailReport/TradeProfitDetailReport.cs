@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             TypeId = r.Field<string>("TypeId");
             CardFee = r.Field<decimal>("CardFee");
             CashCoupon = r.Field<int>("CashCoupon");
+            PrePay = r.Field<int>("PrePay");
         }
 
         private int id;
@@ -32,6 +33,7 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private int profit;
         private int cashAmount;
         private int cardAmount;
+        private int prePay;
         private int discountAmt;
         private string typeId;
         private int count;
@@ -41,6 +43,8 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
         private int totalChange;
         private int totalProfit;
         private int discountAmtMinus;
+
+
         public string TypeId
         {
             get => typeId;
@@ -145,6 +149,16 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
             set
             {
                 Set(() => CashCoupon, ref cashCoupon, value);
+            }
+        }
+
+        // 預付訂金
+        public int PrePay
+        {
+            get => prePay;
+            set
+            {
+                Set(() => PrePay, ref prePay, value);
             }
         }
 

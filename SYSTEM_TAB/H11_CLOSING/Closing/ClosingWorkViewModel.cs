@@ -327,7 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             TradeTodayProfit = (int)result.Rows[0]["tradeTodayProfit"];
             TradeTodayStock= (int)result.Rows[0]["tradeTodayStock"];
             Closed = (int)result.Rows[0]["Closed"];
-            //ReturnPrepay = (int)result.Rows[0]["ReturnPrepay"];
+            ReturnPrepay = (int)result.Rows[0]["ReturnPrepay"];
 
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
             CloseCash_Total= (int)result.Rows[0]["CloseCash_Total"];
