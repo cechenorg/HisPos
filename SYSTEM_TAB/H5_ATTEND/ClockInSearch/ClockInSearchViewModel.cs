@@ -7,12 +7,23 @@ using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.ClockIn;
 using System.Data;
 using System.Windows.Threading;
+<<<<<<< Updated upstream
 
+=======
+using System.Windows.Forms;
+using System.IO;
+using System.Text;
+>>>>>>> Stashed changes
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 {
     public class ClockInSearchViewModel : TabBase
     {
+<<<<<<< Updated upstream
+=======
+
+        #region ----- Define Variables -----
+>>>>>>> Stashed changes
         public override TabBase getTab()
         {
             return this;
@@ -68,6 +79,10 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             set
             {
                 Set(() => SingInEmployee, ref singinemployee, value);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
             }
         }
 
@@ -78,6 +93,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             set
             {
                 Set(() => Employee, ref employee, value);
+<<<<<<< Updated upstream
 
 
                 GetDate();
@@ -98,6 +114,9 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             //    MinCount = iMin % 60;
 
             //}
+=======
+                GetDate();
+>>>>>>> Stashed changes
         }
     }
 
@@ -122,13 +141,61 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         }
 
 
+<<<<<<< Updated upstream
+=======
+        public ClockInLog clockInLogsRpt;
+        public ClockInLog ClockInLogsRpt
+        {
+            get { return clockInLogsRpt; }
+            set
+            {
+                Set(() => ClockInLogsRpt, ref clockInLogsRpt, value);
+            }
+        }
+        public class CommonBox
+        {
+            public string Namepath { get; set; }
+            public string Value { get; set; }
+        }
+
+        public CommonBox checkLine;
+        public CommonBox CheckLine
+        {
+            get { return checkLine; }
+            set
+            {
+                Set(() => CheckLine, ref checkLine, value);
+                if(CheckLine!=null)
+                    SetEmployeeCollection();
+            }
+        }
+
+        public System.Collections.Generic.List<CommonBox> checkLines;
+        public System.Collections.Generic.List<CommonBox> CheckLines
+        {
+            get { return checkLines; }
+            set
+            {
+                Set(() => CheckLines, ref checkLines, value);
+           
+            }
+        }
+
+
+        #endregion ----- Define Variables -----
+>>>>>>> Stashed changes
 
         #region ----- Define Commands -----
 
         public RelayCommand<object> ConfirmEmpCommand { get; set; }
         public RelayCommand<object> SearchCommand { get; set; }
         public RelayCommand<object> DataChangeCommand { get; set; }
+<<<<<<< Updated upstream
         
+=======
+        public RelayCommand ExportCsvCommand { get; set; }
+
+>>>>>>> Stashed changes
 
         #endregion ----- Define Commands -----
 
@@ -153,6 +220,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             else
                 if (!CheckPassWord()) return;  //檢查帳密
 
+<<<<<<< Updated upstream
 
 
 
@@ -172,6 +240,9 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                 MainWindow.ServerConnection.CloseConnection();
 
             }
+=======
+            SetStore();
+>>>>>>> Stashed changes
 
             (sender as System.Windows.Controls.PasswordBox)?.Clear();
             this.Account = "";
@@ -202,8 +273,13 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             ConfirmEmpCommand = new RelayCommand<object>(ConfirmEmpAction);
             SearchCommand = new RelayCommand<object>(SearchAction);
             DataChangeCommand = new RelayCommand<object>(DataChangeAction);
+<<<<<<< Updated upstream
         }
 
+=======
+            ExportCsvCommand = new RelayCommand(ExportCsv);
+        }
+>>>>>>> Stashed changes
         private bool CheckPassWord()
         {
 
@@ -230,10 +306,17 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         }
         public void GetDate()
         {
+<<<<<<< Updated upstream
             if (Employee != null)
             {
 
 
+=======
+
+            ClockInLogs = null;
+            if (Employee != null)
+            {
+>>>>>>> Stashed changes
                 MainWindow.ServerConnection.OpenConnection();
                 ClockInLogs = new ClockInLog(ClockInDb.ClockInLogByDate(System.DateTime.Now.Year.ToString(), SearchMonth, Employee.ID.ToString()));
                 MainWindow.ServerConnection.CloseConnection();
@@ -250,12 +333,158 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             }
 
         }
+<<<<<<< Updated upstream
 
 
         #endregion ----- Define Functions -----
 
 
 
+=======
+        public void SetStore()
+        {
+            this.CheckLines = null;
+            this.CheckLines = new System.Collections.Generic.List<CommonBox>();
+
+            if (SingInEmployee.ID == 1)
+            {
+                
+                this.CheckLines.Add(new CommonBox() { Namepath = "測試", Value = "Develop" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "杏昌", Value = "XingChang" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "明昌", Value = "MingChang" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "宏昌", Value = "HongChang" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "佑昌", Value = "YoChang" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "佑東", Value = "YoDong" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "和昌", Value = "HeChang" });
+                this.CheckLine = this.checkLines[0];
+
+
+            }
+            else if ( SingInEmployee.ID == 97 || SingInEmployee.ID == 45) //需要看見各店的人
+            {
+                this.CheckLines.Add(new CommonBox() { Namepath = "杏昌", Value = "XingChang" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "明昌", Value = "MingChang" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "宏昌", Value = "HongChang" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "佑昌", Value = "YoChang" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "佑東", Value = "YoDong" });
+                this.CheckLines.Add(new CommonBox() { Namepath = "和昌", Value = "HeChang" });
+                this.CheckLine = this.checkLines[0];
+
+            }
+            else if (SingInEmployee.ID == 40 || SingInEmployee.ID == 48 || SingInEmployee.ID == 72 || SingInEmployee.ID == 47) //店長能看見其他員工SingInEmployee.WorkPosition.WorkPositionId == 2 || 
+            {
+                //不能選擇店
+                if (SingInEmployee.ID == 72)
+                    this.CheckLines.Add(new CommonBox() { Namepath = "和昌", Value = "HeChang" });
+                if (SingInEmployee.ID == 40)
+                    this.CheckLines.Add(new CommonBox() { Namepath = "明昌", Value = "MingChang" });
+                if (SingInEmployee.ID == 47)
+                    this.CheckLines.Add(new CommonBox() { Namepath = "佑昌", Value = "YoChang" });
+                if (SingInEmployee.ID == 48)
+                    this.CheckLines.Add(new CommonBox() { Namepath = "杏昌", Value = "XingChang" });
+
+                this.CheckLine = this.checkLines[0];
+
+            }
+            else //一般員工
+            {
+                //不能選擇店
+                this.CheckLines.Add(new CommonBox() { Namepath = "無選項", Value = "" });
+                this.CheckLine = this.checkLines[0];
+
+            }
+
+            SetEmployeeCollection();
+
+
+        }
+        public void SetEmployeeCollection()
+        {
+
+            if (SingInEmployee.ID == 1)
+            {
+              
+
+                MainWindow.ServerConnection.OpenConnection();
+                EmployeeCollection = new Employees();
+                EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), CheckLine.Value, "", 1);
+                MainWindow.ServerConnection.CloseConnection();
+
+            }
+            else if (SingInEmployee.ID == 97 || SingInEmployee.ID == 45) //需要看見各店的人
+            {
+
+                MainWindow.ServerConnection.OpenConnection();
+                EmployeeCollection = new Employees();
+                EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), CheckLine.Value, "", 2);
+                MainWindow.ServerConnection.CloseConnection();
+
+            }
+            else if (SingInEmployee.ID == 40 || SingInEmployee.ID == 48 || SingInEmployee.ID == 72 || SingInEmployee.ID == 47) //店長能看見其他員工SingInEmployee.WorkPosition.WorkPositionId == 2 || 
+            {
+
+                MainWindow.ServerConnection.OpenConnection();
+                EmployeeCollection = new Employees();
+                EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), CheckLine.Value, "", 2);
+                MainWindow.ServerConnection.CloseConnection();
+
+            }
+            else //一般員工
+            {
+
+                //只能看自己資料
+                MainWindow.ServerConnection.OpenConnection();
+                EmployeeCollection = new Employees();
+                EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), null, SingInEmployee.ID.ToString(), 3);
+                MainWindow.ServerConnection.CloseConnection();
+
+            }
+
+            //選第一位
+            if (EmployeeCollection.Count > 0)
+                Employee = EmployeeCollection[0];
+
+        }
+        private void ExportCsv()
+        {
+            if (SingInEmployee == null)
+            {
+                MessageWindow.ShowMessage("請先登入查詢!!!", Class.MessageType.ERROR);
+                return ;
+            }
+
+            //ClockInLogFotReport
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "csv|*.csv ";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                ClockInLogsRpt = new ClockInLog(ClockInDb.ClockInLogFotReport(System.DateTime.Now.Year.ToString(), SearchMonth, CheckLine.Value));
+                MainWindow.ServerConnection.CloseConnection();
+
+                using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.CreateNew))
+                {
+                    //var t1="",t2="";
+                    StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
+                    sw.WriteLine("日期" + "\t" + "店別" + "\t" + "姓名" + "\t" + "上班" + "\t" + "下班" + "\t" + "時數" + "\t" + "小計");
+                    foreach (var row in ClockInLogsRpt)
+                    {
+                        sw.WriteLine(row.Date + "\t" + row.EmpAccount + "\t" + row.EmpName + "\t" + row.Time + "\t" + row.Time2 + "\t" + row.WMin/60 + "\t"+ row.Type);
+                    }
+                    sw.Close();
+                }
+            }
+
+
+        }
+
+
+        #endregion ----- Define Functions -----
+>>>>>>> Stashed changes
 
 
     }

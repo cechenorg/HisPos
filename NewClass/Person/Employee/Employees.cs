@@ -31,6 +31,19 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
+<<<<<<< Updated upstream
+=======
+        public void ClockInEmp(string WYear, string WMonth, string StoreNo, string EmpId, int Permit)
+        {
+            Clear();
+            var table = EmployeeDb.EmployeeClockInListTest(WYear, WMonth, StoreNo, EmpId, Permit);
+            foreach (DataRow row in table.Rows)
+            {
+                Add(new Employee(row));
+            }
+        }
+
+>>>>>>> Stashed changes
 
         public void GetEnablePharmacist(DateTime selectedDate)
         {

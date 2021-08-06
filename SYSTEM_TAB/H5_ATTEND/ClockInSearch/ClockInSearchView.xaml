@@ -59,8 +59,13 @@
                 FontSize="20"
                 InputMethod.IsInputMethodEnabled="False"
                 InputScope="AlphanumericHalfWidth"               
+<<<<<<< Updated upstream
                 Text="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" /> 
                 <!--PreviewKeyDown="Account_OnPreviewKeyDown"-->
+=======
+                Text="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PreviewKeyDown="Account_OnPreviewKeyDown" /> 
+>>>>>>> Stashed changes
             <Label
                 Width="Auto"
                 Margin="10,0,5,0"
@@ -75,8 +80,13 @@
                     FontSize="20" 
                     FontWeight="Bold"
                     InputMethod.IsInputMethodEnabled="False"
+<<<<<<< Updated upstream
                     InputScope="AlphanumericHalfWidth"    >
                     <!--PreviewKeyDown="PassWord_OnPreviewKeyDown"-->
+=======
+                    InputScope="AlphanumericHalfWidth" 
+                    PreviewKeyDown="PassWord_OnPreviewKeyDown"   >
+>>>>>>> Stashed changes
                 <PasswordBox.InputBindings>
                     <KeyBinding   Command="{Binding ConfirmAddClockInCommand}" CommandParameter="{Binding ElementName=Password}" Key="Enter" />
                 </PasswordBox.InputBindings>
@@ -101,6 +111,7 @@
                 BorderThickness="0"
                 Content="清空"
                 FontSize="20"
+<<<<<<< Updated upstream
                 FontWeight="Bold"/>--> 
             <!--Click="btn_clear_Click"-->
             <!--<TextBlock x:Name="SystemTime" Margin="10,5,10,10" VerticalAlignment="Center" FontSize="22" Foreground="#535761" TextWrapping="Wrap" />-->
@@ -109,6 +120,33 @@
                 Grid.Row="1"
                 Grid.Column="0"
             Grid.RowSpan="2"
+=======
+                FontWeight="Bold"/>-->
+        </StackPanel>
+        <Grid 
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.RowSpan="2"
+            Margin="10,10,0,10"
+            Background="{StaticResource GridBackGround}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ComboBox
+                Grid.Row="0"
+                Margin="10,0,10,0"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"            
+                ItemsSource="{Binding CheckLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+             DisplayMemberPath="Namepath"
+                SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                />   
+            <DataGrid
+            Grid.Row="1"
+>>>>>>> Stashed changes
                 Margin="10,10,10,10"
                 AllowDrop="True"
                 AutoGenerateColumns="False"
@@ -124,6 +162,7 @@
                 VerticalScrollBarVisibility="Hidden"
                 ItemsSource="{Binding EmployeeCollection, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+<<<<<<< Updated upstream
             <!--<DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -151,6 +190,8 @@
                     <Setter Property="Height" Value="41" />
                 </Style>
             </DataGrid.RowStyle>-->
+=======
+>>>>>>> Stashed changes
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="175"
@@ -168,10 +209,18 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+<<<<<<< Updated upstream
         <DataGrid
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="5,10,10,0"
+=======
+        </Grid>
+        <DataGrid
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="5,10,0,0"
+>>>>>>> Stashed changes
                 AllowDrop="True"
                 AutoGenerateColumns="False"
                 Background="{StaticResource GridBackGround}"
@@ -215,6 +264,22 @@
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="175"
+<<<<<<< Updated upstream
+=======
+                    Binding="{Binding EmpAccount}"
+                    FontFamily="Segoe UI Semi"
+                    Header="店別"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="175"
+>>>>>>> Stashed changes
                     Binding="{Binding EmpName}"
                     FontFamily="Segoe UI Semi"
                     Header="員工姓名"
@@ -287,7 +352,11 @@
             Background="#bfbfbf"
             Orientation="Horizontal" >
             <ComboBox
+<<<<<<< Updated upstream
                 Width="120"
+=======
+                Width="60"
+>>>>>>> Stashed changes
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
@@ -310,7 +379,11 @@
             </ComboBox>
             <Label
                             VerticalAlignment="Center"
+<<<<<<< Updated upstream
                             Content="  總共"
+=======
+                            Content="  月    總共"
+>>>>>>> Stashed changes
                             FontFamily="Segoe UI Semibold"
                             FontSize="20"
                             Foreground="Black" />
@@ -342,7 +415,20 @@
                             FontFamily="Segoe UI Semibold"
                             FontSize="20"
                             Foreground="Black" />
+<<<<<<< Updated upstream
 
+=======
+            <Button
+                x:Name="ButtonPrint"
+                Width="150"
+                Margin="10,0,0,0"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding ExportCsvCommand}"
+                Content="匯出結果"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
+>>>>>>> Stashed changes
         </StackPanel>
     </Grid>
 </UserControl>
