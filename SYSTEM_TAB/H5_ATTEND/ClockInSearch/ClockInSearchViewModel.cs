@@ -7,23 +7,16 @@ using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.ClockIn;
 using System.Data;
 using System.Windows.Threading;
-<<<<<<< Updated upstream
-
-=======
 using System.Windows.Forms;
 using System.IO;
 using System.Text;
->>>>>>> Stashed changes
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 {
     public class ClockInSearchViewModel : TabBase
     {
-<<<<<<< Updated upstream
-=======
 
         #region ----- Define Variables -----
->>>>>>> Stashed changes
         public override TabBase getTab()
         {
             return this;
@@ -79,10 +72,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             set
             {
                 Set(() => SingInEmployee, ref singinemployee, value);
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
             }
         }
 
@@ -93,30 +83,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             set
             {
                 Set(() => Employee, ref employee, value);
-<<<<<<< Updated upstream
-
-
                 GetDate();
-            //if (Employee != null) {
-
-
-            //    MainWindow.ServerConnection.OpenConnection();
-            //    ClockInLogs = new ClockInLog(ClockInDb.ClockInLogByDate(System.DateTime.Now.Year.ToString(), SearchMonth , Employee.ID.ToString()));
-            //    MainWindow.ServerConnection.CloseConnection();
-
-            //    if (ClockInLogs is null) return;
-            //    int iMin = 0;
-            //    foreach (var s in ClockInLogs)
-            //    {
-            //        iMin += (int)s.WMin;
-            //    }
-            //    HourCount = iMin / 60;
-            //    MinCount = iMin % 60;
-
-            //}
-=======
-                GetDate();
->>>>>>> Stashed changes
         }
     }
 
@@ -141,8 +108,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         }
 
 
-<<<<<<< Updated upstream
-=======
         public ClockInLog clockInLogsRpt;
         public ClockInLog ClockInLogsRpt
         {
@@ -183,19 +148,14 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 
 
         #endregion ----- Define Variables -----
->>>>>>> Stashed changes
 
         #region ----- Define Commands -----
 
         public RelayCommand<object> ConfirmEmpCommand { get; set; }
         public RelayCommand<object> SearchCommand { get; set; }
         public RelayCommand<object> DataChangeCommand { get; set; }
-<<<<<<< Updated upstream
-        
-=======
         public RelayCommand ExportCsvCommand { get; set; }
 
->>>>>>> Stashed changes
 
         #endregion ----- Define Commands -----
 
@@ -220,29 +180,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             else
                 if (!CheckPassWord()) return;  //檢查帳密
 
-<<<<<<< Updated upstream
-
-
-
-            if (SingInEmployee.ID == 1 || SingInEmployee.WorkPosition.WorkPositionId == 4)
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                EmployeeCollection = new Employees();
-                EmployeeCollection.ClockIn(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(),null);
-                MainWindow.ServerConnection.CloseConnection();
-
-            }
-            else
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                EmployeeCollection = new Employees();
-                EmployeeCollection.ClockIn(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), SingInEmployee.ID);
-                MainWindow.ServerConnection.CloseConnection();
-
-            }
-=======
             SetStore();
->>>>>>> Stashed changes
 
             (sender as System.Windows.Controls.PasswordBox)?.Clear();
             this.Account = "";
@@ -273,13 +211,8 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             ConfirmEmpCommand = new RelayCommand<object>(ConfirmEmpAction);
             SearchCommand = new RelayCommand<object>(SearchAction);
             DataChangeCommand = new RelayCommand<object>(DataChangeAction);
-<<<<<<< Updated upstream
-        }
-
-=======
             ExportCsvCommand = new RelayCommand(ExportCsv);
         }
->>>>>>> Stashed changes
         private bool CheckPassWord()
         {
 
@@ -306,17 +239,10 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         }
         public void GetDate()
         {
-<<<<<<< Updated upstream
-            if (Employee != null)
-            {
-
-
-=======
 
             ClockInLogs = null;
             if (Employee != null)
             {
->>>>>>> Stashed changes
                 MainWindow.ServerConnection.OpenConnection();
                 ClockInLogs = new ClockInLog(ClockInDb.ClockInLogByDate(System.DateTime.Now.Year.ToString(), SearchMonth, Employee.ID.ToString()));
                 MainWindow.ServerConnection.CloseConnection();
@@ -333,14 +259,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             }
 
         }
-<<<<<<< Updated upstream
-
-
-        #endregion ----- Define Functions -----
-
-
-
-=======
         public void SetStore()
         {
             this.CheckLines = null;
@@ -484,7 +402,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 
 
         #endregion ----- Define Functions -----
->>>>>>> Stashed changes
 
 
     }

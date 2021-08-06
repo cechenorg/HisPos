@@ -242,8 +242,6 @@ namespace His_Pos.NewClass.Person.Employee
             }
             return table;
         }
-<<<<<<< Updated upstream
-=======
         public static DataTable EmployeeClockInListTest(string WYear, string WMonth,string StoreNo, string EmpId, int Permit)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -257,7 +255,6 @@ namespace His_Pos.NewClass.Person.Employee
        
             return table;
         }
->>>>>>> Stashed changes
 
 
     }

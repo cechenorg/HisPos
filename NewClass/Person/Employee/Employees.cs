@@ -31,8 +31,6 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-<<<<<<< Updated upstream
-=======
         public void ClockInEmp(string WYear, string WMonth, string StoreNo, string EmpId, int Permit)
         {
             Clear();
@@ -43,7 +41,6 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
->>>>>>> Stashed changes
 
         public void GetEnablePharmacist(DateTime selectedDate)
         {

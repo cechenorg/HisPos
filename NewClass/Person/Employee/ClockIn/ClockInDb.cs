@@ -28,9 +28,6 @@ namespace His_Pos.NewClass.Person.Employee.ClockIn
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInLogByDate]", parameterList);
             return table;
         }
-<<<<<<< Updated upstream
-    }
-=======
         public static DataTable ClockInLogFotReport(string year, string month, string storeNo)
         {
             DataTable reDT = new DataTable();
@@ -88,5 +85,4 @@ namespace His_Pos.NewClass.Person.Employee.ClockIn
         }
     }
     //[Get].[StoreByPermit]
->>>>>>> Stashed changes
 }

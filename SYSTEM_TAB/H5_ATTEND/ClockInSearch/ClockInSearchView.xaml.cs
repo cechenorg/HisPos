@@ -25,10 +25,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         public ClockInSearchView()
         {
             InitializeComponent();
-<<<<<<< Updated upstream
-        }
-    }
-=======
             Account.Focus();
         }
 
@@ -65,5 +61,4 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
     }
 
 
->>>>>>> Stashed changes
 }

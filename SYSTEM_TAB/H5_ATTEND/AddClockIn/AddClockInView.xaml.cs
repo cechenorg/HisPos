@@ -22,16 +22,10 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
     public partial class AddClockInView : UserControl
     {
         public AddClockInView()
-<<<<<<< Updated upstream
-        {
-            StartClock();
-            InitializeComponent();
-=======
         {            
             StartClock();
             InitializeComponent();
             Account.Focus();
->>>>>>> Stashed changes
         }
 
 
@@ -67,12 +61,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         }
 
         private DispatcherTimer ShowTimer;
-<<<<<<< Updated upstream
-        /*
-         *啟動處方登錄時間Timer
-         */
-=======
->>>>>>> Stashed changes
 
         private void StartClock()
         {
@@ -97,13 +85,5 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
             //System.Diagnostics.Debug.Print("this.ShowCurrentTime {0}", this.ShowCurrentTime);
         }
 
-<<<<<<< Updated upstream
-        private void btn_clear_Click(object sender, RoutedEventArgs e)
-        {
-            Account.Text = "";
-            Password.Clear();
-        }
-=======
->>>>>>> Stashed changes
     }
 }

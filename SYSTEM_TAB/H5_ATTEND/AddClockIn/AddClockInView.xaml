@@ -26,11 +26,7 @@
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
         <Grid.RowDefinitions>
-<<<<<<< Updated upstream
-            <RowDefinition Height="60" />
-=======
             <RowDefinition Height="0" />
->>>>>>> Stashed changes
             <RowDefinition Height="60" />
             <RowDefinition />
             <RowDefinition Height="50" />
@@ -40,11 +36,7 @@
             VerticalAlignment="Center"
             Margin="10,0,0,0"
             Orientation="Horizontal">
-<<<<<<< Updated upstream
-            <RadioButton
-=======
             <!--<RadioButton
->>>>>>> Stashed changes
                         VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         Content="上班"
@@ -58,11 +50,7 @@
                         Content="下班"
                         FontFamily="Segoe UI Semibold"
                         FontSize="20"
-<<<<<<< Updated upstream
-                        IsChecked="{Binding OutCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-=======
                         IsChecked="{Binding OutCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
->>>>>>> Stashed changes
         </StackPanel>
         <StackPanel
             Grid.Row="1"
@@ -105,8 +93,6 @@
                     <KeyBinding   Command="{Binding ConfirmAddClockInCommand}" CommandParameter="{Binding ElementName=Password}" Key="Enter" />
                     </PasswordBox.InputBindings>
             </PasswordBox>
-<<<<<<< Updated upstream
-=======
             <RadioButton
                         Margin="30,0,0,0"
                         VerticalAlignment="Center"
@@ -123,7 +109,6 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="20"
                         IsChecked="{Binding OutCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
->>>>>>> Stashed changes
             <Button
                 Name="AddClockIn"                
                 Width="100"
