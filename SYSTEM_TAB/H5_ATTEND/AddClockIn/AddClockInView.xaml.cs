@@ -22,9 +22,10 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
     public partial class AddClockInView : UserControl
     {
         public AddClockInView()
-        {
+        {            
             StartClock();
             InitializeComponent();
+            Account.Focus();
         }
 
 
@@ -60,9 +61,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         }
 
         private DispatcherTimer ShowTimer;
-        /*
-         *啟動處方登錄時間Timer
-         */
 
         private void StartClock()
         {
@@ -87,10 +85,5 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
             //System.Diagnostics.Debug.Print("this.ShowCurrentTime {0}", this.ShowCurrentTime);
         }
 
-        private void btn_clear_Click(object sender, RoutedEventArgs e)
-        {
-            Account.Text = "";
-            Password.Clear();
-        }
     }
 }

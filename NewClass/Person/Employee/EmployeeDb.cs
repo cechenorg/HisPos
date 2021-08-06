@@ -242,6 +242,19 @@ namespace His_Pos.NewClass.Person.Employee
             }
             return table;
         }
+        public static DataTable EmployeeClockInListTest(string WYear, string WMonth,string StoreNo, string EmpId, int Permit)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("WYear", WYear));
+            parameterList.Add(new SqlParameter("WMonth", WMonth));
+            parameterList.Add(new SqlParameter("StoreNo", StoreNo));
+            parameterList.Add(new SqlParameter("Permit", Permit));
+            parameterList.Add(new SqlParameter("Emp_ID", EmpId));
+            var table = new DataTable();
+            table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInLogEmployees]", parameterList);
+       
+            return table;
+        }
 
 
     }
