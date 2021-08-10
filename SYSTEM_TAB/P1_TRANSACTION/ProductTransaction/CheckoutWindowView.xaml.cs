@@ -239,6 +239,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("訂金沖銷金額大於可沖訂金！", MessageType.WARNING);
                 return;
             }
+            if (prepay > Total) 
+            {
+                MessageWindow.ShowMessage("訂金沖銷金額不可大於應付金額！", MessageType.WARNING);
+                return;
+            }
             int.TryParse(tbCard.Text, out int card);
             if (card > 0 && !CheckCardNumber())
             {
