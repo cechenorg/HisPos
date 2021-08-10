@@ -579,7 +579,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     var sAdjust = s.IsAdjust ? "已調劑" : "未調劑";
                     var adjDate = DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(s.AdjustDate);
                     var treatDate = s.TreatDate is null ? "" : ((DateTime)s.TreatDate).AddYears(-1911).ToString("yyy/MM/dd");
-                    Debug.Assert(s.Patient.Birthday != null, "s.Patient.Birthday != null");
+                    //Debug.Assert(s.Patient.Birthday != null, "s.Patient.Birthday != null");
+                    if (s.Patient.Birthday == null) {
+                        s.Patient.Birthday = DateTime.Now;
+                    }
+
                     file.WriteLine($"{sAdjust},{s.StoStatus},{insName}," +
                             $"{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber}," +
                             $"{((DateTime)s.Patient.Birthday).AddYears(-1911):yyy/MM/dd}," +
