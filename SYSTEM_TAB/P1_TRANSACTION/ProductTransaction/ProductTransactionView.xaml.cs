@@ -1515,7 +1515,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void btnPrepay_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
-
+            if (isGift) 
+            {
+                MessageWindow.ShowMessage("預付訂金不得當作贈品", MessageType.ERROR);
+                isGift = false;
+            }
             if (ProductList.Rows.Count == 0)
             {
                 AddProductByInputAction(PrepayProID, currentRowIndex);
