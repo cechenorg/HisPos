@@ -1863,11 +1863,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 ws.Cell("B2").Value = "姓名";
                 ws.Cell("C2").Value = "現金";
                 ws.Cell("D2").Value = "刷卡";
-                ws.Cell("E2").Value = "禮券";
-                ws.Cell("F2").Value = "現金券";
-                ws.Cell("G2").Value = "耗用";
-                ws.Cell("H2").Value = "毛利";
-                ws.Cell("I2").Value = "銷售員";
+                ws.Cell("E2").Value = "訂金沖銷";
+                ws.Cell("F2").Value = "禮券";
+                ws.Cell("G2").Value = "現金券";
+                ws.Cell("H2").Value = "耗用";
+                ws.Cell("I2").Value = "毛利";
+                ws.Cell("J2").Value = "銷售員";
 
                 var rangeWithData = ws.Cell(3, 1).InsertData(result.AsEnumerable());
 
@@ -2249,43 +2250,43 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             CashflowSelectedItem = null;
         }
 
-        private void TradeProfitCostReportSelectionChangedAction()
-        {
-            CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
-            ChangeVis = Visibility.Hidden;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                BusyContent = "報表查詢中";
-                TradeProfitDetailReportCollection = new TradeProfitDetailReports("0", StartDate, EndDate);
-                TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
+        //private void TradeProfitCostReportSelectionChangedAction()
+        //{
+        //    CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
+        //    ChangeVis = Visibility.Hidden;
+        //    var worker = new BackgroundWorker();
+        //    worker.DoWork += (o, ea) =>
+        //    {
+        //        MainWindow.ServerConnection.OpenConnection();
+        //        BusyContent = "報表查詢中";
+        //        TradeProfitDetailReportCollection = new TradeProfitDetailReports("0", StartDate, EndDate);
+        //        TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
 
-                MainWindow.ServerConnection.CloseConnection();
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
-                TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
-                TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
+        //        MainWindow.ServerConnection.CloseConnection();
+        //    };
+        //    worker.RunWorkerCompleted += (o, ea) =>
+        //    {
+        //        TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
+        //        TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
+        //        TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
 
-                TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
-                //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
-                //SumStockTakingDetailReport();
-                TradeChangeSelectItem = "全部";
-                TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-                SumOTCReport("0");
-                TradeDetailCount = TradeProfitDetailReportCollection.Count();
-                TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
-                EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-            /*SelfPrescriptionSelectedItem = null;
-            CooperativePrescriptionSelectedItem = null;*/
-            CashflowSelectedItem = null;
-        }
+        //        TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
+        //        //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
+        //        //SumStockTakingDetailReport();
+        //        TradeChangeSelectItem = "全部";
+        //        TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
+        //        SumOTCReport("0");
+        //        TradeDetailCount = TradeProfitDetailReportCollection.Count();
+        //        TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
+        //        EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
+        //        IsBusy = false;
+        //    };
+        //    IsBusy = true;
+        //    worker.RunWorkerAsync();
+        //    /*SelfPrescriptionSelectedItem = null;
+        //    CooperativePrescriptionSelectedItem = null;*/
+        //    CashflowSelectedItem = null;
+        //}
 
         private void TradeProfitReportSelectionChangedActionMain()
         {
@@ -2311,7 +2312,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             SumOTCReportMain("0");
             TradeDetailCount = TradeProfitDetailReportCollection.Count();
             TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
-            EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => (int)e.Profit);
+            EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
 
             /*SelfPrescriptionSelectedItem = null;
             CooperativePrescriptionSelectedItem = null;*/
@@ -2363,7 +2364,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 SumOTCReportMainChanged("1");
                 TradeDetailCount = TradeProfitDetailReportCollectionChanged.Count();
                 TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
-                EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => (int)e.Profit);
+                EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
                 IsBusy = false;
             };
             IsBusy = true;
@@ -2409,7 +2410,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             SumOTCReportChangeMain("1");
             TradeDetailCount = TradeProfitDetailReportCollection.Count();
             TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
-            EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => (int)e.Profit);
+            EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
 
             /*SelfPrescriptionSelectedItem = null;
             CooperativePrescriptionSelectedItem = null;*/
@@ -2757,33 +2758,33 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             StockTakingSelectedItem = null;
         }
 
-        private void SelfPrescriptionChangeSelectionChangedAction()
-        {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                MainWindow.ServerConnection.OpenConnection();
+        //private void SelfPrescriptionChangeSelectionChangedAction()
+        //{
+        //    CoopVis = Visibility.Collapsed;
+        //    CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
+        //    var worker = new BackgroundWorker();
+        //    worker.DoWork += (o, ea) =>
+        //    {
+        //        MainWindow.ServerConnection.OpenConnection();
 
-                PrescriptionChangeDetailReportCollection = new PrescriptionDetailReports("11", StartDate, EndDate);
-                MainWindow.ServerConnection.CloseConnection();
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionChangeDetailReportCollection };
-                PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-                CoopSelectItem = "全部";
-                PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-                SumPrescriptionDetailReport();
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-            CooperativePrescriptionSelectedItem = null;
-            CashflowSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
+        //        PrescriptionChangeDetailReportCollection = new PrescriptionDetailReports("11", StartDate, EndDate);
+        //        MainWindow.ServerConnection.CloseConnection();
+        //    };
+        //    worker.RunWorkerCompleted += (o, ea) =>
+        //    {
+        //        PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionChangeDetailReportCollection };
+        //        PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+        //        CoopSelectItem = "全部";
+        //        PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+        //        SumPrescriptionDetailReport();
+        //        IsBusy = false;
+        //    };
+        //    IsBusy = true;
+        //    worker.RunWorkerAsync();
+        //    CooperativePrescriptionSelectedItem = null;
+        //    CashflowSelectedItem = null;
+        //    StockTakingSelectedItem = null;
+        //}
 
         /******* 各種箋明細 *******/
 
@@ -3361,56 +3362,35 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             SumOTCProfit();
             SumMedProfit();
             SumAllProfit();
-
-            /*StockTakingOTCReportSelectionChangedAction();
-            StockTakingReportSelectionChangedAction();
-            
-            TradeProfitReportSelectionChangedActionMain();
-            TradeProfitAllReportSelectionChangedAction();
-            TradeChangeReportSelectionChangedActionMain();
-            
-            
-            SelfPrescriptionChangeSelectionChangedActionMain();
-            SelfPrescriptionSelectionChangedActionMain();
-            
-            CooperativePrescriptionChangeSelectionChangedActionMain();
-            CooperativePrescriptionSelectionChangedActionMain();
-
-            SumOTCProfit();
-            SumMedProfit();
-            SumAllProfit();
-
-            RewardReportCollection = new RewardReports(StartDate, EndDate);
-            CalculateTotalRewardProfit();*/
         }
 
-        private void GetInventoryDifference()
-        {
-            var table = CashReportDb.GetInventoryDifferenceByDate(StartDate, EndDate);
-            if (table.Rows.Count > 0)
-            {
-                InventoryDifference = new InventoryDifference(table.Rows[0]);
-            }
-        }
+        //private void GetInventoryDifference()
+        //{
+        //    var table = CashReportDb.GetInventoryDifferenceByDate(StartDate, EndDate);
+        //    if (table.Rows.Count > 0)
+        //    {
+        //        InventoryDifference = new InventoryDifference(table.Rows[0]);
+        //    }
+        //}
 
-        private void RevertSelfPrescriptionProfitByEditRecords()
-        {
-            foreach (var s in SelfPrescriptionProfitReportCollection)
-            {
-                var editRecords = PrescriptionPointEditRecords.Where(r => r.TypeID.EndsWith(s.TypeId));
-                if (editRecords.Any())
-                {
-                    var medicalServicePoint = editRecords.Sum(e => e.MedicalServiceDifference) * -1;
-                    var medicinePoint = editRecords.Sum(e => e.MedicineDifference) * -1;
-                    var paySelfPoint = editRecords.Sum(e => e.PaySelfDifference) * -1;
-                    var profit = editRecords.Sum(e => e.ProfitDifference) * -1;
-                    s.MedicalServicePoint += medicalServicePoint;
-                    s.MedicinePoint += medicinePoint;
-                    s.PaySelfPoint += paySelfPoint;
-                    s.Profit += profit;
-                }
-            }
-        }
+        //private void RevertSelfPrescriptionProfitByEditRecords()
+        //{
+        //    foreach (var s in SelfPrescriptionProfitReportCollection)
+        //    {
+        //        var editRecords = PrescriptionPointEditRecords.Where(r => r.TypeID.EndsWith(s.TypeId));
+        //        if (editRecords.Any())
+        //        {
+        //            var medicalServicePoint = editRecords.Sum(e => e.MedicalServiceDifference) * -1;
+        //            var medicinePoint = editRecords.Sum(e => e.MedicineDifference) * -1;
+        //            var paySelfPoint = editRecords.Sum(e => e.PaySelfDifference) * -1;
+        //            var profit = editRecords.Sum(e => e.ProfitDifference) * -1;
+        //            s.MedicalServicePoint += medicalServicePoint;
+        //            s.MedicinePoint += medicinePoint;
+        //            s.PaySelfPoint += paySelfPoint;
+        //            s.Profit += profit;
+        //        }
+        //    }
+        //}
 
         private void SumCashDetailReport()
         {
@@ -3428,11 +3408,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 tempCollection = CashDetailReportCollection;
             }
             CashDetailReportSum.CusName = "總計";
-            CashDetailReportSum.CopayMentPrice = tempCollection.Sum(s => (int)s.CopayMentPrice);
-            CashDetailReportSum.PaySelfPrice = tempCollection.Sum(s => (int)s.PaySelfPrice);
-            CashDetailReportSum.PaySelfPrescritionPrice = tempCollection.Sum(s => (int)s.PaySelfPrescritionPrice);
-            CashDetailReportSum.Deposit = tempCollection.Sum(s => (int)s.Deposit);
-            CashDetailReportSum.Other = tempCollection.Sum(s => (int)s.Other);
+            CashDetailReportSum.CopayMentPrice = tempCollection.Sum(s => s.CopayMentPrice);
+            CashDetailReportSum.PaySelfPrice = tempCollection.Sum(s => s.PaySelfPrice);
+            CashDetailReportSum.PaySelfPrescritionPrice = tempCollection.Sum(s => s.PaySelfPrescritionPrice);
+            CashDetailReportSum.Deposit = tempCollection.Sum(s => s.Deposit);
+            CashDetailReportSum.Other = tempCollection.Sum(s => s.Other);
             CashDetailReportSum.Count = tempCollection.Count();
         }
 
@@ -3489,9 +3469,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportSum.MedicalPoint = (int)tempCollection.Sum(s => s.MedicalPoint);
             PrescriptionDetailReportSum.MedicalServicePoint = (int)tempCollection.Sum(s => s.MedicalServicePoint);
             PrescriptionDetailReportSum.PaySelfPoint = (int)tempCollection.Sum(s => s.PaySelfPoint);
-            PrescriptionDetailReportSum.Meduse = (int)tempCollection.Sum(s => s.Meduse);
-            PrescriptionDetailReportSum.Profit = (int)tempCollection.Sum(s => s.Profit);
-            PrescriptionDetailReportSum.Count = (int)tempCollection.Count();
+            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
+            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            PrescriptionDetailReportSum.Count = tempCollection.Count();
         }
 
         private void SumPrescriptionDetailReportALL()
@@ -3547,9 +3527,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportSum.MedicalPoint = (int)tempCollection.Sum(s => s.MedicalPoint);
             PrescriptionDetailReportSum.MedicalServicePoint = (int)tempCollection.Sum(s => s.MedicalServicePoint);
             PrescriptionDetailReportSum.PaySelfPoint = (int)tempCollection.Sum(s => s.PaySelfPoint);
-            PrescriptionDetailReportSum.Meduse = (int)tempCollection.Sum(s => s.Meduse);
-            PrescriptionDetailReportSum.Profit = (int)tempCollection.Sum(s => s.Profit);
-            PrescriptionDetailReportSum.Count = (int)tempCollection.Count();
+            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
+            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            PrescriptionDetailReportSum.Count = tempCollection.Count();
         }
 
         private void SumPrescriptionChangedDetailReport()
@@ -3605,9 +3585,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportSum.MedicalPoint = (int)tempCollection.Sum(s => s.MedicalPoint);
             PrescriptionDetailReportSum.MedicalServicePoint = (int)tempCollection.Sum(s => s.MedicalServicePoint);
             PrescriptionDetailReportSum.PaySelfPoint = (int)tempCollection.Sum(s => s.PaySelfPoint);
-            PrescriptionDetailReportSum.Meduse = (int)tempCollection.Sum(s => s.Meduse);
-            PrescriptionDetailReportSum.Profit = (int)tempCollection.Sum(s => s.Profit);
-            PrescriptionDetailReportSum.Count = (int)tempCollection.Count();
+            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
+            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            PrescriptionDetailReportSum.Count = tempCollection.Count();
         }
 
         private void SumCoopPrescriptionDetailReport()
@@ -3663,9 +3643,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportSum.MedicalPoint = (int)tempCollection.Sum(s => s.MedicalPoint);
             PrescriptionDetailReportSum.MedicalServicePoint = (int)tempCollection.Sum(s => s.MedicalServicePoint);
             PrescriptionDetailReportSum.PaySelfPoint = (int)tempCollection.Sum(s => s.PaySelfPoint);
-            PrescriptionDetailReportSum.Meduse = (int)tempCollection.Sum(s => s.Meduse);
-            PrescriptionDetailReportSum.Profit = (int)tempCollection.Sum(s => s.Profit);
-            PrescriptionDetailReportSum.Count = (int)tempCollection.Count();
+            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
+            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            PrescriptionDetailReportSum.Count = tempCollection.Count();
         }
 
         private void SumCoopChangePrescriptionDetailReport()
@@ -3721,9 +3701,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportSum.MedicalPoint = (int)tempCollection.Sum(s => s.MedicalPoint);
             PrescriptionDetailReportSum.MedicalServicePoint = (int)tempCollection.Sum(s => s.MedicalServicePoint);
             PrescriptionDetailReportSum.PaySelfPoint = (int)tempCollection.Sum(s => s.PaySelfPoint);
-            PrescriptionDetailReportSum.Meduse = (int)tempCollection.Sum(s => s.Meduse);
-            PrescriptionDetailReportSum.Profit = (int)tempCollection.Sum(s => s.Profit);
-            PrescriptionDetailReportSum.Count = (int)tempCollection.Count();
+            PrescriptionDetailReportSum.Meduse = tempCollection.Sum(s => s.Meduse);
+            PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
+            PrescriptionDetailReportSum.Count = tempCollection.Count();
 
             PrescriptionCoopDetailReportSumMain.CoopChange = PrescriptionDetailReportSum.MedicalPoint + PrescriptionDetailReportSum.MedicalServicePoint + PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
         }
@@ -3747,26 +3727,26 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             tempCollectionPaySelfChange = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "0");
 
             PrescriptionDetailReportSumMain.NormalCount = tempCollectionNormal.Count();
-            PrescriptionDetailReportSumMain.NormalMeduse = (int)tempCollectionNormal.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.NormalMeduse = tempCollectionNormal.Sum(s => s.Meduse);
 
             //profit normal
-            PrescriptionDetailReportSumMain.NormalProfit = (int)tempCollectionNormal.Sum(s => s.Profit) + (int)tempCollectionNormalChange.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.NormalProfit = tempCollectionNormal.Sum(s => s.Profit) + tempCollectionNormalChange.Sum(s => s.Meduse);
 
             PrescriptionDetailReportSumMain.NormalIncome = (int)tempCollectionNormal.Sum(s => s.MedicalPoint) + (int)tempCollectionNormal.Sum(s => s.MedicalServicePoint) + (int)tempCollectionNormal.Sum(s => s.PaySelfPoint);
 
             PrescriptionDetailReportSumMain.SlowCount = tempCollectionSlow.Count();
-            PrescriptionDetailReportSumMain.SlowMeduse = (int)tempCollectionSlow.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.SlowMeduse = tempCollectionSlow.Sum(s => s.Meduse);
 
             //profit slow
-            PrescriptionDetailReportSumMain.SlowProfit = (int)tempCollectionSlow.Sum(s => s.Profit) + (int)tempCollectionSlowChange.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.SlowProfit = tempCollectionSlow.Sum(s => s.Profit) + tempCollectionSlowChange.Sum(s => s.Meduse);
 
             PrescriptionDetailReportSumMain.SlowIncome = (int)tempCollectionSlow.Sum(s => s.MedicalPoint) + (int)tempCollectionSlow.Sum(s => s.MedicalServicePoint) + (int)tempCollectionSlow.Sum(s => s.PaySelfPoint);
 
             PrescriptionDetailReportSumMain.PaySelfCount = tempCollectionPaySelf.Count();
-            PrescriptionDetailReportSumMain.PaySelfMeduse = (int)tempCollectionPaySelf.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.PaySelfMeduse = tempCollectionPaySelf.Sum(s => s.Meduse);
 
             //profit payself
-            PrescriptionDetailReportSumMain.PaySelfProfit = (int)tempCollectionPaySelf.Sum(s => s.Profit) + (int)tempCollectionPaySelfChange.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.PaySelfProfit = tempCollectionPaySelf.Sum(s => s.Profit) + tempCollectionPaySelfChange.Sum(s => s.Meduse);
 
             PrescriptionDetailReportSumMain.PaySelfIncome = (int)tempCollectionPaySelf.Sum(s => s.MedicalPoint) + (int)tempCollectionPaySelf.Sum(s => s.MedicalServicePoint) + (int)tempCollectionPaySelf.Sum(s => s.PaySelfPoint);
         }
@@ -3782,9 +3762,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             tempCollectionSlowChange = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "2");
             tempCollectionPaySelfChange = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "0");
 
-            PrescriptionDetailReportSumMain.NormalChange = (int)tempCollectionNormalChange.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.SlowChange = (int)tempCollectionSlowChange.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.PaySelfChange = (int)tempCollectionPaySelfChange.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.NormalChange = tempCollectionNormalChange.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.SlowChange = tempCollectionSlowChange.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.PaySelfChange = tempCollectionPaySelfChange.Sum(s => s.Meduse);
         }
 
         private void SumCoopPrescriptionDetailMain()
@@ -3793,7 +3773,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             var tempCollectionCoop = PrescriptionCoopDetailReportCollection.Where(p => true);
             tempCollectionCoop = PrescriptionCoopDetailReportCollection;//.Where(p => p.InsName == CoopSelectItem);
             PrescriptionCoopDetailReportSumMain.CoopCount = tempCollectionCoop.Count();
-            PrescriptionCoopDetailReportSumMain.CoopMeduse = (int)tempCollectionCoop.Sum(s => s.Meduse);
+            PrescriptionCoopDetailReportSumMain.CoopMeduse = tempCollectionCoop.Sum(s => s.Meduse);
             //PrescriptionCoopDetailReportSumMain.CoopProfit = (int)tempCollectionCoop.Sum(s => s.Profit);
             PrescriptionCoopDetailReportSumMain.CoopIncome = (int)tempCollectionCoop.Sum(s => s.MedicalPoint) + (int)tempCollectionCoop.Sum(s => s.MedicalServicePoint) + (int)tempCollectionCoop.Sum(s => s.PaySelfPoint);
 
@@ -3802,23 +3782,23 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                 PrescriptionCoopDetailReportSumMain.CoopChange;
         }
 
-        private void SumCoopPrescriptionChangeDetailMain()
-        {
-            var tempCollectionCoop = PrescriptionCoopChangeDetailReportCollection.Where(p => true);
-            tempCollectionCoop = PrescriptionCoopChangeDetailReportCollection.Where(p => p.InsName == CoopSelectItem);
-            PrescriptionCoopDetailReportSumMain.CoopChange = (int)tempCollectionCoop.Sum(s => s.Meduse);
-        }
+        //private void SumCoopPrescriptionChangeDetailMain()
+        //{
+        //    var tempCollectionCoop = PrescriptionCoopChangeDetailReportCollection.Where(p => true);
+        //    tempCollectionCoop = PrescriptionCoopChangeDetailReportCollection.Where(p => p.InsName == CoopSelectItem);
+        //    PrescriptionCoopDetailReportSumMain.CoopChange = tempCollectionCoop.Sum(s => s.Meduse);
+        //}
 
         private void SumOTCReportMainChanged(string ID)
         {
             var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => true);
             tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
-            TradeDetailReportSum.TotalChange = (int)tempCollection.Sum(s => s.Profit);
+            TradeDetailReportSum.TotalChange = tempCollection.Sum(s => s.Profit);
 
             TradeDetailReportSum.CardAmount = tempCollection.Sum(s => s.CardAmount);
             TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
-
             TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
+            TradeDetailReportSum.PrePay = tempCollection.Sum(s => s.PrePay); //0809
             TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
 
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
@@ -3834,6 +3814,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
             TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => s.DiscountAmt);
             TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
+            TradeDetailReportSum.PrePay = tempCollection.Sum(s => s.PrePay); //0806
             TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
             TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.RealTotal);
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
@@ -3848,7 +3829,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
         {
             var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => true);
             tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
-            TradeDetailReportSum.TotalChange = (int)tempCollection.Sum(s => s.Profit);
+            TradeDetailReportSum.TotalChange = tempCollection.Sum(s => s.Profit);
         }
 
         private void SumOTCReport(string ID)
@@ -3871,13 +3852,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                     tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId == TradeChangeSelectItem));
                 }
             }
-            TradeDetailReportSum.CardAmount = tempCollection.Sum(s => (int)s.CardAmount);
-            TradeDetailReportSum.CashAmount = tempCollection.Sum(s => (int)s.CashAmount);
-            TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => (int)s.DiscountAmt);
-            TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => (int)s.CashCoupon);
-            TradeDetailReportSum.Profit = tempCollection.Sum(s => (int)s.Profit);
+            TradeDetailReportSum.CardAmount = tempCollection.Sum(s => s.CardAmount);
+            TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
+            TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => s.DiscountAmt);
+            TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
+            TradeDetailReportSum.PrePay = tempCollection.Sum(s => s.PrePay); //0809
+            TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
             //TradeDetailReportSum.RealTotal = tempCollection.Sum(s => (int)s.RealTotal);
-            TradeDetailReportSum.RealTotal = tempCollection.Sum(s => (int)s.CardAmount) + tempCollection.Sum(s => (int)s.CashAmount) + tempCollection.Sum(s => (int)s.DiscountAmt) + tempCollection.Sum(s => (int)s.CashCoupon);
+            TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.CardAmount) + tempCollection.Sum(s => s.CashAmount) + tempCollection.Sum(s => s.DiscountAmt) + tempCollection.Sum(s => s.CashCoupon) + tempCollection.Sum(s => s.PrePay);
             TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => (int)s.ValueDifference);
             TradeDetailReportSum.CardFee = tempCollection.Sum(s => (int)s.CardFee);
             TradeDetailReportSum.Count = tempCollection.Count();
@@ -3888,7 +3870,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
         private void SumOTCProfit()
         {
             //TradeDetailReportSum.TotalProfit = TradeDetailReportSum.Profit + TradeDetailReportSum.TotalChange + (int)TotalRewardReport.RewardAmount + (int)StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus;
-            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + (int)TradeDetailReportSum.ValueDifference + TradeDetailReportSum.TotalChange + (int)StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
+            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + (int)TradeDetailReportSum.ValueDifference + TradeDetailReportSum.TotalChange + StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
         }
 
         private void SumMedProfit()
@@ -3899,7 +3881,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportSumMain.MedTotalMeduse = PrescriptionDetailReportSumMain.NormalMeduse + PrescriptionDetailReportSumMain.PaySelfMeduse + PrescriptionDetailReportSumMain.SlowMeduse + PrescriptionCoopDetailReportSumMain.CoopMeduse;
             PrescriptionDetailReportSumMain.MedTotalChange = PrescriptionDetailReportSumMain.NormalChange + PrescriptionDetailReportSumMain.PaySelfChange + PrescriptionDetailReportSumMain.SlowChange + PrescriptionCoopDetailReportSumMain.CoopChange;
 
-            PrescriptionDetailReportSumMain.MedTotalProfit = PrescriptionDetailReportSumMain.NormalProfit + PrescriptionDetailReportSumMain.PaySelfProfit + PrescriptionDetailReportSumMain.SlowProfit + PrescriptionCoopDetailReportSumMain.CoopProfit + (double)StockTakingDetailReportSum.Price /*+ PrescriptionDetailReportSumMain.MedTotalChange*/;
+            PrescriptionDetailReportSumMain.MedTotalProfit = PrescriptionDetailReportSumMain.NormalProfit + PrescriptionDetailReportSumMain.PaySelfProfit + PrescriptionDetailReportSumMain.SlowProfit + PrescriptionCoopDetailReportSumMain.CoopProfit + StockTakingDetailReportSum.Price /*+ PrescriptionDetailReportSumMain.MedTotalChange*/;
         }
 
         private void SumAllProfit()
@@ -3910,7 +3892,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             TotalCashFlow.AllCost = (int)(TradeDetailReportSum.TotalCost + PrescriptionDetailReportSumMain.MedTotalMeduse);
             TotalCashFlow.AllChange = (int)(TradeDetailReportSum.TotalChange + PrescriptionDetailReportSumMain.MedTotalChange);
 
-            TotalCashFlow.AllStock = (int)(StockTakingOTCDetailReportSum.Price + StockTakingDetailReportSum.Price);
+            TotalCashFlow.AllStock = StockTakingOTCDetailReportSum.Price + StockTakingDetailReportSum.Price;
 
             TotalCashFlow.AllProfit = (int)(TradeDetailReportSum.TotalProfit + PrescriptionDetailReportSumMain.MedTotalProfit);
         }
@@ -3926,7 +3908,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             {
                 tempCollection = StockTakingOTCDetailReportCollection.Where(p => (p.Type == StockTakingOTCSelectItem));
             }
-            StockTakingOTCDetailReportSum.Price = (int)tempCollection.Sum(s => s.Price);
+            StockTakingOTCDetailReportSum.Price = tempCollection.Sum(s => s.Price);
             StockTakingOTCDetailReportSum.Count = tempCollection.Count();
         }
 
@@ -3942,87 +3924,87 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             {
                 tempCollection = StockTakingDetailReportCollection.Where(p => (p.Type == StockTakingSelectItem));
             }
-            StockTakingDetailReportSum.Price = (int)tempCollection.Sum(s => s.Price);
+            StockTakingDetailReportSum.Price = tempCollection.Sum(s => s.Price);
             StockTakingDetailReportSum.Count = tempCollection.Count();
         }
 
-        private void CalculateTotalCashFlow()
-        {
-            TotalCashFlow.CopayMentPrice = CashflowCollection.Sum(c => c.CopayMentPrice);
-            TotalCashFlow.PaySelfPrice = CashflowCollection.Sum(c => c.PaySelfPrice);
-            TotalCashFlow.AllPaySelfPrice = CashflowCollection.Sum(c => c.AllPaySelfPrice);
-            TotalCashFlow.DepositPrice = CashflowCollection.Sum(c => c.DepositPrice);
-            TotalCashFlow.OtherPrice = CashflowCollection.Sum(c => c.OtherPrice);
-            TotalCashFlow.TotalPrice = CashflowCollection.Sum(c => c.TotalPrice);
-        }
+        //private void CalculateTotalCashFlow()
+        //{
+        //    TotalCashFlow.CopayMentPrice = CashflowCollection.Sum(c => c.CopayMentPrice);
+        //    TotalCashFlow.PaySelfPrice = CashflowCollection.Sum(c => c.PaySelfPrice);
+        //    TotalCashFlow.AllPaySelfPrice = CashflowCollection.Sum(c => c.AllPaySelfPrice);
+        //    TotalCashFlow.DepositPrice = CashflowCollection.Sum(c => c.DepositPrice);
+        //    TotalCashFlow.OtherPrice = CashflowCollection.Sum(c => c.OtherPrice);
+        //    TotalCashFlow.TotalPrice = CashflowCollection.Sum(c => c.TotalPrice);
+        //}
 
-        private void CalculateTotalPrescriptionProfit()
-        {
-            TotalPrescriptionProfitReport = new PrescriptionProfitReport();
-            foreach (var r in TotalPrescriptionProfitReportCollection)
-            {
-                TotalPrescriptionProfitReport.Count += r.Count;
-                TotalPrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
-                TotalPrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
-                TotalPrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
-                TotalPrescriptionProfitReport.MedUse += r.MedUse;
-                TotalPrescriptionProfitReport.Profit += r.Profit;
-            }
-        }
+        //private void CalculateTotalPrescriptionProfit()
+        //{
+        //    TotalPrescriptionProfitReport = new PrescriptionProfitReport();
+        //    foreach (var r in TotalPrescriptionProfitReportCollection)
+        //    {
+        //        TotalPrescriptionProfitReport.Count += r.Count;
+        //        TotalPrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
+        //        TotalPrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
+        //        TotalPrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
+        //        TotalPrescriptionProfitReport.MedUse += r.MedUse;
+        //        TotalPrescriptionProfitReport.Profit += r.Profit;
+        //    }
+        //}
 
-        private void CalculateTotalTradeProfit()
-        {
-            TotalTradeProfitReport = new TradeProfitReport();
-            foreach (var r in TradeNormalReportCollection)
-            {
-                TotalTradeProfitReport.Count += r.Count;
-                TotalTradeProfitReport.NetIncome += r.NetIncome;
-                TotalTradeProfitReport.Cost += r.Cost;
-                TotalTradeProfitReport.Profit += r.Profit;
-                TotalTradeProfitReport.CashAmount += r.CashAmount;
-                TotalTradeProfitReport.CardAmount += r.CardAmount;
-                TotalTradeProfitReport.DiscountAmt += r.DiscountAmt;
-                TotalTradeProfitReport.CardFee += r.CardFee;
-                TotalTradeProfitReport.CashCoupon += r.CashCoupon;
-            }
-            TotalTradeProfitReport.TotalAmt = TotalTradeProfitReport.CashAmount + TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.DiscountAmt + TotalTradeProfitReport.CashCoupon;
+        //private void CalculateTotalTradeProfit()
+        //{
+        //    TotalTradeProfitReport = new TradeProfitReport();
+        //    foreach (var r in TradeNormalReportCollection)
+        //    {
+        //        TotalTradeProfitReport.Count += r.Count;
+        //        TotalTradeProfitReport.NetIncome += r.NetIncome;
+        //        TotalTradeProfitReport.Cost += r.Cost;
+        //        TotalTradeProfitReport.Profit += r.Profit;
+        //        TotalTradeProfitReport.CashAmount += r.CashAmount;
+        //        TotalTradeProfitReport.CardAmount += r.CardAmount;
+        //        TotalTradeProfitReport.DiscountAmt += r.DiscountAmt;
+        //        TotalTradeProfitReport.CardFee += r.CardFee;
+        //        TotalTradeProfitReport.CashCoupon += r.CashCoupon;
+        //    }
+        //    TotalTradeProfitReport.TotalAmt = TotalTradeProfitReport.CashAmount + TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.DiscountAmt + TotalTradeProfitReport.CashCoupon;
 
-            TotalTradeProfitReport.TotalCostTotal = (int)(TotalTradeProfitReport.Cost /*+ TotalTradeProfitReport.CardFee*/);
-        }
+        //    TotalTradeProfitReport.TotalCostTotal = TotalTradeProfitReport.Cost /*+ TotalTradeProfitReport.CardFee*/;
+        //}
 
-        private void CalculateTotalTradeNormal()
-        {
-            foreach (var r in TradeNormalReportCollection)
-            {
-                TradeNormalProfitReport.TotalNormalAmt += r.DiscountAmt + r.CardAmount + r.CashAmount;
-            }
-        }
+        //private void CalculateTotalTradeNormal()
+        //{
+        //    foreach (var r in TradeNormalReportCollection)
+        //    {
+        //        TradeNormalProfitReport.TotalNormalAmt += r.DiscountAmt + r.CardAmount + r.CashAmount;
+        //    }
+        //}
 
-        private void CalculateTotalTradeDelete()
-        {
-            foreach (var r in TradeDeleteReportCollection)
-            {
-                TotalTradeProfitReport.TotalDeleteAmt += r.DiscountAmt + r.CardAmount + r.CashAmount + r.Cost;
-                TotalTradeProfitReport.TotalDeleteCardAmt += r.CardAmount;
-                TotalTradeProfitReport.TotalDeleteCashAmt += r.CashAmount;
-                TotalTradeProfitReport.TotalDeleteDiscountAmt += r.DiscountAmt;
-                TotalTradeProfitReport.TotalDeleteCostAmt += r.Cost/*+(int)(r.CardFee)*/;
-                TotalTradeProfitReport.TotalDeleteCashCouponAmt += r.CashCoupon;
-            }
-        }
+        //private void CalculateTotalTradeDelete()
+        //{
+        //    foreach (var r in TradeDeleteReportCollection)
+        //    {
+        //        TotalTradeProfitReport.TotalDeleteAmt += r.DiscountAmt + r.CardAmount + r.CashAmount + r.Cost;
+        //        TotalTradeProfitReport.TotalDeleteCardAmt += r.CardAmount;
+        //        TotalTradeProfitReport.TotalDeleteCashAmt += r.CashAmount;
+        //        TotalTradeProfitReport.TotalDeleteDiscountAmt += r.DiscountAmt;
+        //        TotalTradeProfitReport.TotalDeleteCostAmt += r.Cost/*+(int)(r.CardFee)*/;
+        //        TotalTradeProfitReport.TotalDeleteCashCouponAmt += r.CashCoupon;
+        //    }
+        //}
 
-        private void CalculateTotalTradeChange()
-        {
-            foreach (var r in TradeChangeReportCollection)
-            {
-                TotalTradeProfitReport.TotalChangeAmt += r.DiscountAmt + r.CardAmount + r.CashAmount + r.Cost /*+ (int)(r.CardFee)*/;
-                TotalTradeProfitReport.TotalChangeCardAmt += r.CardAmount;
-                TotalTradeProfitReport.TotalChangeCashAmt += r.CashAmount;
-                TotalTradeProfitReport.TotalChangeDiscountAmt += r.DiscountAmt;
-                TotalTradeProfitReport.TotalChangeCostAmt += r.Cost /*+ (int)(r.CardFee)*/;
-                TotalTradeProfitReport.TotalChangeCashCouponAmt += r.CashCoupon;
-            }
-        }
+        //private void CalculateTotalTradeChange()
+        //{
+        //    foreach (var r in TradeChangeReportCollection)
+        //    {
+        //        TotalTradeProfitReport.TotalChangeAmt += r.DiscountAmt + r.CardAmount + r.CashAmount + r.Cost /*+ (int)(r.CardFee)*/;
+        //        TotalTradeProfitReport.TotalChangeCardAmt += r.CardAmount;
+        //        TotalTradeProfitReport.TotalChangeCashAmt += r.CashAmount;
+        //        TotalTradeProfitReport.TotalChangeDiscountAmt += r.DiscountAmt;
+        //        TotalTradeProfitReport.TotalChangeCostAmt += r.Cost /*+ (int)(r.CardFee)*/;
+        //        TotalTradeProfitReport.TotalChangeCashCouponAmt += r.CashCoupon;
+        //    }
+        //}
 
         private void CalculateTotalRewardProfit()
         {
@@ -4030,130 +4012,130 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
         }
 
-        private void CalculateTotalStockTaking()
-        {
-            TotalStockTakingReport.Count = StockTakingReportCollection.Sum(c => c.Count);
-            TotalStockTakingReport.Price = StockTakingReportCollection.Sum(c => c.Price);
-        }
+        //private void CalculateTotalStockTaking()
+        //{
+        //    TotalStockTakingReport.Count = StockTakingReportCollection.Sum(c => c.Count);
+        //    TotalStockTakingReport.Price = StockTakingReportCollection.Sum(c => c.Price);
+        //}
 
-        private void CalculateTotalStockTakingOTC()
-        {
-            TotalStockTakingOTCReport.Count = StockTakingOTCReportCollection.Sum(c => c.Count);
-            TotalStockTakingOTCReport.Price = StockTakingOTCReportCollection.Sum(c => c.Price);
-        }
+        //private void CalculateTotalStockTakingOTC()
+        //{
+        //    TotalStockTakingOTCReport.Count = StockTakingOTCReportCollection.Sum(c => c.Count);
+        //    TotalStockTakingOTCReport.Price = StockTakingOTCReportCollection.Sum(c => c.Price);
+        //}
 
-        private void CalculateSelfPrescriptionProfit()
-        {
-            SelfPrescriptionProfitReport = new PrescriptionProfitReport();
-            foreach (var r in SelfPrescriptionProfitReportCollection)
-            {
-                SelfPrescriptionProfitReport.Count += r.Count;
-                SelfPrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
-                SelfPrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
-                SelfPrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
-                SelfPrescriptionProfitReport.MedUse += r.MedUse;
-                SelfPrescriptionProfitReport.Profit += r.Profit;
-            }
-            SelfPrescriptionProfitReport.TotalMed = SelfPrescriptionProfitReport.MedicalServicePoint + SelfPrescriptionProfitReport.MedicinePoint;
-        }
+        //private void CalculateSelfPrescriptionProfit()
+        //{
+        //    SelfPrescriptionProfitReport = new PrescriptionProfitReport();
+        //    foreach (var r in SelfPrescriptionProfitReportCollection)
+        //    {
+        //        SelfPrescriptionProfitReport.Count += r.Count;
+        //        SelfPrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
+        //        SelfPrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
+        //        SelfPrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
+        //        SelfPrescriptionProfitReport.MedUse += r.MedUse;
+        //        SelfPrescriptionProfitReport.Profit += r.Profit;
+        //    }
+        //    SelfPrescriptionProfitReport.TotalMed = SelfPrescriptionProfitReport.MedicalServicePoint + SelfPrescriptionProfitReport.MedicinePoint;
+        //}
 
-        private void CalculateSelfPrescriptionChange()
-        {
-            SelfPrescriptionChangeReport = new PrescriptionProfitReport();
-            foreach (var r in SelfPrescriptionChangeProfitReportCollection)
-            {
-                SelfPrescriptionChangeReport.Count += r.Count;
-                SelfPrescriptionChangeReport.MedicalServicePoint += r.MedicalServicePoint;
-                SelfPrescriptionChangeReport.MedicinePoint += r.MedicinePoint;
-                SelfPrescriptionChangeReport.PaySelfPoint += r.PaySelfPoint;
-                SelfPrescriptionChangeReport.MedUse += r.MedUse;
-                SelfPrescriptionChangeReport.Profit += r.Profit;
-            }
-            SelfPrescriptionChangeReport.TotalMed = SelfPrescriptionChangeReport.MedUse;
-        }
+        //private void CalculateSelfPrescriptionChange()
+        //{
+        //    SelfPrescriptionChangeReport = new PrescriptionProfitReport();
+        //    foreach (var r in SelfPrescriptionChangeProfitReportCollection)
+        //    {
+        //        SelfPrescriptionChangeReport.Count += r.Count;
+        //        SelfPrescriptionChangeReport.MedicalServicePoint += r.MedicalServicePoint;
+        //        SelfPrescriptionChangeReport.MedicinePoint += r.MedicinePoint;
+        //        SelfPrescriptionChangeReport.PaySelfPoint += r.PaySelfPoint;
+        //        SelfPrescriptionChangeReport.MedUse += r.MedUse;
+        //        SelfPrescriptionChangeReport.Profit += r.Profit;
+        //    }
+        //    SelfPrescriptionChangeReport.TotalMed = SelfPrescriptionChangeReport.MedUse;
+        //}
 
-        private void CalculateCooperativePrescriptionProfit()
-        {
-            CooperativePrescriptionProfitReport = new PrescriptionProfitReport();
-            foreach (var r in CooperativePrescriptionProfitReportCollection)
-            {
-                CooperativePrescriptionProfitReport.Count += r.Count;
-                CooperativePrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
-                CooperativePrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
-                CooperativePrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
-                CooperativePrescriptionProfitReport.MedUse += r.MedUse;
-                CooperativePrescriptionProfitReport.Profit += r.Profit;
-            }
-            CooperativePrescriptionProfitReport.TotalMed = CooperativePrescriptionProfitReport.MedicinePoint + CooperativePrescriptionProfitReport.MedicalServicePoint;
-        }
+        //private void CalculateCooperativePrescriptionProfit()
+        //{
+        //    CooperativePrescriptionProfitReport = new PrescriptionProfitReport();
+        //    foreach (var r in CooperativePrescriptionProfitReportCollection)
+        //    {
+        //        CooperativePrescriptionProfitReport.Count += r.Count;
+        //        CooperativePrescriptionProfitReport.MedicalServicePoint += r.MedicalServicePoint;
+        //        CooperativePrescriptionProfitReport.MedicinePoint += r.MedicinePoint;
+        //        CooperativePrescriptionProfitReport.PaySelfPoint += r.PaySelfPoint;
+        //        CooperativePrescriptionProfitReport.MedUse += r.MedUse;
+        //        CooperativePrescriptionProfitReport.Profit += r.Profit;
+        //    }
+        //    CooperativePrescriptionProfitReport.TotalMed = CooperativePrescriptionProfitReport.MedicinePoint + CooperativePrescriptionProfitReport.MedicalServicePoint;
+        //}
 
-        private void CalculateCooperativeChangePrescriptionProfit()
-        {
-            CooperativePrescriptionChangeReport = new PrescriptionProfitReport();
-            foreach (var r in CooperativePrescriptionChangeProfitReportCollection)
-            {
-                CooperativePrescriptionChangeReport.Count += r.Count;
-                CooperativePrescriptionChangeReport.MedicalServicePoint += r.MedicalServicePoint;
-                CooperativePrescriptionChangeReport.MedicinePoint += r.MedicinePoint;
-                CooperativePrescriptionChangeReport.PaySelfPoint += r.PaySelfPoint;
-                CooperativePrescriptionChangeReport.MedUse += r.MedUse;
-                CooperativePrescriptionChangeReport.Profit += r.Profit;
-            }
-            CooperativePrescriptionChangeReport.TotalMed = CooperativePrescriptionChangeReport.MedUse;
-        }
+        //private void CalculateCooperativeChangePrescriptionProfit()
+        //{
+        //    CooperativePrescriptionChangeReport = new PrescriptionProfitReport();
+        //    foreach (var r in CooperativePrescriptionChangeProfitReportCollection)
+        //    {
+        //        CooperativePrescriptionChangeReport.Count += r.Count;
+        //        CooperativePrescriptionChangeReport.MedicalServicePoint += r.MedicalServicePoint;
+        //        CooperativePrescriptionChangeReport.MedicinePoint += r.MedicinePoint;
+        //        CooperativePrescriptionChangeReport.PaySelfPoint += r.PaySelfPoint;
+        //        CooperativePrescriptionChangeReport.MedUse += r.MedUse;
+        //        CooperativePrescriptionChangeReport.Profit += r.Profit;
+        //    }
+        //    CooperativePrescriptionChangeReport.TotalMed = CooperativePrescriptionChangeReport.MedUse;
+        //}
 
-        private void CalculateCoopCashProfit()
-        {
-            CoopCashProfitReport = new CashReport();
-            foreach (var r in CoopCashProfitReportCollection)
-            {
-                CoopCashProfitReport.AllPaySelfPrice += r.AllPaySelfPrice;
-                CoopCashProfitReport.PaySelfPrice += r.PaySelfPrice;
-            }
-            CoopCashProfitReport.TotalPrice = CoopCashProfitReport.AllPaySelfPrice + CoopCashProfitReport.PaySelfPrice;
-        }
+        //private void CalculateCoopCashProfit()
+        //{
+        //    CoopCashProfitReport = new CashReport();
+        //    foreach (var r in CoopCashProfitReportCollection)
+        //    {
+        //        CoopCashProfitReport.AllPaySelfPrice += r.AllPaySelfPrice;
+        //        CoopCashProfitReport.PaySelfPrice += r.PaySelfPrice;
+        //    }
+        //    CoopCashProfitReport.TotalPrice = CoopCashProfitReport.AllPaySelfPrice + CoopCashProfitReport.PaySelfPrice;
+        //}
 
-        private void CalculateCashProfit()
-        {
-            CashProfitReport = new CashReport();
-            foreach (var r in CashProfitReportCollection)
-            {
-                CashProfitReport.AllPaySelfPrice += r.AllPaySelfPrice;
-                CashProfitReport.PaySelfPrice += r.PaySelfPrice;
-            }
-            CashProfitReport.TotalPrice = CashProfitReport.AllPaySelfPrice + CashProfitReport.PaySelfPrice;
-        }
+        //private void CalculateCashProfit()
+        //{
+        //    CashProfitReport = new CashReport();
+        //    foreach (var r in CashProfitReportCollection)
+        //    {
+        //        CashProfitReport.AllPaySelfPrice += r.AllPaySelfPrice;
+        //        CashProfitReport.PaySelfPrice += r.PaySelfPrice;
+        //    }
+        //    CashProfitReport.TotalPrice = CashProfitReport.AllPaySelfPrice + CashProfitReport.PaySelfPrice;
+        //}
 
-        private void CalculateTotal()
-        {
-            TotalTradeProfitReport.TotalCostTotalAmt = TotalTradeProfitReport.TotalDeleteCostAmt + TotalTradeProfitReport.TotalChangeCostAmt;
-            TotalTradeProfitReport.TotalCashTotalAmt = TotalTradeProfitReport.TotalDeleteCashAmt + TotalTradeProfitReport.TotalChangeCashAmt;
-            TotalTradeProfitReport.TotalCardTotalAmt = TotalTradeProfitReport.TotalDeleteCardAmt + TotalTradeProfitReport.TotalChangeCardAmt;
-            TotalTradeProfitReport.TotalDiscountTotalAmt = TotalTradeProfitReport.TotalDeleteDiscountAmt + TotalTradeProfitReport.TotalChangeDiscountAmt;
-            TotalTradeProfitReport.TotalCashCouponTotalAmt = TotalTradeProfitReport.TotalDeleteCashCouponAmt + TotalTradeProfitReport.TotalChangeCashCouponAmt;
+        //private void CalculateTotal()
+        //{
+        //    TotalTradeProfitReport.TotalCostTotalAmt = TotalTradeProfitReport.TotalDeleteCostAmt + TotalTradeProfitReport.TotalChangeCostAmt;
+        //    TotalTradeProfitReport.TotalCashTotalAmt = TotalTradeProfitReport.TotalDeleteCashAmt + TotalTradeProfitReport.TotalChangeCashAmt;
+        //    TotalTradeProfitReport.TotalCardTotalAmt = TotalTradeProfitReport.TotalDeleteCardAmt + TotalTradeProfitReport.TotalChangeCardAmt;
+        //    TotalTradeProfitReport.TotalDiscountTotalAmt = TotalTradeProfitReport.TotalDeleteDiscountAmt + TotalTradeProfitReport.TotalChangeDiscountAmt;
+        //    TotalTradeProfitReport.TotalCashCouponTotalAmt = TotalTradeProfitReport.TotalDeleteCashCouponAmt + TotalTradeProfitReport.TotalChangeCashCouponAmt;
 
-            TotalCashFlow.TotalOTCChange = TotalTradeProfitReport.TotalDeleteAmt + TotalTradeProfitReport.TotalChangeAmt;
+        //    TotalCashFlow.TotalOTCChange = TotalTradeProfitReport.TotalDeleteAmt + TotalTradeProfitReport.TotalChangeAmt;
 
-            TotalCashFlow.TotalOTCCash = TotalTradeProfitReport.CashAmount + TotalTradeProfitReport.TotalCashTotalAmt;
-            TotalCashFlow.TotalOTCCard = TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.TotalCardTotalAmt;
-            TotalCashFlow.TotalOTCTicket = TotalTradeProfitReport.DiscountAmt + TotalTradeProfitReport.TotalDiscountTotalAmt;
-            TotalCashFlow.TotalOTCCashTicket = TotalTradeProfitReport.CashCoupon + TotalTradeProfitReport.TotalCashCouponTotalAmt;
+        //    TotalCashFlow.TotalOTCCash = TotalTradeProfitReport.CashAmount + TotalTradeProfitReport.TotalCashTotalAmt;
+        //    TotalCashFlow.TotalOTCCard = TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.TotalCardTotalAmt;
+        //    TotalCashFlow.TotalOTCTicket = TotalTradeProfitReport.DiscountAmt + TotalTradeProfitReport.TotalDiscountTotalAmt;
+        //    TotalCashFlow.TotalOTCCashTicket = TotalTradeProfitReport.CashCoupon + TotalTradeProfitReport.TotalCashCouponTotalAmt;
 
-            TotalCashFlow.TotalMedCoop = CooperativePrescriptionProfitReport.TotalMed + CooperativePrescriptionProfitReport.MedUse + CoopCashProfitReport.TotalPrice + CooperativePrescriptionChangeReport.Profit;
-            TotalCashFlow.TotalMedNotCoop = SelfPrescriptionChangeReport.Profit + SelfPrescriptionProfitReport.TotalMed + SelfPrescriptionProfitReport.MedUse + CashProfitReport.TotalPrice;
+        //    TotalCashFlow.TotalMedCoop = CooperativePrescriptionProfitReport.TotalMed + CooperativePrescriptionProfitReport.MedUse + CoopCashProfitReport.TotalPrice + CooperativePrescriptionChangeReport.Profit;
+        //    TotalCashFlow.TotalMedNotCoop = SelfPrescriptionChangeReport.Profit + SelfPrescriptionProfitReport.TotalMed + SelfPrescriptionProfitReport.MedUse + CashProfitReport.TotalPrice;
 
-            DiscountAmt = -TotalTradeProfitReport.DiscountAmt;
-            TotalCashFlow.TotalOTCAmount = TotalTradeProfitReport.Cost + TotalTradeProfitReport.TotalCostTotalAmt + (double)TotalStockTakingOTCReport.Price + (double)TotalRewardReport.RewardAmount + (double)DiscountAmt;
+        //    DiscountAmt = -TotalTradeProfitReport.DiscountAmt;
+        //    TotalCashFlow.TotalOTCAmount = TotalTradeProfitReport.Cost + TotalTradeProfitReport.TotalCostTotalAmt + (double)TotalStockTakingOTCReport.Price + (double)TotalRewardReport.RewardAmount + DiscountAmt;
 
-            InventoryDifference.InventoryTotal = (double)(InventoryDifference.InventoryOverage + InventoryDifference.InventoryShortage + InventoryDifference.InventoryScrap);
-            TotalCashFlow.TotalOTC = TotalTradeProfitReport.Profit + (int)TotalStockTakingOTCReport.Price + DiscountAmt + TotalRewardReport.RewardAmount + TotalCashFlow.TotalOTCChange;
-            TotalCashFlow.TotalMedProfit = CooperativePrescriptionProfitReport.TotalMed + SelfPrescriptionProfitReport.TotalMed;
-            TotalCashFlow.TotalMedUse = CooperativePrescriptionProfitReport.MedUse + SelfPrescriptionProfitReport.MedUse;
-            TotalCashFlow.TotalMedCash = /*TotalCashFlow.CopayMentPrice +*/ TotalCashFlow.PaySelfPrice + TotalCashFlow.AllPaySelfPrice /*+ TotalCashFlow.DepositPrice*/ + TotalCashFlow.OtherPrice;
-            TotalCashFlow.TotalMedChange = SelfPrescriptionChangeReport.TotalMed + CooperativePrescriptionChangeReport.TotalMed;
-            TotalCashFlow.TotalMed = TotalCashFlow.TotalMedCash + TotalCashFlow.TotalMedUse + TotalCashFlow.TotalMedProfit + (double)TotalStockTakingReport.Price + TotalCashFlow.TotalMedChange;
-            TotalCashFlow.Total = (double)(TotalCashFlow.TotalOTC + TotalCashFlow.TotalMed + (double)ExtraMoney);
-        }
+        //    InventoryDifference.InventoryTotal = (double)(InventoryDifference.InventoryOverage + InventoryDifference.InventoryShortage + InventoryDifference.InventoryScrap);
+        //    TotalCashFlow.TotalOTC = TotalTradeProfitReport.Profit + (int)TotalStockTakingOTCReport.Price + DiscountAmt + TotalRewardReport.RewardAmount + TotalCashFlow.TotalOTCChange;
+        //    TotalCashFlow.TotalMedProfit = CooperativePrescriptionProfitReport.TotalMed + SelfPrescriptionProfitReport.TotalMed;
+        //    TotalCashFlow.TotalMedUse = CooperativePrescriptionProfitReport.MedUse + SelfPrescriptionProfitReport.MedUse;
+        //    TotalCashFlow.TotalMedCash = /*TotalCashFlow.CopayMentPrice +*/ TotalCashFlow.PaySelfPrice + TotalCashFlow.AllPaySelfPrice /*+ TotalCashFlow.DepositPrice*/ + TotalCashFlow.OtherPrice;
+        //    TotalCashFlow.TotalMedChange = SelfPrescriptionChangeReport.TotalMed + CooperativePrescriptionChangeReport.TotalMed;
+        //    TotalCashFlow.TotalMed = TotalCashFlow.TotalMedCash + TotalCashFlow.TotalMedUse + TotalCashFlow.TotalMedProfit + (double)TotalStockTakingReport.Price + TotalCashFlow.TotalMedChange;
+        //    TotalCashFlow.Total = (double)(TotalCashFlow.TotalOTC + TotalCashFlow.TotalMed + (double)ExtraMoney);
+        //}
 
         private void AdjustCaseFilter(object sender, FilterEventArgs e)
         {

@@ -20,6 +20,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private int Total;
         private int paid;
         private string cardNumber = "";
+        private bool isprepay = false;
+        private int paycount = 0;
 
         private int cash = 0;
         private int realcash = 0;
@@ -52,7 +54,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return _regex.IsMatch(text);
         }
 
-        public CheckoutWindowView(int total, int linecount, int itemcount, string prepaybalance, bool hasCustomer)
+        public CheckoutWindowView(int total, int linecount, int itemcount, string prepaybalance, bool hasCustomer, bool isPrepay)
         {
             InitializeComponent();
 
@@ -71,12 +73,22 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 tbPrepay.IsEnabled = true;
             }
 
+            if (isPrepay) 
+            {
+                tbVoucher.IsEnabled = false;
+                tbCashCoupon.IsEnabled = false;
+                tbPrepay.IsEnabled = false;
+
+                tbInvoiceNum.Content = "";
+            }
+
             Total = total;
             lblTotal.Content = total.ToString();
             lblLineCount.Content = linecount.ToString();
             lblItemCount.Content = itemcount.ToString();
             lblPrepay.Content = int.Parse(prepaybalance);
             prepayBalance = int.Parse(prepaybalance);
+            isprepay = isPrepay;
             GetEmployeeList();
             CardNumberControl();
             ChangeCount();
@@ -116,22 +128,27 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (CashParse && realcash > 0)
             {
                 list.Add("現金");
+                paycount++;
             }
             if (VoucherParse && voucher > 0)
             {
                 list.Add("禮券");
+                paycount++;
             }
             if (CashCouponParse && cashcoupon > 0)
             {
                 list.Add("現金券");
+                paycount++;
             }
             if (CardParse && card > 0)
             {
                 list.Add("信用卡");
+                paycount++;
             }
             if (PrepayParse && prepay > 0)
             {
                 list.Add("訂金沖銷");
+                paycount++;
             }
 
             string[] arr = list.ToArray();
@@ -214,6 +231,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (!IsEmployeeIDValid())
             {
                 MessageWindow.ShowMessage("結帳人員輸入錯誤！", MessageType.WARNING);
+                tbEmployee.Focus();
                 return;
             }
             if (prepay > prepayBalance) 
@@ -230,6 +248,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (card == 0)
             {
                 cardNumber = "";
+            }
+            GetPayMethod();
+            if (isprepay && paycount > 1) 
+            {
+                MessageWindow.ShowMessage("預付訂金需使用單一付款方式", MessageType.WARNING);
+                return;
             }
 
             DialogResult = true;
@@ -268,12 +292,25 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter || e.Key == Key.Down)
             {
                 ChangeCount();
-                tbVoucher.Focus();
+                if (tbVoucher.IsEnabled)
+                {
+                    tbVoucher.Focus();
+                }
+                else 
+                {
+                    tbCard.Focus();
+                }
+                
             }
             if (e.Key == Key.Up)
             {
                 ChangeCount();
                 tbTaxNum.Focus();
+            }
+            if (e.Key == Key.Right)
+            {
+                ChangeCount();
+                tbPrepay.Focus();
             }
         }
 
@@ -317,7 +354,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (e.Key == Key.Up)
                 {
                     ChangeCount();
-                    tbCashCoupon.Focus();
+                    if (tbCashCoupon.IsEnabled)
+                    {
+                        tbCashCoupon.Focus();
+                    }
+                    else 
+                    {
+                        tbCash.Focus();
+                    }
                 }
             }
             else
@@ -330,7 +374,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (e.Key == Key.Up)
                 {
                     ChangeCount();
-                    tbCashCoupon.Focus();
+                    if (tbCashCoupon.IsEnabled)
+                    {
+                        tbCashCoupon.Focus();
+                    }
+                    else
+                    {
+                        tbCash.Focus();
+                    }
                 }
             }
         }

@@ -228,6 +228,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 }
             }
 
+            if (ProductList.Rows.Count > 0 && ProductList.Rows[0]["Pro_ID"].ToString() == PrepayProID) 
+            {
+                MessageWindow.ShowMessage("預付訂金須單獨結帳", MessageType.ERROR);
+                return;
+            }
+
             if (int.TryParse(searchString, out int n))
             {
                 if (searchString.Length < 5)
@@ -540,7 +546,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 {
                     DepositInsert();
-                    if (Properties.Settings.Default.InvoiceCheck == "1")
+                    if (Properties.Settings.Default.InvoiceCheck == "1" && ProductList.Rows[0]["Pro_ID"].ToString() != PrepayProID)
                     {
                         if (Properties.Settings.Default.InvoiceNumber.Length != 8)
                         {
@@ -610,11 +616,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int priceSum = 0;
             for (int i = 0; i < j; i++)
             {
-                if (ProductList.Rows[i]["Pro_TypeID"].ToString()=="1") {
+                if (ProductList.Rows[i]["Pro_TypeID"].ToString() == "1") {
                     strArr = big5.GetBytes("配藥".PadRight(13, ' ').Substring(0, 13));
                     port.Write(strArr, 0, strArr.Length);
                     port.Write("" + cr + lf);
                 }
+                else if (ProductList.Rows[i]["Pro_ID"].ToString() == PrepayProID) { } //預收訂金
                 else {
                     strArr = big5.GetBytes(ProductList.Rows[i]["Pro_ChineseName"].ToString().PadRight(13, ' ').Substring(0, 13));
                     port.Write(strArr, 0, strArr.Length);
@@ -708,7 +715,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int rowCount = ProductList.Rows.Count;
             int amtCount = int.Parse(ProductList.Compute("Sum(Amount)", string.Empty).ToString());
             bool hasCustomer = int.Parse(cusID) > 0 ? true : false;
-            chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount, PrepayBalance, hasCustomer);
+            bool isPrepay = ProductList.Rows[0]["Pro_ID"].ToString() == PrepayProID;
+            chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount, PrepayBalance, hasCustomer, isPrepay);
             chkWindow.ShowDialog();
             if ((bool)chkWindow.DialogResult)
             {
@@ -1507,21 +1515,29 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void btnPrepay_Click(object sender, RoutedEventArgs e)
         {
             int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
-            AddProductByInputAction(PrepayProID, currentRowIndex);
-            foreach (DataRow dr in ProductList.Rows)
+
+            if (ProductList.Rows.Count == 0)
             {
-                dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
+                AddProductByInputAction(PrepayProID, currentRowIndex);
+                foreach (DataRow dr in ProductList.Rows)
+                {
+                    dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
+                }
+                // Focus On Price
+                Dispatcher.InvokeAsync(() =>
+                {
+                    var ProductIDList = new List<TextBox>();
+                    NewFunction.FindChildGroup(ProductDataGrid, "Amount",
+                        ref ProductIDList);
+                    TextBox tb = ProductIDList[ProductIDList.Count - 2];
+                    tb.Focus();
+                    tb.SelectAll();
+                }, DispatcherPriority.ApplicationIdle);
             }
-            // Focus On Price
-            Dispatcher.InvokeAsync(() =>
+            else 
             {
-                var ProductIDList = new List<TextBox>();
-                NewFunction.FindChildGroup(ProductDataGrid, "Amount",
-                    ref ProductIDList);
-                TextBox tb = ProductIDList[ProductIDList.Count - 2];
-                tb.Focus();
-                tb.SelectAll();
-            }, DispatcherPriority.ApplicationIdle);
+                MessageWindow.ShowMessage("預付訂金須單獨結帳", MessageType.ERROR);
+            }
         }
     }
 }
