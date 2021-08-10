@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows;
 using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
@@ -283,8 +284,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 
         private void UpdateAction()
         {
-            ReloadAction();
             InsertToClosingAccoutRecord();
+            ReloadAction();
         }
 
         private void HistoryAction()
@@ -387,6 +388,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             DailyClosingAccount data = new DailyClosingAccount()
             {
                 ClosingDate = StartDate,
+                
                 PharmacyName = ViewModelMainWindow.CurrentPharmacy.Name,
                 OTCSaleProfit = Trade - TradeTodayStock,
                 DailyAdjustAmount = Count,
@@ -395,10 +397,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 ChronicAndOtherProfit = Other
             };
             data.SelfProfit = data.OTCSaleProfit  + data.ChronicAndOtherProfit + data.PrescribeProfit;
-            data.TotalProfit = data.SelfProfit + data.CooperativeClinicProfit;
+            data.TotalProfit = CheckTotal;
 
-            if( data.OTCSaleProfit == 0 && data.ChronicAndOtherProfit == 0 && data.PrescribeProfit == 0 && data.CooperativeClinicProfit==0)
-                return;
+
 
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();

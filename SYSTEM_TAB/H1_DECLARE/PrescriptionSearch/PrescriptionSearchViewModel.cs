@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
     {
         #region Properties
 
-        public Collection<string> TimeIntervalTypes => new Collection<string> { "調劑日", "登錄日", "預約日" };
+        public Collection<string> TimeIntervalTypes => new Collection<string> { "調劑日", "登錄日" };
         public Collection<string> PatientConditions => new Collection<string> { "姓名", "身分證" };
         public Collection<string> MedicineConditions => new Collection<string> { "藥品代碼", "藥品名稱" };
         private PrescriptionType searchType { get; set; }

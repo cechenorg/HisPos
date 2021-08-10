@@ -417,7 +417,7 @@
                                 Margin="5,0,0,0"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                IsEnabled="{Binding Enable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="True"
                                 PreviewMouseLeftButtonDown="KeyIn_PreviewMouseLeftButtonDown"
                                 Text="{Binding CheckTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <Button
