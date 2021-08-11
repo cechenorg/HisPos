@@ -56,7 +56,15 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             parameterList.Add(new SqlParameter("ChronicAndOtherProfit", data.ChronicAndOtherProfit));
             parameterList.Add(new SqlParameter("SelfProfit", data.SelfProfit));
             parameterList.Add(new SqlParameter("TotalProfit", data.TotalProfit));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCloseCash]", parameterList);
+
+            if (ViewModelMainWindow.CurrentPharmacy.GroupServerName != string.Empty)
+                MainWindow.ServerConnection.ExecuteProcBySchema(
+                    ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertClosingAccountRecord]", parameterList);
+            else
+            {
+                MainWindow.ServerConnection.ExecuteProcBySchema(
+                    ViewModelMainWindow.CurrentPharmacy.HISPOS_ServerName, "[Set].[InsertClosingAccountRecord]", parameterList);
+            }
         }
 
         public List<MonthlyAccountTarget> GetMonthTargetByGroupServerName(string groupServerName){

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Windows;
 using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
@@ -284,8 +283,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 
         private void UpdateAction()
         {
-            InsertToClosingAccoutRecord();
             ReloadAction();
+            InsertToClosingAccoutRecord();
         }
 
         private void HistoryAction()
@@ -399,9 +398,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             data.SelfProfit = data.OTCSaleProfit  + data.ChronicAndOtherProfit + data.PrescribeProfit;
             data.TotalProfit = CheckTotal;
 
-           /* if ( data.OTCSaleProfit == 0 && data.Chroni
-            * cAndOtherProfit == 0 && data.PrescribeProfit == 0 && data.CooperativeClinicProfit==0)
-                return;*/
+            if ( data.OTCSaleProfit == 0 && data.ChronicAndOtherProfit == 0 && data.PrescribeProfit == 0 && data.CooperativeClinicProfit==0)
+                return;
 
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
