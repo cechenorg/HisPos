@@ -67,7 +67,7 @@
                     <MouseBinding Command="{Binding DataContext.SetPricesCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" MouseAction="LeftClick" />
                 </Image.InputBindings>
             </Image>
-            <Label
+            <!--<Label
                 Margin="55,0,0,0"
                 VerticalAlignment="Center"
                 Content="員工價"
@@ -96,7 +96,7 @@
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.SpecialPrice, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding MedicineDetail.SpecialPrice, Mode=TwoWay, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />-->
         </StackPanel>
         <StackPanel Grid.Row="3">
             <Grid Margin="0,10,0,0">
