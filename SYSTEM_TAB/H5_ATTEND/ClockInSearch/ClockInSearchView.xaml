@@ -59,8 +59,8 @@
                 FontSize="20"
                 InputMethod.IsInputMethodEnabled="False"
                 InputScope="AlphanumericHalfWidth"               
-                Text="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" /> 
-                <!--PreviewKeyDown="Account_OnPreviewKeyDown"-->
+                Text="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PreviewKeyDown="Account_OnPreviewKeyDown" /> 
             <Label
                 Width="Auto"
                 Margin="10,0,5,0"
@@ -75,8 +75,8 @@
                     FontSize="20" 
                     FontWeight="Bold"
                     InputMethod.IsInputMethodEnabled="False"
-                    InputScope="AlphanumericHalfWidth"    >
-                    <!--PreviewKeyDown="PassWord_OnPreviewKeyDown"-->
+                    InputScope="AlphanumericHalfWidth" 
+                    PreviewKeyDown="PassWord_OnPreviewKeyDown"   >
                 <PasswordBox.InputBindings>
                     <KeyBinding   Command="{Binding ConfirmAddClockInCommand}" CommandParameter="{Binding ElementName=Password}" Key="Enter" />
                 </PasswordBox.InputBindings>
@@ -101,14 +101,31 @@
                 BorderThickness="0"
                 Content="清空"
                 FontSize="20"
-                FontWeight="Bold"/>--> 
-            <!--Click="btn_clear_Click"-->
-            <!--<TextBlock x:Name="SystemTime" Margin="10,5,10,10" VerticalAlignment="Center" FontSize="22" Foreground="#535761" TextWrapping="Wrap" />-->
+                FontWeight="Bold"/>-->
         </StackPanel>
-        <DataGrid
-                Grid.Row="1"
-                Grid.Column="0"
+        <Grid 
+            Grid.Row="1"
+            Grid.Column="0"
             Grid.RowSpan="2"
+            Margin="10,10,0,10"
+            Background="{StaticResource GridBackGround}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ComboBox
+                Grid.Row="0"
+                Margin="10,0,10,0"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"            
+                ItemsSource="{Binding CheckLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+             DisplayMemberPath="Namepath"
+                SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                />   
+            <DataGrid
+            Grid.Row="1"
                 Margin="10,10,10,10"
                 AllowDrop="True"
                 AutoGenerateColumns="False"
@@ -124,33 +141,6 @@
                 VerticalScrollBarVisibility="Hidden"
                 ItemsSource="{Binding EmployeeCollection, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <!--<DataGrid.Resources>
-                <Style TargetType="{x:Type ScrollBar}">
-                    <Setter Property="SnapsToDevicePixels" Value="True" />
-                    <Setter Property="OverridesDefaultStyle" Value="true" />
-                    <Setter Property="Width" Value="100" />
-                    <Style.Triggers>
-                        <Trigger Property="Orientation" Value="Horizontal">
-                            <Setter Property="Width" Value="Auto" />
-                            <Setter Property="Height" Value="15" />
-                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                        </Trigger>
-                        <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="Width" Value="15" />
-                            <Setter Property="Height" Value="Auto" />
-                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                    <Setter Property="FontSize" Value="16" />
-                    <Setter Property="Height" Value="41" />
-                </Style>
-            </DataGrid.RowStyle>-->
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="175"
@@ -168,10 +158,11 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        </Grid>
         <DataGrid
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="5,10,10,0"
+                Margin="5,10,0,0"
                 AllowDrop="True"
                 AutoGenerateColumns="False"
                 Background="{StaticResource GridBackGround}"
@@ -213,6 +204,19 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="175"
+                    Binding="{Binding EmpAccount}"
+                    FontFamily="Segoe UI Semi"
+                    Header="店別"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="175"
                     Binding="{Binding EmpName}"
@@ -287,7 +291,7 @@
             Background="#bfbfbf"
             Orientation="Horizontal" >
             <ComboBox
-                Width="120"
+                Width="60"
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
@@ -310,7 +314,7 @@
             </ComboBox>
             <Label
                             VerticalAlignment="Center"
-                            Content="  總共"
+                            Content="  月    總共"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20"
                             Foreground="Black" />
@@ -342,7 +346,16 @@
                             FontFamily="Segoe UI Semibold"
                             FontSize="20"
                             Foreground="Black" />
-
+            <Button
+                x:Name="ButtonPrint"
+                Width="150"
+                Margin="10,0,0,0"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding ExportCsvCommand}"
+                Content="匯出結果"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
         </StackPanel>
     </Grid>
 </UserControl>

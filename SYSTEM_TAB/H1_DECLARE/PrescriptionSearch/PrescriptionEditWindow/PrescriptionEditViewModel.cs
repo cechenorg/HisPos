@@ -166,7 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust || EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1;
+        public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust || EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師");
         public bool PriceReadOnly => !CanEdit;
 
         #endregion UIProperties

@@ -149,10 +149,11 @@ namespace His_Pos.NewClass.StoreOrder
                     hasControlMed = true;
                 }
 
-                if (OrderProducts.Where(s => s.ID == product.ID).Count()>1 && product.RealAmount != 0 && (product.BatchNumber=="" ||product.BatchNumber==null)) {
-                    
+                if (OrderProducts.Where(s => s.ID == product.ID).Count()>1 && product.RealAmount != 0 && (product.BatchNumber=="" ||product.BatchNumber==null)) 
+                {                    
                      hasNoBatch = true;
                 }
+                
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null) && product.RealAmount > 0)
                 {
                     MessageWindow.ShowMessage("管藥批號不得為空!", MessageType.ERROR);

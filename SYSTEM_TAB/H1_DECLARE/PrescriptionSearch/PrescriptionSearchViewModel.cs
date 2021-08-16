@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
     {
         #region Properties
 
-        public Collection<string> TimeIntervalTypes => new Collection<string> { "調劑日", "登錄日", "預約日" };
+        public Collection<string> TimeIntervalTypes => new Collection<string> { "調劑日", "登錄日" };
         public Collection<string> PatientConditions => new Collection<string> { "姓名", "身分證" };
         public Collection<string> MedicineConditions => new Collection<string> { "藥品代碼", "藥品名稱" };
         private PrescriptionType searchType { get; set; }
@@ -579,7 +579,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     var sAdjust = s.IsAdjust ? "已調劑" : "未調劑";
                     var adjDate = DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(s.AdjustDate);
                     var treatDate = s.TreatDate is null ? "" : ((DateTime)s.TreatDate).AddYears(-1911).ToString("yyy/MM/dd");
-                    Debug.Assert(s.Patient.Birthday != null, "s.Patient.Birthday != null");
+                    //Debug.Assert(s.Patient.Birthday != null, "s.Patient.Birthday != null");
+                    if (s.Patient.Birthday == null) {
+                        s.Patient.Birthday = DateTime.Now;
+                    }
+
                     file.WriteLine($"{sAdjust},{s.StoStatus},{insName}," +
                             $"{divName},{s.Patient.Name},{s.MedicalNumber},{s.Patient.IDNumber}," +
                             $"{((DateTime)s.Patient.Birthday).AddYears(-1911):yyy/MM/dd}," +

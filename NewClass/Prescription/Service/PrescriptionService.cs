@@ -826,7 +826,7 @@ namespace His_Pos.NewClass.Prescription.Service
         private static void CheckAdminLogin(Prescription selected)
         {
             if (selected is null) return;
-            if (VM.CurrentUser.ID == 1)
+            if (VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師"))
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
                 var edit = new PrescriptionEditWindow(selected, title);

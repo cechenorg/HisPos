@@ -431,6 +431,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             DailyClosingAccount data = new DailyClosingAccount()
             {
                 ClosingDate = StartDate,
+                
                 PharmacyName = ViewModelMainWindow.CurrentPharmacy.Name,
                 OTCSaleProfit = Trade - TradeTodayStock,
                 DailyAdjustAmount = Count,
@@ -439,9 +440,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 ChronicAndOtherProfit = Other
             };
             data.SelfProfit = data.OTCSaleProfit  + data.ChronicAndOtherProfit + data.PrescribeProfit;
-            data.TotalProfit = data.SelfProfit + data.CooperativeClinicProfit;
+            data.TotalProfit = data.SelfProfit + data.CooperativeClinicProfit; ;
 
-            if( data.OTCSaleProfit == 0 && data.ChronicAndOtherProfit == 0 && data.PrescribeProfit == 0 && data.CooperativeClinicProfit==0)
+            if ( data.OTCSaleProfit == 0 && data.ChronicAndOtherProfit == 0 && data.PrescribeProfit == 0 && data.CooperativeClinicProfit==0)
                 return;
 
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
