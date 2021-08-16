@@ -50,7 +50,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private int realTotal = 0;
         private double totalProfit = 0;
         private string cusID = "0";
+        private string PrepayBalance = "0";
         private bool isGift = false;
+        private string PrepayProID = "PREPAY";
 
         private CheckoutWindowView chkWindow;
 
@@ -213,6 +215,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return result;
         }
 
+        // 新增品項
         private void AddProductByInputAction(string searchString, int rowIndex)
         {
             if (string.IsNullOrEmpty(searchString)) return;
@@ -223,6 +226,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     ProductList.Rows.RemoveAt(rowIndex);
                     CalculateTotal();
                 }
+            }
+
+            if (ProductList.Rows.Count > 0 && ProductList.Rows[0]["Pro_ID"].ToString() == PrepayProID) 
+            {
+                MessageWindow.ShowMessage("預付訂金須單獨結帳", MessageType.ERROR);
+                return;
             }
 
             if (int.TryParse(searchString, out int n))
@@ -259,7 +268,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (productCount == 0)
             {
                 MessageWindow.ShowMessage("查無商品", MessageType.WARNING);
-                if (rowIndex < ProductList.Rows.Count)
+                if (rowIndex < ProductList.Rows.Count && rowIndex >= 0)
                 {
                     ProductList.Rows.RemoveAt(rowIndex);
                     CalculateTotal();
@@ -321,13 +330,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         DataRow NewProduct = result.Rows[0];
                         newRow.ItemArray = NewProduct.ItemArray;
 
+                        if (result.Rows[0]["Pro_ID"].ToString() == PrepayProID) 
+                        {
+                            result.Rows[0]["Pro_TypeID"] = 0;
+                        }
+
                         int amt = int.Parse(result.Rows[0]["Available_Amount"].ToString());
-                        if (amt < 1)
+                        if (amt < 1 && result.Rows[0]["Pro_ID"].ToString() != PrepayProID)
                         {
                             MessageWindow.ShowMessage("該品項可用量不足", MessageType.WARNING);
                             return;
                         }
-                        if (rowIndex < ProductList.Rows.Count)
+                        if (rowIndex < ProductList.Rows.Count && rowIndex >= 0)
                         {
                             ProductList.Rows.RemoveAt(rowIndex);
                             ProductList.Rows.InsertAt(newRow, rowIndex);
@@ -344,7 +358,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         {
                             newRow.ItemArray = NewProduct.ItemArray;
                             int amt = int.Parse(NewProduct["Available_Amount"].ToString());
-                            if (amt < 1)
+                            if (amt < 1 && result.Rows[0]["Pro_ID"].ToString() != PrepayProID)
                             {
                                 MessageWindow.ShowMessage("該品項可用量不足", MessageType.WARNING);
                                 return;
@@ -433,7 +447,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             TaxNum.Content = ((int)(realTotal * 0.05)).ToString();
             NOTaxNum.Content = (realTotal - ((int)(realTotal * 0.05))).ToString();
 
-
             if (ProductList.Rows.Count > 0)
             {
                 double.TryParse(ProductList.Compute("SUM(Profit)", string.Empty).ToString(), out double preProfit);
@@ -502,7 +515,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             try
             {
-               
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("CustomerID", cusID));
@@ -512,6 +524,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("VoucherAmount", chkWindow.Voucher));
                 parameters.Add(new SqlParameter("CashCouponAmount", chkWindow.CashCoupon));
                 parameters.Add(new SqlParameter("CardAmount", chkWindow.Card));
+                parameters.Add(new SqlParameter("PrepayAmount", chkWindow.Prepay));
                 parameters.Add(new SqlParameter("PreTotal", preTotal));
                 parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
                 parameters.Add(new SqlParameter("RealTotal", realTotal));
@@ -533,7 +546,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 {
                     DepositInsert();
-                    if (Properties.Settings.Default.InvoiceCheck == "1")
+                    if (Properties.Settings.Default.InvoiceCheck == "1" && ProductList.Rows[0]["Pro_ID"].ToString() != PrepayProID)
                     {
                         if (Properties.Settings.Default.InvoiceNumber.Length != 8)
                         {
@@ -549,19 +562,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     ClearPage();
                     MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
                 }
-                else { MessageWindow.ShowMessage("資料傳送失敗！", MessageType.ERROR); }
+                else { MessageWindow.ShowMessage(result.Rows[0].Field<string>("RESULT"), MessageType.ERROR); }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
 
         private void InvoicePrint() //9.16發票
         {
-            //MessageBox.Show(detail.Rows[0]["TraDet_ProductName"].ToString());
             MyPharmacy = Pharmacy.GetCurrentPharmacy();
-
             SerialPort port = new SerialPort(Properties.Settings.Default.InvoiceComPort, 9600, Parity.None, 8, StopBits.One);
             try
             {
@@ -581,18 +592,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             char cr = Convert.ToChar(13);
             char esc = Convert.ToChar(27);
 
-            //port.Write(esc + "@");
-            //port.Write(esc + "z" + Convert.ToChar(1));
-            //port.Write(esc + "d" + Convert.ToChar(4));
             strArr = big5.GetBytes(MyPharmacy.Name.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
             strArr = big5.GetBytes("地址:" + MyPharmacy.Address.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
-            /*strArr = big5.GetBytes("統編:" + MyPharmacy.ID.ToString());
-            port.Write(strArr, 0, strArr.Length); */
-            // port.Write("" + cr + lf);
             strArr = big5.GetBytes("電話:" + MyPharmacy.Tel.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
@@ -602,22 +607,21 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             strArr = big5.GetBytes("賣方:" + MyPharmacy.TAXNUM.ToString());
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
-            //port.Write(esc + "d" + Convert.ToChar(1));
             strArr = big5.GetBytes("買方:" + chkWindow.TaxNumber);
             port.Write(strArr, 0, strArr.Length);
             port.Write("" + cr + lf);
             port.Write("" + cr + lf);
 
             int j = ProductList.Rows.Count;
-            
             int priceSum = 0;
             for (int i = 0; i < j; i++)
             {
-                if (ProductList.Rows[i]["Pro_TypeID"].ToString()=="1") {
+                if (ProductList.Rows[i]["Pro_TypeID"].ToString() == "1") {
                     strArr = big5.GetBytes("配藥".PadRight(13, ' ').Substring(0, 13));
                     port.Write(strArr, 0, strArr.Length);
                     port.Write("" + cr + lf);
                 }
+                else if (ProductList.Rows[i]["Pro_ID"].ToString() == PrepayProID) { } //預收訂金
                 else {
                     strArr = big5.GetBytes(ProductList.Rows[i]["Pro_ChineseName"].ToString().PadRight(13, ' ').Substring(0, 13));
                     port.Write(strArr, 0, strArr.Length);
@@ -691,23 +695,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 FocusLastRow();
                 return;
             }
-
             if (Properties.Settings.Default.InvoiceNumber.Length != 8 && Properties.Settings.Default.InvoiceCheck=="1")
             {
                 MessageWindow.ShowMessage("請確認發票設定！", MessageType.ERROR);
                 return;
             }
-
-
             if (Math.Ceiling((double)ProductList.Rows.Count / 7) >= 1 && Properties.Settings.Default.InvoiceCheck == "1")
             {
-
-                int num;
-                int Snum;
-                int Count;
-                num = Int32.Parse(Properties.Settings.Default.InvoiceNumber);
-                Snum = Int32.Parse(Properties.Settings.Default.InvoiceNumberStart);
-                Count = Int32.Parse(Properties.Settings.Default.InvoiceNumberCount);
+                int num = int.Parse(Properties.Settings.Default.InvoiceNumber);
+                int Snum = int.Parse(Properties.Settings.Default.InvoiceNumberStart);
+                int Count = int.Parse(Properties.Settings.Default.InvoiceNumberCount);
                 if ((Count - (num - Snum)) < Math.Ceiling((double)ProductList.Rows.Count / 7))
                 {
                     MessageWindow.ShowMessage("發票剩餘張數不夠 請檢查設定！", MessageType.ERROR);
@@ -717,8 +714,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
             int rowCount = ProductList.Rows.Count;
             int amtCount = int.Parse(ProductList.Compute("Sum(Amount)", string.Empty).ToString());
-
-            chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount);
+            bool hasCustomer = int.Parse(cusID) > 0 ? true : false;
+            bool isPrepay = ProductList.Rows[0]["Pro_ID"].ToString() == PrepayProID;
+            chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount, PrepayBalance, hasCustomer, isPrepay);
             chkWindow.ShowDialog();
             if ((bool)chkWindow.DialogResult)
             {
@@ -816,7 +814,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
             int.TryParse(ProductList.Rows[index]["Available_Amount"].ToString(), out int stock);
-            if (amt > stock)
+            if (amt > stock && ProductList.Rows[index]["Pro_ID"].ToString() != PrepayProID)
             {
                 MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
                 tb.Text = stock.ToString();
@@ -1025,9 +1023,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbCusNote.Text = "";
 
             cusID = "0";
+            PrepayBalance = "0";
             TradeRecordGrid.ItemsSource = null;
             HISRecordGrid.ItemsSource = null;
             DepositColumn.Visibility = Visibility.Hidden;
+            btnPrepay.IsEnabled = false;
             AppliedPrice = "Pro_RetailPrice";
             SetPrice();
             CalculateTotal();
@@ -1036,7 +1036,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void FillInCustomerData(DataTable result)
         {
             cusID = result.Rows[0]["Cus_ID"].ToString();
-
+            string res = result.Rows[0]["Prepay_Balance"].ToString();
+            PrepayBalance = string.IsNullOrEmpty(res) ? "0" : res;
             lbName.Content = result.Rows[0]["Cus_Name"].ToString();
             lbGender.Content = result.Rows[0]["Cus_Gender"].ToString();
             if (result.Rows[0]["Cus_Birthday"] == null || result.Rows[0]["Cus_Birthday"].ToString() == "")
@@ -1060,11 +1061,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             SetPrice();
             CalculateTotal();
             DepositColumn.Visibility = Visibility.Visible;
+            btnPrepay.IsEnabled = true;
         }
 
         private void GetCustomerTradeRecord()
         {
-            //MessageBox.Show(cusID);
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MasterID", DBNull.Value));
@@ -1147,6 +1148,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     return;
                 }
 
+                // 電話查詢
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 bool isCell = tb.Text.StartsWith("09");
@@ -1168,6 +1170,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
                     parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
                 }
+
+                // 姓名查詢
                 if (!int.TryParse(tb.Text, out int i))
                 {
                     parameters.Add(new SqlParameter("@Cus_Name", tb.Text));
@@ -1177,6 +1181,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     parameters.Add(new SqlParameter("@Cus_Name", DBNull.Value));
                 }
+
+                // 生日查詢
                 if (tb.Text.Length == 6)
                 {
                     int.TryParse(tb.Text.Substring(0, 2), out int year);
@@ -1188,7 +1194,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
                     Con = CustomerSearchCondition.Birthday;
                 }
-                else if ((tb.Text.Length == 7 && tb.Text.StartsWith("1")))
+                else if (tb.Text.Length == 7 && tb.Text.StartsWith("1"))
                 {
                     int.TryParse(tb.Text.Substring(0, 3), out int year);
                     int.TryParse(tb.Text.Substring(3, 2), out int month);
@@ -1202,9 +1208,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     parameters.Add(new SqlParameter("@Cus_Birthday", DBNull.Value));
                 }
+
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
-
                 if (result.Rows.Count == 0)
                 {
                     MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
@@ -1506,6 +1512,36 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }*/
         }
 
-        
+        private void btnPrepay_Click(object sender, RoutedEventArgs e)
+        {
+            int currentRowIndex = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentItem);
+            if (isGift) 
+            {
+                MessageWindow.ShowMessage("預付訂金不得當作贈品", MessageType.ERROR);
+                isGift = false;
+            }
+            if (ProductList.Rows.Count == 0)
+            {
+                AddProductByInputAction(PrepayProID, currentRowIndex);
+                foreach (DataRow dr in ProductList.Rows)
+                {
+                    dr["ID"] = ProductList.Rows.IndexOf(dr) + 1;
+                }
+                // Focus On Price
+                Dispatcher.InvokeAsync(() =>
+                {
+                    var ProductIDList = new List<TextBox>();
+                    NewFunction.FindChildGroup(ProductDataGrid, "Amount",
+                        ref ProductIDList);
+                    TextBox tb = ProductIDList[ProductIDList.Count - 2];
+                    tb.Focus();
+                    tb.SelectAll();
+                }, DispatcherPriority.ApplicationIdle);
+            }
+            else 
+            {
+                MessageWindow.ShowMessage("預付訂金須單獨結帳", MessageType.ERROR);
+            }
+        }
     }
 }

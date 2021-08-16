@@ -137,6 +137,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbCard.Content = masterRow["TraMas_CardAmount"].ToString();
             lbVoucher.Content = masterRow["TraMas_VoucherAmount"].ToString();
             lbCashCoupon.Content = masterRow["TraMas_CashCoupon"].ToString();
+            lbPrepay.Content = masterRow["TraMas_Prepay"].ToString();
             lblTradeTime.Content = masterRow["TransTime_Format"];
             tbNote.Text = masterRow["TraMas_Note"].ToString();
             tbPhone.Content= masterRow["Cus_Phone"].ToString();
@@ -171,6 +172,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 {
                     MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
                     Close();
+                }
+                else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN")) 
+                {
+                    MessageWindow.ShowMessage("訂金餘額不足！", MessageType.ERROR);
                 }
                 else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
             }

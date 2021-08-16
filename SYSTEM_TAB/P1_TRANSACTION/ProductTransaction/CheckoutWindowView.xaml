@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="結帳視窗"
-    Width="450"
+    Width="520"
     Height="710"
     DataContext="{Binding RelativeSource={RelativeSource Self}}"
     FontFamily="Segoe UI Semibold"
@@ -101,6 +101,17 @@
                 LostFocus="tbCash_LostFocus"
                 PreviewKeyDown="tbCash_PreviewKeyDown"
                 Text="" />
+            <Label Margin="20,0,0,0" Content="訂金沖銷：" FontSize="24" />
+            <TextBox
+                x:Name="tbPrepay"
+                Width="100"
+                FontSize="24"
+                GotFocus="tbCash_GotFocus"
+                InputMethod.InputScope="Number"
+                LostFocus="tbCash_LostFocus"
+                PreviewKeyDown="tbCash_PreviewKeyDown"
+                Text="" 
+                IsEnabled="False"/>
         </StackPanel>
         <StackPanel
             Grid.Row="5"
@@ -117,6 +128,11 @@
                 LostFocus="tbVoucher_LostFocus"
                 PreviewKeyDown="tbVoucher_PreviewKeyDown"
                 Text="" />
+            <Label Margin="20,0,0,0" Content="可沖訂金：" FontSize="24" />
+            <Label
+                x:Name="lblPrepay"
+                Content="0"
+                FontSize="24" />
         </StackPanel>
         <StackPanel
             Grid.Row="6"

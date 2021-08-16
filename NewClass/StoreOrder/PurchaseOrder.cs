@@ -153,7 +153,7 @@ namespace His_Pos.NewClass.StoreOrder
                 {                    
                      hasNoBatch = true;
                 }
-
+                
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null) && product.RealAmount > 0)
                 {
                     MessageWindow.ShowMessage("管藥批號不得為空!", MessageType.ERROR);

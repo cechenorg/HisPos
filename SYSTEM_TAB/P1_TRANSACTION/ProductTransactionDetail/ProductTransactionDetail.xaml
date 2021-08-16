@@ -154,9 +154,8 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
-
                 <Label
-                    Margin="10,0,0,0"
+                    Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     Content="現金$"
@@ -165,14 +164,13 @@
                     Foreground="Black" />
                 <Label
                     x:Name="lbCash"
-                    Width="60"
+                    Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
                     Content="0"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
-
                 <Label
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
@@ -183,14 +181,13 @@
                     Foreground="Black" />
                 <Label
                     x:Name="lbCard"
-                    Width="60"
+                    Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
                     Content="0"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
-
                 <Label
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
@@ -201,14 +198,13 @@
                     Foreground="Black" />
                 <Label
                     x:Name="lbVoucher"
-                    Width="60"
+                    Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
                     Content="0"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
-
                 <Label
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
@@ -219,31 +215,30 @@
                     Foreground="Black" />
                 <Label
                     x:Name="lbCashCoupon"
-                    Width="60"
+                    Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
                     Content="0"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
-
                 <Label
-                    Margin="40,0,0,0"
+                    Margin="10,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
-                    Content="顧客姓名："
+                    Content="訂金沖銷$"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
                 <Label
-                    x:Name="lbCusName"
+                    x:Name="lbPrepay"
+                    Width="65"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
+                    Content="0"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
-                    Foreground="Black"
-                    MouseDoubleClick="lbCusName_MouseDoubleClick"
-                    Style="{StaticResource ActionLabelStyle}"/>
+                    Foreground="Black" />
             </StackPanel>
             <StackPanel
                 Grid.Row="2"
@@ -259,7 +254,7 @@
                     Foreground="Black" />
                 <TextBox
                     x:Name="tbCardNum"
-                    Width="180"
+                    Width="160"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semi"
@@ -275,7 +270,7 @@
                     </TextBox.InputScope>
                 </TextBox>
                 <Label
-                    Margin="10,0,0,0"
+                    Margin="00,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     Content="統編"
@@ -284,7 +279,7 @@
                     Foreground="Black" />
                 <TextBox
                     x:Name="tbTaxNum"
-                    Width="100"
+                    Width="90"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semi"
@@ -300,34 +295,50 @@
                     </TextBox.InputScope>
                 </TextBox>
                 <Label
-                    Margin="10,0,0,0"
+                    Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     Content="發票號碼"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
-                    Foreground="Black" 
-                    
-                    />
+                    Foreground="Black" />
                 <Label
                     x:Name="tbInvoiceNum"
-                    Width="150"
+                    Width="100"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
                     Foreground="Black" />
                 <Label
-                  Margin="35,0,0,0"
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Content="顧客姓名:"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Foreground="Black" />
+                <Label
+                    x:Name="lbCusName"
+                    Width="65"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Left"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Foreground="Black"
+                    MouseDoubleClick="lbCusName_MouseDoubleClick"
+                    Style="{StaticResource ActionLabelStyle}"/>
+                <Label
+                    Margin="0,0,0,0"
                     Width="95"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
-                     Content="顧客電話："
+                     Content="顧客電話:"
                     Foreground="Black" />
                 <Label
-                      x:Name="tbPhone"
+                    x:Name="tbPhone"
                     Width="100"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Left"
