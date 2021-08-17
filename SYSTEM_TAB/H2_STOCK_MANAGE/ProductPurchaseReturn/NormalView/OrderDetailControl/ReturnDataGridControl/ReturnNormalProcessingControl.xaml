@@ -197,19 +197,14 @@
                 <DataGridTemplateColumn Width="70" Header="退貨價">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox
+                            <Label
                                 x:Name="ProductPriceTextbox"
                                 Width="60"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
-                                GotFocus="UIElement_OnGotFocus"
-                                InputMethod.IsInputMethodEnabled="False"
-                                KeyDown="UIElement_OnKeyDown"
-                                PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
-                                Style="{DynamicResource CantEditPrice}"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -245,8 +240,8 @@
                                 InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
-                                Style="{DynamicResource CantEditSubTotal}"
-                                Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}">
+                                
+                                Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />

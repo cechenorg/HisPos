@@ -167,6 +167,8 @@ namespace His_Pos.NewClass.StoreOrder
 
         public abstract bool ChkPrice();
 
+        public abstract bool ChkPurchase();
+
         #endregion ///// Abstract Function /////
 
         #region ///// Status Function /////

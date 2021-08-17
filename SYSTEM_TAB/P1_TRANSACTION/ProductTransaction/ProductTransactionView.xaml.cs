@@ -1057,7 +1057,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbAddress.Text = result.Rows[0]["Cus_Address"].ToString();
             tbCusNote.Text = result.Rows[0]["Cus_Note"].ToString();
 
-            AppliedPrice = "Pro_MemberPrice";
+            if (result.Rows[0]["Cus_CusType"].ToString() == "EMP")
+            {
+                AppliedPrice = "Pro_EmployeePrice";
+            }
+            else 
+            {
+                AppliedPrice = "Pro_MemberPrice";
+            }
+            
             SetPrice();
             CalculateTotal();
             DepositColumn.Visibility = Visibility.Visible;

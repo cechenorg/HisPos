@@ -88,9 +88,26 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </CheckBox>-->
+            <CheckBox
+                Margin="500,0,0,0"
+                VerticalAlignment="Center"
+                Content="員工身分"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}"
+                IsChecked="{Binding IsEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}" CommandParameter="{Binding}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding DataChangeCommand}" CommandParameter="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
             <Button
                 Width="120"
-                Margin="640,0,10,0"
+                Margin="50,0,10,0"
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding DeleteCommand}"

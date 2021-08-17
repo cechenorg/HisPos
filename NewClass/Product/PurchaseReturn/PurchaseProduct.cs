@@ -238,8 +238,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         else
                             price = SubTotal / RealAmount;
                         break;
-                }
+            }
             //}
+
+            if (SubTotal == 0)
+            {
+                price = 0;
+            }
 
             RaisePropertyChanged(nameof(Price));
             RaisePropertyChanged(nameof(SubTotal));
@@ -262,6 +267,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     else
                         price = SubTotal / RealAmount;
                     break;
+            }
+
+            if (SubTotal == 0) 
+            {
+                price = 0;
             }
 
             RaisePropertyChanged(nameof(Price));

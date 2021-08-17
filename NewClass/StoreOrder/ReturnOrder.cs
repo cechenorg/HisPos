@@ -349,6 +349,11 @@ namespace His_Pos.NewClass.StoreOrder
             return true;
         }
 
+        public override bool ChkPurchase()
+        {
+            return true;
+        }
+
         #endregion ----- Override Function -----
     }
 }

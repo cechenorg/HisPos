@@ -516,6 +516,26 @@ namespace His_Pos.NewClass.StoreOrder
                 return true;
             }
         }
+
+        public override bool ChkPurchase()
+        {
+            int flag = 0;
+            for (int x = 0; x < OrderProducts.Count; x++)
+            {
+                if (OrderProducts[x].RealAmount == 0 && OrderProducts[x].SubTotal > 0)
+                {
+                    flag = 1;
+                }
+            }
+            if (flag == 1)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 
     #endregion ----- Define Function -----
