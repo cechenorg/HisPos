@@ -612,8 +612,8 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void Print(bool noCard)
         {
-            if (this.TempPre.PrescriptionStatus.IsPrint == true|| this.TempPrint.PrescriptionStatus.IsPrint==true)
-            {
+            if (this.TempPre.PrescriptionStatus.IsPrint == true)
+            { 
             }
             else {
                 PrintMedBag();
