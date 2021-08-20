@@ -15,10 +15,12 @@ namespace His_Pos.NewClass.Person.Employee
         {
             Clear();
             var table = EmployeeDb.GetData();
+            
             foreach (DataRow row in table.Rows)
             {
                 Add(new Employee(row));
             }
+            
         }
 
         public void ClockIn(string WYear, string WMonth,int? EmpID)
@@ -35,9 +37,16 @@ namespace His_Pos.NewClass.Person.Employee
         {
             Clear();
             var table = EmployeeDb.EmployeeClockInListTest(WYear, WMonth, StoreNo, EmpId, Permit);
-            foreach (DataRow row in table.Rows)
+            if (table.Rows.Count > 0)
             {
-                Add(new Employee(row));
+                foreach (DataRow row in table.Rows)
+                {
+                    Add(new Employee(row));
+                }
+            }
+            else
+            { 
+            
             }
         }
 

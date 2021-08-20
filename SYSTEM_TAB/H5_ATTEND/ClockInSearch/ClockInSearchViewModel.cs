@@ -263,33 +263,48 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         {
             this.CheckLines = null;
             this.CheckLines = new System.Collections.Generic.List<CommonBox>();
+            DataTable dt;
+            MainWindow.ServerConnection.OpenConnection();
+            dt = MainWindow.ServerConnection.ExecuteProc("[Get].[Pharmacy]");
+            MainWindow.ServerConnection.CloseConnection();
+
+
 
             if (SingInEmployee.ID == 1)
             {
-                
-                this.CheckLines.Add(new CommonBox() { Namepath = "測試", Value = "Develop" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "杏昌", Value = "XingChang" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "明昌", Value = "MingChang" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "宏昌", Value = "HongChang" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "佑昌", Value = "YoChang" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "佑東", Value = "YoDong" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "和昌", Value = "HeChang" });
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    this.CheckLines.Add(new CommonBox() { Namepath = dr["Namepath"].ToString(), Value = dr["Value"].ToString() });
+                }
+
+                #region OLD
+                //this.CheckLines.Add(new CommonBox() { Namepath = "測試", Value = "Develop" });
+                //this.CheckLines.Add(new CommonBox() { Namepath = "杏昌", Value = "XingChang" });
+                //this.CheckLines.Add(new CommonBox() { Namepath = "明昌", Value = "MingChang" });
+                //this.CheckLines.Add(new CommonBox() { Namepath = "宏昌", Value = "HongChang" });
+                //this.CheckLines.Add(new CommonBox() { Namepath = "佑昌", Value = "YoChang" });
+                //this.CheckLines.Add(new CommonBox() { Namepath = "佑東", Value = "YoDong" });
+                //this.CheckLines.Add(new CommonBox() { Namepath = "和昌", Value = "HeChang" });
+                #endregion
+
                 this.CheckLine = this.checkLines[0];
 
 
             }
             else if ( SingInEmployee.ID == 97 || SingInEmployee.ID == 45) //需要看見各店的人
             {
-                this.CheckLines.Add(new CommonBox() { Namepath = "杏昌", Value = "XingChang" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "明昌", Value = "MingChang" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "宏昌", Value = "HongChang" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "佑昌", Value = "YoChang" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "佑東", Value = "YoDong" });
-                this.CheckLines.Add(new CommonBox() { Namepath = "和昌", Value = "HeChang" });
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if(dr["Value"].ToString() != "Develop")
+                        this.CheckLines.Add(new CommonBox() { Namepath = dr["Namepath"].ToString(), Value = dr["Value"].ToString() });
+                }
+
                 this.CheckLine = this.checkLines[0];
 
             }
-            else if (SingInEmployee.ID == 40 || SingInEmployee.ID == 48 || SingInEmployee.ID == 72 || SingInEmployee.ID == 47) //店長能看見其他員工SingInEmployee.WorkPosition.WorkPositionId == 2 || 
+            else if ((SingInEmployee.ID == 40 || SingInEmployee.ID == 48 || SingInEmployee.ID == 72 || SingInEmployee.ID == 47) && ViewModelMainWindow.CurrentPharmacy.Name != "和安藥局") //店長能看見其他員工SingInEmployee.WorkPosition.WorkPositionId == 2 || 
             {
                 //不能選擇店
                 if (SingInEmployee.ID == 72)
@@ -386,12 +401,27 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 
                 using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.CreateNew))
                 {
-                    //var t1="",t2="";
+                    
                     StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
+                    var c = 0;int? cMin=0;
                     sw.WriteLine("日期" + "\t" + "店別" + "\t" + "姓名" + "\t" + "上班" + "\t" + "下班" + "\t" + "時數" + "\t" + "小計");
+                    
                     foreach (var row in ClockInLogsRpt)
                     {
+                        string _str = row.Date.Substring(row.Date.Length - 3, 3);
+                        string days = "/"+System.DateTime.DaysInMonth(System.DateTime.Now.Year, int.Parse(SearchMonth)).ToString();
+
                         sw.WriteLine(row.Date + "\t" + row.EmpAccount + "\t" + row.EmpName + "\t" + row.Time + "\t" + row.Time2 + "\t" + row.WMin/60 + "\t"+ row.Type);
+                        cMin += row.WMin/60;
+
+                        if (_str == days)
+                        {
+
+                            sw.WriteLine("----------\t----------\t---------\t---------\t 總計:  \t   " + cMin + " 小時 ");
+
+                            cMin = 0;
+                        }
+                        c++;
                     }
                     sw.Close();
                 }

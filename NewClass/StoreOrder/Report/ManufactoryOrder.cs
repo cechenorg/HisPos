@@ -90,10 +90,10 @@ namespace His_Pos.NewClass.StoreOrder.Report
 
                             if (typeName == "進貨")
                             {
-                                file.WriteLine($"{typeName},{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{order.UnTaxPrice},{order.Tax},{order.TaxPrice}");
+                                file.WriteLine($"{typeName},\t{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{order.UnTaxPrice},{order.Tax},{order.TaxPrice}");
                         } else if (typeName == "退貨") {
 
-                                file.WriteLine($"{typeName},{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{-order.UnTaxPrice},{Math.Round(-order.Tax)},{Math.Round(-order.TaxPrice)}");
+                                file.WriteLine($"{typeName},\t{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{-order.UnTaxPrice},{Math.Round(-order.Tax)},{Math.Round(-order.TaxPrice)}");
                             }
                                 
                         }
@@ -129,7 +129,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
                         foreach (var order in detailTotal)
                         {
                             string typeName = order.Type == OrderTypeEnum.PURCHASE ? "進貨" : "退貨";
-                            file.WriteLine($"{order.Name},{typeName},{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{order.UnTaxPrice},{Math.Round(order.Tax)},{Math.Round(order.TaxPrice)}");
+                            file.WriteLine($"{order.Name},{typeName},\t{order.ID},{order.DoneTime.ToString("yyyyMMdd HH:mm:ss")},{order.UnTaxPrice},{Math.Round(order.Tax)},{Math.Round(order.TaxPrice)}");
                         }
                         file.Close();
                         file.Dispose();

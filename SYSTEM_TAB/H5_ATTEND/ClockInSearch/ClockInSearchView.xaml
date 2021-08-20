@@ -56,11 +56,9 @@
                 Name="Account"
                 Width="130"
                 Margin="0,0,10,0"
-                FontSize="20"
-                InputMethod.IsInputMethodEnabled="False"
-                InputScope="AlphanumericHalfWidth"               
+                FontSize="20"            
                 Text="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                PreviewKeyDown="Account_OnPreviewKeyDown" /> 
+                PreviewKeyDown="Account_OnPreviewKeyDown" />
             <Label
                 Width="Auto"
                 Margin="10,0,5,0"

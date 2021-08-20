@@ -49,7 +49,7 @@
                     Margin="30,0,0,0"
                     Padding="0"
                     VerticalAlignment="Center"
-                    Content="調劑"
+                    Content="銷售耗用"
                     FontFamily="Segoe UI Semibold"
                     FontSize="25"
                     IsChecked="{Binding IsAdjustCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -78,7 +78,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="200"
+                    Width="100"
                     Binding="{Binding Date, Converter={StaticResource NullableDateConverter}}"
                     FontFamily="Segoe UI Semi"
                     Header="時間"
@@ -92,6 +92,19 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="120"
+                    Binding="{Binding SourceID}"
+                    FontFamily="Segoe UI Semi"
+                    Header="單號"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="80"
                     Binding="{Binding EntryName}"
                     FontFamily="Segoe UI Semi"
                     Header="科目"
@@ -105,7 +118,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding Value}"
+                    Binding="{Binding Value, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="金額"
                     IsReadOnly="True">

@@ -163,6 +163,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalDailyStock.MinusStockAdjustValue = DailyStockValueCollection.Sum(d => d.MinusStockAdjustValue);
                 TotalDailyStock.StockCheckValue = DailyStockValueCollection.Sum(d => d.StockCheckValue);
                 TotalDailyStock.TrashValue = DailyStockValueCollection.Sum(d => d.TrashValue);
+                TotalDailyStock.AdjustValue = DailyStockValueCollection.Sum(d => d.AdjustValue);
                 TotalDailyStock.FinalStockValue = DailyStockValueCollection[DailyStockValueCollection.Count - 1].FinalStockValue;
             }
         }
@@ -176,6 +177,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalOTCDailyStock.ReturnValue = DailyOTCStockValueCollection.Sum(d => d.ReturnValue);
                 TotalOTCDailyStock.MedUseValue = DailyOTCStockValueCollection.Sum(d => d.MedUseValue);
                 TotalOTCDailyStock.MinusStockAdjustValue = DailyOTCStockValueCollection.Sum(d => d.MinusStockAdjustValue);
+                TotalOTCDailyStock.AdjustValue = DailyOTCStockValueCollection.Sum(d => d.AdjustValue);
                 TotalOTCDailyStock.StockCheckValue = DailyOTCStockValueCollection.Sum(d => d.StockCheckValue);
                 TotalOTCDailyStock.TrashValue = DailyOTCStockValueCollection.Sum(d => d.TrashValue);
                 TotalOTCDailyStock.FinalStockValue = DailyOTCStockValueCollection[DailyOTCStockValueCollection.Count - 1].FinalStockValue;

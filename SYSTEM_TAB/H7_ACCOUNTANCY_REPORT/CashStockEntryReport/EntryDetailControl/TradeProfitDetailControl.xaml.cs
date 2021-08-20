@@ -40,6 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
             spEmp.Visibility = Visibility.Collapsed;
             SumEmp.Visibility = Visibility.Collapsed;
             SumRecord.Visibility = Visibility.Visible;
+            btn.Visibility = Visibility.Visible;
         }
 
         private void Empbtn_Click(object sender, RoutedEventArgs e)
@@ -56,6 +57,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport.EntryDet
             spEmp.Visibility = Visibility.Visible;
             SumEmp.Visibility = Visibility.Visible;
             SumRecord.Visibility = Visibility.Collapsed;
+            btn.Visibility = Visibility.Collapsed;
         }
     }
 }
