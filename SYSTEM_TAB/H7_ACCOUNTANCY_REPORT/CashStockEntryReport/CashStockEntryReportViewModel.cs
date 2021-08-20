@@ -1474,6 +1474,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
         public RelayCommand TradeChangeReportSelectionChangedCommand { get; set; }
 
         public RelayCommand RewardExcelCommand { get; set; }
+        public RelayCommand DownloadMonTradeReportCommand { get; set; }
 
         #endregion Command
 
@@ -1510,6 +1511,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             RewardDetailMedicineDoubleClickCommand = new RelayCommand(RewardDetailMedicineDoubleClickAction);
             TradeChangeReportSelectionChangedCommand = new RelayCommand(TradeChangeReportSelectionChangedAction);
             RewardExcelCommand = new RelayCommand(RewardExcelAction);
+            DownloadMonTradeReportCommand = new RelayCommand(DownloadMonTradeReportAction);
             GetData();
             InitCollection();
         }
@@ -1580,6 +1582,81 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             catch (Exception ex)
             {
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+            }
+
+
+
+        }
+
+        //add 20210819 shani 下載當月發票DownloadMonTradeReportAction
+        private void DownloadMonTradeReportAction()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Id", null));
+            parameters.Add(new SqlParameter("sDate", StartDate));
+            parameters.Add(new SqlParameter("eDate", EndDate));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeProfitDetailEmpRecordByDate]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+
+
+            Process myProcess = new Process();
+            SaveFileDialog fdlg = new SaveFileDialog();
+            fdlg.Title = "當月發票";
+            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
+            fdlg.Filter = "XLSX檔案|*.xlsx";
+            fdlg.FileName = StartDate.ToString("yyyyMM") + "-"+ "當月發票";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                XLWorkbook wb = new XLWorkbook();
+                var style = XLWorkbook.DefaultStyle;
+                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
+
+                var ws = wb.Worksheets.Add("發票明細");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                var col1 = ws.Column("A");
+                col1.Width = 25;
+                var col2 = ws.Column("B");
+                col2.Width = 15;
+                var col3 = ws.Column("C");
+                col3.Width = 25;
+
+
+                ws.Cell(1, 1).Value = "發票明細";
+                ws.Range(1, 1, 1, 3).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "時間";
+                ws.Cell("B2").Value = "發票金額";
+                ws.Cell("C2").Value = "發票號碼";
+
+                if (result.Rows.Count > 0)
+                {
+                    var rangeWithData = ws.Cell(3, 1).InsertData(result.AsEnumerable());
+                    rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                }
+
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
+                wb.SaveAs(fdlg.FileName);
+
+                try
+                {
+                    myProcess.StartInfo.UseShellExecute = true;
+                    myProcess.StartInfo.FileName = (fdlg.FileName);
+                    myProcess.StartInfo.CreateNoWindow = true;
+                    //myProcess.StartInfo.Verb = "print";
+                    myProcess.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+
+
             }
 
 

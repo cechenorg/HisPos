@@ -70,7 +70,7 @@
             </StackPanel>
             <StackPanel
                 x:Name="spEmp"
-                Width="200"
+                Width="400"
                 Orientation="Horizontal"
                 Visibility="Collapsed">
                 <Label
@@ -107,6 +107,22 @@
                 BorderThickness="0"
                 Click="Empbtn_Click"
                 Content="切換"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            Orientation="Horizontal">
+            <Button
+                x:Name="btn"
+                Width="100"
+                Margin="530,0,0,0"
+                Background="Green"
+                BorderThickness="0"
+                Click="Recordbtn_Click"
+                Content="下載發票"
+                Command="{Binding DownloadMonTradeReportCommand}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>

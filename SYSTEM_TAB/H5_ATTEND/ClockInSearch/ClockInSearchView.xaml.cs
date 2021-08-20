@@ -5,14 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
@@ -25,7 +18,8 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         public ClockInSearchView()
         {
             InitializeComponent();
-            Account.Focus();
+            _ = Account.Focus();
+
         }
 
         private void Account_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -51,10 +45,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                     case Key.Enter:
                         AddClockIn.Focus();
                         break;
-
-                        //case Key.Left:
-                        //    AddClockIn.Focus();
-                        //    break;
                 }
             }
         }
