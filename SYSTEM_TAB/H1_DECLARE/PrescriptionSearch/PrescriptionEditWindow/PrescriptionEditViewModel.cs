@@ -443,15 +443,35 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         switch (printSingle != null && (bool)printSingle)
                         {
                             case false:
-                                PrintEditedPrescription.PrintMedBagMultiMode();
+                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                {
+
+                                    EditedPrescription.PrintMedBagSingleModeByCE();
+
+
+                                }
+                                else
+                                {
+                                    PrintEditedPrescription.PrintMedBagMultiMode();
+                                }
                                 break;
 
                             case true:
-                                PrintEditedPrescription.PrintMedBagSingleMode();
-                                break;
+                                 if (VM.CurrentPharmacy.ID == "5931017216")
+                                {
+
+                                    EditedPrescription.PrintMedBagSingleModeByCE();
+
+
+                                }
+                                else {
+                                    PrintEditedPrescription.PrintMedBagSingleMode();
+                                } break;
                         }
+                          
                     }
                 }
+              
                 else
                 {
                     if ((bool)printMedBag)

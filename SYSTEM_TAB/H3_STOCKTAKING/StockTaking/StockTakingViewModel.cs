@@ -122,9 +122,9 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             set
             {
                 Set(() => SourceallItemsAreChecked, ref sourceallItemsAreChecked, value);
-                for (int i = 0; i < SourceStockTakingProducts.Count; i++)
+                for (int i = 0; i < WordsView.Count; i++)
                 {
-                    SourceStockTakingProducts[i].IsSelected = value;
+                    WordsView[i].IsSelected = value;
                 }
             }
         }
@@ -355,6 +355,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public StockTakingViewModel()
         {
             RegisterCommand();
+            WordsView = new ObservableCollection<StockTakingPlanProduct>();
             WareHouses = VM.WareHouses;
             CurrentPlan.WareHouse = WareHouses[0];
             EmployeeCollection.Init();
@@ -631,6 +632,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             {
                 if (CurrentPlan.StockTakingProductCollection.Count(t => t.ID == SourceStockTakingProducts[i].ID) > 0)
                 {
+                    WordsView.Remove(SourceStockTakingProducts[i]);
                     SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
                     i--;
                 }
@@ -651,6 +653,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                     }
 
                     CurrentPlan.StockTakingProductCollection.Add(SourceStockTakingProducts[i]);
+                    WordsView.Remove(SourceStockTakingProducts[i]);
                     SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
                     i--;
                 }

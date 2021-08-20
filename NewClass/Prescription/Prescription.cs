@@ -28,6 +28,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows;
 using System.Xml.Linq;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
@@ -84,6 +85,8 @@ namespace His_Pos.NewClass.Prescription
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
             Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(r.Field<string>("Emp_IDNumber")));
             AdjustDate = r.Field<DateTime>("AdjustDate");
+            AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
+            AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
                 ChronicSeq = r.Field<byte>("ChronicSequence");
@@ -244,11 +247,13 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
             Medicines = new Medicines();
+            AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
+            AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");
             Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle, AdjustDate);
         }
 
         [SuppressMessage("ReSharper", "TooManyDependencies")]
-        public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead)
+        public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead ,bool isPrint)
         {
             #region CooPreVariable
 
@@ -298,6 +303,10 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
             TreatDate = treatDate.Date;
             AdjustDate = DateTime.Today;
+            AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
+            AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");
+            AdjustYear = Convert.ToDateTime(AdjustDate).ToString("yyyy");
+
             SpecialTreat = new SpecialTreat();
             CooperativeGetDisease(diseases);
             GetCopayment(insurance.CopaymentCode);
@@ -306,6 +315,7 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;
+            PrescriptionStatus.IsPrint = isPrint;
             Medicines = new Medicines();
             Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle, AdjustDate);
         }
@@ -395,6 +405,39 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
+        private string adjustDay;//調劑日期 D23
+
+        public string AdjustDay
+        {
+            get => adjustDay;
+            set
+            {
+                Set(() => AdjustDay, ref adjustDay, value);
+            }
+        }
+
+
+        private string adjustMonth;//調劑日期 D23
+
+        public string AdjustMonth
+        {
+            get => adjustMonth;
+            set
+            {
+                Set(() => AdjustMonth, ref adjustMonth, value);
+            }
+        }
+
+        private string adjustYear;//調劑日期 D23
+
+        public string AdjustYear
+        {
+            get => adjustYear;
+            set
+            {
+                Set(() => AdjustYear, ref adjustYear, value);
+            }
+        }
         private DiseaseCode mainDisease;//主診斷代碼(國際疾病分類碼1) D8
 
         public DiseaseCode MainDisease
@@ -938,7 +981,21 @@ namespace His_Pos.NewClass.Prescription
         }
 
         #region PrintFunctions
-
+        public void PrintMedBagSingleModeByCE()
+        {
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            var medBagMedicines = new MedBagMedicines(Medicines, true);
+            var medDays = Medicines.CountMedicineDays();
+            for (int i = 1; i <= medBagMedicines.Count; i++)
+            {
+                SetSingleModeReportByCEViewer(rptViewer, medBagMedicines[i - 1], $"{i}/{medBagMedicines.Count}", medDays);
+                MainWindow.Instance.Dispatcher.Invoke(() =>
+                {
+                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBagCE(rptViewer);
+                });
+            }
+        }
         public void PrintMedBagSingleMode()
         {
             var rptViewer = new ReportViewer();
@@ -1021,7 +1078,15 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.DataSources.Add(rd);
             rptViewer.LocalReport.Refresh();
         }
-
+        private void SetSingleModeReportByCEViewer(ReportViewer rptViewer, MedBagMedicine m, string orderNumber, int medDays)
+        {
+            rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingleByCE.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this, orderNumber, medDays);
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.Refresh();
+        }
         private void SetReceiptReportViewer(ReportViewer rptViewer)
         {
             switch (Properties.Settings.Default.ReceiptForm)
@@ -1082,6 +1147,9 @@ namespace His_Pos.NewClass.Prescription
             SpecialTreat = null;
             TreatDate = DateTime.Today;
             AdjustDate = DateTime.Today;
+            AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
+            AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");
+            AdjustYear = Convert.ToDateTime(AdjustDate).ToString("yyyy");
             AdjustCase = VM.GetAdjustCase("1");
             PrescriptionCase = VM.GetPrescriptionCases("09");
             Copayment = VM.GetCopayment("I21");
@@ -1189,6 +1257,10 @@ namespace His_Pos.NewClass.Prescription
                 TempMedicalNumber = TempMedicalNumber,
                 TreatDate = TreatDate,
                 AdjustDate = AdjustDate,
+                
+                AdjustDay = AdjustDay,
+                AdjustYear = AdjustYear,
+                AdjustMonth = AdjustMonth,
                 MainDisease = MainDisease.DeepCloneViaJson(),
                 SubDisease = SubDisease?.DeepCloneViaJson(),
                 ChronicSeq = ChronicSeq,
@@ -1256,7 +1328,12 @@ namespace His_Pos.NewClass.Prescription
                 Type = Type,
                 OrderContent = OrderContent,
                 OrderID = OrderID,
+                AdjustDay = AdjustDay,
+                AdjustYear = AdjustYear,
+                AdjustMonth = AdjustMonth,
                 Medicines = new Medicines()
+       
+                
             };
             foreach (var m in Medicines)
             {

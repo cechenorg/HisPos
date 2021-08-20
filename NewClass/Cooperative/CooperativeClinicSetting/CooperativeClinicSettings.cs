@@ -56,6 +56,11 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                 {
                     if (!Directory.Exists($"{c.FilePath}\\PurgeFile"))
                         Directory.CreateDirectory($"{c.FilePath}\\PurgeFile");
+
+                    if (!Directory.Exists($"{c.FilePath}\\TxtFile"))
+                        Directory.CreateDirectory($"{c.FilePath}\\TxtFile");
+
+
                     List<string> fileList = new List<string>();
                     DirectoryInfo di = new DirectoryInfo(c.FilePath);
                     foreach (FileInfo f in di.GetFiles("*.xml", SearchOption.AllDirectories))
@@ -67,6 +72,20 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                     {
                         File.Delete(fs);
                     }
+
+                    List<string> fileListTxt = new List<string>();
+                    DirectoryInfo ditxt = new DirectoryInfo(c.FilePath);
+                    foreach (FileInfo f in ditxt.GetFiles("*.txt", SearchOption.AllDirectories))
+                    {
+                        fileListTxt.Add(f.FullName);
+                    }
+                    Function.ZipFiles(fileListTxt, $"{c.FilePath}\\TxtFile\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip");
+                    foreach (string fs in fileListTxt)
+                    {
+                        File.Delete(fs);
+                    }
+
+
                 }
                 catch (Exception)
                 {

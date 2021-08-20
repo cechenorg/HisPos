@@ -22,7 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private CusPrePreviewBases cooperativePres { get; set; }
         private CollectionViewSource cooPreCollectionViewSource;
 
-        private CollectionViewSource CooPreCollectionViewSource
+        public CollectionViewSource CooPreCollectionViewSource
         {
             get => cooPreCollectionViewSource;
             set
@@ -36,7 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         public ICollectionView CooPreCollectionView
         {
             get => cooPreCollectionView;
-            private set
+             set
             {
                 Set(() => CooPreCollectionView, ref cooPreCollectionView, value);
             }
@@ -129,6 +129,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         }
 
         private bool isNotRead;
+        private int v;
 
         public bool IsNotRead
         {
@@ -158,6 +159,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             InitCommands();
         }
 
+        public CooperativePrescriptionViewModel(int v)
+        {
+            InitVariables();
+            InitPrescriptions1();
+        }
+
         private void InitVariables()
         {
             IsRead = false;
@@ -165,6 +172,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             StartDate = DateTime.Today;
             EndDate = DateTime.Today;
         }
+        public void InitPrescriptions1()
+        {
+            cooperativePres = new CusPrePreviewBases();
+           
+                MainWindow.ServerConnection.OpenConnection();
+                cooperativePres.GetAutoCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
+                MainWindow.ServerConnection.CloseConnection();
+          
+                CooPreCollectionViewSource = new CollectionViewSource { Source = cooperativePres };
+                CooPreCollectionView = CooPreCollectionViewSource.View;
+                cooPreCollectionViewSource.Filter += Filter;
+         
+        }
+
+
 
         public void InitPrescriptions()
         {
@@ -197,7 +219,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
 
         #region Actions
 
-        private void PrintAction()
+        public void PrintAction()
         {
             MainWindow.ServerConnection.OpenConnection();
             SelectedPrescription?.Print();
@@ -249,5 +271,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             else
                 e.Accepted = false;
         }
+
+       public  void PrintAction(CusPrePreviewBase ff)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+
+
+            ff.PrintDir();
+            MainWindow.ServerConnection.CloseConnection();
+        }
+
+
     }
 }

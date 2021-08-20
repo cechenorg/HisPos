@@ -115,6 +115,7 @@ namespace His_Pos.FunctionWindow
                 var inumS = fileReader.ReadLine();
                 var inumC = fileReader.ReadLine();
                 var inumE = fileReader.ReadLine();
+                var pP = fileReader.ReadLine();
                 var match = medReg.Match(medBagPrinter);
                 Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
                 if (receiptPrinter.Contains("$"))
@@ -138,6 +139,7 @@ namespace His_Pos.FunctionWindow
                 Properties.Settings.Default.InvoiceNumberStart = string.IsNullOrEmpty(inumS) ? "" : inumS.Substring(6, inumS.Length - 6);
                 Properties.Settings.Default.InvoiceNumberCount = string.IsNullOrEmpty(inumC) ? "" : inumC.Substring(6, inumC.Length - 6);
                 Properties.Settings.Default.InvoiceNumberEng = string.IsNullOrEmpty(inumE) ? "" : inumE.Substring(6, inumE.Length - 6);
+                Properties.Settings.Default.PrePrint = string.IsNullOrEmpty(pP) ? "" : pP.Substring(3, pP.Length - 3);
                 Properties.Settings.Default.Save();
             }
         }

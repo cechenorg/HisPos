@@ -37,6 +37,7 @@ namespace His_Pos.NewClass.Prescription
 
         public bool IsAdjust { get; set; }
         public bool IsRead { get; set; }
+        public bool IsPrint { get; set; }
         public bool IsVIP { get; set; }
         private bool isGetCard;
 

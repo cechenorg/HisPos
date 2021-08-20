@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             NormalWareHouse = VM.GetWareHouse(r.Field<int>("CooCli_NorWareHouseID").ToString());
             ChronicIsBuckle = r.Field<bool>("CooCli_ChiIsBuckle");
             ChronicWareHouse = VM.GetWareHouse(r.Field<int>("CooCli_ChiWareHouseID").ToString());
-
+            AutoPrint = r.Field<bool>("CooCli_AutoPrint");
             if (!(FilePath is null))
             {
                 var tempsplit = FilePath.Split('\\');
@@ -40,6 +40,14 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             set { Set(() => CooperavieClinic, ref cooperavieClinic, value); }
         }
 
+        private bool autoPrint = false;
+
+        public bool AutoPrint
+        {
+            get { return autoPrint; }
+            set { Set(() => AutoPrint, ref autoPrint, value); }
+        }
+
         private bool isInstitutionEdit = false;
 
         public bool IsInstitutionEdit
@@ -47,6 +55,8 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             get { return isInstitutionEdit; }
             set { Set(() => IsInstitutionEdit, ref isInstitutionEdit, value); }
         }
+
+
 
         private bool isPurge;
 

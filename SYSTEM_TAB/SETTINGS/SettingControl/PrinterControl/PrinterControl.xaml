@@ -48,6 +48,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="30"
                 Foreground="DimGray" />
+            
             <ComboBox
                 Width="300"
                 Margin="20,0,0,0"
@@ -62,6 +63,23 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="自動列印"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <CheckBox  IsChecked="{Binding PrePrint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label
