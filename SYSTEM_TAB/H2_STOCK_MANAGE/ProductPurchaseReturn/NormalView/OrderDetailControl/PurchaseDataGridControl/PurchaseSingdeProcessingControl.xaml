@@ -303,7 +303,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn
+                <!--<DataGridTextColumn
                     Width="85"
                     Binding="{Binding SubTotal, StringFormat=N2}"
                     FontFamily="Segoe UI Semi"
@@ -315,7 +315,7 @@
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                </DataGridTextColumn>-->
                 
                 <DataGridTemplateColumn
                     MinWidth="170"
