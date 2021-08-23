@@ -702,9 +702,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
             if (Math.Ceiling((double)ProductList.Rows.Count / 7) >= 1 && Properties.Settings.Default.InvoiceCheck == "1")
             {
-                int num = int.Parse(Properties.Settings.Default.InvoiceNumber);
-                int Snum = int.Parse(Properties.Settings.Default.InvoiceNumberStart);
-                int Count = int.Parse(Properties.Settings.Default.InvoiceNumberCount);
+                int.TryParse(Properties.Settings.Default.InvoiceNumber, out int num);
+                int.TryParse(Properties.Settings.Default.InvoiceNumberStart, out int Snum);
+                int.TryParse(Properties.Settings.Default.InvoiceNumberCount, out int Count);
                 if ((Count - (num - Snum)) < Math.Ceiling((double)ProductList.Rows.Count / 7))
                 {
                     MessageWindow.ShowMessage("發票剩餘張數不夠 請檢查設定！", MessageType.ERROR);
@@ -1057,7 +1057,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbAddress.Text = result.Rows[0]["Cus_Address"].ToString();
             tbCusNote.Text = result.Rows[0]["Cus_Note"].ToString();
 
-            AppliedPrice = "Pro_MemberPrice";
+            if (result.Rows[0]["Cus_CusType"].ToString() == "EMP")
+            {
+                AppliedPrice = "Pro_EmployeePrice";
+            }
+            else 
+            {
+                AppliedPrice = "Pro_MemberPrice";
+            }
+            
             SetPrice();
             CalculateTotal();
             DepositColumn.Visibility = Visibility.Visible;

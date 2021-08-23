@@ -205,10 +205,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         private void ToNextStatusAction()
         {
-
-
             if (CurrentStoreOrder.CheckOrder() && (CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING|| CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING|| CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
             {
+                if ((CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING) && !CurrentStoreOrder.ChkPurchase())
+                {
+                    MessageWindow.ShowMessage("品項入庫量且小計大於0!", MessageType.WARNING);
+                    return;
+                }
                 if (!CurrentStoreOrder.ChkPrice())
                 {
                     ConfirmWindow confirmWindow = new ConfirmWindow($"本次進價與上次進價不同\n是否確認送出進貨單?", "", true);
@@ -216,6 +219,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     if (!(bool)confirmWindow.DialogResult)
                         return;
                 }
+
+                
                 /*else if (CurrentStoreOrder.OrderType == OrderTypeEnum.RETURN && CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING)
                 {
                     ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認送出退貨單?\n(確認後直接扣除庫存)", "", true);

@@ -212,5 +212,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         private void Amount_MouseDown(object sender, MouseButtonEventArgs e)
         {
         }
+
+        private void ProductSubTotalTextbox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (string.IsNullOrEmpty(textBox.Text))
+            {
+                textBox.Text = "0";
+            }
+        }
     }
 }

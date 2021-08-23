@@ -8,11 +8,12 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="銷售詳細記錄"
-    Width="900"
+    Width="960"
     Height="680"
     FontFamily="Segoe UI Semibold"
     Loaded="Window_Loaded"
     WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
     <Window.Resources>
         <Style x:Key="ActionLabelStyle" TargetType="{x:Type Label}">
@@ -101,7 +102,7 @@
                 <Label
                     x:Name="lblChanged"
                     Width="70"
-                    Margin="20,0,0,0"
+                    Margin="80,0,0,0"
                     VerticalAlignment="Bottom"
                     HorizontalContentAlignment="Right"
                     Content="未修改"
@@ -318,7 +319,7 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Foreground="Black" />
-                <Label
+                <!--<Label
                     x:Name="lbCusName"
                     Width="65"
                     VerticalAlignment="Center"
@@ -327,7 +328,25 @@
                     FontSize="16"
                     Foreground="Black"
                     MouseDoubleClick="lbCusName_MouseDoubleClick"
-                    Style="{StaticResource ActionLabelStyle}"/>
+                    Style="{StaticResource ActionLabelStyle}"/>-->
+                <TextBox
+                    x:Name="tbCusName"
+                    Width="120"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black"
+                    TextChanged="tb_TextChanged"
+                    KeyDown="tbCusName_KeyDown">
+                    <TextBox.InputScope>
+                        <InputScope>
+                            <InputScope.Names>
+                                <InputScopeName NameValue="AlphanumericHalfWidth" />
+                            </InputScope.Names>
+                        </InputScope>
+                    </TextBox.InputScope>
+                </TextBox>
                 <Label
                     Margin="0,0,0,0"
                     Width="95"
