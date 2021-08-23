@@ -110,7 +110,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 DataTable dataTable;
 
-                if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
+                // 關閉杏德代訂 2021.08.23
+                /*if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
                 {
                     BusyContent = "取得杏德新訂單...";
                     dataTable = StoreOrderDB.GetNewSingdeOrders();
@@ -120,7 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
                     if (dataTable.Rows.Count > 0)
                         StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
-                }
+                }*/
 
                 BusyContent = "取得訂單資料...";
                 storeOrderCollection = StoreOrders.GetOrdersNotDone();

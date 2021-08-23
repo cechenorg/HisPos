@@ -4,6 +4,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
@@ -27,10 +29,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         public DataTable RecordSumList;
         public DataTable RecordPrint;
         public DataTable RecordDetailListPrint;
+        private int queryTab = 1;
+
+        //private bool isBusy;
+        //private string busyContent;
+        //private BackgroundWorker initBackgroundWorker;
 
         public ProductTransactionRecordView()
         {
             InitializeComponent();
+            //InitBackgroundWorker();
             StartDate.Value = GetDefaultDate();
             EndDate.Value = GetDefaultDate();
             RecordList = new DataTable();
@@ -71,171 +79,203 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             return dts;
         }
 
-        private void GetData()
+        //private void InitBackgroundWorker()
+        //{
+        //    initBackgroundWorker = new BackgroundWorker();
+        //    initBackgroundWorker.DoWork += (sender, args) =>
+        //    {
+        //        System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+        //        {
+        //            GetData(1);
+        //        }), DispatcherPriority.ContextIdle);
+        //    };
+
+        //    initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
+        //    {
+        //        busyindi.IsBusy = false;
+        //    };
+        //}
+
+        private void GetData(int querytype)
         {
-            GetDefaultDate();
-            if (StartDate.Text.Contains("-") || EndDate.Text.Contains("-")) { return; }
-            string sDate = ConvertMaskedDate(StartDate.Text);
-            string eDate = ConvertMaskedDate(EndDate.Text);
-            bool isIrregular = chkIsIrregular.IsChecked.Value;
-            bool isReturn = chkIsReturn.IsChecked.Value;
-            string sInvoice = StartInvoice.Text;
-            string eInvoice = EndInvoice.Text;
-            int Cashier;
-            string proID = ProId.Text;
-            string proNAME = ProName.Text;
-            if (cbCashier.SelectedValue == null)
+            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                Cashier = -1;
-            }
-            else
-            {
-                Cashier = (int)cbCashier.SelectedValue;
-            }
-            if (sInvoice.Length == 8 || sInvoice.Length == 0 || sInvoice == "" || int.TryParse(sInvoice, out int S))
-            {
-            }
-            else
-            {
-                MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
-                return;
-            }
-            if (eInvoice.Length == 8 || eInvoice.Length == 0 || eInvoice == "" || int.TryParse(eInvoice, out int E))
-            {
-            }
-            else
-            {
-                MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
-                return;
-            }
+                GetDefaultDate();
+                if (StartDate.Text.Contains("-") || EndDate.Text.Contains("-")) { return; }
+                string sDate = ConvertMaskedDate(StartDate.Text);
+                string eDate = ConvertMaskedDate(EndDate.Text);
+                bool isIrregular = chkIsIrregular.IsChecked.Value;
+                bool isReturn = chkIsReturn.IsChecked.Value;
+                string sInvoice = StartInvoice.Text;
+                string eInvoice = EndInvoice.Text;
+                int Cashier;
+                string proID = ProId.Text;
+                string proNAME = ProName.Text;
+                if (cbCashier.SelectedValue == null)
+                {
+                    Cashier = -1;
+                }
+                else
+                {
+                    Cashier = (int)cbCashier.SelectedValue;
+                }
+                if (sInvoice.Length == 8 || sInvoice.Length == 0 || sInvoice == "" || int.TryParse(sInvoice, out int S))
+                {
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
+                    return;
+                }
+                if (eInvoice.Length == 8 || eInvoice.Length == 0 || eInvoice == "" || int.TryParse(eInvoice, out int E))
+                {
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
+                    return;
+                }
 
-            // 銷售紀錄
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
-            parameters.Add(new SqlParameter("MasterID", DBNull.Value));
-            parameters.Add(new SqlParameter("sDate", sDate));
-            parameters.Add(new SqlParameter("eDate", eDate));
-            parameters.Add(new SqlParameter("sInvoice", sInvoice));
-            parameters.Add(new SqlParameter("eInvoice", eInvoice));
-            parameters.Add(new SqlParameter("flag", "0"));
-            parameters.Add(new SqlParameter("ShowIrregular", isIrregular));
-            parameters.Add(new SqlParameter("ShowReturn", isReturn));
-            parameters.Add(new SqlParameter("Cashier", Cashier));
-            parameters.Add(new SqlParameter("ProID", proID));
-            parameters.Add(new SqlParameter("ProName", proNAME));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-            FormatData(result);
-            RecordList = result.Copy();
-            RecordList.Columns.Add("NO"); // 序
-            int countRL = 1;
-            foreach (DataRow dr in RecordList.Rows)
-            {
-                dr["NO"] = countRL.ToString();
-                countRL += 1;
-            }
-            RecordGrid.ItemsSource = RecordList.DefaultView;
-            lblCount.Content = RecordList.Rows.Count;
-            lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
-            if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
+                switch (querytype)
+                {
+                    case 1: // 銷售紀錄
+                    default:
+                        queryTab = 1;
+                        MainWindow.ServerConnection.OpenConnection();
+                        List<SqlParameter> parameters = new List<SqlParameter>();
+                        parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
+                        parameters.Add(new SqlParameter("MasterID", DBNull.Value));
+                        parameters.Add(new SqlParameter("sDate", sDate));
+                        parameters.Add(new SqlParameter("eDate", eDate));
+                        parameters.Add(new SqlParameter("sInvoice", sInvoice));
+                        parameters.Add(new SqlParameter("eInvoice", eInvoice));
+                        parameters.Add(new SqlParameter("flag", "0"));
+                        parameters.Add(new SqlParameter("ShowIrregular", isIrregular));
+                        parameters.Add(new SqlParameter("ShowReturn", isReturn));
+                        parameters.Add(new SqlParameter("Cashier", Cashier));
+                        parameters.Add(new SqlParameter("ProID", proID));
+                        parameters.Add(new SqlParameter("ProName", proNAME));
+                        DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
+                        MainWindow.ServerConnection.CloseConnection();
+                        FormatData(result);
+                        RecordList = result.Copy();
+                        RecordList.Columns.Add("NO"); // 序
+                        int countRL = 1;
+                        foreach (DataRow dr in RecordList.Rows)
+                        {
+                            dr["NO"] = countRL.ToString();
+                            countRL += 1;
+                        }
+                        RecordGrid.ItemsSource = RecordList.DefaultView;
+                        lblCount.Content = RecordList.Rows.Count;
+                        lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
+                        if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
+                        break;
 
-            // 銷售紀錄(列印)
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parametersPrint = new List<SqlParameter>();
-            parametersPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
-            parametersPrint.Add(new SqlParameter("MasterID", DBNull.Value));
-            parametersPrint.Add(new SqlParameter("sDate", sDate));
-            parametersPrint.Add(new SqlParameter("eDate", eDate));
-            parametersPrint.Add(new SqlParameter("sInvoice", sInvoice));
-            parametersPrint.Add(new SqlParameter("eInvoice", eInvoice));
-            parametersPrint.Add(new SqlParameter("flag", "0"));
-            parametersPrint.Add(new SqlParameter("ShowIrregular", isIrregular));
-            parametersPrint.Add(new SqlParameter("ShowReturn", isReturn));
-            parametersPrint.Add(new SqlParameter("Cashier", Cashier));
-            parametersPrint.Add(new SqlParameter("ProID", proID));
-            parametersPrint.Add(new SqlParameter("ProName", proNAME));
+                    case 2: // 銷售明細
+                        queryTab = 2;
+                        MainWindow.ServerConnection.OpenConnection();
+                        List<SqlParameter> parametersDetail = new List<SqlParameter>();
+                        parametersDetail.Add(new SqlParameter("CustomerID", DBNull.Value));
+                        parametersDetail.Add(new SqlParameter("MasterID", DBNull.Value));
+                        parametersDetail.Add(new SqlParameter("sDate", sDate));
+                        parametersDetail.Add(new SqlParameter("eDate", eDate));
+                        parametersDetail.Add(new SqlParameter("sInvoice", sInvoice));
+                        parametersDetail.Add(new SqlParameter("eInvoice", eInvoice));
+                        parametersDetail.Add(new SqlParameter("flag", "0"));
+                        parametersDetail.Add(new SqlParameter("ShowIrregular", isIrregular));
+                        parametersDetail.Add(new SqlParameter("ShowReturn", isReturn));
+                        parametersDetail.Add(new SqlParameter("Cashier", Cashier));
+                        parametersDetail.Add(new SqlParameter("ProID", proID));
+                        parametersDetail.Add(new SqlParameter("ProName", proNAME));
+                        DataTable resultDetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]", parametersDetail);
+                        MainWindow.ServerConnection.CloseConnection();
+                        FormatData(resultDetail);
+                        RecordDetailList = resultDetail.Copy();
 
-            DataTable resultprint = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQueryPrint]", parametersPrint);
-            MainWindow.ServerConnection.CloseConnection();
-            RecordPrint = resultprint.Copy();
+                        RecordDetailList.Columns.Add("NO"); // 序
+                        int countDL = 1;
+                        foreach (DataRow dr in RecordDetailList.Rows)
+                        {
+                            dr["NO"] = countDL.ToString();
+                            countDL += 1;
+                        }
+                        RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
+                        break;
 
-            // 銷售明細
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parametersDetail = new List<SqlParameter>();
-            parametersDetail.Add(new SqlParameter("CustomerID", DBNull.Value));
-            parametersDetail.Add(new SqlParameter("MasterID", DBNull.Value));
-            parametersDetail.Add(new SqlParameter("sDate", sDate));
-            parametersDetail.Add(new SqlParameter("eDate", eDate));
-            parametersDetail.Add(new SqlParameter("sInvoice", sInvoice));
-            parametersDetail.Add(new SqlParameter("eInvoice", eInvoice));
-            parametersDetail.Add(new SqlParameter("flag", "0"));
-            parametersDetail.Add(new SqlParameter("ShowIrregular", isIrregular));
-            parametersDetail.Add(new SqlParameter("ShowReturn", isReturn));
-            parametersDetail.Add(new SqlParameter("Cashier", Cashier));
-            parametersDetail.Add(new SqlParameter("ProID", proID));
-            parametersDetail.Add(new SqlParameter("ProName", proNAME));
-            DataTable resultDetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]", parametersDetail);
-            MainWindow.ServerConnection.CloseConnection();
-            FormatData(resultDetail);
-            RecordDetailList = resultDetail.Copy();
+                    case 3: // 銷售彙總
+                        queryTab = 3;
+                        MainWindow.ServerConnection.OpenConnection();
+                        List<SqlParameter> parametersSum = new List<SqlParameter>();
+                        parametersSum.Add(new SqlParameter("CustomerID", DBNull.Value));
+                        parametersSum.Add(new SqlParameter("MasterID", DBNull.Value));
+                        parametersSum.Add(new SqlParameter("sDate", sDate));
+                        parametersSum.Add(new SqlParameter("eDate", eDate));
+                        parametersSum.Add(new SqlParameter("sInvoice", sInvoice));
+                        parametersSum.Add(new SqlParameter("eInvoice", eInvoice));
+                        parametersSum.Add(new SqlParameter("flag", "0"));
+                        parametersSum.Add(new SqlParameter("ShowIrregular", isIrregular));
+                        parametersSum.Add(new SqlParameter("ShowReturn", isReturn));
+                        parametersSum.Add(new SqlParameter("Cashier", Cashier));
+                        parametersSum.Add(new SqlParameter("ProID", proID));
+                        parametersSum.Add(new SqlParameter("ProName", proNAME));
+                        DataTable resultSum = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordSum]", parametersSum);
+                        MainWindow.ServerConnection.CloseConnection();
+                        RecordSumList = resultSum.Copy();
 
-            RecordDetailList.Columns.Add("NO"); // 序
-            int countDL = 1;
-            foreach (DataRow dr in RecordDetailList.Rows) 
-            {
-                dr["NO"] = countDL.ToString();
-                countDL += 1;
-            }
-            RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
+                        RecordSumList.Columns.Add("NO"); // 序
+                        int countSUM = 1;
+                        foreach (DataRow dr in RecordSumList.Rows)
+                        {
+                            dr["NO"] = countSUM.ToString();
+                            countSUM += 1;
+                        }
+                        RecordSumGrid.ItemsSource = RecordSumList.DefaultView;
+                        break;
 
-            // 銷售明細(列印)
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parametersDetailPrint = new List<SqlParameter>();
-            parametersDetailPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
-            parametersDetailPrint.Add(new SqlParameter("MasterID", DBNull.Value));
-            parametersDetailPrint.Add(new SqlParameter("sDate", sDate));
-            parametersDetailPrint.Add(new SqlParameter("eDate", eDate));
-            parametersDetailPrint.Add(new SqlParameter("sInvoice", sInvoice));
-            parametersDetailPrint.Add(new SqlParameter("eInvoice", eInvoice));
-            parametersDetailPrint.Add(new SqlParameter("flag", "0"));
-            parametersDetailPrint.Add(new SqlParameter("ShowIrregular", isIrregular));
-            parametersDetailPrint.Add(new SqlParameter("ShowReturn", isReturn));
-            parametersDetailPrint.Add(new SqlParameter("Cashier", Cashier));
-            parametersDetailPrint.Add(new SqlParameter("ProID", proID));
-            parametersDetailPrint.Add(new SqlParameter("ProName", proNAME));
-            DataTable resultDetailPrint = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQueryPrint]", parametersDetailPrint);
-            MainWindow.ServerConnection.CloseConnection();
+                    case 4: // 銷售紀錄(列印)
+                        MainWindow.ServerConnection.OpenConnection();
+                        List<SqlParameter> parametersPrint = new List<SqlParameter>();
+                        parametersPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
+                        parametersPrint.Add(new SqlParameter("MasterID", DBNull.Value));
+                        parametersPrint.Add(new SqlParameter("sDate", sDate));
+                        parametersPrint.Add(new SqlParameter("eDate", eDate));
+                        parametersPrint.Add(new SqlParameter("sInvoice", sInvoice));
+                        parametersPrint.Add(new SqlParameter("eInvoice", eInvoice));
+                        parametersPrint.Add(new SqlParameter("flag", "0"));
+                        parametersPrint.Add(new SqlParameter("ShowIrregular", isIrregular));
+                        parametersPrint.Add(new SqlParameter("ShowReturn", isReturn));
+                        parametersPrint.Add(new SqlParameter("Cashier", Cashier));
+                        parametersPrint.Add(new SqlParameter("ProID", proID));
+                        parametersPrint.Add(new SqlParameter("ProName", proNAME));
 
-            RecordDetailListPrint = resultDetailPrint.Copy();
+                        DataTable resultprint = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQueryPrint]", parametersPrint);
+                        MainWindow.ServerConnection.CloseConnection();
+                        RecordPrint = resultprint.Copy();
+                        break;
 
-            // 銷售彙總
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parametersSum = new List<SqlParameter>();
-            parametersSum.Add(new SqlParameter("CustomerID", DBNull.Value));
-            parametersSum.Add(new SqlParameter("MasterID", DBNull.Value));
-            parametersSum.Add(new SqlParameter("sDate", sDate));
-            parametersSum.Add(new SqlParameter("eDate", eDate));
-            parametersSum.Add(new SqlParameter("sInvoice", sInvoice));
-            parametersSum.Add(new SqlParameter("eInvoice", eInvoice));
-            parametersSum.Add(new SqlParameter("flag", "0"));
-            parametersSum.Add(new SqlParameter("ShowIrregular", isIrregular));
-            parametersSum.Add(new SqlParameter("ShowReturn", isReturn));
-            parametersSum.Add(new SqlParameter("Cashier", Cashier));
-            parametersSum.Add(new SqlParameter("ProID", proID));
-            parametersSum.Add(new SqlParameter("ProName", proNAME));
-            DataTable resultSum = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordSum]", parametersSum);
-            MainWindow.ServerConnection.CloseConnection();
-            RecordSumList = resultSum.Copy();
+                    case 5: // 銷售明細(列印)
+                        MainWindow.ServerConnection.OpenConnection();
+                        List<SqlParameter> parametersDetailPrint = new List<SqlParameter>();
+                        parametersDetailPrint.Add(new SqlParameter("CustomerID", DBNull.Value));
+                        parametersDetailPrint.Add(new SqlParameter("MasterID", DBNull.Value));
+                        parametersDetailPrint.Add(new SqlParameter("sDate", sDate));
+                        parametersDetailPrint.Add(new SqlParameter("eDate", eDate));
+                        parametersDetailPrint.Add(new SqlParameter("sInvoice", sInvoice));
+                        parametersDetailPrint.Add(new SqlParameter("eInvoice", eInvoice));
+                        parametersDetailPrint.Add(new SqlParameter("flag", "0"));
+                        parametersDetailPrint.Add(new SqlParameter("ShowIrregular", isIrregular));
+                        parametersDetailPrint.Add(new SqlParameter("ShowReturn", isReturn));
+                        parametersDetailPrint.Add(new SqlParameter("Cashier", Cashier));
+                        parametersDetailPrint.Add(new SqlParameter("ProID", proID));
+                        parametersDetailPrint.Add(new SqlParameter("ProName", proNAME));
+                        DataTable resultDetailPrint = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQueryPrint]", parametersDetailPrint);
+                        MainWindow.ServerConnection.CloseConnection();
 
-            RecordSumList.Columns.Add("NO"); // 序
-            int countSUM = 1;
-            foreach (DataRow dr in RecordSumList.Rows)
-            {
-                dr["NO"] = countSUM.ToString();
-                countSUM += 1;
-            }
-            RecordSumGrid.ItemsSource = RecordSumList.DefaultView;
+                        RecordDetailListPrint = resultDetailPrint.Copy();
+                        break;
+                }
+            }), DispatcherPriority.ContextIdle);
         }
 
         private void FormatData(DataTable result)
@@ -300,7 +340,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         public void DetailWindowClosed(object sender, System.EventArgs e)
         {
-            GetData();
+            GetData(queryTab);
         }
 
         private void StartDate_OnPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -321,21 +361,25 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             }
         }
 
-        private void btnQuery_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void btnQuery_Click(object sender, RoutedEventArgs e)
         {
-            GetData();
+            GetData(queryTab);
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
-            RecordList.Clear();
-            StartInvoice.Text = "";
-            EndInvoice.Text = "";
-            cbCashier.SelectedIndex = -1;
+            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                RecordList.Clear();
+                StartInvoice.Text = "";
+                EndInvoice.Text = "";
+                cbCashier.SelectedIndex = -1;
+            }), DispatcherPriority.ContextIdle);
         }
 
         private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            GetData(1);
             btnTradeDetail.Background = Brushes.Transparent;
             btnTradeDetail.Foreground = Brushes.DimGray;
             btnTrade.Foreground = Brushes.White;
@@ -354,6 +398,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         private void btnTradeDetail_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            GetData(2);
             btnTrade.Background = Brushes.Transparent;
             btnTrade.Foreground = Brushes.DimGray;
             btnTradeDetail.Foreground = Brushes.White;
@@ -371,6 +416,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         private void btnTradeSum_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            GetData(3);
             btnTrade.Background = Brushes.Transparent;
             btnTrade.Foreground = Brushes.DimGray;
             btnTradeDetail.Foreground = Brushes.DimGray;
@@ -388,6 +434,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         private void btnPrint1_Click(object sender, RoutedEventArgs e)
         {
+            GetData(4);
             Process myProcess = new Process();
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "銷售紀錄";
@@ -454,6 +501,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
         private void btnPrint2_Click(object sender, RoutedEventArgs e)
         {
+            GetData(5);
             Process myProcess = new Process();
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "銷售明細";
