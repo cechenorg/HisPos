@@ -200,6 +200,7 @@
                     Grid.Column="0"
                     Margin="10,10,9.6,-0.4"
                     AutoGenerateColumns="False"
+                    Height="750"
                     Background="{StaticResource GridBackGround}"
                     CanUserAddRows="False"
                     CellStyle="{StaticResource DataGridCellStyle}"
@@ -258,7 +259,7 @@
                     Grid.Column="1"
                     Grid.ColumnSpan="2">
                     <DataGrid
-                    Height="760"
+                    Height="750"
                     Margin="0.4,10,9.8,-0.4"
                     AutoGenerateColumns="False"
                     Background="{StaticResource GridBackGround}"
