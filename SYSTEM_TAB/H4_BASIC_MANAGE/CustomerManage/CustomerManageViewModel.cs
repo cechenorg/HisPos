@@ -97,6 +97,17 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             set { Set(() => IdNumber, ref idNumber, value); }
         }
 
+        private bool isEmployee;
+
+        public bool IsEmployee
+        {
+            get 
+            {
+                return isEmployee;
+            }
+            set { Set(() => IsEmployee, ref isEmployee, value); }
+        }
+
         private DateTime? textCusBirthDay;
 
         public DateTime? TextCusBirthDay
@@ -269,7 +280,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void DeleteAction()
         {
-            if (Customer.ID != null)
+            if (Customer != null)
             {
                 ConfirmWindow cw = new ConfirmWindow("是否刪除顧客(無法復原)", "刪除確認");
                 if (!(bool)cw.DialogResult) { return; }
@@ -302,7 +313,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void ClearAction()
         {
-
             //TextCusName = string.Empty;
             //TextCusBirthDay = null;
             //IdNumber = string.Empty;
@@ -310,13 +320,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             //Customer = new Customer();
             //CustomerCollection = new Customers();
 
-
             //edit by shani 2021/07/14
             TextCusName = null;
             TextCusBirthDay = null;
             IdNumber = null;
             PhoneNumber = null;
-
         }
 
         private void SearchAction()
@@ -364,61 +372,67 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         public void CancelAction()
         {
-            Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
-            InitDataChanged();
+            if (Customer != null) 
+            {
+                Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
+                InitDataChanged();
+            }
         }
 
         public void SubmitAction()
         {
-            for (int i = 0; i < CustomerCollection.Count; i++)
+            if (Customer != null) 
             {
-                if (CustomerCollection[i].ID == Customer.ID)
+                for (int i = 0; i < CustomerCollection.Count; i++)
                 {
-                    CustomerCollection[i] = Customer;
-                    Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == CustomerCollection[i].ID));
-                    break;
+                    if (CustomerCollection[i].ID == Customer.ID)
+                    {
+                        CustomerCollection[i] = Customer;
+                        Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == CustomerCollection[i].ID));
+                        break;
+                    }
                 }
-            }
-            if(!String.IsNullOrEmpty(Customer.IDNumber)) 
-            {
-                if (!VerifyService.VerifyIDNumber(Customer.IDNumber))
+                if (!string.IsNullOrEmpty(Customer.IDNumber))
                 {
-                    MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
-                    return;
+                    if (!VerifyService.VerifyIDNumber(Customer.IDNumber))
+                    {
+                        MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
+                        return;
+                    }
+                    MainWindow.ServerConnection.OpenConnection();
+                    List<SqlParameter> parameters = new List<SqlParameter>();
+                    parameters.Add(new SqlParameter("Cus_IDNumber", Customer.IDNumber));
+                    DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerIDs]", parameters);
+                    MainWindow.ServerConnection.CloseConnection();
+                    if (result.Rows.Count == 1)
+                    {
+                        MessageWindow.ShowMessage("身分證已存在!", Class.MessageType.ERROR);
+                        return;
+                    }
                 }
                 MainWindow.ServerConnection.OpenConnection();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("Cus_IDNumber", Customer.IDNumber));
-                DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerIDs]", parameters);
+                DataTable dataTable = CustomerDb.CheckCustomerByPhone(Customer.CellPhone, Customer.Tel);
                 MainWindow.ServerConnection.CloseConnection();
-                if (result.Rows.Count == 1)
+                if (dataTable.Rows.Count == 1)
                 {
-                    MessageWindow.ShowMessage("身分證已存在!", Class.MessageType.ERROR);
-                    return;
+                    CustomerDb.UpdateCustomerByPhone((int)dataTable.Rows[0]["Person_Id"], Customer.ID, Customer.CellPhone, Customer.Tel);
+                    MessageWindow.ShowMessage("POS顧客已併入HIS!", Class.MessageType.SUCCESS);
                 }
-            }
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CustomerDb.CheckCustomerByPhone(Customer.CellPhone, Customer.Tel);
-            MainWindow.ServerConnection.CloseConnection();
-            if (dataTable.Rows.Count == 1)
-            {
-                CustomerDb.UpdateCustomerByPhone((int)dataTable.Rows[0]["Person_Id"], Customer.ID, Customer.CellPhone, Customer.Tel);
-                MessageWindow.ShowMessage("POS顧客已併入HIS!", Class.MessageType.SUCCESS);
-            }
 
-            if (!Customer.IsEnable)
-            {
-                ConfirmWindow confirmWindow = new ConfirmWindow("關閉後會刪除此位客人病患所有預約慢箋 是否關閉?", "關閉病患視窗確認");
-                if ((bool)confirmWindow.DialogResult)
+                if (!Customer.IsEnable)
                 {
-                    Customer.Save();
-                    MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
+                    ConfirmWindow confirmWindow = new ConfirmWindow("關閉後會刪除此位客人病患所有預約慢箋 是否關閉?", "關閉病患視窗確認");
+                    if ((bool)confirmWindow.DialogResult)
+                    {
+                        Customer.Save();
+                        MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
+                    }
                 }
+                else
+                    Customer.Save();
+                InitDataChanged();
+                MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
             }
-            else
-                Customer.Save();
-            InitDataChanged();
-            MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
         }
 
         private void ShowMedicinesDetailAction()
@@ -440,6 +454,22 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void InitDataChanged()
         {
+            if (Customer != null)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("CusID", Customer.ID));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[IsEmployee]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+                if (result.Rows[0]["Cus_CusType"].ToString() == "1")
+                {
+                    isEmployee = true;
+                }
+                else 
+                {
+                    isEmployee = false;
+                }
+            }
             IsDataChanged = false;
             BtnCancelEnable = false;
             BtnSubmitEnable = false;

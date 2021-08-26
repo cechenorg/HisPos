@@ -21,7 +21,9 @@ namespace His_Pos.NewClass.StockValue
             MinusStockAdjustValue = r.Field<double>("進貨負庫調整");
             TrashValue = r.Field<double>("報廢");
             AdjustValue = r.Field<double>("調整");
-            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue + MinusStockAdjustValue + TrashValue;
+
+            //edit AdjustValue by SHANI 0823
+            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue + MinusStockAdjustValue + TrashValue + AdjustValue; 
             FinalStockValue = stock;
         }
 

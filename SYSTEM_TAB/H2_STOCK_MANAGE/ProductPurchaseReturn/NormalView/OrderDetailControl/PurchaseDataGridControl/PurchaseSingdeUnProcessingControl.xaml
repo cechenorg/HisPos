@@ -162,8 +162,13 @@
                                 InputMethod.IsInputMethodEnabled="False"
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"           
                                 Style="{DynamicResource CantEditPrice}"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='{}{0:0.00;;#}'}"
-                                />
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:0.00;;#}'}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

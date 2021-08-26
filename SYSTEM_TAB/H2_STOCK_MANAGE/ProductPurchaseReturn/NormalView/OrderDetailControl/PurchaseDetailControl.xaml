@@ -72,7 +72,7 @@
                                 <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -123,9 +123,21 @@
                 Margin="25,0,0,0"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
-                FontSize="22"
+                FontSize="24"
                 Foreground="Green"
                 Text="進貨" />
+            <Label
+                Margin="20,0,0,0"
+                Content="原"
+                Foreground="Black"
+                Style="{StaticResource BoldLabelHeader25}" />
+            <Label
+                Width="200"
+                VerticalAlignment="Center"
+                Content="{Binding ID}"
+                FontFamily="Segoe UI Semi"
+                FontSize="24"
+                Foreground="Black" />
             <Label
                 Margin="20,0,0,0"
                 Content="採購人"

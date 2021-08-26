@@ -191,26 +191,26 @@
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox
+                            <Label
                                 Width="70"
                                 Margin="0,0,0,2"
-                                HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='{}{0:0.00;;#}' }">
+                                HorizontalContentAlignment="Center"
+                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='{}{0:0.00;;#}' }">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="LostFocus">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <TextBox.InputScope>
+                                <!--<TextBox.InputScope>
                                     <InputScope>
                                         <InputScope.Names>
                                             <InputScopeName NameValue="AlphanumericHalfWidth"/>
                                         </InputScope.Names>
                                     </InputScope>
-                                </TextBox.InputScope>
-                            </TextBox>
+                                </TextBox.InputScope>-->
+                            </Label>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -255,7 +255,7 @@
                                 FontSize="18"
                                 Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:0;;#}'}">
                                 <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="TextChanged">
+                                    <i:EventTrigger EventName="PreviewKeyUp">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
@@ -270,7 +270,40 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn
+
+                <DataGridTemplateColumn
+                    Width="85"
+                    Header="小計"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox
+                                Width="70"
+                                Margin="0,0,0,2"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="18"
+                                HorizontalContentAlignment="Center"
+                                Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0 }"
+                                GotFocus="TextBox_GotFocus"
+                                LostFocus="TextBox_LostFocus">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="PreviewKeyUp">
+                                        <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <TextBox.InputScope>
+                                    <InputScope>
+                                        <InputScope.Names>
+                                            <InputScopeName NameValue="AlphanumericHalfWidth"/>
+                                        </InputScope.Names>
+                                    </InputScope>
+                                </TextBox.InputScope>
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!--<DataGridTextColumn
                     Width="85"
                     Binding="{Binding SubTotal, StringFormat=N2}"
                     FontFamily="Segoe UI Semi"
@@ -282,7 +315,8 @@
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                </DataGridTextColumn>-->
+                
                 <DataGridTemplateColumn
                     MinWidth="170"
                     Header="批號"

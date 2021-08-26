@@ -155,7 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             int index = textBoxs.IndexOf(textBox);
 
-            ProductDataGrid.SelectedItem = (ProductDataGrid.Items[index] as Product);
+            ProductDataGrid.SelectedItem = ProductDataGrid.Items[index/2] as Product;
         }
         private void MoveFocusNext(object sender)
         {
@@ -194,6 +194,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             }
         }
         private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            textBox.SelectAll();
+            FocusRow(textBox);
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (string.IsNullOrEmpty(textBox.Text)) 
+            {
+                textBox.Text = "0";
+            }
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
 
