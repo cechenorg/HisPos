@@ -241,8 +241,14 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                         if (ProStructCollectionView.CurrentPosition < maxIndex)
                             ProStructCollectionView.MoveCurrentToNext();
                         break;
+                    case "ENTER":
+                        ProductSelectedAction();
+                        break;
                 }
-                SelectedProductStruct = (ProductStruct)ProStructCollectionView.CurrentItem;
+                if (ProStructCollectionView.CurrentItem != null) 
+                {
+                    SelectedProductStruct = (ProductStruct)ProStructCollectionView.CurrentItem;
+                }
             }
         }
 
