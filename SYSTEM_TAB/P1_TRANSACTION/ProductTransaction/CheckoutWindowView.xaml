@@ -234,7 +234,9 @@
                 Width="60"
                 FontSize="24"
                 PreviewKeyDown="tbEmployee_PreviewKeyDown"
+                TextChanged="tbEmployee_TextChanged"
                 Text="" />
+            <Label x:Name="lbEmployee" Margin="10,0,0,0" FontSize="24" />
         </StackPanel>
         <StackPanel
             Grid.Row="11"

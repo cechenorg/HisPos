@@ -420,10 +420,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     if (dr["CurrentPrice"].ToString() != "" && dr["Amount"].ToString() != "")
                     {
-                        dr["Calc"] = int.Parse(dr["CurrentPrice"].ToString()) * int.Parse(dr["Amount"].ToString());
-                        double profit = (double.Parse(dr["CurrentPrice"].ToString()) -
-                        double.Parse(dr["AVGVALUE"].ToString())) * int.Parse(dr["Amount"].ToString());
+                        double.TryParse(dr["CurrentPrice"].ToString(), out double price);
+                        double.TryParse(dr["AVGVALUE"].ToString(), out double avg);
+                        int.TryParse(dr["Amount"].ToString(), out int amt);
+
+                        dr["Calc"] = price * amt;
+                        double profit = (price - avg) * amt;
                         dr["Profit"] = string.Format("{0:F2}", profit);
+                        dr["PriceTooltip"] = string.Format("{0:F2}", avg) + " / " + string.Format("{0:F2}", profit);
                     }
                 }
                 preTotal = int.Parse(ProductList.Compute("SUM(Calc)", string.Empty).ToString());
@@ -859,15 +863,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 tb.Text = "0";
                 return;
             }
-
             CalculateTotal();
-            foreach (DataRow dr in ProductList.Rows)
-            {
-                double profit = (double.Parse(dr["CurrentPrice"].ToString()) -
-                    double.Parse(dr["AVGVALUE"].ToString()));
-                dr["PriceTooltip"] = string.Format("{0:F2}", dr["AVGVALUE"]) + " / " +
-                    string.Format("{0:F2}", profit);
-            }
         }
 
         private void Price_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1028,6 +1024,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             HISRecordGrid.ItemsSource = null;
             DepositColumn.Visibility = Visibility.Hidden;
             btnPrepay.IsEnabled = false;
+            btnDepositManage.IsEnabled = false;
             AppliedPrice = "Pro_RetailPrice";
             SetPrice();
             CalculateTotal();
@@ -1070,6 +1067,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             CalculateTotal();
             DepositColumn.Visibility = Visibility.Visible;
             btnPrepay.IsEnabled = true;
+            btnDepositManage.IsEnabled = true;
         }
 
         private void GetCustomerTradeRecord()

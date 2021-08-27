@@ -253,7 +253,7 @@
                     CanUserAddRows="False"
                     CellStyle="{StaticResource DataGridCellStyle}"
                     ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    EnableRowVirtualization="False"
+                    EnableRowVirtualization="True"
                     HorizontalScrollBarVisibility="Disabled">
                         <DataGrid.Resources>
                             <Style TargetType="ScrollBar">
@@ -401,7 +401,7 @@
                     CanUserAddRows="False"
                     CellStyle="{StaticResource DataGridCellStyle}"
                     ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    EnableRowVirtualization="False"
+                    EnableRowVirtualization="True"
                     HorizontalScrollBarVisibility="Disabled"
                     Visibility="Collapsed">
                         <DataGrid.Resources>
@@ -575,7 +575,7 @@
                     CanUserAddRows="False"
                     CellStyle="{StaticResource DataGridCellStyle}"
                     ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    EnableRowVirtualization="False"
+                    EnableRowVirtualization="True"
                     HorizontalScrollBarVisibility="Disabled"
                     Visibility="Collapsed">
                         <DataGrid.Resources>

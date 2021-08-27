@@ -410,6 +410,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (e.Key == Key.Enter)
                 {
                     btnSubmit.Focus();
+
                 }
                 if (e.Key == Key.Up)
                 {
@@ -546,6 +547,29 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (IsLoaded)
             {
                 CardNumberControl();
+            }
+        }
+
+        private void tbEmployee_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            bool isMatch = false;
+            string empName = "";
+            foreach (DataRow dr in EmployeeList.Rows)
+            {
+                if (dr["Emp_CashierID"].ToString() == tb.Text)
+                {
+                    isMatch = true;
+                    empName = dr["Emp_Name"].ToString();
+                }
+            }
+            if (!isMatch || string.IsNullOrEmpty(tb.Text))
+            {
+                lbEmployee.Content = "";
+            }
+            else 
+            {
+                lbEmployee.Content = empName;
             }
         }
     }

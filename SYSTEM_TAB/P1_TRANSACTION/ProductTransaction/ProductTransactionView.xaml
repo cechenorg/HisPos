@@ -163,7 +163,7 @@
                             VerticalContentAlignment="Center"
                             Content="生日："
                             FontFamily="Segoe UI Semibold"
-                            FontSize="17" />
+                            FontSize="17"/>
                         <Label
                             x:Name="lbBirthDay"
                             Width="90"
@@ -171,7 +171,7 @@
                             HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
-                            FontSize="17" />
+                            FontSize="17"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
                         <Label
@@ -259,11 +259,11 @@
                     <Button
                         x:Name="btnChangeRecord"
                         Width="100"
-                        Margin="10,0,0,0"
-                        Background="RoyalBlue"
+                        Margin="15,0,0,0"
+                        Background="ForestGreen"
                         BorderThickness="0"
                         Click="btnChangeRecord_Click"
-                        Content="切換"
+                        Content="消費"
                         FontFamily="Segoe UI Semibold"
                         FontSize="17"
                         Visibility="Collapsed" />
@@ -271,10 +271,10 @@
                         x:Name="btnChangeHIS"
                         Width="100"
                         Margin="15,0,0,0"
-                        Background="RoyalBlue"
+                        Background="IndianRed"
                         BorderThickness="0"
                         Click="btnChangeHIS_Click"
-                        Content="切換"
+                        Content="處方"
                         FontFamily="Segoe UI Semibold"
                         FontSize="17" />
                     <Label
@@ -295,7 +295,8 @@
                         Click="btnDepositManage_Click"
                         Content="寄庫管理"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="17" />
+                        FontSize="17"
+                        IsEnabled="False"/>
                 </StackPanel>
                 <Rectangle Grid.Row="3" Fill="{StaticResource GridDarkerBackGround}" />
                 <DataGrid

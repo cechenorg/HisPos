@@ -45,6 +45,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             GetEmployeeList();
         }
 
+        private void ClearDataGrids() 
+        {
+            RecordGrid.ItemsSource = null;
+            RecordDetailGrid.ItemsSource = null;
+            RecordSumGrid.ItemsSource = null;
+        }
+
         private void GetEmployeeList()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -135,7 +142,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
                     return;
                 }
-
+                ClearDataGrids();
                 switch (querytype)
                 {
                     case 1: // 銷售紀錄
@@ -370,7 +377,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         {
             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                RecordList.Clear();
+                ClearDataGrids();
                 StartInvoice.Text = "";
                 EndInvoice.Text = "";
                 cbCashier.SelectedIndex = -1;
