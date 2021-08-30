@@ -820,8 +820,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int.TryParse(ProductList.Rows[index]["Available_Amount"].ToString(), out int stock);
             if (amt > stock && ProductList.Rows[index]["Pro_ID"].ToString() != PrepayProID)
             {
-                MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
                 tb.Text = stock.ToString();
+                ProductList.Rows[index]["Amount"] = stock.ToString();
+                MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
             }
             CalculateTotal();
         }
