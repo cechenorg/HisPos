@@ -607,7 +607,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     e.Handled = true;
                     tb.Focus();
-                    PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
+                    if (PrescriptionMedicines.CurrentCell.Item != null) 
+                    {
+                        PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
+                    }
                 }
             }
         }

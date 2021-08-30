@@ -394,7 +394,6 @@ namespace His_Pos.NewClass.Person.Customer
         public bool CheckCellFormat()
         {
             var cleared = Regex.Replace(CellPhone, "[^0-9]", "");
-            //System.Windows.MessageBox.Show(cleared.Length.ToString());
             return cleared.Length == 10;
         }
 
