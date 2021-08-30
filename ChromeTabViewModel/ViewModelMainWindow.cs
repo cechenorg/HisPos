@@ -433,7 +433,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement insurance = doc.CreateElement("insurance");
                 insurance.SetAttribute("insurance_type", "A");
-                insurance.SetAttribute("serial_code", ss[20].PadLeft(4, '0'));
+                insurance.SetAttribute("serial_code", ss[20].PadLeft(4,'0'));
                 insurance.SetAttribute("except_code", "");
                 insurance.SetAttribute("copayment_code", ss[10]);
                 insurance.SetAttribute("case_type", ss[25]);
