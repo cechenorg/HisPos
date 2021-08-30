@@ -554,7 +554,15 @@ namespace His_Pos.NewClass.Medicine.Base
 
         private void SetPriceByRemark(string remark, string itemPrice)
         {
-            var priceValue = Convert.ToDouble(itemPrice);
+            var priceValue = 0.0;
+            if (itemPrice == "")
+            {
+                priceValue = 0;
+            }
+            else
+            {
+                priceValue = Convert.ToDouble(itemPrice);
+            }
             if (priceValue < 0) priceValue *= -1;
             switch (remark)
             {
