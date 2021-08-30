@@ -461,13 +461,17 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 parameters.Add(new SqlParameter("CusID", Customer.ID));
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[IsEmployee]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
-                if (result.Rows[0]["Cus_CusType"].ToString() == "1")
+
+                if (result.Rows.Count>0)
                 {
-                    isEmployee = true;
-                }
-                else 
-                {
-                    isEmployee = false;
+                    if (result.Rows[0]["Cus_CusType"].ToString() == "1")
+                    {
+                        isEmployee = true;
+                    }
+                    else
+                    {
+                        isEmployee = false;
+                    }
                 }
             }
             IsDataChanged = false;

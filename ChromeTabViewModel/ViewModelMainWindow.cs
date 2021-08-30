@@ -203,25 +203,27 @@ namespace His_Pos.ChromeTabViewModel
                 var paths = new List<string>();
                 foreach (var c in CooperativeClinicSettings)
                 {
-                    if (c.AutoPrint == true)
+                    if (Properties.Settings.Default.PrePrint == "True")
                     {
-                        pathFile = c.FilePath;
-                        if (c.FilePath == null)
+                        if (c.AutoPrint == true)
                         {
-                            continue;
+                            pathFile = c.FilePath;
+                            if (c.FilePath == null)
+                            {
+                                continue;
+                            }
+                            FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.txt");
+                            //開啟監聽
+                            watch.EnableRaisingEvents = true;
+                            //是否連子資料夾都要偵測
+                            watch.IncludeSubdirectories = true;
+                            //新增時觸發事件
+
+
+
+                            watch.Created += watch_Created;
                         }
-                        FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.txt");
-                        //開啟監聽
-                        watch.EnableRaisingEvents = true;
-                        //是否連子資料夾都要偵測
-                        watch.IncludeSubdirectories = true;
-                        //新增時觸發事件
-
-
-
-                        watch.Created += watch_Created;
                     }
-
 
                 }
 
@@ -431,7 +433,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement insurance = doc.CreateElement("insurance");
                 insurance.SetAttribute("insurance_type", "A");
-                insurance.SetAttribute("serial_code", String.Format("{0:0000}", ss[20]));
+                insurance.SetAttribute("serial_code", ss[20].PadLeft(4, '0'));
                 insurance.SetAttribute("except_code", "");
                 insurance.SetAttribute("copayment_code", ss[10]);
                 insurance.SetAttribute("case_type", ss[25]);
