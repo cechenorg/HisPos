@@ -1620,16 +1620,22 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 var col1 = ws.Column("A");
                 col1.Width = 25;
                 var col2 = ws.Column("B");
-                col2.Width = 15;
+                col2.Width = 55;
                 var col3 = ws.Column("C");
-                col3.Width = 25;
+                col3.Width = 15;
+                var col4 = ws.Column("D");
+                col4.Width = 55;
+                var col5 = ws.Column("E");
+                col4.Width = 15;
 
 
                 ws.Cell(1, 1).Value = "發票明細";
-                ws.Range(1, 1, 1, 3).Merge().AddToNamed("Titles");
+                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "時間";
-                ws.Cell("B2").Value = "發票金額";
-                ws.Cell("C2").Value = "發票號碼";
+                ws.Cell("B2").Value = "發票號碼";
+                ws.Cell("C2").Value = "發票金額";
+                ws.Cell("D2").Value = "作廢發票號碼";
+                ws.Cell("E2").Value = "作廢發票號碼";
 
                 if (result.Rows.Count > 0)
                 {
@@ -1651,22 +1657,22 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 col1 = ws.Column("A");
                 col1.Width = 15;
                 col2 = ws.Column("B");
-                col2.Width = 55;
+                col2.Width = 15;
                 col3 = ws.Column("C");
                 col3.Width = 15;
                 col4 = ws.Column("D");
-                col4.Width = 15;
+                col3.Width = 15;
 
 
 
                 ws.Cell(1, 1).Value = "發票明細";
-                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
+                ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "日期";
                 ws.Cell("B2").Value = "發票號碼";
                 ws.Cell("C2").Value = "發票金額";
                 ws.Cell("D2").Value = "作廢";//result2
 
-                if (result.Rows.Count > 0)
+                if (result2.Rows.Count > 0)
                 {
                     var rangeWithData = ws.Cell(3, 1).InsertData(result2.AsEnumerable());
                     rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
