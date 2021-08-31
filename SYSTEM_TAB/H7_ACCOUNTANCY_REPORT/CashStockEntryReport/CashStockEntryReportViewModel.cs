@@ -1638,6 +1638,46 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                     rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 }
 
+
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters2 = new List<SqlParameter>();
+                parameters2.Add(new SqlParameter("Id", "1"));
+                parameters2.Add(new SqlParameter("sDate", StartDate));
+                DataTable result2 = MainWindow.ServerConnection.ExecuteProc("[GET].[InvoiceRecordByDate]", parameters2);
+                MainWindow.ServerConnection.CloseConnection();
+
+                ws = wb.Worksheets.Add("發票明細2");
+                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
+                col1 = ws.Column("A");
+                col1.Width = 15;
+                col2 = ws.Column("B");
+                col2.Width = 55;
+                col3 = ws.Column("C");
+                col3.Width = 15;
+                col4 = ws.Column("D");
+                col4.Width = 15;
+
+
+
+                ws.Cell(1, 1).Value = "發票明細";
+                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
+                ws.Cell("A2").Value = "日期";
+                ws.Cell("B2").Value = "發票號碼";
+                ws.Cell("C2").Value = "發票金額";
+                ws.Cell("D2").Value = "作廢";//result2
+
+                if (result.Rows.Count > 0)
+                {
+                    var rangeWithData = ws.Cell(3, 1).InsertData(result2.AsEnumerable());
+                    rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                }
+
+
+
+
+
+
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
