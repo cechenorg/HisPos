@@ -208,13 +208,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Label
-                                
                                 Width="60"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
-                                
                                 Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
                             <!--<TextBox
                                 x:Name="ProductPriceTextbox"

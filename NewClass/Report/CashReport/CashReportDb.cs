@@ -70,6 +70,16 @@ namespace His_Pos.NewClass.Report.CashReport
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StrikeHistoriesBySource]");
         }
+        internal static DataTable GetSelectStrikeHistories(string type, DateTime sdate, DateTime edate)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            if(!string.IsNullOrEmpty(type))
+                parameters.Add(new SqlParameter("type", type));
+            parameters.Add(new SqlParameter("sdate", sdate));
+            parameters.Add(new SqlParameter("edate", edate));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StrikeHistoriesBySourceByDate]", parameters);
+        }
+
 
         public static void DeleteStrikeHistory(StrikeHistory selectedHistory)
         {

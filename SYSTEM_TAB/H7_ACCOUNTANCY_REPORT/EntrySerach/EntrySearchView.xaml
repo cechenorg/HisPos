@@ -114,13 +114,21 @@
                 ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                 ItemsSource="{Binding WareHouseCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Rectangle Width="700" />
+            <Rectangle Width="540" />
             <Button
                 Width="100"
                 Background="RoyalBlue"
                 BorderThickness="0"
                 Command="{Binding SearchCommand}"
                 Content="查詢"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
+            <Button
+                Width="150"
+                Margin="10,0,0,0"
+                Background="Green"
+                Command="{Binding DownloadCommand}"
+                Content="匯出庫存量"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
@@ -922,7 +930,7 @@
                 Background="RoyalBlue"
                 BorderThickness="0"
                 Command="{Binding ExportOTCCsvCommand}"
-                Content="匯出結果"
+                Content="OTC匯出結果"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
