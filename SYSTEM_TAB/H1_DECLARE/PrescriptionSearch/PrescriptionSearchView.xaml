@@ -590,7 +590,7 @@
                         Command="{Binding ImportDeclareFileCommand}"
                         Content="匯入申報檔"
                         FontSize="16"
-                        Visibility="Collapsed" />
+                        Visibility="Visible" />
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>

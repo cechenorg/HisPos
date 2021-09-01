@@ -476,15 +476,36 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 {
                     if ((bool)printMedBag)
                     {
+
                         BusyContent = Resources.藥袋列印;
                         switch (printSingle != null && (bool)printSingle)
                         {
                             case false:
-                                EditedPrescription.PrintMedBagMultiMode();
+                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                {
+
+                                    EditedPrescription.PrintMedBagSingleModeByCE();
+
+
+                                }
+                                else
+                                {
+                                    EditedPrescription.PrintMedBagMultiMode();
+                                }
                                 break;
 
                             case true:
-                                EditedPrescription.PrintMedBagSingleMode();
+                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                {
+
+                                    EditedPrescription.PrintMedBagSingleModeByCE();
+
+
+                                }
+                                else
+                                {
+                                    EditedPrescription.PrintMedBagSingleMode();
+                                }
                                 break;
                         }
                     }
