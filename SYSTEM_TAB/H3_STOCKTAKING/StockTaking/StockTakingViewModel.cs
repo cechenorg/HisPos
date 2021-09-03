@@ -654,7 +654,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 
                     CurrentPlan.StockTakingProductCollection.Add(SourceStockTakingProducts[i]);
                     WordsView.Remove(SourceStockTakingProducts[i]);
-                    SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
+                    //SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
                     i--;
                 }
             }
