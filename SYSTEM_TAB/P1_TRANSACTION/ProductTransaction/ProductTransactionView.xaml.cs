@@ -22,6 +22,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO.Ports;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -815,13 +816,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int index = GetRowIndexRouted(e);
             if (index > ProductList.Rows.Count - 1) { return; }
             TextBox tb = (TextBox)sender;
+
+
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
+
+            var list = ProductList.AsEnumerable().Select(a => new { value = a.Field<int>("Amount") }).Distinct().ToList();
+            int disAmt = list.Sum(s => s.value);
+
             int.TryParse(ProductList.Rows[index]["Available_Amount"].ToString(), out int stock);
-            if (amt > stock && ProductList.Rows[index]["Pro_ID"].ToString() != PrepayProID)
+            if (disAmt > stock && ProductList.Rows[index]["Pro_ID"].ToString() != PrepayProID)
             {
-                tb.Text = stock.ToString();
-                ProductList.Rows[index]["Amount"] = stock.ToString();
+                tb.Text = "";
+                ProductList.Rows[index]["Amount"] = 0;
                 MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
             }
             CalculateTotal();
@@ -1055,7 +1062,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbAddress.Text = result.Rows[0]["Cus_Address"].ToString();
             tbCusNote.Text = result.Rows[0]["Cus_Note"].ToString();
 
-            if (result.Rows[0]["Cus_CusType"].ToString() == "EMP")
+            if (result.Rows[0]["Cus_CusType"].ToString() == "1")
             {
                 AppliedPrice = "Pro_EmployeePrice";
             }
