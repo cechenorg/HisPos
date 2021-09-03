@@ -22,6 +22,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO.Ports;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -815,14 +816,30 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int index = GetRowIndexRouted(e);
             if (index > ProductList.Rows.Count - 1) { return; }
             TextBox tb = (TextBox)sender;
+
+            //var list = ProductList.AsEnumerable().Select(a => new { value = a.Field<int>("Amount") }).Distinct().ToList();
+            //int disAmt = list.Sum(s => s.value);
+
+            string ProID = ProductList.Rows[index]["Pro_ID"].ToString();
+            int DisAmt = 0;
+            foreach (DataRow row in ProductList.Rows)
+            {
+                int.TryParse(row["Amount"].ToString(), out int rowAmt);
+                if (row["Pro_ID"].ToString() == ProID) 
+                {
+                    DisAmt = DisAmt + rowAmt;
+                }
+            }
+            MessageBox.Show(DisAmt.ToString());
+
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
             int.TryParse(ProductList.Rows[index]["Available_Amount"].ToString(), out int stock);
             if (amt > stock && ProductList.Rows[index]["Pro_ID"].ToString() != PrepayProID)
             {
-                tb.Text = stock.ToString();
-                ProductList.Rows[index]["Amount"] = stock.ToString();
                 MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
+                tb.Text = "0";
+                ProductList.Rows[index]["Amount"] = 0;
             }
             CalculateTotal();
         }
