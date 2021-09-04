@@ -831,11 +831,18 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
             int.TryParse(ProductList.Rows[index]["Available_Amount"].ToString(), out int stock);
-            if (amt > stock && ProductList.Rows[index]["Pro_ID"].ToString() != PrepayProID)
+            if (DisAmt > stock && ProductList.Rows[index]["Pro_ID"].ToString() != PrepayProID)
             {
                 MessageWindow.ShowMessage("輸入量大於可用量！", MessageType.WARNING);
-                tb.Text = "0";
-                ProductList.Rows[index]["Amount"] = 0;
+                if (ProductList.Rows[index]["IsGift"].ToString() == "1" && amt == 1)
+                {
+                    ProductList.Rows.RemoveAt(index);
+                }
+                else 
+                {
+                    tb.Text = "0";
+                    ProductList.Rows[index]["Amount"] = 0;
+                }                
             }
             CalculateTotal();
         }
