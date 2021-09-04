@@ -817,9 +817,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (index > ProductList.Rows.Count - 1) { return; }
             TextBox tb = (TextBox)sender;
 
-            //var list = ProductList.AsEnumerable().Select(a => new { value = a.Field<int>("Amount") }).Distinct().ToList();
-            //int disAmt = list.Sum(s => s.value);
-
             string ProID = ProductList.Rows[index]["Pro_ID"].ToString();
             int DisAmt = 0;
             foreach (DataRow row in ProductList.Rows)
@@ -830,7 +827,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     DisAmt = DisAmt + rowAmt;
                 }
             }
-            MessageBox.Show(DisAmt.ToString());
 
             int.TryParse(tb.Text, out int amt);
             if (amt < 0) { tb.Text = "0"; }
