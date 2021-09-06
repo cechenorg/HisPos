@@ -162,6 +162,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             {
                 lblUpdateTime.Content = "";
             }
+
+            int.TryParse(lbDiscountAmt.Content.ToString(), out int dis);
+            if (dis > 0) 
+            {
+                lbDiscountAmt.Foreground = Brushes.Red;
+            }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)

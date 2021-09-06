@@ -3,6 +3,7 @@ using His_Pos.FunctionWindow;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -61,6 +62,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             // 發票號碼
             if (Properties.Settings.Default.InvoiceCheck == "1")
             {
+                ReadSettingFile();
                 tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
             }
             else
@@ -570,6 +572,34 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             else 
             {
                 lbEmployee.Content = empName;
+            }
+        }
+
+        public static void ReadSettingFile()
+        {
+            var filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            using (var fileReader = new StreamReader(filePath))
+            {
+                var verifyKey = fileReader.ReadLine();
+                var medBagPrinter = fileReader.ReadLine();
+                var receiptPrinter = fileReader.ReadLine();
+                var reportPrinter = fileReader.ReadLine();
+                var comport = fileReader.ReadLine();
+                var icomport = fileReader.ReadLine();
+                var inumber = fileReader.ReadLine();
+                var ichk = fileReader.ReadLine();
+                var inumS = fileReader.ReadLine();
+                var inumC = fileReader.ReadLine();
+                var inumE = fileReader.ReadLine();
+                var pP = fileReader.ReadLine();
+                Properties.Settings.Default.InvoiceNumber = string.IsNullOrEmpty(inumber) ? "" : inumber.Substring(5, inumber.Length - 5);
+                Properties.Settings.Default.InvoiceCheck = string.IsNullOrEmpty(ichk) ? "" : ichk.Substring(5, ichk.Length - 5);
+                Properties.Settings.Default.InvoiceNumberStart = string.IsNullOrEmpty(inumS) ? "" : inumS.Substring(6, inumS.Length - 6);
+                Properties.Settings.Default.InvoiceNumberCount = string.IsNullOrEmpty(inumC) ? "" : inumC.Substring(6, inumC.Length - 6);
+                Properties.Settings.Default.InvoiceNumberEng = string.IsNullOrEmpty(inumE) ? "" : inumE.Substring(6, inumE.Length - 6);
+                Properties.Settings.Default.PrePrint = string.IsNullOrEmpty(pP) ? "" : pP.Substring(3, pP.Length - 3);
+                Properties.Settings.Default.Save();
             }
         }
     }

@@ -305,7 +305,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
-                wb.SaveAs(fdlg.FileName);
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
+                
             }
             try
             {
@@ -363,7 +371,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
             if (e.Item is null) return;
             if (!(e.Item is NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare src))
                 e.Accepted = false;
-            NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare controlMedicineDeclare = ((NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare)e.Item);
+            NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare controlMedicineDeclare = (NewClass.Medicine.ControlMedicineDeclare.ControlMedicineDeclare)e.Item;
             e.Accepted = controlMedicineDeclare.WareHouse.ID == SelectedWareHouse.ID;
         }
 

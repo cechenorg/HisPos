@@ -142,12 +142,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
                     return;
                 }
-                ClearDataGrids();
+                
                 switch (querytype)
                 {
                     case 1: // 銷售紀錄
                     default:
                         queryTab = 1;
+                        ClearDataGrids();
                         MainWindow.ServerConnection.OpenConnection();
                         List<SqlParameter> parameters = new List<SqlParameter>();
                         parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -181,6 +182,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
                     case 2: // 銷售明細
                         queryTab = 2;
+                        ClearDataGrids();
                         MainWindow.ServerConnection.OpenConnection();
                         List<SqlParameter> parametersDetail = new List<SqlParameter>();
                         parametersDetail.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -212,6 +214,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
 
                     case 3: // 銷售彙總
                         queryTab = 3;
+                        ClearDataGrids();
                         MainWindow.ServerConnection.OpenConnection();
                         List<SqlParameter> parametersSum = new List<SqlParameter>();
                         parametersSum.Add(new SqlParameter("CustomerID", DBNull.Value));
@@ -490,7 +493,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
-                wb.SaveAs(fdlg.FileName);
+                //wb.SaveAs(fdlg.FileName);
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
             }
             try
             {
@@ -561,7 +572,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
-                wb.SaveAs(fdlg.FileName);
+                //wb.SaveAs(fdlg.FileName);
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
             }
             try
             {
@@ -619,7 +638,15 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
-                wb.SaveAs(fdlg.FileName);
+                //wb.SaveAs(fdlg.FileName);
+                try
+                {
+                    wb.SaveAs(fdlg.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                }
             }
             try
             {

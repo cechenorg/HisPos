@@ -248,6 +248,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
+                                x:Name="Amount"
                                 Width="60"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
@@ -257,6 +258,9 @@
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="PreviewKeyUp">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="PreviewMouseDoubleClick">
+                                        <i:InvokeCommandAction Command="{Binding Path=DataContext.RealAmountMouseDoubleClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding ID}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <TextBox.InputScope>
