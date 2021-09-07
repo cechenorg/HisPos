@@ -82,7 +82,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
             foreach (var data in pharmacyTargetList)
             {
                 MonthlyAccountTarget pharmacyTaget = new MonthlyAccountTarget();
-                var info = gtroupServerInfo.First(_ => _.VerifyKey == data.VerifyKey);
+                var info = gtroupServerInfo.First(_ => _.VerifyKey.ToLower() == data.VerifyKey.ToLower());
                 pharmacyTaget.VerifyKey = info.VerifyKey;
                 pharmacyTaget.PharmacyName = info.Name;
                 pharmacyTaget.MonthlyTarget = data.MonthlyTarget;
