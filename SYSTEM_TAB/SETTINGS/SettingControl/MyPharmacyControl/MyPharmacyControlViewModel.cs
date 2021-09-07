@@ -123,6 +123,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
                 fileWriter.WriteLine("ICom " + Properties.Settings.Default.InvoiceComPort);
                 fileWriter.WriteLine("INum " + Properties.Settings.Default.InvoiceNumber);
                 fileWriter.WriteLine("IChk " + Properties.Settings.Default.InvoiceCheck);
+
+                fileWriter.WriteLine("INumS " + Properties.Settings.Default.InvoiceNumberStart);
+                fileWriter.WriteLine("INumC " + Properties.Settings.Default.InvoiceNumberCount);
+                fileWriter.WriteLine("INumE " + Properties.Settings.Default.InvoiceNumberEng);
+                fileWriter.WriteLine("PP " + Properties.Settings.Default.PrePrint);
             }
 
             IsDataChanged = false;

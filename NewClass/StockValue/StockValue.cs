@@ -20,7 +20,10 @@ namespace His_Pos.NewClass.StockValue
             MedUseValue = r.Field<double>("調劑耗用");
             MinusStockAdjustValue = r.Field<double>("進貨負庫調整");
             TrashValue = r.Field<double>("報廢");
-            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue + MinusStockAdjustValue + TrashValue;
+            AdjustValue = r.Field<double>("調整");
+
+            //edit AdjustValue by SHANI 0823
+            stock += PurchaseValue + ReturnValue + StockCheckValue + MedUseValue + MinusStockAdjustValue + TrashValue + AdjustValue; 
             FinalStockValue = stock;
         }
 
@@ -87,6 +90,14 @@ namespace His_Pos.NewClass.StockValue
         {
             get { return finalStockValue; }
             set { Set(() => FinalStockValue, ref finalStockValue, value); }
+        }
+
+        private double adjustValue;
+
+        public double AdjustValue
+        {
+            get { return adjustValue; }
+            set { Set(() => AdjustValue, ref adjustValue, value); }
         }
     }
 }

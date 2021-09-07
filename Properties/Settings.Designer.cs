@@ -253,5 +253,19 @@ namespace His_Pos.Properties {
                 this["ReceiptForm"] = value;
             }
         }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PrePrint
+        {
+            get
+            {
+                return ((string)(this["PrePrint"]));
+            }
+            set
+            {
+                this["PrePrint"] = value;
+            }
+        }
     }
 }

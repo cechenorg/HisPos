@@ -205,23 +205,35 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         private void ToNextStatusAction()
         {
-
-
             if (CurrentStoreOrder.CheckOrder() && (CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING|| CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING|| CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
             {
+                if ((CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING) && !CurrentStoreOrder.ChkPurchase())
+                {
+                    MessageWindow.ShowMessage("品項入庫量且小計大於0!", MessageType.WARNING);
+                    return;
+                }
                 if (!CurrentStoreOrder.ChkPrice())
                 {
-                    ConfirmWindow confirmWindow = new ConfirmWindow($"本次進價與上次進價不同                 是否送出？", "", true);
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"本次進價與上次進價不同\n是否確認送出進貨單?", "", true);
 
                     if (!(bool)confirmWindow.DialogResult)
                         return;
                 }
-                else
+
+                
+                /*else if (CurrentStoreOrder.OrderType == OrderTypeEnum.RETURN && CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING)
                 {
-                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認送出退貨單?\n(確認後直接扣除庫存)", "", true);
+
                     if (!(bool)confirmWindow.DialogResult)
                         return;
-                }
+                }*/
+                /*else
+                {
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認送出進貨單?\n(資料內容將不能修改)", "");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
+                }*/
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
                 CurrentStoreOrder.MoveToNextStatus();
@@ -258,14 +270,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
                 ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum, CurrentStoreOrder.OrderStatus, CurrentStoreOrder.OrderWarehouse.ID,CurrentStoreOrder.OrderTypeIsOTC);
-                if (productPurchaseReturnAddProductWindow.Activate() == false)
-                {
-
-                }
-                else
-                {
                     productPurchaseReturnAddProductWindow.ShowDialog();
-                }
                 Messenger.Default.Unregister(this);
             }
             else if (productCount == 1)
@@ -419,6 +424,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
+                CurrentStoreOrder.Note += "手動入庫";
                 CurrentStoreOrder.MoveToNextStatusNoSingde();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();

@@ -62,7 +62,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
 
         internal void CalculateTax()
         {
-            TaxPrice = InitialPrice;
+            TaxPrice = Math.Round(InitialPrice);
 
             UnTaxPrice = Math.Round(TaxPrice * 100 / 105, MidpointRounding.AwayFromZero);
 

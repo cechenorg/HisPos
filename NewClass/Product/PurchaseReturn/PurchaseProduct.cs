@@ -229,7 +229,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         break;
 
                     case ProductStartInputVariableEnum.PRICE:
-                        subTotal = Price * RealAmount;
+                        subTotal = Price * OrderAmount;
                         break;
 
                     case ProductStartInputVariableEnum.SUBTOTAL:
@@ -238,8 +238,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         else
                             price = SubTotal / RealAmount;
                         break;
-                }
+            }
             //}
+
+            /*if (SubTotal == 0)
+            {
+                price = 0;
+            }*/
 
             RaisePropertyChanged(nameof(Price));
             RaisePropertyChanged(nameof(SubTotal));
@@ -263,6 +268,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         price = SubTotal / RealAmount;
                     break;
             }
+
+            /*if (SubTotal == 0) 
+            {
+                price = 0;
+            }*/
 
             RaisePropertyChanged(nameof(Price));
             RaisePropertyChanged(nameof(SubTotal));

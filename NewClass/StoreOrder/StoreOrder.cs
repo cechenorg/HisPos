@@ -128,7 +128,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             ID = row.Field<string>("StoOrd_ID");
-            ReceiveID = row.Field<string>("StoOrd_ReceiveID");
+            ReceiveID = String.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
@@ -166,6 +166,8 @@ namespace His_Pos.NewClass.StoreOrder
         public abstract void SetRealAmount(string id);
 
         public abstract bool ChkPrice();
+
+        public abstract bool ChkPurchase();
 
         #endregion ///// Abstract Function /////
 
@@ -255,8 +257,6 @@ namespace His_Pos.NewClass.StoreOrder
             if (OrderType == OrderTypeEnum.RETURN && !OrderManufactory.ID.Equals("0"))
             {
                 DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
-                MessageBox.Show(dataTable.Rows.Count.ToString());
-                MessageBox.Show(dataTable.Rows[0].Field<string>("RESULT"));
                 if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                 {
                     MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
@@ -312,7 +312,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
-                MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+                MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
         }
 
         #endregion ///// Status Function /////
@@ -368,7 +368,7 @@ namespace His_Pos.NewClass.StoreOrder
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
             string prescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
 
-            if (orderFlag == 2)
+            /*if (orderFlag == 2)
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(delegate
                 {
@@ -377,7 +377,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 ToScrapStatus();
             }
-            else if (isShipment)
+            else*/ if (isShipment)
             {
                 ReceiveID = prescriptionReceiveID;
 

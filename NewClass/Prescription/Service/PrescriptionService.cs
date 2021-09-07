@@ -368,6 +368,21 @@ namespace His_Pos.NewClass.Prescription.Service
             return true;
         }
 
+        public bool PrintConfirmDir()
+        {
+            bool? focus = null;
+  
+            PrintResult = NewFunction.CheckPrintDir(Current, focus);
+            var printMedBag = PrintResult[0];
+            var printSingle = PrintResult[1];
+            var printReceipt = PrintResult[2];
+            if (printMedBag is null || printReceipt is null)
+                return false;
+            if ((bool)printMedBag && printSingle is null)
+                return false;
+            return true;
+        }
+
         public void CheckDailyUpload(ErrorUploadWindowViewModel.IcErrorCode errorCode)
         {
             if (Current.IsPrescribe) return;
@@ -438,7 +453,10 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("Form", m.Form),
                         new ReportParameter("PatientTel", patientTel),
                         new ReportParameter("ChronicTotal", p.ChronicTotal is null ? string.Empty : ((int)p.ChronicTotal).ToString()),
-                        new ReportParameter("ChronicSeq", p.ChronicSeq is null ? string.Empty : ((int)p.ChronicSeq).ToString())
+                        new ReportParameter("ChronicSeq", p.ChronicSeq is null ? string.Empty : ((int)p.ChronicSeq).ToString()),
+                        new ReportParameter("AdjustMonth", p.AdjustMonth),
+                        new ReportParameter("AdjustYear", p.AdjustYear),
+                        new ReportParameter("AdjustDay", p.AdjustDay)
                     };
         }
 
@@ -594,9 +612,22 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void Print(bool noCard)
         {
-            PrintMedBag();
+            if (this.TempPre.PrescriptionStatus.IsPrint == true)
+            { 
+            }
+            else {
+                PrintMedBag();
+            }
+            
             PrintReceipt(noCard);
         }
+        public void PrintDir(bool noCard)
+        {
+            PrintMedBag();
+
+        }
+
+
 
         private void PrintMedBag()
         {
@@ -626,6 +657,10 @@ namespace His_Pos.NewClass.Prescription.Service
                     TempPrint.PrintMedBagSingleMode();
                 else
                     TempPrint.PrintMedBagMultiMode();
+            }
+            else if (VM.CurrentPharmacy.ID == "5931017216") {
+
+                TempPre.PrintMedBagSingleModeByCE();
             }
             else
             {
@@ -826,7 +861,7 @@ namespace His_Pos.NewClass.Prescription.Service
         private static void CheckAdminLogin(Prescription selected)
         {
             if (selected is null) return;
-            if (VM.CurrentUser.ID == 1)
+            if (VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師")|| VM.CurrentUser.WorkPosition.WorkPositionId==5)
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
                 var edit = new PrescriptionEditWindow(selected, title);

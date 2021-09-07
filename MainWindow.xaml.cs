@@ -6,6 +6,8 @@ using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
+using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.SETTINGS;
@@ -15,10 +17,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Xml;
+using System.Xml.Linq;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using StringRes = His_Pos.Properties.Resources;
@@ -28,6 +34,8 @@ namespace His_Pos
     /// <summary>
     /// MainWindow.xaml 的互動邏輯
     /// </summary>
+    /// 
+    
     public partial class MainWindow
     {
         public static SQLServerConnection ServerConnection = new SQLServerConnection();
@@ -36,9 +44,11 @@ namespace His_Pos
         public static List<Feature> HisFeatures = new List<Feature>();
         public static MainWindow Instance;
 
+
         public MainWindow(Employee user)
         {
             InitializeComponent();
+
             Instance = this;
             FeatureFactory();
             WindowState = WindowState.Maximized;
@@ -52,6 +62,7 @@ namespace His_Pos
             InitializeMenu();
             InitialUserBlock();
             StartClock();
+     
 
             AddNewTab("每日作業");
         }
@@ -83,7 +94,7 @@ namespace His_Pos
                             new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage, StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", StringRes.Attend,
-                            new[] { StringRes.ClockIn, StringRes.WorkScheduleManage }));
+                            new[] { StringRes.ClockIn, StringRes.WorkScheduleManage, StringRes.ClockInSearch })); // add by SHANI
 
             HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
                             new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare, StringRes.CashStockEntryReport , StringRes.TodayCashStockEntryReport}));

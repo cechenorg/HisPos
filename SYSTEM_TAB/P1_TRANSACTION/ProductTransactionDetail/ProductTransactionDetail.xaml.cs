@@ -2,6 +2,7 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
@@ -30,6 +31,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
         private string payMethod;
         public int ID;
         public CustomerSearchCondition Con;
+
+        public AddCustomerWindow addCustomerWindow;
 
         public NewClass.Prescription.Prescription CurrentPrescription
         {
@@ -68,6 +71,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     dr["IsReward_Format"] = true;
                 }
             }
+
+            btnSubmit.IsEnabled = false;
+            lblChanged.Content = "未修改";
+            lblChanged.Foreground = Brushes.Black;
         }
 
         private void GetEmployeeList()
@@ -122,7 +129,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     break;
             }
 
-            lbCusName.Content = masterRow["Cus_Name"].ToString();
+            //lbCusName.Content = masterRow["Cus_Name"].ToString();
+            tbCusName.Text = masterRow["Cus_Name"].ToString();
             lblRealTotal.Content = masterRow["TraMas_RealTotal"];
             lblCashier.Content = masterRow["Emp_Name"];
             tbCardNum.Text = masterRow["TraMas_CardNumber"].ToString();
@@ -137,6 +145,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbCard.Content = masterRow["TraMas_CardAmount"].ToString();
             lbVoucher.Content = masterRow["TraMas_VoucherAmount"].ToString();
             lbCashCoupon.Content = masterRow["TraMas_CashCoupon"].ToString();
+            lbPrepay.Content = masterRow["TraMas_Prepay"].ToString();
             lblTradeTime.Content = masterRow["TransTime_Format"];
             tbNote.Text = masterRow["TraMas_Note"].ToString();
             tbPhone.Content= masterRow["Cus_Phone"].ToString();
@@ -171,6 +180,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 {
                     MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
                     Close();
+                }
+                else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN")) 
+                {
+                    MessageWindow.ShowMessage("訂金餘額不足！", MessageType.ERROR);
                 }
                 else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
             }
@@ -354,11 +367,129 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                 MainWindow.ServerConnection.CloseConnection();
                 if (result.Rows.Count > 0)
                 {
-                    lbCusName.Content = result.Rows[0]["Person_Name"].ToString();
+                    tbCusName.Text = result.Rows[0]["Person_Name"].ToString();
                     MainWindow.ServerConnection.CloseConnection();
                     btnSubmit.IsEnabled = true;
                     lblChanged.Content = "已修改";
                     lblChanged.Foreground = Brushes.Red;
+                }
+            }
+        }
+
+        private void tbCusName_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                if (tb.Text.Length == 0)
+                {
+                    cusID = "0";
+
+                    MainWindow.ServerConnection.OpenConnection();
+                    List<SqlParameter> para = new List<SqlParameter>();
+                    para.Add(new SqlParameter("Cus_Id", int.Parse(cusID)));
+                    DataTable res = MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", para);
+                    MainWindow.ServerConnection.CloseConnection();
+                    if (res.Rows.Count > 0)
+                    {
+                        tbCusName.Text = res.Rows[0]["Person_Name"].ToString();
+                        MainWindow.ServerConnection.CloseConnection();
+                        btnSubmit.IsEnabled = true;
+                        lblChanged.Content = "已修改";
+                        lblChanged.Foreground = Brushes.Red;
+                    }
+                    return;
+                }
+
+                // 電話查詢
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                bool isCell = tb.Text.StartsWith("09");
+                if (isCell)
+                {
+                    parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
+                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+                    Con = CustomerSearchCondition.CellPhone;
+                }
+                else if (tb.Text.Length >= 7 && tb.Text.Length <= 10 && !tb.Text.StartsWith("1"))
+                {
+                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Telephone", tb.Text));
+                    Con = CustomerSearchCondition.Tel;
+                }
+                else
+                {
+                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+                }
+
+                // 姓名查詢
+                if (!int.TryParse(tb.Text, out int i))
+                {
+                    parameters.Add(new SqlParameter("@Cus_Name", tb.Text));
+                    Con = CustomerSearchCondition.Name;
+                }
+                else
+                {
+                    parameters.Add(new SqlParameter("@Cus_Name", DBNull.Value));
+                }
+
+                // 生日查詢
+                if (tb.Text.Length == 6)
+                {
+                    int.TryParse(tb.Text.Substring(0, 2), out int year);
+                    int.TryParse(tb.Text.Substring(2, 2), out int month);
+                    int.TryParse(tb.Text.Substring(4, 2), out int day);
+                    string yearStr = (year + 1911).ToString();
+                    string dateStr = yearStr + month.ToString("00") + day.ToString("00");
+
+                    parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+                    Con = CustomerSearchCondition.Birthday;
+                }
+                else if (tb.Text.Length == 7 && tb.Text.StartsWith("1"))
+                {
+                    int.TryParse(tb.Text.Substring(0, 3), out int year);
+                    int.TryParse(tb.Text.Substring(3, 2), out int month);
+                    int.TryParse(tb.Text.Substring(5, 2), out int day);
+                    string yearStr = (year + 1911).ToString();
+                    string dateStr = yearStr + month.ToString("00") + day.ToString("00");
+                    parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+                    Con = CustomerSearchCondition.Birthday;
+                }
+                else
+                {
+                    parameters.Add(new SqlParameter("@Cus_Birthday", DBNull.Value));
+                }
+
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+                if (result.Rows.Count == 0)
+                {
+                    MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
+                }
+                else if (result.Rows.Count > 1)
+                {
+                    CustomerSearchWindow customerSearch;
+                    if (Con == CustomerSearchCondition.Birthday)
+                    {
+                        Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                        var twCulture = new System.Globalization.CultureInfo("zh-TW", true);
+                        twCulture.DateTimeFormat.Calendar = new System.Globalization.TaiwanCalendar();
+
+                        var dateString = tb.Text.Trim();
+                        dateString = dateString.PadLeft(8, '0');
+                        var date = DateTime.ParseExact(dateString, "yMMdd", twCulture);
+
+                        customerSearch = new CustomerSearchWindow(date);
+                        Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                    }
+                    else
+                    {
+                        Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                        customerSearch = new CustomerSearchWindow(Con, 0, tb.Text.Trim());
+                        Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                    }
                 }
             }
         }

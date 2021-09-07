@@ -78,9 +78,21 @@
                 Margin="25,0,0,0"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
-                FontSize="22"
+                FontSize="24"
                 Foreground="Red"
                 Text="退貨" />
+            <Label
+                Margin="20,0,0,0"
+                Content="原"
+                Foreground="Black"
+                Style="{StaticResource BoldLabelHeader25}" />
+            <Label
+                Width="200"
+                VerticalAlignment="Center"
+                Content="{Binding ID}"
+                FontFamily="Segoe UI Semi"
+                FontSize="24"
+                Foreground="Black" />
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
@@ -359,7 +371,12 @@
                             <DataTrigger Binding="{Binding OrderStatus}" Value="SCRAP">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
-                            
+                            <DataTrigger Binding="{Binding OrderManufactory.ID}" Value="0">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ViewModelMainWindow.CurrentUser.ID, Source={StaticResource Locator}}" Value="1">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>

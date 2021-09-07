@@ -35,5 +35,10 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         public void MakeUp()
         {
         }
+
+        public override void PrintDir()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

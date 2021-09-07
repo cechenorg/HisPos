@@ -20,6 +20,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private int Total;
         private int paid;
         private string cardNumber = "";
+        private bool isprepay = false;
+        private int paycount = 0;
 
         private int cash = 0;
         private int realcash = 0;
@@ -27,7 +29,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private int cashcoupon = 0;
         private int card = 0;
         private int change = 0;
+        private int prepay = 0;
 
+        private int prepayBalance = 0;
+
+        public int Prepay => prepay;
         public int Cash => realcash;
         public int Voucher => voucher;
         public int CashCoupon => cashcoupon;
@@ -48,7 +54,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             return _regex.IsMatch(text);
         }
 
-        public CheckoutWindowView(int total, int linecount, int itemcount)
+        public CheckoutWindowView(int total, int linecount, int itemcount, string prepaybalance, bool hasCustomer, bool isPrepay)
         {
             InitializeComponent();
 
@@ -62,10 +68,27 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 tbInvoiceNum.Content = "";
             }
 
+            if (hasCustomer) 
+            {
+                tbPrepay.IsEnabled = true;
+            }
+
+            if (isPrepay) 
+            {
+                tbVoucher.IsEnabled = false;
+                tbCashCoupon.IsEnabled = false;
+                tbPrepay.IsEnabled = false;
+
+                tbInvoiceNum.Content = "";
+            }
+
             Total = total;
             lblTotal.Content = total.ToString();
             lblLineCount.Content = linecount.ToString();
             lblItemCount.Content = itemcount.ToString();
+            lblPrepay.Content = int.Parse(prepaybalance);
+            prepayBalance = int.Parse(prepaybalance);
+            isprepay = isPrepay;
             GetEmployeeList();
             CardNumberControl();
             ChangeCount();
@@ -100,22 +123,32 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             bool VoucherParse = int.TryParse(tbVoucher.Text, out voucher);
             bool CashCouponParse = int.TryParse(tbCashCoupon.Text, out cashcoupon);
             bool CardParse = int.TryParse(tbCard.Text, out card);
+            bool PrepayParse = int.TryParse(tbPrepay.Text, out prepay);
 
             if (CashParse && realcash > 0)
             {
                 list.Add("現金");
+                paycount++;
             }
             if (VoucherParse && voucher > 0)
             {
                 list.Add("禮券");
+                paycount++;
             }
             if (CashCouponParse && cashcoupon > 0)
             {
                 list.Add("現金券");
+                paycount++;
             }
             if (CardParse && card > 0)
             {
                 list.Add("信用卡");
+                paycount++;
+            }
+            if (PrepayParse && prepay > 0)
+            {
+                list.Add("訂金沖銷");
+                paycount++;
             }
 
             string[] arr = list.ToArray();
@@ -163,18 +196,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int.TryParse(tbVoucher.Text, out voucher);
             int.TryParse(tbCashCoupon.Text, out cashcoupon);
             int.TryParse(tbCard.Text, out card);
+            int.TryParse(tbPrepay.Text, out prepay);
 
-            int nochange = voucher + cashcoupon + card;
+            int nochange = voucher + cashcoupon + card + prepay;
             if (nochange >= Total)
             {
                 change = cash;
             }
             else
             {
-                change = (cash + voucher + cashcoupon + card) - Total;
+                change = (cash + voucher + cashcoupon + card + prepay) - Total;
             }
             tbChange.Content = change;
-            paid = cash + voucher + cashcoupon + card;
+            paid = cash + voucher + cashcoupon + card + prepay;
             realcash = cash - change;
 
             if (change >= 0)
@@ -197,6 +231,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (!IsEmployeeIDValid())
             {
                 MessageWindow.ShowMessage("結帳人員輸入錯誤！", MessageType.WARNING);
+                tbEmployee.Focus();
+                return;
+            }
+            if (prepay > prepayBalance) 
+            {
+                MessageWindow.ShowMessage("訂金沖銷金額大於可沖訂金！", MessageType.WARNING);
+                return;
+            }
+            if (prepay > Total) 
+            {
+                MessageWindow.ShowMessage("訂金沖銷金額不可大於應付金額！", MessageType.WARNING);
                 return;
             }
             int.TryParse(tbCard.Text, out int card);
@@ -208,6 +253,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (card == 0)
             {
                 cardNumber = "";
+            }
+            GetPayMethod();
+            if (isprepay && paycount > 1) 
+            {
+                MessageWindow.ShowMessage("預付訂金需使用單一付款方式", MessageType.WARNING);
+                return;
             }
 
             DialogResult = true;
@@ -246,12 +297,25 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (e.Key == Key.Enter || e.Key == Key.Down)
             {
                 ChangeCount();
-                tbVoucher.Focus();
+                if (tbVoucher.IsEnabled)
+                {
+                    tbVoucher.Focus();
+                }
+                else 
+                {
+                    tbCard.Focus();
+                }
+                
             }
             if (e.Key == Key.Up)
             {
                 ChangeCount();
                 tbTaxNum.Focus();
+            }
+            if (e.Key == Key.Right)
+            {
+                ChangeCount();
+                tbPrepay.Focus();
             }
         }
 
@@ -295,7 +359,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (e.Key == Key.Up)
                 {
                     ChangeCount();
-                    tbCashCoupon.Focus();
+                    if (tbCashCoupon.IsEnabled)
+                    {
+                        tbCashCoupon.Focus();
+                    }
+                    else 
+                    {
+                        tbCash.Focus();
+                    }
                 }
             }
             else
@@ -308,7 +379,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (e.Key == Key.Up)
                 {
                     ChangeCount();
-                    tbCashCoupon.Focus();
+                    if (tbCashCoupon.IsEnabled)
+                    {
+                        tbCashCoupon.Focus();
+                    }
+                    else
+                    {
+                        tbCash.Focus();
+                    }
                 }
             }
         }
@@ -332,6 +410,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (e.Key == Key.Enter)
                 {
                     btnSubmit.Focus();
+
                 }
                 if (e.Key == Key.Up)
                 {
@@ -468,6 +547,29 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             if (IsLoaded)
             {
                 CardNumberControl();
+            }
+        }
+
+        private void tbEmployee_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            bool isMatch = false;
+            string empName = "";
+            foreach (DataRow dr in EmployeeList.Rows)
+            {
+                if (dr["Emp_CashierID"].ToString() == tb.Text)
+                {
+                    isMatch = true;
+                    empName = dr["Emp_Name"].ToString();
+                }
+            }
+            if (!isMatch || string.IsNullOrEmpty(tb.Text))
+            {
+                lbEmployee.Content = "";
+            }
+            else 
+            {
+                lbEmployee.Content = empName;
             }
         }
     }

@@ -56,7 +56,7 @@
                 <xctk:MaskedTextBox
                     x:Name="StartDate"
                     Width="150"
-                    Margin="20,0,10,5"
+                    Margin="20,2,10,2.667"
                     HorizontalContentAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="27"

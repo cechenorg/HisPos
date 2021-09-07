@@ -84,5 +84,10 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             }
             return idList;
         }
+
+        public override void PrintDir()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -42,6 +42,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
         private void DeleteOrderAction()
         {
+            btnDelete.IsEnabled = false;
             ConfirmWindow confirmWindow = new ConfirmWindow("是否確認刪除?", "再次確認");
 
             if ((bool)confirmWindow.DialogResult)

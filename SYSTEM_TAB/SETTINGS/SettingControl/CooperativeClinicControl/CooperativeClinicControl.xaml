@@ -223,7 +223,19 @@
                                     SelectedValuePath="content"
                                     Text="{Binding TypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <ComboBoxItem>展望</ComboBoxItem>
+                                    <ComboBoxItem>杏翔</ComboBoxItem>
                                 </ComboBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="100" Header="自動列印" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <CheckBox  IsChecked="{Binding AutoPrint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    
+                                </CheckBox>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

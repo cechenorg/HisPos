@@ -96,11 +96,11 @@
             <Button
                 x:Name="Recordbtn"
                 Width="100"
-                Margin="50,0,0,0"
+                Margin="250,0,0,0"
                 Background="DimGray"
                 BorderThickness="0"
                 Click="Recordbtn_Click"
-                Content="切換"
+                Content="銷售紀錄"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16"
                 Visibility="Collapsed" />
@@ -111,7 +111,7 @@
                 Background="DimGray"
                 BorderThickness="0"
                 Click="Empbtn_Click"
-                Content="切換"
+                Content="人員業績"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
@@ -284,6 +284,31 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="80"
+                    Binding="{Binding PrePay}"
+                    FontFamily="Segoe UI Semi"
+                    Header="訂金沖銷"
+                    IsReadOnly="True"
+                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="FontSize" Value="18" />
+                            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+                            <Setter Property="Height" Value="41" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
 
                 <DataGridTextColumn
                     Width="80"
@@ -356,6 +381,21 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="1">
+            <Button
+                Width="120"
+                Margin="450,0,0,0"
+                Background="DarkCyan"
+                BorderBrush="DarkCyan"
+                Command="{Binding PrintTradeProfitDetailCommand}"
+                Content="匯出檔案"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18" />
+        </StackPanel>
+       
         <DataGrid
             x:Name="dgEmp"
             Grid.Row="1"
@@ -702,6 +742,15 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.CashCoupon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                    TextAlignment="Right"
+                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
+                <TextBlock
+                    Width="80"
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="16"
+                    Text="{Binding TradeDetailReportSum.PrePay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     TextAlignment="Right"
                     Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock

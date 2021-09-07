@@ -124,5 +124,10 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 }
             }
         }
+
+        public override void PrintDir()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

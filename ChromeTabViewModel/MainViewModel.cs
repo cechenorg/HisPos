@@ -21,6 +21,8 @@ using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage;
+using His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch;
+using His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn;
 using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare;
@@ -272,6 +274,16 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.關班帳務查詢):
                     break;
 
+                // add by shani
+                case nameof(FeatureItem.上下班打卡):
+                    break;
+                // add by shani
+                case nameof(FeatureItem.排班管理):
+                    break;
+                // add by shani
+                case nameof(FeatureItem.打卡記錄查詢):
+                    break;
+
                 default:
                     return;
             }
@@ -378,12 +390,19 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).CustomerManageView;
                     break;
 
-                //打卡
+                //打卡 add by SHANI
+                case nameof(FeatureItem.上下班打卡): //add by shani
+                    newTab = new AddClockInViewModel() { TabName = MainWindow.HisFeatures[6].Functions[0], Icon = MainWindow.HisFeatures[6].Icon };
+                    break;
                 case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[6].Functions[1], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
+                case nameof(FeatureItem.打卡記錄查詢):
+                    newTab = new ClockInSearchViewModel() { TabName = MainWindow.HisFeatures[6].Functions[2], Icon = MainWindow.HisFeatures[6].Icon };
+                    break;
 
                 //報表
+
                 case nameof(FeatureItem.庫存現值報表):
                     newTab = new EntrySearchViewModel() { TabName = MainWindow.HisFeatures[7].Functions[0], Icon = MainWindow.HisFeatures[7].Icon };
                     break;

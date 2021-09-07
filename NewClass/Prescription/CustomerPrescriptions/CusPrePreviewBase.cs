@@ -64,6 +64,42 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             IsRead = isRead;
             Medicines = new PreviewMedicines();
             Medicines.AddItemsFromCooperative(prescription.MedicineOrder.Item);
+           
+        }
+
+        protected CusPrePreviewBase(CooperativePrescription.Prescription c, DateTime treatDate, bool isRead, bool isPrint)
+        {
+            #region CooPreVariable
+
+            var prescription = c;
+            var customer = prescription.CustomerProfile.Customer;
+            var study = prescription.Study;
+            var cusBirth = customer.Birth.Trim();
+            int birthYear = 1911, birthMonth = 1, birthDay = 1;
+            if (cusBirth.Length >= 7)
+            {
+                birthYear = string.IsNullOrEmpty(cusBirth) ? 1911 : int.Parse(cusBirth.Substring(0, 3)) + 1911;
+                birthMonth = string.IsNullOrEmpty(cusBirth) ? 1 : int.Parse(cusBirth.Substring(3, 2));
+                birthDay = string.IsNullOrEmpty(cusBirth) ? 1 : int.Parse(cusBirth.Substring(5, 2));
+            }
+
+            #endregion CooPreVariable
+
+            Patient = new Customer(customer, birthYear, birthMonth, birthDay);
+            Institution = VM.GetInstitution(prescription.From);
+            Division = VM.GetDivision(study.Subject);
+            TreatDate = treatDate.Date;
+            IsRead = isRead;
+            Medicines = new PreviewMedicines();
+            Medicines.AddItemsFromCooperative(prescription.MedicineOrder.Item);
+            IsPrint = isPrint;
+            if (IsPrint == true) {
+                IsPrintString = "已自動列印";
+            }
+            else {
+                IsPrintString = "";
+            }
+
         }
 
         protected CusPrePreviewBase(DataRow r)
@@ -81,9 +117,10 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         public DateTime TreatDate { get; }
         public DateTime AdjustDate { get; set; }
         public bool IsRead { get; set; }
-
+        public bool IsPrint { get; set; }
+        public string IsPrintString { get; set; }
         public abstract void Print();
-
+        public abstract void PrintDir();
         public abstract Prescription CreatePrescription();
 
         public abstract void GetMedicines();

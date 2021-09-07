@@ -36,6 +36,7 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_ChiWareHouseID", c.ChronicWareHouse.ID);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_IsPurge", c.IsPurge);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_FolderPath", c.FilePath);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_AutoPrint", c.AutoPrint);
                 cooperativeClinicTable.Rows.Add(newRow);
             }
             return cooperativeClinicTable;
@@ -52,6 +53,7 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             masterTable.Columns.Add("CooCli_ChiWareHouseID", typeof(int));
             masterTable.Columns.Add("CooCli_IsPurge", typeof(bool));
             masterTable.Columns.Add("CooCli_FolderPath", typeof(string));
+            masterTable.Columns.Add("CooCli_AutoPrint", typeof(string));
             return masterTable;
         }
 

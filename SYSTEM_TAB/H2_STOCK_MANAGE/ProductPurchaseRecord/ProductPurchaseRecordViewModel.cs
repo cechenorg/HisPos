@@ -238,7 +238,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             FilterOrderCommand = new RelayCommand(FilterOrderAction);
             ClearSearchConditionCommand = new RelayCommand(ClearSearchConditionAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
-            DeleteOrderReturnCommand = new RelayCommand(DeleteOrderReturnAction);
+
+            //DeleteOrderReturnCommand = new RelayCommand(DeleteOrderReturnAction);
+            DeleteOrderReturnCommand = new RelayCommand(DeleteOrderAction);
+
             ExportOrderDataCommand = new RelayCommand<string>(ExportOrderDataAction);
         }
 

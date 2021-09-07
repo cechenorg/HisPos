@@ -114,13 +114,21 @@
                 ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                 ItemsSource="{Binding WareHouseCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Rectangle Width="700" />
+            <Rectangle Width="540" />
             <Button
                 Width="100"
                 Background="RoyalBlue"
                 BorderThickness="0"
                 Command="{Binding SearchCommand}"
                 Content="查詢"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
+            <Button
+                Width="150"
+                Margin="10,0,0,0"
+                Background="Green"
+                Command="{Binding DownloadCommand}"
+                Content="匯出庫存量"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
@@ -219,15 +227,23 @@
                     Grid.Column="3"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="耗用"
+                    Content="銷售耗用"
                     FontFamily="Segoe UI Semibold"
                     FontSize="22" />
-                <Label
+                <!--<Label
                     Grid.Row="0"
                     Grid.Column="4"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Content="進貨負庫調整"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="22" />-->
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="調整"
                     FontFamily="Segoe UI Semibold"
                     FontSize="22" />
                 <Label
@@ -261,7 +277,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="25"
-                    Text="{Binding InitStockValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding InitStockValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="1"
@@ -269,7 +285,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding PurchaseValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding PurchaseValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="2"
@@ -277,7 +293,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding ReturnValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding ReturnValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="3"
@@ -285,7 +301,15 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding MedUseValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding MedUseValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
+                <!--<TextBlock
+                    Grid.Row="1"
+                    Grid.Column="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="20"
+                    Text="{Binding MinusStockAdjustValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />-->
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="4"
@@ -293,7 +317,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding MinusStockAdjustValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding AdjustValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="5"
@@ -301,7 +325,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding StockCheckValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding StockCheckValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="6"
@@ -309,7 +333,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding TrashValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding TrashValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="7"
@@ -317,7 +341,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="25"
-                    Text="{Binding FinalStockValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding FinalStockValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
             </Grid>
         </StackPanel>
         <StackPanel
@@ -386,15 +410,23 @@
                     Grid.Column="3"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="耗用"
+                    Content="銷售耗用"
                     FontFamily="Segoe UI Semibold"
                     FontSize="22" />
-                <Label
+                <!--<Label
                     Grid.Row="0"
                     Grid.Column="4"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Content="進貨負庫調整"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="22" />-->
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="調整"
                     FontFamily="Segoe UI Semibold"
                     FontSize="22" />
                 <Label
@@ -428,7 +460,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="25"
-                    Text="{Binding InitStockValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding InitStockValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="1"
@@ -436,7 +468,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding PurchaseValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding PurchaseValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="2"
@@ -444,7 +476,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding ReturnValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding ReturnValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="3"
@@ -452,7 +484,15 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding MedUseValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding MedUseValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
+                <!--<TextBlock
+                    Grid.Row="1"
+                    Grid.Column="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="20"
+                    Text="{Binding MinusStockAdjustValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />-->
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="4"
@@ -460,7 +500,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding MinusStockAdjustValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding AdjustValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="5"
@@ -468,7 +508,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding StockCheckValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding StockCheckValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="6"
@@ -476,7 +516,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semi"
                     FontSize="20"
-                    Text="{Binding TrashValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding TrashValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="7"
@@ -484,7 +524,7 @@
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="25"
-                    Text="{Binding FinalStockValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N2}" />
+                    Text="{Binding FinalStockValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat=N0}" />
             </Grid>
         </StackPanel>
 
@@ -552,7 +592,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="170"
-                    Binding="{Binding InitStockValue, StringFormat=N2}"
+                    Binding="{Binding InitStockValue, StringFormat=N0}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -567,7 +607,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding PurchaseValue, StringFormat=N2}"
+                    Binding="{Binding PurchaseValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="進貨"
                     IsReadOnly="True">
@@ -580,7 +620,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding ReturnValue, StringFormat=N2}"
+                    Binding="{Binding ReturnValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="退貨"
                     IsReadOnly="True">
@@ -593,9 +633,9 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="150"
-                    Binding="{Binding MedUseValue, StringFormat=N2}"
+                    Binding="{Binding MedUseValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
-                    Header="耗用"
+                    Header="銷售耗用"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -604,9 +644,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
+                <!--<DataGridTextColumn
                     Width="130"
-                    Binding="{Binding MinusStockAdjustValue, StringFormat=N2}"
+                    Binding="{Binding MinusStockAdjustValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="進貨負庫調整"
                     IsReadOnly="True">
@@ -616,10 +656,23 @@
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>-->
+                <DataGridTextColumn
+                    Width="130"
+                    Binding="{Binding AdjustValue, StringFormat=N0}"
+                    FontFamily="Segoe UI Semi"
+                    Header="調整"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding StockCheckValue, StringFormat=N2}"
+                    Binding="{Binding StockCheckValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="盤點差異"
                     IsReadOnly="True">
@@ -632,7 +685,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding TrashValue, StringFormat=N2}"
+                    Binding="{Binding TrashValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="報廢"
                     IsReadOnly="True">
@@ -645,7 +698,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="170"
-                    Binding="{Binding FinalStockValue, StringFormat=N2}"
+                    Binding="{Binding FinalStockValue, StringFormat=N0}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -726,7 +779,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="170"
-                    Binding="{Binding InitStockValue, StringFormat=N2}"
+                    Binding="{Binding InitStockValue, StringFormat=N0}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -741,7 +794,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding PurchaseValue, StringFormat=N2}"
+                    Binding="{Binding PurchaseValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="進貨"
                     IsReadOnly="True">
@@ -754,7 +807,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding ReturnValue, StringFormat=N2}"
+                    Binding="{Binding ReturnValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="退貨"
                     IsReadOnly="True">
@@ -767,7 +820,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="150"
-                    Binding="{Binding MedUseValue, StringFormat=N2}"
+                    Binding="{Binding MedUseValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="銷售耗用"
                     IsReadOnly="True">
@@ -778,11 +831,24 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
+                <!--<DataGridTextColumn
                     Width="130"
-                    Binding="{Binding MinusStockAdjustValue, StringFormat=N2}"
+                    Binding="{Binding MinusStockAdjustValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="進貨負庫調整"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>-->
+                <DataGridTextColumn
+                    Width="130"
+                    Binding="{Binding AdjustValue, StringFormat=N0}"
+                    FontFamily="Segoe UI Semi"
+                    Header="調整"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -793,7 +859,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding StockCheckValue, StringFormat=N2}"
+                    Binding="{Binding StockCheckValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="盤點差異"
                     IsReadOnly="True">
@@ -806,7 +872,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="130"
-                    Binding="{Binding TrashValue, StringFormat=N2}"
+                    Binding="{Binding TrashValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="報廢"
                     IsReadOnly="True">
@@ -819,7 +885,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="170"
-                    Binding="{Binding FinalStockValue, StringFormat=N2}"
+                    Binding="{Binding FinalStockValue, StringFormat=N0}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -834,6 +900,7 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        
         <StackPanel
             x:Name="Print"
             Grid.Row="5"
@@ -863,7 +930,7 @@
                 Background="RoyalBlue"
                 BorderThickness="0"
                 Command="{Binding ExportOTCCsvCommand}"
-                Content="匯出結果"
+                Content="OTC匯出結果"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>

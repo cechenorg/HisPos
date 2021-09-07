@@ -166,7 +166,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust || EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1;
+        public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust || EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師");
         public bool PriceReadOnly => !CanEdit;
 
         #endregion UIProperties
@@ -443,28 +443,69 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         switch (printSingle != null && (bool)printSingle)
                         {
                             case false:
-                                PrintEditedPrescription.PrintMedBagMultiMode();
+                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                {
+
+                                    EditedPrescription.PrintMedBagSingleModeByCE();
+
+
+                                }
+                                else
+                                {
+                                    PrintEditedPrescription.PrintMedBagMultiMode();
+                                }
                                 break;
 
                             case true:
-                                PrintEditedPrescription.PrintMedBagSingleMode();
-                                break;
+                                 if (VM.CurrentPharmacy.ID == "5931017216")
+                                {
+
+                                    EditedPrescription.PrintMedBagSingleModeByCE();
+
+
+                                }
+                                else {
+                                    PrintEditedPrescription.PrintMedBagSingleMode();
+                                } break;
                         }
+                          
                     }
                 }
+              
                 else
                 {
                     if ((bool)printMedBag)
                     {
+
                         BusyContent = Resources.藥袋列印;
                         switch (printSingle != null && (bool)printSingle)
                         {
                             case false:
-                                EditedPrescription.PrintMedBagMultiMode();
+                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                {
+
+                                    EditedPrescription.PrintMedBagSingleModeByCE();
+
+
+                                }
+                                else
+                                {
+                                    EditedPrescription.PrintMedBagMultiMode();
+                                }
                                 break;
 
                             case true:
-                                EditedPrescription.PrintMedBagSingleMode();
+                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                {
+
+                                    EditedPrescription.PrintMedBagSingleModeByCE();
+
+
+                                }
+                                else
+                                {
+                                    EditedPrescription.PrintMedBagSingleMode();
+                                }
                                 break;
                         }
                     }

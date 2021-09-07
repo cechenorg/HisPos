@@ -74,12 +74,12 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 if (product.ReturnAmount == 0)
                 {
-                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
+                    MessageWindow.ShowMessage(product.ID + " 退貨量為0!", MessageType.ERROR);
                     return false;
                 }
                 else if (product.ReturnAmount < 0)
                 {
-                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    MessageWindow.ShowMessage(product.ID + " 退貨量不可小於0!", MessageType.ERROR);
                     return false;
                 }
                 else if (product.ReturnAmount > product.Inventory)
@@ -121,12 +121,17 @@ namespace His_Pos.NewClass.StoreOrder
         protected override bool CheckNormalProcessingOrder()
         {
             bool hasControlMed = false;
+            bool hasZeroPrice = false;
 
             foreach (var product in ReturnProducts)
             {
                 if (product is ReturnMedicine && (product as ReturnMedicine).IsControl != null)
                 {
                     hasControlMed = true;
+                }
+                else if (product.Price == 0) 
+                {
+                    hasZeroPrice = true;
                 }
             }
 
@@ -141,9 +146,16 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
-
-            return (bool)confirmWindow.DialogResult;
+            if (hasZeroPrice)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow($"部分品項退貨價為0，\n是否確認完成退貨單?", "", false);
+                return (bool)confirmWindow.DialogResult;
+            }
+            else
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?", "", false);
+                return (bool)confirmWindow.DialogResult;
+            }
         }
 
         protected override bool CheckSingdeProcessingOrder()
@@ -333,6 +345,11 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         public override bool ChkPrice()
+        {
+            return true;
+        }
+
+        public override bool ChkPurchase()
         {
             return true;
         }

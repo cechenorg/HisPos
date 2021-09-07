@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.HisApi;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine.Position;
 using His_Pos.NewClass.Medicine.Usage;
 using His_Pos.NewClass.Person.Employee;
@@ -17,6 +18,7 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow;
 using Microsoft.Reporting.WinForms;
 using System;
 using System.Collections.Generic;
@@ -27,7 +29,11 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
+using System.Xml;
+using System.Xml.Linq;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
@@ -143,6 +149,7 @@ namespace His_Pos.ChromeTabViewModel
         public static string CooperativeInstitutionID { get; private set; }
         private int mCurrentPageIndex;
         private IList<Stream> mStreams;
+        public string pathFile;
 
         public ViewModelMainWindow()
         {
@@ -189,6 +196,37 @@ namespace His_Pos.ChromeTabViewModel
                 BusyContent = "取得合作院所設定";
                 CooperativeClinicSettings = new CooperativeClinicSettings();
                 cooperativePres = new CusPrePreviewBases();
+
+                CooperativeClinicSettings.Init();
+                var xDocs = new List<XDocument>();
+                var cusIdNumbers = new List<string>();
+                var paths = new List<string>();
+                foreach (var c in CooperativeClinicSettings)
+                {
+                    if (Properties.Settings.Default.PrePrint == "True")
+                    {
+                        if (c.AutoPrint == true)
+                        {
+                            pathFile = c.FilePath;
+                            if (c.FilePath == null)
+                            {
+                                continue;
+                            }
+                            FileSystemWatcher watch = new FileSystemWatcher(c.FilePath, "*.txt");
+                            //開啟監聽
+                            watch.EnableRaisingEvents = true;
+                            //是否連子資料夾都要偵測
+                            watch.IncludeSubdirectories = true;
+                            //新增時觸發事件
+
+
+
+                            watch.Created += watch_Created;
+                        }
+                    }
+
+                }
+
                 cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
                 CooperativeClinicSettings.Init();
                 CooperativeClinicSettings.FilePurge();
@@ -235,6 +273,288 @@ namespace His_Pos.ChromeTabViewModel
             worker.RunWorkerAsync();
         }
 
+        void watch_Created(object sender, FileSystemEventArgs e)
+        {
+            string DirectPath = e.FullPath;
+            //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
+            if (DirectPath != null)
+            {
+                var cooperativeClinicSettings = new CooperativeClinicSettings();
+                cooperativeClinicSettings.Init();
+                var xDocs = new List<XDocument>();
+                var cusIdNumbers = new List<string>();
+                var paths = new List<string>();
+                foreach (var c in cooperativeClinicSettings)
+                {
+                    try
+                    {
+                        var fileEntries = Directory.GetFiles(pathFile);
+                        foreach (var s in fileEntries)
+                        {
+
+                            try
+                            {
+                                if (c.TypeName == "杏翔" && Path.GetExtension(s) == ".txt")
+                                {
+                                    GetTxtFiles(s, pathFile, Path.GetFileName(s));
+                                }
+
+                                var xDocument = XDocument.Load(s);
+                                var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                                xDocs.Add(xDocument);
+                                cusIdNumbers.Add(cusIdNumber);
+                                paths.Add(s);
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        }
+                        XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+
+                CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
+                if (gg.CooPreCollectionView == null)
+                {
+
+                }
+                else
+                {
+                    foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
+                    {
+                  
+                        MainWindow.Instance.Dispatcher.Invoke(() =>
+                        {
+                            if (Properties.Settings.Default.PrePrint == "True")
+                            {
+                                foreach (var c in cooperativeClinicSettings)
+                                {
+                                    if (c.AutoPrint == true)
+                                    {
+                                        if (ff.IsPrint == false)
+                                        {
+
+                                            gg.PrintAction(ff);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+                
+               
+            }
+
+        }
+        public static void GetTxtFiles(string path, string path1, string v)
+        {
+            int counter = 0;
+            string line;
+
+            // Read the file and display it line by line.  
+            StreamReader file = new StreamReader(path, Encoding.Default);
+            line = file.ReadLine();
+            string[] ss = new string[] { };
+
+            ss = line.Split(',');
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration declaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            doc.AppendChild(declaration);
+
+            XmlElement orders = doc.CreateElement("orders");
+            orders.SetAttribute("days", ss[8]);
+            orders.SetAttribute("mill", "");
+            orders.SetAttribute("dosage_method", "5");
+
+
+
+
+            if (counter == 0)
+            {
+
+
+                //建立子節點
+                XmlElement case1 = doc.CreateElement("case");
+                case1.SetAttribute("from", ss[1]);//設定屬性
+                case1.SetAttribute("to", "");//設定屬性
+                case1.SetAttribute("local_id", ss[13]);//設定屬性
+                case1.SetAttribute("date", ss[6]);//設定屬性
+                case1.SetAttribute("time", "");//設定屬性
+                case1.SetAttribute("lroom", "");//設定屬性
+                case1.SetAttribute("app", "VISW");//設定屬性
+                case1.SetAttribute("request_method", "UF");//設定屬性
+                doc.AppendChild(case1);
+
+
+                XmlElement profile = doc.CreateElement("profile");//建立節點
+                case1.AppendChild(profile);
+
+                XmlElement person = doc.CreateElement("person");
+                person.SetAttribute("name", ss[2]);
+                person.SetAttribute("type", ss[0]);
+                person.SetAttribute("id", ss[34]);
+                person.SetAttribute("foreigner", "no");
+                person.SetAttribute("sex", "1");
+                person.SetAttribute("birth", ss[4]);
+                person.SetAttribute("birth_order", "");
+                person.SetAttribute("phone", "");
+                person.SetAttribute("family", "");
+                person.SetAttribute("mobile", "");
+                person.SetAttribute("email", "");
+                person.SetAttribute("blood", "");
+                person.SetAttribute("blood_rh", "");
+                profile.AppendChild(person);
+
+
+                XmlElement addr = doc.CreateElement("addr");
+                person.AppendChild(addr);
+
+                XmlElement remark = doc.CreateElement("remark");
+                person.AppendChild(remark);
+
+                XmlElement allergy = doc.CreateElement("allergy");
+                person.AppendChild(allergy);
+
+                XmlElement weight = doc.CreateElement("weight");
+                person.AppendChild(weight);
+
+                XmlElement temperature = doc.CreateElement("temperature");
+                person.AppendChild(temperature);
+
+                XmlElement blood_pressure = doc.CreateElement("blood_pressure");
+                person.AppendChild(blood_pressure);
+
+
+
+
+                XmlElement insurance = doc.CreateElement("insurance");
+                insurance.SetAttribute("insurance_type", "A");
+                insurance.SetAttribute("serial_code", ss[7].PadLeft(4,'0'));
+                insurance.SetAttribute("except_code", "");
+                insurance.SetAttribute("copayment_code", ss[10]);
+                insurance.SetAttribute("case_type", ss[25]);
+                insurance.SetAttribute("pay_type", "1");
+                insurance.SetAttribute("ldistp_type", "4");
+                insurance.SetAttribute("release_type", "1");
+                insurance.SetAttribute("ldsc", " ");
+                insurance.SetAttribute("labeno_type", "");
+                case1.AppendChild(insurance);
+
+                XmlElement study = doc.CreateElement("study");
+                study.SetAttribute("doctor_id", ss[12]);
+                study.SetAttribute("subject", ss[5].Substring(0, 2));
+                case1.AppendChild(study);
+                XmlElement diseases = doc.CreateElement("diseases");
+                study.AppendChild(diseases);
+
+                XmlElement itema = doc.CreateElement("item");
+                itema.SetAttribute("code", ss[14]);
+                itema.SetAttribute("type", "ICD10");
+                itema.SetAttribute("desc", "");
+                diseases.AppendChild(itema);
+                XmlElement itemb = doc.CreateElement("item");
+                itemb.SetAttribute("code", ss[15]);
+                itemb.SetAttribute("type", "ICD10");
+                itemb.SetAttribute("desc", "");
+                diseases.AppendChild(itemb);
+
+
+                XmlElement treatments = doc.CreateElement("treatments");
+                study.AppendChild(treatments);
+
+                XmlElement chief_complain = doc.CreateElement("chief_complain");
+                study.AppendChild(chief_complain);
+
+                XmlElement physical_examination = doc.CreateElement("physical_examination");
+                study.AppendChild(physical_examination);
+
+
+                XmlElement continous_prescription = doc.CreateElement("continous_prescription");
+                continous_prescription.SetAttribute("start_at", ss[6]);
+                continous_prescription.SetAttribute("count", "");
+                continous_prescription.SetAttribute("total", "");
+                continous_prescription.SetAttribute("other_mo", "");
+                continous_prescription.SetAttribute("eat_at", "");
+                case1.AppendChild(continous_prescription);
+
+
+
+
+                case1.AppendChild(orders);
+
+
+                XmlElement item0 = doc.CreateElement("item");
+                item0.SetAttribute("remark", "0");
+                item0.SetAttribute("local_code", "ssss");
+                item0.SetAttribute("id", ss[35]);
+                item0.SetAttribute("nowid", ss[35]);
+                item0.SetAttribute("type", ss[43]);
+                item0.SetAttribute("divided_dose", ss[37]);
+                item0.SetAttribute("daily_dose", ss[37]);
+                item0.SetAttribute("total_dose", ss[42]);
+                item0.SetAttribute("freq", ss[39]);
+                item0.SetAttribute("days", ss[40]);
+                item0.SetAttribute("way", ss[38]);
+                item0.SetAttribute("price", "1");
+                item0.SetAttribute("multiplier", "1.00");
+                item0.SetAttribute("memo", "");
+                item0.SetAttribute("desc", ss[36]);
+                item0.SetAttribute("dum", "");
+                item0.SetAttribute("dnop", "");
+                item0.SetAttribute("dtp1", "");
+                orders.AppendChild(item0);
+            }
+
+            while ((line = file.ReadLine()) != null)
+            {
+                ss = new string[] { };
+
+                ss = line.Split(',');
+
+
+
+                XmlElement item = doc.CreateElement("item");
+                item.SetAttribute("remark", "0");
+                item.SetAttribute("local_code", "ssss");
+                item.SetAttribute("id", ss[35]);
+                item.SetAttribute("nowid", ss[35]);
+                item.SetAttribute("type", ss[43]);
+                item.SetAttribute("divided_dose", ss[37]);
+                item.SetAttribute("daily_dose", ss[37]);
+                item.SetAttribute("total_dose", ss[42]);
+                item.SetAttribute("freq", ss[39]);
+                item.SetAttribute("days", ss[40]);
+                item.SetAttribute("way", ss[38]);
+                item.SetAttribute("price", "1");
+                item.SetAttribute("multiplier", "1.00");
+                item.SetAttribute("memo", "");
+                item.SetAttribute("desc", ss[36]);
+                item.SetAttribute("dum", "");
+                item.SetAttribute("dnop", "");
+                item.SetAttribute("dtp1", "");
+                orders.AppendChild(item);
+
+
+                counter++;
+            }
+
+
+            try
+            {
+                string path11 = path + ".xml";
+                doc.Save(path11);
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+
+        }
         public static WareHouse GetWareHouse(string id)
         {
             var result = WareHouses.SingleOrDefault(i => i.ID.Equals(id));
@@ -371,7 +691,14 @@ namespace His_Pos.ChromeTabViewModel
             ReportPrint(Properties.Settings.Default.MedBagPrinter);
             IsBusy = false;
         }
-
+        public void StartPrintMedBagCE(ReportViewer r)
+        {
+            IsBusy = false;
+            BusyContent = StringRes.MedBagPrinting;
+            Export(r.LocalReport, 22, 24);
+            ReportPrint(Properties.Settings.Default.MedBagPrinter);
+            IsBusy = false;
+        }
         public void StartPrintReceipt(ReportViewer r)
         {
             BusyContent = StringRes.收據列印;
@@ -450,18 +777,26 @@ namespace His_Pos.ChromeTabViewModel
 
         private void ReportPrint(string printer)
         {
-            PrintDocument printDoc = new PrintDocument();
-            printDoc.PrinterSettings.PrinterName = printer;
-            printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
-            mCurrentPageIndex = 0;
+     
+                    PrintDocument printDoc = new PrintDocument();
+                    printDoc.PrinterSettings.PrinterName = printer;
+                    printDoc.PrintController = new System.Drawing.Printing.StandardPrintController();
+                    printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
+                    mCurrentPageIndex = 0;
             try
             {
-                printDoc.Print();
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    {
+                        printDoc.Print();
+                    }
+                }));
             }
             catch (Exception ex)
             {
                 FunctionWindow.MessageWindow.ShowMessage(ex.Message, Class.MessageType.ERROR);
             }
+    
         }
 
         private Stream CreateStream(string name, string fileNameExtension, Encoding encoding,

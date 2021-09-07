@@ -15,11 +15,41 @@ namespace His_Pos.NewClass.Person.Employee
         {
             Clear();
             var table = EmployeeDb.GetData();
+            
+            foreach (DataRow row in table.Rows)
+            {
+                Add(new Employee(row));
+            }
+            
+        }
+
+        public void ClockIn(string WYear, string WMonth,int? EmpID)
+        {
+            Clear();
+            var table = EmployeeDb.EmployeeClockInList(WYear, WMonth, EmpID);
             foreach (DataRow row in table.Rows)
             {
                 Add(new Employee(row));
             }
         }
+
+        public void ClockInEmp(string WYear, string WMonth, string StoreNo, string EmpId, int Permit)
+        {
+            Clear();
+            var table = EmployeeDb.EmployeeClockInListTest(WYear, WMonth, StoreNo, EmpId, Permit);
+            if (table.Rows.Count > 0)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    Add(new Employee(row));
+                }
+            }
+            else
+            { 
+            
+            }
+        }
+
 
         public void GetEnablePharmacist(DateTime selectedDate)
         {

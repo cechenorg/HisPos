@@ -84,7 +84,8 @@
                 Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="23"
-                Foreground="Black" />
+                Foreground="Black">
+            </Label>
         </DataTemplate>
         <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
         <ControlTemplate x:Key="ScrollBar" TargetType="{x:Type ScrollBar}">
@@ -388,7 +389,7 @@
                                                                 <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                                                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>

@@ -125,7 +125,6 @@ namespace His_Pos.NewClass.StoreOrder
                     return false;
                 }
             }
-            //ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認轉成進貨單?\n(資料內容將不能修改)", "");
 
             return true;
         }
@@ -134,7 +133,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             bool isLowerThenOrderAmount = false;
             bool hasControlMed = false;
-
+            bool hasNoBatch = false;
             var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
 
             foreach (var product in OrderProducts)
@@ -149,6 +148,22 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     hasControlMed = true;
                 }
+
+                if (OrderProducts.Where(s => s.ID == product.ID).Count()>1 && product.RealAmount != 0 && (product.BatchNumber=="" ||product.BatchNumber==null)) 
+                {                    
+                     hasNoBatch = true;
+                }
+                
+                if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null) && product.RealAmount > 0)
+                {
+                    MessageWindow.ShowMessage("管藥批號不得為空!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            if (hasNoBatch == true) {
+                MessageWindow.ShowMessage("拆批不可沒有批號!", MessageType.ERROR);
+                return false;
             }
 
             if (hasControlMed)
@@ -177,6 +192,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
+
             if (isLowerThenOrderAmount)
             {
                 ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
@@ -188,10 +204,10 @@ namespace His_Pos.NewClass.StoreOrder
                     if (!isSuccess) return false;
                 }
             }
+            //ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
 
-            ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
-
-            return (bool)confirmWindow1.DialogResult;
+            //return (bool)confirmWindow1.DialogResult;
+            return true;
         }
 
         protected override bool CheckSingdeProcessingOrder()
@@ -487,6 +503,26 @@ namespace His_Pos.NewClass.StoreOrder
             for (int x = 0; x < OrderProducts.Count; x++)
             {
                 if (OrderProducts[x].LastPrice != OrderProducts[x].Price)
+                {
+                    flag = 1;
+                }
+            }
+            if (flag == 1)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public override bool ChkPurchase()
+        {
+            int flag = 0;
+            for (int x = 0; x < OrderProducts.Count; x++)
+            {
+                if (OrderProducts[x].RealAmount == 0 && OrderProducts[x].SubTotal > 0)
                 {
                     flag = 1;
                 }

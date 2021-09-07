@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.IO;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
 {
@@ -24,6 +25,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
         private string receiptPrinter;
         private string reportPrinter;
         private string receiptForm;
+        private bool prePrint;
         public Collection<string> Printers { get; set; }
         public Collection<string> PrintForms { get; set; }
 
@@ -61,6 +63,13 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             get => reportPrinter;
             set { Set(() => ReportPrinter, ref reportPrinter, value); }
         }
+        public bool PrePrint
+        {
+            get => prePrint;
+            set { Set(() => PrePrint, ref prePrint, value); }
+
+        }
+
 
         #endregion ----- Define Variables -----
 
@@ -79,6 +88,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             Properties.Settings.Default.ReceiptPrinter = ReceiptPrinter;
             Properties.Settings.Default.ReportPrinter = ReportPrinter;
             Properties.Settings.Default.ReceiptForm = ReceiptForm;
+            Properties.Settings.Default.PrePrint = PrePrint.ToString();
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -101,6 +111,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
                 fileWriter.WriteLine("ICom " + Properties.Settings.Default.InvoiceComPort);
                 fileWriter.WriteLine("INum " + Properties.Settings.Default.InvoiceNumber);
                 fileWriter.WriteLine("IChk " + Properties.Settings.Default.InvoiceCheck);
+                fileWriter.WriteLine("INumS " + Properties.Settings.Default.InvoiceNumberStart);
+                fileWriter.WriteLine("INumC " + Properties.Settings.Default.InvoiceNumberCount);
+                fileWriter.WriteLine("INumE " + Properties.Settings.Default.InvoiceNumberEng);
+                fileWriter.WriteLine("PP " + Properties.Settings.Default.PrePrint);
             }
 
             IsDataChanged = false;
@@ -131,6 +145,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             }
 
             PrintForms = new BindingList<string> { "點陣", "一般" };
+
+
         }
 
         private void RegisterCommands()
@@ -151,6 +167,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             ReceiptPrinter = Properties.Settings.Default.ReceiptPrinter;
             ReportPrinter = Properties.Settings.Default.ReportPrinter;
             ReceiptForm = Properties.Settings.Default.ReceiptForm;
+          
+            if (Properties.Settings.Default.PrePrint == "True") { PrePrint = true; }
+            else { PrePrint = false; }
+            
         }
 
         #endregion ----- Define Functions -----

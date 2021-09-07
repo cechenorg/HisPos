@@ -10,10 +10,13 @@ using His_Pos.NewClass.WareHouse;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewProductWindow;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Data;
 using System.Windows.Forms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
@@ -119,9 +122,9 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             set
             {
                 Set(() => SourceallItemsAreChecked, ref sourceallItemsAreChecked, value);
-                for (int i = 0; i < SourceStockTakingProducts.Count; i++)
+                for (int i = 0; i < WordsView.Count; i++)
                 {
-                    SourceStockTakingProducts[i].IsSelected = value;
+                    WordsView[i].IsSelected = value;
                 }
             }
         }
@@ -243,7 +246,86 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 ResultDiffTotalPrice = ResultFinalTotalPrice - ResultInitTotalPrice;
             }
         }
+        /**7.27 盤點篩選 **/
+        private string stockTakingTypeSelectItem = "全部";
 
+        public string StockTakingTypeSelectItem
+        {
+            get => stockTakingTypeSelectItem;
+            set
+            {
+                Set(() => StockTakingTypeSelectItem, ref stockTakingTypeSelectItem, value);
+            }
+        }
+        private string stockTakingCommonSelectItem = "全部";
+
+        public string StockTakingCommonSelectItem
+        {
+            get => stockTakingCommonSelectItem;
+            set
+            {
+                Set(() => StockTakingCommonSelectItem, ref stockTakingCommonSelectItem, value);
+            }
+        }
+        private string whereSelectItem = "全部";
+
+        public string WhereSelectItem
+        {
+            get => whereSelectItem;
+            set
+            {
+                Set(() => WhereSelectItem, ref whereSelectItem, value);
+            }
+        }
+
+
+        private List<string> stockTakingTypeString;
+
+        public List<string> StockTakingTypeString
+        {
+            get => stockTakingTypeString;
+            set
+            {
+                Set(() => StockTakingTypeString, ref stockTakingTypeString, value);
+            }
+        }
+        private List<string> stockTakingCommonString;
+
+        public List<string> StockTakingCommonString
+        {
+            get => stockTakingCommonString;
+            set
+            {
+                Set(() => StockTakingCommonString, ref stockTakingCommonString, value);
+            }
+        }
+        private List<string> whereString;
+
+        public List<string> WhereString
+        {
+            get => whereString;
+            set
+            {
+                Set(() => WhereString, ref whereString, value);
+            }
+        }
+
+
+        private ObservableCollection<StockTakingPlanProduct> wordsView;
+
+        public ObservableCollection<StockTakingPlanProduct> WordsView
+        {
+            get => wordsView;
+            set
+            {
+                Set(() => WordsView, ref wordsView, value);
+            }
+        }
+      
+
+
+
+        /**7.27 盤點篩選 **/
         public RelayCommand ClearStockTakingProductCommand { get; set; }
         public RelayCommand NextToResultPageCommand { get; set; }
         public RelayCommand NextToReasonPageCommand { get; set; }
@@ -266,10 +348,14 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         public RelayCommand ProductSearchCommand { get; set; }
         public RelayCommand WarHouseChangedCommand { get; set; }
         public RelayCommand PlanProductCommand { get; set; }
+        public RelayCommand StockTakingTypeChangedCommand { get; set; }
+        public RelayCommand StockTakingCommonSChangedCommand { get; set; }
+        public RelayCommand WhereChangedCommand { get; set; }
 
         public StockTakingViewModel()
         {
             RegisterCommand();
+            WordsView = new ObservableCollection<StockTakingPlanProduct>();
             WareHouses = VM.WareHouses;
             CurrentPlan.WareHouse = WareHouses[0];
             EmployeeCollection.Init();
@@ -282,6 +368,11 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 }
             }
             EmployeeCollection.Add(ViewModelMainWindow.CurrentUser);
+
+            StockTakingCommonString = new List<string>() { "全部", "常備", "非常備" };
+            StockTakingTypeString = new List<string>() { "全部", "藥品", "OTC",  };
+            WhereString = new List<string>() { "全部", "一般箋", "慢箋", "自費調劑" };
+
         }
 
         private void SetDiffInventoryAmountAction()
@@ -478,6 +569,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             if (SourceStockTakingProductSelectedItem is null) return;
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { SourceStockTakingProductSelectedItem.ID, CurrentPlan.WareHouse.ID }, "ShowProductDetail"));
+            TypeChangedAction();
         }
 
         private void ShowStockResultMedicineDetailAction()
@@ -485,6 +577,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             if (StockTakingResultProductSelected is null) return;
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { StockTakingResultProductSelected.ID, CurrentPlan.WareHouse.ID }, "ShowProductDetail"));
+            TypeChangedAction();
         }
 
         private void DeleteProductAction()
@@ -498,24 +591,28 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         {
             SourceStockTakingProducts = SourceStockTakingProducts.GetControlMedincines(CurrentPlan.WareHouse.ID);
             RemoveSourceProInTarget();
+            TypeChangedAction();
         }
 
         private void GetStockLessProductsAction()
         {
             SourceStockTakingProducts = SourceStockTakingProducts.GetStockLessProducts(CurrentPlan.WareHouse.ID);
             RemoveSourceProInTarget();
+            TypeChangedAction();
         }
 
         private void GetMonthMedicinesAction()
         {
             SourceStockTakingProducts = SourceStockTakingProducts.GetMonthMedicines(CurrentPlan.WareHouse.ID);
             RemoveSourceProInTarget();
+            TypeChangedAction();
         }
 
         private void GetOnTheFrameMedicinesAction()
         {
             SourceStockTakingProducts = SourceStockTakingProducts.GetOnTheFrameMedicines(CurrentPlan.WareHouse.ID);
             RemoveSourceProInTarget();
+            TypeChangedAction();
         }
 
         private void GetStockTakingProductByProNameAction()
@@ -525,6 +622,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             else
                 SourceStockTakingProducts = SourceStockTakingProducts.GetStockTakingPlanProductByProName("%" + ProductSearchName + "%", CurrentPlan.WareHouse.ID);
             RemoveSourceProInTarget();
+            TypeChangedAction();
         }
 
         private void RemoveSourceProInTarget()
@@ -534,6 +632,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             {
                 if (CurrentPlan.StockTakingProductCollection.Count(t => t.ID == SourceStockTakingProducts[i].ID) > 0)
                 {
+                    WordsView.Remove(SourceStockTakingProducts[i]);
                     SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
                     i--;
                 }
@@ -554,7 +653,8 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                     }
 
                     CurrentPlan.StockTakingProductCollection.Add(SourceStockTakingProducts[i]);
-                    SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
+                    WordsView.Remove(SourceStockTakingProducts[i]);
+                    //SourceStockTakingProducts.Remove(SourceStockTakingProducts[i]);
                     i--;
                 }
             }
@@ -607,7 +707,54 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             GetMonthMedicinesCommand = new RelayCommand(GetMonthMedicinesAction);
             ProductSearchCommand = new RelayCommand(GetStockTakingProductByProNameAction);
             WarHouseChangedCommand = new RelayCommand(WarHouseChangedAction);
+            StockTakingTypeChangedCommand = new RelayCommand(TypeChangedAction);
             PlanProductCommand = new RelayCommand(PlanProductAction);
+            StockTakingCommonSChangedCommand = new RelayCommand(TypeChangedAction);
+            WhereChangedCommand = new RelayCommand(TypeChangedAction);
         }
+
+        private void TypeChangedAction()
+        {
+        if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "藥品")
+            {
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => ( p.Type == 1))) ;
+
+            }
+            else if (StockTakingCommonSelectItem == "常備" && StockTakingTypeSelectItem == "全部")
+            {
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => ( p.IsCommon == true)));
+            }
+            else if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "OTC")
+            {
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => ( p.Type == 2)));
+            }
+            else if (StockTakingCommonSelectItem == "非常備" && StockTakingTypeSelectItem == "全部")
+            {
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 1))); 
+            }
+            else if (StockTakingCommonSelectItem == "非常備" && StockTakingTypeSelectItem == "OTC")
+            {
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 2)));
+            }
+            else if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "全部")
+            {
+                WordsView = (StockTakingPlanProducts)SourceStockTakingProducts;
+            }
+            else if (StockTakingCommonSelectItem == "非常備" && StockTakingTypeSelectItem == "藥品")
+            {
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 1)));
+            }
+            else if (StockTakingCommonSelectItem == "常備" && StockTakingTypeSelectItem == "藥品")
+            {
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == true && p.Type == 1)));
+            }
+            else if (StockTakingCommonSelectItem == "常備" && StockTakingTypeSelectItem == "OTC")
+            {
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == true && p.Type == 2)));
+            }
+
+
+        }
+
     }
 }

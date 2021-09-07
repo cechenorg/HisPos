@@ -8,6 +8,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerS
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
 using System;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Data;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
@@ -126,28 +127,38 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             {
                 NewCustomer.Gender = Properties.Resources.Female;
             }
-            var insertResult = NewCustomer.InsertData();
-            if (insertResult)
+            var insertResult = NewCustomer.InsertNewData();
+
+            if (insertResult == "SUCCESS")
             {
                 NewCustomerInsertSuccess();
             }
             else {
-
-                ConfirmWindow confirmWindow = new ConfirmWindow("有重複電話號碼是否進入選擇?", "重複電話號碼", true);
-
-                if (!(bool)confirmWindow.DialogResult)
+                if (insertResult == "ID_SAME") 
                 {
-                    NewCustomer.InsertData("111");
-                    NewCustomerInsertSuccess();
+                    MessageWindow.ShowMessage("身分證字號已存在！", MessageType.ERROR);
                     return;
+                }
+                if (insertResult == "PHONE_SAME") 
+                {
+                    ConfirmWindow confirmWindow = new ConfirmWindow("有重複電話號碼是否進入選擇?", "重複電話號碼", true);
+                    if (!(bool)confirmWindow.DialogResult)
+                    {
+                        //不判斷電話
+                        var res = NewCustomer.InsertData(); 
+                        if (res)
+                        {
+                            NewCustomerInsertSuccess();
+                        }
+                        return;
+                    }
                 }
 
                 CustomerSearchWindow customerSearch;
-               
                 
-                    Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
-                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, NewCustomer.CellPhone.Trim());
-                    Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, NewCustomer.CellPhone.Trim());
+                Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
                 
                 Messenger.Default.Send(new NotificationMessage("CloseAddCustomerWindow"));
 
@@ -155,14 +166,17 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 {
                     return;
                 }
-                else if (CurrentPrescription.Patient.CellPhone != null || CurrentPrescription.Patient.CellPhone != "")
+                else if (CurrentPrescription != null) 
                 {
-                    ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.ID.ToString();
-                }
-                else if (CurrentPrescription.Patient.Tel != null || CurrentPrescription.Patient.Tel != "" || ProductTransactionView.FromHISCuslblcheck != null)
-                {
-                    ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.ID.ToString();
-                }
+                    if (CurrentPrescription.Patient.CellPhone != null || CurrentPrescription.Patient.CellPhone != "")
+                    {
+                        ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.ID.ToString();
+                    }
+                    else if (CurrentPrescription.Patient.Tel != null || CurrentPrescription.Patient.Tel != "" || ProductTransactionView.FromHISCuslblcheck != null)
+                    {
+                        ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.ID.ToString();
+                    }
+                }     
                 else
                 {
                     return;

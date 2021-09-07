@@ -626,4 +626,7 @@
   <data name="ClosingCashSelect" xml:space="preserve">
     <value>關班帳務查詢</value>
   </data>
+  <data name="ClockInSearch" xml:space="preserve">
+    <value>打卡記錄查詢</value>
+  </data>
 </root>
