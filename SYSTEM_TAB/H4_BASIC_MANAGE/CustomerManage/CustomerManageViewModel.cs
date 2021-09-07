@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
@@ -35,11 +36,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         public RelayCommand ShowMedicinesDetailCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
 
-        #endregion -----Define Command-----
+    #endregion -----Define Command-----
 
-        #region ----- Define Variables -----
+    #region ----- Define Variables -----
 
-        private List<string> prescriptionCaseString;
+    private List<string> prescriptionCaseString;
 
         public List<string> PrescriptionCaseString
         {
@@ -79,6 +80,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             set { Set(() => SearchOrderID, ref searchOrderID, value); }
         }
 
+
         private string phoneNumber;
 
         public string PhoneNumber
@@ -99,7 +101,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         public bool IsEmployee
         {
-            get
+            get 
             {
                 return isEmployee;
             }
@@ -286,12 +288,13 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("ID", Customer.ID));
-                MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteCustomer]", parameters);
+                 MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteCustomer]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
-
+               
                 MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
                 Customer = new Customer();
                 CustomerCollection = new Customers();
+
             }
         }
 
@@ -303,6 +306,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 SearchOrderID = notificationMessage.Content;
                 SearchIDAction();
             }
+
         }
 
         #region Action
@@ -368,7 +372,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         public void CancelAction()
         {
-            if (Customer != null)
+            if (Customer != null) 
             {
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
                 InitDataChanged();
@@ -377,7 +381,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         public void SubmitAction()
         {
-            if (Customer != null)
+            if (Customer != null) 
             {
                 for (int i = 0; i < CustomerCollection.Count; i++)
                 {
@@ -458,7 +462,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[IsEmployee]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
 
-                if (result.Rows.Count > 0)
+                if (result.Rows.Count>0)
                 {
                     if (result.Rows[0]["Cus_CusType"].ToString() == "1")
                     {
@@ -490,7 +494,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         }
 
         #endregion Function
-
         private void RegisterMessengers()
         {
             Messenger.Default.Register<NotificationMessage<string>>(this, ShowOrderDetailByOrderID);

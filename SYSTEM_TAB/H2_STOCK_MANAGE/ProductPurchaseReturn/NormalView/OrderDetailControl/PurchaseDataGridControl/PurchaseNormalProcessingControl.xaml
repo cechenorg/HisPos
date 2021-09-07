@@ -211,9 +211,9 @@
                                 Width="60"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
-                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                                 FontFamily="Segoe UI Semi"
-                                FontSize="18" />
+                                FontSize="18"
+                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
                             <!--<TextBox
                                 x:Name="ProductPriceTextbox"
                                 Width="60"
@@ -308,8 +308,8 @@
                                 GotFocus="UIElement_OnGotFocus"
                                 InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="ProductSubTotalTextbox_OnKeyDown"
-                                LostFocus="ProductSubTotalTextbox_LostFocus"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
+                                LostFocus="ProductSubTotalTextbox_LostFocus"
                                 Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">

@@ -1,25 +1,29 @@
-﻿using His_Pos.ChromeTabViewModel;
+﻿using Dapper;
+using His_Pos.ChromeTabViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 {
-    public class ClosingAccountReportRepository
-    {
+   public class ClosingAccountReportRepository
+    { 
         public List<PharmacyInfo> GetPharmacyInfosByGroupServerName(string groupServerName)
         {
-            List<PharmacyInfo> result = new List<PharmacyInfo>();
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("groupServerName", groupServerName));
+            List<PharmacyInfo> result = new List<PharmacyInfo>(); 
+            List<SqlParameter> parameterList = new List<SqlParameter>(); 
+            parameterList.Add(new SqlParameter("groupServerName", groupServerName)); 
             DataTable table = MainWindow.ServerConnection.ExecuteProcBySchema(
                   ViewModelMainWindow.CurrentPharmacy.HISPOS_ServerName, "[Get].[PharmacyListByGroupServerName]", parameterList);
 
-            foreach (DataRow r in table.Rows)
+            foreach(DataRow r in table.Rows)
             {
                 result.Add(new PharmacyInfo(r));
-            }
+            } 
             return result;
         }
 
@@ -29,13 +33,14 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
                   ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[GroupClosingAccountRecord]");
 
             List<DailyClosingAccount> result = new List<DailyClosingAccount>();
-
-            foreach (DataRow r in table.Rows)
+            
+            foreach(DataRow r in table.Rows)
             {
                 DailyClosingAccount data = new DailyClosingAccount(r);
                 result.Add(data);
-            }
 
+            }
+           
             return result;
         }
 
@@ -62,21 +67,22 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             }
         }
 
-        public List<MonthlyAccountTarget> GetMonthTargetByGroupServerName(string groupServerName)
-        {
+        public List<MonthlyAccountTarget> GetMonthTargetByGroupServerName(string groupServerName){
             List<MonthlyAccountTarget> result = new List<MonthlyAccountTarget>();
 
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("groupServerName", groupServerName));
+           parameterList.Add(new SqlParameter("groupServerName", groupServerName)); 
             DataTable table = MainWindow.ServerConnection.ExecuteProcBySchema(
                 ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[MonthTargetByGroupServerName]", parameterList);
 
-            foreach (DataRow r in table.Rows)
+            foreach( DataRow r in table.Rows)
             {
                 result.Add(new MonthlyAccountTarget(r));
             }
             return result;
         }
+
+       
 
         public void UpdateClosingAccountTarget(MonthlyAccountTarget data)
         {
@@ -86,29 +92,30 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             parameterList.Add(new SqlParameter("TargetValue", data.MonthlyTarget));
             MainWindow.ServerConnection.ExecuteProcBySchema(
                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertUpdateAccountTarget]", parameterList);
+     
         }
 
-        public void UpdateWorkingDaySetting(DateTime date, int count)
+        public void UpdateWorkingDaySetting(DateTime date,int count)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("@date", date));
-            parameterList.Add(new SqlParameter("@count", count));
+            parameterList.Add(new SqlParameter("@count", count)); 
             MainWindow.ServerConnection.ExecuteProcBySchema(
-                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateWorkingDaySetting]", parameterList);
+                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateWorkingDaySetting]", parameterList); 
         }
 
         public List<WorkingDaySetting> GetWorkingDaySetting()
         {
             List<WorkingDaySetting> result = new List<WorkingDaySetting>();
-            DataTable table = MainWindow.ServerConnection.ExecuteProcBySchema(
-                 ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[WorkingDayRecord]");
-
-            foreach (DataRow row in table.Rows)
-            {
-                WorkingDaySetting data = new WorkingDaySetting(row);
-                result.Add(data);
-            }
-            return result;
+           DataTable table = MainWindow.ServerConnection.ExecuteProcBySchema(
+                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[WorkingDayRecord]");
+             
+           foreach (DataRow row in table.Rows)
+           {
+               WorkingDaySetting data = new WorkingDaySetting(row);
+               result.Add(data);
+           } 
+           return result;
         }
 
         public class WorkingDaySetting
@@ -135,5 +142,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 
             public string Name { get; set; }
         }
+
+       
     }
 }

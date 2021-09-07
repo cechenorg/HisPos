@@ -1,19 +1,22 @@
-﻿using ClosedXML.Excel;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StockValue;
 using His_Pos.NewClass.WareHouse;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
+using ClosedXML.Excel;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using His_Pos.FunctionWindow;
+using His_Pos.Class;
+
+
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
 {
@@ -174,7 +177,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 }
             }
         }
-
         private void Search()
         {
             DailyStockValueCollection.Clear();
@@ -216,13 +218,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 TotalOTCDailyStock.FinalStockValue = DailyOTCStockValueCollection[DailyOTCStockValueCollection.Count - 1].FinalStockValue;
             }
         }
-
         private void DownloadAction()
         {
+
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[GET].[StockNumReport]", parameters);
             MainWindow.ServerConnection.CloseConnection();
+
+
 
             Process myProcess = new Process();
             SaveFileDialog fdlg = new SaveFileDialog();
@@ -257,6 +261,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 var col15 = ws.Column("O").Width = 10;
                 var col16 = ws.Column("P").Width = 20;
 
+
+
                 ws.Cell(1, 1).Value = "庫存盤點明細";
                 ws.Range(1, 1, 1, 16).Merge().AddToNamed("Titles");
                 ws.Range(1, 2, 1, 16).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
@@ -277,6 +283,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 ws.Cell("N2").Value = "期末日期";
                 ws.Cell("O2").Value = "期末單價";
                 ws.Cell("P2").Value = "期末庫存現值";
+                         
 
                 if (result.Rows.Count > 0)
                 {
@@ -302,7 +309,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }
+
+
             }
+
+
+
         }
 
         #endregion Function

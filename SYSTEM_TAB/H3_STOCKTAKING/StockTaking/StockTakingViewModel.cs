@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Data;
 using System.Windows.Forms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
@@ -245,7 +246,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 ResultDiffTotalPrice = ResultFinalTotalPrice - ResultInitTotalPrice;
             }
         }
-
         /**7.27 盤點篩選 **/
         private string stockTakingTypeSelectItem = "全部";
 
@@ -257,7 +257,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => StockTakingTypeSelectItem, ref stockTakingTypeSelectItem, value);
             }
         }
-
         private string stockTakingCommonSelectItem = "全部";
 
         public string StockTakingCommonSelectItem
@@ -268,7 +267,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => StockTakingCommonSelectItem, ref stockTakingCommonSelectItem, value);
             }
         }
-
         private string whereSelectItem = "全部";
 
         public string WhereSelectItem
@@ -280,6 +278,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             }
         }
 
+
         private List<string> stockTakingTypeString;
 
         public List<string> StockTakingTypeString
@@ -290,7 +289,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => StockTakingTypeString, ref stockTakingTypeString, value);
             }
         }
-
         private List<string> stockTakingCommonString;
 
         public List<string> StockTakingCommonString
@@ -301,7 +299,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => StockTakingCommonString, ref stockTakingCommonString, value);
             }
         }
-
         private List<string> whereString;
 
         public List<string> WhereString
@@ -313,6 +310,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             }
         }
 
+
         private ObservableCollection<StockTakingPlanProduct> wordsView;
 
         public ObservableCollection<StockTakingPlanProduct> WordsView
@@ -323,6 +321,9 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
                 Set(() => WordsView, ref wordsView, value);
             }
         }
+      
+
+
 
         /**7.27 盤點篩選 **/
         public RelayCommand ClearStockTakingProductCommand { get; set; }
@@ -369,8 +370,9 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             EmployeeCollection.Add(ViewModelMainWindow.CurrentUser);
 
             StockTakingCommonString = new List<string>() { "全部", "常備", "非常備" };
-            StockTakingTypeString = new List<string>() { "全部", "藥品", "OTC", };
+            StockTakingTypeString = new List<string>() { "全部", "藥品", "OTC",  };
             WhereString = new List<string>() { "全部", "一般箋", "慢箋", "自費調劑" };
+
         }
 
         private void SetDiffInventoryAmountAction()
@@ -713,25 +715,26 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 
         private void TypeChangedAction()
         {
-            if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "藥品")
+        if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "藥品")
             {
-                WordsView = new ObservableCollection<StockTakingPlanProduct>(SourceStockTakingProducts.Where(p => (p.Type == 1)));
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => ( p.Type == 1))) ;
+
             }
             else if (StockTakingCommonSelectItem == "常備" && StockTakingTypeSelectItem == "全部")
             {
-                WordsView = new ObservableCollection<StockTakingPlanProduct>(SourceStockTakingProducts.Where(p => (p.IsCommon == true)));
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => ( p.IsCommon == true)));
             }
             else if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "OTC")
             {
-                WordsView = new ObservableCollection<StockTakingPlanProduct>(SourceStockTakingProducts.Where(p => (p.Type == 2)));
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => ( p.Type == 2)));
             }
             else if (StockTakingCommonSelectItem == "非常備" && StockTakingTypeSelectItem == "全部")
             {
-                WordsView = new ObservableCollection<StockTakingPlanProduct>(SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 1)));
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 1))); 
             }
             else if (StockTakingCommonSelectItem == "非常備" && StockTakingTypeSelectItem == "OTC")
             {
-                WordsView = new ObservableCollection<StockTakingPlanProduct>(SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 2)));
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 2)));
             }
             else if (StockTakingCommonSelectItem == "全部" && StockTakingTypeSelectItem == "全部")
             {
@@ -739,16 +742,19 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             }
             else if (StockTakingCommonSelectItem == "非常備" && StockTakingTypeSelectItem == "藥品")
             {
-                WordsView = new ObservableCollection<StockTakingPlanProduct>(SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 1)));
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == false && p.Type == 1)));
             }
             else if (StockTakingCommonSelectItem == "常備" && StockTakingTypeSelectItem == "藥品")
             {
-                WordsView = new ObservableCollection<StockTakingPlanProduct>(SourceStockTakingProducts.Where(p => (p.IsCommon == true && p.Type == 1)));
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == true && p.Type == 1)));
             }
             else if (StockTakingCommonSelectItem == "常備" && StockTakingTypeSelectItem == "OTC")
             {
-                WordsView = new ObservableCollection<StockTakingPlanProduct>(SourceStockTakingProducts.Where(p => (p.IsCommon == true && p.Type == 2)));
+                WordsView = new ObservableCollection<StockTakingPlanProduct> (SourceStockTakingProducts.Where(p => (p.IsCommon == true && p.Type == 2)));
             }
+
+
         }
+
     }
 }

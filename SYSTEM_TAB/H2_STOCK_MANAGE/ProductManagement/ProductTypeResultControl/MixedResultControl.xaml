@@ -119,8 +119,8 @@
                                     IsCommon="{Binding IsCommon}"
                                     IsDisable="{Binding IsEnable, Converter={StaticResource InvertBoolConverter}}"
                                     IsFrozen="{Binding IsFrozen}"
-                                    IsInventoryError="{Binding InventoryError}"
-                                    IsMerged="{Binding IsMerged}" />
+                                    IsMerged="{Binding IsMerged}"
+                                    IsInventoryError="{Binding InventoryError}" />
                                 <Label
                                     Margin="-5,0,0,0"
                                     VerticalAlignment="Center"
@@ -252,7 +252,8 @@
                     FontFamily="Segoe UI Semi"
                     Header="櫃位"
                     IsReadOnly="True"
-                    Visibility="{Binding DataContext.OTCDeposit, Source={x:Reference dummyElement}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                     Visibility="{Binding DataContext.OTCDeposit, Source={x:Reference dummyElement}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />

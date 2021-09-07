@@ -27,6 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             DataTable dataTable = ProductLocationDB.UpdateLocation(ID, ChiName.Text);
             MainWindow.ServerConnection.CloseConnection();
 
+
             if (dataTable.Rows[0]["RESULT"].ToString() == "DOUABLE")
             {
                 MessageWindow.ShowMessage("櫃位名稱不得重複", Class.MessageType.ERROR);

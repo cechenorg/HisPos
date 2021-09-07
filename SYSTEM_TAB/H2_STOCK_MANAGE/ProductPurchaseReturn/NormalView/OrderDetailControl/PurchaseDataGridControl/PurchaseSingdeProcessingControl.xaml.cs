@@ -7,6 +7,8 @@ using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using System.Collections.Generic;
+using System.Data;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -23,7 +25,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         {
             InitializeComponent();
         }
-
         private void InputTextbox_OnGotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -49,7 +50,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             e.Handled = true;
             textBox.Focus();
         }
-
         private void ShowDetail(object sender, MouseButtonEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;
@@ -60,7 +60,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
         }
-
         private int GetRowIndex(MouseButtonEventArgs e)
         {
             DataGridRow dgr = null;
@@ -74,29 +73,34 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             int rowIdx = dgr.GetIndex();
             return rowIdx;
         }
-
         private void HISTORYDG_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // StoreOrderHistory row = (StoreOrderHistory)HISTORYDG.SelectedItems[0];
+           // StoreOrderHistory row = (StoreOrderHistory)HISTORYDG.SelectedItems[0];
 
-            // string proID = row.ID.ToString();
+
+
+           // string proID = row.ID.ToString();
+
 
             //    ProductPurchaseRecordViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseRecord;
 
-            //    Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, proID, ""));
-        }
+           //    Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, proID, ""));
+
+            }
 
         private void DataGrid_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             StoreOrderHistory row = (StoreOrderHistory)HISTORYDG.SelectedItems[0];
 
+
+
             string proID = row.ID.ToString();
+
 
             ProductPurchaseRecordViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseRecord;
 
             Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, proID, ""));
         }
-
         private void ProductIDTextbox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -151,9 +155,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             int index = textBoxs.IndexOf(textBox);
 
-            ProductDataGrid.SelectedItem = ProductDataGrid.Items[index / 2] as Product;
+            ProductDataGrid.SelectedItem = ProductDataGrid.Items[index/2] as Product;
         }
-
         private void MoveFocusNext(object sender)
         {
             (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
@@ -190,7 +193,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 FocusRow(firstChild as TextBox);
             }
         }
-
         private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -204,7 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (string.IsNullOrEmpty(textBox.Text))
+            if (string.IsNullOrEmpty(textBox.Text)) 
             {
                 textBox.Text = "0";
             }
@@ -220,4 +222,5 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             FocusRow(textBox);
         }
     }
+
 }

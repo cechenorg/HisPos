@@ -313,6 +313,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }
+                
             }
             try
             {

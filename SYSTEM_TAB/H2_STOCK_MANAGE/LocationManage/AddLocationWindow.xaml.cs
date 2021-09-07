@@ -58,11 +58,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 DataTable dataTable = ProductLocationDB.AddNewProductLocation(ChiName.Text);
                 MainWindow.ServerConnection.CloseConnection();
 
-                if (dataTable.Rows[0]["RESULT"].ToString() == "DOUABLE")
+                if (dataTable.Rows[0]["RESULT"].ToString()=="DOUABLE")
                 {
                     MessageWindow.ShowMessage("櫃位名稱不得重複", Class.MessageType.ERROR);
                     return;
                 }
+
 
                 if (dataTable is null || dataTable.Rows.Count == 0)
                 {

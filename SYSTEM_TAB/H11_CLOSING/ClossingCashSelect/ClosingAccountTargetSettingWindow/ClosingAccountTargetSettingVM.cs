@@ -2,8 +2,11 @@
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTargetSettingWindow
 {
@@ -58,9 +61,9 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
 
-            foreach (var data in TargetDataCollection)
+            foreach(var data in TargetDataCollection)
             {
-                repo.UpdateClosingAccountTarget(data);
+                repo.UpdateClosingAccountTarget(data); 
             }
 
             repo.UpdateWorkingDaySetting(ClosingAccountMonth, CurrentMonthWorkingDayCount);
@@ -79,7 +82,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
             var pharmacyTargetList = repo.GetMonthTargetByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName)
                 .Where(_ => _.Month.Month == ClosingAccountMonth.Month).ToList();
 
-            foreach (var data in pharmacyTargetList)
+            foreach(var data in pharmacyTargetList)
             {
                 MonthlyAccountTarget pharmacyTaget = new MonthlyAccountTarget();
                 var info = gtroupServerInfo.First(_ => _.VerifyKey.ToLower() == data.VerifyKey.ToLower());
@@ -92,8 +95,9 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
 
             var thisMonthWorkingSetting = repo.GetWorkingDaySetting().FirstOrDefault(_ => _.Date.Month == ClosingAccountMonth.Month && _.Date.Year == ClosingAccountMonth.Year);
             CurrentMonthWorkingDayCount = thisMonthWorkingSetting.DayCount;
-
+             
             MainWindow.ServerConnection.CloseConnection();
+
         }
     }
 }

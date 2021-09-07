@@ -2,10 +2,13 @@
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.AccountReport.ClosingAccountReport;
 using His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTargetSettingWindow;
+using His_Pos.NewClass.Prescription.Search;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 {
@@ -37,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 Set(() => EndDate, ref endDate, value);
             }
         }
-
+         
         private ObservableCollection<DailyClosingAccount> sumDailyClosingAccount = new ObservableCollection<DailyClosingAccount>();
 
         public ObservableCollection<DailyClosingAccount> SumDailyClosingAccount
@@ -104,7 +107,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
-        private MonthlyAccountTarget monthlySelfAccount;
+        private MonthlyAccountTarget monthlySelfAccount ;
 
         public MonthlyAccountTarget MonthlySelfAccount
         {
@@ -114,13 +117,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 Set(() => MonthlySelfAccount, ref monthlySelfAccount, value);
             }
         }
+        
 
         public RelayCommand DailyAccountingSearchCommand { get; set; }
         public RelayCommand MonthlyClosingAccountSearchCommand { get; set; }
         public RelayCommand MonthlyTargetSettingCommand { get; set; }
 
         public ClosingCashSelectViwModel()
-        {
+        { 
             DailyAccountingSearchCommand = new RelayCommand(DailyAccountingSearchAction);
             MonthlyClosingAccountSearchCommand = new RelayCommand(MonthlyClosingAccountSearchAction);
             MonthlyTargetSettingCommand = new RelayCommand(MonthlyTargetSettingAction);
@@ -143,51 +147,54 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             MonthlyAccountTargetCollection.Clear();
 
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
-            MainWindow.ServerConnection.OpenConnection();
+            MainWindow.ServerConnection.OpenConnection(); 
             var pharmacyTargetList = repo.GetMonthTargetByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName)
-                .Where(_ => _.Month.Month == firstDayOfMonth.Month).ToList();
+                .Where(_=>_.Month.Month == firstDayOfMonth.Month).ToList(); 
             MainWindow.ServerConnection.CloseConnection();
-
+             
             var sumRecord = GetSumRecordByDate(firstDayOfMonth, lastDayOfMonth);
-
+            
             foreach (var pharmacy in pharmacyTargetList)
-            {
+            { 
+               
                 var sumData = sumRecord.First(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower());
                 pharmacy.PharmacyName = sumData.PharmacyName;
                 pharmacy.MonthlyProfit = sumData.SelfProfit;
-                pharmacy.TargetRatio = Math.Round((double)pharmacy.MonthlyProfit / (double)pharmacy.MonthlyTarget * 100, 2).ToString() + "%";
+                pharmacy.TargetRatio = Math.Round( (double)pharmacy.MonthlyProfit / (double)pharmacy.MonthlyTarget * 100,2).ToString() + "%";
             }
 
-            pharmacyTargetList = pharmacyTargetList.OrderByDescending(_ => Math.Round((double)_.MonthlyProfit / (double)_.MonthlyTarget * 100, 2)).ToList();
+            pharmacyTargetList =  pharmacyTargetList.OrderByDescending(_ => Math.Round((double)_.MonthlyProfit / (double)_.MonthlyTarget * 100, 2)).ToList();
             foreach (var pharmacy in pharmacyTargetList)
             {
-                MonthlyAccountTargetCollection.Add(pharmacy);
+                MonthlyAccountTargetCollection.Add(pharmacy); 
             }
 
-            MonthlyAccountTarget sum = new MonthlyAccountTarget() { PharmacyName = "小計" };
+            MonthlyAccountTarget sum = new MonthlyAccountTarget() { PharmacyName = "小計"};
             sum.MonthlyTarget = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyTarget);
             sum.MonthlyProfit = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyProfit);
-            sum.TargetRatio = Math.Round((double)sum.MonthlyProfit / (double)sum.MonthlyTarget * 100, 2).ToString() + "%";
+            sum.TargetRatio =  Math.Round((double)sum.MonthlyProfit / (double)sum.MonthlyTarget * 100,2).ToString() + "%";
             //MonthlyAccountTargetCollection.Add(sum);
             MonthlySelfAccount = sum;
             var workedDay = repo.GetGroupClosingAccountRecord().Where(_ => _.ClosingDate >= firstDayOfMonth && _.ClosingDate <= lastDayOfMonth).Select(_ => _.ClosingDate).Distinct().Count();
-            var targetratio = Math.Round((double)workedDay / (double)monthlyNeedWorkingDayCount * 100, 2);
+            var targetratio =  Math.Round((double)workedDay / (double) monthlyNeedWorkingDayCount*100,2);
 
-            MonthlyNeedGetTarget = new MonthlyAccountTarget() { PharmacyName = "應達標準" };
+            MonthlyNeedGetTarget = new MonthlyAccountTarget() { PharmacyName = "應達標準"};
 
             //MonthlyNeedGetTarget.TargetRatio = Math.Round((double)sum.MonthlyProfit / targetratio * 100, 2).ToString() + "%";
             MonthlyNeedGetTarget.TargetRatio = targetratio.ToString() + "%";
-
+             
             //MonthlyAccountTargetCollection.Add(todayNeedTarget);
+
         }
 
         private void DailyAccountingSearchAction()
         {
-            SumDailyClosingAccount.Clear();
-            foreach (var data in GetSumRecordByDate(StartDate, EndDate))
+            SumDailyClosingAccount.Clear(); 
+            foreach(var data in GetSumRecordByDate(StartDate, EndDate))
             {
                 SumDailyClosingAccount.Add(data);
             }
+
         }
 
         private List<DailyClosingAccount> GetSumRecordByDate(DateTime sDate, DateTime eDate)
@@ -202,17 +209,17 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             if (workingSetting
                 .Count(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month) == 0)
             {
-                var lastMonthData = workingSetting.FirstOrDefault(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month - 1);
-                repo.UpdateWorkingDaySetting(DateTime.Today, lastMonthData.DayCount);
+               var lastMonthData = workingSetting.FirstOrDefault(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month - 1);
+               repo.UpdateWorkingDaySetting(DateTime.Today, lastMonthData.DayCount);
 
-                MonthlyNeedWorkingDayCount = lastMonthData.DayCount;
+               MonthlyNeedWorkingDayCount = lastMonthData.DayCount;
             }
             else
             {
                 MonthlyNeedWorkingDayCount = workingSetting.FirstOrDefault(_ =>
-                    _.Date.Year == (MonthlySearchYear + 1911) && _.Date.Month == MonthlySearchMonth).DayCount;
+                    _.Date.Year == (MonthlySearchYear+1911) && _.Date.Month == MonthlySearchMonth).DayCount; 
             }
-
+                
             MainWindow.ServerConnection.CloseConnection();
 
             var searchData = datalist.Where(_ => _.ClosingDate >= sDate && _.ClosingDate <= eDate).ToList();
@@ -221,7 +228,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 DailyClosingAccount displayDailyClosingAccount = new DailyClosingAccount();
                 displayDailyClosingAccount.PharmacyName = pharmacy.Name;
                 displayDailyClosingAccount.PharmacyVerifyKey = pharmacy.VerifyKey;
-                result.Add(displayDailyClosingAccount);
+                result.Add(displayDailyClosingAccount); 
                 foreach (var pharmacyRecoird in searchData.Where(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower()))
                 {
                     displayDailyClosingAccount.OTCSaleProfit += pharmacyRecoird.OTCSaleProfit;
@@ -234,13 +241,13 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 }
             }
 
-            if (result.Count > 0)
+            if(result.Count > 0)
                 result = result.OrderByDescending(_ => _.SelfProfit).ToList();
 
             for (int i = 0; i < result.Count; i++)
             {
-                result[i].OrderNumber = i + 1;
-            }
+                result[i].OrderNumber = i+1;
+            } 
             return result;
         }
     }

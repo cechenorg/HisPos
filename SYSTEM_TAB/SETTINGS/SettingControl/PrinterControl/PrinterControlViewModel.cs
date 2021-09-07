@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.IO;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
 {
@@ -62,12 +63,13 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             get => reportPrinter;
             set { Set(() => ReportPrinter, ref reportPrinter, value); }
         }
-
         public bool PrePrint
         {
             get => prePrint;
             set { Set(() => PrePrint, ref prePrint, value); }
+
         }
+
 
         #endregion ----- Define Variables -----
 
@@ -143,6 +145,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             }
 
             PrintForms = new BindingList<string> { "點陣", "一般" };
+
+
         }
 
         private void RegisterCommands()
@@ -163,9 +167,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             ReceiptPrinter = Properties.Settings.Default.ReceiptPrinter;
             ReportPrinter = Properties.Settings.Default.ReportPrinter;
             ReceiptForm = Properties.Settings.Default.ReceiptForm;
-
+          
             if (Properties.Settings.Default.PrePrint == "True") { PrePrint = true; }
             else { PrePrint = false; }
+            
         }
 
         #endregion ----- Define Functions -----

@@ -42,18 +42,20 @@
                     Margin="20,0,0,0"
                     Content="共"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="25"
-                    Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    FontSize="25" 
+                     Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    
+                    />
                 <Label
                     Content="{Binding TradeDetailReportSum.Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="25"
-                    Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    FontSize="25" 
+                     Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label
                     Content="筆"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="25"
-                    Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    FontSize="25" 
+                     Visibility="{Binding ChangeOTCVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label
                     Margin="20,0,0,0"
                     Content="銷售案件"
@@ -113,7 +115,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
-        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
+        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
         <DataGrid
             x:Name="dgRecord"
             Grid.Row="1"
@@ -358,7 +360,7 @@
                     FontFamily="Segoe UI Semi"
                     Header="毛利"
                     IsReadOnly="True"
-                    Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}">
+                     Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
@@ -393,7 +395,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="18" />
         </StackPanel>
-
+       
         <DataGrid
             x:Name="dgEmp"
             Grid.Row="1"
@@ -713,8 +715,8 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.CashAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                    TextAlignment="Right"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                    TextAlignment="Right" 
+                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="70"
                     Margin="10,0,0,0"
@@ -722,8 +724,8 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.CardAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                    TextAlignment="Right"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                    TextAlignment="Right" 
+                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="80"
                     Margin="0,0,0,0"
@@ -731,8 +733,8 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.DiscountAmt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                    TextAlignment="Right"
-                    Visibility="{Binding DataContext.TicketVis, Source={x:Reference dummyElement}}" />
+                    TextAlignment="Right" 
+                    Visibility="{Binding DataContext.TicketVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="80"
                     Margin="0,0,0,0"
@@ -741,7 +743,7 @@
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.CashCoupon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     TextAlignment="Right"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="80"
                     Margin="0,0,0,0"
@@ -750,7 +752,7 @@
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.PrePay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     TextAlignment="Right"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="80"
                     VerticalAlignment="Center"
@@ -758,7 +760,7 @@
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.ValueDifference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     TextAlignment="Right"
-                    Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}" />
+                    Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}"/>
                 <!--<TextBlock Width="80" VerticalAlignment="Center" TextAlignment="Right" Text="{Binding TradeDetailReportSum.CardFee,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="16" />-->
                 <TextBlock
                     Width="80"
@@ -768,7 +770,7 @@
                     FontSize="16"
                     Text="{Binding TradeDetailReportSum.Profit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     TextAlignment="Right"
-                    Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}" />
+                     Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}"/>
             </StackPanel>
         </Border>
         <Border

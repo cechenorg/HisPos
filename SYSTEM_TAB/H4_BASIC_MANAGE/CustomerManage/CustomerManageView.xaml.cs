@@ -14,6 +14,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         public CustomerManageView()
         {
             InitializeComponent();
+
         }
 
         private void DateMaskedTextBoxOnPreviewKeyDown(object sender, KeyEventArgs e)

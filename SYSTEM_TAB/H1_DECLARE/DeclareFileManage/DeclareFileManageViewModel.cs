@@ -17,6 +17,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows;
+using System.Windows.Threading;
 using StringRes = His_Pos.Properties.Resources;
 
 // ReSharper disable InconsistentNaming
@@ -177,9 +179,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void InitialVariables()
         {
             DeclarePharmacies = new DeclarePharmacies();
-            if (DeclarePharmacies.Count == 0)
+            if (DeclarePharmacies.Count==0) 
             {
-                return;
+                return;  
             }
             SelectedPharmacy = DeclarePharmacies.SingleOrDefault(p => p.ID.Equals(ViewModelMainWindow.CurrentPharmacy.ID));
             DeclareFile = new DeclarePreviewOfMonth();
@@ -406,7 +408,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             var sDate = (DateTime)DeclareDateStart;
             var eDate = (DateTime)DeclareDateEnd;
 
-            if (SelectedPharmacy == null)
+            if (SelectedPharmacy==null) 
             {
                 NewFunction.ShowMessageFromDispatcher("查無處方！", MessageType.ERROR);
                 //MessageWindow.ShowMessage("查無處方！", MessageType.ERROR);

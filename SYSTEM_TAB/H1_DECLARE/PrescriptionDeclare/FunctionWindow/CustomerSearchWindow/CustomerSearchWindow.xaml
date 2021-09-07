@@ -29,23 +29,24 @@
                 Style="{StaticResource BoldLabelHeader25}" />
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type customerSearchWindow:CustomerSearchViewModel}">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+              VerticalScrollBarVisibility="Disabled">
                 <DataGrid
-                    Width="720"
-                    HorizontalAlignment="Left"
-                    AutoGenerateColumns="False"
-                    Background="{StaticResource GridBackGround}"
-                    CanUserAddRows="False"
-                    CanUserDeleteRows="False"
-                    CellStyle="{StaticResource DataGridCellStyle}"
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    EnableRowVirtualization="True"
-                    FontFamily="Segoe UI Semi"
-                    HorizontalScrollBarVisibility="Hidden"
-                    ItemsSource="{Binding CustomerCollectionView}"
-                    PreviewKeyDown="UIElement_OnPreviewKeyDown"
-                    PreviewMouseDown="UIElement_OnPreviewMouseDown"
-                    SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}">
+                Width="720"
+                HorizontalAlignment="Left"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridBackGround}"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                EnableRowVirtualization="True"
+                FontFamily="Segoe UI Semi"
+                HorizontalScrollBarVisibility="Hidden"
+                ItemsSource="{Binding CustomerCollectionView}"
+                PreviewKeyDown="UIElement_OnPreviewKeyDown"
+                PreviewMouseDown="UIElement_OnPreviewMouseDown"
+                SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <i:InvokeCommandAction Command="{Binding CustomerSelected}" />
@@ -83,11 +84,11 @@
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
                         <DataGridTextColumn
-                            Width="120"
-                            MaxWidth="120"
-                            Binding="{Binding Name}"
-                            Header="姓名"
-                            IsReadOnly="True">
+                        Width="120"
+                        MaxWidth="120"
+                        Binding="{Binding Name}"
+                        Header="姓名"
+                        IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -96,44 +97,45 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="120"
-                            MaxWidth="120"
-                            Binding="{Binding Birthday, Converter={StaticResource BirthDayConverter}}"
-                            Header="生日"
-                            IsReadOnly="True" />
+                        Width="120"
+                        MaxWidth="120"
+                        Binding="{Binding Birthday, Converter={StaticResource BirthDayConverter}}"
+                        Header="生日"
+                        IsReadOnly="True" />
                         <DataGridTextColumn
-                            Width="150"
-                            MaxWidth="120"
-                            Binding="{Binding IDNumber}"
-                            Header="身分證"
-                            IsReadOnly="True" />
+                        Width="150"
+                        MaxWidth="120"
+                        Binding="{Binding IDNumber}"
+                        Header="身分證"
+                        IsReadOnly="True" />
                         <DataGridTextColumn
-                            Width="150"
-                            MaxWidth="120"
-                            Binding="{Binding CellPhone}"
-                            Header="手機1"
-                            IsReadOnly="True" />
+                        Width="150"
+                        MaxWidth="120"
+                        Binding="{Binding CellPhone}"
+                        Header="手機1"
+                        IsReadOnly="True" />
                         <DataGridTextColumn
-                            Width="150"
-                            MaxWidth="120"
-                            Binding="{Binding SecondPhone}"
-                            Header="手機2"
-                            IsReadOnly="True" />
+                        Width="150"
+                        MaxWidth="120"
+                        Binding="{Binding SecondPhone}"
+                        Header="手機2"
+                        IsReadOnly="True" />
                         <DataGridTextColumn
-                            Width="150"
-                            MaxWidth="120"
-                            Binding="{Binding Tel}"
-                            Header="家電"
-                            IsReadOnly="True" />
+                        Width="150"
+                        MaxWidth="120"
+                        Binding="{Binding Tel}"
+                        Header="家電"
+                        IsReadOnly="True" />
                         <DataGridTextColumn
-                            Width="150"
-                            MaxWidth="120"
-                            Binding="{Binding LastEdit, StringFormat='{}{0:MM/dd HH:mm}'}"
-                            Header="編輯時間"
-                            IsReadOnly="True" />
+                        Width="150"
+                        MaxWidth="120"
+                        Binding="{Binding LastEdit, StringFormat='{}{0:MM/dd HH:mm}'}"
+                        Header="編輯時間"
+                        IsReadOnly="True" />
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
+            
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">

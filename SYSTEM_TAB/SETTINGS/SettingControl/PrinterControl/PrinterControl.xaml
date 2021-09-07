@@ -48,7 +48,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="30"
                 Foreground="DimGray" />
-
+            
             <ComboBox
                 Width="300"
                 Margin="20,0,0,0"
@@ -70,7 +70,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="30"
                 Foreground="DimGray" />
-            <CheckBox IsChecked="{Binding PrePrint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <CheckBox  IsChecked="{Binding PrePrint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding DataChangedCommand}" />

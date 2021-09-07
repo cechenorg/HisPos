@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -52,10 +53,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
 
         private void Combo_Loc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
         }
 
         private void Combo_Loc_DropDownClosed(object sender, System.EventArgs e)
         {
+
         }
     }
 }

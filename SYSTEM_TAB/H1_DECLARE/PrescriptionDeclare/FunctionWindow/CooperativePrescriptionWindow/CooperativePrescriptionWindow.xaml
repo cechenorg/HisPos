@@ -249,6 +249,7 @@
                                                         VerticalAlignment="Center"
                                                         Content="{Binding TreatDate, Converter={StaticResource DateConverter}}"
                                                         FontSize="15" />
+                                                  
                                                 </StackPanel>
                                             </Grid>
                                         </DataTemplate>

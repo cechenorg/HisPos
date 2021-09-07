@@ -89,7 +89,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="630" />
+            <RowDefinition Height="630"/>
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
@@ -104,7 +104,7 @@
             FrozenColumnCount="3"
             GridLinesVisibility="Horizontal"
             ItemsSource="{Binding CurrentStoreOrder.OrderProducts}"
-            SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SelectedItemConverter}}">
+             SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SelectedItemConverter}}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />

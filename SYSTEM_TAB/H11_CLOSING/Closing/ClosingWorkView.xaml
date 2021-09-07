@@ -24,8 +24,8 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="670" />
-                    <ColumnDefinition Width="500" />
-                    <ColumnDefinition Width="670" />
+                    <ColumnDefinition Width="500"/>
+                    <ColumnDefinition Width="670"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel
                     Grid.Row="0"
@@ -116,10 +116,10 @@
                             <RowDefinition Height="40" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="500" />
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition  Width="500"/>
+                            <ColumnDefinition  Width="100"/>
+                            <ColumnDefinition  Width="100"/>
+                            <ColumnDefinition  Width="100"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel
                             Grid.Row="0"
@@ -139,9 +139,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日淨利"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -159,9 +159,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日盤差"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -179,9 +179,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日毛利"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -199,9 +199,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
+                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC現金"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -212,7 +212,9 @@
                                 Content="{Binding TradeCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTC_CASH" />
+                            <CheckBox
+                                x:Name="OTC_CASH">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="6"
@@ -220,9 +222,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
-                                HorizontalContentAlignment="Left"
+                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC信用卡"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -233,7 +235,9 @@
                                 Content="{Binding TradeCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTC_CARD" />
+                            <CheckBox
+                                x:Name="OTC_CARD">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="7"
@@ -241,9 +245,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC禮券"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -254,7 +258,9 @@
                                 Content="{Binding TradeDiscount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTC_TICKET" />
+                            <CheckBox
+                                x:Name="OTC_TICKET">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="8"
@@ -262,9 +268,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
-                                VerticalAlignment="Center"
+                                VerticalAlignment="Center"                                
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC現金券"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -275,7 +281,9 @@
                                 Content="{Binding TradeCashCoupon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTC_CASHTICKET" />
+                            <CheckBox
+                                x:Name="OTC_CASHTICKET">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="9"
@@ -283,9 +291,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="OTC獎金"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -316,9 +324,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="額外收支"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -329,7 +337,9 @@
                                 Content="{Binding Extra, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="OTHER_CASH" />
+                            <CheckBox
+                                x:Name="OTHER_CASH">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="15"
@@ -337,9 +347,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日現金帳"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -358,18 +368,18 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="點算現金"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
                             <TextBox
                                 x:Name="KeyIn"
                                 Width="100"
-                                Margin="5,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="5,0,0,0"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
                                 IsEnabled="True"
@@ -387,7 +397,7 @@
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
                                 IsEnabled="{Binding Enable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                PreviewMouseDown="Button_PreviewMouseDown" />
+                                PreviewMouseDown="Button_PreviewMouseDown"/>
                             <Button
                                 Width="150"
                                 Height="40"
@@ -400,7 +410,7 @@
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
                         </StackPanel>
-
+                        
                         <StackPanel
                             Grid.Row="18"
                             Grid.Column="0"
@@ -414,15 +424,17 @@
                                 FontSize="20" />
                             <Label
                                 Width="100"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="{Binding CheckClosed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
                                 Foreground="{Binding CheckColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
+                      
                     </Grid>
+                    
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -472,9 +484,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="230"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當月總調劑人數"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -493,9 +505,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="230"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="合作診所收入"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -514,9 +526,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="230"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="配藥毛利收入"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -535,9 +547,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="230"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="慢箋+其他收入"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -568,9 +580,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="150"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="自費現金"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -582,7 +594,9 @@
                                 Content="{Binding CashTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="MED_CASH" />
+                            <CheckBox
+                                x:Name="MED_CASH">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="8"
@@ -602,9 +616,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="200"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日收訂金(現金)"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -615,7 +629,9 @@
                                 Content="{Binding PreCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="PREPAY_CASH" />
+                            <CheckBox
+                                x:Name="PREPAY_CASH">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="10"
@@ -623,9 +639,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="200"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日收訂金(信用卡)"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -636,7 +652,9 @@
                                 Content="{Binding PreCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="PREPAY_CARD" />
+                            <CheckBox
+                                x:Name="PREPAY_CARD">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="11"
@@ -644,9 +662,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="200"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日退訂金(現金)"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -657,7 +675,9 @@
                                 Content="{Binding ReturnPreCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="RETURN_PRECASH" />
+                            <CheckBox
+                                x:Name="RETURN_PRECASH">
+                            </CheckBox>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="12"
@@ -665,9 +685,9 @@
                             Orientation="Horizontal">
                             <Label
                                 Width="200"
-                                Margin="40,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Left"
+                                Margin="40,0,0,0"
                                 Content="當日退訂金(信用卡)"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
@@ -678,11 +698,14 @@
                                 Content="{Binding ReturnPreCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" />
-                            <CheckBox x:Name="RETURN_PRECARD" />
+                            <CheckBox
+                                x:Name="RETURN_PRECARD">
+                            </CheckBox>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
             </Grid>
+            
         </Grid>
     </xctk:BusyIndicator>
 </UserControl>

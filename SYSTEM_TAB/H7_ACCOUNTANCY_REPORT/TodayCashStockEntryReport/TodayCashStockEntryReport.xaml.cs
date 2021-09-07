@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.TodayEntryDetailControl;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,6 +12,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
     public partial class TodayCashStockEntryReport : UserControl
     {
         public Visibility test;
+
+
 
         public TodayCashStockEntryReport()
         {
@@ -51,14 +54,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
         private void btnMed_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+          
         }
 
         private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            
         }
 
         private void btnAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+           
         }
 
         private void OTCMain_MouseDown(object sender, MouseButtonEventArgs e)
@@ -105,26 +111,32 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
         private void MedPre_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+           
         }
 
         private void MedCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+         
         }
 
         private void MedCash_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+           
         }
 
         private void MedStock_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+           
         }
 
         private void OTCTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+          
         }
 
         private void OTCCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+          
         }
 
         private void OTCStock_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -133,50 +145,62 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
         private void OTCReward_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+           
         }
 
         private void OTCFee_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+           
         }
 
         private void OTCTicket_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+          
         }
 
         private void MedCoopPreBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            
         }
 
         private void MedSelfPreBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+           
         }
 
         private void MedCostCoopBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            
         }
 
         private void MedCostSelfBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+          
         }
 
         private void MedCashNotCoop_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+          
         }
 
         private void MedCashCoop_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            
         }
 
         private void MedChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+          
         }
 
         private void MedCoopChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+           
         }
 
         private void StackPanel_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+
         }
 
         private void OTCAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -204,7 +228,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
@@ -237,7 +261,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
@@ -270,7 +294,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
@@ -303,7 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
@@ -336,12 +360,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
             NORMALChange.Background = Brushes.Transparent;
+
         }
 
         private void OTCStockChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -369,16 +394,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
             NORMALChange.Background = Brushes.Transparent;
+
         }
 
         private void OTCTicket_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
         {
+
         }
 
         private void OTCTicketDis_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -406,12 +433,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
             NORMALChange.Background = Brushes.Transparent;
+
         }
 
         private void OTCRewardEmp_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -439,12 +467,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
             NORMALChange.Background = Brushes.Transparent;
+
         }
 
         private void PREAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -472,7 +501,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
@@ -505,7 +534,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
@@ -538,7 +567,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
@@ -571,7 +600,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             PREStockChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
@@ -605,7 +634,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
@@ -638,7 +667,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.DarkGray;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
@@ -671,7 +700,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.DarkGray;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
@@ -704,7 +733,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.DarkGray;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
@@ -770,7 +799,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
@@ -803,7 +832,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
@@ -812,6 +841,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
         private void SLOWCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+
             OTCAll.Background = Brushes.Transparent;
             OTCChange.Background = Brushes.Transparent;
             OTCCost.Background = Brushes.Transparent;
@@ -836,7 +866,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
@@ -869,7 +899,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+             COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.Transparent;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
@@ -885,7 +915,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             OTCRewardEmp.Background = Brushes.Transparent;
             OTCStockChange.Background = Brushes.Transparent;
             OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
+            OTCTicketDis.Background = Brushes.Transparent; 
             PREAll.Background = Brushes.Transparent;
             PREIncome.Background = Brushes.Transparent;
             PRECost.Background = Brushes.Transparent;
@@ -902,7 +932,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
+               COOPChange.Background = Brushes.Transparent;
             NORMALAll.Background = Brushes.DarkGray;
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;

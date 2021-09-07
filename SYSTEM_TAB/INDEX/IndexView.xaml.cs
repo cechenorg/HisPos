@@ -16,6 +16,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
 
         private void TextBox_TextChanged()
         {
+
         }
     }
 }

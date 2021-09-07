@@ -28,7 +28,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
         private bool invoiceCheck;
         public int invoiceComPick;
         private int invoiceNumberNowCount;
-
         public bool IsDataChanged
         {
             get { return isDataChanged; }
@@ -51,7 +50,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             get => invoiceNumber;
             set { Set(() => InvoiceNumber, ref invoiceNumber, value); }
         }
-
         public string InvoiceNumberStart
         {
             get => invoiceNumberStart;
@@ -63,13 +61,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             get => invoiceNumberEng;
             set { Set(() => InvoiceNumberEng, ref invoiceNumberEng, value); }
         }
-
         public string InvoiceNumberCount
         {
             get => invoiceNumberCount;
             set { Set(() => InvoiceNumberCount, ref invoiceNumberCount, value); }
         }
-
         public bool InvoiceCheck
         {
             get => invoiceCheck;
@@ -81,7 +77,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             get => invoiceComPick;
             set { Set(() => InvoiceComPick, ref invoiceComPick, value); }
         }
-
         public int InvoiceNumberNowCount
         {
             get => invoiceNumberNowCount;
@@ -108,21 +103,19 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
         }
 
         #region ----- Define Actions -----
-
         public bool Is_Number(string str)
         {
             System.Text.RegularExpressions.Regex reg1 = new System.Text.RegularExpressions.Regex(@"^[0-9]+$");
             return reg1.IsMatch(str);
         }
-
         public bool IsNatural_Number(string str)
         {
             System.Text.RegularExpressions.Regex reg1 = new System.Text.RegularExpressions.Regex(@"^[A-Za-z0-9]+$");
             return reg1.IsMatch(str);
         }
-
         private void ConfirmChangeAction()
         {
+
             string eng;
             int num;
             string invnum;
@@ -130,6 +123,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             string Seng;
             int Snum;
             int Count;
+
+
 
             if (Properties.Settings.Default.InvoiceNumber == "" || Properties.Settings.Default.InvoiceNumberStart == "") { }
             else
@@ -140,7 +135,9 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
 
                 Count = Int32.Parse(Properties.Settings.Default.InvoiceNumberCount);
                 InvoiceNumberNowCount = (num - Snum);
+                
             }
+
 
             string ic;
             if (!InvoiceCheck)
@@ -168,12 +165,13 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 return;
             }
 
+
             if (InvoiceNumber.Length != 8)
             {
                 MessageWindow.ShowMessage("發票號碼為八位數字！", MessageType.ERROR);
                 return;
             }
-            if (InvoiceNumberStart.Length != 8)
+            if (InvoiceNumberStart.Length !=8)
             {
                 MessageWindow.ShowMessage("起始發票號碼為八位數字！", MessageType.ERROR);
                 return;
@@ -184,18 +182,20 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
                 return;
             }
 
-            if (String.IsNullOrEmpty(InvoiceNumberCount))
-            {
+          
+
+            if (String.IsNullOrEmpty(InvoiceNumberCount)) {
                 MessageWindow.ShowMessage("請輸入發票張數", MessageType.ERROR);
                 return;
             }
+
 
             if (Int32.Parse(InvoiceNumberStart) > Int32.Parse(InvoiceNumber))
             {
                 MessageWindow.ShowMessage("當前發票號碼小於起始！", MessageType.ERROR);
                 return;
             }
-            if (Int32.Parse(InvoiceNumberStart) + Int32.Parse(InvoiceNumberCount) - 1 < Int32.Parse(InvoiceNumber))
+            if (Int32.Parse(InvoiceNumberStart)+Int32.Parse(InvoiceNumberCount)-1<Int32.Parse(InvoiceNumber))
             {
                 MessageWindow.ShowMessage("當前發票號碼大於總張數！", MessageType.ERROR);
                 return;
@@ -255,13 +255,15 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl
             Count = Int32.Parse(Properties.Settings.Default.InvoiceNumberCount);
             if ((Count - (num - Snum)) < 20)
             {
-                MessageWindow.ShowMessage("發票即將耗盡！剩餘：" + (Count - (num - Snum) - 1).ToString() + "張", MessageType.ERROR);
+                MessageWindow.ShowMessage("發票即將耗盡！剩餘："+(Count-(num - Snum)-1).ToString()+"張", MessageType.ERROR);
             }
+
+
 
             num = num + 1;
             invnum = eng + num.ToString();
 
-            Properties.Settings.Default.InvoiceNumber = num.ToString().PadLeft(8, '0');
+            Properties.Settings.Default.InvoiceNumber = num.ToString().PadLeft(8,'0');
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";

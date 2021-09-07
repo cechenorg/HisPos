@@ -53,9 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             get { return selectedWareHouse; }
             set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
         }
-
         private string selectedType;
-
         public string SelectedType
         {
             get { return selectedType; }
@@ -101,7 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             if (!CheckInputValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID, int.Parse(SelectedWareHouse.ID), SelectedType);
+            NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID, int.Parse(SelectedWareHouse.ID),SelectedType);
             MainWindow.ServerConnection.CloseConnection();
 
             Messenger.Default.Send(new NotificationMessage("CloseAddNewOrderWindow"));

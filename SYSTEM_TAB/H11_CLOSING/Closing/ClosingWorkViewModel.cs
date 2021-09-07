@@ -46,7 +46,6 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => TradeTodayStock, ref tradeTodayStock, value);
             }
         }
-
         private int tradeTodayProfit;
 
         public int TradeTodayProfit
@@ -202,7 +201,6 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 Set(() => CheckTotal, ref checkTotal, value);
             }
         }
-
         private int closed;
 
         public int Closed
@@ -313,7 +311,6 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
         public RelayCommand ConfirmCommand { get; set; }
         public RelayCommand HistoryCommand { get; set; }
         public RelayCommand UpdateCommand { get; set; }
-
         #endregion ----- Define Commands -----
 
         public ClosingWorkViewModel()
@@ -359,7 +356,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             TradeReward = (int)result.Rows[0]["tradeReward"];
             Extra = (int)result.Rows[0]["Extra"];
             TradeTodayProfit = (int)result.Rows[0]["tradeTodayProfit"];
-            TradeTodayStock = (int)result.Rows[0]["tradeTodayStock"];
+            TradeTodayStock= (int)result.Rows[0]["tradeTodayStock"];
             Closed = (int)result.Rows[0]["Closed"];
             PreCash = (int)result.Rows[0]["PreCash"];
             PreCard = (int)result.Rows[0]["PreCard"];
@@ -367,7 +364,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             ReturnPreCard = (int)result.Rows[0]["ReturnPreCard"];
 
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
-            CloseCash_Total = (int)result.Rows[0]["CloseCash_Total"];
+            CloseCash_Total= (int)result.Rows[0]["CloseCash_Total"];
             CheckColor = Brushes.Green;
             Enable = false;
             if (CheckClosed == null || CheckClosed == "")
@@ -381,7 +378,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             {
                 CheckTotal = 0;
             }
-            else
+            else 
             {
                 CheckTotal = CloseCash_Total;
             }
@@ -434,7 +431,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             DailyClosingAccount data = new DailyClosingAccount()
             {
                 ClosingDate = StartDate,
-
+                
                 PharmacyName = ViewModelMainWindow.CurrentPharmacy.Name,
                 OTCSaleProfit = Trade - TradeTodayStock,
                 DailyAdjustAmount = Count,
@@ -442,15 +439,15 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 PrescribeProfit = Self,
                 ChronicAndOtherProfit = Other
             };
-            data.SelfProfit = data.OTCSaleProfit + data.ChronicAndOtherProfit + data.PrescribeProfit;
+            data.SelfProfit = data.OTCSaleProfit  + data.ChronicAndOtherProfit + data.PrescribeProfit;
             data.TotalProfit = data.SelfProfit + data.CooperativeClinicProfit; ;
 
-            if (data.OTCSaleProfit == 0 && data.ChronicAndOtherProfit == 0 && data.PrescribeProfit == 0 && data.CooperativeClinicProfit == 0)
+            if ( data.OTCSaleProfit == 0 && data.ChronicAndOtherProfit == 0 && data.PrescribeProfit == 0 && data.CooperativeClinicProfit==0)
                 return;
 
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
-            repo.InsertDailyClosingAccountRecord(data);
+            repo.InsertDailyClosingAccountRecord(data); 
             MainWindow.ServerConnection.CloseConnection();
         }
     }

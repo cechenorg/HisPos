@@ -81,8 +81,10 @@
                 Width="200"
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
+           
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
+               
                 ItemsSource="{Binding TypeCollection}"
                 SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>

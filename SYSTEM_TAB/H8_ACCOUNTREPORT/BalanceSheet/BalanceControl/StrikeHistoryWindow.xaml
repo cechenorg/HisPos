@@ -5,8 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:service="clr-namespace:His_Pos.Service"
     Title="歷史資料"
     Width="1300"
     Height="450"
@@ -17,7 +17,9 @@
             <RowDefinition Height="70" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <StackPanel
+            Grid.Row="0"
+            Orientation="Horizontal">
             <!--<Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -30,7 +32,7 @@
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
                 FontSize="22"
-                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"            
                 ItemsSource="{Binding CheckLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 DisplayMemberPath="Namepath"
                 SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
@@ -40,28 +42,26 @@
                 Content="日期"
                 FontFamily="Segoe UI Semibold"
                 FontSize="22" />
-            <DatePicker
-                x:Name="dpSDate"
-                Margin="5,0,0,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
+            <DatePicker 
+                x:Name="dpSDate"  
+                HorizontalAlignment="Stretch" 
+                Margin="5,0,0,0" 
                 FontSize="22"
-                SelectedDate="{Binding StartDate, Mode=TwoWay}"
-                SelectedDateFormat="Short" />
+                VerticalAlignment="Center" SelectedDateFormat="Short"
+                SelectedDate="{Binding StartDate, Mode=TwoWay}"/>
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="~"
                 FontFamily="Segoe UI Semibold"
                 FontSize="22" />
-            <DatePicker
+            <DatePicker 
                 x:Name="dpEDate"
+                HorizontalAlignment="Stretch" 
                 Margin="5,0,0,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                FontSize="22"
-                SelectedDate="{Binding EndDate, Mode=TwoWay}"
-                SelectedDateFormat="Short" />
+                FontSize="22"              
+                VerticalAlignment="Center" SelectedDateFormat="Short"
+                SelectedDate="{Binding EndDate, Mode=TwoWay}"/>
             <Button
                 Width="130"
                 Margin="10,0,0,0"

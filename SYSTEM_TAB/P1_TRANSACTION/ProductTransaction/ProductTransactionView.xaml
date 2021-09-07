@@ -11,8 +11,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    PreviewKeyDown="UserControl_PreviewKeyDown"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    PreviewKeyDown="UserControl_PreviewKeyDown">
     <UserControl.Resources>
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
         <service:SentinelConverter x:Key="SentinelConverter" />
@@ -35,14 +35,14 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Label}">
                         <TextBlock>
-                            <ContentPresenter />
+                <ContentPresenter />
                         </TextBlock>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Resources>
                 <Style TargetType="TextBlock">
-                    <Setter Property="TextDecorations" Value="Underline" />
+                    <Setter Property="TextDecorations" Value="Underline"/>
                 </Style>
             </Style.Resources>
         </Style>
@@ -137,13 +137,14 @@
                             x:Name="lbName"
                             Width="80"
                             VerticalAlignment="Center"
-                            HorizontalContentAlignment="Left"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
-                            FontSize="17"
+                            FontSize="17" 
                             PreviewMouseDoubleClick="lbName_PreviewMouseDoubleClick"
-                            Style="{StaticResource ActionLabelStyle}" />
+                            Style="{StaticResource ActionLabelStyle}">                            
+                        </Label>
 
                         <Label
                             VerticalContentAlignment="Center"
@@ -153,8 +154,8 @@
                         <Label
                             x:Name="lbGender"
                             Width="30"
-                            HorizontalContentAlignment="Left"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -162,28 +163,28 @@
                             VerticalContentAlignment="Center"
                             Content="生日："
                             FontFamily="Segoe UI Semibold"
-                            FontSize="17" />
+                            FontSize="17"/>
                         <Label
                             x:Name="lbBirthDay"
                             Width="90"
-                            HorizontalContentAlignment="Left"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
-                            FontSize="17" />
+                            FontSize="17"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
                         <Label
-                            Width="65"
                             VerticalContentAlignment="Center"
                             Content="手機1："
+                            Width="65"
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
                         <Label
                             x:Name="lbCellphone"
                             Width="120"
-                            HorizontalContentAlignment="Left"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -195,24 +196,24 @@
                         <Label
                             x:Name="lbSecondphone"
                             Width="120"
-                            HorizontalContentAlignment="Left"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
                     </StackPanel>
                     <StackPanel Grid.Row="2" Orientation="Horizontal">
                         <Label
-                            Width="65"
                             VerticalContentAlignment="Center"
                             Content="家電："
+                            Width="65"
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
                         <Label
                             x:Name="lbTelephone"
                             Width="120"
-                            HorizontalContentAlignment="Left"
                             VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Left"
                             Content=""
                             FontFamily="Segoe UI Semibold"
                             FontSize="17" />
@@ -226,8 +227,8 @@
                         <TextBlock
                             x:Name="tbAddress"
                             Width="280"
-                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
                             FontFamily="Segoe UI Semibold"
                             FontSize="17"
                             Text=""
@@ -242,8 +243,8 @@
                         <TextBlock
                             x:Name="tbCusNote"
                             Width="280"
-                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
                             FontFamily="Segoe UI Semibold"
                             FontSize="17"
                             Text=""
@@ -295,7 +296,7 @@
                         Content="寄庫管理"
                         FontFamily="Segoe UI Semibold"
                         FontSize="17"
-                        IsEnabled="False" />
+                        IsEnabled="False"/>
                 </StackPanel>
                 <Rectangle Grid.Row="3" Fill="{StaticResource GridDarkerBackGround}" />
                 <DataGrid
@@ -650,9 +651,9 @@
                         Content="預付訂金"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
-                        IsEnabled="False"
-                        Visibility="Visible" />
-
+                        Visibility="Visible"
+                        IsEnabled="False" />
+                    
                     <!--<Label
                         Margin="15,0,0,0"
                         VerticalAlignment="Center"
@@ -670,7 +671,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="20"
                         Foreground="Black" />-->
-
+                    
                     <Label
                         Margin="135,0,0,0"
                         VerticalAlignment="Center"
@@ -678,8 +679,8 @@
                         Content="發票號碼"
                         FontFamily="Segoe UI Semibold"
                         FontSize="20"
-                        Foreground="Black"
-                        Visibility="Hidden" />
+                        Foreground="Black" 
+                        Visibility="Hidden"/>
                     <Label
                         x:Name="tbInvoiceNum"
                         Width="150"
@@ -687,8 +688,8 @@
                         HorizontalContentAlignment="Center"
                         FontFamily="Segoe UI Semi"
                         FontSize="20"
-                        Foreground="Black"
-                        Visibility="Hidden" />
+                        Foreground="Black" 
+                         Visibility="Hidden"/>
                     <Label
                         Margin="55,0,0,0"
                         VerticalAlignment="Center"
@@ -865,11 +866,11 @@
                                     HorizontalContentAlignment="Center"
                                     FontFamily="Segoe UI Semi"
                                     FontSize="18"
-                                    IsEnabled="{Binding Path=Pro_TypeID}"
                                     LostFocus="Price_LostFocus"
                                     PreviewKeyDown="Price_PreviewKeyDown"
                                     Text="{Binding Path=CurrentPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    TextChanged="Price_TextChanged">
+                                    TextChanged="Price_TextChanged"
+                                    IsEnabled="{Binding Path=Pro_TypeID}">
                                     <TextBox.InputScope>
                                         <InputScope>
                                             <InputScope.Names>

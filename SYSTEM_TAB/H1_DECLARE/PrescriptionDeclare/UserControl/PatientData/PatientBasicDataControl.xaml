@@ -93,7 +93,7 @@
             Grid.Column="0"
             Margin="0,5,0,5"
             Orientation="Horizontal">
-
+            
             <Image
                 Width="20"
                 Height="25"
