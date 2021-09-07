@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public  class PurchaseOrder : StoreOrder
+    public class PurchaseOrder : StoreOrder
     {
         #region ----- Define Variables -----
 
@@ -111,11 +111,13 @@ namespace His_Pos.NewClass.StoreOrder
                 MessageWindow.ShowMessage($"此訂單包含藥品與OTC商品\n請分開建立採購單！", MessageType.ERROR);
                 return false;
             }
-            if (OrderTypeIsOTC == "OTC") {
-                if (flagNotOTC == 1) {
+            if (OrderTypeIsOTC == "OTC")
+            {
+                if (flagNotOTC == 1)
+                {
                     MessageWindow.ShowMessage($"此訂單為OTC單不可包含藥品\n請分開建立採購單！", MessageType.ERROR);
                     return false;
-                } 
+                }
             }
             if (OrderTypeIsOTC == "藥品")
             {
@@ -149,11 +151,11 @@ namespace His_Pos.NewClass.StoreOrder
                     hasControlMed = true;
                 }
 
-                if (OrderProducts.Where(s => s.ID == product.ID).Count()>1 && product.RealAmount != 0 && (product.BatchNumber=="" ||product.BatchNumber==null)) 
-                {                    
-                     hasNoBatch = true;
+                if (OrderProducts.Where(s => s.ID == product.ID).Count() > 1 && product.RealAmount != 0 && (product.BatchNumber == "" || product.BatchNumber == null))
+                {
+                    hasNoBatch = true;
                 }
-                
+
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null) && product.RealAmount > 0)
                 {
                     MessageWindow.ShowMessage("管藥批號不得為空!", MessageType.ERROR);
@@ -161,7 +163,8 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            if (hasNoBatch == true) {
+            if (hasNoBatch == true)
+            {
                 MessageWindow.ShowMessage("拆批不可沒有批號!", MessageType.ERROR);
                 return false;
             }
@@ -192,7 +195,6 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-
             if (isLowerThenOrderAmount)
             {
                 ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
@@ -200,7 +202,7 @@ namespace His_Pos.NewClass.StoreOrder
                 if ((bool)confirmWindow.DialogResult)
                 {
                     bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
-                   
+
                     if (!isSuccess) return false;
                 }
             }
@@ -221,7 +223,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void CalculateTotalPrice()
         {
-            TotalPrice = OrderProducts.Sum(p => p.SubTotal);
+            TotalPrice = OrderProducts.Sum(p => Math.Round(p.SubTotal));
         }
 
         public override void SetProductToProcessingStatus()
@@ -240,13 +242,13 @@ namespace His_Pos.NewClass.StoreOrder
         public override void GetOrderProducts()
         {
             OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
-            TotalPrice = OrderProducts.Sum(p => p.SubTotal);
+            TotalPrice = OrderProducts.Sum(p => Math.Round(p.SubTotal));
 
             if (OrderManufactory.ID.Equals("0"))
-               // OrderProducts.SetToSingde();
+                // OrderProducts.SetToSingde();
 
-            if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.DONE)
-                OrderProducts.SetToProcessing();
+                if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.DONE)
+                    OrderProducts.SetToProcessing();
 
             OrderProducts.SetStartEditToPrice();
 
@@ -413,7 +415,7 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
 
-                Properties.Settings.Default.MinusID =(StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0]);
+                Properties.Settings.Default.MinusID = (StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0]);
                 NormalViewModel nn = new NormalViewModel();
                 nn.storeOrderCollection = StoreOrders.GetOrdersNotDone();
                 nn.AddOrderByMinus();
@@ -426,7 +428,7 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
         }
-     
+
         public static bool InsertPrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
         {
             string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");
