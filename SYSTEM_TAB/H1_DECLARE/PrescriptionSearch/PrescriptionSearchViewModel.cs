@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -580,7 +579,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     var adjDate = DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(s.AdjustDate);
                     var treatDate = s.TreatDate is null ? "" : ((DateTime)s.TreatDate).AddYears(-1911).ToString("yyy/MM/dd");
                     //Debug.Assert(s.Patient.Birthday != null, "s.Patient.Birthday != null");
-                    if (s.Patient.Birthday == null) {
+                    if (s.Patient.Birthday == null)
+                    {
                         s.Patient.Birthday = DateTime.Now.AddYears(100);
                     }
 

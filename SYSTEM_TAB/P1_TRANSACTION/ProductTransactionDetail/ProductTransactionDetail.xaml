@@ -12,8 +12,8 @@
     Height="680"
     FontFamily="Segoe UI Semibold"
     Loaded="Window_Loaded"
-    WindowStartupLocation="CenterScreen"
     ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
         <Style x:Key="ActionLabelStyle" TargetType="{x:Type Label}">
@@ -23,14 +23,14 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Label}">
                         <TextBlock>
-                <ContentPresenter />
+                            <ContentPresenter />
                         </TextBlock>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Resources>
                 <Style TargetType="TextBlock">
-                    <Setter Property="TextDecorations" Value="Underline"/>
+                    <Setter Property="TextDecorations" Value="Underline" />
                 </Style>
             </Style.Resources>
         </Style>
@@ -40,8 +40,8 @@
     </Window.Background>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="229*"/>
-            <ColumnDefinition Width="62*"/>
+            <ColumnDefinition Width="229*" />
+            <ColumnDefinition Width="62*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="180" />
@@ -49,11 +49,14 @@
             <RowDefinition Height="45" />
             <RowDefinition Height="45" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="0,0,-0.4,10" Grid.ColumnSpan="2">
+        <Grid
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Margin="0,0,-0.4,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="422*"/>
-                <ColumnDefinition Width="273*"/>
-                <ColumnDefinition Width="179*"/>
+                <ColumnDefinition Width="422*" />
+                <ColumnDefinition Width="273*" />
+                <ColumnDefinition Width="179*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -63,8 +66,10 @@
             </Grid.RowDefinitions>
             <StackPanel
                 Grid.Row="0"
+                Grid.ColumnSpan="3"
+                Margin="0,0,-0.4,0.4"
                 Background="{StaticResource GridDarkerBackGround}"
-                Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,-0.4,0.4">
+                Orientation="Horizontal">
                 <Label
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
@@ -145,8 +150,11 @@
                     FontSize="16" />
             </StackPanel>
             <StackPanel
+                Grid.RowSpan="3"
+                Grid.ColumnSpan="3"
+                Margin="0,42,-0.4,42"
                 Background="{StaticResource GridBackGround}"
-                Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,42,-0.4,42" Grid.RowSpan="3">
+                Orientation="Horizontal">
                 <Label
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
@@ -243,8 +251,10 @@
             </StackPanel>
             <StackPanel
                 Grid.Row="2"
+                Grid.ColumnSpan="3"
+                Margin="0,0.4,-0.4,0"
                 Background="{StaticResource GridBackGround}"
-                Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0.4,-0.4,0">
+                Orientation="Horizontal">
                 <Label
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
@@ -328,7 +338,7 @@
                     FontSize="16"
                     Foreground="Black"
                     MouseDoubleClick="lbCusName_MouseDoubleClick"
-                    Style="{StaticResource ActionLabelStyle}"/>-->
+                    Style="{StaticResource ActionLabelStyle}" />-->
                 <TextBox
                     x:Name="tbCusName"
                     Width="120"
@@ -337,8 +347,8 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
                     Foreground="Black"
-                    TextChanged="tb_TextChanged"
-                    KeyDown="tbCusName_KeyDown">
+                    KeyDown="tbCusName_KeyDown"
+                    TextChanged="tb_TextChanged">
                     <TextBox.InputScope>
                         <InputScope>
                             <InputScope.Names>
@@ -348,13 +358,13 @@
                     </TextBox.InputScope>
                 </TextBox>
                 <Label
-                    Margin="0,0,0,0"
                     Width="95"
+                    Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
+                    Content="顧客電話:"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
-                     Content="顧客電話:"
                     Foreground="Black" />
                 <Label
                     x:Name="tbPhone"
@@ -367,8 +377,10 @@
             </StackPanel>
             <StackPanel
                 Grid.Row="3"
+                Grid.ColumnSpan="3"
+                Margin="0,0,-0.4,0.4"
                 Background="{StaticResource GridDarkerBackGround}"
-                Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,-0.4,0.4">
+                Orientation="Horizontal">
                 <Label
                     Margin="10,0,0,0"
                     VerticalAlignment="Center"
@@ -433,6 +445,9 @@
         <DataGrid
             Name="ProductDataGrid"
             Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            Margin="0,0,-0.4,44.6"
             AutoGenerateColumns="False"
             Background="{StaticResource GridBackGround}"
             CanUserAddRows="False"
@@ -442,7 +457,7 @@
             EnableRowVirtualization="False"
             GridLinesVisibility="Horizontal"
             MouseDoubleClick="ProductDataGrid_MouseDoubleClick"
-            SelectionUnit="Cell" Grid.ColumnSpan="2" Margin="0,0,-0.4,44.6" Grid.RowSpan="2">
+            SelectionUnit="Cell">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -626,9 +641,11 @@
         </DataGrid>
         <StackPanel
             Grid.Row="2"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
             Margin="0,10.2,-0.4,44.4"
             Background="{StaticResource GridDarkerBackGround}"
-            Orientation="Horizontal" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            Orientation="Horizontal">
             <Label
                 Width="95"
                 Margin="10,0,0,0"
@@ -660,9 +677,10 @@
         </StackPanel>
         <StackPanel
             Grid.Row="3"
+            Grid.ColumnSpan="2"
             Margin="0,10.4,-0.4,0.4"
             Background="{StaticResource GridDarkerBackGround}"
-            Orientation="Horizontal" Grid.ColumnSpan="2">
+            Orientation="Horizontal">
             <Label
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left"

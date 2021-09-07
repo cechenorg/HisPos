@@ -5,9 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
     xmlns:purchaseDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl"
+    xmlns:service="clr-namespace:His_Pos.Service"
     DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -55,9 +55,8 @@
             <RowDefinition Height="70" />
             <RowDefinition Height="50" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="700"/>
+            <RowDefinition Height="700" />
             <RowDefinition Height="40" />
-            
         </Grid.RowDefinitions>
         <StackPanel
             Grid.Row="0"
@@ -193,26 +192,25 @@
                 FontSize="18"
                 Text="{Binding Note}" />
             <StackPanel
-            Grid.Row="2"
-            Background="Transparent"
-            Orientation="Horizontal">
+                Grid.Row="2"
+                Background="Transparent"
+                Orientation="Horizontal">
                 <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="預定客戶"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Foreground="Black" />
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="預定客戶"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black" />
                 <Label
-                Width="213"
-                Margin="10,3,0,3"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Center"
-                Content="{Binding TargetPreOrderCustomer}"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="Black" />
-
+                    Width="213"
+                    Margin="10,3,0,3"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Content="{Binding TargetPreOrderCustomer}"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="18"
+                    Foreground="Black" />
             </StackPanel>
         </StackPanel>
         <ContentControl Grid.Row="3">
@@ -238,8 +236,6 @@
                     </Style.Triggers>
                 </Style>
             </ContentControl.Style>
-
         </ContentControl>
-
     </Grid>
 </UserControl>

@@ -445,10 +445,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                             case false:
                                 if (VM.CurrentPharmacy.ID == "5931017216")
                                 {
-
                                     EditedPrescription.PrintMedBagSingleModeByCE();
-
-
                                 }
                                 else
                                 {
@@ -457,36 +454,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                                 break;
 
                             case true:
-                                 if (VM.CurrentPharmacy.ID == "5931017216")
+                                if (VM.CurrentPharmacy.ID == "5931017216")
                                 {
-
                                     EditedPrescription.PrintMedBagSingleModeByCE();
-
-
                                 }
-                                else {
+                                else
+                                {
                                     PrintEditedPrescription.PrintMedBagSingleMode();
-                                } break;
+                                }
+                                break;
                         }
-                          
                     }
                 }
-              
                 else
                 {
                     if ((bool)printMedBag)
                     {
-
                         BusyContent = Resources.藥袋列印;
                         switch (printSingle != null && (bool)printSingle)
                         {
                             case false:
                                 if (VM.CurrentPharmacy.ID == "5931017216")
                                 {
-
                                     EditedPrescription.PrintMedBagSingleModeByCE();
-
-
                                 }
                                 else
                                 {
@@ -497,10 +487,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                             case true:
                                 if (VM.CurrentPharmacy.ID == "5931017216")
                                 {
-
                                     EditedPrescription.PrintMedBagSingleModeByCE();
-
-
                                 }
                                 else
                                 {

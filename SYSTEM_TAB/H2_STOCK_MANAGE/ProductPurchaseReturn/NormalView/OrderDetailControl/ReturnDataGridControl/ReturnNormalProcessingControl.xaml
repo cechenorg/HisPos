@@ -179,13 +179,12 @@
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
-                    Width="80"
                     x:Name="PreReturn"
+                    Width="80"
                     Binding="{Binding ReturnAmount}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="退貨量"
-                    
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -202,9 +201,9 @@
                                 Width="60"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
+                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                                 FontFamily="Segoe UI Semi"
-                                FontSize="18"
-                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+                                FontSize="18" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -240,7 +239,6 @@
                                 InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
-                                
                                 Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
@@ -352,8 +350,8 @@
                 Command="{Binding ReturnOrderRePurchaseCommand}"
                 Content="未退量補回"
                 FontFamily="Segoe UI Semibold"
-                FontSize="16" 
-                Visibility="Hidden"/>
+                FontSize="16"
+                Visibility="Hidden" />
             <Button
                 Width="150"
                 Margin="10,0,0,0"
@@ -362,8 +360,8 @@
                 Command="{Binding ToNextStatusCommand}"
                 Content="完成退貨"
                 FontFamily="Segoe UI Semibold"
-                FontSize="16" 
-                PreviewMouseDown="Button_PreviewMouseDown"/>
+                FontSize="16"
+                PreviewMouseDown="Button_PreviewMouseDown" />
         </StackPanel>
     </Grid>
 </UserControl>

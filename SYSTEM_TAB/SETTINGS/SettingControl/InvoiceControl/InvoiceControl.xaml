@@ -178,7 +178,6 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label
@@ -230,9 +229,7 @@
                 </i:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <StackPanel Grid.Row="5" Orientation="Horizontal">
-            
-        </StackPanel>
+        <StackPanel Grid.Row="5" Orientation="Horizontal" />
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Label
                 Margin="20,0,0,0"

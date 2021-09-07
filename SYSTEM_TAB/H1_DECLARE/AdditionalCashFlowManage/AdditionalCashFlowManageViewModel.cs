@@ -184,14 +184,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         public RelayCommand Search { get; set; }
         public RelayCommand EditCashFlowRecord { get; set; }
         public RelayCommand DeleteCashFlowRecord { get; set; }
-        
 
         public RelayCommand ToExcel { get; set; }
 
         #endregion Commands
-
-
-
 
         public AdditionalCashFlowManageViewModel()
         {
@@ -245,7 +241,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[ExtraMoneyByDateExcel]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
-
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "額外收支存檔";
             fdlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -273,8 +268,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }
-            
-        }
+            }
         }
 
         private void SubmitAction()

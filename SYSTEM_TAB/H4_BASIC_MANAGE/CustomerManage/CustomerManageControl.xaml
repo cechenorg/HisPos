@@ -54,10 +54,10 @@
             Grid.ColumnSpan="6"
             Orientation="Horizontal">
             <TextBox
+                Width="300"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.Hint="姓名"
-                Width="300"
                 BorderThickness="0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="40"
@@ -89,14 +89,14 @@
                 </i:Interaction.Triggers>
             </CheckBox>-->
             <CheckBox
-                Visibility="Hidden"
                 Margin="500,0,0,0"
                 VerticalAlignment="Center"
                 Content="員工身分"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}"
-                IsChecked="{Binding IsEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                IsChecked="{Binding IsEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="Hidden">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" CommandParameter="{Binding}" />
@@ -115,12 +115,12 @@
                 Content="刪除"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16"
-                IsEnabled="True"/>
+                IsEnabled="True" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
-            Grid.ColumnSpan="6"
             Grid.Column="0"
+            Grid.ColumnSpan="6"
             Margin="8"
             Orientation="Horizontal">
             <Label
@@ -146,8 +146,8 @@
                 </i:Interaction.Triggers>
             </ComboBox>
             <Label
-                Content="生日"
                 Margin="10,0,0,0"
+                Content="生日"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <xctk:MaskedTextBox
@@ -183,9 +183,9 @@
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
             <Label
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="身分證"
-                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
 
@@ -201,11 +201,11 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            
+
             <Label
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="家電"
-                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
@@ -221,9 +221,9 @@
                 </i:Interaction.Triggers>
             </TextBox>
             <Label
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="手機1"
-                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
@@ -239,9 +239,9 @@
                 </i:Interaction.Triggers>
             </TextBox>
             <Label
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="手機2"
-                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
@@ -281,9 +281,9 @@
                 </i:Interaction.Triggers>
             </TextBox>
             <Label
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="電子信箱"
-                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
@@ -299,9 +299,9 @@
                 </i:Interaction.Triggers>
             </TextBox>
             <Label
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="住址"
-                Margin="10,0,0,0"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBox
@@ -405,7 +405,10 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
-        <Grid Grid.Row="5" Grid.ColumnSpan="6" Margin="0,0,0,0.333">
+        <Grid
+            Grid.Row="5"
+            Grid.ColumnSpan="6"
+            Margin="0,0,0,0.333">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="570" />
                 <ColumnDefinition />

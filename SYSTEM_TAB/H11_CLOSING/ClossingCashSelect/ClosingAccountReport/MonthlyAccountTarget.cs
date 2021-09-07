@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 {
-    public class MonthlyAccountTarget:ObservableObject
+    public class MonthlyAccountTarget : ObservableObject
     {
-        public MonthlyAccountTarget() { }
-        public MonthlyAccountTarget(DataRow r )
+        public MonthlyAccountTarget()
+        {
+        }
+
+        public MonthlyAccountTarget(DataRow r)
         {
             VerifyKey = r.Field<string>("Pharmacy_VerifyKey");
             Month = r.Field<DateTime>("TargetMonth");
-            MonthlyTarget = r.Field<int>("TargetValue"); 
+            MonthlyTarget = r.Field<int>("TargetValue");
         }
 
         public string VerifyKey { get; set; }

@@ -148,7 +148,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             lbPrepay.Content = masterRow["TraMas_Prepay"].ToString();
             lblTradeTime.Content = masterRow["TransTime_Format"];
             tbNote.Text = masterRow["TraMas_Note"].ToString();
-            tbPhone.Content= masterRow["Cus_Phone"].ToString();
+            tbPhone.Content = masterRow["Cus_Phone"].ToString();
 
             /* string ogTransTime = masterRow["TraMas_UpdateTime"].ToString();
              DateTime dTime = DateTime.Parse(ogTransTime);
@@ -164,7 +164,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             }
 
             int.TryParse(lbDiscountAmt.Content.ToString(), out int dis);
-            if (dis > 0) 
+            if (dis > 0)
             {
                 lbDiscountAmt.Foreground = Brushes.Red;
             }
@@ -187,7 +187,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
                     Close();
                 }
-                else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN")) 
+                else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN"))
                 {
                     MessageWindow.ShowMessage("訂金餘額不足！", MessageType.ERROR);
                 }

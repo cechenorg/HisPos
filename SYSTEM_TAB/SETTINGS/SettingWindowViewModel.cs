@@ -31,8 +31,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
             Version = "系統版本  " + Assembly.GetExecutingAssembly().GetName().Version;
         }
 
-
-
         #region ----- Define Functions -----
 
         private void InitSettingCollections()

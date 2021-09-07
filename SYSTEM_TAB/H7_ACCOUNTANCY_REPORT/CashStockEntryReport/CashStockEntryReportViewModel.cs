@@ -1315,7 +1315,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             }
         }
 
-        private CashDetailReports cashDetailReportCollection =new CashDetailReports();
+        private CashDetailReports cashDetailReportCollection = new CashDetailReports();
 
         public CashDetailReports CashDetailReportCollection
         {
@@ -1525,14 +1525,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[RewardDetailRecordByDateExcel]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
-
-
             Process myProcess = new Process();
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "績效明細";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName = StartDate.ToString("yyyyMMdd") + "-"+ EndDate.ToString("yyyyMMdd") + "績效明細";
+            fdlg.FileName = StartDate.ToString("yyyyMMdd") + "-" + EndDate.ToString("yyyyMMdd") + "績效明細";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -1583,9 +1581,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             {
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
-
-
-
         }
 
         //add 20210819 shani 下載當月發票DownloadMonTradeReportAction
@@ -1599,14 +1594,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeProfitDetailEmpRecordByDate]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
-
-
             Process myProcess = new Process();
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "當月發票";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName = StartDate.ToString("yyyyMM") + "-"+ "當月發票";
+            fdlg.FileName = StartDate.ToString("yyyyMM") + "-" + "當月發票";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -1628,7 +1621,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 var col5 = ws.Column("E");
                 col4.Width = 15;
 
-
                 ws.Cell(1, 1).Value = "發票明細";
                 ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "時間";
@@ -1643,7 +1635,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                     rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                     rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 }
-
 
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters2 = new List<SqlParameter>();
@@ -1663,8 +1654,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 col4 = ws.Column("D");
                 col3.Width = 15;
 
-
-
                 ws.Cell(1, 1).Value = "發票明細";
                 ws.Range(1, 1, 1, 4).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "日期";
@@ -1678,11 +1667,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                     rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                     rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 }
-
-
-
-
-
 
                 ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
                 ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
@@ -1701,12 +1685,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }
-
-
             }
-
-
-
         }
 
         private void CashDetailMouseDoubleClickAction()
@@ -2723,27 +2702,21 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 CalculateCooperativeChangePrescriptionProfit();
                 CalculateTotal();
 
-
                 if (CashStockEntryReportEnum == CashStockEntryReportEnum.Cash && CashCoopVis == Visibility.Collapsed)
                 {
                     CashCoopSelectionChangedAction();
-
                 }
                 else if (CashStockEntryReportEnum == CashStockEntryReportEnum.Cash && CashCoopVis != Visibility.Collapsed)
                 {
-               
                     CashNotCoopSelectionChangedAction();
                     CashSelectionChangedAction();
                 }
-
                 else if (CashStockEntryReportEnum == CashStockEntryReportEnum.Prescription && CoopVis == Visibility.Visible)
                 {
                     CooperativePrescriptionChangeSelectionChangedAction();
-  
-                }   
+                }
                 else if (CashStockEntryReportEnum == CashStockEntryReportEnum.Prescription && CoopVis != Visibility.Visible)
                 {
-                   
                     CooperativePrescriptionSelectionChangedAction();
                     SelfPrescriptionSelectionChangedAction();
                 }
@@ -2759,7 +2732,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 {
                     TradeChangeReportSelectionChangedAction();
                 }
-                
                 else if (CashStockEntryReportEnum == CashStockEntryReportEnum.ExtraMoney)
                 {
                     ExtraMoneyReportSelectionChangedAction();
@@ -2772,18 +2744,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 {
                     RewardReportSelectionChangedAction();
                 }
-
-
-
-              
-           
-               
-               
-               
-             
-               
-             
-                
 
                 IsBusy = false;
             };
@@ -3160,19 +3120,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
 
             TotalCashFlow.TotalOTCChange = TotalTradeProfitReport.TotalDeleteAmt + TotalTradeProfitReport.TotalChangeAmt;
 
-
             TotalCashFlow.TotalOTCCash = TotalTradeProfitReport.CashAmount + TotalTradeProfitReport.TotalCashTotalAmt;
             TotalCashFlow.TotalOTCCard = TotalTradeProfitReport.CardAmount + TotalTradeProfitReport.TotalCardTotalAmt;
             TotalCashFlow.TotalOTCTicket = TotalTradeProfitReport.DiscountAmt + TotalTradeProfitReport.TotalDiscountTotalAmt;
             TotalCashFlow.TotalOTCCashTicket = TotalTradeProfitReport.CashCoupon + TotalTradeProfitReport.TotalCashCouponTotalAmt;
-            
 
             TotalCashFlow.TotalMedCoop = CooperativePrescriptionProfitReport.TotalMed + CooperativePrescriptionProfitReport.MedUse + CoopCashProfitReport.TotalPrice + CooperativePrescriptionChangeReport.Profit;
             TotalCashFlow.TotalMedNotCoop = SelfPrescriptionChangeReport.Profit + SelfPrescriptionProfitReport.TotalMed + SelfPrescriptionProfitReport.MedUse + CashProfitReport.TotalPrice;
-
-
-
-
 
             DiscountAmt = -TotalTradeProfitReport.DiscountAmt;
             TotalCashFlow.TotalOTCAmount = TotalTradeProfitReport.Cost + TotalTradeProfitReport.TotalCostTotalAmt + (double)TotalStockTakingOTCReport.Price + (double)TotalRewardReport.RewardAmount + (double)DiscountAmt;

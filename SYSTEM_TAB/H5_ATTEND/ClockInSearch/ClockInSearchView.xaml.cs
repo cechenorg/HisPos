@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
-
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 {
@@ -19,7 +12,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         {
             InitializeComponent();
             _ = Account.Focus();
-
         }
 
         private void Account_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -31,11 +23,10 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                     case Key.Enter:
                         Password.Focus();
                         break;
-
-
                 }
             }
         }
+
         private void PassWord_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (!string.IsNullOrEmpty((sender as System.Windows.Controls.PasswordBox)?.Password))
@@ -49,6 +40,4 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             }
         }
     }
-
-
 }

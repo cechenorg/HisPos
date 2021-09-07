@@ -84,8 +84,7 @@
                 Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="23"
-                Foreground="Black">
-            </Label>
+                Foreground="Black" />
         </DataTemplate>
         <newClass:BindingProxy x:Key="proxy" Data="{Binding}" />
         <ControlTemplate x:Key="ScrollBar" TargetType="{x:Type ScrollBar}">
@@ -231,7 +230,8 @@
                         Tag="1" />
                     <Image Width="15" Source="/Images/BlueDot.png" />
                 </StackPanel>
-                <StackPanel  Grid.Row="3"
+                <StackPanel
+                    Grid.Row="3"
                     Background="{StaticResource GridBackGround}"
                     Orientation="Horizontal">
                     <RadioButton

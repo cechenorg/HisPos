@@ -224,12 +224,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             ConfirmWindow cw = new ConfirmWindow("是否進行結案?", "確認");
             if (!(bool)cw.DialogResult) { return; }
 
-
             if (SelectedDetail.StrikeValue != 0)
             {
                 PREStrikeAction();
             }
-
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -443,7 +441,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             StrikeValue = 0;
             DetailChangeAction();
             Init();
-
         }
     }
 }

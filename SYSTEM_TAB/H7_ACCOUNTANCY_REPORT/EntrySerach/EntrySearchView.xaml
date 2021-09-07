@@ -900,7 +900,7 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        
+
         <StackPanel
             x:Name="Print"
             Grid.Row="5"

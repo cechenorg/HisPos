@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage"
-        xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:service="clr-namespace:His_Pos.Service"
     d:DesignHeight="839"
     d:DesignWidth="1365"
     mc:Ignorable="d">
@@ -124,16 +124,15 @@
                 Grid.Row="0"
                 Grid.Column="2"
                 Margin="10,0,0,0"
+                AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
                 AutoGenerateColumns="False"
                 Background="{StaticResource GridDarkerBackGround}"
                 CanUserAddRows="False"
                 CellStyle="{StaticResource DataGridCellStyle}"
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                HorizontalScrollBarVisibility="Disabled"
-                SelectedValuePath="Pro_ID"
                 EnableRowVirtualization="False"
-                    AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
-                >
+                HorizontalScrollBarVisibility="Disabled"
+                SelectedValuePath="Pro_ID">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -167,10 +166,10 @@
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                            Width="60"
-                            Binding="{Binding AlternationIndex,Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
-                            Header="序"
-                            IsReadOnly="True">
+                        Width="60"
+                        Binding="{Binding AlternationIndex, Converter={StaticResource NumberConverter}, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
+                        Header="序"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

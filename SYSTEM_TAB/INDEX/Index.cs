@@ -623,7 +623,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             CommonProduct commonProducts = ((CommonProduct)e.Item);
             if (commonProducts.TypeID == 2 && ProductTypeStatusSelectedItem == "OTC")
                 e.Accepted = true;
-            else if (( commonProducts.TypeID == 1 || commonProducts.TypeID == 3) && ProductTypeStatusSelectedItem == "藥品")
+            else if ((commonProducts.TypeID == 1 || commonProducts.TypeID == 3) && ProductTypeStatusSelectedItem == "藥品")
                 e.Accepted = true;
         }
 

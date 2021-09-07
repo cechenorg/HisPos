@@ -45,14 +45,16 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="414*" />
-                <ColumnDefinition Width="259*"/>
+                <ColumnDefinition Width="259*" />
                 <ColumnDefinition Width="672*" />
             </Grid.ColumnDefinitions>
             <StackPanel
                 Grid.Row="0"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
-                Orientation="Horizontal" Margin="0,0,-0.2,399.6" Grid.RowSpan="2">
+                Margin="0,0,-0.2,399.6"
+                Orientation="Horizontal">
                 <xctk:MaskedTextBox
                     x:Name="StartDate"
                     Width="130"
@@ -129,15 +131,14 @@
                     FontSize="20" />
             </StackPanel>
 
-
             <StackPanel
                 x:Name="OTC"
                 Grid.Row="1"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Height="500"
-                Margin="20,10.4,19.8,289.6"
-                 Grid.RowSpan="2">
+                Margin="20,10.4,19.8,289.6">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
@@ -254,10 +255,10 @@
                     <StackPanel
                         Grid.Row="1"
                         Grid.Column="0"
+                        Margin="30,0,0,0"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="30,0,0,0">
-           
+                        VerticalAlignment="Center">
+
                         <Label
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -273,12 +274,12 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="30,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 Content="張數"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -288,12 +289,12 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="30,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 Content="收入"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -303,12 +304,12 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="30,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 Content="耗用"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -318,12 +319,12 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="30,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 Content="調整"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -333,12 +334,12 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="30,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 Content="盤差"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -348,12 +349,12 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="30,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 Content="禮券"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -363,12 +364,12 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="30,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 Content="醫獎"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="30,0,0,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -378,12 +379,12 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="200"
+                                Padding="20,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 Content="毛利"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="20,0,0,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -399,13 +400,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TradeDetailReportSum.Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -421,13 +422,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TradeDetailReportSum.RealTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -443,13 +444,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TradeDetailReportSum.TotalCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20"
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -465,13 +466,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  TradeDetailReportSum.TotalChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding TradeDetailReportSum.TotalChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -487,13 +488,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  StockTakingOTCDetailReportSum.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding StockTakingOTCDetailReportSum.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20"
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -509,13 +510,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  TradeDetailReportSum.DiscountAmtMinus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding TradeDetailReportSum.DiscountAmtMinus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -531,13 +532,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  TotalRewardReport.RewardAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding TotalRewardReport.RewardAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -549,33 +550,32 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="200"
+                                Padding="0,0,70,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TradeDetailReportSum.TotalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,70,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
                         Grid.Row="2"
                         Grid.Column="0"
+                        Margin="30,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Margin="30,0,0,0"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
-                
+
                         <Label
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            
                             Content="調劑"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20" />
                     </StackPanel>
                     <StackPanel
-                       x:Name="PREAll"
+                        x:Name="PREAll"
                         Grid.Row="2"
                         Grid.Column="1"
                         Background="Transparent"
@@ -587,13 +587,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionDetailReportSumMain.MedTotalCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -609,14 +609,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionDetailReportSumMain.MedTotalIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20"
-                                Padding="0,0,30,0"
-                                />
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -632,13 +631,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -654,13 +653,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionDetailReportSumMain.MedTotalChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -676,13 +675,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding StockTakingDetailReportSum.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -695,13 +694,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -710,17 +709,17 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCCost_PreviewMouseDown">
-                 
+
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -735,32 +734,31 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="200"
+                                Padding="0,0,70,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionDetailReportSumMain.MedTotalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,70,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
                         x:Name="OTCFee"
                         Grid.Row="3"
                         Grid.Column="0"
+                        Margin="70,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Margin="70,0,0,0"
                         PreviewMouseDown="OTCFee_PreviewMouseDown">
-                     
+
                         <Label
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Content="合作"
                             FontFamily="Segoe UI Semibold"
-                            FontSize="20" 
-                            Foreground="Silver"
-                            />
+                            FontSize="20"
+                            Foreground="Silver" />
                     </StackPanel>
                     <StackPanel
                         x:Name="COOPAll"
@@ -775,14 +773,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  PrescriptionCoopDetailReportSumMain.CoopCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -798,14 +796,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -821,14 +819,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  PrescriptionCoopDetailReportSumMain.CoopMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -844,14 +842,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionCoopDetailReportSumMain.CoopChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -866,14 +864,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"
-                                />
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -886,13 +883,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -905,13 +902,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -926,31 +923,31 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="200"
+                                Padding="0,0,70,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopProfit , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,70,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
                         Grid.Row="4"
                         Grid.Column="0"
-                       HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
                         Margin="70,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
                         PreviewMouseDown="OTCStock_PreviewMouseDown">
-                 
+
                         <Label
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Content="慢箋"
                             FontFamily="Segoe UI Semibold"
-                            FontSize="20" 
-                            Foreground="Silver"/>
+                            FontSize="20"
+                            Foreground="Silver" />
                     </StackPanel>
                     <StackPanel
                         x:Name="SLOWAll"
@@ -965,14 +962,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.SlowCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.SlowCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -988,14 +985,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.SlowIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.SlowIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1011,14 +1008,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.SlowMeduse  , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.SlowMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1034,14 +1031,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.SlowChange , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.SlowChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1056,13 +1053,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1075,13 +1072,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1090,17 +1087,17 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCStock_PreviewMouseDown">
- 
+
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1109,26 +1106,26 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCStock_PreviewMouseDown">
-                  
+
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="200"
+                                Padding="0,0,70,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionDetailReportSumMain.SlowProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,70,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
                         Grid.Row="5"
                         Grid.Column="0"
+                        Margin="70,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Margin="70,0,0,0"
                         PreviewMouseDown="OTCReward_PreviewMouseDown">
 
                         <Label
@@ -1136,8 +1133,8 @@
                             VerticalAlignment="Center"
                             Content="一般箋"
                             FontFamily="Segoe UI Semibold"
-                            FontSize="20" 
-                            Foreground="Silver"/>
+                            FontSize="20"
+                            Foreground="Silver" />
                     </StackPanel>
                     <StackPanel
                         x:Name="NORMALAll"
@@ -1152,14 +1149,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.NormalCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.NormalCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1175,14 +1172,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.NormalIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.NormalIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20"
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1198,14 +1195,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.NormalMeduse , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.NormalMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1221,14 +1218,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.NormalChange  , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.NormalChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1243,13 +1240,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1262,13 +1259,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1281,13 +1278,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1296,27 +1293,27 @@
                         Background="Transparent"
                         Orientation="Horizontal"
                         PreviewMouseDown="OTCReward_PreviewMouseDown">
-                
+
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="200"
+                                Padding="0,0,70,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  PrescriptionDetailReportSumMain.NormalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.NormalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,70,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
                         x:Name="OTCTicket"
                         Grid.Row="6"
                         Grid.Column="0"
+                        Margin="70,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Margin="70,0,0,0"
                         PreviewMouseDown="OTCTicket_PreviewMouseDown">
                         <Label
                             Grid.Row="6"
@@ -1326,7 +1323,7 @@
                             Content="配藥"
                             FontFamily="Segoe UI Semibold"
                             FontSize="20"
-                            Foreground="Silver"/>
+                            Foreground="Silver" />
                     </StackPanel>
                     <StackPanel
                         x:Name="SELFAll"
@@ -1341,14 +1338,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1364,14 +1361,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1387,14 +1384,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  PrescriptionDetailReportSumMain.PaySelfMeduse , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1410,14 +1407,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfChange , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,30,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1429,13 +1426,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1447,13 +1444,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1465,13 +1462,14 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Margin="0,6,0,0"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="-"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" Margin="0,6,0,0" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1483,23 +1481,23 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="200"
+                                Padding="0,0,70,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionDetailReportSumMain.PaySelfProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Foreground="Silver"
-                                Padding="0,0,70,0"/>
+                                FontSize="20"
+                                Foreground="Silver" />
                         </Border>
                     </StackPanel>
 
                     <Label
                         Grid.Row="7"
                         Grid.Column="0"
+                        Margin="30,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Margin="30,0,0,0"
                         Content="合計"
                         FontFamily="Segoe UI Semibold"
                         FontSize="20" />
@@ -1511,13 +1509,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TotalCashFlow.AllCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1528,13 +1526,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TotalCashFlow.AllIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20"
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1545,13 +1543,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TotalCashFlow.AllCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20"
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1562,13 +1560,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TotalCashFlow.AllChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1579,13 +1577,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TotalCashFlow.AllStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1596,13 +1594,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
-                                Content="{Binding  TradeDetailReportSum.DiscountAmtMinus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding TradeDetailReportSum.DiscountAmtMinus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
 
@@ -1614,13 +1612,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
+                                Padding="0,0,30,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TotalRewardReport.RewardAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,30,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                     <StackPanel
@@ -1631,13 +1629,13 @@
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="200"
+                                Padding="0,0,70,0"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding TotalCashFlow.AllProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" 
-                                Padding="0,0,70,0"/>
+                                FontSize="20" />
                         </Border>
                     </StackPanel>
                 </Grid>

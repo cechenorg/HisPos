@@ -20,7 +20,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="60" />
                 <RowDefinition Height="60" />
-      
+
                 <RowDefinition Height="60" />
                 <RowDefinition />
             </Grid.RowDefinitions>
@@ -95,43 +95,47 @@
             <StackPanel Grid.Row="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" FontSize="25"
-                           Content="類別"
-                               FontFamily="Segoe UI Semibold"
-                    Foreground="Black"></Label>
-                <ComboBox Grid.Column="0" 
-                    VerticalAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                            Width="100"
-                          Margin="50,0,0,0"
-                          ItemsSource="{Binding StockTakingTypeString}"
-                        SelectedItem="{Binding StockTakingTypeSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          FontSize="20"
-                           
-                    Foreground="Black"
-                          >
+                    <Label
+                        Grid.Column="0"
+                        Content="類別"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="25"
+                        Foreground="Black" />
+                    <ComboBox
+                        Grid.Column="0"
+                        Width="100"
+                        Margin="50,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        FontSize="20"
+                        Foreground="Black"
+                        ItemsSource="{Binding StockTakingTypeString}"
+                        SelectedItem="{Binding StockTakingTypeSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <i:InvokeCommandAction Command="{Binding StockTakingTypeChangedCommand}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </ComboBox>
-                    <Label Grid.Column="1" FontSize="25"
-                           Content="常備"  FontFamily="Segoe UI Semibold"
-                    Foreground="Black"
-                           ></Label>
-                    <ComboBox Grid.Column="1" 
-                     VerticalAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                                 Width="100"
-                          Margin="50,0,0,0"  
-                                 FontSize="20"
-                    Foreground="Black"
-                              ItemsSource="{Binding StockTakingCommonString}"
+                    <Label
+                        Grid.Column="1"
+                        Content="常備"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="25"
+                        Foreground="Black" />
+                    <ComboBox
+                        Grid.Column="1"
+                        Width="100"
+                        Margin="50,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        FontSize="20"
+                        Foreground="Black"
+                        ItemsSource="{Binding StockTakingCommonString}"
                         SelectedItem="{Binding StockTakingCommonSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
@@ -142,20 +146,19 @@
                     <!--<Label Grid.Column="2" FontSize="25"
                            Content="儲位"
                            ></Label>
-                    <ComboBox Grid.Column="2" 
-                              
+                    <ComboBox Grid.Column="2"
+
                                  Width="100"
                           Margin="50,0,0,0"
                               ItemsSource="{Binding WhereString}"
-                        SelectedItem="{Binding WhereSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              >
+                        SelectedItem="{Binding WhereSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <i:InvokeCommandAction Command="{Binding TypeChangedAction}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </ComboBox>-->
-                </Grid>       
+                </Grid>
             </StackPanel>
             <DataGrid
                 Grid.Row="3"

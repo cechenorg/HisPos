@@ -234,27 +234,27 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <ScrollViewer 
-                    HorizontalScrollBarVisibility="Auto"
-                    VerticalScrollBarVisibility="Disabled"
+                <ScrollViewer
                     Grid.Column="1"
-                    Grid.ColumnSpan="2">
+                    Grid.ColumnSpan="2"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Disabled">
                     <DataGrid
-                    Height="760"
-                    Margin="0.4,10,9.8,-0.4"
-                    AutoGenerateColumns="False"
-                    Background="{StaticResource GridBackGround}"
-                    CanUserAddRows="False"
-                    CanUserDeleteRows="False"
-                    CanUserReorderColumns="False"
-                    CanUserResizeColumns="False"
-                    CanUserSortColumns="False"
-                    CellStyle="{StaticResource DataGridCellStyle}"
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    GridLinesVisibility="Horizontal"
-                    HorizontalScrollBarVisibility="Disabled"
-                    ItemsSource="{Binding SelectedCashFlowRecord.Details, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        Height="760"
+                        Margin="0.4,10,9.8,-0.4"
+                        AutoGenerateColumns="False"
+                        Background="{StaticResource GridBackGround}"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeColumns="False"
+                        CanUserSortColumns="False"
+                        CellStyle="{StaticResource DataGridCellStyle}"
+                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                        GridLinesVisibility="Horizontal"
+                        HorizontalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding SelectedCashFlowRecord.Details, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Resources>
                             <Style TargetType="ScrollBar">
                                 <Setter Property="Background" Value="#FFA8A8A8" />
@@ -275,11 +275,11 @@
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
                             <DataGridTextColumn
-                            Width="300"
-                            Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                            FontFamily="Segoe UI Semibold"
-                            Header="科目"
-                            IsReadOnly="True">
+                                Width="300"
+                                Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                Header="科目"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -289,11 +289,11 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn
-                            Width="80"
-                            Binding="{Binding CashFlowValue, UpdateSourceTrigger=PropertyChanged}"
-                            FontFamily="Segoe UI Semibold"
-                            Header="金額"
-                            IsReadOnly="True">
+                                Width="80"
+                                Binding="{Binding CashFlowValue, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                Header="金額"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -303,10 +303,10 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn
-                            Width="200"
-                            Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
-                            Header="備註"
-                            IsReadOnly="True">
+                                Width="200"
+                                Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
+                                Header="備註"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -315,10 +315,10 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding EmpName, UpdateSourceTrigger=PropertyChanged}"
-                            Header="登錄人"
-                            IsReadOnly="True">
+                                Width="120"
+                                Binding="{Binding EmpName, UpdateSourceTrigger=PropertyChanged}"
+                                Header="登錄人"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -327,10 +327,10 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding Date, StringFormat='{}{0:MM/dd HH:mm}', UpdateSourceTrigger=PropertyChanged}"
-                            Header="登錄時間"
-                            IsReadOnly="True">
+                                Width="120"
+                                Binding="{Binding Date, StringFormat='{}{0:MM/dd HH:mm}', UpdateSourceTrigger=PropertyChanged}"
+                                Header="登錄時間"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -342,15 +342,15 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button
-                                        x:Name="EditCashFlowRecordButton"
-                                        HorizontalAlignment="Center"
-                                        HorizontalContentAlignment="Center"
-                                        Background="RoyalBlue"
-                                        BorderBrush="Transparent"
-                                        Command="{Binding DataContext.EditCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Content="編輯"
-                                        IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            x:Name="EditCashFlowRecordButton"
+                                            HorizontalAlignment="Center"
+                                            HorizontalContentAlignment="Center"
+                                            Background="RoyalBlue"
+                                            BorderBrush="Transparent"
+                                            Command="{Binding DataContext.EditCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Content="編輯"
+                                            IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
+                                            Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -358,22 +358,21 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button
-                                        x:Name="DeleteCashFlowRecordButton"
-                                        HorizontalAlignment="Center"
-                                        HorizontalContentAlignment="Center"
-                                        Background="IndianRed"
-                                        BorderBrush="Transparent"
-                                        Command="{Binding DataContext.DeleteCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Content="刪除"
-                                        IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            x:Name="DeleteCashFlowRecordButton"
+                                            HorizontalAlignment="Center"
+                                            HorizontalContentAlignment="Center"
+                                            Background="IndianRed"
+                                            BorderBrush="Transparent"
+                                            Command="{Binding DataContext.DeleteCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Content="刪除"
+                                            IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
+                                            Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
-                
             </Grid>
         </StackPanel>
     </Grid>

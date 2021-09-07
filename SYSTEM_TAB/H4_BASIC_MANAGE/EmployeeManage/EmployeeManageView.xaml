@@ -14,14 +14,14 @@
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     d:DesignHeight="839"
     d:DesignWidth="1365"
-    mc:Ignorable="d"
-    Loaded="UserControl_Loaded">
+    Loaded="UserControl_Loaded"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="AllEditableControl" DataType="UserControl">
             <employeeManageControl:AllEditableControl />
         </DataTemplate>
         <DataTemplate x:Key="NoControl" DataType="UserControl">
-            <employeeManageControl:NoControl/>
+            <employeeManageControl:NoControl />
         </DataTemplate>
         <DataTemplate x:Key="NoEditControl" DataType="UserControl">
             <employeeManageControl:NoEditControl />
@@ -84,10 +84,9 @@
                     ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                     HeadersVisibility="None"
                     HorizontalScrollBarVisibility="Hidden"
-                    ItemsSource="{Binding EmployeeCollectionView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                     IsSynchronizedWithCurrentItem="True"
+                    ItemsSource="{Binding EmployeeCollectionView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                
                     VerticalScrollBarVisibility="Hidden">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">

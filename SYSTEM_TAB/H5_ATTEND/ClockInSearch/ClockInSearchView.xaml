@@ -1,15 +1,17 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch.ClockInSearchView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch"
-             xmlns:clockInControl="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch.ClockInSearchControl"
-             xmlns:service="clr-namespace:His_Pos.Service"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch.ClockInSearchView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:clockInControl="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch.ClockInSearchControl"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
 
     <!--<UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -42,8 +44,8 @@
         <StackPanel
             Grid.Row="0"
             Grid.ColumnSpan="2"
-            VerticalAlignment="Center"
             Margin="10,0,0,0"
+            VerticalAlignment="Center"
             Orientation="Horizontal">
             <Label
                 Width="Auto"
@@ -56,9 +58,9 @@
                 Name="Account"
                 Width="130"
                 Margin="0,0,10,0"
-                FontSize="20"            
-                Text="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                PreviewKeyDown="Account_OnPreviewKeyDown" />
+                FontSize="20"
+                PreviewKeyDown="Account_OnPreviewKeyDown"
+                Text="{Binding Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Label
                 Width="Auto"
                 Margin="10,0,5,0"
@@ -66,32 +68,36 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="22"
                 Foreground="{StaticResource ForeGround}" />
-            <PasswordBox 
-                    Name="Password" 
-                    Width="130" 
-                    Margin="0,0,10,0" 
-                    FontSize="20" 
-                    FontWeight="Bold"
-                    InputMethod.IsInputMethodEnabled="False"
-                    InputScope="AlphanumericHalfWidth" 
-                    PreviewKeyDown="PassWord_OnPreviewKeyDown"   >
+            <PasswordBox
+                Name="Password"
+                Width="130"
+                Margin="0,0,10,0"
+                FontSize="20"
+                FontWeight="Bold"
+                InputMethod.IsInputMethodEnabled="False"
+                InputScope="AlphanumericHalfWidth"
+                PreviewKeyDown="PassWord_OnPreviewKeyDown">
                 <PasswordBox.InputBindings>
-                    <KeyBinding   Command="{Binding ConfirmAddClockInCommand}" CommandParameter="{Binding ElementName=Password}" Key="Enter" />
+                    <KeyBinding
+                        Key="Enter"
+                        Command="{Binding ConfirmAddClockInCommand}"
+                        CommandParameter="{Binding ElementName=Password}" />
                 </PasswordBox.InputBindings>
             </PasswordBox>
             <Button
-                Name="AddClockIn"                
+                Name="AddClockIn"
                 Width="100"
                 Height="30"
                 Margin="40,0,0,0"
                 Background="RoyalBlue"
                 BorderThickness="0"
-                Command="{Binding ConfirmEmpCommand}"  CommandParameter="{Binding ElementName=Password}" 
+                Command="{Binding ConfirmEmpCommand}"
+                CommandParameter="{Binding ElementName=Password}"
                 Content="查詢"
                 FontSize="20"
                 FontWeight="Bold" />
             <!--<Button
-                Name="btn_clear"                
+                Name="btn_clear"
                 Width="100"
                 Height="30"
                 Margin="10,0,0,0"
@@ -99,12 +105,12 @@
                 BorderThickness="0"
                 Content="清空"
                 FontSize="20"
-                FontWeight="Bold"/>-->
+                FontWeight="Bold" />-->
         </StackPanel>
-        <Grid 
+        <Grid
             Grid.Row="1"
-            Grid.Column="0"
             Grid.RowSpan="2"
+            Grid.Column="0"
             Margin="10,10,0,10"
             Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
@@ -115,65 +121,64 @@
                 Grid.Row="0"
                 Margin="10,0,10,0"
                 HorizontalContentAlignment="Center"
+                DisplayMemberPath="Namepath"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
-                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"            
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                 ItemsSource="{Binding CheckLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-             DisplayMemberPath="Namepath"
-                SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                />   
+                SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <DataGrid
-            Grid.Row="1"
+                Grid.Row="1"
                 Margin="10,10,10,10"
                 AllowDrop="True"
                 AutoGenerateColumns="False"
                 Background="{StaticResource GridBackGround}"
+                CanUserAddRows="False"
                 CellStyle="{StaticResource DataGridCellStyle}"
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 EnableRowVirtualization="False"
                 FrozenColumnCount="3"
                 GridLinesVisibility="Horizontal"
-                CanUserAddRows="False"
                 HeadersVisibility="None"
                 HorizontalScrollBarVisibility="Hidden"
-                VerticalScrollBarVisibility="Hidden"
                 ItemsSource="{Binding EmployeeCollection, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="175"
-                    Binding="{Binding Name}"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="23"
-                    Foreground="Black"
-                    IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                SelectedItem="{Binding Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                VerticalScrollBarVisibility="Hidden">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="175"
+                        Binding="{Binding Name}"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="23"
+                        Foreground="Black"
+                        IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
         <DataGrid
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="5,10,0,0"
-                AllowDrop="True"
-                AutoGenerateColumns="False"
-                Background="{StaticResource GridBackGround}"
-                CanUserDeleteRows="False"
-                CanUserReorderColumns="False"
-                CanUserResizeRows="False"
-                CanUserSortColumns="False"
-                CellStyle="{StaticResource DataGridCellStyle}"
-                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                EnableRowVirtualization="False"
-                FrozenColumnCount="3"
-                GridLinesVisibility="Horizontal"
-                ItemsSource="{Binding ClockInLogs}">
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="5,10,0,0"
+            AllowDrop="True"
+            AutoGenerateColumns="False"
+            Background="{StaticResource GridBackGround}"
+            CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
+            CanUserResizeRows="False"
+            CanUserSortColumns="False"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            EnableRowVirtualization="False"
+            FrozenColumnCount="3"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{Binding ClockInLogs}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -287,7 +292,7 @@
             Grid.Column="1"
             Margin="5,0,10,10"
             Background="#bfbfbf"
-            Orientation="Horizontal" >
+            Orientation="Horizontal">
             <ComboBox
                 Width="60"
                 Margin="10,0,0,0"
@@ -296,7 +301,7 @@
                 FontSize="18"
                 ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                 SelectedValuePath="content"
-                Text="{Binding SearchMonth , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding SearchMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBoxItem>1</ComboBoxItem>
                 <ComboBoxItem>2</ComboBoxItem>
                 <ComboBoxItem>3</ComboBoxItem>
@@ -311,39 +316,39 @@
                 <ComboBoxItem>12</ComboBoxItem>
             </ComboBox>
             <Label
-                            VerticalAlignment="Center"
-                            Content="  月    總共"
-                            FontFamily="Segoe UI Semibold"
-                            FontSize="20"
-                            Foreground="Black" />
+                VerticalAlignment="Center"
+                Content="  月    總共"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
             <Label
-                            Width="90"
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Center"
-                            Content="{Binding HourCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            FontFamily="Segoe UI Semi"
-                            FontSize="20"
-                            Foreground="Black" />
+                Width="90"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="{Binding HourCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                Foreground="Black" />
             <Label
-                            VerticalAlignment="Center"
-                            Content="時"
-                            FontFamily="Segoe UI Semibold"
-                            FontSize="20"
-                            Foreground="Black" />
+                VerticalAlignment="Center"
+                Content="時"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
             <Label
-                            Width="90"
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Center"
-                            Content="{Binding MinCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            FontFamily="Segoe UI Semi"
-                            FontSize="20"
-                            Foreground="Black" />
+                Width="90"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="{Binding MinCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                Foreground="Black" />
             <Label
-                            VerticalAlignment="Center"
-                            Content="分"
-                            FontFamily="Segoe UI Semibold"
-                            FontSize="20"
-                            Foreground="Black" />
+                VerticalAlignment="Center"
+                Content="分"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
             <Button
                 x:Name="ButtonPrint"
                 Width="150"

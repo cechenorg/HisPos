@@ -69,9 +69,7 @@
             VerticalAlignment="Center"
             Orientation="Horizontal">
             <Label Content="發票號碼：" FontSize="24" />
-            <Label
-                x:Name="tbInvoiceNum"
-                FontSize="24"/>
+            <Label x:Name="tbInvoiceNum" FontSize="24" />
         </StackPanel>
         <StackPanel
             Grid.Row="3"
@@ -101,17 +99,20 @@
                 LostFocus="tbCash_LostFocus"
                 PreviewKeyDown="tbCash_PreviewKeyDown"
                 Text="" />
-            <Label Margin="20,0,0,0" Content="訂金沖銷：" FontSize="24" />
+            <Label
+                Margin="20,0,0,0"
+                Content="訂金沖銷："
+                FontSize="24" />
             <TextBox
                 x:Name="tbPrepay"
                 Width="100"
                 FontSize="24"
                 GotFocus="tbCash_GotFocus"
                 InputMethod.InputScope="Number"
+                IsEnabled="False"
                 LostFocus="tbCash_LostFocus"
                 PreviewKeyDown="tbCash_PreviewKeyDown"
-                Text="" 
-                IsEnabled="False"/>
+                Text="" />
         </StackPanel>
         <StackPanel
             Grid.Row="5"
@@ -128,7 +129,10 @@
                 LostFocus="tbVoucher_LostFocus"
                 PreviewKeyDown="tbVoucher_PreviewKeyDown"
                 Text="" />
-            <Label Margin="20,0,0,0" Content="可沖訂金：" FontSize="24" />
+            <Label
+                Margin="20,0,0,0"
+                Content="可沖訂金："
+                FontSize="24" />
             <Label
                 x:Name="lblPrepay"
                 Content="0"
@@ -178,37 +182,37 @@
                 Width="55"
                 VerticalContentAlignment="Center"
                 FontSize="22"
+                IsEnabled="False"
                 PreviewKeyDown="tbCardNum1_PreviewKeyDown"
                 Text=""
-                TextChanged="tbCardNum1_TextChanged"
-                IsEnabled="False"/>
+                TextChanged="tbCardNum1_TextChanged" />
             <Label Content="-" FontSize="24" />
             <TextBox
                 x:Name="tbCardNum2"
                 Width="55"
                 VerticalContentAlignment="Center"
                 FontSize="22"
+                IsEnabled="False"
                 Text=""
-                TextChanged="tbCardNum2_TextChanged"
-                IsEnabled="False"/>
+                TextChanged="tbCardNum2_TextChanged" />
             <Label Content="-" FontSize="24" />
             <TextBox
                 x:Name="tbCardNum3"
                 Width="55"
                 VerticalContentAlignment="Center"
                 FontSize="22"
+                IsEnabled="False"
                 Text=""
-                TextChanged="tbCardNum3_TextChanged"
-                IsEnabled="False"/>
+                TextChanged="tbCardNum3_TextChanged" />
             <Label Content="-" FontSize="24" />
             <TextBox
                 x:Name="tbCardNum4"
                 Width="55"
                 VerticalContentAlignment="Center"
                 FontSize="22"
+                IsEnabled="False"
                 Text=""
-                TextChanged="tbCardNum4_TextChanged"
-                IsEnabled="False"/>
+                TextChanged="tbCardNum4_TextChanged" />
         </StackPanel>
         <StackPanel
             Grid.Row="9"
@@ -234,9 +238,12 @@
                 Width="60"
                 FontSize="24"
                 PreviewKeyDown="tbEmployee_PreviewKeyDown"
-                TextChanged="tbEmployee_TextChanged"
-                Text="" />
-            <Label x:Name="lbEmployee" Margin="10,0,0,0" FontSize="24" />
+                Text=""
+                TextChanged="tbEmployee_TextChanged" />
+            <Label
+                x:Name="lbEmployee"
+                Margin="10,0,0,0"
+                FontSize="24" />
         </StackPanel>
         <StackPanel
             Grid.Row="11"

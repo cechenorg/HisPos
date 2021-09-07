@@ -364,9 +364,18 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black" />
-            <Button Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Margin="10,0,0,0" Foreground="White" Background="IndianRed" Command="{Binding DataContext.DeleteOrderReturnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <Button
+                Width="120"
+                Margin="10,0,0,0"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding DataContext.DeleteOrderReturnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Content="刪除"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                Foreground="White">
                 <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding OrderStatus}" Value="SCRAP">
                                 <Setter Property="IsEnabled" Value="False" />

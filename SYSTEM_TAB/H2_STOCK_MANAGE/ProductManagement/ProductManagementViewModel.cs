@@ -246,7 +246,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     ProductCollectionView.Filter += ProductTitleFilter;
-                    
                 }));
 
                 RaisePropertyChanged(nameof(CurrentStockValue));

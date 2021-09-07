@@ -6,10 +6,7 @@ using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetSelfPayMultiplierWindow;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTCControl
 {
@@ -61,6 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
         private bool isNHIProduct;
         private int locBind;
         private ProductManageLocCombos locBindItem;
+
         public ProductManageMedicine Medicine
         {
             get { return medicine; }
@@ -78,7 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             get { return locBind; }
             set { Set(() => LocBind, ref locBind, value); }
         }
-     
+
         public ProductManageLocCombos LocBindItems { get; set; }
 
         public bool IsNHIProduct
@@ -101,7 +99,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             if ((int)ProductType == 2) IsNHIProduct = true;
 
             LocBindItems = ProductManageLocCombos.GetProductManageLocCombos();
-
         }
 
         #region ----- Define Actions -----

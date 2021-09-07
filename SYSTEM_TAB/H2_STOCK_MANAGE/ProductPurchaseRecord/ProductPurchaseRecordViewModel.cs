@@ -254,10 +254,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", CurrentStoreOrder.ID));
- 
-           DataTable iii =MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
-            if (iii.Rows.Count >= 1) {
 
+            DataTable iii = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
+            if (iii.Rows.Count >= 1)
+            {
                 MessageWindow.ShowMessage("刪除失敗!請勿重複刪除!", MessageType.ERROR);
             }
             MainWindow.ServerConnection.CloseConnection();

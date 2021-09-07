@@ -4,7 +4,6 @@ using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -45,7 +44,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             GetEmployeeList();
         }
 
-        private void ClearDataGrids() 
+        private void ClearDataGrids()
         {
             RecordGrid.ItemsSource = null;
             RecordDetailGrid.ItemsSource = null;
@@ -142,7 +141,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
                     return;
                 }
-                
+
                 switch (querytype)
                 {
                     case 1: // 銷售紀錄

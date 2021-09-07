@@ -1,11 +1,8 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.ClockIn;
-using System.Data;
 using System.Windows.Threading;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
@@ -15,8 +12,8 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         public override TabBase getTab()
         {
             return this;
-
         }
+
         public AddClockInViewModel()
         {
             GetDate();
@@ -27,10 +24,10 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 
         public RelayCommand<object> ConfirmAddClockInCommand { get; set; }
 
-
         #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         public string account = "";
 
         public string Account
@@ -40,6 +37,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         }
 
         public Employee employee;
+
         public Employee Employee
         {
             get { return employee; }
@@ -52,6 +50,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         public His_Pos.NewClass.Person.Employee.ClockIn.ClockIn clockIn;
 
         public ClockInLog clockInLogs;
+
         public His_Pos.NewClass.Person.Employee.ClockIn.ClockIn ClockIn
         {
             get { return clockIn; }
@@ -60,6 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
                 Set(() => ClockIn, ref clockIn, value);
             }
         }
+
         public ClockInLog ClockInLogs
         {
             get { return clockInLogs; }
@@ -70,6 +70,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         }
 
         private bool inCheck = true;
+
         public bool InCheck
         {
             get { return inCheck; }
@@ -80,6 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         }
 
         private bool outCheck = false;
+
         public bool OutCheck
         {
             get { return outCheck; }
@@ -93,9 +95,8 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 
         #region ----- Define Actions -----
 
-        private void ConfirmAddClockInAction(object sender)     
+        private void ConfirmAddClockInAction(object sender)
         {
-
             Employee = new Employee();
             Employee.Account = Account;
             Employee.Password = (sender as System.Windows.Controls.PasswordBox)?.Password;
@@ -112,20 +113,18 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
             else
                 if (!CheckPassWord()) return;  //檢查帳密
 
-            int wtype=1;
+            int wtype = 1;
             if (!inCheck)
                 wtype = 2;
-
 
             ////增加一筆打卡紀錄
             MainWindow.ServerConnection.OpenConnection();
             ClockInLogs = new ClockInLog(EmployeeDb.AddClockIn(Employee.ID.ToString(), wtype));
             MainWindow.ServerConnection.CloseConnection();
 
-
             (sender as System.Windows.Controls.PasswordBox)?.Clear();
             this.Account = "";
-            MessageWindow.ShowMessage("打卡成功!!", Class.MessageType.SUCCESS); 
+            MessageWindow.ShowMessage("打卡成功!!", Class.MessageType.SUCCESS);
         }
 
         #endregion ----- Define Actions -----
@@ -136,9 +135,9 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         {
             ConfirmAddClockInCommand = new RelayCommand<object>(ConfirmAddClockInAction);
         }
+
         private bool CheckPassWord()
         {
-
             //1.如果全部都沒有,查無帳號,請確認帳號
             if (Employee.CheckEmployeeAccountSame())
             {
@@ -156,21 +155,23 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
                 MessageWindow.ShowMessage("密碼錯誤!", Class.MessageType.ERROR);
                 return false;
             }
-            
 
             return true;
         }
+
         public void GetDate()
         {
-            if (System.DateTime.Now.Hour > 12) {
+            if (System.DateTime.Now.Hour > 12)
+            {
                 InCheck = false;
                 OutCheck = true;
             }
 
             MainWindow.ServerConnection.OpenConnection();
-            ClockInLogs = new ClockInLog(ClockInDb.EmployeeClockInLog(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), System.DateTime.Now.Day.ToString(), "",0));
+            ClockInLogs = new ClockInLog(ClockInDb.EmployeeClockInLog(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), System.DateTime.Now.Day.ToString(), "", 0));
             MainWindow.ServerConnection.CloseConnection();
         }
+
         public void DoEvents()
         {
             DispatcherFrame frame = new DispatcherFrame();
@@ -185,6 +186,5 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         }
 
         #endregion ----- Define Functions -----
-
     }
 }

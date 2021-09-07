@@ -9,7 +9,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
     public class StrikeHistoryViewModel : ViewModelBase
     {
-
         private DateTime startDate = DateTime.Today;
 
         public DateTime StartDate
@@ -79,6 +78,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             StrikeHistories.GetData();
             MainWindow.ServerConnection.CloseConnection();
         }
+
         private void SearchStrikeHistoryAction()
         {
             StrikeHistories = new StrikeHistories();

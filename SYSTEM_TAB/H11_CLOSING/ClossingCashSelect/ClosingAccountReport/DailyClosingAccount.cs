@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
 {
@@ -19,10 +15,12 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             PrescribeProfit = r.Field<int>("PrescribeProfit");
             ChronicAndOtherProfit = r.Field<int>("ChronicAndOtherProfit");
             SelfProfit = r.Field<int>("SelfProfit");
-            TotalProfit = r.Field<int>("TotalProfit"); 
-
+            TotalProfit = r.Field<int>("TotalProfit");
         }
-        public DailyClosingAccount()  { }
+
+        public DailyClosingAccount()
+        {
+        }
 
         public int OrderNumber { get; set; }
 

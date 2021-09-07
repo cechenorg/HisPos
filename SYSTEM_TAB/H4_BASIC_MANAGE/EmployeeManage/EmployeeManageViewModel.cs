@@ -193,9 +193,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
             if (EmployeeCollection != null)
             {
-              
             }
-            else {
+            else
+            {
                 ControlType = EmployeeControlEnum.NoControl;
             }
         }

@@ -1,113 +1,120 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect.ClosingCashSelect"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" 
-              xmlns:service="clr-namespace:His_Pos.Service"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             d:DesignHeight="800" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect.ClosingCashSelect"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="800"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.DataContext>
-        <local:ClosingCashSelectViwModel/>
+        <local:ClosingCashSelectViwModel />
     </UserControl.DataContext>
     <UserControl.Resources>
-        <local:RowIndexConverter x:Key="RowIndexConverter" ></local:RowIndexConverter>
+        <local:RowIndexConverter x:Key="RowIndexConverter" />
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="Segoe UI SemiBold"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="Segoe UI SemiBold" />
+            <Setter Property="FontSize" Value="20" />
             <Setter Property="Margin" Value="5,0,0,0" />
         </Style>
     </UserControl.Resources>
     <Grid>
-         
+
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="300"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="320"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="300" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="320" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="查詢日期:"  FontSize="22"  Margin="10,0,0,0"/>
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="22"
+                    Text="查詢日期:" />
                 <xctk:MaskedTextBox
-                        x:Name="StartDate"
-                        Width="150"
-                        Margin="20,0,10,5"
-                        HorizontalContentAlignment="Center"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="28"
-                        Foreground="{StaticResource ForeGround}"
-                        InputScope="Number"
-                        InsertKeyMode="Overwrite"
-                        Mask="000/00/00"
-                        PromptChar="-"
-                        Style="{StaticResource MaterialDesignTextBox}"
-                        ValueDataType="xctk:DateTimeFormat">
+                    x:Name="StartDate"
+                    Width="150"
+                    Margin="20,0,10,5"
+                    HorizontalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="28"
+                    Foreground="{StaticResource ForeGround}"
+                    InputScope="Number"
+                    InsertKeyMode="Overwrite"
+                    Mask="000/00/00"
+                    PromptChar="-"
+                    Style="{StaticResource MaterialDesignTextBox}"
+                    ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
                         <Binding
-                                Converter="{StaticResource NullableDateConverter}"
-                                Mode="TwoWay"
-                                NotifyOnValidationError="True"
-                                Path="StartDate"
-                                UpdateSourceTrigger="PropertyChanged"
-                                ValidatesOnDataErrors="True">
+                            Converter="{StaticResource NullableDateConverter}"
+                            Mode="TwoWay"
+                            NotifyOnValidationError="True"
+                            Path="StartDate"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>
                                 <service:DateValidationRule />
                             </Binding.ValidationRules>
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <TextBlock Text="~"></TextBlock>
+                <TextBlock Text="~" />
                 <xctk:MaskedTextBox
-                        x:Name="EndDate"
-                        Width="150"
-                        Margin="20,0,10,5"
-                        HorizontalContentAlignment="Center"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="28"
-                        Foreground="{StaticResource ForeGround}"
-                        InputScope="Number"
-                        InsertKeyMode="Overwrite"
-                        Mask="000/00/00"
-                        PromptChar="-"
-                        Style="{StaticResource MaterialDesignTextBox}"
-                        ValueDataType="xctk:DateTimeFormat">
+                    x:Name="EndDate"
+                    Width="150"
+                    Margin="20,0,10,5"
+                    HorizontalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="28"
+                    Foreground="{StaticResource ForeGround}"
+                    InputScope="Number"
+                    InsertKeyMode="Overwrite"
+                    Mask="000/00/00"
+                    PromptChar="-"
+                    Style="{StaticResource MaterialDesignTextBox}"
+                    ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
                         <Binding
-                                Converter="{StaticResource NullableDateConverter}"
-                                Mode="TwoWay"
-                                NotifyOnValidationError="True"
-                                Path="EndDate"
-                                UpdateSourceTrigger="PropertyChanged"
-                                ValidatesOnDataErrors="True">
+                            Converter="{StaticResource NullableDateConverter}"
+                            Mode="TwoWay"
+                            NotifyOnValidationError="True"
+                            Path="EndDate"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>
                                 <service:DateValidationRule />
                             </Binding.ValidationRules>
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Button Margin="5,5,0,0"
-                        Background="DarkCyan" Content="查詢"
-                        Command="{Binding DailyAccountingSearchCommand}"
-                        BorderBrush="Transparent"
-                        FontFamily="Segoe UI SemiBold"></Button>
+                <Button
+                    Margin="5,5,0,0"
+                    Background="DarkCyan"
+                    BorderBrush="Transparent"
+                    Command="{Binding DailyAccountingSearchCommand}"
+                    Content="查詢"
+                    FontFamily="Segoe UI SemiBold" />
             </StackPanel>
             <DataGrid
-            Grid.Row="1"
-            Margin="10,0,10,0"
-            AutoGenerateColumns="False"
-            Background="{StaticResource GridBackGround}"
-            CanUserAddRows="False"
-            CellStyle="{StaticResource DataGridCellStyle}"
-            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-            ItemsSource="{Binding SumDailyClosingAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Grid.Row="1"
+                Margin="10,0,10,0"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridBackGround}"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                ItemsSource="{Binding SumDailyClosingAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -141,22 +148,25 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="排名" Width="70">
+                    <DataGridTemplateColumn Width="70" Header="排名">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},  Converter={StaticResource RowIndexConverter}}"></TextBlock>
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Converter={StaticResource RowIndexConverter}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn
-                    Width="130"
-                    Binding="{Binding PharmacyName }"
-                    FontFamily="Segoe UI Semi" 
-                    IsReadOnly="True">
+                        Width="130"
+                        Binding="{Binding PharmacyName}"
+                        FontFamily="Segoe UI Semi"
+                        IsReadOnly="True">
                         <DataGridTextColumn.Header>
                             <DockPanel>
-                                <TextBlock Text="藥局名稱"  DockPanel.Dock="Right"></TextBlock>
-                            </DockPanel> 
+                                <TextBlock DockPanel.Dock="Right" Text="藥局名稱" />
+                            </DockPanel>
                         </DataGridTextColumn.Header>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -165,13 +175,13 @@
                                 <Setter Property="Margin" Value="30,0,0,0" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn> 
+                    </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100" 
-                    Binding="{Binding DailyAdjustAmount, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="調劑人數"
-                    IsReadOnly="True">
+                        Width="100"
+                        Binding="{Binding DailyAdjustAmount, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="調劑人數"
+                        IsReadOnly="True">
 
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -185,8 +195,7 @@
                         Binding="{Binding OTCSaleProfit, StringFormat={}{0:N0}}"
                         FontFamily="Segoe UI Semi"
                         Header="OTC收入"
-                        IsReadOnly="True"
-                    >
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -195,11 +204,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding CooperativeClinicProfit, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="合作診所"
-                    IsReadOnly="True">
+                        Width="100"
+                        Binding="{Binding CooperativeClinicProfit, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="合作診所"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -208,11 +217,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding PrescribeProfit, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="配藥收入"
-                    IsReadOnly="True">
+                        Width="100"
+                        Binding="{Binding PrescribeProfit, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="配藥收入"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -221,11 +230,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding ChronicAndOtherProfit, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="慢箋+其他"
-                    IsReadOnly="True">
+                        Width="100"
+                        Binding="{Binding ChronicAndOtherProfit, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="慢箋+其他"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -234,11 +243,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding SelfProfit, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="小計金額"
-                    IsReadOnly="True">
+                        Width="100"
+                        Binding="{Binding SelfProfit, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="小計金額"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -247,11 +256,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="120"
-                    Binding="{Binding TotalProfit, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="總計(含合作)"
-                    IsReadOnly="True">
+                        Width="120"
+                        Binding="{Binding TotalProfit, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="總計(含合作)"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -262,11 +271,19 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
-                <TextBlock Text="月業績目標查詢"/>
-                <TextBox VerticalAlignment="Center" Margin="10,0,0,0" FontSize="18" Text="{Binding MonthlySearchYear}"></TextBox>
-                <TextBlock Text="年"></TextBlock>
-                <TextBox VerticalAlignment="Center" Margin="5,0,0,0" FontSize="18" Text="{Binding MonthlySearchMonth}"></TextBox>
-                <TextBlock Text="月" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="月業績目標查詢" />
+                <TextBox
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="18"
+                    Text="{Binding MonthlySearchYear}" />
+                <TextBlock Text="年" />
+                <TextBox
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="18"
+                    Text="{Binding MonthlySearchMonth}" />
+                <TextBlock VerticalAlignment="Center" Text="月" />
                 <!--<xctk:MaskedTextBox
                         x:Name="A"
                         Width="120"
@@ -295,28 +312,30 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>-->
-                <Button Content="查詢"
-                        Background="DarkCyan"
-                        Margin="5,0,0,0"
-                        Command="{Binding MonthlyClosingAccountSearchCommand}"
-                        BorderBrush="Transparent"
-                        FontFamily="Segoe UI SemiBold"/>
-                <Button Margin="5,0,0,0" 
-                        Content="設定目標"
-                        Background="DarkGray"
-                        Command="{Binding MonthlyTargetSettingCommand}"
-                        BorderBrush="Transparent"
-                        FontFamily="Segoe UI SemiBold"/>
+                <Button
+                    Margin="5,0,0,0"
+                    Background="DarkCyan"
+                    BorderBrush="Transparent"
+                    Command="{Binding MonthlyClosingAccountSearchCommand}"
+                    Content="查詢"
+                    FontFamily="Segoe UI SemiBold" />
+                <Button
+                    Margin="5,0,0,0"
+                    Background="DarkGray"
+                    BorderBrush="Transparent"
+                    Command="{Binding MonthlyTargetSettingCommand}"
+                    Content="設定目標"
+                    FontFamily="Segoe UI SemiBold" />
             </StackPanel>
             <DataGrid
-            Grid.Row="3"
-            Margin="10,0,10,0"
-            AutoGenerateColumns="False"
-            Background="{StaticResource GridBackGround}"
-            CanUserAddRows="False"
-            CellStyle="{StaticResource DataGridCellStyle}"
-            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-            ItemsSource="{Binding MonthlyAccountTargetCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Grid.Row="3"
+                Margin="10,0,10,0"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridBackGround}"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                ItemsSource="{Binding MonthlyAccountTargetCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -351,11 +370,11 @@
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                    Width="130"
-                    Binding="{Binding PharmacyName}"
-                    FontFamily="Segoe UI Semi"
-                    Header="藥局名稱"
-                    IsReadOnly="True">
+                        Width="130"
+                        Binding="{Binding PharmacyName}"
+                        FontFamily="Segoe UI Semi"
+                        Header="藥局名稱"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -363,14 +382,14 @@
                                 <Setter Property="Margin" Value="30,0,0,0" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn> 
+                    </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding MonthlyTarget, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="目標"
-                    IsReadOnly="True">
-                        
+                        Width="100"
+                        Binding="{Binding MonthlyTarget, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="目標"
+                        IsReadOnly="True">
+
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -379,11 +398,11 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding MonthlyProfit, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="加總"
-                    IsReadOnly="True">
+                        Width="100"
+                        Binding="{Binding MonthlyProfit, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="加總"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
@@ -392,39 +411,48 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding TargetRatio, StringFormat={}{0:N0}}"
-                    FontFamily="Segoe UI Semi"
-                    Header="達成率"
-                    IsReadOnly="True">
+                        Width="100"
+                        Binding="{Binding TargetRatio, StringFormat={}{0:N0}}"
+                        FontFamily="Segoe UI Semi"
+                        Header="達成率"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Right" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn> 
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Grid.Row="6" Margin="25,0,0,0" Orientation="Horizontal">
-                <TextBlock Text="今日日期"></TextBlock>
-                <Rectangle Width="45"></Rectangle>
-                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Today}, StringFormat='{}{0:yyyy / MM / dd}'}"/>
+            <StackPanel
+                Grid.Row="6"
+                Margin="25,0,0,0"
+                Orientation="Horizontal">
+                <TextBlock Text="今日日期" />
+                <Rectangle Width="45" />
+                <TextBlock Text="{Binding Source={x:Static sys:DateTime.Today}, StringFormat='{}{0:yyyy / MM / dd}'}" />
             </StackPanel>
-            <StackPanel Grid.Row="4" Margin="25,0,0,0" Orientation="Horizontal">
-                <TextBlock Text="小計"></TextBlock>
-                <Rectangle Width="85"></Rectangle>
-                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.MonthlyTarget, StringFormat={}{0:N0},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <Rectangle Width="35"></Rectangle>
-                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.MonthlyProfit, StringFormat={}{0:N0},Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <Rectangle Width="35"></Rectangle>
-                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.TargetRatio,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel
+                Grid.Row="4"
+                Margin="25,0,0,0"
+                Orientation="Horizontal">
+                <TextBlock Text="小計" />
+                <Rectangle Width="85" />
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.MonthlyTarget, StringFormat={}{0:N0}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Rectangle Width="35" />
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.MonthlyProfit, StringFormat={}{0:N0}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Rectangle Width="35" />
+                <TextBlock FontSize="18" Text="{Binding MonthlySelfAccount.TargetRatio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            <StackPanel Grid.Row="5" Margin="25,0,0,0" Orientation="Horizontal">
-                <TextBlock Text="應達標準"></TextBlock>
-                 <Rectangle Width="270"></Rectangle>
-                <TextBlock Text="{Binding MonthlyNeedGetTarget.TargetRatio,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-            </StackPanel> 
+            <StackPanel
+                Grid.Row="5"
+                Margin="25,0,0,0"
+                Orientation="Horizontal">
+                <TextBlock Text="應達標準" />
+                <Rectangle Width="270" />
+                <TextBlock Text="{Binding MonthlyNeedGetTarget.TargetRatio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

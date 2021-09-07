@@ -105,84 +105,83 @@
                     <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
                 <StackPanel
-            Grid.Row="0"
-            Background="{StaticResource Shadow}"
-            Orientation="Horizontal">
+                    Grid.Row="0"
+                    Background="{StaticResource Shadow}"
+                    Orientation="Horizontal">
                     <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="杏德價"
-                FontFamily="Segoe UI Semibold"
-                FontSize="25"
-                Foreground="Black" />
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="杏德價"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="25"
+                        Foreground="Black" />
                     <Label
-                Margin="30,0,0,0"
-                VerticalAlignment="Center"
-                Content="散裝價"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
+                        Margin="30,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="散裝價"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="Black" />
                     <TextBlock
-                Width="80"
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.SindePrice, StringFormat=N2}" />
+                        Width="80"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="18"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding MedicineDetail.SindePrice, StringFormat=N2}" />
                     <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="包裝價"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="包裝價"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="Black" />
                     <TextBlock
-                Width="90"
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.SingdePackagePrice, StringFormat=N2}" />
+                        Width="90"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="18"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding MedicineDetail.SingdePackagePrice, StringFormat=N2}" />
                 </StackPanel>
                 <StackPanel
-            Grid.Row="1"
-            Background="{StaticResource Shadow}"
-            Orientation="Horizontal">
+                    Grid.Row="1"
+                    Background="{StaticResource Shadow}"
+                    Orientation="Horizontal">
                     <Label
-                Margin="113,0,0,0"
-                VerticalAlignment="Center"
-                Content="杏德庫存量"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
+                        Margin="113,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="杏德庫存量"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="Black" />
                     <TextBlock
-                Width="80"
-                Margin="8,0,0,0"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.SindeStock}" />
+                        Width="80"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="18"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding MedicineDetail.SindeStock}" />
                     <Label
-                Margin="11,0,0,0"
-                VerticalAlignment="Center"
-                Content="包裝量"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
+                        Margin="11,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="包裝量"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="Black" />
                     <TextBlock
-                Width="80"
-                Margin="8,0,0,0"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="{StaticResource ForeGround}"
-                Text="{Binding MedicineDetail.SingdePackageAmount}" />
+                        Width="80"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="18"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding MedicineDetail.SingdePackageAmount}" />
                 </StackPanel>
             </Grid>
         </StackPanel>
     </Grid>
-    
 </UserControl>

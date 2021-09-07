@@ -1,29 +1,22 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
-using System.Data;
-
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
 {
     public partial class AddClockInWindowViewModel : ViewModelBase
     {
-
         #region ----- Define Commands -----
 
         public RelayCommand ConfirmAddClockInCommand { get; set; }
 
-
         #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         public string EmployeeID { get; set; }
         public string EmployeePassWord { get; set; }
-
 
         public Employee employee;
 
@@ -35,8 +28,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
                 Set(() => Employee, ref employee, value);
             }
         }
-
-
 
         #endregion ----- Define Variables -----
 
@@ -52,9 +43,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
         {
             if (!CheckPassWord()) return;  //檢查帳密
 
-
-
-
             ////增加一筆打卡紀錄
             //MainWindow.ServerConnection.OpenConnection();
             //DataTable dataTable = ManufactoryDB.AddNewManufactory(ManufactoryName, ManufactoryNickName, ManufactoryTelephone, ManufactoryAddress);
@@ -68,7 +56,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
             //else
             //    MessageWindow.ShowMessage("網路異常 新增失敗!", MessageType.ERROR);
         }
-
 
         #endregion ----- Define Actions -----
 

@@ -461,7 +461,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
 
         private bool FilterByCellPhone(Customer c)
         {
-            return (!string.IsNullOrEmpty(c.CellPhone)|| !string.IsNullOrEmpty(c.SecondPhone)) && (c.CellPhone.Contains(Search)|| c.SecondPhone.Contains(Search));
+            return (!string.IsNullOrEmpty(c.CellPhone) || !string.IsNullOrEmpty(c.SecondPhone)) && (c.CellPhone.Contains(Search) || c.SecondPhone.Contains(Search));
         }
 
         private bool FilterByTel(Customer c)
