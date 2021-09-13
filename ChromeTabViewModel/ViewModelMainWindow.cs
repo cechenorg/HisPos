@@ -341,7 +341,7 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     if (c.AutoPrint == true)
                                     {
-                                        if (ff.IsPrint == false || isRePost=="")
+                                        if (ff.IsPrint == false && isRePost!="")
                                         {
 
                                             gg.PrintAction(ff);
