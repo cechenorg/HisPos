@@ -17,6 +17,7 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
@@ -263,6 +264,7 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetImportDeclareXmlMaster(ddatas, declareFiles, preId, cs, fileId));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetImportDeclareXmlDetail(ddatas, preId));
+            MessageBox.Show("IN");
             MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
         }
 

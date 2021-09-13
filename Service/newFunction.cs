@@ -329,7 +329,7 @@ namespace His_Pos.Service
                             var xDocument = XDocument.Load(s);
                             var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                             isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value;
-                            if (isRePost != "")
+                            if (isRePost != "1")
                             {
                                 isRe = true;
                             }
@@ -346,7 +346,7 @@ namespace His_Pos.Service
                            
                         }
                     }
-                    XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName);
+                    XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
                 }
                 catch (Exception ex)
                 {
@@ -498,7 +498,7 @@ namespace His_Pos.Service
                     continous_prescription.SetAttribute("total", "");
                 }
 
-                    continous_prescription.SetAttribute("other_mo", "");
+                    continous_prescription.SetAttribute("other_mo", ss[0]);
                     continous_prescription.SetAttribute("eat_at", "");
                     case1.AppendChild(continous_prescription);
 

@@ -42,7 +42,7 @@ namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
                             {
                             }
                         }
-                        XmlOfPrescriptionDb.Insert(cusIdNumbers, filepaths, xmls, c.TypeName);
+                        XmlOfPrescriptionDb.Insert(cusIdNumbers, filepaths, xmls, c.TypeName,false);
                     }
                     catch (Exception)
                     {

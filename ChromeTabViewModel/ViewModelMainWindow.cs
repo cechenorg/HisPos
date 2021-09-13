@@ -276,7 +276,7 @@ namespace His_Pos.ChromeTabViewModel
         void watch_Created(object sender, FileSystemEventArgs e)
         {
             bool isRe=false;
-            string isRePost="";
+            string isRePost="1";
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
             if (DirectPath != null)
@@ -304,7 +304,7 @@ namespace His_Pos.ChromeTabViewModel
                                 var xDocument = XDocument.Load(s);
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                                  isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value;
-                                if (isRePost != "") {
+                                if (isRePost != "1") {
                                     isRe = true;
                                 }else
                                 { isRe = false; }
@@ -316,7 +316,8 @@ namespace His_Pos.ChromeTabViewModel
                             {
                             }
                         }
-                        XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName);
+                        MessageBox.Show(isRe.ToString());
+                        XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName,isRe);
                     }
                     catch (Exception ex)
                     {
@@ -341,7 +342,7 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     if (c.AutoPrint == true)
                                     {
-                                        if (ff.IsPrint == false && isRePost!="")
+                                        if (ff.IsPrint == false && isRePost=="1")
                                         {
 
                                             gg.PrintAction(ff);

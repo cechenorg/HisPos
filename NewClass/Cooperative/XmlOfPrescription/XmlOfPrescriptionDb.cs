@@ -11,11 +11,12 @@ namespace His_Pos.NewClass.Cooperative.XmlOfPrescription
 {
     public static class XmlOfPrescriptionDb
     {
-        public static void Insert(List<string> cusIDNumbers, List<string> filepaths, List<XDocument> xmls, string typeName)
+        public static void Insert(List<string> cusIDNumbers, List<string> filepaths, List<XDocument> xmls, string typeName,bool isPrint)
         {
             DataTable dataTable = SetCooperativeClinicPrescription(cusIDNumbers, filepaths, xmls, typeName);
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CooperativeClinicPrescriptions", dataTable);
+            DataBaseFunction.AddSqlParameter(parameterList, "isPrint", isPrint);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCooperativeClinicPrescription]", parameterList);
         }
 

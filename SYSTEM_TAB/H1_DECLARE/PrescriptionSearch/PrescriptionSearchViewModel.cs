@@ -5,6 +5,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Prescription;
+using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using His_Pos.NewClass.Prescription.Search;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
@@ -21,9 +22,14 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Data;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using System.Xml.XPath;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -398,7 +404,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         public RelayCommand ExportPrescriptionCsv { get; set; }
         public RelayCommand ExportMedicineCsv { get; set; }
         public RelayCommand SearchNotBuckleCommad { get; set; }
-
+        public RelayCommand ImportDeclareFileCommand { get; set; }
         #endregion Commands
 
         public PrescriptionSearchViewModel()
@@ -453,6 +459,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
         private void InitCommand()
         {
+            ImportDeclareFileCommand = new RelayCommand(ImportDeclareFileAction);
             DateMouseDoubleClick = new RelayCommand<MaskedTextBox>(DateMouseDoubleClickAction);
             Search = new RelayCommand(SearchAction);
             Clear = new RelayCommand(ClearAction);
@@ -461,6 +468,141 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             ExportPrescriptionCsv = new RelayCommand(ExportPrescriptionCsvAction);
             ExportMedicineCsv = new RelayCommand(ExportMedicineCsvAction);
             SearchNotBuckleCommad = new RelayCommand(SearchNotBuckleAction);
+        }
+
+        private void ImportDeclareFileAction()
+        {
+
+            var dict = new List<His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Ddata>();
+            var dict2 = new List<string>();
+            int i = 0;
+
+            List<ImportDeclareXml.Ddata> users;
+
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load("C:\\DRUGT.xml");
+            XmlNodeReader xmlNodeReader = new XmlNodeReader(doc);
+            var nodes = doc.SelectNodes("pharmacy//ddata");
+           
+            foreach (XmlNode node in nodes)
+            {
+                string da = $"<ddata>{node.InnerXml}</ddata>";
+
+
+                //XmlSerializer serializer = new XmlSerializer(typeof(ImportDeclareXml.Ddata), node.InnerText);
+                //ImportDeclareXml.Ddata obj = serializer.Deserialize(da);
+
+                //XmlSerializer deserializer = new XmlSerializer(typeof(List<ImportDeclareXml.Ddata>),
+                //    new XmlRootAttribute("pharmacy//ddata"));
+                //users = (List<ImportDeclareXml.Ddata>)deserializer.Deserialize(xmlNodeReader);
+
+                var dictin = new His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Ddata();
+                dictin.D1 = node.SelectSingleNode("dhead/d1")?.InnerText ?? "";
+                dictin.D2 = node.SelectSingleNode("dhead/d2")?.InnerText ?? "";
+                dictin.D3 = node.SelectSingleNode("dhead/d3")?.InnerText ?? "";
+                dictin.D4 = node.SelectSingleNode("dhead/d4")?.InnerText ?? "";
+                dictin.D5 = node.SelectSingleNode("dhead/d5")?.InnerText ?? "";
+                dictin.D6 = node.SelectSingleNode("dhead/d6")?.InnerText ?? "";
+                dictin.D7 = node.SelectSingleNode("dhead/d7")?.InnerText ?? "";
+                dictin.D8 = node.SelectSingleNode("dhead/d8")?.InnerText ?? "";
+                dictin.D9 = node.SelectSingleNode("dhead/d9")?.InnerText ?? "";
+
+
+                dictin.D13 = node.SelectSingleNode("dhead/d13")?.InnerText ?? "";
+                dictin.D14 = node.SelectSingleNode("dhead/d14")?.InnerText ?? "";
+                dictin.D15 = node.SelectSingleNode("dhead/d15")?.InnerText ?? "";
+                dictin.D16 = node.SelectSingleNode("dhead/d16")?.InnerText ?? "";
+                dictin.D17 = node.SelectSingleNode("dhead/d17")?.InnerText ?? "";
+                dictin.D18 = node.SelectSingleNode("dhead/d18")?.InnerText ?? "";
+
+                dictin.D20 = node.SelectSingleNode("dhead/d20")?.InnerText ?? "";
+                dictin.D21 = node.SelectSingleNode("dhead/d21")?.InnerText ?? "";
+                dictin.D22 = node.SelectSingleNode("dhead/d22").InnerText ?? "";
+                dictin.D23 = node.SelectSingleNode("dhead/d23")?.InnerText ?? "";
+                dictin.D24 = node.SelectSingleNode("dhead/d24")?.InnerText ?? "";
+                dictin.D25 = node.SelectSingleNode("dhead/d25")?.InnerText ?? "";
+                dictin.D26 = node.SelectSingleNode("dhead/d26")?.InnerText ?? "";
+
+                dictin.D30 = node.SelectSingleNode("dbody/d30")?.InnerText ?? "";
+                dictin.D31 = node.SelectSingleNode("dbody/d31")?.InnerText ?? "";
+                dictin.D32 = node.SelectSingleNode("dbody/d32")?.InnerText ?? "";
+                dictin.D33 = node.SelectSingleNode("dbody/d33")?.InnerText ?? "";
+
+
+
+                dictin.D35 = node.SelectSingleNode("dbody/d35")?.InnerText ?? "";
+                dictin.D36 = node.SelectSingleNode("dbody/d36")?.InnerText ?? "";
+                dictin.D37 = node.SelectSingleNode("dbody/d37")?.InnerText ?? "";
+                dictin.D38 = node.SelectSingleNode("dbody/d38")?.InnerText ?? "";
+                dictin.D43 = node.SelectSingleNode("dbody/d43")?.InnerText ?? "";
+                dictin.D44 = node.SelectSingleNode("dbody/d44")?.InnerText ?? "";
+                dictin.Pdatas = new List<ImportDeclareXml.Pdata>();
+                var nodess = doc.SelectNodes("pharmacy//ddata//dbody");
+                foreach (XmlNode nodesss in nodess) {
+                    var dictindd = new His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Pdata();
+                    dictindd.P1= nodesss.SelectSingleNode("pdata/p1")?.InnerText ?? "";
+                    dictindd.P2 = nodesss.SelectSingleNode("pdata/p2")?.InnerText ?? "";
+                    dictindd.P3 = nodesss.SelectSingleNode("pdata/p3")?.InnerText ?? "";
+                    dictindd.P4 = nodesss.SelectSingleNode("pdata/p4")?.InnerText ?? "";
+                    dictindd.P5 = nodesss.SelectSingleNode("pdata/p5")?.InnerText ?? "";
+                    dictindd.P6 = nodesss.SelectSingleNode("pdata/p6")?.InnerText ?? "";
+                    dictindd.P7 = nodesss.SelectSingleNode("pdata/p7")?.InnerText ?? "";
+                    dictindd.P8 = nodesss.SelectSingleNode("pdata/p8")?.InnerText ?? "";
+                    dictindd.P9 = nodesss.SelectSingleNode("pdata/p9")?.InnerText ?? "";
+                    dictindd.P10 = nodesss.SelectSingleNode("pdata/p10")?.InnerText ?? "";
+                    dictindd.P11 = nodesss.SelectSingleNode("pdata/p10")?.InnerText ?? "";
+                    dictindd.P12 = nodesss.SelectSingleNode("pdata/p10")?.InnerText ?? "";
+                    dictindd.P13 = nodesss.SelectSingleNode("pdata/p13")?.InnerText ?? "";
+                    dictindd.P15 = nodesss.SelectSingleNode("pdata/p15")?.InnerText ?? "";
+
+                    dictin.Pdatas.Add(dictindd);
+                }
+                dict2.Add(i.ToString());
+                dict.Add(dictin);
+                i++;
+
+
+            }
+
+
+
+
+
+            //using (var reader = new StreamReader("C:\\DRUGT.xml"))
+            //{
+
+
+
+            //    serializer.Serialize(writer, productoServices);
+            //    XmlSerializer deserializer = new XmlSerializer(typeof(List<ImportDeclareXml.Ddata>),
+            //        new XmlRootAttribute("pharmacy"));
+            //    users = (List<ImportDeclareXml.Ddata>)deserializer.Deserialize(reader);
+            //}
+
+            //for (int i = 0; i<= users.Count; i++) {
+
+            //    dict2.Add(users.Count.ToString());
+            //}
+
+            MainWindow.ServerConnection.OpenConnection();
+
+            List<List<ImportDeclareXml.Ddata>> listGroup = new List<List<ImportDeclareXml.Ddata>>();
+            int j = 300;
+            for (int ii = 0; ii < dict.Count; ii += 300)
+            {
+                List<ImportDeclareXml.Ddata> cList = new List<ImportDeclareXml.Ddata>();
+                cList = dict.Take(j).Skip(ii).ToList();
+                j += 300;
+                listGroup.Add(cList);
+                PrescriptionDb.ImportDeclareXml(cList, dict2, "1");
+            }
+           
+            
+            
+            MainWindow.ServerConnection.CloseConnection();
+            
+
         }
 
         #endregion InitFunctions
