@@ -276,7 +276,8 @@ namespace His_Pos.ChromeTabViewModel
         void watch_Created(object sender, FileSystemEventArgs e)
         {
             bool isRe=false;
-            string isRePost="1";
+            string isRePost="";
+            
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
             if (DirectPath != null)
@@ -290,6 +291,7 @@ namespace His_Pos.ChromeTabViewModel
                 {
                     try
                     {
+                        
                         var fileEntries = Directory.GetFiles(pathFile);
                         foreach (var s in fileEntries)
                         {
@@ -300,26 +302,33 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     GetTxtFiles(s, pathFile, Path.GetFileName(s));
                                 }
-
+                
                                 var xDocument = XDocument.Load(s);
+                               
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                 isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value;
+                                
+                                //isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
                                 if (isRePost != "1") {
                                     isRe = true;
-                                }else
-                                { isRe = false; }
+                                 
+                                }
+                                else
+                                { isRe = false;}
                                 xDocs.Add(xDocument);
                                 cusIdNumbers.Add(cusIdNumber);
                                 paths.Add(s);
                             }
                             catch (Exception ex)
                             {
+                          
+                                MessageBox.Show(ex.ToString());
                             }
                         }
                         XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName,isRe);
                     }
                     catch (Exception ex)
                     {
+                       
                     }
                 }
 
@@ -482,24 +491,32 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement continous_prescription = doc.CreateElement("continous_prescription");
                 continous_prescription.SetAttribute("start_at", ss[6]);
-                if (Int32.Parse(ss[24]) > Int32.Parse(ss[40]))
-                {
-                    if (Int32.Parse(ss[24]) <= 56)
-                    {
-                        continous_prescription.SetAttribute("count", "1");
-                        continous_prescription.SetAttribute("total", "2");
-                    }
-                    else
-                    {
-                        continous_prescription.SetAttribute("count", "1");
-                        continous_prescription.SetAttribute("total", "3");
-                    }
-
-                }
-                else
+                if (ss[24] == "")
                 {
                     continous_prescription.SetAttribute("count", "");
                     continous_prescription.SetAttribute("total", "");
+                }
+                else
+                {
+                    if (Int32.Parse(ss[24]) > Int32.Parse(ss[40]))
+                    {
+                        if (Int32.Parse(ss[24]) <= 56)
+                        {
+                            continous_prescription.SetAttribute("count", "1");
+                            continous_prescription.SetAttribute("total", "2");
+                        }
+                        else
+                        {
+                            continous_prescription.SetAttribute("count", "1");
+                            continous_prescription.SetAttribute("total", "3");
+                        }
+
+                    }
+                    else
+                    {
+                        continous_prescription.SetAttribute("count", "");
+                        continous_prescription.SetAttribute("total", "");
+                    }
                 }
                 continous_prescription.SetAttribute("other_mo", ss[0]);
                 continous_prescription.SetAttribute("eat_at", "");
