@@ -307,7 +307,7 @@ namespace His_Pos.ChromeTabViewModel
                                
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                                 
-                                //isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
                                 if (isRePost != "1") {
                                     isRe = true;
                                  
