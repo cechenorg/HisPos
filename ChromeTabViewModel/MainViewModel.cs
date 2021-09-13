@@ -268,6 +268,8 @@ namespace His_Pos.ChromeTabViewModel
 
                 case nameof(FeatureItem.資產負債表):
                     break;
+                case nameof(FeatureItem.沖帳作業):
+                    break;
 
                 case nameof(FeatureItem.關班作業):
                     break;
@@ -434,9 +436,12 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.資產負債表):
                     newTab = new BalanceSheetViewModel() { TabName = MainWindow.HisFeatures[8].Functions[2], Icon = MainWindow.HisFeatures[8].Icon };
                     break;
+                case nameof(FeatureItem.沖帳作業):
+                    newTab = new StrikeManageViewModel() { TabName = MainWindow.HisFeatures[8].Functions[3], Icon = MainWindow.HisFeatures[8].Icon };
+                    break;
 
                 case nameof(FeatureItem.會計科目):
-                    newTab = new AccountsManageViewModel() { TabName = MainWindow.HisFeatures[8].Functions[3], Icon = MainWindow.HisFeatures[8].Icon };
+                    newTab = new AccountsManageViewModel() { TabName = MainWindow.HisFeatures[8].Functions[4], Icon = MainWindow.HisFeatures[8].Icon };
                     break;
 
                 //系統教學

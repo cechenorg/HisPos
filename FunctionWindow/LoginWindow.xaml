@@ -5,14 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:functionWindow="clr-namespace:His_Pos.FunctionWindow"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:local="clr-namespace:His_Pos.FunctionWindow"
         mc:Ignorable="d"
         Title="Login" Height="900" Width="700"
         WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
     <Window.DataContext>
-        <functionWindow:LoginWindowViewModel />
+        <local:LoginWindowViewModel/>
     </Window.DataContext>
     <Viewbox Stretch="Fill">
         <StackPanel Width="700" Height="900">
