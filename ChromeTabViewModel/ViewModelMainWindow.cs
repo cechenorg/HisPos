@@ -316,7 +316,6 @@ namespace His_Pos.ChromeTabViewModel
                             {
                             }
                         }
-                        MessageBox.Show(isRe.ToString());
                         XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName,isRe);
                     }
                     catch (Exception ex)
