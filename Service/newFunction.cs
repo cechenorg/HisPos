@@ -300,6 +300,8 @@ namespace His_Pos.Service
 
         public static void GetXmlFiles()
         {
+            bool isRe = false;
+            string isRePost = "";
             var cooperativeClinicSettings = new CooperativeClinicSettings();
             cooperativeClinicSettings.Init();
             var xDocs = new List<XDocument>();
@@ -326,6 +328,13 @@ namespace His_Pos.Service
                        
                             var xDocument = XDocument.Load(s);
                             var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                            isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value;
+                            if (isRePost != "")
+                            {
+                                isRe = true;
+                            }
+                            else
+                            { isRe = false; }
                             xDocs.Add(xDocument);
                             cusIdNumbers.Add(cusIdNumber);
                             paths.Add(s);
@@ -469,8 +478,26 @@ namespace His_Pos.Service
 
                     XmlElement continous_prescription = doc.CreateElement("continous_prescription");
                     continous_prescription.SetAttribute("start_at", ss[6]);
+
+                if (Int32.Parse(ss[24]) > Int32.Parse(ss[40]))
+                {
+                    if(Int32.Parse(ss[24]) <= 56)
+                    {
+                        continous_prescription.SetAttribute("count", "1");
+                        continous_prescription.SetAttribute("total", "2");
+                    }
+                        else {
+                        continous_prescription.SetAttribute("count", "1");
+                        continous_prescription.SetAttribute("total", "3");
+                    }
+                  
+                }
+                else
+                {
                     continous_prescription.SetAttribute("count", "");
                     continous_prescription.SetAttribute("total", "");
+                }
+
                     continous_prescription.SetAttribute("other_mo", "");
                     continous_prescription.SetAttribute("eat_at", "");
                     case1.AppendChild(continous_prescription);
@@ -483,7 +510,7 @@ namespace His_Pos.Service
 
                     XmlElement item0 = doc.CreateElement("item");
                     item0.SetAttribute("remark", "0");
-                    item0.SetAttribute("local_code", "ssss");
+                    item0.SetAttribute("local_code", ss[35]);
                     item0.SetAttribute("id", ss[35]);
                     item0.SetAttribute("nowid", ss[35]);
                     item0.SetAttribute("type", ss[43]);
@@ -513,7 +540,7 @@ namespace His_Pos.Service
 
                 XmlElement item = doc.CreateElement("item");
                     item.SetAttribute("remark", "0");
-                    item.SetAttribute("local_code", "ssss");
+                    item.SetAttribute("local_code", ss[35]);
                     item.SetAttribute("id", ss[35]);
                     item.SetAttribute("nowid", ss[35]);
                     item.SetAttribute("type", ss[43]);
