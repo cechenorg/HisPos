@@ -805,6 +805,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 沖帳作業 的當地語系化字串。
+        /// </summary>
+        internal static string StrikeManage {
+            get {
+                return ResourceManager.GetString("StrikeManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 系統教學文件 的當地語系化字串。
         /// </summary>
         internal static string SystemTutorial {

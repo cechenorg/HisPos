@@ -1471,9 +1471,13 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\NormalViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\TransferViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\StrikeManageView.xaml.cs">
+      <DependentUpon>StrikeManageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceSheetView.xaml.cs">
       <DependentUpon>BalanceSheetView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\StrikeManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceSheetViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\IncomeStatement\IncomeStatementView.xaml.cs">
       <DependentUpon>IncomeStatementView.xaml</DependentUpon>
@@ -2444,6 +2448,10 @@
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\TransferControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\StrikeManageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceSheetView.xaml">
       <SubType>Designer</SubType>

@@ -623,6 +623,9 @@
   <data name="BalanceSheet" xml:space="preserve">
     <value>資產負債表</value>
   </data>
+  <data name="StrikeManage" xml:space="preserve">
+    <value>沖帳作業</value>
+  </data>
   <data name="ClosingCashSelect" xml:space="preserve">
     <value>關班帳務查詢</value>
   </data>
