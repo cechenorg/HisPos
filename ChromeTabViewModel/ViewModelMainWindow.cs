@@ -320,8 +320,6 @@ namespace His_Pos.ChromeTabViewModel
                             }
                             catch (Exception ex)
                             {
-                          
-                                MessageBox.Show(ex.ToString());
                             }
                         }
                         XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName,isRe);
