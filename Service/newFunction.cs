@@ -326,7 +326,7 @@ namespace His_Pos.Service
                        
                             var xDocument = XDocument.Load(s);
                             var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                            if (String.IsNullOrEmpty(xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString())) { isRePost = "2"; }
+                            if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo")==null) { isRePost = "2"; }
                             else
                             {
                                 isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
