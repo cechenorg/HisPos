@@ -311,7 +311,7 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
                                 }
-                                if (isRePost != "1") {
+                                if (isRePost != "0") {
                                     isRe = true;
                                  
                                 }
@@ -352,7 +352,7 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     if (c.AutoPrint == true)
                                     {
-                                        if (ff.IsPrint == false && isRePost=="1")
+                                        if (ff.IsPrint == false && isRePost=="0")
                                         {
 
                                             gg.PrintAction(ff);

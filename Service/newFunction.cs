@@ -331,7 +331,7 @@ namespace His_Pos.Service
                             {
                                 isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
                             }
-                            if (isRePost != "1")
+                            if (isRePost != "0")
                             {
                                 isRe = true;
                             }
