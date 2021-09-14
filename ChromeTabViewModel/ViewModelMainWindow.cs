@@ -516,7 +516,7 @@ namespace His_Pos.ChromeTabViewModel
                         continous_prescription.SetAttribute("total", "");
                     }
                 }
-                continous_prescription.SetAttribute("other_mo", ss[0]);
+                continous_prescription.SetAttribute("other_mo", ss[45]);
                 continous_prescription.SetAttribute("eat_at", "");
                 case1.AppendChild(continous_prescription);
 
