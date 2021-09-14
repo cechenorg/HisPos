@@ -306,8 +306,11 @@ namespace His_Pos.ChromeTabViewModel
                                 var xDocument = XDocument.Load(s);
                                
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString() == null || xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString() == "") { isRePost = "2"; } else {
-                                    isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString(); }
+                                if (String.IsNullOrEmpty(xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString()) ) { isRePost = "2"; }
+                                else
+                                {
+                                    isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                }
                                 if (isRePost != "1") {
                                     isRe = true;
                                  
@@ -320,6 +323,7 @@ namespace His_Pos.ChromeTabViewModel
                             }
                             catch (Exception ex)
                             {
+                                
                             }
                         }
                         XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName,isRe);
