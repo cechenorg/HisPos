@@ -105,7 +105,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             {
                 IsAssigned = true;
             }
-            else 
+            else
             {
                 IsAssigned = false;
             }
@@ -197,7 +197,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             ValidDate = dataRow.Field<DateTime?>("StoOrdDet_ValidDate");
             BatchNumber = dataRow.Field<string>("StoOrdDet_BatchNumber");
             Note = dataRow.Field<string>("StoOrdDet_Note");
-            OriginPrice= (double)dataRow.Field<decimal>("StoOrdDet_OriginPrice");
+            OriginPrice = (double)dataRow.Field<decimal>("StoOrdDet_OriginPrice");
             SingdePackageAmount = dataRow.Field<int>("SinData_PackageAmount");
             SingdePackagePrice = (double)dataRow.Field<decimal>("SinData_PackagePrice");
             SingdePrice = (double)dataRow.Field<decimal>("SinData_SinglePrice");
@@ -223,21 +223,21 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             //}
             //else
             //{
-                switch (StartInputVariable)
-                {
-                    case ProductStartInputVariableEnum.INIT:
-                        break;
+            switch (StartInputVariable)
+            {
+                case ProductStartInputVariableEnum.INIT:
+                    break;
 
-                    case ProductStartInputVariableEnum.PRICE:
-                        subTotal = Price * OrderAmount;
-                        break;
+                case ProductStartInputVariableEnum.PRICE:
+                    subTotal = Price * OrderAmount;
+                    break;
 
-                    case ProductStartInputVariableEnum.SUBTOTAL:
-                        if (OrderAmount <= 0)
-                            price = 0;
-                        else
-                            price = SubTotal / RealAmount;
-                        break;
+                case ProductStartInputVariableEnum.SUBTOTAL:
+                    if (RealAmount <= 0)
+                        price = 0;
+                    else
+                        price = SubTotal / RealAmount;
+                    break;
             }
             //}
 
