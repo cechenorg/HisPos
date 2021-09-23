@@ -445,12 +445,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private async void CalculateDiscount()
         {
-            int unTax = (int)(realTotal / 1.05);
-            int Tax = realTotal - unTax;
-
             discountAmount = int.Parse(tbDiscountAmt.Text);
             realTotal = preTotal - discountAmount;
             lblRealTotal.Content = realTotal;
+
+            int unTax = (int)(realTotal / 1.05);
+            int Tax = realTotal - unTax;
             TaxNum.Content = Tax.ToString();
             NOTaxNum.Content = unTax.ToString();
 
