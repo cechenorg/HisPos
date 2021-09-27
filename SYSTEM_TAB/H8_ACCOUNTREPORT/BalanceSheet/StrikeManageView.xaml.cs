@@ -9,11 +9,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
@@ -32,6 +34,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private int subtotal = 0;
         private BalanceSheetTypeEnum BalanceSheetType;
 
+        public bool IsSelectAll { get; set; }
+
         public StrikeManageView()
         {
             InitializeComponent();
@@ -42,6 +46,25 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             GetAccountList();
             SetCombobox();
+        }
+
+        private void ReloadDetail()
+        {
+            if (cbTargetAccount.SelectedValue != null)
+            {
+                DataTable dt = transferAccList.Copy();
+                for (int i = dt.Rows.Count - 1; i >= 0; i--)
+                {
+                    if (dt.Rows[i]["Accounts_ID"].ToString() == cbTargetAccount.SelectedValue.ToString())
+                    {
+                        dt.Rows[i].Delete();
+                    }
+                }
+                dt.AcceptChanges();
+                cbSourceAccount.ItemsSource = dt.DefaultView;
+                GetAccountRecords(cbTargetAccount.SelectedValue.ToString());
+            }
+            CalculateSubTotal();
         }
 
         private int GetRowIndex(MouseButtonEventArgs e)
@@ -169,11 +192,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             subtotal = 0;
             foreach (DataRow dr in dgDetails.Rows)
             {
-                int index = dgDetails.Rows.IndexOf(dr);
                 if ((bool)dr["IsSelected"])
                 {
                     count++;
-                    subtotal = subtotal + (int)dr["StrikeAmount"];
+                    subtotal += (int)dr["StrikeAmount"];
                 }
             }
             lbSelectedCount.Content = count.ToString();
@@ -234,11 +256,20 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
             itemsViewOriginal.Filter = (o) =>
             {
-                if (string.IsNullOrEmpty(cmb.Text)) return false;
+                if (string.IsNullOrEmpty(cmb.Text))
+                {
+                    return false;
+                }
                 else
                 {
-                    if (((string)o).StartsWith(cmb.Text)) return true;
-                    else return false;
+                    if (((string)o).StartsWith(cmb.Text))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             };
 
@@ -258,11 +289,50 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             }
         }
 
-        private void btnBatchStrike_Click(object sender, RoutedEventArgs e)
+        private void btnHistory_Click(object sender, RoutedEventArgs e)
         {
+            var historyWindow = new StrikeHistoryWindow();
+            historyWindow.ShowDialog();
         }
 
-        private void btnStrike_Click(object sender, RoutedEventArgs e)
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsSelectAll)
+            {
+                foreach (DataRow dr in dgDetails.Rows)
+                {
+                    dr["IsSelected"] = true;
+                    int value = Convert.ToInt32(dr["Value"]);
+                    dr["StrikeAmount"] = value;
+                }
+            }
+            else
+            {
+                foreach (DataRow dr in dgDetails.Rows)
+                {
+                    dr["IsSelected"] = false;
+                }
+            }
+            CalculateSubTotal();
+        }
+
+        private void cbSelect_Checked(object sender, RoutedEventArgs e)
+        {
+            int index = GetRowIndexRouted(e);
+            dgDetails.Rows[index]["IsSelected"] = true;
+            CalculateSubTotal();
+        }
+
+        private void cbSelect_Unchecked(object sender, RoutedEventArgs e)
+        {
+            int index = GetRowIndexRouted(e);
+            dgDetails.Rows[index]["IsSelected"] = false;
+            CalculateSubTotal();
+        }
+
+        #region /// 沖帳 ///
+
+        private bool StrikeAction(object sender, RoutedEventArgs e)
         {
             int index = GetRowIndexRouted(e);
             double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
@@ -276,12 +346,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             if (left == null || right == null)
             {
                 MessageWindow.ShowMessage("尚未選擇帳戶！", MessageType.ERROR);
-                return;
+                return false;
             }
             if (amount == 0)
             {
                 MessageWindow.ShowMessage("沖帳金額為零！", MessageType.ERROR);
-                return;
+                return false;
             }
 
             if (enu == BalanceSheetTypeEnum.Bank)
@@ -289,6 +359,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 sourceID = left.ToString();
             }
 
+            MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
             parameters.Add(new SqlParameter("VALUE", amount));
@@ -296,11 +367,15 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             parameters.Add(new SqlParameter("NOTE", note));
             parameters.Add(new SqlParameter("TARGET", right.ToString()));
             parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
-
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
-            if (result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            return result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+        }
+
+        private void btnStrike_Click(object sender, RoutedEventArgs e)
+        {
+            if (StrikeAction(sender, e))
             {
                 MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
             }
@@ -308,12 +383,198 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             {
                 MessageWindow.ShowMessage("沖帳失敗，請稍後再試", MessageType.ERROR);
             }
+            ReloadDetail();
         }
 
-        private void btnHistory_Click(object sender, RoutedEventArgs e)
+        private void btnBatchStrike_Click(object sender, RoutedEventArgs e)
         {
-            var historyWindow = new StrikeHistoryWindow();
-            historyWindow.ShowDialog();
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否進行批次沖帳?", "批次沖帳", true);
+            if ((bool)confirmWindow.DialogResult)
+            {
+                bool success = true;
+                var left = cbTargetAccount.SelectedValue;
+                var right = cbSourceAccount.SelectedValue;
+                BalanceSheetTypeEnum enu = GetStrikeTypeEnum();
+
+                if (left == null || right == null)
+                {
+                    MessageWindow.ShowMessage("尚未選擇帳戶！", MessageType.ERROR);
+                    return;
+                }
+
+                MainWindow.ServerConnection.OpenConnection();
+                foreach (DataRow dr in dgDetails.Rows)
+                {
+                    double.TryParse(dr["StrikeAmount"].ToString(), out double amount);
+                    string note = dr["StrikeNote"].ToString();
+                    string sourceID = dr["ID"].ToString();
+
+                    if (amount == 0)
+                    {
+                        continue;
+                    }
+                    if (enu == BalanceSheetTypeEnum.Bank)
+                    {
+                        sourceID = left.ToString();
+                    }
+
+                    List<SqlParameter> parameters = new List<SqlParameter>();
+                    parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+                    parameters.Add(new SqlParameter("VALUE", amount));
+                    parameters.Add(new SqlParameter("TYPE", sourceID));
+                    parameters.Add(new SqlParameter("NOTE", note));
+                    parameters.Add(new SqlParameter("TARGET", right.ToString()));
+                    parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
+                    DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
+                    if (result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS")) { }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                MainWindow.ServerConnection.CloseConnection();
+
+                if (!success)
+                {
+                    MessageWindow.ShowMessage("批次沖帳發生錯誤", MessageType.ERROR);
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("批次沖帳成功", MessageType.SUCCESS);
+                }
+                ReloadDetail();
+            }
+        }
+
+        #endregion /// 沖帳 ///
+
+        #region /// 結案 ///
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            int index = GetRowIndexRouted(e);
+            double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
+            string sourceID = dgDetails.Rows[index]["ID"].ToString();
+            var left = cbTargetAccount.SelectedValue;
+
+            if (amount != 0)
+            {
+                if (!StrikeAction(sender, e))
+                {
+                    return;
+                }
+            }
+
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Emp", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("Detail", sourceID));
+            parameters.Add(new SqlParameter("ID", left.ToString()));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[DeclareClosed]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+            {
+                MessageWindow.ShowMessage("結案成功", MessageType.SUCCESS);
+            }
+            else
+            {
+                MessageWindow.ShowMessage("結案失敗，請稍後再試", MessageType.ERROR);
+            }
+            ReloadDetail();
+        }
+
+        private void btnBatchClose_Click(object sender, RoutedEventArgs e)
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否進行批次結案?", "批次結案", true);
+            if ((bool)confirmWindow.DialogResult)
+            {
+                bool success = true;
+                var left = cbTargetAccount.SelectedValue;
+                var right = cbSourceAccount.SelectedValue;
+                BalanceSheetTypeEnum enu = GetStrikeTypeEnum();
+
+                MainWindow.ServerConnection.OpenConnection();
+                foreach (DataRow dr in dgDetails.Rows)
+                {
+                    if ((bool)dr["IsSelected"])
+                    {
+                        double.TryParse(dr["StrikeAmount"].ToString(), out double amount);
+                        string note = dr["StrikeNote"].ToString();
+                        string sourceID = dr["ID"].ToString();
+
+                        if (amount != 0)
+                        {
+                            if (left == null || right == null)
+                            {
+                                MessageWindow.ShowMessage("尚未選擇帳戶！", MessageType.ERROR);
+                                ReloadDetail();
+                                return;
+                            }
+                            if (enu == BalanceSheetTypeEnum.Bank)
+                            {
+                                sourceID = left.ToString();
+                            }
+
+                            List<SqlParameter> parameters = new List<SqlParameter>();
+                            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+                            parameters.Add(new SqlParameter("VALUE", amount));
+                            parameters.Add(new SqlParameter("TYPE", sourceID));
+                            parameters.Add(new SqlParameter("NOTE", note));
+                            parameters.Add(new SqlParameter("TARGET", right.ToString()));
+                            parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
+                            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
+                            if (result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                            {
+                                List<SqlParameter> para = new List<SqlParameter>();
+                                para.Add(new SqlParameter("Emp", ViewModelMainWindow.CurrentUser.ID));
+                                para.Add(new SqlParameter("Detail", sourceID));
+                                para.Add(new SqlParameter("ID", left.ToString()));
+                                DataTable res = MainWindow.ServerConnection.ExecuteProc("[Set].[DeclareClosed]", para);
+                                if (res.Rows.Count > 0 && res.Rows[0].Field<string>("RESULT").Equals("SUCCESS")) { }
+                                else // 結案失敗
+                                {
+                                    success = false;
+                                }
+                            }
+                            else // 沖帳失敗
+                            {
+                                success = false;
+                            }
+                        }
+                        else
+                        {
+                            List<SqlParameter> para = new List<SqlParameter>();
+                            para.Add(new SqlParameter("Emp", ViewModelMainWindow.CurrentUser.ID));
+                            para.Add(new SqlParameter("Detail", sourceID));
+                            para.Add(new SqlParameter("ID", left.ToString()));
+                            DataTable res = MainWindow.ServerConnection.ExecuteProc("[Set].[DeclareClosed]", para);
+                            if (res.Rows.Count > 0 && res.Rows[0].Field<string>("RESULT").Equals("SUCCESS")) { }
+                            else // 結案失敗
+                            {
+                                success = false;
+                            }
+                        }
+                    }
+                }
+                MainWindow.ServerConnection.CloseConnection();
+                if (!success)
+                {
+                    MessageWindow.ShowMessage("批次結案發生錯誤", MessageType.ERROR);
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("批次結案成功", MessageType.SUCCESS);
+                }
+                ReloadDetail();
+            }
+        }
+
+        #endregion /// 結案 ///
+
+        private void tbAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CalculateSubTotal();
         }
     }
 }

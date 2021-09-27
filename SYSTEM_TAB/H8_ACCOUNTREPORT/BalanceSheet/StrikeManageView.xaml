@@ -99,10 +99,10 @@
                     VerticalAlignment="Center"
                     Background="RoyalBlue"
                     BorderThickness="0"
+                    Click="btnHistory_Click"
                     Content="歷程紀錄"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="20"
-                    Click="btnHistory_Click" />
+                    FontSize="20" />
                 <!--<Label
                     Margin="190,0,0,0"
                     VerticalAlignment="Center"
@@ -153,7 +153,8 @@
                     CanUserReorderColumns="False"
                     CanUserResizeColumns="False"
                     CanUserSortColumns="False"
-                    CellStyle="{StaticResource DataGridCellStyle}">
+                    CellStyle="{StaticResource DataGridCellStyle}"
+                    EnableRowVirtualization="False">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -179,26 +180,29 @@
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
                     <DataGrid.Columns>
-                        <DataGridCheckBoxColumn
-                            Width="60"
-                            Binding="{Binding Path=IsSelected}"
-                            EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"
-                            ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
-                            <!--<DataGridCheckBoxColumn.Header>
-                            -->
-                            <!--  padding to allow hit test to pass thru for sorting  -->
-                            <!--
+                        <DataGridTemplateColumn Width="60">
+                            <DataGridTemplateColumn.Header>
                                 <Border
                                     Padding="6,0,6,0"
                                     HorizontalAlignment="Center"
                                     Background="Transparent">
                                     <CheckBox
                                         HorizontalAlignment="Center"
-                                        DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"
-                                        IsChecked="{Binding IsAllItems3Selected}" />
+                                        Click="CheckBox_Click"
+                                        IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=IsSelectAll}" />
                                 </Border>
-                            </DataGridCheckBoxColumn.Header>-->
-                        </DataGridCheckBoxColumn>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        x:Name="cbSelect"
+                                        Margin="20,0,0,0"
+                                        Checked="cbSelect_Checked"
+                                        IsChecked="{Binding Path=IsSelected}"
+                                        Unchecked="cbSelect_Unchecked" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn
                             Width="60"
                             Binding="{Binding Path=NO}"
@@ -263,13 +267,15 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox
+                                        x:Name="tbAmount"
                                         Width="100"
                                         Margin="0,0,0,2"
                                         HorizontalContentAlignment="Center"
                                         FontFamily="Segoe UI Semi"
                                         FontSize="20"
                                         InputMethod.IsInputMethodEnabled="False"
-                                        Text="{Binding Path=StrikeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        Text="{Binding Path=StrikeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        TextChanged="tbAmount_TextChanged" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -298,11 +304,9 @@
                                         Margin="10,0,0,0"
                                         Background="RoyalBlue"
                                         BorderThickness="0"
-                                        Command="{Binding DataContext.PayableViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                        CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        Click="btnStrike_Click"
                                         Content="沖帳"
-                                        FontSize="18"
-                                        Click="btnStrike_Click" />
+                                        FontSize="18" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -310,12 +314,12 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
+                                        x:Name="btnClose"
                                         Height="35"
                                         Margin="10,0,0,0"
                                         Background="IndianRed"
                                         BorderThickness="0"
-                                        Command="{Binding DataContext.PayableViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                        CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        Click="btnClose_Click"
                                         Content="結案"
                                         FontSize="18" />
                                 </DataTemplate>
@@ -362,10 +366,10 @@
                     VerticalAlignment="Center"
                     Background="RoyalBlue"
                     BorderThickness="0"
+                    Click="btnBatchStrike_Click"
                     Content="批次沖帳"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="20"
-                    Click="btnBatchStrike_Click" />
+                    FontSize="20" />
                 <Button
                     x:Name="btnBatchClose"
                     Width="140"
@@ -374,6 +378,7 @@
                     VerticalAlignment="Center"
                     Background="IndianRed"
                     BorderThickness="0"
+                    Click="btnBatchClose_Click"
                     Content="批次結案"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20" />
