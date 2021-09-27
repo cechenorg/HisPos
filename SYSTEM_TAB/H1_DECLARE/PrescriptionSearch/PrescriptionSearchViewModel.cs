@@ -481,13 +481,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
 
             XmlDocument doc = new XmlDocument();
-            doc.Load("C:\\DRUGT.xml");
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = true;//該值確定是否可以選擇多個檔案
+            dialog.Title = "請選擇資料夾";
+            dialog.Filter = "所有檔案(*.*)|*.*";
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string file = dialog.FileName;
+                doc.Load(file);
+            }
+            else {
+                return;
+            }
+            
+            
             XmlNodeReader xmlNodeReader = new XmlNodeReader(doc);
             var nodes = doc.SelectNodes("pharmacy//ddata");
            
             foreach (XmlNode node in nodes)
             {
-                string da = $"<ddata>{node.InnerXml}</ddata>";
+                string da = $"{node.InnerXml}";
 
 
                 //XmlSerializer serializer = new XmlSerializer(typeof(ImportDeclareXml.Ddata), node.InnerText);
@@ -558,7 +571,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
                     dictin.Pdatas.Add(dictindd);
                 }
-                dict2.Add(i.ToString());
+                dict2.Add(da.ToString());
                 dict.Add(dictin);
                 i++;
 
@@ -593,9 +606,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 List<ImportDeclareXml.Ddata> cList = new List<ImportDeclareXml.Ddata>();
                 cList = dict.Take(j).Skip(ii).ToList();
+                List<string> cList2 = new List<string>();
+                cList2 = dict2.Take(j).Skip(ii).ToList();
+
                 j += 300;
                 listGroup.Add(cList);
-                PrescriptionDb.ImportDeclareXml(cList, dict2, "1");
+                PrescriptionDb.ImportDeclareXml(cList, cList2, "1");
             }
            
             

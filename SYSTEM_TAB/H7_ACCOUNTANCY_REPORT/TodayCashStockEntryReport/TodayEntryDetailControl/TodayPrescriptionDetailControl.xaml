@@ -5,10 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+   
     d:DesignHeight="600"
     d:DesignWidth="800"
     mc:Ignorable="d">
-
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
@@ -72,7 +73,7 @@
                 SelectedItem="{Binding CoopSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding CoopVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
         </StackPanel>
-        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
+        <FrameworkElement x:Name="dummyElement" Visibility="Collapsed"/>
         <DataGrid
             Grid.Row="1"
             Grid.Column="0"
@@ -240,8 +241,8 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    x:Name="ttt"
                     Width="70"
+                    x:Name="ttt"
                     Binding="{Binding Meduse, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="耗用"
@@ -326,15 +327,15 @@
                     FontSize="16"
                     Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     TextAlignment="Right"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                     Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="70"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Text="{Binding PrescriptionDetailReportSum.MedicalPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                    TextAlignment="Right"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                    TextAlignment="Right" 
+                     Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="78"
                     VerticalAlignment="Center"
@@ -342,23 +343,23 @@
                     FontSize="16"
                     Text="{Binding PrescriptionDetailReportSum.PaySelfPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                     TextAlignment="Right"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                     Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="70"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Text="{Binding PrescriptionDetailReportSum.Meduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                    TextAlignment="Right"
-                    Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}" />
+                    TextAlignment="Right" 
+                     Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}"/>
                 <TextBlock
                     Width="70"
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16"
                     Text="{Binding PrescriptionDetailReportSum.Profit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                    TextAlignment="Right"
-                    Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}" />
+                    TextAlignment="Right" 
+                     Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}"/>
             </StackPanel>
         </Border>
         <StackPanel
@@ -464,7 +465,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding MedicinePrice, StringFormat=N2}"
+                    Binding="{Binding MedicinePrice, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="健保點數"
                     IsReadOnly="True">

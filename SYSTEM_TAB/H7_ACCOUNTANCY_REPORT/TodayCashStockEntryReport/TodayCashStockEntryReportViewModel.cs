@@ -1935,7 +1935,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
                         double sumMedicalServicePoint = 0;
                         double sumMedicalPoint = 0;
                         double sumPaySelfPoint = 0;
-                        double sumMeduse = 0;
+                        decimal sumMeduse = 0;
                         double sumProfit = 0;
                         foreach (var c in PrescriptionDetailReportView)
                         {
@@ -3705,7 +3705,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
             PrescriptionDetailReportSum.Count = tempCollection.Count();
 
-            PrescriptionCoopDetailReportSumMain.CoopChange = PrescriptionDetailReportSum.MedicalPoint + PrescriptionDetailReportSum.MedicalServicePoint + PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
+            PrescriptionCoopDetailReportSumMain.CoopChange = (decimal)PrescriptionDetailReportSum.MedicalPoint + (decimal)PrescriptionDetailReportSum.MedicalServicePoint + (decimal)PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
         }
 
         private void SumPrescriptionDetailMain()
@@ -3778,7 +3778,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             PrescriptionCoopDetailReportSumMain.CoopIncome = (int)tempCollectionCoop.Sum(s => s.MedicalPoint) + (int)tempCollectionCoop.Sum(s => s.MedicalServicePoint) + (int)tempCollectionCoop.Sum(s => s.PaySelfPoint);
 
 
-            PrescriptionCoopDetailReportSumMain.CoopProfit = PrescriptionCoopDetailReportSumMain.CoopIncome + PrescriptionCoopDetailReportSumMain.CoopMeduse +
+            PrescriptionCoopDetailReportSumMain.CoopProfit = (decimal)PrescriptionCoopDetailReportSumMain.CoopIncome + PrescriptionCoopDetailReportSumMain.CoopMeduse +
                 PrescriptionCoopDetailReportSumMain.CoopChange;
         }
 

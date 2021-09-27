@@ -25,7 +25,9 @@ namespace His_Pos.NewClass.Medicine.PreviewMedicine
             Usage = m.Freq;
             Position = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
-            Dosage = Convert.ToDouble(m.Divided_dose);
+          
+                Dosage = Convert.ToDouble(m.Divided_dose);
+            
             Days = (int)Convert.ToDouble(m.Days);
         }
 

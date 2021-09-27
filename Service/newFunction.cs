@@ -348,7 +348,7 @@ namespace His_Pos.Service
                            
                         }
                     }
-                    if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216")
+                    if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216" || ViewModelMainWindow.CurrentPharmacy.ID == "7777777777")
                     {
                         XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
                     }

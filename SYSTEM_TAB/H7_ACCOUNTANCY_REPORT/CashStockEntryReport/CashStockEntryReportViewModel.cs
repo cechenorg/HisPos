@@ -1749,7 +1749,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                         double sumMedicalServicePoint = 0;
                         double sumMedicalPoint = 0;
                         double sumPaySelfPoint = 0;
-                        double sumMeduse = 0;
+                        decimal sumMeduse = 0;
                         double sumProfit = 0;
                         foreach (var c in PrescriptionDetailReportView)
                         {

@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             AdjustCaseID = r.Field<string>("AdjustCaseID");
             MedicalServicePoint = r.Field<int>("MedicalServicePoint");
             MedicalPoint = r.Field<int>("MedicinePoint");
-            Meduse = r.Field<int>("Meduse");
+            Meduse = r.Field<decimal>("Meduse");
             Profit = r.Field<int>("Profit");
             PaySelfPoint = r.Field<int>("PaySelfPoint");
         }
@@ -26,36 +26,36 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         private double medicalServicePoint;
         private double medicalPoint;
         private double paySelfPoint;
-        private int meduse;
+        private decimal meduse;
         private int profit;
         private int count;
         private int coopCount;
         private int paySelfCount;
         private int slowCount;
         private int normalCount;
-        private double coopProfit;
-        private double paySelfProfit;
-        private double slowProfit;
-        private double normalProfit;
-        private double coopMeduse;
-        private double paySelfMeduse;
-        private double slowMeduse;
-        private double normalMeduse;
+        private decimal coopProfit;
+        private decimal paySelfProfit;
+        private decimal slowProfit;
+        private decimal normalProfit;
+        private decimal coopMeduse;
+        private decimal paySelfMeduse;
+        private decimal slowMeduse;
+        private decimal normalMeduse;
         private double coopIncome;
         private double paySelfIncome;
         private double slowIncome;
         private double normalIncome;
 
-        private double coopChange;
-        private double paySelfChange;
-        private double slowChange;
-        private double normalChange;
+        private decimal coopChange;
+        private decimal paySelfChange;
+        private decimal slowChange;
+        private decimal normalChange;
 
         private int medTotalCount;
-        private double medTotalProfit;
-        private double medTotalMeduse;
+        private decimal medTotalProfit;
+        private decimal medTotalMeduse;
         private double medTotalIncome;
-        private double medTotalChange;
+        private decimal medTotalChange;
 
         public int Id { get; set; }
         public string AdjustCaseID { get; set; }
@@ -97,7 +97,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public int Meduse
+        public decimal Meduse
         {
             get => meduse;
             set
@@ -156,7 +156,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => NormalCount, ref normalCount, value);
             }
         }
-        public double CoopProfit
+        public decimal CoopProfit
         {
             get => coopProfit;
             set
@@ -164,7 +164,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => CoopProfit, ref coopProfit, value);
             }
         }
-        public double PaySelfProfit
+        public decimal PaySelfProfit
         {
             get => paySelfProfit;
             set
@@ -172,7 +172,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => PaySelfProfit, ref paySelfProfit, value);
             }
         }
-        public double SlowProfit
+        public decimal SlowProfit
         {
             get => slowProfit;
             set
@@ -180,7 +180,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => SlowProfit, ref slowProfit, value);
             }
         }
-        public double NormalProfit
+        public decimal NormalProfit
         {
             get => normalProfit;
             set
@@ -188,7 +188,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => NormalProfit, ref normalProfit, value);
             }
         }
-        public double CoopMeduse
+        public decimal CoopMeduse
         {
             get => coopMeduse;
             set
@@ -196,7 +196,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => CoopMeduse, ref coopMeduse, value);
             }
         }
-        public double PaySelfMeduse
+        public decimal PaySelfMeduse
         {
             get => paySelfMeduse;
             set
@@ -204,7 +204,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => PaySelfMeduse, ref paySelfMeduse, value);
             }
         }
-        public double SlowMeduse
+        public decimal SlowMeduse
         {
             get => slowMeduse;
             set
@@ -212,7 +212,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => SlowMeduse, ref slowMeduse, value);
             }
         }
-        public double NormalMeduse
+        public decimal NormalMeduse
         {
             get => normalMeduse;
             set
@@ -256,7 +256,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
 
 
-        public double CoopChange
+        public decimal CoopChange
         {
             get => coopChange;
             set
@@ -264,7 +264,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => CoopChange, ref coopChange, value);
             }
         }
-        public double PaySelfChange
+        public decimal PaySelfChange
         {
             get => paySelfChange;
             set
@@ -272,7 +272,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => PaySelfChange, ref paySelfChange, value);
             }
         }
-        public double SlowChange
+        public decimal SlowChange
         {
             get => slowChange;
             set
@@ -280,7 +280,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => SlowChange, ref slowChange, value);
             }
         }
-        public double NormalChange
+        public decimal NormalChange
         {
             get => normalChange;
             set
@@ -297,7 +297,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => MedTotalCount, ref medTotalCount, value);
             }
         }
-        public double MedTotalProfit
+        public decimal MedTotalProfit
         {
             get => medTotalProfit;
             set
@@ -305,7 +305,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => MedTotalProfit, ref medTotalProfit, value);
             }
         }
-        public double MedTotalMeduse
+        public decimal MedTotalMeduse
         {
             get => medTotalMeduse;
             set
@@ -322,7 +322,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public double MedTotalChange
+        public decimal MedTotalChange
         {
             get => medTotalChange;
             set
