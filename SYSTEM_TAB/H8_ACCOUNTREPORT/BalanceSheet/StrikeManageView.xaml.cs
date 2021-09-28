@@ -2,28 +2,28 @@
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
-using His_Pos.NewClass.Report.CashReport;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
     /// <summary>
     /// BalanceSheetView.xaml 的互動邏輯
     /// </summary>
-    public partial class StrikeManageView : UserControl
+    public partial class StrikeManageView : UserControl, INotifyPropertyChanged
     {
+        #region /// Variables ///
+
         private DataTable debitAccList = new DataTable();
         private DataTable creditAccList = new DataTable();
         private DataTable transferAccList = new DataTable();
@@ -34,11 +34,50 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private int subtotal = 0;
         private BalanceSheetTypeEnum BalanceSheetType;
 
-        public bool IsSelectAll { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        private bool isSelectAll = false;
+
+        public bool IsSelectAll
+        {
+            get { return isSelectAll; }
+            set
+            {
+                isSelectAll = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("IsSelectAll"));
+            }
+        }
+
+        private DateTime sDate;
+
+        public DateTime SDate
+        {
+            get => sDate;
+            set
+            {
+                sDate = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("SDate"));
+            }
+        }
+
+        private DateTime eDate;
+
+        public DateTime EDate
+        {
+            get => eDate;
+            set
+            {
+                eDate = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("EDate"));
+            }
+        }
+
+        #endregion /// Variables ///
 
         public StrikeManageView()
         {
             InitializeComponent();
+            DataContext = this;
             InitView();
         }
 
@@ -46,6 +85,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             GetAccountList();
             SetCombobox();
+            DateTime dt = DateTime.Now;
+            string year = dt.Year.ToString();
+            string month = dt.Month.ToString();
+            dpSDate.SelectedDate = Convert.ToDateTime(year + "-" + month + "-" + "1");
+            dpEDate.SelectedDate = dt;
         }
 
         private void ReloadDetail()
@@ -168,6 +212,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 sn.DefaultValue = "";
                 dgDetails.Columns.Add(sn);
 
+                DataColumn cc = new DataColumn("CanClose", typeof(bool));
+                sn.DefaultValue = true;
+                dgDetails.Columns.Add(cc);
+
                 dgStrikeDataGrid.ItemsSource = dgDetails.DefaultView;
             }
             catch
@@ -205,6 +253,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void listDC_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listbox = (ListBox)sender;
+            isSelectAll = false;
+
+            if (dgStrikeDataGrid != null)
+            {
+                dgStrikeDataGrid.ItemsSource = null;
+                dgStrikeDataGrid.Items.Refresh();
+            }
+
             if (listbox.SelectedItem == null)
             {
                 if (e.RemovedItems.Count > 0)
@@ -240,6 +296,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 dt.AcceptChanges();
                 cbSourceAccount.ItemsSource = dt.DefaultView;
                 GetAccountRecords(cbTargetAccount.SelectedValue.ToString());
+
+                if (cbTargetAccount.SelectedValue.ToString().StartsWith("002"))
+                {
+                    foreach (DataRow dr in dgDetails.Rows)
+                    {
+                        dr["CanClose"] = false;
+                    }
+                }
             }
         }
 
@@ -280,7 +344,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void DataGridCell_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             int index = GetRowIndex(e);
-            if (index < dgDetails.Rows.Count)
+            if (index < dgDetails.Rows.Count && index >= 0)
             {
                 int value = Convert.ToInt32(dgDetails.Rows[index]["Value"]);
                 dgDetails.Rows[index]["StrikeAmount"] = value;
@@ -292,7 +356,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void btnHistory_Click(object sender, RoutedEventArgs e)
         {
             var historyWindow = new StrikeHistoryWindow();
-            historyWindow.ShowDialog();
+            _ = historyWindow.ShowDialog();
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
@@ -319,14 +383,20 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void cbSelect_Checked(object sender, RoutedEventArgs e)
         {
             int index = GetRowIndexRouted(e);
-            dgDetails.Rows[index]["IsSelected"] = true;
+            if (index >= 0)
+            {
+                dgDetails.Rows[index]["IsSelected"] = true;
+            }
             CalculateSubTotal();
         }
 
         private void cbSelect_Unchecked(object sender, RoutedEventArgs e)
         {
             int index = GetRowIndexRouted(e);
-            dgDetails.Rows[index]["IsSelected"] = false;
+            if (index >= 0)
+            {
+                dgDetails.Rows[index]["IsSelected"] = false;
+            }
             CalculateSubTotal();
         }
 
@@ -335,7 +405,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private bool StrikeAction(object sender, RoutedEventArgs e)
         {
             int index = GetRowIndexRouted(e);
-            double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
+            _ = double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
             string note = dgDetails.Rows[index]["StrikeNote"].ToString();
             string sourceID = dgDetails.Rows[index]["ID"].ToString();
             BalanceSheetTypeEnum enu = GetStrikeTypeEnum();
@@ -405,31 +475,34 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 MainWindow.ServerConnection.OpenConnection();
                 foreach (DataRow dr in dgDetails.Rows)
                 {
-                    double.TryParse(dr["StrikeAmount"].ToString(), out double amount);
-                    string note = dr["StrikeNote"].ToString();
-                    string sourceID = dr["ID"].ToString();
+                    if ((bool)dr["IsSelected"])
+                    {
+                        _ = double.TryParse(dr["StrikeAmount"].ToString(), out double amount);
+                        string note = dr["StrikeNote"].ToString();
+                        string sourceID = dr["ID"].ToString();
 
-                    if (amount == 0)
-                    {
-                        continue;
-                    }
-                    if (enu == BalanceSheetTypeEnum.Bank)
-                    {
-                        sourceID = left.ToString();
-                    }
+                        if (amount == 0)
+                        {
+                            continue;
+                        }
+                        if (enu == BalanceSheetTypeEnum.Bank)
+                        {
+                            sourceID = left.ToString();
+                        }
 
-                    List<SqlParameter> parameters = new List<SqlParameter>();
-                    parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-                    parameters.Add(new SqlParameter("VALUE", amount));
-                    parameters.Add(new SqlParameter("TYPE", sourceID));
-                    parameters.Add(new SqlParameter("NOTE", note));
-                    parameters.Add(new SqlParameter("TARGET", right.ToString()));
-                    parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
-                    DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
-                    if (result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS")) { }
-                    else
-                    {
-                        success = false;
+                        List<SqlParameter> parameters = new List<SqlParameter>();
+                        parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+                        parameters.Add(new SqlParameter("VALUE", amount));
+                        parameters.Add(new SqlParameter("TYPE", sourceID));
+                        parameters.Add(new SqlParameter("NOTE", note));
+                        parameters.Add(new SqlParameter("TARGET", right.ToString()));
+                        parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
+                        DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
+                        if (result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS")) { }
+                        else
+                        {
+                            success = false;
+                        }
                     }
                 }
                 MainWindow.ServerConnection.CloseConnection();
@@ -453,7 +526,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             int index = GetRowIndexRouted(e);
-            double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
+            _ = double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
             string sourceID = dgDetails.Rows[index]["ID"].ToString();
             var left = cbTargetAccount.SelectedValue;
 
@@ -499,7 +572,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 {
                     if ((bool)dr["IsSelected"])
                     {
-                        double.TryParse(dr["StrikeAmount"].ToString(), out double amount);
+                        _ = double.TryParse(dr["StrikeAmount"].ToString(), out double amount);
                         string note = dr["StrikeNote"].ToString();
                         string sourceID = dr["ID"].ToString();
 
@@ -575,6 +648,69 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void tbAmount_TextChanged(object sender, TextChangedEventArgs e)
         {
             CalculateSubTotal();
+        }
+
+        private void tbAmount_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            _ = textBox.CaptureMouse();
+        }
+
+        private void tbAmount_GotMouseCapture(object sender, MouseEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.SelectAll();
+        }
+
+        private void tbAmount_IsMouseCaptureWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.SelectAll();
+        }
+
+        private void btnDateFilter_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime sd = (DateTime)dpSDate.SelectedDate;
+            int sdInt = int.Parse(sd.ToString("yyyyMMdd"));
+            DateTime ed = (DateTime)dpEDate.SelectedDate;
+            int edInt = int.Parse(ed.ToString("yyyyMMdd"));
+
+            if (sd != null && ed != null)
+            {
+                DataTable dt = dgDetails.Copy();
+                for (int i = dt.Rows.Count - 1; i >= 0; i--)
+                {
+                    if (!string.IsNullOrEmpty(dt.Rows[i]["Date"].ToString()))
+                    {
+                        string[] split = dt.Rows[i]["Date"].ToString().Split('-');
+                        if (split.Length == 3)
+                        {
+                            _ = int.TryParse(split[0] + split[1] + split[2], out int mergeDate2K);
+                            _ = int.TryParse(split[0], out int yy);
+                            _ = int.TryParse(split[1], out int mm);
+                            _ = int.TryParse(split[2], out int dd);
+                            if (yy > 1000 && (mergeDate2K < sdInt || mergeDate2K > edInt))
+                            {
+                                dt.Rows[i].Delete();
+                            }
+                            else if (yy <= 1000)
+                            {
+                                int mergeDateMG = int.Parse((yy + 1911).ToString() + mm.ToString() + dd.ToString());
+                                if (mergeDateMG < sdInt || mergeDateMG > edInt)
+                                {
+                                    dt.Rows[i].Delete();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                dt.AcceptChanges();
+                dgStrikeDataGrid.ItemsSource = dt.DefaultView;
+            }
         }
     }
 }

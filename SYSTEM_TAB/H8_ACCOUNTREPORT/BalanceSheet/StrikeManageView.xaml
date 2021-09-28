@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="StrikeManageViewControl"
     FontFamily="Segoe UI Semibold"
     mc:Ignorable="d">
 
@@ -103,6 +104,46 @@
                     Content="歷程紀錄"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20" />
+                <Button
+                    x:Name="btnDateFilter"
+                    Width="120"
+                    Height="40"
+                    Margin="40,0,0,0"
+                    VerticalAlignment="Center"
+                    Background="Green"
+                    BorderThickness="0"
+                    Content="查詢"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Click="btnDateFilter_Click" />
+                <Label
+                    Margin="30,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="日期"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="22" />
+                <DatePicker
+                    x:Name="dpSDate"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="22"
+                    Width="120"
+                    SelectedDateFormat="Short" />
+                <Label
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="~"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="22" />
+                <DatePicker
+                    x:Name="dpEDate"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="22"
+                    Width="120"
+                    SelectedDateFormat="Short" />
                 <!--<Label
                     Margin="190,0,0,0"
                     VerticalAlignment="Center"
@@ -153,8 +194,7 @@
                     CanUserReorderColumns="False"
                     CanUserResizeColumns="False"
                     CanUserSortColumns="False"
-                    CellStyle="{StaticResource DataGridCellStyle}"
-                    EnableRowVirtualization="False">
+                    CellStyle="{StaticResource DataGridCellStyle}">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -189,7 +229,7 @@
                                     <CheckBox
                                         HorizontalAlignment="Center"
                                         Click="CheckBox_Click"
-                                        IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=IsSelectAll}" />
+                                        IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=IsSelectAll, Mode=TwoWay}" />
                                 </Border>
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
@@ -273,7 +313,10 @@
                                         HorizontalContentAlignment="Center"
                                         FontFamily="Segoe UI Semi"
                                         FontSize="20"
+                                        GotFocus="tbAmount_GotFocus"
+                                        GotMouseCapture="tbAmount_GotMouseCapture"
                                         InputMethod.IsInputMethodEnabled="False"
+                                        IsMouseCaptureWithinChanged="tbAmount_IsMouseCaptureWithinChanged"
                                         Text="{Binding Path=StrikeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                         TextChanged="tbAmount_TextChanged" />
                                 </DataTemplate>
@@ -321,7 +364,8 @@
                                         BorderThickness="0"
                                         Click="btnClose_Click"
                                         Content="結案"
-                                        FontSize="18" />
+                                        FontSize="18"
+                                        IsEnabled="{Binding Path=CanClose}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -338,7 +382,7 @@
                     FontSize="24" />
                 <Label
                     x:Name="lbSelectedCount"
-                    Width="60"
+                    Width="65"
                     Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     Content="0"
@@ -347,7 +391,7 @@
                 <Label
                     Margin="30,0,0,0"
                     VerticalAlignment="Center"
-                    Content="已選金額:"
+                    Content="沖帳金額:"
                     FontFamily="Segoe UI Semibold"
                     FontSize="24" />
                 <Label
