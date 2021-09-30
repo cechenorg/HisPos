@@ -36,41 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        private bool isSelectAll = false;
-
-        public bool IsSelectAll
-        {
-            get { return isSelectAll; }
-            set
-            {
-                isSelectAll = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("IsSelectAll"));
-            }
-        }
-
-        private DateTime sDate;
-
-        public DateTime SDate
-        {
-            get => sDate;
-            set
-            {
-                sDate = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SDate"));
-            }
-        }
-
-        private DateTime eDate;
-
-        public DateTime EDate
-        {
-            get => eDate;
-            set
-            {
-                eDate = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("EDate"));
-            }
-        }
+        public bool IsSelectAll { get; set; }
 
         #endregion /// Variables ///
 
@@ -160,6 +126,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void SetCombobox()
         {
             int dcSwitch = listDC.SelectedIndex;
+            dgDetails.Rows.Clear();
 
             if (dcSwitch == 0)
             {
@@ -253,7 +220,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void listDC_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listbox = (ListBox)sender;
-            isSelectAll = false;
 
             if (dgStrikeDataGrid != null)
             {
@@ -418,9 +384,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 MessageWindow.ShowMessage("尚未選擇帳戶！", MessageType.ERROR);
                 return false;
             }
-            if (amount == 0)
+            if (amount <= 0)
             {
-                MessageWindow.ShowMessage("沖帳金額為零！", MessageType.ERROR);
+                MessageWindow.ShowMessage("沖帳金額有誤！", MessageType.ERROR);
                 return false;
             }
 
@@ -576,7 +542,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         string note = dr["StrikeNote"].ToString();
                         string sourceID = dr["ID"].ToString();
 
-                        if (amount != 0)
+                        if (amount > 0)
                         {
                             if (left == null || right == null)
                             {
@@ -670,13 +636,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
         private void btnDateFilter_Click(object sender, RoutedEventArgs e)
         {
-            DateTime sd = (DateTime)dpSDate.SelectedDate;
-            int sdInt = int.Parse(sd.ToString("yyyyMMdd"));
-            DateTime ed = (DateTime)dpEDate.SelectedDate;
-            int edInt = int.Parse(ed.ToString("yyyyMMdd"));
-
-            if (sd != null && ed != null)
+            ReloadDetail();
+            if (dpSDate.SelectedDate != null && dpEDate.SelectedDate != null)
             {
+                DateTime sd = (DateTime)dpSDate.SelectedDate;
+                int sdInt = int.Parse(sd.ToString("yyyyMMdd"));
+                DateTime ed = (DateTime)dpEDate.SelectedDate;
+                int edInt = int.Parse(ed.ToString("yyyyMMdd"));
+
                 DataTable dt = dgDetails.Copy();
                 for (int i = dt.Rows.Count - 1; i >= 0; i--)
                 {
@@ -687,15 +654,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         {
                             _ = int.TryParse(split[0] + split[1] + split[2], out int mergeDate2K);
                             _ = int.TryParse(split[0], out int yy);
-                            _ = int.TryParse(split[1], out int mm);
-                            _ = int.TryParse(split[2], out int dd);
                             if (yy > 1000 && (mergeDate2K < sdInt || mergeDate2K > edInt))
                             {
                                 dt.Rows[i].Delete();
                             }
                             else if (yy <= 1000)
                             {
-                                int mergeDateMG = int.Parse((yy + 1911).ToString() + mm.ToString() + dd.ToString());
+                                int mergeDateMG = int.Parse((yy + 1911).ToString() + split[1] + split[2]);
                                 if (mergeDateMG < sdInt || mergeDateMG > edInt)
                                 {
                                     dt.Rows[i].Delete();
@@ -704,13 +669,27 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         }
                         else
                         {
-                            break;
+                            dt.Rows[i].Delete();
                         }
                     }
                 }
                 dt.AcceptChanges();
-                dgStrikeDataGrid.ItemsSource = dt.DefaultView;
+                dgDetails.Rows.Clear();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    int index = dt.Rows.IndexOf(dr);
+                    dr["NO"] = index + 1;
+                    dgDetails.ImportRow(dr);
+                }
+                dgStrikeDataGrid.ItemsSource = dgDetails.DefaultView;
             }
+        }
+
+        private void btnDateClear_Click(object sender, RoutedEventArgs e)
+        {
+            dpSDate.SelectedDate = null;
+            dpEDate.SelectedDate = null;
+            ReloadDetail();
         }
     }
 }

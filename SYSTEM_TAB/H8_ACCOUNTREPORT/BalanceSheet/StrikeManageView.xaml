@@ -112,10 +112,22 @@
                     VerticalAlignment="Center"
                     Background="Green"
                     BorderThickness="0"
-                    Content="查詢"
+                    Content="區間查詢"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
                     Click="btnDateFilter_Click" />
+                <Button
+                    x:Name="btnDateClear"
+                    Width="80"
+                    Height="40"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Background="IndianRed"
+                    BorderThickness="0"
+                    Content="清除"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Click="btnDateClear_Click" />
                 <Label
                     Margin="30,0,0,0"
                     VerticalAlignment="Center"
