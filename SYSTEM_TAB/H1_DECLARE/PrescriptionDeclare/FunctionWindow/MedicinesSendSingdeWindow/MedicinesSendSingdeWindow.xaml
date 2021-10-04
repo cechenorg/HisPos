@@ -129,7 +129,7 @@
                     FontWeight="Bold"
                     Foreground="IndianRed"
                     Header="傳送量"
-                    IsReadOnly="True">
+                    IsReadOnly="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />

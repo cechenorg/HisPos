@@ -276,7 +276,7 @@ namespace His_Pos.ChromeTabViewModel
         void watch_Created(object sender, FileSystemEventArgs e)
         {
             bool isRe=false;
-            string isRePost="";
+            string isRePost="0";
             
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
@@ -326,7 +326,7 @@ namespace His_Pos.ChromeTabViewModel
                                 
                             }
                         }
-                        if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216")
+                        if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216"|| ViewModelMainWindow.CurrentPharmacy.ID == "7777777777")
                         {
                             XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
                         }
@@ -359,7 +359,7 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     if (c.AutoPrint == true)
                                     {
-                                        if (ff.IsPrint == false && isRePost=="0")
+                                        if (ff.IsPrint == false)
                                         {
 
                                             gg.PrintAction(ff);
@@ -619,6 +619,12 @@ namespace His_Pos.ChromeTabViewModel
 
         public static AdjustCase GetAdjustCase(string id)
         {
+            if (AdjustCases.SingleOrDefault(a => a.ID.Equals(id)) == null)
+            {
+                MessageBox.Show(id);
+            }
+
+
             return AdjustCases.SingleOrDefault(a => a.ID.Equals(id));
         }
 
