@@ -57,9 +57,9 @@
             Background="{StaticResource Shadow}"
             Orientation="Horizontal">
             <Label
-                Margin="113,0,0,0"
+                Margin="151,0,0,0"
                 VerticalAlignment="Center"
-                Content="杏德庫存量"
+                Content="庫存量"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Foreground="Black" />

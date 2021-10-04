@@ -139,8 +139,8 @@
                     Margin="5,0,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
-                    FontSize="22"
-                    Width="120"
+                    FontSize="20"
+                    Width="160"
                     SelectedDateFormat="Short" />
                 <Label
                     Margin="10,0,0,0"
@@ -153,8 +153,8 @@
                     Margin="5,0,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
-                    FontSize="22"
-                    Width="120"
+                    FontSize="20"
+                    Width="160"
                     SelectedDateFormat="Short" />
                 <!--<Label
                     Margin="190,0,0,0"
