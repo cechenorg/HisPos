@@ -10,10 +10,10 @@
     xmlns:medicineControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl"
     xmlns:otcControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTCControl"
     Title="商品詳細資料"
+     DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelProductDetailWindow}"
     Width="{Binding WindowWidth}"
     Height="{Binding WindowHeight}"
     Closed="ProductDetailWindow_OnClosed"
-    DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelProductDetailWindow}"
     Left="{Binding StartLeft}"
     Top="{Binding StartTop}"
     mc:Ignorable="d">
