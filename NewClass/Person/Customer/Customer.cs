@@ -4,8 +4,10 @@ using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
@@ -42,6 +44,20 @@ namespace His_Pos.NewClass.Person.Customer
             set
             {
                 Set(() => IsEnable, ref isEnable, value);
+            }
+        }
+
+        private bool isEmp;
+
+        public bool IsEmp
+        {
+            get
+            {
+                return isEmp;
+            }
+            set
+            {
+                Set(() => IsEmp, ref isEmp, value);
             }
         }
 
@@ -332,7 +348,6 @@ namespace His_Pos.NewClass.Person.Customer
             MessageWindow.ShowMessage("新增顧客資料發生異常，請稍後重試。", MessageType.ERROR);
             return "FAILED";
         }
-
 
         public void GetHistories()
         {

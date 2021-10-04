@@ -18,7 +18,7 @@ using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 {
-    public class CustomerManageViewModel : TabBase
+    public class CustomerManageViewModel : TabBase, INotifyPropertyChanged
     {
         public override TabBase getTab()
         {
@@ -29,18 +29,21 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         public RelayCommand SelectionChangedCommand { get; set; }
         public RelayCommand DataChangeCommand { get; set; }
+        public RelayCommand CheckUncheckCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
         public RelayCommand ShowMedicinesDetailCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
+        public RelayCommand IsEmployeeChecked { get; set; }
+        public RelayCommand IsEmployeeUnchecked { get; set; }
 
-    #endregion -----Define Command-----
+        #endregion -----Define Command-----
 
-    #region ----- Define Variables -----
+        #region ----- Define Variables -----
 
-    private List<string> prescriptionCaseString;
+        private List<string> prescriptionCaseString;
 
         public List<string> PrescriptionCaseString
         {
@@ -80,7 +83,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             set { Set(() => SearchOrderID, ref searchOrderID, value); }
         }
 
-
         private string phoneNumber;
 
         public string PhoneNumber
@@ -97,15 +99,15 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             set { Set(() => IdNumber, ref idNumber, value); }
         }
 
-        private bool isEmployee;
+        private bool isEmployee = false;
 
         public bool IsEmployee
         {
-            get 
+            get { return isEmployee; }
+            set
             {
-                return isEmployee;
+                Set(() => IsEmployee, ref isEmployee, value);
             }
-            set { Set(() => IsEmployee, ref isEmployee, value); }
         }
 
         private DateTime? textCusBirthDay;
@@ -275,7 +277,18 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             ShowMedicinesDetailCommand = new RelayCommand(ShowMedicinesDetailAction);
             PrescriptionCaseString = new List<string>() { "全部", "調劑", "登錄", "預約" };
             PrescriptionCaseSelectItem = PrescriptionCaseString[0];
+
             RegisterMessengers();
+        }
+
+        private void UpdateIsEmployee()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("CusID", Customer.ID));
+            parameters.Add(new SqlParameter("IsEmployee", customer.IsEmp));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateIsEmployee]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
         }
 
         private void DeleteAction()
@@ -288,13 +301,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 MainWindow.ServerConnection.OpenConnection();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("ID", Customer.ID));
-                 MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteCustomer]", parameters);
+                MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteCustomer]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
-               
+
                 MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
                 Customer = new Customer();
                 CustomerCollection = new Customers();
-
             }
         }
 
@@ -306,7 +318,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 SearchOrderID = notificationMessage.Content;
                 SearchIDAction();
             }
-
         }
 
         #region Action
@@ -362,6 +373,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         {
             if (Customer is null) return;
             Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
+
             InitDataChanged();
         }
 
@@ -372,7 +384,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         public void CancelAction()
         {
-            if (Customer != null) 
+            if (Customer != null)
             {
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection.Single(cus => cus.ID == Customer.ID));
                 InitDataChanged();
@@ -381,7 +393,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         public void SubmitAction()
         {
-            if (Customer != null) 
+            if (Customer != null)
             {
                 for (int i = 0; i < CustomerCollection.Count; i++)
                 {
@@ -425,11 +437,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                     if ((bool)confirmWindow.DialogResult)
                     {
                         Customer.Save();
+                        UpdateIsEmployee();
                         MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
                     }
                 }
                 else
+                {
                     Customer.Save();
+                    UpdateIsEmployee();
+                }
+
                 InitDataChanged();
                 MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
             }
@@ -454,26 +471,27 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void InitDataChanged()
         {
-            if (Customer != null)
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("CusID", Customer.ID));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[IsEmployee]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            if (result.Rows.Count > 0)
             {
-                MainWindow.ServerConnection.OpenConnection();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("CusID", Customer.ID));
-                DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[IsEmployee]", parameters);
-                MainWindow.ServerConnection.CloseConnection();
-
-                if (result.Rows.Count>0)
+                if (result.Rows[0]["Cus_CusType"].ToString() == "1")
                 {
-                    if (result.Rows[0]["Cus_CusType"].ToString() == "1")
-                    {
-                        isEmployee = true;
-                    }
-                    else
-                    {
-                        isEmployee = false;
-                    }
+                    customer.IsEmp = true;
+                }
+                else
+                {
+                    customer.IsEmp = false;
                 }
             }
+            else
+            {
+                customer.IsEmp = false;
+            }
+
             IsDataChanged = false;
             BtnCancelEnable = false;
             BtnSubmitEnable = false;
@@ -494,6 +512,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         }
 
         #endregion Function
+
         private void RegisterMessengers()
         {
             Messenger.Default.Register<NotificationMessage<string>>(this, ShowOrderDetailByOrderID);
