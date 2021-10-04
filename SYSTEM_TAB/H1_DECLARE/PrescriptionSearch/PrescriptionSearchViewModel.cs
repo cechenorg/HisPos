@@ -551,7 +551,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                 dictin.D43 = node.SelectSingleNode("dbody/d43")?.InnerText ?? "";
                 dictin.D44 = node.SelectSingleNode("dbody/d44")?.InnerText ?? "";
                 dictin.Pdatas = new List<ImportDeclareXml.Pdata>();
-                var nodess = doc.SelectNodes("pharmacy//ddata//dbody");
+                var nodess = node.SelectNodes("dbody");
                 foreach (XmlNode nodesss in nodess) {
                     var dictindd = new His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Pdata();
                     dictindd.P1= nodesss.SelectSingleNode("pdata/p1")?.InnerText ?? "";
@@ -564,8 +564,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     dictindd.P8 = nodesss.SelectSingleNode("pdata/p8")?.InnerText ?? "";
                     dictindd.P9 = nodesss.SelectSingleNode("pdata/p9")?.InnerText ?? "";
                     dictindd.P10 = nodesss.SelectSingleNode("pdata/p10")?.InnerText ?? "";
-                    dictindd.P11 = nodesss.SelectSingleNode("pdata/p10")?.InnerText ?? "";
-                    dictindd.P12 = nodesss.SelectSingleNode("pdata/p10")?.InnerText ?? "";
+                    dictindd.P11 = nodesss.SelectSingleNode("pdata/p11")?.InnerText ?? "";
+                    dictindd.P12 = nodesss.SelectSingleNode("pdata/p12")?.InnerText ?? "";
                     dictindd.P13 = nodesss.SelectSingleNode("pdata/p13")?.InnerText ?? "";
                     dictindd.P15 = nodesss.SelectSingleNode("pdata/p15")?.InnerText ?? "";
 
