@@ -471,25 +471,28 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void InitDataChanged()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("CusID", Customer.ID));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[IsEmployee]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-            if (result.Rows.Count > 0)
+            if (Customer != null)
             {
-                if (result.Rows[0]["Cus_CusType"].ToString() == "1")
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("CusID", Customer.ID));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[IsEmployee]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+                if (result.Rows.Count > 0)
                 {
-                    customer.IsEmp = true;
+                    if (result.Rows[0]["Cus_CusType"].ToString() == "1")
+                    {
+                        customer.IsEmp = true;
+                    }
+                    else
+                    {
+                        customer.IsEmp = false;
+                    }
                 }
                 else
                 {
                     customer.IsEmp = false;
                 }
-            }
-            else
-            {
-                customer.IsEmp = false;
             }
 
             IsDataChanged = false;

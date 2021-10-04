@@ -681,6 +681,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     dr["NO"] = index + 1;
                     dgDetails.ImportRow(dr);
                 }
+                if (cbTargetAccount.SelectedValue.ToString().StartsWith("002"))
+                {
+                    foreach (DataRow dr in dgDetails.Rows)
+                    {
+                        dr["CanClose"] = false;
+                    }
+                }
                 dgStrikeDataGrid.ItemsSource = dgDetails.DefaultView;
             }
         }
