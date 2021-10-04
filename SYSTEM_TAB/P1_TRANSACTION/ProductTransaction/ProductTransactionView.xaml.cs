@@ -505,6 +505,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbDiscountAmt.Text = "0";
             tbNote.Text = "";
             AppliedPrice = "Pro_RetailPrice";
+            lblAppliedPrice.Content = "零售價";
+            lblAppliedPrice.Foreground = Brushes.Black;
 
             CalculateTotal();
             PriceCombo.SelectedIndex = 0;
@@ -1051,6 +1053,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             btnPrepay.IsEnabled = false;
             btnDepositManage.IsEnabled = false;
             AppliedPrice = "Pro_RetailPrice";
+            lblAppliedPrice.Content = "零售價";
+            lblAppliedPrice.Foreground = Brushes.Black;
             SetPrice();
             CalculateTotal();
         }
@@ -1079,13 +1083,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             tbAddress.Text = result.Rows[0]["Cus_Address"].ToString();
             tbCusNote.Text = result.Rows[0]["Cus_Note"].ToString();
 
-            if (result.Rows[0]["Cus_CusType"].ToString() == "EMP")
+            if (result.Rows[0]["Cus_CusType"].ToString() == "1")
             {
                 AppliedPrice = "Pro_EmployeePrice";
+                lblAppliedPrice.Content = "員工價";
+                lblAppliedPrice.Foreground = Brushes.Black;
             }
             else
             {
                 AppliedPrice = "Pro_MemberPrice";
+                lblAppliedPrice.Content = "會員價";
+                lblAppliedPrice.Foreground = Brushes.Black;
             }
 
             SetPrice();
