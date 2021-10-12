@@ -8,8 +8,8 @@
     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="歷史資料"
-    Width="1300"
-    Height="450"
+    Width="1240"
+    Height="540"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid>
@@ -34,19 +34,19 @@
                 ItemsSource="{Binding CheckLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 DisplayMemberPath="Namepath"
                 SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
-            <Label
-                Margin="10,0,0,0"
+            <!--<Label
+                Margin="5,0,0,0"
                 VerticalAlignment="Center"
                 Content="日期"
                 FontFamily="Segoe UI Semibold"
-                FontSize="22" />
+                FontSize="22" />-->
             <DatePicker
                 x:Name="dpSDate"
                 Width="120"
-                Margin="5,0,0,0"
+                Margin="15,0,0,0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                FontSize="22"
+                FontSize="18"
                 SelectedDate="{Binding StartDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" />
             <Label
@@ -61,12 +61,112 @@
                 Margin="5,0,0,0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                FontSize="22"
+                FontSize="18"
                 SelectedDate="{Binding EndDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" />
-            <Button
-                Width="130"
+            <Label
+                Margin="50,0,0,0"
+                VerticalAlignment="Center"
+                Content="科目"
+                FontFamily="Segoe UI Semibold"
+                FontSize="22" />
+            <ComboBox
+                Width="160"
+                Height="45"
+                Margin="0,0,0,0"
+                VerticalContentAlignment="Center"
+                DisplayMemberPath="StrikeName"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsTextSearchEnabled="False"
+                ItemsSource="{Binding TypeTable}"
+                SelectedIndex="-1"
+                SelectedValue="{Binding Type, Mode=TwoWay}"
+                SelectedValuePath="StrikeName">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+            <Label
                 Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="帳戶"
+                FontFamily="Segoe UI Semibold"
+                FontSize="22" />
+            <ComboBox
+                Width="140"
+                Height="45"
+                Margin="0,0,0,0"
+                VerticalContentAlignment="Center"
+                DisplayMemberPath="StrikeType"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsTextSearchEnabled="False"
+                ItemsSource="{Binding SujectTable}"
+                SelectedIndex="-1"
+                SelectedValue="{Binding SujectString, Mode=TwoWay}"
+                SelectedValuePath="StrikeType">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="類別"
+                FontFamily="Segoe UI Semibold"
+                FontSize="22" />
+            <ComboBox
+                Width="100"
+                Height="45"
+                Margin="0,0,0,0"
+                VerticalContentAlignment="Center"
+                DisplayMemberPath="StrikeWay"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsTextSearchEnabled="False"
+                ItemsSource="{Binding AccountTable}"
+                SelectedIndex="-1"
+                SelectedValue="{Binding AccountString, Mode=TwoWay}"
+                SelectedValuePath="StrikeWay">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="人員"
+                FontFamily="Segoe UI Semibold"
+                FontSize="22" />
+            <ComboBox
+                Width="100"
+                Height="45"
+                Margin="0,0,0,0"
+                VerticalContentAlignment="Center"
+                DisplayMemberPath="Emp_Name"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsTextSearchEnabled="False"
+                ItemsSource="{Binding EmpTable}"
+                SelectedIndex="-1"
+                SelectedValue="{Binding Emp, Mode=TwoWay}"
+                SelectedValuePath="Emp_Name">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+            <Button
+                Width="80"
+                Margin="30,0,0,0"
                 VerticalAlignment="Center"
                 Background="Green"
                 BorderThickness="0"
@@ -147,7 +247,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="200"
+                    Width="180"
                     Binding="{Binding StrikeTypeName}"
                     FontFamily="Segoe UI Semi"
                     Header="帳戶"
@@ -203,10 +303,15 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="200"
-                    Binding="{Binding StrikeNote, UpdateSourceTrigger=PropertyChanged}"
+                    Width="160"
+                    Binding="{Binding StrikeSourceID, UpdateSourceTrigger=PropertyChanged}"
                     Header="來源"
                     IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -215,10 +320,15 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="80"
+                    Width="100"
                     Binding="{Binding EMP, UpdateSourceTrigger=PropertyChanged}"
                     Header="人員"
                     IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -227,10 +337,15 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="150"
+                    Width="250"
                     Binding="{Binding StrikeNote, UpdateSourceTrigger=PropertyChanged}"
                     Header="沖帳備註"
                     IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Left" />

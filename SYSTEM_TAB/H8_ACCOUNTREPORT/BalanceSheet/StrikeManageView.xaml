@@ -51,7 +51,6 @@
                     VerticalContentAlignment="Center"
                     FontFamily="Segoe UI Semibold"
                     FontSize="18"
-                    IsEditable="True"
                     IsTextSearchEnabled="False"
                     KeyUp="cbTargetAccount_KeyUp"
                     SelectedIndex="-1"

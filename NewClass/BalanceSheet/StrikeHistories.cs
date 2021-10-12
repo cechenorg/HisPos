@@ -1,7 +1,9 @@
 ﻿using His_Pos.NewClass.Report.CashReport;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace His_Pos.NewClass.BalanceSheet
 {
@@ -20,14 +22,15 @@ namespace His_Pos.NewClass.BalanceSheet
                 Add(new StrikeHistory(r));
             }
         }
-        public void GetSelectData(string type, DateTime sdate, DateTime edate)
+
+        public void GetSelectData(DataTable dt)
         {
             Clear();
-            var historiesTable = CashReportDb.GetSelectStrikeHistories( type,  sdate,  edate);
-            foreach (DataRow r in historiesTable.Rows)
+            foreach (DataRow r in dt.Rows)
             {
                 Add(new StrikeHistory(r));
             }
+            
         }
     }
 }

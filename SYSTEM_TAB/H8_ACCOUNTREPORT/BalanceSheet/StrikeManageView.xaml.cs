@@ -263,9 +263,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 cbSourceAccount.ItemsSource = dt.DefaultView;
                 GetAccountRecords(cbTargetAccount.SelectedValue.ToString());
 
-                if (cbTargetAccount.SelectedValue.ToString().StartsWith("002"))
+                if (cbTargetAccount.SelectedValue.ToString().StartsWith("002") || cbTargetAccount.SelectedValue.ToString().StartsWith("007"))
                 {
                     foreach (DataRow dr in dgDetails.Rows)
+                    {
+                        dr["CanClose"] = false;
+                    }
+                }
+                foreach (DataRow dr in dgDetails.Rows)
+                {
+                    if (dr["ID"].ToString() == "0")
                     {
                         dr["CanClose"] = false;
                     }
@@ -384,11 +391,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 MessageWindow.ShowMessage("尚未選擇帳戶！", MessageType.ERROR);
                 return false;
             }
-            if (amount <= 0)
-            {
-                MessageWindow.ShowMessage("沖帳金額有誤！", MessageType.ERROR);
-                return false;
-            }
+            //if (amount <= 0)
+            //{
+            //    MessageWindow.ShowMessage("沖帳金額有誤！", MessageType.ERROR);
+            //    return false;
+            //}
 
             if (enu == BalanceSheetTypeEnum.Bank)
             {
@@ -536,13 +543,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 MainWindow.ServerConnection.OpenConnection();
                 foreach (DataRow dr in dgDetails.Rows)
                 {
-                    if ((bool)dr["IsSelected"])
+                    if ((bool)dr["IsSelected"] && dr["CanClose"].ToString() != "False")
                     {
                         _ = double.TryParse(dr["StrikeAmount"].ToString(), out double amount);
                         string note = dr["StrikeNote"].ToString();
                         string sourceID = dr["ID"].ToString();
 
-                        if (amount > 0)
+                        if (amount != 0)
                         {
                             if (left == null || right == null)
                             {
@@ -637,7 +644,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void btnDateFilter_Click(object sender, RoutedEventArgs e)
         {
             ReloadDetail();
-            if (dpSDate.SelectedDate != null && dpEDate.SelectedDate != null)
+            if (dpSDate.SelectedDate != null && dpEDate.SelectedDate != null && cbSourceAccount.SelectedItem != null)
             {
                 DateTime sd = (DateTime)dpSDate.SelectedDate;
                 int sdInt = int.Parse(sd.ToString("yyyyMMdd"));
@@ -681,9 +688,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     dr["NO"] = index + 1;
                     dgDetails.ImportRow(dr);
                 }
-                if (cbTargetAccount.SelectedValue.ToString().StartsWith("002"))
+                if (cbTargetAccount.SelectedValue.ToString().StartsWith("002") || cbTargetAccount.SelectedValue.ToString().StartsWith("002"))
                 {
                     foreach (DataRow dr in dgDetails.Rows)
+                    {
+                        dr["CanClose"] = false;
+                    }
+                }
+                foreach (DataRow dr in dgDetails.Rows)
+                {
+                    if (dr["ID"].ToString() == "0")
                     {
                         dr["CanClose"] = false;
                     }
