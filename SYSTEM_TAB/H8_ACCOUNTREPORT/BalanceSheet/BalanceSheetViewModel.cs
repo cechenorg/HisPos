@@ -221,11 +221,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             LeftTotal = (double)dataSet.Tables[2].Rows[0].Field<decimal>("LEFT_TOTAL");
             RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("RIGHT_TOTAL");
 
-            PayableViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[4]);
-            PayViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[5]);
+            //PayableViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[4]);
+            //PayViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[5]);
             MedPointViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[6]);
 
             MainWindow.ServerConnection.CloseConnection();
+            MessageWindow.ShowMessage("載入完成。", MessageType.SUCCESS);
         }
 
         private void ShowHistoryAction()
