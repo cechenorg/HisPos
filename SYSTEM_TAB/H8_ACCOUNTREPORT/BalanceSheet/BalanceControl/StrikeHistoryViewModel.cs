@@ -12,7 +12,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
     public class StrikeHistoryViewModel : ViewModelBase
     {
-        private DateTime startDate = DateTime.Today;
+        private static DateTime now = DateTime.Now;
+        private DateTime startDate = new DateTime(now.Year, now.Month, 1);
 
         public DateTime StartDate
         {
@@ -23,7 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
         }
 
-        private DateTime endDate = DateTime.Today;
+        private DateTime endDate = now;
 
         public DateTime EndDate
         {
