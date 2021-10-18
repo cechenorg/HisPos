@@ -47,5 +47,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             TextBox tb = (TextBox)sender;
             tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
         }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }

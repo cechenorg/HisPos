@@ -75,6 +75,7 @@
                 Content="備註"
                 FontSize="18" />
             <TextBox
+                x:Name="tbNote"
                 Width="400"
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -82,6 +83,7 @@
                 Text="{Binding CashFlowNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextAlignment="Center" />
             <Button
+                x:Name="btnAdd"
                 Width="80"
                 Margin="10,0,0,0"
                 Background="IndianRed"
@@ -89,7 +91,8 @@
                 Command="{Binding SubmitCommand}"
                 Content="新增"
                 FontFamily="Segoe UI Semibold"
-                FontSize="16" />
+                FontSize="16"
+                Click="btnAdd_Click" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
@@ -234,7 +237,7 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <ScrollViewer 
+                <ScrollViewer
                     HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Disabled"
                     Grid.Column="1"
@@ -373,7 +376,6 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
-                
             </Grid>
         </StackPanel>
     </Grid>

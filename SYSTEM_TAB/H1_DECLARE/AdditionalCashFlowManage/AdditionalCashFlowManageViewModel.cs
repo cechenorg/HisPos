@@ -284,6 +284,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             MainWindow.ServerConnection.OpenConnection();
             CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue, SelectedBank.ID);
             MainWindow.ServerConnection.CloseConnection();
+            CashFlowValue = 0;
+            CashFlowNote = "";
+            EndDate = DateTime.Today;
             SearchAction();
         }
 
