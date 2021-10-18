@@ -65,7 +65,7 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                     switch (order.Type)
                     {
                         case OrderTypeEnum.PURCHASE:
-                            result = StoreOrderDB.PurchaseStoreOrderToDone(id);
+                            result = StoreOrderDB.PurchaseStoreOrderToDone(id, false);
                             break;
 
                         case OrderTypeEnum.RETURN:
@@ -95,7 +95,7 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                     switch (order.Type)
                     {
                         case OrderTypeEnum.PURCHASE:
-                            result = StoreOrderDB.PurchaseStoreOrderToDone(order.ID);
+                            result = StoreOrderDB.PurchaseStoreOrderToDone(order.ID, false);
                             break;
 
                         case OrderTypeEnum.RETURN:

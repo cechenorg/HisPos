@@ -35,8 +35,6 @@ namespace His_Pos.NewClass.StoreOrder
             return masterTable;
         }
 
-       
-
         public static DataTable StoreOrderDetailTable()
         {
             DataTable detailTable = new DataTable();
@@ -345,7 +343,6 @@ namespace His_Pos.NewClass.StoreOrder
                 }
                 catch
                 {
-
                 }
 
                 string realProductID = row.Field<string>("PRO_ID");
@@ -383,7 +380,7 @@ namespace His_Pos.NewClass.StoreOrder
                     case "NCS03A1001.0":
                         realProductID = "NCS03A1000ZZ-1.0";
                         break;
-                } 
+                }
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", realProductID);
@@ -554,12 +551,12 @@ namespace His_Pos.NewClass.StoreOrder
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToProcessing]", parameters);
         }
+
         internal static DataTable GetNotDoneMinus(string ID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDER_ID", ID));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderMinus]", parameters);
-
         }
 
         internal static DataTable AddStoreOrderLowerThenOrderAmount(string storeOrderID, string manufactoryID, string warehouseID, PurchaseProducts orderProducts)
@@ -573,7 +570,7 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[StoreOrderAddLowerThenOrderAmount]", parameters);
         }
 
-        internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID, int wareHouseID,string type)
+        internal static DataTable AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory orderManufactory, int employeeID, int wareHouseID, string type)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", orderType.ToString()));
@@ -698,11 +695,12 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
 
-        internal static DataTable PurchaseStoreOrderToDone(string storeOrderID)
+        internal static DataTable PurchaseStoreOrderToDone(string storeOrderID, bool isPayCash)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("IsPayCash", isPayCash));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdatePurchaseStoreOrderToDone]", parameters);
         }
 

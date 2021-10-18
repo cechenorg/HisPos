@@ -221,5 +221,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 textBox.Text = "0";
             }
         }
+
+        private void tgPay_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)tgPay.IsChecked)
+            {
+                lbCashPay.Foreground = Brushes.Black;
+                lbNormalPay.Foreground = Brushes.DimGray;
+            }
+            else
+            {
+                lbCashPay.Foreground = Brushes.DimGray;
+                lbNormalPay.Foreground = Brushes.Black;
+            }
+        }
     }
 }

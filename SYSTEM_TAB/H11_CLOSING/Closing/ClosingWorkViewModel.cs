@@ -302,6 +302,17 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
         }
 
+        private int storeOrderPayCash;
+
+        public int StoreOrderPayCash
+        {
+            get => storeOrderPayCash;
+            set
+            {
+                Set(() => StoreOrderPayCash, ref storeOrderPayCash, value);
+            }
+        }
+
         public override TabBase getTab()
         {
             return this;
@@ -365,6 +376,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             PreCard = (int)result.Rows[0]["PreCard"];
             ReturnPreCash = (int)result.Rows[0]["ReturnPreCash"];
             ReturnPreCard = (int)result.Rows[0]["ReturnPreCard"];
+            StoreOrderPayCash = (int)result.Rows[0]["StoreOrderPayCash"];
 
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
             CloseCash_Total = (int)result.Rows[0]["CloseCash_Total"];
@@ -376,7 +388,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 CheckColor = Brushes.Red;
                 Enable = true;
             }
-            Total = TradeCash + CashTotal + TradeReward + Extra + PreCash - ReturnPreCash;
+            Total = TradeCash + CashTotal + TradeReward + Extra + PreCash - ReturnPreCash - StoreOrderPayCash;
             if (CheckClosed == "未關班")
             {
                 CheckTotal = 0;
@@ -389,9 +401,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 
         private void ConfirmAction()
         {
-            if (CheckTotal == 0 || CheckTotal == null)
+            if (CheckTotal == 0)
             {
-                MessageWindow.ShowMessage("請輸入", MessageType.ERROR);
+                MessageWindow.ShowMessage("請輸入點算現金", MessageType.ERROR);
                 return;
             }
             if (StartDate != DateTime.Today)
@@ -413,8 +425,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("Value", (int)(Total - CheckTotal)));
-            parameters.Add(new SqlParameter("Total", (int)CheckTotal));
+            parameters.Add(new SqlParameter("Value", Total - CheckTotal));
+            parameters.Add(new SqlParameter("Total", CheckTotal));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCloseCash]", parameters);
             MainWindow.ServerConnection.CloseConnection();
             if (result.Rows[0]["RESULT"].ToString() == "FAIL")

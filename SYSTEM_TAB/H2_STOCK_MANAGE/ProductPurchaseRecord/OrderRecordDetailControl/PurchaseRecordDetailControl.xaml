@@ -418,7 +418,15 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Margin="290,0,0,0"
+                x:Name="lbNormalPay"
+                Margin="190,0,0,0"
+                VerticalAlignment="Center"
+                Content="{Binding OrderIsPayCash}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black" />
+            <Label
+                Margin="20,0,0,0"
                 VerticalAlignment="Center"
                 Content="完成時間:"
                 FontFamily="Segoe UI Semibold"

@@ -5,7 +5,6 @@ using His_Pos.Interface;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using System;
 using System.Data;
-using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -18,13 +17,11 @@ namespace His_Pos.NewClass.StoreOrder
         private double totalPrice;
         private StoreOrderHistorys storeOrderHistory;
 
-
-
         protected int initProductCount;
 
         public Product.Product SelectedItem
         {
-            get 
+            get
             {
                 return selectedItem;
             }
@@ -40,7 +37,6 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if (selectedItem == null)
                 {
-
                 }
             }
         }
@@ -58,10 +54,27 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         private string orderTypeIsOTC;
+
         public string OrderTypeIsOTC
         {
             get { return orderTypeIsOTC; }
             set { Set(() => OrderTypeIsOTC, ref orderTypeIsOTC, value); }
+        }
+
+        private string orderIsPayCash;
+
+        public string OrderIsPayCash
+        {
+            get { return orderIsPayCash; }
+            set { Set(() => OrderIsPayCash, ref orderIsPayCash, value); }
+        }
+
+        private bool isPayCash = false;
+
+        public bool IsPayCash
+        {
+            get { return isPayCash; }
+            set { Set(() => IsPayCash, ref isPayCash, value); }
         }
 
         public OrderTypeEnum OrderType { get; set; }
@@ -74,10 +87,8 @@ namespace His_Pos.NewClass.StoreOrder
         public DateTime CreateDateTime { get; set; }
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
-
         public string TargetPreOrderCustomer { get; set; }
         public DateTime Day { get; set; }
-
         public int IsOTC { get; set; }
 
         public double TotalPrice
@@ -138,7 +149,8 @@ namespace His_Pos.NewClass.StoreOrder
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
 
             initProductCount = row.Field<int>("ProductCount");
-            OrderTypeIsOTC= row.Field<string>("StoOrd_IsOTCType");
+            OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
+            OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
         }
 
         #region ----- Define Functions -----
@@ -226,7 +238,6 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
 
-
         private void ToWaitingStatus()
         {
             bool isSuccess = SendOrderToSingde();
@@ -238,7 +249,7 @@ namespace His_Pos.NewClass.StoreOrder
                 if (OrderType == OrderTypeEnum.RETURN)
                 {
                     DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
-                
+
                     if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
                         MessageWindow.ShowMessage("退貨失敗 請稍後再試", MessageType.ERROR);
@@ -268,8 +279,6 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
             }
-
-          
             else { OrderStatus = OrderStatusEnum.NORMAL_PROCESSING; }
 
             if (OrderType == OrderTypeEnum.RETURN && OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
@@ -303,7 +312,12 @@ namespace His_Pos.NewClass.StoreOrder
             switch (OrderType)
             {
                 case OrderTypeEnum.PURCHASE:
-                    result = StoreOrderDB.PurchaseStoreOrderToDone(ID);
+                    string pay = IsPayCash ? "下貨付現" : "一般收貨";
+                    ConfirmWindow confirmWindow = new ConfirmWindow("訂單金額: " + TotalPrice + "\n選擇: " + pay + "\n是否確認收貨?", "關閉新增盤點確認");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
+                    result = StoreOrderDB.PurchaseStoreOrderToDone(ID, IsPayCash);
+                    MessageWindow.ShowMessage("收貨成功!", MessageType.SUCCESS);
                     break;
 
                 case OrderTypeEnum.RETURN:
@@ -377,7 +391,8 @@ namespace His_Pos.NewClass.StoreOrder
 
                 ToScrapStatus();
             }
-            else*/ if (isShipment)
+            else*/
+            if (isShipment)
             {
                 ReceiveID = prescriptionReceiveID;
 
@@ -429,9 +444,9 @@ namespace His_Pos.NewClass.StoreOrder
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
-        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID,string type)
+        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID, string type)
         {
-            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID,type);
+            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID, type);
 
             switch (orderType)
             {

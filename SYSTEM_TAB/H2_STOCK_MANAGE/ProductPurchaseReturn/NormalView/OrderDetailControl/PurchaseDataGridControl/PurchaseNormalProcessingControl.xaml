@@ -211,9 +211,9 @@
                                 Width="60"
                                 Margin="0,0,0,2"
                                 HorizontalContentAlignment="Center"
+                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                                 FontFamily="Segoe UI Semi"
-                                FontSize="18"
-                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+                                FontSize="18" />
                             <!--<TextBox
                                 x:Name="ProductPriceTextbox"
                                 Width="60"
@@ -308,8 +308,8 @@
                                 GotFocus="UIElement_OnGotFocus"
                                 InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="ProductSubTotalTextbox_OnKeyDown"
-                                PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 LostFocus="ProductSubTotalTextbox_LostFocus"
+                                PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
@@ -485,10 +485,29 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black" />
-            <Rectangle Width="430" />
+            <Rectangle Width="200" />
+            <Label
+                x:Name="lbNormalPay"
+                VerticalAlignment="Center"
+                Content="一般收貨"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black" />
+            <ToggleButton
+                x:Name="tgPay"
+                Click="tgPay_Click"
+                Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                IsChecked="{Binding CurrentStoreOrder.IsPayCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                x:Name="lbCashPay"
+                VerticalAlignment="Center"
+                Content="下貨付現"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="DimGray" />
             <Button
                 Width="120"
-                Margin="0,0,10,0"
+                Margin="30,0,10,0"
                 Background="DimGray"
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
