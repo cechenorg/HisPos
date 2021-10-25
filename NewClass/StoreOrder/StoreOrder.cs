@@ -139,7 +139,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             ID = row.Field<string>("StoOrd_ID");
-            ReceiveID = String.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
+            ReceiveID = string.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
@@ -199,6 +199,10 @@ namespace His_Pos.NewClass.StoreOrder
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
                     ToWaitingStatus();
                     ToNormalProcessingStatus();
+                    if (OrderType == OrderTypeEnum.RETURN)
+                    {
+                        ToDoneStatus();
+                    }
                     break;
 
                 case OrderStatusEnum.NORMAL_PROCESSING:

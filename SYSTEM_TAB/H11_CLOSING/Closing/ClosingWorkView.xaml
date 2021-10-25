@@ -443,9 +443,7 @@
                                 FontSize="20"
                                 Foreground="{Binding CheckColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
-
                     </Grid>
-
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -703,10 +701,29 @@
                                 FontSize="20" />
                             <CheckBox x:Name="RETURN_PRECARD" />
                         </StackPanel>
+                        <StackPanel
+                            Grid.Row="13"
+                            Grid.Column="0"
+                            Orientation="Horizontal">
+                            <Label
+                                Width="200"
+                                Margin="40,0,0,0"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="沖銷訂金"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                            <Label
+                                Width="100"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Left"
+                                Content="{Binding PrepayToday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                FontSize="20" />
+                        </StackPanel>
                     </Grid>
                 </StackPanel>
             </Grid>
-
         </Grid>
     </xctk:BusyIndicator>
 </UserControl>

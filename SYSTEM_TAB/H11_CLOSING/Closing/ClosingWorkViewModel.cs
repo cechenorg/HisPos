@@ -280,6 +280,17 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             }
         }
 
+        private int prepayToday;
+
+        public int PrepayToday
+        {
+            get => prepayToday;
+            set
+            {
+                Set(() => PrepayToday, ref prepayToday, value);
+            }
+        }
+
         private Brush checkColor;
 
         public Brush CheckColor
@@ -376,6 +387,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
             PreCard = (int)result.Rows[0]["PreCard"];
             ReturnPreCash = (int)result.Rows[0]["ReturnPreCash"];
             ReturnPreCard = (int)result.Rows[0]["ReturnPreCard"];
+            PrepayToday = (int)result.Rows[0]["PrepayToday"];
             StoreOrderPayCash = (int)result.Rows[0]["StoreOrderPayCash"];
 
             CheckClosed = result.Rows[0]["CheckClosed"].ToString();
