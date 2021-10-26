@@ -80,6 +80,24 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
             DataTable expanse = MainWindow.ServerConnection.ExecuteProc("[Get].[ExpanseByYear]", paraExpanse);
             DataTable closed = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsClosedByYear]", paraClosed);
 
+            foreach (DataRow dr in closed.Rows)
+            {
+                bool isZero = true;
+                foreach (DataColumn dc in closed.Columns)
+                {
+                    bool isInt = int.TryParse(dr[dc].ToString(), out int value);
+                    if (isInt && value != 0)
+                    {
+                        isZero = false;
+                    }
+                }
+                if (isZero)
+                {
+                    dr.Delete();
+                }
+            }
+            closed.AcceptChanges();
+
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 dgPreCount.ItemsSource = count.DefaultView;
