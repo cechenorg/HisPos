@@ -338,7 +338,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         int amt = int.Parse(result.Rows[0]["Available_Amount"].ToString());
                         if (amt < 1 && result.Rows[0]["Pro_ID"].ToString() != PrepayProID)
                         {
-                            MessageWindow.ShowMessage("該品項可用量不足", MessageType.WARNING);
+                            string name = result.Rows[0]["Pro_ChineseName"].ToString();
+                            string r_price = result.Rows[0]["Pro_RetailPrice"].ToString();
+                            string m_price = result.Rows[0]["Pro_MemberPrice"].ToString();
+                            string e_price = result.Rows[0]["Pro_EmployeePrice"].ToString();
+                            MessageWindow.ShowMessage($"該品項可用量不足\n品名: {name}\n售價: {r_price}\n會員價: {m_price}\n員工價: {e_price}", MessageType.WARNING);
                             return;
                         }
                         if (rowIndex < ProductList.Rows.Count && rowIndex >= 0)
@@ -358,9 +362,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         {
                             newRow.ItemArray = NewProduct.ItemArray;
                             int amt = int.Parse(NewProduct["Available_Amount"].ToString());
-                            if (amt < 1 && result.Rows[0]["Pro_ID"].ToString() != PrepayProID)
+                            if (amt < 1 && NewProduct["Pro_ID"].ToString() != PrepayProID)
                             {
-                                MessageWindow.ShowMessage("該品項可用量不足", MessageType.WARNING);
+                                string name = NewProduct["Pro_ChineseName"].ToString();
+                                string r_price = NewProduct["Pro_RetailPrice"].ToString();
+                                string m_price = NewProduct["Pro_MemberPrice"].ToString();
+                                string e_price = NewProduct["Pro_EmployeePrice"].ToString();
+                                MessageWindow.ShowMessage($"該品項可用量不足\n品名: {name}\n售價: {r_price}\n會員價: {m_price}\n員工價: {e_price}", MessageType.WARNING);
                                 return;
                             }
                         }

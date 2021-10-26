@@ -440,13 +440,14 @@
                     Background="{StaticResource GridBackGround}"
                     Orientation="Horizontal">
                     <Label
-                        Width="80"
+                        Width="60"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
-                        Content="備註"
                         FontFamily="Segoe UI Semibold"
                         FontSize="20"
-                        Foreground="Black" />
+                        Foreground="Black">
+                        <TextBlock Text="銷售備註" TextWrapping="Wrap" />
+                    </Label>
                     <TextBox
                         x:Name="tbNote"
                         Width="300"

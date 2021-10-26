@@ -11,7 +11,6 @@ using System.Windows.Media;
 
 namespace His_Pos.Service
 {
-
     public class NumberConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -19,7 +18,6 @@ namespace His_Pos.Service
             if (value == null)
                 return 0;
             return System.Convert.ToInt32(value) + 1;
-
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -159,7 +157,15 @@ namespace His_Pos.Service
                     year = int.Parse(dateStr.Substring(0, 3)) + 1911;
                     month = int.Parse(dateStr.Substring(3, 2));
                     date = int.Parse(dateStr.Substring(5, 2));
-                    result = new DateTime(year, month, date);
+                    string dt = year.ToString() + "/" + month.ToString() + "/" + date.ToString();
+                    if (DateTime.TryParse(dt, out DateTime res))
+                    {
+                        result = res;
+                    }
+                    else
+                    {
+                        result = null;
+                    }
                     break;
             }
 

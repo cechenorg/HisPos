@@ -31,21 +31,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         public DataTable RecordDetailListPrint;
         private int queryTab = 1;
 
-        //private bool isBusy;
-        //private string busyContent;
-        //private BackgroundWorker initBackgroundWorker;
-
         public ProductTransactionRecordView()
         {
             InitializeComponent();
-            //InitBackgroundWorker();
             StartDate.Value = GetDefaultDate();
             EndDate.Value = GetDefaultDate();
             RecordList = new DataTable();
             GetEmployeeList();
         }
 
-        private void ClearDataGrids() 
+        private void ClearDataGrids()
         {
             RecordGrid.ItemsSource = null;
             RecordDetailGrid.ItemsSource = null;
@@ -86,23 +81,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             return dts;
         }
 
-        //private void InitBackgroundWorker()
-        //{
-        //    initBackgroundWorker = new BackgroundWorker();
-        //    initBackgroundWorker.DoWork += (sender, args) =>
-        //    {
-        //        System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
-        //        {
-        //            GetData(1);
-        //        }), DispatcherPriority.ContextIdle);
-        //    };
-
-        //    initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
-        //    {
-        //        busyindi.IsBusy = false;
-        //    };
-        //}
-
         private void GetData(int querytype)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -142,7 +120,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     MessageWindow.ShowMessage("搜尋發票號碼必須為8位數字!", MessageType.ERROR);
                     return;
                 }
-                
+
                 switch (querytype)
                 {
                     case 1: // 銷售紀錄
@@ -348,7 +326,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             ptd.Activate();
         }
 
-        public void DetailWindowClosed(object sender, System.EventArgs e)
+        public void DetailWindowClosed(object sender, EventArgs e)
         {
             GetData(queryTab);
         }
@@ -661,5 +639,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
             }
         }
+
+
     }
 }
