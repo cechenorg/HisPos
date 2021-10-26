@@ -10,10 +10,22 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         {
             GetDataByDate(typeId, sDate, eDate);
         }
+        public PrescriptionDetailReports(DataTable a)
+        {
+            GetDataByDate(a);
+        }
 
         public void GetDataByDate(string typeId, DateTime sDate, DateTime eDate)
         {
             DataTable table = PrescriptionDetailReportDb.GetDataByDate(typeId, sDate, eDate);
+            foreach (DataRow r in table.Rows)
+            {
+                Add(new PrescriptionDetailReport(r));
+            }
+        }
+        public void GetDataByDate(DataTable a)
+        {
+            DataTable table = a;
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionDetailReport(r));

@@ -69,6 +69,7 @@ namespace His_Pos.Class
         關班帳務查詢 = 43,
         打卡記錄查詢 = 47, // add by SHANI
         沖帳作業 = 48,
+        新每日總帳報表 = 49,
     }
 
     public enum StoreOrderProductType

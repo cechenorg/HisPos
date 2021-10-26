@@ -539,6 +539,9 @@
   <data name="TodayCashStockEntryReport" xml:space="preserve">
     <value>每日總帳報表</value>
   </data>
+	<data name="NewTodayCashStockEntryReport" xml:space="preserve">
+    <value>新每日總帳報表</value>
+  </data>
   <data name="CooperativeEntryReport" xml:space="preserve">
     <value>合作診所結帳報表</value>
   </data>

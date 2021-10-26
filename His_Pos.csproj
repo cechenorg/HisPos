@@ -232,7 +232,7 @@
       <HintPath>packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1449.0\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+      <HintPath>packages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MySql.Data, Version=8.0.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
@@ -1339,6 +1339,34 @@
     <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\WorkScheduleManageView.xaml.cs">
       <DependentUpon>WorkScheduleManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\ExportIncomeStatementWindow.xaml.cs">
+      <DependentUpon>ExportIncomeStatementWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayCashStockEntryReport.xaml.cs">
+      <DependentUpon>NewTodayCashStockEntryReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayCashStockEntryReportViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\NewCashDetailControl.xaml.cs">
+      <DependentUpon>NewCashDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\ExtraMoneyDetailControl.xaml.cs">
+      <DependentUpon>ExtraMoneyDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\RewardDetailControl.xaml.cs">
+      <DependentUpon>RewardDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\StockTakingDetailControl.xaml.cs">
+      <DependentUpon>StockTakingDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\StockTakingOTCDetailControl.xaml.cs">
+      <DependentUpon>StockTakingOTCDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TodayPrescriptionDetailControl.xaml.cs">
+      <DependentUpon>TodayPrescriptionDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TradeProfitDetailControl.xaml.cs">
+      <DependentUpon>TradeProfitDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayCashStockEntryReport.xaml.cs">
       <DependentUpon>TodayCashStockEntryReport.xaml</DependentUpon>
     </Compile>
@@ -2297,6 +2325,42 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\ExportIncomeStatementWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayCashStockEntryReport.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\NewCashDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\ExtraMoneyDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\RewardDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\StockTakingDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\StockTakingOTCDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TodayPrescriptionDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TradeProfitDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayCashStockEntryReport.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -2713,6 +2777,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="RDLC\MedBagReportSingleByCE.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -2725,9 +2792,6 @@
     </Content>
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="RDLC\MedBagReportSingleByCE.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Images\down.png" />
     <Resource Include="Images\up.png" />

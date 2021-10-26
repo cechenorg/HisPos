@@ -97,7 +97,7 @@ namespace His_Pos
                             new[] { StringRes.ClockIn, StringRes.WorkScheduleManage, StringRes.ClockInSearch })); // add by SHANI
 
             HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
-                            new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare, StringRes.CashStockEntryReport , StringRes.TodayCashStockEntryReport}));
+                            new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare, StringRes.CashStockEntryReport , StringRes.TodayCashStockEntryReport, StringRes.NewTodayCashStockEntryReport }));
 
             HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.AccountReportSystem,
                             new[] { StringRes.InstitutionDeclarePointReport, StringRes.IncomeStatement, StringRes.BalanceSheet, StringRes.StrikeManage, StringRes.AccountsManage }));
