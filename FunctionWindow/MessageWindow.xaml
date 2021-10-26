@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MessageWindow"
     Width="350"
-    Height="200"
+    Height="220"
     ResizeMode="NoResize"
     Topmost="True"
     WindowStartupLocation="CenterScreen"
@@ -16,7 +16,7 @@
     <Grid Name="MainGrid" PreviewKeyDown="Grid_PreviewKeyDown">
         <StackPanel VerticalAlignment="Center" Orientation="Vertical">
             <StackPanel
-                Height="150"
+                Height="165"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <Image
@@ -26,7 +26,7 @@
                     Margin="30,0,20,0" />
                 <ScrollViewer
                     Width="240"
-                    Margin="0,10,0,10"
+                    Margin="0,0,0,10"
                     VerticalScrollBarVisibility="Auto">
                     <TextBlock
                         Name="Message"
@@ -39,7 +39,7 @@
             </StackPanel>
             <Button
                 Name="OkButton"
-                Margin="10"
+                Margin="10,0,10,10"
                 Background="DarkSlateBlue"
                 BorderThickness="0"
                 Click="ButtonBase_OnClick"
