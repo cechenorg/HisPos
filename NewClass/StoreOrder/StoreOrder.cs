@@ -199,8 +199,10 @@ namespace His_Pos.NewClass.StoreOrder
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
                     ToWaitingStatus();
                     ToNormalProcessingStatus();
+                    // 直接結案
                     if (OrderType == OrderTypeEnum.RETURN)
                     {
+                        SaveOrder();
                         ToDoneStatus();
                     }
                     break;
