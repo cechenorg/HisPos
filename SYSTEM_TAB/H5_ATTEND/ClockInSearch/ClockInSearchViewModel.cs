@@ -344,7 +344,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                 MainWindow.ServerConnection.CloseConnection();
 
             }
-            else if (SingInEmployee.ID == 97 || SingInEmployee.ID == 45) //需要看見各店的人
+            else if (SingInEmployee.ID == 97 || SingInEmployee.ID == 45 || SingInEmployee.ID == 114) //需要看見各店的人
             {
 
                 MainWindow.ServerConnection.OpenConnection();
