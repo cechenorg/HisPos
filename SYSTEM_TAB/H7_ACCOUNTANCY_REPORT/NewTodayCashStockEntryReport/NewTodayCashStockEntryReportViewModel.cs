@@ -1592,7 +1592,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         public DataSet Ds = new DataSet();
-
+        DataTable ddd = new DataTable();
+        DataTable sss = new DataTable();
 
         #endregion Variables
 
@@ -2290,7 +2291,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             MainWindow.ServerConnection.OpenConnection();
             BusyContent = "報表查詢中";
-            TradeProfitDetailReportCollection = new TradeProfitDetailReports(Ds.Tables[11]);
+            TradeProfitDetailReportCollection = new TradeProfitDetailReports(Ds.Tables[10]);
             TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
 
             MainWindow.ServerConnection.CloseConnection();
@@ -2452,7 +2453,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CashStockEntryReportEnum = CashStockEntryReportEnum.OTCStockTaking;
 
-            StockTakingOTCDetailReportCollection = new StockTakingOTCDetailReports(Ds.Tables[7]);
+            StockTakingOTCDetailReportCollection = new StockTakingOTCDetailReports(Ds.Tables[9]);
             var CashCoopStringCopy = new List<string>() { };
             foreach (var r in StockTakingOTCDetailReportCollection)
             {
@@ -2682,7 +2683,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             MainWindow.ServerConnection.OpenConnection();
             BusyContent = "報表查詢中";
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[6]);
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(sss);
             MainWindow.ServerConnection.CloseConnection();
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
@@ -2738,7 +2739,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             MainWindow.ServerConnection.OpenConnection();
 
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[6]);
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(sss);
             MainWindow.ServerConnection.CloseConnection();
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
@@ -3012,7 +3013,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
                 MainWindow.ServerConnection.OpenConnection();
-                PrescriptionDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[2]);
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports(sss);
                 MainWindow.ServerConnection.CloseConnection();
                 //PrescriptionDetailReportCollection = new PrescriptionDetailReports("1", StartDate, EndDate);
                 MainWindow.ServerConnection.CloseConnection();
@@ -3169,7 +3170,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             MainWindow.ServerConnection.OpenConnection();
 
-            PrescriptionDetailReportCollectionChanged = new PrescriptionDetailReports(Ds.Tables[7]);
+            DataTable ccc = new DataTable();
+            ccc.Merge(Ds.Tables[3]);
+            ccc.Merge(Ds.Tables[5]);
+            ccc.Merge(Ds.Tables[7]);
+
+            PrescriptionDetailReportCollectionChanged = new PrescriptionDetailReports(ccc);
             MainWindow.ServerConnection.CloseConnection();
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollectionChanged };
@@ -3334,25 +3340,33 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void GetData()
         {
-            PrescriptionDetailReportSumMain = new PrescriptionDetailReport();
-            PrescriptionCoopDetailReportSumMain = new PrescriptionDetailReport();
-            TradeDetailReportSum = new TradeProfitDetailReport();
-            StockTakingDetailReportSum = new StockTakingDetailReport();
-            StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", StartDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", EndDate);
             Ds = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList);
-            DataTable ddd = new DataTable();
+            ddd = new DataTable();
+            sss = new DataTable();
             ddd.Merge(Ds.Tables[0]);
             ddd.Merge(Ds.Tables[2]);
             ddd.Merge(Ds.Tables[4]);
             ddd.Merge(Ds.Tables[6]);
-            PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports(ddd); 
+            sss.Merge(Ds.Tables[2]);
+            sss.Merge(Ds.Tables[4]);
+            sss.Merge(Ds.Tables[6]);
+            PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports(ddd);
+            PrescriptionDetailReportCollection= new PrescriptionDetailReports(sss);
             MainWindow.ServerConnection.CloseConnection();
 
+
+            PrescriptionDetailReportSumMain = new PrescriptionDetailReport();
+            PrescriptionCoopDetailReportSumMain = new PrescriptionDetailReport();
+            TradeDetailReportSum = new TradeProfitDetailReport();
+            StockTakingDetailReportSum = new StockTakingDetailReport();
+            StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
+
+           
 
             TradeProfitReportSelectionChangedActionMain();
             TradeChangeReportSelectionChangedActionMain();
@@ -3688,6 +3702,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSum.Count = tempCollection.Count();
 
             PrescriptionCoopDetailReportSumMain.CoopChange = (decimal)PrescriptionDetailReportSum.MedicalPoint + (decimal)PrescriptionDetailReportSum.MedicalServicePoint + (decimal)PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
+            PrescriptionCoopDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionCoopDetailReportSumMain.CoopIncome + PrescriptionCoopDetailReportSumMain.CoopMeduse + PrescriptionCoopDetailReportSumMain.CoopChange);
         }
 
         private void SumPrescriptionDetailMain()
@@ -3712,25 +3727,26 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSumMain.NormalMeduse = (int)tempCollectionNormal.Sum(s => s.Meduse);
 
             //profit normal
-            PrescriptionDetailReportSumMain.NormalProfit = (int)(tempCollectionNormal.Sum(s => s.Profit) + tempCollectionNormalChange.Sum(s => s.Meduse));
-
+         
             PrescriptionDetailReportSumMain.NormalIncome = (int)tempCollectionNormal.Sum(s => s.MedicalPoint) + (int)tempCollectionNormal.Sum(s => s.MedicalServicePoint) + (int)tempCollectionNormal.Sum(s => s.PaySelfPoint);
 
             PrescriptionDetailReportSumMain.SlowCount = tempCollectionSlow.Count();
             PrescriptionDetailReportSumMain.SlowMeduse = (int)tempCollectionSlow.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.NormalProfit = (int)(PrescriptionDetailReportSumMain.NormalIncome + PrescriptionDetailReportSumMain.NormalMeduse + (double)PrescriptionDetailReportSumMain.NormalChange);
 
             //profit slow
-            PrescriptionDetailReportSumMain.SlowProfit = (int)(tempCollectionSlow.Sum(s => s.Profit) + tempCollectionSlowChange.Sum(s => s.Meduse));
+
 
             PrescriptionDetailReportSumMain.SlowIncome = (int)tempCollectionSlow.Sum(s => s.MedicalPoint) + (int)tempCollectionSlow.Sum(s => s.MedicalServicePoint) + (int)tempCollectionSlow.Sum(s => s.PaySelfPoint);
 
             PrescriptionDetailReportSumMain.PaySelfCount = tempCollectionPaySelf.Count();
             PrescriptionDetailReportSumMain.PaySelfMeduse = (int)tempCollectionPaySelf.Sum(s => s.Meduse);
-
+            PrescriptionDetailReportSumMain.SlowProfit = (int)(PrescriptionDetailReportSumMain.SlowIncome + PrescriptionDetailReportSumMain.SlowMeduse + (double)PrescriptionDetailReportSumMain.SlowChange);
             //profit payself
-            PrescriptionDetailReportSumMain.PaySelfProfit = (int)(tempCollectionPaySelf.Sum(s => s.Profit) + tempCollectionPaySelfChange.Sum(s => s.Meduse));
-
+            
             PrescriptionDetailReportSumMain.PaySelfIncome = (int)tempCollectionPaySelf.Sum(s => s.MedicalPoint) + (int)tempCollectionPaySelf.Sum(s => s.MedicalServicePoint) + (int)tempCollectionPaySelf.Sum(s => s.PaySelfPoint);
+            PrescriptionDetailReportSumMain.PaySelfProfit = (int)(PrescriptionDetailReportSumMain.PaySelfIncome + PrescriptionDetailReportSumMain.PaySelfMeduse + (double)PrescriptionDetailReportSumMain.PaySelfChange);
+
         }
 
         private void SumPrescriptionChangeDetailMain()
@@ -3744,9 +3760,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             tempCollectionSlowChange = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "2");
             tempCollectionPaySelfChange = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "0");
 
-            PrescriptionDetailReportSumMain.NormalChange = tempCollectionNormalChange.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.SlowChange = tempCollectionSlowChange.Sum(s => s.Meduse);
-            PrescriptionDetailReportSumMain.PaySelfChange = tempCollectionPaySelfChange.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.NormalChange = tempCollectionNormalChange.Sum(s => s.Meduse+(decimal)s.MedicalServicePoint+ (decimal)s.MedicalPoint + (decimal)s.PaySelfPoint);
+            PrescriptionDetailReportSumMain.SlowChange = tempCollectionSlowChange.Sum(s => s.Meduse + (decimal)s.MedicalServicePoint + (decimal)s.MedicalPoint + (decimal)s.PaySelfPoint);
+            PrescriptionDetailReportSumMain.PaySelfChange = tempCollectionPaySelfChange.Sum(s => s.Meduse + (decimal)s.MedicalServicePoint + (decimal)s.MedicalPoint+(decimal)s.PaySelfPoint);
         }
 
         private void SumCoopPrescriptionDetailMain()
@@ -3758,10 +3774,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionCoopDetailReportSumMain.CoopMeduse = (int)tempCollectionCoop.Sum(s => s.Meduse);
             //PrescriptionCoopDetailReportSumMain.CoopProfit = (int)tempCollectionCoop.Sum(s => s.Profit);
             PrescriptionCoopDetailReportSumMain.CoopIncome = (int)tempCollectionCoop.Sum(s => s.MedicalPoint) + (int)tempCollectionCoop.Sum(s => s.MedicalServicePoint) + (int)tempCollectionCoop.Sum(s => s.PaySelfPoint);
+        
 
-
-            PrescriptionCoopDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionCoopDetailReportSumMain.CoopIncome + PrescriptionCoopDetailReportSumMain.CoopMeduse +
-                PrescriptionCoopDetailReportSumMain.CoopChange);
+            
         }
 
         //private void SumCoopPrescriptionChangeDetailMain()
@@ -3852,7 +3867,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         private void SumOTCProfit()
         {
             //TradeDetailReportSum.TotalProfit = TradeDetailReportSum.Profit + TradeDetailReportSum.TotalChange + (int)TotalRewardReport.RewardAmount + (int)StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus;
-            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + (int)TradeDetailReportSum.ValueDifference + TradeDetailReportSum.TotalChange + StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
+            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + (int)TradeDetailReportSum.TotalCost + TradeDetailReportSum.TotalChange + StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
         }
 
         private void SumMedProfit()
@@ -3863,7 +3878,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSumMain.MedTotalMeduse = PrescriptionDetailReportSumMain.NormalMeduse + PrescriptionDetailReportSumMain.PaySelfMeduse + PrescriptionDetailReportSumMain.SlowMeduse + PrescriptionCoopDetailReportSumMain.CoopMeduse;
             PrescriptionDetailReportSumMain.MedTotalChange = PrescriptionDetailReportSumMain.NormalChange + PrescriptionDetailReportSumMain.PaySelfChange + PrescriptionDetailReportSumMain.SlowChange + PrescriptionCoopDetailReportSumMain.CoopChange;
 
-            PrescriptionDetailReportSumMain.MedTotalProfit = PrescriptionDetailReportSumMain.NormalProfit + PrescriptionDetailReportSumMain.PaySelfProfit + PrescriptionDetailReportSumMain.SlowProfit + PrescriptionCoopDetailReportSumMain.CoopProfit + StockTakingDetailReportSum.Price /*+ PrescriptionDetailReportSumMain.MedTotalChange*/;
+            PrescriptionDetailReportSumMain.MedTotalProfit = (decimal)(PrescriptionDetailReportSumMain.MedTotalIncome + PrescriptionDetailReportSumMain.MedTotalMeduse + (double)PrescriptionDetailReportSumMain.MedTotalChange + StockTakingDetailReportSum.Price ) /*+ PrescriptionDetailReportSumMain.MedTotalChange*/;
         }
 
         private void SumAllProfit()
