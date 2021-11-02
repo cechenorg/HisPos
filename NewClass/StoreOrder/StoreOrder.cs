@@ -202,7 +202,7 @@ namespace His_Pos.NewClass.StoreOrder
                     // 直接結案
                     if (OrderType == OrderTypeEnum.RETURN)
                     {
-                        SaveOrder();
+                        //SaveOrder();
                         ToDoneStatus();
                     }
                     break;
