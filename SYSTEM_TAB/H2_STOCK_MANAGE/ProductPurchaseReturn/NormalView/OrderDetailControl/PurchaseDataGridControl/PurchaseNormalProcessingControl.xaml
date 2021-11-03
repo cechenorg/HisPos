@@ -93,6 +93,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <DataGrid
+            EnableRowVirtualization="False"
             Name="ProductDataGrid"
             Grid.Row="0"
             AutoGenerateColumns="False"

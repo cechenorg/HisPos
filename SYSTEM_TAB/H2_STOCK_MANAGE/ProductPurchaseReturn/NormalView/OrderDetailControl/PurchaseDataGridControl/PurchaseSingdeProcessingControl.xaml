@@ -62,8 +62,9 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <DataGrid
+            EnableRowVirtualization="False"
             Grid.Row="0"
-             Name="ProductDataGrid"
+            Name="ProductDataGrid"
             AutoGenerateColumns="False"
             Background="{StaticResource GridDarkestBackGround}"
             CanUserDeleteRows="False"

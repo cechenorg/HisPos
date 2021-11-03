@@ -22,6 +22,7 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
+            EnableRowVirtualization="False"
             Name="ProductDataGrid"
             Grid.Row="0"
             AutoGenerateColumns="False"
