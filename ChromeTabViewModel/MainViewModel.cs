@@ -286,7 +286,7 @@ namespace His_Pos.ChromeTabViewModel
                 // add by shani
                 case nameof(FeatureItem.打卡記錄查詢):
                     break;
-                case nameof(FeatureItem.新每日總帳報表):
+                case nameof(FeatureItem.舊每日總帳報表):
                     break;
 
                 default:
@@ -423,10 +423,10 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.會計總帳報表):
                     newTab = new CashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[3], Icon = MainWindow.HisFeatures[7].Icon };
                     break;
-                case nameof(FeatureItem.每日總帳報表):
+                case nameof(FeatureItem.舊每日總帳報表):
                     newTab = new TodayCashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[4], Icon = MainWindow.HisFeatures[7].Icon };
                     break;
-                case nameof(FeatureItem.新每日總帳報表):
+                case nameof(FeatureItem.每日總帳報表):
                     newTab = new NewTodayCashStockEntryReportViewModel() { TabName = MainWindow.HisFeatures[7].Functions[5], Icon = MainWindow.HisFeatures[7].Icon };
                     break;
 

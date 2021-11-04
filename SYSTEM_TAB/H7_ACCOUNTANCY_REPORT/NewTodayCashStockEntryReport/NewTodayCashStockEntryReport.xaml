@@ -793,17 +793,17 @@
                         <StackPanel.InputBindings>
                             <MouseBinding Command="{Binding CooperativeIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0" Height="50" VerticalAlignment="Center">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label
                                 Width="130"
-                                VerticalAlignment="Bottom"
+                                VerticalAlignment="Center"
                                 HorizontalContentAlignment="Right"
                                 Content="{Binding PrescriptionCoopDetailReportSumMain.CoopIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="20" 
                                 Foreground="Silver"
-                                Padding="0,0,30,0" Margin="0,0,0,25"/>
+                                Padding="0,0,30,0" Margin="0,0,0,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel

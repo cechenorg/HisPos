@@ -532,6 +532,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 col8.Width = 10;
                 var col9 = ws.Column("I");
                 col9.Width = 10;
+                var col10 = ws.Column("J");
+                col10.Width = 30;
                 ws.Cell(1, 1).Value = "銷售明細";
                 ws.Range(1, 1, 1, 9).Merge().AddToNamed("Titles");
                 ws.Cell("A2").Value = "結帳時間";
@@ -543,6 +545,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 ws.Cell("G2").Value = "小計";
                 ws.Cell("H2").Value = "獎勵";
                 ws.Cell("I2").Value = "收銀員";
+                ws.Cell("J2").Value = "發票號";
                 var rangeWithData = ws.Cell(3, 1).InsertData(RecordDetailListPrint.AsEnumerable());
 
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
