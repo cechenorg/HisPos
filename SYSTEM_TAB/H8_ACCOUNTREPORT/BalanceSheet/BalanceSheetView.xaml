@@ -64,7 +64,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="35" />
 
-                    <TextBox
+                    <!--<TextBox
                         x:Name="tb_Value"
                         Width="100"
                         Margin="10,0,0,0"
@@ -74,9 +74,9 @@
                         InputScope="Number"
                         Text="{Binding FirstValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         TextAlignment="Center"
-                        Visibility="Hidden" />
+                        Visibility="Hidden" />-->
 
-                    <Button
+                    <!--<Button
                         Width="130"
                         Margin="10,0,0,0"
                         VerticalAlignment="Center"
@@ -86,11 +86,20 @@
                         Content="輸入期初"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
-                        Visibility="Hidden" />
-
+                        Visibility="Hidden" />-->
                     <Button
                         Width="130"
-                        Margin="50,0,0,0"
+                        Margin="170,0,0,0"
+                        VerticalAlignment="Center"
+                        Background="IndianRed"
+                        BorderThickness="0"
+                        Command="{Binding AccountManageCommand}"
+                        Content="科目管理"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="18" />
+                    <Button
+                        Width="130"
+                        Margin="10,0,0,0"
                         VerticalAlignment="Center"
                         Background="RoyalBlue"
                         BorderThickness="0"

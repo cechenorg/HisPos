@@ -35,6 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand ShowHistoryCommand { get; set; }
         public RelayCommand FirstCommand { get; set; }
+        public RelayCommand AccountManageCommand { get; set; }
 
         #endregion ----- Define Commands -----
 
@@ -149,6 +150,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             ReloadCommand = new RelayCommand(ReloadAction);
             ShowHistoryCommand = new RelayCommand(ShowHistoryAction);
             FirstCommand = new RelayCommand(FirstAction);
+            AccountManageCommand = new RelayCommand(AccountManageAction);
             ReloadAction();
         }
 
@@ -170,7 +172,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 }
                 catch
                 {
-                    MessageWindow.ShowMessage("發生錯誤請再試一次", MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("發生錯誤請再試一次", MessageType.ERROR);
                     return;
                 }
                 MessageWindow.ShowMessage("設定成功", MessageType.SUCCESS);
@@ -235,6 +237,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             historyWindow.ShowDialog();
 
             ReloadAction();
+        }
+
+        private void AccountManageAction()
+        {
+            var accManageWindow = new AccountManage();
+            accManageWindow.ShowDialog();
         }
 
         #endregion ----- Define Actions -----
