@@ -71,7 +71,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="22" />
             <ComboBox
-                Width="160"
+                Width="130"
                 Height="45"
                 Margin="0,0,0,0"
                 VerticalContentAlignment="Center"
@@ -96,7 +96,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="22" />
             <ComboBox
-                Width="140"
+                Width="120"
                 Height="45"
                 Margin="0,0,0,0"
                 VerticalContentAlignment="Center"
@@ -121,7 +121,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="22" />
             <ComboBox
-                Width="100"
+                Width="80"
                 Height="45"
                 Margin="0,0,0,0"
                 VerticalContentAlignment="Center"
@@ -172,6 +172,16 @@
                 BorderThickness="0"
                 Command="{Binding SearchStrikeHistory}"
                 Content="查詢"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18" />
+            <Button
+                Width="80"
+                Margin="5,0,0,0"
+                VerticalAlignment="Center"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding PrintHistory}"
+                Content="匯出"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18" />
             <!--<Button

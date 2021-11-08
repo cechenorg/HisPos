@@ -336,8 +336,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 
             if (SingInEmployee.ID == 1)
             {
-              
-
                 MainWindow.ServerConnection.OpenConnection();
                 EmployeeCollection = new Employees();
                 EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), CheckLine.Value, "", 1);
