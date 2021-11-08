@@ -76,23 +76,61 @@
                 FontSize="18" />
             <TextBox
                 x:Name="tbNote"
-                Width="400"
+                Width="350"
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 FontSize="16"
                 Text="{Binding CashFlowNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextAlignment="Center" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="立帳日期"
+                FontSize="18" />
+            <xctk:MaskedTextBox
+                x:Name="RecordDate"
+                Width="100"
+                Height="35"
+                Margin="0,0,10,0"
+                HorizontalContentAlignment="Center"
+                FontSize="16"
+                Foreground="{StaticResource ForeGround}"
+                InputMethod.IsInputMethodEnabled="False"
+                InputScope="Number"
+                InsertKeyMode="Overwrite"
+                Mask="000/00/00"
+                PreviewKeyDown="StartDate_OnPreviewKeyDown"
+                PromptChar="-"
+                Style="{StaticResource MaterialDesignTextBox}"
+                ValueDataType="{x:Type xctk:DateTimeFormat}">
+                <Binding
+                    Converter="{StaticResource NullableDateConverter}"
+                    Mode="TwoWay"
+                    NotifyOnValidationError="True"
+                    Path="RecordDate"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <service:DateValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=StartDate}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </xctk:MaskedTextBox>
             <Button
                 x:Name="btnAdd"
                 Width="80"
                 Margin="10,0,0,0"
                 Background="IndianRed"
                 BorderThickness="0"
+                Click="btnAdd_Click"
                 Command="{Binding SubmitCommand}"
                 Content="新增"
                 FontFamily="Segoe UI Semibold"
-                FontSize="16"
-                Click="btnAdd_Click" />
+                FontSize="16" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
@@ -238,26 +276,26 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <ScrollViewer
-                    HorizontalScrollBarVisibility="Auto"
-                    VerticalScrollBarVisibility="Disabled"
                     Grid.Column="1"
-                    Grid.ColumnSpan="2">
+                    Grid.ColumnSpan="2"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Disabled">
                     <DataGrid
-                    Height="760"
-                    Margin="0.4,10,9.8,-0.4"
-                    AutoGenerateColumns="False"
-                    Background="{StaticResource GridBackGround}"
-                    CanUserAddRows="False"
-                    CanUserDeleteRows="False"
-                    CanUserReorderColumns="False"
-                    CanUserResizeColumns="False"
-                    CanUserSortColumns="False"
-                    CellStyle="{StaticResource DataGridCellStyle}"
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    GridLinesVisibility="Horizontal"
-                    HorizontalScrollBarVisibility="Disabled"
-                    ItemsSource="{Binding SelectedCashFlowRecord.Details, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        Height="760"
+                        Margin="0.4,10,9.8,-0.4"
+                        AutoGenerateColumns="False"
+                        Background="{StaticResource GridBackGround}"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserResizeColumns="False"
+                        CanUserSortColumns="False"
+                        CellStyle="{StaticResource DataGridCellStyle}"
+                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                        GridLinesVisibility="Horizontal"
+                        HorizontalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding SelectedCashFlowRecord.Details, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Resources>
                             <Style TargetType="ScrollBar">
                                 <Setter Property="Background" Value="#FFA8A8A8" />
@@ -278,11 +316,11 @@
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
                             <DataGridTextColumn
-                            Width="300"
-                            Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                            FontFamily="Segoe UI Semibold"
-                            Header="科目"
-                            IsReadOnly="True">
+                                Width="300"
+                                Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                Header="科目"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -292,11 +330,11 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn
-                            Width="80"
-                            Binding="{Binding CashFlowValue, UpdateSourceTrigger=PropertyChanged}"
-                            FontFamily="Segoe UI Semibold"
-                            Header="金額"
-                            IsReadOnly="True">
+                                Width="80"
+                                Binding="{Binding CashFlowValue, UpdateSourceTrigger=PropertyChanged}"
+                                FontFamily="Segoe UI Semibold"
+                                Header="金額"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -306,10 +344,10 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn
-                            Width="200"
-                            Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
-                            Header="備註"
-                            IsReadOnly="True">
+                                Width="200"
+                                Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
+                                Header="備註"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -318,10 +356,10 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding EmpName, UpdateSourceTrigger=PropertyChanged}"
-                            Header="登錄人"
-                            IsReadOnly="True">
+                                Width="120"
+                                Binding="{Binding EmpName, UpdateSourceTrigger=PropertyChanged}"
+                                Header="登錄人"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -330,10 +368,10 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding Date, StringFormat='{}{0:MM/dd HH:mm}', UpdateSourceTrigger=PropertyChanged}"
-                            Header="登錄時間"
-                            IsReadOnly="True">
+                                Width="120"
+                                Binding="{Binding Date, StringFormat='{}{0:MM/dd HH:mm}', UpdateSourceTrigger=PropertyChanged}"
+                                Header="登錄時間"
+                                IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -345,15 +383,15 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button
-                                        x:Name="EditCashFlowRecordButton"
-                                        HorizontalAlignment="Center"
-                                        HorizontalContentAlignment="Center"
-                                        Background="RoyalBlue"
-                                        BorderBrush="Transparent"
-                                        Command="{Binding DataContext.EditCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Content="編輯"
-                                        IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            x:Name="EditCashFlowRecordButton"
+                                            HorizontalAlignment="Center"
+                                            HorizontalContentAlignment="Center"
+                                            Background="RoyalBlue"
+                                            BorderBrush="Transparent"
+                                            Command="{Binding DataContext.EditCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Content="編輯"
+                                            IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
+                                            Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -361,15 +399,15 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button
-                                        x:Name="DeleteCashFlowRecordButton"
-                                        HorizontalAlignment="Center"
-                                        HorizontalContentAlignment="Center"
-                                        Background="IndianRed"
-                                        BorderBrush="Transparent"
-                                        Command="{Binding DataContext.DeleteCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        Content="刪除"
-                                        IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            x:Name="DeleteCashFlowRecordButton"
+                                            HorizontalAlignment="Center"
+                                            HorizontalContentAlignment="Center"
+                                            Background="IndianRed"
+                                            BorderBrush="Transparent"
+                                            Command="{Binding DataContext.DeleteCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Content="刪除"
+                                            IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
+                                            Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

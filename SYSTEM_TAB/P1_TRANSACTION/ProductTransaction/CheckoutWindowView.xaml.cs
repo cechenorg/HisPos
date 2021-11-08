@@ -602,5 +602,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 Properties.Settings.Default.Save();
             }
         }
+
+        private void tbEmployee_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ChangeCount();
+        }
     }
 }

@@ -1467,6 +1467,9 @@
     <Compile Include="GeneralCustomControl\IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\AccountManage.xaml.cs">
+      <DependentUpon>AccountManage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\MedPointControl.xaml.cs">
       <DependentUpon>MedPointControl.xaml</DependentUpon>
     </Compile>
@@ -2480,6 +2483,10 @@
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\AccountManage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\MedPointControl.xaml">
       <SubType>Designer</SubType>

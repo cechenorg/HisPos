@@ -546,7 +546,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
                 parameters.Add(new SqlParameter("RealTotal", realTotal));
                 parameters.Add(new SqlParameter("CardNumber", chkWindow.CardNumber));
-                if (Properties.Settings.Default.InvoiceCheck == "0")
+                if (Properties.Settings.Default.InvoiceCheck == "0" || realTotal == 0)
                 {
                     parameters.Add(new SqlParameter("InvoiceNumber", ""));
                 }
@@ -564,7 +564,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 {
                     DepositInsert();
-                    if (Properties.Settings.Default.InvoiceCheck == "1" && ProductList.Rows[0]["Pro_ID"].ToString() != PrepayProID)
+                    if (Properties.Settings.Default.InvoiceCheck == "1" && ProductList.Rows[0]["Pro_ID"].ToString() != PrepayProID && realTotal != 0)
                     {
                         if (Properties.Settings.Default.InvoiceNumber.Length != 8)
                         {
@@ -781,10 +781,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         NewFunction.FindChildGroup(ProductDataGrid, "ProductIDTextbox",
                             ref ProductIDList);
                         ProductIDList[ProductIDList.Count - 1].Focus();
-                        //var ProductIDList = new List<TextBox>();
-                        //NewFunction.FindChildGroup(ProductDataGrid, "Price",
-                        //    ref ProductIDList);
-                        //ProductIDList[currentRowIndex].Focus();
                     }, DispatcherPriority.ApplicationIdle);
                     tb.Text = "";
                 }

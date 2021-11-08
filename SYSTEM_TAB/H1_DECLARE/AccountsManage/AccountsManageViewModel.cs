@@ -111,6 +111,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             }
         }
 
+        private DateTime? recordDate = DateTime.Today;
+
+        public DateTime? RecordDate
+        {
+            get => recordDate;
+            set
+            {
+                Set(() => RecordDate, ref recordDate, value);
+            }
+        }
+
         private bool payCheck;
 
         public bool PayCheck
@@ -244,8 +255,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         {
             ConfirmWindow cw = new ConfirmWindow("是否進行輸入科目金額", "確認");
             if (!(bool)cw.DialogResult) { return; }
+            if ((DateTime)RecordDate == null)
+            {
+                MessageWindow.ShowMessage("未填寫立帳日期", MessageType.ERROR);
+                return;
+            }
             MainWindow.ServerConnection.OpenConnection();
-            AccountsDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue);
+            AccountsDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue, (DateTime)RecordDate);
             MainWindow.ServerConnection.CloseConnection();
             CashFlowValue = 0;
             CashFlowNote = "";

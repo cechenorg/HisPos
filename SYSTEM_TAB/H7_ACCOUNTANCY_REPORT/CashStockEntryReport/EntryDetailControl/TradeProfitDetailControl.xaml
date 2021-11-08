@@ -121,8 +121,8 @@
                 Background="Green"
                 BorderThickness="0"
                 Click="Recordbtn_Click"
-                Content="下載發票"
                 Command="{Binding DownloadMonTradeReportCommand}"
+                Content="下載發票"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>

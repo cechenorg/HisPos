@@ -45,14 +45,16 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="414*" />
-                <ColumnDefinition Width="259*"/>
+                <ColumnDefinition Width="259*" />
                 <ColumnDefinition Width="672*" />
             </Grid.ColumnDefinitions>
             <StackPanel
                 Grid.Row="0"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
-                Orientation="Horizontal" Margin="0,0,-0.2,399.6" Grid.RowSpan="2">
+                Margin="0,0,-0.2,399.6"
+                Orientation="Horizontal">
                 <xctk:MaskedTextBox
                     x:Name="StartDate"
                     Width="150"
@@ -171,11 +173,12 @@
             <StackPanel
                 x:Name="All"
                 Grid.Row="1"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Height="500"
                 Margin="20,10.4,19.8,289.6"
-                Visibility="Visible" Grid.RowSpan="2">
+                Visibility="Visible">
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -310,11 +313,12 @@
             <StackPanel
                 x:Name="Med"
                 Grid.Row="1"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Height="600"
                 Margin="20,10.4,19.8,189.6"
-                Visibility="Collapsed" Grid.RowSpan="2">
+                Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />
@@ -973,11 +977,12 @@
             <StackPanel
                 x:Name="OTC"
                 Grid.Row="1"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Height="500"
                 Margin="20,10.4,19.8,289.6"
-                Visibility="Collapsed" Grid.RowSpan="2">
+                Visibility="Collapsed">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40" />

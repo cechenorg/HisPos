@@ -43,16 +43,16 @@
             <Rectangle Width="150" />
 
             <Button
-                    x:Name="RewardExcel"
-                    Width="150"
-                    Height="35"
-                    Margin="140,0,0,0"
-                    Background="RoyalBlue"
-                    BorderThickness="0"
-                    Command="{Binding RewardExcelCommand}"
-                    Content="匯出EXCEL"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="20" />
+                x:Name="RewardExcel"
+                Width="150"
+                Height="35"
+                Margin="140,0,0,0"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding RewardExcelCommand}"
+                Content="匯出EXCEL"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
         </StackPanel>
         <DataGrid
             Grid.Row="1"
