@@ -51,7 +51,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 DataTable dataTable = StoreOrderDB.DeleteDoneOrder(OrderID);
                 MainWindow.ServerConnection.CloseConnection();
 
-             
+
 
 
                 if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -59,6 +59,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("LOW"))
                 {
                     MessageWindow.ShowMessage("庫存不足 刪除失敗！", MessageType.ERROR);
+                } else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("STRIKED"))
+                {
+                    MessageWindow.ShowMessage("刪除失敗!已沖帳過!", MessageType.ERROR);
                 }
 
                 else
