@@ -30,6 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
             foreach (DataRow dr in accList.Rows)
             {
+                // LEFT
                 if (dr["Accounts_ID"].ToString().StartsWith("001"))
                 {
                     dr["Accounts_Prefix"] = "流動資產-現金";
@@ -77,6 +78,44 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 if (dr["Accounts_ID"].ToString().StartsWith("012"))
                 {
                     dr["Accounts_Prefix"] = "其他資產-存出保證金";
+                }
+
+                // RIGHT
+                if (dr["Accounts_ID"].ToString().StartsWith("101"))
+                {
+                    dr["Accounts_Prefix"] = "流動負債-應付帳款";
+                }
+                if (dr["Accounts_ID"].ToString().StartsWith("102"))
+                {
+                    dr["Accounts_Prefix"] = "流動負債-應付費用";
+                }
+                if (dr["Accounts_ID"].ToString().StartsWith("103"))
+                {
+                    dr["Accounts_Prefix"] = "流動負債-應付稅捐";
+                }
+                if (dr["Accounts_ID"].ToString().StartsWith("104"))
+                {
+                    dr["Accounts_Prefix"] = "預收款項-預收款";
+                }
+                if (dr["Accounts_ID"].ToString().StartsWith("105"))
+                {
+                    dr["Accounts_Prefix"] = "代收-代收";
+                }
+                if (dr["Accounts_ID"].ToString().StartsWith("201"))
+                {
+                    dr["Accounts_Prefix"] = "資本-股本(登記)";
+                }
+                if (dr["Accounts_ID"].ToString().StartsWith("202"))
+                {
+                    dr["Accounts_Prefix"] = "公積及盈餘-本期損益";
+                }
+                if (dr["Accounts_ID"].ToString().StartsWith("203"))
+                {
+                    dr["Accounts_Prefix"] = "公積及盈餘-本年損益";
+                }
+                if (dr["Accounts_ID"].ToString().StartsWith("204"))
+                {
+                    dr["Accounts_Prefix"] = "公積及盈餘-未實現損益";
                 }
             }
 

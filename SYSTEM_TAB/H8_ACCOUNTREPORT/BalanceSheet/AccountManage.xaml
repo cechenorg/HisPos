@@ -95,7 +95,7 @@
                     <DataGridTextColumn
                         Width="200"
                         Binding="{Binding Path=Accounts_Prefix}"
-                        Header="科目代號"
+                        Header="科目"
                         IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
