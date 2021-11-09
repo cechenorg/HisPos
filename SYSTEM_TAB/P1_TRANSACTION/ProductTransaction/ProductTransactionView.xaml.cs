@@ -546,7 +546,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 parameters.Add(new SqlParameter("DiscountAmt", discountAmount));
                 parameters.Add(new SqlParameter("RealTotal", realTotal));
                 parameters.Add(new SqlParameter("CardNumber", chkWindow.CardNumber));
-                if (Properties.Settings.Default.InvoiceCheck == "0" || realTotal == 0)
+                if (Properties.Settings.Default.InvoiceCheck == "0" || ProductList.Rows[0]["Pro_ID"].ToString() == PrepayProID || realTotal == 0)
                 {
                     parameters.Add(new SqlParameter("InvoiceNumber", ""));
                 }
