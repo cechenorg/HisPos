@@ -87,19 +87,10 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Visibility="Hidden" />-->
+
                     <Button
                         Width="130"
                         Margin="170,0,0,0"
-                        VerticalAlignment="Center"
-                        Background="IndianRed"
-                        BorderThickness="0"
-                        Command="{Binding AccountManageCommand}"
-                        Content="科目管理"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="18" />
-                    <Button
-                        Width="130"
-                        Margin="10,0,0,0"
                         VerticalAlignment="Center"
                         Background="RoyalBlue"
                         BorderThickness="0"
@@ -115,6 +106,16 @@
                         BorderThickness="0"
                         Command="{Binding ShowHistoryCommand}"
                         Content="歷程紀錄"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="18" />
+                    <Button
+                        Width="130"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Background="IndianRed"
+                        BorderThickness="0"
+                        Command="{Binding AccountManageCommand}"
+                        Content="科目管理"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18" />
                 </StackPanel>
