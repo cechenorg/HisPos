@@ -37,7 +37,6 @@
                 <Button
                     Width="120"
                     Margin="0,0,10,0"
-                    HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Background="DimGray"
                     BorderThickness="0"
@@ -47,7 +46,7 @@
                     FontSize="18" />
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="2">
+        <!--<Grid Grid.Row="2">
             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                 <Label
                     Margin="10,0,0,0"
@@ -67,11 +66,12 @@
                     ItemsSource="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding SelectedBank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-        </Grid>
+        </Grid>-->
         <DataGrid
             Grid.Row="1"
+            Grid.RowSpan="3"
             Grid.ColumnSpan="2"
-            Height="300"
+            Height="700"
             AutoGenerateColumns="False"
             Background="{StaticResource GridBackGround}"
             CanUserAddRows="False"
@@ -150,16 +150,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <!--<DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button x:Name="DeleteCashFlowRecordButton" Content="刪除" Background="IndianRed" BorderBrush="Transparent" Command="{Binding DataContext.DeleteCommand,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter},RelativeSource={RelativeSource FindAncestor, AncestorType=DataGridRow}}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid
+        <!--<DataGrid
             Grid.Row="3"
             Grid.ColumnSpan="2"
             Height="380"
@@ -301,6 +294,6 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
     </Grid>
 </UserControl>

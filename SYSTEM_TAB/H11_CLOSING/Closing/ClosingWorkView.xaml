@@ -419,7 +419,8 @@
                                 Command="{Binding UpdateCommand}"
                                 Content="修正上傳"
                                 FontFamily="Segoe UI Semibold"
-                                FontSize="20" />
+                                FontSize="20"
+                                Visibility="Hidden" />
                         </StackPanel>
 
                         <StackPanel

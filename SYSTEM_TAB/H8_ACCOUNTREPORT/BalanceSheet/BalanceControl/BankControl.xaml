@@ -35,7 +35,7 @@
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button
                     Width="120"
-                    Margin="20,0,0,0"
+                    Margin="0,0,10,0"
                     VerticalAlignment="Center"
                     Background="DimGray"
                     BorderThickness="0"
@@ -45,7 +45,7 @@
                     FontSize="18" />
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="1">
+        <!--<Grid Grid.Row="1">
             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                 <Label
                     Margin="10,0,0,0"
@@ -89,9 +89,10 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="18" />
             </StackPanel>
-        </Grid>
+        </Grid>-->
         <DataGrid
-            Grid.Row="2"
+            Grid.Row="1"
+            Grid.RowSpan="2"
             Grid.ColumnSpan="2"
             Height="700"
             AutoGenerateColumns="False"
