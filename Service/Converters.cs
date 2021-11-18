@@ -43,6 +43,16 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            return value ?? DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value == null || value.GetType().Name == "NamedObject") ? null : value;
+        }
+
+        /*public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             return value;
         }
 
@@ -55,7 +65,7 @@ namespace His_Pos.Service
             }
 
             return value;
-        }
+        }*/
     }
 
     public class DateConverter : IValueConverter
