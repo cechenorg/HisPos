@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -31,8 +32,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private int card = 0;
         private int change = 0;
         private int prepay = 0;
-
         private int prepayBalance = 0;
+
+        private bool invcheck = false; // 發票開關
+        private bool invbtn = false; // 發票按鈕
 
         public int Prepay => prepay;
         public int Cash => realcash;
@@ -64,18 +67,19 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 ReadSettingFile();
                 tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumber.ToString();
+                invcheck = true;
             }
             else
             {
                 tbInvoiceNum.Content = "";
             }
 
-            if (hasCustomer) 
+            if (hasCustomer)
             {
                 tbPrepay.IsEnabled = true;
             }
 
-            if (isPrepay) 
+            if (isPrepay)
             {
                 tbVoucher.IsEnabled = false;
                 tbCashCoupon.IsEnabled = false;
@@ -111,7 +115,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 return false;
             }
-            else 
+            else
             {
                 bool contains = EmployeeList.AsEnumerable().Any(row => empCashierID == row.Field<string>("Emp_CashierID"));
                 return contains;
@@ -236,12 +240,12 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 tbEmployee.Focus();
                 return;
             }
-            if (prepay > prepayBalance) 
+            if (prepay > prepayBalance)
             {
                 MessageWindow.ShowMessage("訂金沖銷金額大於可沖訂金！", MessageType.WARNING);
                 return;
             }
-            if (prepay > Total) 
+            if (prepay > Total)
             {
                 MessageWindow.ShowMessage("訂金沖銷金額不可大於應付金額！", MessageType.WARNING);
                 return;
@@ -257,7 +261,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 cardNumber = "";
             }
             GetPayMethod();
-            if (isprepay && paycount > 1) 
+            if (isprepay && paycount > 1)
             {
                 MessageWindow.ShowMessage("預付訂金需使用單一付款方式", MessageType.WARNING);
                 return;
@@ -303,11 +307,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 {
                     tbVoucher.Focus();
                 }
-                else 
+                else
                 {
                     tbCard.Focus();
                 }
-                
             }
             if (e.Key == Key.Up)
             {
@@ -365,7 +368,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     {
                         tbCashCoupon.Focus();
                     }
-                    else 
+                    else
                     {
                         tbCash.Focus();
                     }
@@ -412,7 +415,6 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (e.Key == Key.Enter)
                 {
                     btnSubmit.Focus();
-
                 }
                 if (e.Key == Key.Up)
                 {
@@ -529,14 +531,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (TaxNumber.Length != 8&&TaxNumber.Length!=0)
+            if (TaxNumber.Length != 8 && TaxNumber.Length != 0)
             {
                 MessageWindow.ShowMessage("統一編號位數有誤！", MessageType.ERROR);
                 return;
             }
             ChangeCount();
 
-            if (card > Total) 
+            if (card > Total)
             {
                 MessageWindow.ShowMessage("刷卡金額大於應付金額！", MessageType.ERROR);
                 return;
@@ -569,7 +571,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 lbEmployee.Content = "";
             }
-            else 
+            else
             {
                 lbEmployee.Content = empName;
             }
@@ -606,6 +608,21 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private void tbEmployee_GotFocus(object sender, RoutedEventArgs e)
         {
             ChangeCount();
+        }
+
+        private void btnNoReciept_Click(object sender, RoutedEventArgs e)
+        {
+            invbtn = !invbtn;
+            if (invbtn)
+            {
+                btnNoReciept.Background = Brushes.IndianRed;
+                Properties.Settings.Default.InvoiceCheck = "0";
+            }
+            else
+            {
+                btnNoReciept.Background = Brushes.LightGray;
+                Properties.Settings.Default.InvoiceCheck = invcheck ? "1" : "0";
+            }
         }
     }
 }

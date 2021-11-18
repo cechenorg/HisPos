@@ -54,6 +54,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
         private bool isGift = false;
         private string PrepayProID = "PREPAY";
 
+        private bool originInvChk = false;
         private CheckoutWindowView chkWindow;
 
         public AddCustomerWindow addCustomerWindow;
@@ -736,11 +737,14 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             int amtCount = int.Parse(ProductList.Compute("Sum(Amount)", string.Empty).ToString());
             bool hasCustomer = int.Parse(cusID) > 0 ? true : false;
             bool isPrepay = ProductList.Rows[0]["Pro_ID"].ToString() == PrepayProID;
+
+            originInvChk = Properties.Settings.Default.InvoiceCheck == "1";
             chkWindow = new CheckoutWindowView(realTotal, rowCount, amtCount, PrepayBalance, hasCustomer, isPrepay);
             chkWindow.ShowDialog();
             if ((bool)chkWindow.DialogResult)
             {
                 CheckoutSubmit();
+                Properties.Settings.Default.InvoiceCheck = originInvChk ? "1" : "0";
             }
         }
 

@@ -92,12 +92,12 @@
                     FontSize="20"
                     Header="金額"
                     IsReadOnly="True">
-                    <DataGridTextColumn.HeaderStyle>
+                    <!--<DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
-                    </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn.HeaderStyle>-->
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
