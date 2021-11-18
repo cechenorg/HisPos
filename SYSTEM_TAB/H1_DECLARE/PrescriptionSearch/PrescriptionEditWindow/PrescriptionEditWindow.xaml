@@ -1416,9 +1416,10 @@
                                         Name="DeleteDot"
                                         Width="18"
                                         Source="/Images/DeleteDot.png"
-                                        Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        Visibility="Hidden">
+                                        <!--Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"-->
                                         <Image.InputBindings>
-                                            <MouseBinding Command="{Binding DataContext.DeleteMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick" />
+                                            <!--<MouseBinding Command="{Binding DataContext.DeleteMedicine, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick" />-->
                                         </Image.InputBindings>
                                     </Image>
                                 </DataTemplate>
