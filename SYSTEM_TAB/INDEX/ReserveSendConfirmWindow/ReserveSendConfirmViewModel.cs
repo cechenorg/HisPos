@@ -96,19 +96,23 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
         {
             if (IndexReserveSelectedItem is null) return;
             ConfirmWindow confirmWindow;
+            ConfirmWindow printWindow;
+            var confirm = false;
             var print = false;
             switch (IndexReserveSelectedItem.PrepareMedType)
             {
                 case ReserveSendType.AllPrepare:
-                    confirmWindow = new ConfirmWindow("是否列印封包明細", "預約慢箋採購");
-                    print = (bool)confirmWindow.DialogResult;
+                    printWindow = new ConfirmWindow("是否列印封包明細?", "預約慢箋採購");
+                    print = (bool)printWindow.DialogResult;
                     SendReserveStoOrder(print);
                     break;
 
                 default:
                     confirmWindow = new ConfirmWindow("是否傳送藥健康?", "預約慢箋採購");
-                    print = (bool)confirmWindow.DialogResult;
-                    if (!print) return;
+                    confirm = (bool)confirmWindow.DialogResult;
+                    if (!confirm) return;
+                    printWindow = new ConfirmWindow("是否列印封包明細?", "預約慢箋採購");
+                    print = (bool)printWindow.DialogResult;
                     SendReserveStoOrder(print);
                     break;
             }
