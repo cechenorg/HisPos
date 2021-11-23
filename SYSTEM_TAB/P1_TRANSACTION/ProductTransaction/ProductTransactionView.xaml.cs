@@ -565,11 +565,17 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                 {
                     DepositInsert();
+                    MyPharmacy = Pharmacy.GetCurrentPharmacy();
                     if (Properties.Settings.Default.InvoiceCheck == "1" && ProductList.Rows[0]["Pro_ID"].ToString() != PrepayProID && realTotal != 0)
                     {
                         if (Properties.Settings.Default.InvoiceNumber.Length != 8)
                         {
                             MessageWindow.ShowMessage("請重新設定發票！", MessageType.ERROR);
+                            return;
+                        }
+                        else if (string.IsNullOrEmpty(MyPharmacy.TAXNUM.ToString()))
+                        {
+                            MessageWindow.ShowMessage("尚未設定統一編號！", MessageType.ERROR);
                             return;
                         }
                         tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString() + Properties.Settings.Default.InvoiceNumber.ToString();
