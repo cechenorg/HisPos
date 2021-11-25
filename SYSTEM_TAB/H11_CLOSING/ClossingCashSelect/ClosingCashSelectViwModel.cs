@@ -248,7 +248,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                     int sumDailyAdjustAmount = 0; 
                     var orderData = pharmacySearchData.OrderBy(_ => _.ClosingDate).ToList();
                     DateTime firstDate = orderData.First().ClosingDate;
-
+                     
                     if (orderData[0].ClosingDate.AddMonths(1).Month == orderData[1].ClosingDate.Month)
                     {
                         sumDailyAdjustAmount = orderData.First().DailyAdjustAmount;
