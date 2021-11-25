@@ -228,17 +228,50 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 DailyClosingAccount displayDailyClosingAccount = new DailyClosingAccount();
                 displayDailyClosingAccount.PharmacyName = pharmacy.Name;
                 displayDailyClosingAccount.PharmacyVerifyKey = pharmacy.VerifyKey;
-                result.Add(displayDailyClosingAccount); 
-                foreach (var pharmacyRecoird in searchData.Where(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower()))
+                result.Add(displayDailyClosingAccount);
+
+                var pharmacySearchData =
+                    searchData.Where(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower());
+                foreach (var pharmacyRecoird in pharmacySearchData)
                 {
                     displayDailyClosingAccount.OTCSaleProfit += pharmacyRecoird.OTCSaleProfit;
                     displayDailyClosingAccount.ChronicAndOtherProfit += pharmacyRecoird.ChronicAndOtherProfit;
-                    displayDailyClosingAccount.CooperativeClinicProfit += pharmacyRecoird.CooperativeClinicProfit;
-                    displayDailyClosingAccount.DailyAdjustAmount += pharmacyRecoird.DailyAdjustAmount;
+                    displayDailyClosingAccount.CooperativeClinicProfit += pharmacyRecoird.CooperativeClinicProfit; 
                     displayDailyClosingAccount.PrescribeProfit += pharmacyRecoird.PrescribeProfit;
                     displayDailyClosingAccount.SelfProfit += pharmacyRecoird.SelfProfit;
                     displayDailyClosingAccount.TotalProfit += pharmacyRecoird.TotalProfit;
                 }
+
+              
+                if (pharmacySearchData.Count() > 0)
+                {
+                    int sumDailyAdjustAmount = 0; 
+                    var orderData = pharmacySearchData.OrderBy(_ => _.ClosingDate).ToList();
+                    DateTime firstDate = orderData.First().ClosingDate;
+
+                    if (orderData[0].ClosingDate.AddMonths(1).Month == orderData[1].ClosingDate.Month)
+                    {
+                        sumDailyAdjustAmount = orderData.First().DailyAdjustAmount;
+                    }
+                    else
+                    {
+                        sumDailyAdjustAmount = orderData.First().DailyAdjustAmount * -1;
+                    }
+                     
+                    for (int i = 1; i < orderData.Count()-1; i++)
+                    {
+                        if (orderData[i].ClosingDate.AddMonths(1).Month == orderData[i+1].ClosingDate.Month)
+                        {
+                            sumDailyAdjustAmount += orderData[i].DailyAdjustAmount;
+                        }
+                    }
+
+                    sumDailyAdjustAmount += orderData.Last().DailyAdjustAmount;
+                    displayDailyClosingAccount.DailyAdjustAmount += sumDailyAdjustAmount;
+                }
+               
+
+               
             }
 
             if(result.Count > 0)
