@@ -221,8 +221,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
                 
             MainWindow.ServerConnection.CloseConnection();
-
-            var searchData = datalist.Where(_ => _.ClosingDate >= sDate && _.ClosingDate <= eDate).ToList();
+            
             foreach (var pharmacy in pharmacyList)
             {
                 DailyClosingAccount displayDailyClosingAccount = new DailyClosingAccount();
@@ -231,8 +230,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                 result.Add(displayDailyClosingAccount);
 
                 var pharmacySearchData =
-                    searchData.Where(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower());
-                foreach (var pharmacyRecoird in pharmacySearchData)
+                    datalist.Where(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower()).OrderBy(_ => _.ClosingDate);
+                foreach (var pharmacyRecoird in pharmacySearchData.Where(_ => _.ClosingDate >= sDate && _.ClosingDate <= eDate))
                 {
                     displayDailyClosingAccount.OTCSaleProfit += pharmacyRecoird.OTCSaleProfit;
                     displayDailyClosingAccount.ChronicAndOtherProfit += pharmacyRecoird.ChronicAndOtherProfit;
@@ -245,28 +244,64 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
               
                 if (pharmacySearchData.Count() > 0)
                 {
+                   
                     int sumDailyAdjustAmount = 0; 
-                    var orderData = pharmacySearchData.OrderBy(_ => _.ClosingDate).ToList();
-                    DateTime firstDate = orderData.First().ClosingDate;
-                     
-                    if (orderData[0].ClosingDate.AddMonths(1).Month == orderData[1].ClosingDate.Month)
+                    var orderData = pharmacySearchData.Where(_ => _.ClosingDate >= sDate && _.ClosingDate <= eDate).ToList();
+                   
+                    
+                    if (orderData.Count == 1) //只查一天
                     {
-                        sumDailyAdjustAmount = orderData.First().DailyAdjustAmount;
-                    }
-                    else
-                    {
-                        sumDailyAdjustAmount = orderData.First().DailyAdjustAmount * -1;
-                    }
-                     
-                    for (int i = 1; i < orderData.Count()-1; i++)
-                    {
-                        if (orderData[i].ClosingDate.AddMonths(1).Month == orderData[i+1].ClosingDate.Month)
+                        var firstDay = orderData.FirstOrDefault();
+
+                        if(firstDay == null)
+                            break;
+
+                        sumDailyAdjustAmount = firstDay.DailyAdjustAmount;
+
+                        int idx = pharmacySearchData.ToList().IndexOf(firstDay);
+
+                        if (idx > 0)
                         {
-                            sumDailyAdjustAmount += orderData[i].DailyAdjustAmount;
+                            var beforeFirstDay = pharmacySearchData.ToList()[idx - 1];
+
+                            if (beforeFirstDay.ClosingDate.Month == firstDay.ClosingDate.Month)
+                            {
+                                sumDailyAdjustAmount -= beforeFirstDay.DailyAdjustAmount;
+                            }
+
                         }
                     }
+                    else if(orderData.Count > 1)
+                    {
+                        //計算第一個月的判斷
+                        if (orderData[0].ClosingDate.AddMonths(1).Month == orderData[1].ClosingDate.Month) //判斷是否第一筆為該月最後一筆,如果是則當正的
+                        {
+                            sumDailyAdjustAmount = orderData.First().DailyAdjustAmount;
+                        }
+                        else //判斷第一筆是否為本月第一筆,若是的話則當作0,若否則往前一筆*-1
+                        {
+                            int idx = pharmacySearchData.ToList().IndexOf(orderData.First());
+                            
+                            var beforeFirstDay = pharmacySearchData.ToList()[idx - 1];
 
-                    sumDailyAdjustAmount += orderData.Last().DailyAdjustAmount;
+                            if (beforeFirstDay.ClosingDate.Month == orderData.First().ClosingDate.Month)
+                            {
+                                sumDailyAdjustAmount = beforeFirstDay.DailyAdjustAmount*-1;
+                            } 
+                        }
+
+                        for (int i = 1; i < orderData.Count() - 1; i++)
+                        {
+                            if (orderData[i].ClosingDate.AddMonths(1).Month == orderData[i + 1].ClosingDate.Month)
+                            {
+                                sumDailyAdjustAmount += orderData[i].DailyAdjustAmount;
+                            }
+                        }
+
+                        sumDailyAdjustAmount += orderData.Last().DailyAdjustAmount;
+                    }
+                        
+                   
                     displayDailyClosingAccount.DailyAdjustAmount += sumDailyAdjustAmount;
                 }
                
