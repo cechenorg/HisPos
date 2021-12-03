@@ -406,16 +406,16 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 int count = ProductList.Rows.Count;
                 foreach (DataRow dr in ProductList.Rows)
                 {
-                    if (rc == count - 1)
+                    //if (rc == count - 1)
+                    //{
+                    bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
+                    //if (!tp || ig != 1 && dr["CurrentPrice"].ToString() == "0")
+                    if (!tp || ig != 1)
                     {
-                        bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
-                        //if (!tp || ig != 1 && dr["CurrentPrice"].ToString() == "0")
-                        if (!tp || ig != 1)
-                        {
-                            dr["CurrentPrice"] = dr[AppliedPrice];
-                        }
+                        dr["CurrentPrice"] = dr[AppliedPrice];
                     }
-                    rc++;
+                    //}
+                    //rc++;
                 }
             }
         }
