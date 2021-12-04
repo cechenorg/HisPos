@@ -139,6 +139,14 @@
                         Content="重新整理"
                         FontFamily="Segoe UI Semibold"
                         FontSize="17" />
+                    <Button
+                        Margin="10,0,0,0"
+                        Background="RoyalBlue"
+                        BorderThickness="0"
+                        Click="ExportExcelCommand"
+                        Content="匯出Excel"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="17" />
                 </StackPanel>
                 <Expander
                     Grid.Row="1"

@@ -5,9 +5,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Text;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
+using TextBox = System.Windows.Controls.TextBox;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 {
@@ -180,6 +186,46 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
             {
                 InitData();
             }
+        }
+
+        private void ExportExcelCommand(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.SaveFileDialog diag = new System.Windows.Forms.SaveFileDialog();
+            diag.FileName = year +"損益表.csv";
+            diag.Filter = "csv (*.csv)|*.csv";
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = diag.FileName;
+
+                string result = "";
+                result += GetDataViewData(dgTotal.ItemsSource as DataView); 
+                result += GetDataViewData(dgPreCount.ItemsSource as DataView);
+                result += GetDataViewData(dgIncome.ItemsSource as DataView);
+                result += GetDataViewData(dgExpanse.ItemsSource as DataView);
+                result += GetDataViewData(dgDiff.ItemsSource as DataView);
+
+                File.WriteAllText(filePath, result,Encoding.Unicode);
+            }
+        }
+
+        private string GetDataViewData(DataView grid)
+        {
+            string result = string.Empty;
+            foreach (DataRow row in (grid as DataView).ToTable().Rows)
+            {
+
+                for (int i = 0; i < row.ItemArray.Length; i++)
+                {
+                    result += row.ItemArray[i];
+
+                    if (i < row.ItemArray.Length - 1)
+                        result += "\t";
+                }
+                result += "\r\n";
+            }
+
+            result += "\r\n";
+            return result;
         }
     }
 }
