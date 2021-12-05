@@ -210,7 +210,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
 
         private string GetDataViewData(DataView grid)
         {
-            string result = string.Empty;
+            string result = "\t1月\t2月\t3月\t4月\t5月\t6月\t7月\t8月\t9月\t10月\t11月\t12月\t總計\r\n";
             foreach (DataRow row in (grid as DataView).ToTable().Rows)
             {
 
