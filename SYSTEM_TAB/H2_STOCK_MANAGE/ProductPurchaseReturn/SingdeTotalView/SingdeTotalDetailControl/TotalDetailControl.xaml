@@ -183,7 +183,7 @@
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{Binding}">
+                            <ContentControl IsEnabled="False" Content="{Binding}">
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Setter Property="ContentTemplate" Value="{StaticResource OrderNotDone}" />
@@ -230,7 +230,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Text="{Binding CurrenTotalOrder.Total, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
-            <ContentControl Margin="625,0,0,0" Content="{Binding}">
+            <ContentControl IsEnabled="False" Margin="625,0,0,0" Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource OrderAllToDone}" />
