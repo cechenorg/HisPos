@@ -406,16 +406,31 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 int count = ProductList.Rows.Count;
                 foreach (DataRow dr in ProductList.Rows)
                 {
-                    //if (rc == count - 1)
-                    //{
+                    if (rc == count - 1)
+                    {
+                        bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
+                        //if (!tp || ig != 1 && dr["CurrentPrice"].ToString() == "0")
+                        if (!tp || ig != 1)
+                        {
+                            dr["CurrentPrice"] = dr[AppliedPrice];
+                        }
+                    }
+                    rc++;
+                }
+            }
+        }
+
+        private void AlterAppliedPrice() 
+        {
+            if (ProductList != null)
+            {
+                foreach (DataRow dr in ProductList.Rows)
+                {
                     bool tp = int.TryParse(dr["IsGift"].ToString(), out int ig);
-                    //if (!tp || ig != 1 && dr["CurrentPrice"].ToString() == "0")
                     if (!tp || ig != 1)
                     {
                         dr["CurrentPrice"] = dr[AppliedPrice];
                     }
-                    //}
-                    //rc++;
                 }
             }
         }
@@ -1014,7 +1029,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     AppliedPrice = "Pro_RetailPrice";
                     break;
             }
-            SetPrice();
+            AlterAppliedPrice();
             CalculateTotal();
         }
 
@@ -1069,7 +1084,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             AppliedPrice = "Pro_RetailPrice";
             lblAppliedPrice.Content = "零售價";
             lblAppliedPrice.Foreground = Brushes.Black;
-            SetPrice();
+            AlterAppliedPrice();
             CalculateTotal();
         }
 
@@ -1110,7 +1125,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 lblAppliedPrice.Foreground = Brushes.Black;
             }
 
-            SetPrice();
+            AlterAppliedPrice();
             CalculateTotal();
             DepositColumn.Visibility = Visibility.Visible;
             btnPrepay.IsEnabled = true;
