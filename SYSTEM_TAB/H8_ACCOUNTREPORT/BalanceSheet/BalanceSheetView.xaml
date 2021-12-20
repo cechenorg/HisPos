@@ -90,7 +90,7 @@
 
                     <Button
                         Width="130"
-                        Margin="170,0,0,0"
+                        Margin="30,0,0,0"
                         VerticalAlignment="Center"
                         Background="RoyalBlue"
                         BorderThickness="0"
@@ -118,6 +118,17 @@
                         Content="科目管理"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18" />
+                    <Button
+                        Width="130"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Background="DarkCyan"
+                        BorderThickness="0"
+                        Command="{Binding ExportCSVCommand}"
+                        Content="匯出Excel"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="18" />
+                    
                 </StackPanel>
                 <DataGrid
                     x:Name="dg_Left"

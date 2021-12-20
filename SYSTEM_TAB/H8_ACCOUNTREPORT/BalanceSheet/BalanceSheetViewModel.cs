@@ -8,6 +8,9 @@ using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
@@ -36,6 +39,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         public RelayCommand ShowHistoryCommand { get; set; }
         public RelayCommand FirstCommand { get; set; }
         public RelayCommand AccountManageCommand { get; set; }
+
+        public RelayCommand ExportCSVCommand { get; set; }
 
         #endregion ----- Define Commands -----
 
@@ -151,7 +156,51 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             ShowHistoryCommand = new RelayCommand(ShowHistoryAction);
             FirstCommand = new RelayCommand(FirstAction);
             AccountManageCommand = new RelayCommand(AccountManageAction);
+            ExportCSVCommand = new RelayCommand(ExportCSVAction);
             ReloadAction();
+        }
+
+        private void ExportCSVAction()
+        {
+            System.Windows.Forms.SaveFileDialog diag = new System.Windows.Forms.SaveFileDialog();
+            diag.FileName =   "資產負債表.csv";
+            diag.Filter = "csv (*.csv)|*.csv";
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = diag.FileName;
+
+                string result = "科別\t項目\t金額\t\t\t科別\t項目\t金額\r\n";
+
+                int maxSize = LeftBalanceSheetDatas.Count > RightBalanceSheetDatas.Count
+                    ? LeftBalanceSheetDatas.Count
+                    : RightBalanceSheetDatas.Count;
+
+
+                for (int i = 0; i < maxSize; i++)
+                {
+                    if (LeftBalanceSheetDatas.Count > i)
+                    {
+                        LeftBalanceSheetDatas[i].Name = LeftBalanceSheetDatas[i].Name.Replace("+", "");
+                        LeftBalanceSheetDatas[i].Name = LeftBalanceSheetDatas[i].Name.Replace("-", "");
+                        result += $"{LeftBalanceSheetDatas[i].Name}\t{LeftBalanceSheetDatas[i].Type}\t{LeftBalanceSheetDatas[i].Value}";
+                    }
+                    else
+                    {
+                        result += $" \t\t";
+                    }
+
+                    result += "\t\t\t";
+                    if (RightBalanceSheetDatas.Count > i)
+                    {
+                        RightBalanceSheetDatas[i].Name = RightBalanceSheetDatas[i].Name.Replace("+", "");
+                        RightBalanceSheetDatas[i].Name = RightBalanceSheetDatas[i].Name.Replace("-", "");
+                        result += $"{RightBalanceSheetDatas[i].Name}\t{RightBalanceSheetDatas[i].Type}\t{RightBalanceSheetDatas[i].Value}";
+                    }
+                    result += "\r\n";
+                }
+                 
+                File.WriteAllText(filePath, result, Encoding.Unicode);
+            }
         }
 
         private void FirstAction()
