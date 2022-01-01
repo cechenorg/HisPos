@@ -209,7 +209,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             if (workingSetting
                 .Count(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month) == 0)
             {
-               var lastMonthData = workingSetting.FirstOrDefault(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month - 1);
+               var lastMonthData = workingSetting.FirstOrDefault(_ => _.Date.Year == DateTime.Today.AddMonths(-1).Year && _.Date.Month == DateTime.Today.AddMonths(-1).Month);
                repo.UpdateWorkingDaySetting(DateTime.Today, lastMonthData.DayCount);
 
                MonthlyNeedWorkingDayCount = lastMonthData.DayCount;
