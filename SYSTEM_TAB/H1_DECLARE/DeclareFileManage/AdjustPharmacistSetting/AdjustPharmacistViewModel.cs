@@ -160,8 +160,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
             PharmacistSchedule = new PharmacistSchedule();
             CurrentDate = declare;
             MyDisplayDate = declare;
-            first = new DateTime(declare.AddMonths(1).Year, declare.Month, 1);
-            last = new DateTime(declare.AddMonths(1).Year, declare.AddMonths(1).Month, 1).AddDays(-1);
+            if (declare.Month == 12)
+            {
+                first = new DateTime(declare.Year, declare.Month, 1);
+                last = new DateTime(declare.AddMonths(1).Year, declare.AddMonths(1).Month, 1).AddDays(-1);
+            }
+            else 
+            {
+                first = new DateTime(declare.AddMonths(1).Year, declare.Month, 1);
+                last = new DateTime(declare.AddMonths(1).Year, declare.AddMonths(1).Month, 1).AddDays(-1);
+            }
             MonthViewCalendar = new MonthViewCalendar(MyDisplayDate);
             InitItemsSource();
         }
@@ -240,6 +248,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
 
         private void AddPharmacistScheduleItemAction()
         {
+            if (MySelectedDate == null)
+            {
+                MessageWindow.ShowMessage("請選擇欲新增日期", MessageType.WARNING);
+                return;
+            }
             var addPharmacistScheduleItemWindow = new AddPharmacistScheduleItemWindow
             (
                 pharmacistScheduleItem =>
