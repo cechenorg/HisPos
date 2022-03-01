@@ -819,7 +819,6 @@
     </Compile>
     <Compile Include="Class\Authority\Authority.cs" />
     <Compile Include="Class\Authority\AuthorityDb.cs" />
-    <Compile Include="Class\CooperativeClinicJson.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\ConvertData.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadService.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadDb.cs" />
@@ -928,9 +927,6 @@
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
     <Compile Include="Class\InStock.cs" />
-    <Compile Include="Class\Location\Location.cs" />
-    <Compile Include="Class\Location\LocationDb.cs" />
-    <Compile Include="Class\Location\LocationDetail.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
     <Compile Include="NewClass\Medicine\Position\Position.cs" />
@@ -3020,9 +3016,6 @@
     <Resource Include="Images\ClockIn.png" />
     <Resource Include="Images\Genders.png" />
     <Resource Include="Images\User_48px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\LOGO_HISPOS.png" />

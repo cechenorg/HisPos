@@ -72,60 +72,11 @@ namespace His_Pos.Class
         每日總帳報表 = 49,
     }
 
-    public enum StoreOrderProductType
-    {
-        BASIC = 0,
-        SAFE = 1
-    }
+  
 
-    public enum ProcedureProcessType
-    {
-        INSERT = 0,
-        UPDATE = 1,
-        DELETE = 2
-    }
-
-    public enum OrderType
-    {
-        UNPROCESSING = 0,
-        PROCESSING = 1,
-        DONE = 2,
-        ALL = 3,
-        WAITING = 4,
-        SCRAP = 5,
-        ERROR = 100
-    }
-
-    public enum AddOrderType
-    {
-        RETURNBYMANUFACTORY = 1,
-        RETURNBYORDER = 2,
-        ADDALLBELOWSAFEAMOUNT = 4,
-        ADDBYMANUFACTORY = 5,
-        ADDALLTOBASICAMOUNT = 6,
-        ADDALLGOODSALES = 8,
-        ADDBYMANUFACTORYBELOWSAFEAMOUNT = 10,
-        ADDBYMANUFACTORYTOBASICAMOUNT = 15,
-        ADDBYMANUFACTORYGOODSALES = 20,
-        ERROR = 100
-    }
-
-    public enum DataSource
-    {
-        GetOtc = 0,
-        STOORDLIST = 1,
-        GetMedicine = 2,
-        MANUFACTORY = 3,
-        PROMAN = 4,
-        PRODUCTBASICORSAFE = 5,
-        ITEMDIALOGPRODUCT = 6,
-        GetStoreOrderDetail = 7,
-        GetItemDialogProduct = 8,
-        GetMedicalIcCard = 9,
-        InitMedicalIcCard = 10,
-        GetHospitalData = 11,
-        InitHospitalData = 12,
-    }
+  
+  
+   
 
     public enum MessageType
     {
@@ -136,25 +87,7 @@ namespace His_Pos.Class
         TIPS = 4
     }
 
-    public enum DeclareFileType
-    {
-        LOG_IN = 0,
-        UPDATE = 1,
-        DECLAREFILE_UPDATE = 2
-    }
-
-    public enum MedBagMode
-    {
-        SINGLE = 0,
-        MULTI = 1
-    }
-
-    public enum SystemType
-    {
-        HIS = 0,
-        POS = 1,
-        ALL = 2
-    }
+   
 
     public enum SearchType
     {
@@ -831,11 +764,7 @@ namespace His_Pos.Class
         NotIcCard = 9
     }
 
-    public enum SqlConnectionType
-    {
-        SqlServer = 0,
-        NySql = 1
-    }
+   
 
     public enum HistoryType
     {
