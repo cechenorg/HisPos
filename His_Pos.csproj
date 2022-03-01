@@ -928,12 +928,6 @@
     <Compile Include="NewClass\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Medicine\Position\PositionDb.cs" />
     <Compile Include="NewClass\Medicine\MedBag\MedBagMedicine.cs" />
-    <Compile Include="Class\ReportClass\MedBagReport.cs" />
-    <Compile Include="Class\ReportClass\MedBagItem.cs" />
-    <Compile Include="Class\StockTakingOrder\StockTakingOrder.cs" />
-    <Compile Include="Class\StockTakingOrder\StockTakingOrderDb.cs" />
-    <Compile Include="Class\StockTakingOrder\StockTakingOrderProduct.cs" />
-    <Compile Include="Class\StockTakingOrder\StockTakingOverview.cs" />
     <Compile Include="AbstractClass\Product.cs" />
     <Compile Include="NewClass\Medicine\Usage\Usage.cs" />
     <Compile Include="NewClass\Medicine\Usage\UsageDb.cs" />
