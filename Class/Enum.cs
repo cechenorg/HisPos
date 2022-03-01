@@ -10,20 +10,7 @@ namespace His_Pos.Class
         PurchaseReturn = 2,
         StockTaking = 3
     }
-
-    public enum StoreOrderCategory
-    {
-        PURCHASE = 0,
-        RETURN = 1,
-    }
-
-    public enum StockTakingStatus
-    {
-        ADDPRODUCTS = 0,
-        PRINT = 1,
-        INPUTRESULT = 2,
-        COMPLETE = 3
-    }
+     
 
     public enum FeatureItem
     {

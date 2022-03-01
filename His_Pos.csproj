@@ -817,8 +817,6 @@
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
       <DependentUpon>AdminFunctionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Class\Authority\Authority.cs" />
-    <Compile Include="Class\Authority\AuthorityDb.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\ConvertData.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadService.cs" />
     <Compile Include="NewClass\Prescription\ICCard\Upload\IcDataUploadDb.cs" />
@@ -924,8 +922,6 @@
     <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCase.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayment.cs" />
-    <Compile Include="Class\Employee\Employee.cs" />
-    <Compile Include="Class\Employee\EmployeeDb.cs" />
     <Compile Include="Class\InStock.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
@@ -949,7 +945,6 @@
     <Compile Include="Class\StockTakingOrder\StockTakingOrderDb.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrderProduct.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOverview.cs" />
-    <Compile Include="Class\Person\Person.cs" />
     <Compile Include="AbstractClass\Product.cs" />
     <Compile Include="NewClass\Medicine\Usage\Usage.cs" />
     <Compile Include="NewClass\Medicine\Usage\UsageDb.cs" />
