@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl
 {
@@ -20,8 +8,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
     public partial class GetCustomerWindow : Window
     {
         #region ----- Define Variables -----
+
         public string SearchString { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public GetCustomerWindow(string searchString)
         {
@@ -29,9 +19,5 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
 
             SearchString = searchString;
         }
-
-        #region ----- Define Functions -----
-
-        #endregion
     }
 }

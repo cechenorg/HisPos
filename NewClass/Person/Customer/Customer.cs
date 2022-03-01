@@ -1,20 +1,21 @@
-﻿using System;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Windows.Data;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Windows.Data;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 
 namespace His_Pos.NewClass.Person.Customer
 {
-    public class Customer:Person,ICloneable
+    public class Customer : Person, ICloneable
     {
         public Customer()
         {
@@ -34,19 +35,37 @@ namespace His_Pos.NewClass.Person.Customer
             Birthday = card.Birthday;
             Gender = card.Gender;
         }
+
         private bool isEnable = true;
+
         public bool IsEnable
         {
             get => isEnable;
             set
             {
-                Set(() => IsEnable, ref isEnable, value); 
+                Set(() => IsEnable, ref isEnable, value);
             }
-        } 
+        }
+
+        private bool isEmp;
+
+        public bool IsEmp
+        {
+            get
+            {
+                return isEmp;
+            }
+            set
+            {
+                Set(() => IsEmp, ref isEmp, value);
+            }
+        }
+
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間
         public CustomerHistories Histories { get; set; }//處方.自費調劑紀錄
         private CollectionViewSource historyCollectionViewSource;
+
         public CollectionViewSource HistoryCollectionViewSource
         {
             get => historyCollectionViewSource;
@@ -58,7 +77,34 @@ namespace His_Pos.NewClass.Person.Customer
 
         private ICollectionView historyCollectionView;
 
-        public Customer(Cooperative.CooperativeInstitution.Customer customer,int birthYear, int birthMonth, int birthDay)
+        //11.02
+
+        public CustomerRecords Records { get; set; }//處方.自費調劑紀錄
+        private CollectionViewSource recordCollectionViewSource;
+
+        public CollectionViewSource RecordCollectionViewSource
+        {
+            get => recordCollectionViewSource;
+            set
+            {
+                Set(() => RecordCollectionViewSource, ref recordCollectionViewSource, value);
+            }
+        }
+
+        private ICollectionView recordCollectionView;
+
+        public ICollectionView RecordCollectionView
+        {
+            get => recordCollectionView;
+            set
+            {
+                Set(() => RecordCollectionView, ref recordCollectionView, value);
+            }
+        }
+
+        //11.02^^
+
+        public Customer(Cooperative.CooperativeInstitution.Customer customer, int birthYear, int birthMonth, int birthDay)
         {
             IDNumber = customer.IdNumber;
             Name = customer.Name;
@@ -85,13 +131,18 @@ namespace His_Pos.NewClass.Person.Customer
                 Set(() => HistoryCollectionView, ref historyCollectionView, value);
             }
         }
+
         #region Function
+
         public void Save()
         {
-            if (ID == 0 || IDNumber.Equals("A111111111") || Name.Equals("匿名"))
+            if (IDNumber != null)
             {
-                MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.ERROR);
-                return;
+                if (ID == 0 || IDNumber.Equals("A111111111") || Name.Equals("匿名"))
+                {
+                    MessageWindow.ShowMessage("匿名資料不可編輯", MessageType.ERROR);
+                    return;
+                }
             }
             CustomerDb.Save(this);
         }
@@ -101,31 +152,42 @@ namespace His_Pos.NewClass.Person.Customer
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
             /* 格式化手機 */
-            if (!string.IsNullOrEmpty(customer.CellPhone) && customer.CellPhone.Length == 10) {
+            if (!string.IsNullOrEmpty(customer.CellPhone) && customer.CellPhone.Length == 10)
+            {
                 string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
                 customer.CellPhone = FormatCell;
+            }
+            if (!string.IsNullOrEmpty(customer.SecondPhone) && customer.SecondPhone.Length == 10)
+            {
+                string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
+                customer.SecondPhone = FormatCell;
             }
             /* 格式化電話 */
             if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 7)
             {
                 string FormatTel = customer.Tel.Insert(3, "-");
                 customer.Tel = FormatTel;
-            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 8)
+            }
+            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 8)
             {
                 string FormatTel = customer.Tel.Insert(4, "-");
                 customer.Tel = FormatTel;
-            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 9)
+            }
+            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 9)
             {
                 string FormatTel = customer.Tel.Insert(2, "-").Insert(6, "-");
                 customer.Tel = FormatTel;
-            }else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 10)
+            }
+            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 10)
             {
                 string FormatTel = customer.Tel.Insert(2, "-").Insert(7, "-");
                 customer.Tel = FormatTel;
             }
             return customer;
         }
-        public Customers Check() {
+
+        public Customers Check()
+        {
             var table = CustomerDb.CheckCustomer(this);
             var customers = new Customers();
             if (table.Rows.Count == 0) return customers;
@@ -135,11 +197,14 @@ namespace His_Pos.NewClass.Person.Customer
             }
             return customers;
         }
-        public void UpdateEditTime() {
+
+        public void UpdateEditTime()
+        {
             CustomerDb.UpdateEditTime(ID);
         }
 
-        #endregion
+        #endregion Function
+
         public int CountAge()
         {
             var today = DateTime.Today;
@@ -207,13 +272,14 @@ namespace His_Pos.NewClass.Person.Customer
             c.Name = Name;
             c.Note = Note;
             c.Tel = Tel;
+            c.SecondPhone = SecondPhone;
             c.IsEnable = IsEnable;
             c.Histories = new CustomerHistories();
             if (Histories != null)
             {
                 foreach (var h in Histories)
                     c.Histories.Add(h);
-                c.HistoryCollectionViewSource = new CollectionViewSource{Source = c.Histories };
+                c.HistoryCollectionViewSource = new CollectionViewSource { Source = c.Histories };
                 c.HistoryCollectionView = HistoryCollectionViewSource.View;
             }
             return c;
@@ -238,17 +304,63 @@ namespace His_Pos.NewClass.Person.Customer
                 Gender = c.Gender;
                 Line = c.Line;
                 Note = c.Note;
+                SecondPhone = c.SecondPhone;
                 return true;
             }
             MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
             return false;
         }
 
+        public string InsertNewData()
+        {
+            var table = CustomerDb.InsertNewCustomerData(this);
+            if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
+            {
+                //MessageWindow.ShowMessage("身分證字號已存在！", MessageType.ERROR);
+                return "ID_SAME";
+            }
+
+            if (table.Rows[0].Field<string>("RESULT").Equals("PHONESAME"))
+            {
+                //MessageWindow.ShowMessage("電話號碼已存在！", MessageType.ERROR);
+                return "PHONE_SAME";
+            }
+
+            if (table.Rows.Count > 0)
+            {
+                var c = new Customer(table.Rows[0]);
+                ID = c.ID;
+                Name = c.Name;
+                IDNumber = c.IDNumber;
+                Birthday = c.Birthday;
+                Tel = c.Tel;
+                ContactNote = c.ContactNote;
+                LastEdit = c.LastEdit;
+                Address = c.Address;
+                CellPhone = c.CellPhone;
+                Email = c.Email;
+                Gender = c.Gender;
+                Line = c.Line;
+                Note = c.Note;
+                SecondPhone = c.SecondPhone;
+                return "SUCCESS";
+            }
+            MessageWindow.ShowMessage("新增顧客資料發生異常，請稍後重試。", MessageType.ERROR);
+            return "FAILED";
+        }
+
         public void GetHistories()
         {
             Histories = new CustomerHistories(ID);
             HistoryCollectionViewSource = new CollectionViewSource { Source = Histories };
-            HistoryCollectionView =HistoryCollectionViewSource.View;
+            HistoryCollectionView = HistoryCollectionViewSource.View;
+        }
+
+        public void GetRecord()
+        {
+            Records = new CustomerRecords(ID);
+            RecordCollectionViewSource = new CollectionViewSource { Source = Records };
+            RecordCollectionView = RecordCollectionViewSource.View;
         }
 
         public void CheckPatientWithCard(Customer patientFromCard)
@@ -294,9 +406,9 @@ namespace His_Pos.NewClass.Person.Customer
             return Name.Equals("匿名") && IDNumber.Equals("A111111111");
         }
 
-        public bool CheckCellFormat() {            
+        public bool CheckCellFormat()
+        {
             var cleared = Regex.Replace(CellPhone, "[^0-9]", "");
-            //System.Windows.MessageBox.Show(cleared.Length.ToString());
             return cleared.Length == 10;
         }
 
@@ -304,7 +416,5 @@ namespace His_Pos.NewClass.Person.Customer
             var cleared = Regex.Replace(Tel, "[^0-9]", "");
             return cleared.Length == 7 || cleared.Length == 9;
         }*/
-
-
     }
 }

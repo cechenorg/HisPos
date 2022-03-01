@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using His_Pos.Service;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using His_Pos.Service;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
@@ -10,12 +10,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
     /// CustomerManageView.xaml 的互動邏輯
     /// </summary>
     public partial class CustomerManageView : UserControl
-    { 
+    {
         public CustomerManageView()
         {
-            InitializeComponent(); 
+            InitializeComponent();
         }
-
 
         private void DateMaskedTextBoxOnPreviewKeyDown(object sender, KeyEventArgs e)
         {

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using System;
+using System.Data;
 
 namespace His_Pos.NewClass.Prescription.SameDeclarePrescriptions
 {
@@ -30,8 +30,9 @@ namespace His_Pos.NewClass.Prescription.SameDeclarePrescriptions
             }
             Medicines = new Medicines();
         }
+
         public int ID { get; }
-        public string PatientName { get;}
+        public string PatientName { get; }
         public string PatientIDNumber { get; }
         public DateTime TreatDate { get; }
         public DateTime AdjustDate { get; }

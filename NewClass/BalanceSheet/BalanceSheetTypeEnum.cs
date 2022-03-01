@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace His_Pos.NewClass.BalanceSheet
+﻿namespace His_Pos.NewClass.BalanceSheet
 {
     public enum BalanceSheetTypeEnum
     {
@@ -12,6 +6,9 @@ namespace His_Pos.NewClass.BalanceSheet
         MedPoint = 2,
         Payable = 3,
         Pay = 4,
-        Transfer = 5
+        Transfer = 5,
+        Normal = 6,
+        NormalNoEdit = 7,
+        Bank = 8
     }
 }

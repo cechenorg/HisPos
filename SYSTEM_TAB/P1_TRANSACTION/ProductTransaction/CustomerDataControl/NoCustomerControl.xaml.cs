@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,28 +16,36 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
     /// </summary>
     public partial class NoCustomerControl : UserControl
     {
-        private bool isAnonymous = true;
-        private string cusID;
+        private static string cusID = "0";
+
+        public string CusID
+        {
+            get { return cusID; }
+            set { cusID = value; }
+        }
 
         public NoCustomerControl()
         {
             InitializeComponent();
         }
 
-        public string ReturnCusID() 
+        public static IEnumerable<T> FindLogicalChildren<T>(DependencyObject obj) where T : DependencyObject
         {
-            if (isAnonymous)
+            if (obj != null)
             {
-                return "0";
-            }
-            else 
-            {
-                return cusID;
+                if (obj is T)
+                    yield return obj as T;
+
+                foreach (DependencyObject child in LogicalTreeHelper.GetChildren(obj).OfType<DependencyObject>())
+                    foreach (T c in FindLogicalChildren<T>(child))
+                        yield return c;
             }
         }
 
-        public void ClearView() 
+        public void ClearView()
         {
+            tbSearch.Text = "";
+
             lbName.Content = "";
             lbGender.Content = "";
             lbBirthDay.Content = "";
@@ -45,10 +54,10 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             tbAddress.Text = "";
             tbNote.Text = "";
 
-            isAnonymous = true;
+            cusID = "0";
         }
 
-        private void FillInCustomerData(DataTable result) 
+        private void FillInCustomerData(DataTable result)
         {
             cusID = result.Rows[0]["PosCus_Uid"].ToString();
 
@@ -59,12 +68,37 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
             lbTelephone.Content = result.Rows[0]["PosCus_Telephone"].ToString();
             tbAddress.Text = result.Rows[0]["PosCus_Address"].ToString();
             tbNote.Text = result.Rows[0]["PosCus_Note"].ToString();
+
+            foreach (DataGridTemplateColumn column in FindLogicalChildren<DataGridTemplateColumn>(Application.Current.MainWindow))
+            {
+                int count = 0;
+                count++;
+            }
         }
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
             AddNewCustomerWindow acw = new AddNewCustomerWindow();
+            acw.RaiseCustomEvent += new EventHandler<CustomEventArgs>(acw_RaiseCustomEvent);
             acw.ShowDialog();
+        }
+
+        private void acw_RaiseCustomEvent(object sender, CustomEventArgs e)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", int.Parse(e.Message)));
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[GetCustomerByID]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            if (result.Rows.Count == 0)
+            {
+                MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
+            }
+            else
+            {
+                FillInCustomerData(result);
+            }
         }
 
         private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
@@ -84,13 +118,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
                 bool isCell = tb.Text.StartsWith("09");
                 if (isCell)
                 {
-                    parameters.Add(new SqlParameter("PosCus_Cellphone", tb.Text));
-                    parameters.Add(new SqlParameter("PosCus_Telephone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
+                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
                 }
-                else 
+                else
                 {
-                    parameters.Add(new SqlParameter("PosCus_Cellphone", DBNull.Value));
-                    parameters.Add(new SqlParameter("PosCus_Telephone", tb.Text));
+                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("Cus_Telephone", tb.Text));
                 }
                 DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[CustomerQuery]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
@@ -99,14 +133,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataContr
                 {
                     MessageWindow.ShowMessage("查無資料！", MessageType.ERROR);
                 }
-                else 
+                else
                 {
-                    isAnonymous = false;
                     FillInCustomerData(result);
                 }
             }
         }
-
-        
     }
 }

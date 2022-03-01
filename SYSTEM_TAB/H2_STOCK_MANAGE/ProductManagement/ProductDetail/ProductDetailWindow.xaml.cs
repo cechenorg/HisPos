@@ -1,6 +1,6 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
 {
@@ -24,12 +24,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
 
             Instance.Activate();
         }
+
         private void ProductDetailWindow_OnClosed(object sender, EventArgs e)
         {
             Instance = null;
             Messenger.Default.Send(new NotificationMessage(this, "CloseProductTabs"));
         }
-        public static void ActivateProductDetailWindow() 
+
+        public static void ActivateProductDetailWindow()
         {
             Instance.Activate();
         }

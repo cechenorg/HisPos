@@ -1,9 +1,9 @@
-﻿using System.Windows.Media.Imaging;
-using His_Pos.Class;
+﻿using His_Pos.Class;
+using System.Windows.Media.Imaging;
 
 namespace His_Pos.Interface
 {
-   public interface IInventory
+    public interface IInventory
     {
         string Id { get; set; }
         string Name { get; set; }

@@ -8,6 +8,7 @@ namespace His_Pos.Class.ReportClass
         {
             ReportItems = new List<MedBagItem>();
         }
+
         public List<MedBagItem> ReportItems { get; set; }
     }
 }

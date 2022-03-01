@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace His_Pos.NewClass.Report
+﻿namespace His_Pos.NewClass.Report
 {
     public enum CashStockEntryReportEnum
     {
         Cash = 0,
-        Prescription = 1
+        Prescription = 1,
+        StockTaking = 2,
+        TradeProfit = 3,
+        ExtraMoney = 4,
+        OTCStockTaking = 5,
+        Reward = 6
     }
 }
- 

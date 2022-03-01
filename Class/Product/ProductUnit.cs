@@ -1,13 +1,15 @@
-﻿using System;
+﻿using His_Pos.Interface;
+using System;
 using System.ComponentModel;
 using System.Data;
-using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class ProductUnit: IDeletable, INotifyPropertyChanged
+    public class ProductUnit : IDeletable, INotifyPropertyChanged
     {
-        public ProductUnit() {}
+        public ProductUnit()
+        {
+        }
 
         public ProductUnit(string unit)
         {
@@ -50,6 +52,7 @@ namespace His_Pos.Class.Product
         public double EmpPrice { get; set; }
         public bool BaseType { get; set; }
         private string source = "";
+
         public string Source
         {
             get { return source; }
@@ -61,6 +64,7 @@ namespace His_Pos.Class.Product
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)

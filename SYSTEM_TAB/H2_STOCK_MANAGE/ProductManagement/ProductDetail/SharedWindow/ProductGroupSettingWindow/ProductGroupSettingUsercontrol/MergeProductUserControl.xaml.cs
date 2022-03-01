@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol {
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow.ProductGroupSettingUsercontrol
+{
     /// <summary>
     /// MergeProductUserControl.xaml 的互動邏輯
     /// </summary>
-    public partial class MergeProductUserControl : UserControl {
-        public MergeProductUserControl() {
+    public partial class MergeProductUserControl : UserControl
+    {
+        public MergeProductUserControl()
+        {
             InitializeComponent();
         }
 
@@ -26,7 +17,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             TextBox textBox = sender as TextBox;
 
-            if(textBox is null) return;
+            if (textBox is null) return;
 
             if (e.Key == Key.Enter)
             {

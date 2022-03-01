@@ -11,14 +11,17 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[Institution]");
         }
-        public static DataTable GetCommonInstitution() {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CommonInstitution]"); 
+
+        public static DataTable GetCommonInstitution()
+        {
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CommonInstitution]");
         }
+
         public static void UpdateUsedTime(string insId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "InsId", insId);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InstitutionUsedTime]", parameterList); 
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InstitutionUsedTime]", parameterList);
         }
 
         public static DataTable CheckDivisionValid(string institutionID, string divisionId)

@@ -1,10 +1,5 @@
 ﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Tutorial;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial
 {
@@ -14,16 +9,20 @@ namespace His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial
         {
             return this;
         }
+
         public Tutorials tutorialCollection;
+
         public Tutorials TutorialCollection
         {
             get { return tutorialCollection; }
             set
             {
-                Set(() => TutorialCollection, ref tutorialCollection, value); 
+                Set(() => TutorialCollection, ref tutorialCollection, value);
             }
         }
-        public NewClass.Tutorial.Tutorial  tutorialSelectedItem;
+
+        public NewClass.Tutorial.Tutorial tutorialSelectedItem;
+
         public NewClass.Tutorial.Tutorial TutorialSelectedItem
         {
             get { return tutorialSelectedItem; }
@@ -33,7 +32,8 @@ namespace His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial
             }
         }
 
-        public TutorialViewModel() {
+        public TutorialViewModel()
+        {
             TutorialCollection = Tutorials.GetData();
         }
     }

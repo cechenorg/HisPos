@@ -6,10 +6,9 @@ namespace His_Pos.NewClass.Prescription.Service
     {
         public NormalPrescriptionService()
         {
-            
         }
 
-        public override bool CheckPrescription(bool noCard,bool errorAdjust)
+        public override bool CheckPrescription(bool noCard, bool errorAdjust)
         {
             if (!CheckAnonymousPatient()) return false;
             if (!CheckValidCustomer()) return false;
@@ -21,7 +20,7 @@ namespace His_Pos.NewClass.Prescription.Service
             else
             {
                 if (!CheckNhiRules(noCard)) return false;
-                if(!noCard)
+                if (!noCard)
                     if (!CheckMedicalNumber()) return false;
             }
             if (!CheckMedicines()) return false;
@@ -55,7 +54,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 Current.PrescriptionStatus.OrderStatus = "訂單狀態:無訂單";
             if (Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
             {
-                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current,true);
+                var medicinesSendSingdeWindow = new MedicinesSendSingdeWindow(Current, true);
                 vm = (MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext;
                 return !((MedicinesSendSingdeViewModel)medicinesSendSingdeWindow.DataContext).IsReturn;
             }
@@ -111,7 +110,7 @@ namespace His_Pos.NewClass.Prescription.Service
             Current.PrescriptionStatus.SetRegisterStatus();
             if (Current.InsertDb())
             {
-                if(Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
+                if (Current.PrescriptionStatus.IsSendOrder && !Current.PrescriptionStatus.OrderStatus.Equals("訂單狀態:已收貨"))
                     SendOrder(vm);
                 return true;
             }

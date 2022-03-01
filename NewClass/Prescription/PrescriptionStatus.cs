@@ -1,5 +1,5 @@
-﻿using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
+using System.Data;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -9,7 +9,7 @@ namespace His_Pos.NewClass.Prescription
         {
         }
 
-        public PrescriptionStatus(DataRow r,PrescriptionType type)
+        public PrescriptionStatus(DataRow r, PrescriptionType type)
         {
             switch (type)
             {
@@ -20,6 +20,7 @@ namespace His_Pos.NewClass.Prescription
                     IsDeposit = r.Field<bool>("IsDeposit");
                     IsAdjust = r.Field<bool>("IsAdjust");
                     break;
+
                 case PrescriptionType.ChronicReserve:
                     IsSendToSingde = r.Field<bool>("IsSendToServer");
                     break;
@@ -27,15 +28,19 @@ namespace His_Pos.NewClass.Prescription
         }
 
         #region Properties
+
         public bool IsSendToSingde
         {
             get;
             set;
         }
+
         public bool IsAdjust { get; set; }
         public bool IsRead { get; set; }
+        public bool IsPrint { get; set; }
         public bool IsVIP { get; set; }
         private bool isGetCard;
+
         public bool IsGetCard
         {
             get => isGetCard;
@@ -44,12 +49,14 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => IsGetCard, ref isGetCard, value);
             }
         }
+
         public bool IsDeclare { get; set; }
         public bool IsDeposit { get; set; }
         public bool IsRegister { get; set; }
         public bool? IsCreateSign { get; set; }
         public bool IsSendOrder { get; set; }
         private bool? reserveSend;
+
         public bool? ReserveSend
         {
             get => reserveSend;
@@ -58,7 +65,9 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => ReserveSend, ref reserveSend, value);
             }
         }
+
         private string orderStatus;
+
         public string OrderStatus
         {
             get => orderStatus;
@@ -67,7 +76,8 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => OrderStatus, ref orderStatus, value);
             }
         }
-        #endregion
+
+        #endregion Properties
 
         public void SetPrescribeStatus()
         {

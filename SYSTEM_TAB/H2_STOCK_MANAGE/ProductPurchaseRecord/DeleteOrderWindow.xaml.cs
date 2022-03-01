@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder;
+using System.Data;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
@@ -25,15 +13,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
     public partial class DeleteOrderWindow : Window
     {
         #region ----- Define Variables -----
+
         public RelayCommand DeleteOrderCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         #region ----- Define Variables -----
+
         private string OrderID { get; }
         private string ReceiveID { get; }
         public string CheckStringHint { get { return $"輸入刪除單號 {ReceiveID}"; } }
         public string CheckString { get; set; } = "";
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public DeleteOrderWindow(string orderID, string receiveID)
         {
@@ -47,8 +39,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         }
 
         #region ----- Define Actions -----
+
         private void DeleteOrderAction()
         {
+            btnDelete.IsEnabled = false;
             ConfirmWindow confirmWindow = new ConfirmWindow("是否確認刪除?", "再次確認");
 
             if ((bool)confirmWindow.DialogResult)
@@ -57,17 +51,30 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 DataTable dataTable = StoreOrderDB.DeleteDoneOrder(OrderID);
                 MainWindow.ServerConnection.CloseConnection();
 
+
+
+
                 if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                     MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
+                else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("LOW"))
+                {
+                    MessageWindow.ShowMessage("庫存不足 刪除失敗！", MessageType.ERROR);
+                } else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("STRIKED"))
+                {
+                    MessageWindow.ShowMessage("刪除失敗!已沖帳過!", MessageType.ERROR);
+                }
+
                 else
                     MessageWindow.ShowMessage("網路異常 刪除失敗!", MessageType.ERROR);
             }
 
             Close();
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private bool CanDelete()
         {
             if (!CheckString.Equals(ReceiveID))
@@ -75,6 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

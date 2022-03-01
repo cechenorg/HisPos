@@ -1,25 +1,42 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow.CommonHospitalsWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
-        xmlns:commonHospitalsWindow="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow"
-        mc:Ignorable="d"
-        Title="常用院所" Icon="/Images/common.ico"  Height="365" Width="600" WindowStartupLocation="CenterScreen">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow.CommonHospitalsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
+    xmlns:commonHospitalsWindow="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CommonHospitalsWindow"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="常用院所"
+    Width="600"
+    Height="365"
+    Icon="/Images/common.ico"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type commonHospitalsWindow:CommonHospitalsViewModel}">
-            <DataGrid Name="HospitalGrid" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding CommonHospitalsCollectionView,UpdateSourceTrigger=PropertyChanged}" Margin="10" SelectedItem="{Binding SelectedInstitution,UpdateSourceTrigger=PropertyChanged}"
-                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Background="{StaticResource GridBackGround}"  Height="365" Width="600" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+            <DataGrid
+                Name="HospitalGrid"
+                Width="600"
+                Height="365"
+                Margin="10"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridBackGround}"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                HorizontalScrollBarVisibility="Disabled"
+                ItemsSource="{Binding CommonHospitalsCollectionView, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedInstitution, UpdateSourceTrigger=PropertyChanged}"
+                VerticalScrollBarVisibility="Disabled">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding InstitutionSelected}"/>
+                        <i:InvokeCommandAction Command="{Binding InstitutionSelected}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <i:Interaction.Behaviors>
-                    <behaviors:ScrollIntoView/>
+                    <behaviors:ScrollIntoView />
                 </i:Interaction.Behaviors>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -54,7 +71,14 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="200" Header="醫事機構代碼" Binding="{Binding ID,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semibold" FontSize="18" FontWeight="Bold" IsReadOnly="True">
+                    <DataGridTextColumn
+                        Width="200"
+                        Binding="{Binding ID, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Header="醫事機構代碼"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -62,7 +86,14 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="400" Header="院所名稱" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" FontWeight="Bold" IsReadOnly="True">
+                    <DataGridTextColumn
+                        Width="400"
+                        Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Header="院所名稱"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -79,7 +110,7 @@
             <ContentControl Name="ResultGrid" Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}"/>
+                        <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
                     </Style>
                 </ContentControl.Style>
             </ContentControl>

@@ -1,15 +1,16 @@
-﻿using System.ComponentModel;
+﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.ChromeTabViewModel
 {
     public class ViewModelProductDetailWindow : ProductDetailViewModel, IChromeTabViewModel
     {
         #region ----- Define Variables -----
+
         private bool _canMoveTabs;
         private bool _showAddButton;
 
@@ -29,6 +30,7 @@ namespace His_Pos.ChromeTabViewModel
                 }
             }
         }
+
         public bool ShowAddButton
         {
             get { return _showAddButton; }
@@ -40,13 +42,14 @@ namespace His_Pos.ChromeTabViewModel
                 }
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ViewModelProductDetailWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
-          
+
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
 
             CanMoveTabs = true;
@@ -56,21 +59,25 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         #region ----- Define Functions -----
+
         private void RegisterMessenger()
         {
             Messenger.Default.Register<NotificationMessage<string[]>>(this, GetSelectedProductDetail);
             Messenger.Default.Register<NotificationMessage>(this, ClearTabs);
         }
+
         private void GetSelectedProductDetail(NotificationMessage<string[]> notificationMessage)
         {
             if (notificationMessage.Notification == "ShowProductDetail")
                 AddTabCommandAction(notificationMessage.Content);
         }
+
         private void ClearTabs(NotificationMessage notificationMessage)
         {
             if (notificationMessage.Notification == "CloseProductTabs" && notificationMessage.Sender is ProductDetailWindow)
                 ItemCollection.Clear();
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

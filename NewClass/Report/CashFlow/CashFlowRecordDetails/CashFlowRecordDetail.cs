@@ -1,16 +1,16 @@
-﻿using System;
-using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
+using System;
+using System.Data;
 
 namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
 {
-    public class CashFlowRecordDetail:ObservableObject
+    public class CashFlowRecordDetail : ObservableObject
     {
         public CashFlowRecordDetail()
         {
-
         }
+
         public CashFlowRecordDetail(DataRow r)
         {
             ID = r.Field<int>("CashFlow_ID");
@@ -20,9 +20,11 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
             Date = r.Field<DateTime>("CashFlow_Time");
             EmpName = r.Field<string>("Emp_Name");
             CanEdit = DateTime.Compare(Date, DateTime.Today) >= 0 || ViewModelMainWindow.CurrentUser.ID == 1;
+            Bank = r.Field<string>("BANK");
         }
 
         private int id;
+
         public int ID
         {
             get => id;
@@ -33,6 +35,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
         }
 
         private string name;
+
         public string Name
         {
             get => name;
@@ -41,7 +44,20 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
                 Set(() => Name, ref name, value);
             }
         }
+
+        private string bank;
+
+        public string Bank
+        {
+            get => bank;
+            set
+            {
+                Set(() => Bank, ref bank, value);
+            }
+        }
+
         private string note;
+
         public string Note
         {
             get => note;
@@ -50,7 +66,9 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
                 Set(() => Note, ref note, value);
             }
         }
+
         private int cashFlowValue;
+
         public int CashFlowValue
         {
             get => cashFlowValue;
@@ -61,6 +79,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
         }
 
         private DateTime date;
+
         public DateTime Date
         {
             get => date;
@@ -71,6 +90,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
         }
 
         private string empName;
+
         public string EmpName
         {
             get => empName;
@@ -81,6 +101,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
         }
 
         private bool isSelected;
+
         public bool IsSelected
         {
             get => isSelected;
@@ -91,6 +112,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails
         }
 
         private bool canEdit;
+
         public bool CanEdit
         {
             get => canEdit;

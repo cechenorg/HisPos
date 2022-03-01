@@ -1,15 +1,15 @@
-﻿using System.Diagnostics;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
-using His_Pos.NewClass.Product;
-using StringRes = His_Pos.Properties.Resources;
-using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
-using System.Data;
 using His_Pos.NewClass.Medicine.MedicineSet;
+using His_Pos.NewClass.Product;
+using System.Data;
+using System.Diagnostics;
+using MedSelectWindow = His_Pos.FunctionWindow.AddProductWindow.AddMedicineWindow;
+using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow
 {
@@ -17,6 +17,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
     {
         public MedicineSetMode Mode;
         private MedicineSet currentSet;
+
         public MedicineSet CurrentSet
         {
             get => currentSet;
@@ -27,12 +28,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         }
 
         #region Commands
+
         public RelayCommand<string> AddMedicine { get; set; }
         public RelayCommand DeleteMedicine { get; set; }
         public RelayCommand Save { get; set; }
         public RelayCommand Delete { get; set; }
         public RelayCommand Cancel { get; set; }
-        #endregion
+
+        #endregion Commands
+
         public MedicineSetViewModel(MedicineSetMode mode, MedicineSet selected = null)
         {
             Mode = mode;
@@ -57,6 +61,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
         }
 
         #region CommandActions
+
         private void AddMedicineAction(string medicineID)
         {
             if (string.IsNullOrEmpty(medicineID)) return;
@@ -66,25 +71,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                 return;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare,"0");
+            var productCount = ProductStructs.GetProductStructCountBySearchString(medicineID, AddProductEnum.PrescriptionDeclare, "0");
             MainWindow.ServerConnection.CloseConnection();
             if (productCount == 0)
                 MessageWindow.ShowMessage(StringRes.查無藥品, MessageType.WARNING);
             else
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
-                var MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.MedicineSetWindow,"0");
+                var MedicineWindow = new MedSelectWindow(medicineID, AddProductEnum.MedicineSetWindow, "0");
                 if (productCount > 1)
                     MedicineWindow.ShowDialog();
             }
         }
+
         private void DeleteMedicineAction()
         {
             CurrentSet.MedicineSetItems.Remove(CurrentSet.SelectedMedicine);
         }
+
         private void SaveAction()
         {
-            if(!CheckSetValid()) return;
+            if (!CheckSetValid()) return;
             MainWindow.ServerConnection.OpenConnection();
             var table = MedicineSetDb.UpdateMedicineSet(CurrentSet);
             if (table.Rows.Count == 1)
@@ -99,16 +106,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             }
             MainWindow.ServerConnection.CloseConnection();
         }
+
         private void CancelAction()
         {
             Messenger.Default.Send(new NotificationMessage("CloseMedicineSetWindow"));
         }
+
         private void GetSelectedProduct(NotificationMessage<ProductStruct> msg)
         {
             if (msg.Notification != nameof(MedicineSetViewModel)) return;
             Messenger.Default.Unregister<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
             CurrentSet.AddMedicine(msg.Content);
         }
+
         private void DeleteAction()
         {
             var deleteConfirm = new ConfirmWindow("確認刪除藥品組合:" + CurrentSet.Name, "");
@@ -122,13 +132,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                 Messenger.Default.Send(new NotificationMessage("CloseMedicineSetWindow"));
             }
         }
-        #endregion
+
+        #endregion CommandActions
+
         #region Functions
+
         private bool CheckSetValid()
         {
             if (CurrentSet.MedicineSetItems.Count == 0)
             {
-                MessageWindow.ShowMessage("藥品組合不得為空",MessageType.ERROR);
+                MessageWindow.ShowMessage("藥品組合不得為空", MessageType.ERROR);
                 return false;
             }
             if (string.IsNullOrEmpty(CurrentSet.Name))
@@ -138,6 +151,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             }
             return true;
         }
-        #endregion
+
+        #endregion Functions
     }
 }

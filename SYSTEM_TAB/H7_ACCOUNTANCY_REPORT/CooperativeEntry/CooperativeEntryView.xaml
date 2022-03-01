@@ -1,23 +1,22 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry.CooperativeEntryView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:hisPos="clr-namespace:His_Pos"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:service="clr-namespace:His_Pos.Service"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry" 
-             
-             mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry.CooperativeEntryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hisPos="clr-namespace:His_Pos"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="839"
+    d:DesignWidth="1365"
+    mc:Ignorable="d">
     <UserControl.DataContext>
-        <local:CooperativeEntry/>
+        <local:CooperativeEntry />
     </UserControl.DataContext>
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
-    <Grid >
-      
-    </Grid>
+    <Grid />
 </UserControl>

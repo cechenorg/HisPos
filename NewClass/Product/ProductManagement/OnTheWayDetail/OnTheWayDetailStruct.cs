@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.ProductManagement.OnTheWayDetail
 {
     public struct OnTheWayDetailStruct
     {
         #region ----- Define Variables -----
+
         public string Status { get; set; }
         public string ID { get; set; }
         public string CusName { get; set; }
@@ -17,7 +14,8 @@ namespace His_Pos.NewClass.Product.ProductManagement.OnTheWayDetail
         public double Amount { get; set; }
 
         public string AmountHeader { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public OnTheWayDetailStruct(DataRow row)
         {

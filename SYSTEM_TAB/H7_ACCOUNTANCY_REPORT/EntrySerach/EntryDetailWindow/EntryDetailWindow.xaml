@@ -1,63 +1,131 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach.EntryDetailWindow.EntryDetailWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach.EntryDetailWindow"
-        mc:Ignorable="d"
-        xmlns:service="clr-namespace:His_Pos.Service"
-        Title="庫存現值詳細" Height="450" Width="500" WindowStartupLocation="CenterScreen">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach.EntryDetailWindow.EntryDetailWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach.EntryDetailWindow"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    Title="庫存現值詳細"
+    Width="500"
+    Height="450"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal">
-                <CheckBox IsChecked="{Binding IsPurchaseCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="進貨" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="30,0,0,0"   />
-                <CheckBox IsChecked="{Binding IsReturnCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="退貨" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="30,0,0,0"   />
-                <CheckBox IsChecked="{Binding IsStockTakingCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="盤點" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="30,0,0,0"  />
-                <CheckBox IsChecked="{Binding IsAdjustCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="調劑" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="30,0,0,0" />
+                <CheckBox
+                    Margin="30,0,0,0"
+                    Padding="0"
+                    VerticalAlignment="Center"
+                    Content="進貨"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="25"
+                    IsChecked="{Binding IsPurchaseCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox
+                    Margin="30,0,0,0"
+                    Padding="0"
+                    VerticalAlignment="Center"
+                    Content="退貨"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="25"
+                    IsChecked="{Binding IsReturnCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox
+                    Margin="30,0,0,0"
+                    Padding="0"
+                    VerticalAlignment="Center"
+                    Content="盤點"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="25"
+                    IsChecked="{Binding IsStockTakingCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox
+                    Margin="30,0,0,0"
+                    Padding="0"
+                    VerticalAlignment="Center"
+                    Content="銷售耗用"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="25"
+                    IsChecked="{Binding IsAdjustCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
-        <DataGrid Name="EntryDetail"  Grid.Row="1" ItemsSource="{Binding EntryCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
+        <DataGrid
+            Name="EntryDetail"
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            Background="{StaticResource Shadow}"
+            CanUserAddRows="False"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            ItemsSource="{Binding EntryCollectionView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
                         </Trigger>
                     </Style.Triggers>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Height" Value="40" />
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="200" Header="時間" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Date,Converter={StaticResource NullableDateConverter}}">
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding Date, Converter={StaticResource NullableDateConverter}}"
+                    FontFamily="Segoe UI Semi"
+                    Header="時間"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="120" Header="科目" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding EntryName}">
+                <DataGridTextColumn
+                    Width="120"
+                    Binding="{Binding SourceID}"
+                    FontFamily="Segoe UI Semi"
+                    Header="單號"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="100" Header="金額" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value}">
+                <DataGridTextColumn
+                    Width="80"
+                    Binding="{Binding EntryName}"
+                    FontFamily="Segoe UI Semi"
+                    Header="科目"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="100"
+                    Binding="{Binding Value, StringFormat=N0}"
+                    FontFamily="Segoe UI Semi"
+                    Header="金額"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>

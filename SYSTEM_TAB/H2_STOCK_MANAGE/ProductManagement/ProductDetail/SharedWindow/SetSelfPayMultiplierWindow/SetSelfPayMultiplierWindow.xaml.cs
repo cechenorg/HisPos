@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
+using System.ComponentModel;
+using System.Data;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.SetSelfPayMultiplierWindow
 {
@@ -25,6 +15,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public partial class SetSelfPayMultiplierWindow : Window, INotifyPropertyChanged
     {
         #region ----- Define Variables -----
+
         private double selfPayMultiplier;
 
         public double SelfPayMultiplier
@@ -38,6 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -45,7 +37,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public SetSelfPayMultiplierWindow(double multiplier)
         {
@@ -56,6 +49,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #region ----- Define Functions -----
+
         private void TextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -64,6 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             textBox.Focus();
         }
+
         private void TextBox_OnGotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -72,6 +67,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             textBox.SelectAll();
         }
+
         private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
             DataTable dataTable = ProductDetailDB.SetSelfPayMultiplier(SelfPayMultiplier);
@@ -87,6 +83,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             }
             Close();
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

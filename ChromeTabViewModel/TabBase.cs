@@ -5,6 +5,7 @@ namespace His_Pos.ChromeTabViewModel
     public abstract class TabBase : ViewModelBase
     {
         private int _tabNumber;
+
         public int TabNumber
         {
             get { return _tabNumber; }
@@ -18,6 +19,7 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         private string _tabName;
+
         public string TabName
         {
             get { return _tabName; }
@@ -45,6 +47,7 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         private bool _isPinned;
+
         public bool IsPinned
         {
             get => _isPinned;
@@ -58,6 +61,5 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         public abstract TabBase getTab();
-
     }
 }

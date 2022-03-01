@@ -7,7 +7,8 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
     {
         private int ID { get; set; }
         public PrescriptionType Type { get; }
-        public NoCardPreview(DataRow r):base(r)
+
+        public NoCardPreview(DataRow r) : base(r)
         {
             Type = PrescriptionType.Normal;
             ID = r.Field<int>("ID");
@@ -33,7 +34,11 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 
         public void MakeUp()
         {
+        }
 
+        public override void PrintDir()
+        {
+            throw new NotImplementedException();
         }
     }
 }

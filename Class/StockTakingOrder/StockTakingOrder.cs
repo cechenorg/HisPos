@@ -7,14 +7,18 @@ namespace His_Pos.Class.StockTakingOrder
 {
     public class StockTakingOrder : INotifyPropertyChanged
     {
-        public StockTakingOrder(DataRow row) {
+        public StockTakingOrder(DataRow row)
+        {
             Id = row["PROCHE_ID"].ToString();
         }
+
         public StockTakingOrder(string id)
         {
             Id = id;
         }
-        public string id; 
+
+        public string id;
+
         public string Id
         {
             get
@@ -27,7 +31,9 @@ namespace His_Pos.Class.StockTakingOrder
                 NotifyPropertyChanged("Id");
             }
         }
+
         public int amount;
+
         public int Amount
         {
             get
@@ -40,7 +46,9 @@ namespace His_Pos.Class.StockTakingOrder
                 NotifyPropertyChanged("Amount");
             }
         }
+
         public ObservableCollection<string> empName = new ObservableCollection<string>();
+
         public ObservableCollection<string> EmpName
         {
             get
@@ -53,20 +61,23 @@ namespace His_Pos.Class.StockTakingOrder
                 NotifyPropertyChanged("EmpName");
             }
         }
-        
+
         public double TotalPriceDiff
         {
             get
             {
                 double totalPriceDiff = 0;
-                foreach (var product in changedtakingCollection) {
+                foreach (var product in changedtakingCollection)
+                {
                     totalPriceDiff += Convert.ToDouble(product.PriceDiff);
                 }
                 return totalPriceDiff;
             }
         }
+
         public string stockTakingTime;
         private ObservableCollection<StockTakingOrderProduct> changedtakingCollection = new ObservableCollection<StockTakingOrderProduct>();
+
         public ObservableCollection<StockTakingOrderProduct> ChangedtakingCollection
         {
             get
@@ -79,7 +90,9 @@ namespace His_Pos.Class.StockTakingOrder
                 NotifyPropertyChanged("ChangedtakingCollection");
             }
         }
+
         private ObservableCollection<StockTakingOrderProduct> unchangedtakingCollection = new ObservableCollection<StockTakingOrderProduct>();
+
         public ObservableCollection<StockTakingOrderProduct> UnchangedtakingCollection
         {
             get
@@ -94,12 +107,13 @@ namespace His_Pos.Class.StockTakingOrder
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string info)
-          {
+        {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
-          }
+        }
     }
 }

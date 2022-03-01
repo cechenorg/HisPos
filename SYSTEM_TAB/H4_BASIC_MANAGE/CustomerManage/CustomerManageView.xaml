@@ -1,79 +1,190 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage.CustomerManageView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:hisPos="clr-namespace:His_Pos"
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:command="http://www.galasoft.ch/mvvmlight"
-             xmlns:service="clr-namespace:His_Pos.Service"
-             mc:Ignorable="d"  
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage.CustomerManageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hisPos="clr-namespace:His_Pos"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <DataTemplate x:Key="CusControl" DataType="UserControl">
-            <local:CustomerManageControl/>
+            <local:CustomerManageControl />
         </DataTemplate>
         <DataTemplate x:Key="NoData" DataType="UserControl">
             <Grid Background="{StaticResource GridDarkerBackGround}">
-                <Label Content="無顧客資料" Style="{StaticResource BoldLabelHeader30}" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}"/>
+                <Label
+                    HorizontalAlignment="Center"
+                    Content="無顧客資料"
+                    Foreground="{StaticResource ForeGround}"
+                    Style="{StaticResource BoldLabelHeader30}" />
             </Grid>
         </DataTemplate>
-    </UserControl.Resources> 
+    </UserControl.Resources>
     <Grid Width="1365" Height="869">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="50" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label Content="姓名" Margin="10,0,0,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <TextBox Text="{Binding TextCusName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="10,0,0,8" Width="120" FontSize="18" FontFamily="Segoe UI Semi"/>
-            <Label Content="生日" Margin="10,0,0,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <xctk:MaskedTextBox Width="120" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
-                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Default" GotFocus="DateControl_GotFocus"
-                                PreviewKeyDown="DateMaskedTextBoxOnPreviewKeyDown">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label
+                Height="50"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="姓名"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <TextBox
+                Width="120"
+                Margin="10,0,0,8"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Text="{Binding TextCusName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Height="50"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="生日"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <xctk:MaskedTextBox
+                Width="120"
+                Height="35"
+                Margin="5,0,5,0"
+                HorizontalContentAlignment="Center"
+                FontSize="16"
+                Foreground="{StaticResource ForeGround}"
+                GotFocus="DateControl_GotFocus"
+                InputMethod.IsInputMethodEnabled="False"
+                InputScope="Number"
+                InsertKeyMode="Default"
+                Mask="000/00/00"
+                PreviewKeyDown="DateMaskedTextBoxOnPreviewKeyDown"
+                PromptChar="-"
+                Style="{StaticResource MaterialDesignTextBox}"
+                ValueDataType="{x:Type xctk:DateTimeFormat}">
                 <xctk:MaskedTextBox.Text>
-                    <Binding Path="TextCusBirthDay" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                    <Binding
+                        Converter="{StaticResource NullableDateConverter}"
+                        Mode="TwoWay"
+                        NotifyOnValidationError="True"
+                        Path="TextCusBirthDay"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
                         <Binding.ValidationRules>
-                            <service:DateValidationRule/>
+                            <service:DateValidationRule />
                         </Binding.ValidationRules>
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Label Content="身分證" Margin="10,0,0,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <TextBox  Text="{Binding IdNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="10,0,0,8" Width="120" FontSize="18" FontFamily="Segoe UI Semi"/>
-            <Button Command="{Binding ClearCommand}" Margin="555,0,0,0" Width="100" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"/>
-            <Button Command="{Binding SearchCommand}" Margin="10,0,0,0" Width="100" Content="查詢" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0"/>
+            <Label
+                Height="50"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="身分證"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <TextBox
+                Width="120"
+                Margin="10,0,0,8"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Text="{Binding IdNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Height="50"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="電話"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black" />
+            <TextBox
+                Width="120"
+                Margin="10,0,0,8"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                Width="100"
+                Margin="350,0,0,0"
+                Background="DimGray"
+                BorderThickness="0"
+                Command="{Binding ClearCommand}"
+                Content="清除"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
+            <Button
+                Width="100"
+                Margin="10,0,0,0"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding SearchCommand}"
+                Content="查詢"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="260"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="260" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Row="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" Margin="10,0,0,10" CanUserDeleteRows="False" CellStyle="{StaticResource DataGridCellStyle}"
-                      ItemsSource="{Binding CustomerCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Customer,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
+            <DataGrid
+                Grid.Row="0"
+                Margin="10,0,0,10"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridBackGround}"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                HeadersVisibility="None"
+                HorizontalScrollBarVisibility="Hidden"
+                ItemsSource="{Binding CustomerCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                VerticalScrollBarVisibility="Hidden">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}" />
                             </Trigger>
                         </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="Height" Value="50"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="Height" Value="50" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="250">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Height="50">
-                                    <Label Content="{Binding Name,UpdateSourceTrigger=PropertyChanged}" Width="130" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                    <Label Content="{Binding Birthday,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}" Foreground="Black"  FontSize="18" VerticalAlignment="Center"/>
+                                <StackPanel Height="50" Orientation="Horizontal">
+                                    <Label
+                                        Width="130"
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Content="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                        FontFamily="Segoe UI Semibold"
+                                        FontSize="25"
+                                        Foreground="Black" />
+                                    <Label
+                                        VerticalAlignment="Center"
+                                        Content="{Binding Birthday, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
+                                        FontSize="18"
+                                        Foreground="Black" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -81,11 +192,14 @@
                 </DataGrid.Columns>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </DataGrid>
-            <ContentControl Grid.Column="1" Margin="0,0,10,10" Content="{Binding}">
+            <ContentControl
+                Grid.Column="1"
+                Margin="0,0,10,10"
+                Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource CusControl}" />

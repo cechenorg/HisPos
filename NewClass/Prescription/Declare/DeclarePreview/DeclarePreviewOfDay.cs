@@ -1,24 +1,27 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
+using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using GalaSoft.MvvmLight;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
-using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
 {
-    public class DeclarePreviewOfDay:ObservableObject
+    public class DeclarePreviewOfDay : ObservableObject
     {
         public DeclarePreviewOfDay()
         {
             PresOfDay = new DeclarePrescriptions();
         }
+
         #region Variables
+
         public string Day => Date.Day.ToString().PadLeft(2, '0');
         private int normalCount;
+
         public int NormalCount
         {
             get => normalCount;
@@ -27,7 +30,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => NormalCount, ref normalCount, value);
             }
         }
+
         private int simpleFormCount;
+
         public int SimpleFormCount
         {
             get => simpleFormCount;
@@ -36,7 +41,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => SimpleFormCount, ref simpleFormCount, value);
             }
         }
+
         private int chronicCount;
+
         public int ChronicCount
         {
             get => chronicCount;
@@ -45,7 +52,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => ChronicCount, ref chronicCount, value);
             }
         }
+
         private int declareCount;
+
         public int DeclareCount
         {
             get => declareCount;
@@ -54,7 +63,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => DeclareCount, ref declareCount, value);
             }
         }
+
         private int notDeclareCount;
+
         public int NotDeclareCount
         {
             get => notDeclareCount;
@@ -63,7 +74,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => NotDeclareCount, ref notDeclareCount, value);
             }
         }
+
         private CollectionViewSource presOfDayViewSource;
+
         private CollectionViewSource PresOfDayViewSource
         {
             get => presOfDayViewSource;
@@ -72,7 +85,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => PresOfDayViewSource, ref presOfDayViewSource, value);
             }
         }
+
         private ICollectionView presOfDayCollectionView;
+
         public ICollectionView PresOfDayCollectionView
         {
             get => presOfDayCollectionView;
@@ -92,9 +107,11 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => SelectedPrescription, ref selectedPrescription, value);
             }
         }
+
         public DeclarePrescriptions PresOfDay { get; set; }
 
         private DeclareMedicalPersonnels declarePharmacists;
+
         public DeclareMedicalPersonnels DeclarePharmacists
         {
             get => declarePharmacists;
@@ -103,6 +120,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => DeclarePharmacists, ref declarePharmacists, value);
             }
         }
+
         private bool isAdjustOutOfRange;
 
         public bool IsAdjustOutOfRange
@@ -113,6 +131,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => IsAdjustOutOfRange, ref isAdjustOutOfRange, value);
             }
         }
+
         private bool hasNotDeclare;
 
         public bool HasNotDeclare
@@ -123,7 +142,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => HasNotDeclare, ref hasNotDeclare, value);
             }
         }
+
         private DateTime date;
+
         public DateTime Date
         {
             get => date;
@@ -132,7 +153,8 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
                 Set(() => Date, ref date, value);
             }
         }
-        #endregion
+
+        #endregion Variables
 
         public void AddPresOfDay(List<DeclarePrescription.DeclarePrescription> pres)
         {
@@ -179,7 +201,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             foreach (var g in PresOfDay.GroupBy(p => p.Pharmacist.ID))
             {
                 var m = ViewModelMainWindow.GetMedicalPersonByID(g.Key);
-                var pharmacist = new DeclareMedicalPersonnel(m) {PrescriptionCount = g.Count()};
+                var pharmacist = new DeclareMedicalPersonnel(m) { PrescriptionCount = g.Count() };
                 tempList.Add(pharmacist);
             }
             foreach (var pharmacist in tempList.OrderBy(p => p.Name))

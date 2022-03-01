@@ -1,74 +1,115 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow.AutoRegisterWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:service="clr-namespace:His_Pos.Service"
-        xmlns:command="http://www.galasoft.ch/mvvmlight"
-        mc:Ignorable="d" FontSize="18" FontFamily="Segoe UI Semibold"
-        Height="400" Width="750" WindowStyle="None"
-        WindowStartupLocation="CenterScreen">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow.AutoRegisterWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Width="750"
+    Height="400"
+    FontFamily="Segoe UI Semibold"
+    FontSize="18"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="45"/>
-            <RowDefinition/>
-            <RowDefinition Height="55"/>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="45" />
+            <RowDefinition />
+            <RowDefinition Height="55" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="GhostWhite" Background="CornflowerBlue" FontSize="16" Content="預約登錄確認" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
-        <TextBlock Height="30" FontSize="18" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="*此處方尚有右列預約可登錄，如需一併登錄請填寫欲調劑日期後按下確定，取消返回。" Foreground="Red" Margin="10,0,0,0"/>
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            VerticalContentAlignment="Center"
+            Background="CornflowerBlue"
+            Content="預約登錄確認"
+            FontFamily="Segoe UI Semibold"
+            FontSize="16"
+            Foreground="GhostWhite" />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Height="30"
+            Margin="10,0,0,0"
+            FontSize="18"
+            Foreground="Red"
+            Text="*此處方尚有右列預約可登錄，如需一併登錄請填寫欲調劑日期後按下確定，取消返回。" />
         <Grid Grid.Row="2" Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
-                <RowDefinition Height="45"/>
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <Label Height="35" Content="姓名:"/>
-                <Label Height="35" Content="{Binding CurrentPrescription.Patient.Name}"/>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Label Height="35" Content="姓名:" />
+                <Label Height="35" Content="{Binding CurrentPrescription.Patient.Name}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Label Height="35" Content="院所:"/>
-                <Label Height="35" Content="{Binding CurrentPrescription.Institution.Name}"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Label Height="35" Content="院所:" />
+                <Label Height="35" Content="{Binding CurrentPrescription.Institution.Name}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="2">
-                <Label Height="35" Content="科別:"/>
-                <Label Height="35" Content="{Binding CurrentPrescription.Division.Name}"/>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Label Height="35" Content="科別:" />
+                <Label Height="35" Content="{Binding CurrentPrescription.Division.Name}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="3">
-                <Label Height="35" Content="就醫日:"/>
-                <Label Height="35" Content="{Binding CurrentPrescription.TreatDate,Converter={StaticResource NullableDateConverter}}"/>
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <Label Height="35" Content="就醫日:" />
+                <Label Height="35" Content="{Binding CurrentPrescription.TreatDate, Converter={StaticResource NullableDateConverter}}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="4">
-                <Label Height="35" Content="調劑日:"/>
-                <Label Height="35" Content="{Binding CurrentPrescription.AdjustDate,Converter={StaticResource NullableDateConverter}}"/>
+            <StackPanel Grid.Row="4" Orientation="Horizontal">
+                <Label Height="35" Content="調劑日:" />
+                <Label Height="35" Content="{Binding CurrentPrescription.AdjustDate, Converter={StaticResource NullableDateConverter}}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="5">
-                <Label Height="35" Content="調劑次數:"/>
-                <Label Height="35" Content="{Binding CurrentPrescription.ChronicTotal}"/>
-                <Label Height="35" Content="-"/>
-                <Label Height="35" Content="{Binding CurrentPrescription.ChronicSeq}"/>
+            <StackPanel Grid.Row="5" Orientation="Horizontal">
+                <Label Height="35" Content="調劑次數:" />
+                <Label Height="35" Content="{Binding CurrentPrescription.ChronicTotal}" />
+                <Label Height="35" Content="-" />
+                <Label Height="35" Content="{Binding CurrentPrescription.ChronicSeq}" />
             </StackPanel>
         </Grid>
-        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
-            <Label Content="可登錄處方"/>
-            <DataGrid Name="ReserveGrid" Width="330" Height="230" VerticalAlignment="Top" ItemsSource="{Binding RegisterList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"
-                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}">
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="1"
+            Orientation="Vertical">
+            <Label Content="可登錄處方" />
+            <DataGrid
+                Name="ReserveGrid"
+                Width="330"
+                Height="230"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                ItemsSource="{Binding RegisterList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="80" Header="可調劑" FontSize="18" FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicTotal,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn
+                        Width="80"
+                        Binding="{Binding ChronicTotal, UpdateSourceTrigger=PropertyChanged}"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Header="可調劑"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -79,12 +120,26 @@
                     <DataGridTemplateColumn Width="20" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Label Width="20" Height="35" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0" 
-                                     FontSize="18" FontWeight="Bold" InputScope="AlphanumericHalfWidth" Content="-" />
+                                <Label
+                                    Width="20"
+                                    Height="35"
+                                    HorizontalContentAlignment="Center"
+                                    BorderBrush="DimGray"
+                                    BorderThickness="0"
+                                    Content="-"
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    InputScope="AlphanumericHalfWidth" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Width="80" Header="調劑次數" FontSize="18"  FontWeight="Bold" IsReadOnly="True" Binding="{Binding ChronicSeq,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn
+                        Width="80"
+                        Binding="{Binding ChronicSeq, UpdateSourceTrigger=PropertyChanged}"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Header="調劑次數"
+                        IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -92,16 +147,39 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn Width="110" Header="調劑日期" IsReadOnly="True" >
+                    <DataGridTemplateColumn
+                        Width="110"
+                        Header="調劑日期"
+                        IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <xctk:MaskedTextBox x:Name="AdjustDateTextBox" Width="110" Height="35" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" 
-                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" GotFocus="DateControl_GotFocus" InputScope="Number"
-                                                CaretBrush="Black" PreviewKeyDown="AdjustDateTextBox_OnPreviewKeyDown">
-                                    <Binding Path="AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"
-                                         ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                                <xctk:MaskedTextBox
+                                    x:Name="AdjustDateTextBox"
+                                    Width="110"
+                                    Height="35"
+                                    Margin="5,0,0,0"
+                                    HorizontalContentAlignment="Center"
+                                    CaretBrush="Black"
+                                    FontSize="18"
+                                    Foreground="{StaticResource ForeGround}"
+                                    GotFocus="DateControl_GotFocus"
+                                    InputMethod.IsInputMethodEnabled="False"
+                                    InputScope="Number"
+                                    InsertKeyMode="Overwrite"
+                                    Mask="000/00/00"
+                                    PreviewKeyDown="AdjustDateTextBox_OnPreviewKeyDown"
+                                    PromptChar="-"
+                                    Style="{StaticResource MaterialDesignTextBox}"
+                                    ValueDataType="{x:Type xctk:DateTimeFormat}">
+                                    <Binding
+                                        Converter="{StaticResource NullableDateConverter}"
+                                        Mode="TwoWay"
+                                        NotifyOnValidationError="True"
+                                        Path="AdjustDate"
+                                        UpdateSourceTrigger="PropertyChanged"
+                                        ValidatesOnDataErrors="True">
                                         <Binding.ValidationRules>
-                                            <service:DateValidationRule/>
+                                            <service:DateValidationRule />
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </xctk:MaskedTextBox>
@@ -111,9 +189,22 @@
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1">
-            <Button Content="取消" Background="DimGray" BorderThickness="0" Command="{Binding Cancel}"/>
-            <Button Content="確認" Background="IndianRed" BorderThickness="0" Margin="10" Command="{Binding Submit}"/>
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Background="DimGray"
+                BorderThickness="0"
+                Command="{Binding Cancel}"
+                Content="取消" />
+            <Button
+                Margin="10"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding Submit}"
+                Content="確認" />
         </StackPanel>
     </Grid>
 </Window>

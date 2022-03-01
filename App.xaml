@@ -1,20 +1,19 @@
-<Application x:Class="His_Pos.App"
+<Application
+    x:Class="His_Pos.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:chromeTabViewModel="clr-namespace:His_Pos.ChromeTabViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:chromeTabViewModel="clr-namespace:His_Pos.ChromeTabViewModel"
-    xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
-    xmlns:service="clr-namespace:His_Pos.Service"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
-    d1p1:Ignorable="d" StartupUri="LoginPage.xaml">
+    d1p1:Ignorable="d"
+    StartupUri="LoginPage.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Red.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <ResourceDictionary>
                     <chromeTabViewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
                 </ResourceDictionary>
@@ -73,7 +72,11 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Thumb}">
-                                    <Border Background="DimGray" BorderBrush="DimGray" BorderThickness="1" CornerRadius="5" />
+                                    <Border
+                                        Background="DimGray"
+                                        BorderBrush="DimGray"
+                                        BorderThickness="1"
+                                        CornerRadius="5" />
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -85,13 +88,22 @@
                                 <RowDefinition />
                                 <RowDefinition Height="5" />
                             </Grid.RowDefinitions>
-                            <Border Grid.RowSpan="3" Background="LightGray" CornerRadius="8" />
-                            <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
+                            <Border
+                                Grid.RowSpan="3"
+                                Background="LightGray"
+                                CornerRadius="8" />
+                            <Track
+                                Name="PART_Track"
+                                Grid.Row="1"
+                                IsDirectionReversed="true">
                                 <Track.DecreaseRepeatButton>
                                     <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollBarPageButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Width="8" Margin="1,0,1,0" Style="{StaticResource ScrollBarThumb}" />
+                                    <Thumb
+                                        Width="8"
+                                        Margin="1,0,1,0"
+                                        Style="{StaticResource ScrollBarThumb}" />
                                 </Track.Thumb>
                                 <Track.IncreaseRepeatButton>
                                     <RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollBarPageButton}" />
@@ -106,13 +118,22 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="5" />
                             </Grid.ColumnDefinitions>
-                            <Border Grid.ColumnSpan="3" Background="LightGray" CornerRadius="8" />
-                            <Track Name="PART_Track" Grid.Column="1" IsDirectionReversed="False">
+                            <Border
+                                Grid.ColumnSpan="3"
+                                Background="LightGray"
+                                CornerRadius="8" />
+                            <Track
+                                Name="PART_Track"
+                                Grid.Column="1"
+                                IsDirectionReversed="False">
                                 <Track.DecreaseRepeatButton>
                                     <RepeatButton Command="ScrollBar.PageLeftCommand" Style="{StaticResource ScrollBarPageButton}" />
                                 </Track.DecreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Height="8" Margin="0,1,0,1" Style="{StaticResource ScrollBarThumb}" />
+                                    <Thumb
+                                        Height="8"
+                                        Margin="0,1,0,1"
+                                        Style="{StaticResource ScrollBarThumb}" />
                                 </Track.Thumb>
                                 <Track.IncreaseRepeatButton>
                                     <RepeatButton Command="ScrollBar.PageRightCommand" Style="{StaticResource ScrollBarPageButton}" />
@@ -126,7 +147,10 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
-                                    <Border x:Name="ContentBorder" Padding="6" Background="GhostWhite">
+                                    <Border
+                                        x:Name="ContentBorder"
+                                        Padding="6"
+                                        Background="GhostWhite">
                                         <ContentPresenter />
                                     </Border>
                                     <ControlTemplate.Triggers>
@@ -151,12 +175,22 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                                    <Border Name="Border" SnapsToDevicePixels="True" Padding="3,2,2,2" Background="LightGray">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding ComboBoxItem.Content}" ContentTemplate="{TemplateBinding ComboBoxItem.ContentTemplate}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" ContentTemplateSelector="{TemplateBinding ComboBoxItem.ContentTemplateSelector}" />
+                                    <Border
+                                        Name="Border"
+                                        Padding="3,2,2,2"
+                                        Background="LightGray"
+                                        SnapsToDevicePixels="True">
+                                        <ContentPresenter
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding ComboBoxItem.Content}"
+                                            ContentTemplate="{TemplateBinding ComboBoxItem.ContentTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ComboBoxItem.ContentTemplateSelector}"
+                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
-                                            <Setter Property="Panel.Background" TargetName="Border" Value="LightBlue" />
+                                            <Setter TargetName="Border" Property="Panel.Background" Value="LightBlue" />
                                             <Setter Property="TextElement.Foreground" Value="Black" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
@@ -174,12 +208,22 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                                    <Border Name="Border" SnapsToDevicePixels="True" Padding="3,2,2,2" Background="LightGray">
-                                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Content="{TemplateBinding ComboBoxItem.Content}" ContentTemplate="{TemplateBinding ComboBoxItem.ContentTemplate}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" ContentTemplateSelector="{TemplateBinding ComboBoxItem.ContentTemplateSelector}" />
+                                    <Border
+                                        Name="Border"
+                                        Padding="3,2,2,2"
+                                        Background="LightGray"
+                                        SnapsToDevicePixels="True">
+                                        <ContentPresenter
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding ComboBoxItem.Content}"
+                                            ContentTemplate="{TemplateBinding ComboBoxItem.ContentTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ComboBoxItem.ContentTemplateSelector}"
+                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
-                                            <Setter Property="Panel.Background" TargetName="Border" Value="LightBlue" />
+                                            <Setter TargetName="Border" Property="Panel.Background" Value="LightBlue" />
                                             <Setter Property="TextElement.Foreground" Value="Black" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
@@ -201,73 +245,73 @@
                     <Brush x:Key="MenuBarBackGround">#FF363535</Brush>
                 </ResourceDictionary>
                 <ResourceDictionary>
-                    <Style x:Key="BoldLabelContent16" TargetType="{x:Type Label }">
+                    <Style x:Key="BoldLabelContent16" TargetType="{x:Type Label}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="BoldLabelContent17" TargetType="{x:Type Label }">
+                    <Style x:Key="BoldLabelContent17" TargetType="{x:Type Label}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="17" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="BoldTextBoxContent16" TargetType="{x:Type TextBox }">
+                    <Style x:Key="BoldTextBoxContent16" TargetType="{x:Type TextBox}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="BoldTextBlockContent16" TargetType="{x:Type TextBlock }">
+                    <Style x:Key="BoldTextBlockContent16" TargetType="{x:Type TextBlock}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="BoldLabelContent18" TargetType="{x:Type Label }">
+                    <Style x:Key="BoldLabelContent18" TargetType="{x:Type Label}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="18" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="BoldTextBoxContent18" TargetType="{x:Type TextBox }">
+                    <Style x:Key="BoldTextBoxContent18" TargetType="{x:Type TextBox}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="18" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="BoldTextBlockContent18" TargetType="{x:Type TextBlock }">
+                    <Style x:Key="BoldTextBlockContent18" TargetType="{x:Type TextBlock}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="18" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="BoldLabelHeader25" TargetType="{x:Type Label }">
+                    <Style x:Key="BoldLabelHeader25" TargetType="{x:Type Label}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="25" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="BoldLabelHeader30" TargetType="{x:Type Label }">
+                    <Style x:Key="BoldLabelHeader30" TargetType="{x:Type Label}">
                         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
                         <Setter Property="FontSize" Value="30" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="LabelContent16" TargetType="{x:Type Label }">
+                    <Style x:Key="LabelContent16" TargetType="{x:Type Label}">
                         <Setter Property="FontFamily" Value="Segoe UI Semi" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="TextBlockContent16" TargetType="{x:Type TextBlock }">
+                    <Style x:Key="TextBlockContent16" TargetType="{x:Type TextBlock}">
                         <Setter Property="FontFamily" Value="Segoe UI Semi" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="Foreground" Value="#FF424040" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style x:Key="CustomerHistoryRadio" TargetType="{x:Type RadioButton }">
+                    <Style x:Key="CustomerHistoryRadio" TargetType="{x:Type RadioButton}">
                         <Setter Property="FontFamily" Value="Segoe UI Semi" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="Margin" Value="20,0,5,0" />
@@ -275,8 +319,10 @@
                         <Setter Property="VerticalContentAlignment" Value="Center" />
                         <Setter Property="Background" Value="Transparent" />
                     </Style>
-                    <chromeTabViewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True"
-                        xmlns:vm="clr-namespace:His_Pos.ChromeTabViewModel" />
+                    <chromeTabViewModel:ViewModelLocator
+                        xmlns:vm="clr-namespace:His_Pos.ChromeTabViewModel"
+                        x:Key="Locator"
+                        d:IsDataSource="True" />
                     <Style TargetType="ListBoxItem">
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">

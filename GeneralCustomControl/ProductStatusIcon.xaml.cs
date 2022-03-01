@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using JetBrains.Annotations;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using JetBrains.Annotations;
 
 namespace His_Pos.GeneralCustomControl
 {
@@ -12,6 +12,7 @@ namespace His_Pos.GeneralCustomControl
     public partial class ProductStatusIcon : UserControl, INotifyPropertyChanged
     {
         #region ----- Define DependencyProperty -----
+
         public bool IsCommon
         {
             get { return (bool)GetValue(IsCommonProperty); }
@@ -34,6 +35,12 @@ namespace His_Pos.GeneralCustomControl
         {
             get { return (bool)GetValue(IsFrozenProperty); }
             set { SetValue(IsFrozenProperty, value); }
+        }
+
+        public bool IsMerged
+        {
+            get { return (bool)GetValue(IsIsMergedProperty); }
+            set { SetValue(IsIsMergedProperty, value); }
         }
 
         public bool IsInventoryError
@@ -60,6 +67,9 @@ namespace His_Pos.GeneralCustomControl
         public static readonly DependencyProperty IsFrozenProperty =
             DependencyProperty.Register("IsFrozen", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
 
+        public static readonly DependencyProperty IsIsMergedProperty =
+            DependencyProperty.Register("IsMerged", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
+
         public static readonly DependencyProperty IsInventoryErrorProperty =
             DependencyProperty.Register("IsInventoryError", typeof(bool), typeof(ProductStatusIcon), new PropertyMetadata(false));
 
@@ -73,9 +83,11 @@ namespace His_Pos.GeneralCustomControl
             userControl.OnPropertyChanged(nameof(IsControl));
             userControl.OnPropertyChanged(nameof(ShowSafeAmount));
         }
-        #endregion
+
+        #endregion ----- Define DependencyProperty -----
 
         #region ----- Define Variables -----
+
         public bool IsControl { get { return ControlLevel > 0; } }
         public bool ShowSafeAmount { get { return CommonSafeAmount > 0; } }
 
@@ -86,7 +98,9 @@ namespace His_Pos.GeneralCustomControl
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
+
         public ProductStatusIcon()
         {
             InitializeComponent();

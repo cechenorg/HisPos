@@ -1,8 +1,7 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer;
-using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.ICCard;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow
 {
@@ -11,7 +10,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     /// </summary>
     public partial class CustomerPrescriptionWindow : Window
     {
-        public CustomerPrescriptionWindow(Customer customer,IcCard card)
+        public CustomerPrescriptionWindow(Customer customer, IcCard card)
         {
             InitializeComponent();
             DataContext = new CustomerPrescriptionViewModel(customer, card);

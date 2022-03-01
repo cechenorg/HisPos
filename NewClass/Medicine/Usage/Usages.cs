@@ -4,12 +4,13 @@ using System.Data;
 
 namespace His_Pos.NewClass.Medicine.Usage
 {
-    public class Usages:Collection<Usage>
+    public class Usages : Collection<Usage>
     {
         public Usages()
         {
             Init();
         }
+
         public Usages(IList<Usage> list)
         {
             foreach (var u in list)

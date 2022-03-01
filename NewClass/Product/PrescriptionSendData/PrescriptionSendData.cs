@@ -8,10 +8,12 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
         public PrescriptionSendData()
         {
         }
-        public PrescriptionSendData(Medicine.Base.Medicine m) {
+
+        public PrescriptionSendData(Medicine.Base.Medicine m)
+        {
             MedId = m.ID;
-            MedName = m.FullName; 
-            TreatAmount = m.Amount; 
+            MedName = m.FullName;
+            TreatAmount = m.Amount;
             SendAmount = 0;
             InvID = m.InventoryID;
             CanUseAmount = 0;
@@ -22,10 +24,12 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 IsFrozen = nhiMed.Frozen;
             }
         }
+
         public string MedId { get; set; }
         public string MedName { get; set; }
         public int InvID { get; set; }
         private double canUseAmount;
+
         public double CanUseAmount
         {
             get => canUseAmount;
@@ -34,10 +38,11 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 Set(() => CanUseAmount, ref canUseAmount, value);
             }
         }
-      
-        public double TreatAmount { get; set; } 
+
+        public double TreatAmount { get; set; }
         private double sendAmount;
-        public double SendAmount 
+
+        public double SendAmount
         {
             get => sendAmount;
             set
@@ -45,7 +50,9 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 Set(() => SendAmount, ref sendAmount, value);
             }
         }
+
         private double prepareAmount;
+
         public double PrepareAmount
         {
             get => prepareAmount;
@@ -54,6 +61,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 Set(() => PrepareAmount, ref prepareAmount, value);
             }
         }
+
         public bool IsFrozen { get; set; }
         public bool IsControl { get; set; }
         public bool IsCommon { get; set; }

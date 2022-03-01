@@ -14,6 +14,7 @@ namespace His_Pos.Database
             else
                 row[column] = value;
         }
+
         public static void AddSqlParameter(List<SqlParameter> row, string column, Object value)
         {
             if (value == null)
@@ -34,7 +35,6 @@ namespace His_Pos.Database
                     row.Add(new SqlParameter(column, value));
                 }
             }
-            
         }
     }
 }

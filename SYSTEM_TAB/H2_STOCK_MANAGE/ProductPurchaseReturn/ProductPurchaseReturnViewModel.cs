@@ -1,23 +1,11 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.StoreOrder;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Data;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.FunctionWindow.AddProductWindow;
-using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.PurchaseReturn;
-using His_Pos.NewClass.StoreOrder;
-using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
-using His_Pos.Service.ExportService;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -29,16 +17,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ----- Define ViewModel -----
+
         public NormalViewModel NormalViewModel { get; set; }
         public SingdeTotalViewModel SingdeTotalViewModel { get; set; }
-        #endregion
+
+        #endregion ----- Define ViewModel -----
 
         #region ----- Define Command -----
+
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand<string> ChangeUiTypeCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Command -----
 
         #region ----- Define Variables -----
+
         private bool isBusy;
         private string busyContent;
         private BackgroundWorker initBackgroundWorker;
@@ -50,22 +43,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => isBusy;
             set { Set(() => IsBusy, ref isBusy, value); }
         }
+
         public string BusyContent
         {
             get => busyContent;
             set { Set(() => BusyContent, ref busyContent, value); }
         }
+
         public OrderUITypeEnum UiType
         {
             get => uiType;
             set { Set(() => UiType, ref uiType, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductPurchaseReturnViewModel()
         {
-            TabName = MainWindow.HisFeatures[2].Functions[2];
-            Icon = MainWindow.HisFeatures[2].Icon;
+            TabName = MainWindow.HisFeatures[3].Functions[2];
+            Icon = MainWindow.HisFeatures[3].Icon;
 
             NormalViewModel = new NormalViewModel();
             SingdeTotalViewModel = new SingdeTotalViewModel();
@@ -75,10 +71,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
 
         #region ----- Define Actions -----
+
         private void ReloadAction()
         {
             InitVariables();
         }
+
         private void ChangeUiTypeAction(string type)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -88,6 +86,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     UiType = OrderUITypeEnum.NORMAL;
                     NormalViewModel.InitData(StoreOrders.GetOrdersNotDone());
                     break;
+
                 case "SINGDE":
                     UiType = OrderUITypeEnum.SINGDE;
                     SingdeTotalViewModel.InitData();
@@ -95,9 +94,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             }
             MainWindow.ServerConnection.CloseConnection();
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void InitBackgroundWorker()
         {
             initBackgroundWorker = new BackgroundWorker();
@@ -109,7 +110,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 DataTable dataTable;
 
-                if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
+                // 關閉杏德代訂 2021.08.23
+                /*if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
                 {
                     BusyContent = "取得杏德新訂單...";
                     dataTable = StoreOrderDB.GetNewSingdeOrders();
@@ -119,7 +121,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
                     if (dataTable.Rows.Count > 0)
                         StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
-                }
+                }*/
 
                 BusyContent = "取得訂單資料...";
                 storeOrderCollection = StoreOrders.GetOrdersNotDone();
@@ -130,11 +132,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
 
                     if (storeOrders.Count > 0)
-                        dateTime = storeOrders[0].CreateDateTime.AddDays(-1).ToString("yyyyMMdd");
+                        dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
 
                     BusyContent = "取得杏德訂單最新狀態...";
                     dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
-
                     if (dataTable.Rows.Count > 0)
                     {
                         storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
@@ -152,20 +153,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 NormalViewModel.InitData(storeOrderCollection);
                 IsBusy = false;
             };
-
         }
+
         private void InitVariables()
         {
             IsBusy = true;
 
-            if(!initBackgroundWorker.IsBusy)
+            if (!initBackgroundWorker.IsBusy)
                 initBackgroundWorker.RunWorkerAsync();
         }
+
         private void RegisterCommand()
         {
             ReloadCommand = new RelayCommand(ReloadAction);
             ChangeUiTypeCommand = new RelayCommand<string>(ChangeUiTypeAction);
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

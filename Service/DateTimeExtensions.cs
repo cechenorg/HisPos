@@ -1,12 +1,11 @@
-﻿using System;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System;
 
 namespace His_Pos.Service
 {
     public static class DateTimeExtensions
     {
-
         public static string ConvertToTaiwanCalender(DateTime d)
         {
             var dateStringArr = CreateDateStringFromDateTime(d);
@@ -24,10 +23,10 @@ namespace His_Pos.Service
             var year = (d.Year - 1911).ToString().PadLeft(3, '0');
             var month = (d.Month).ToString().PadLeft(2, '0');
             var day = (d.Day).ToString().PadLeft(2, '0');
-            return new[] {year, month, day};
+            return new[] { year, month, day };
         }
 
-        public static string ConvertToTaiwanCalenderWithTime(DateTime d,bool needSplit = false)
+        public static string ConvertToTaiwanCalenderWithTime(DateTime d, bool needSplit = false)
         {
             var year = (d.Year - 1911).ToString().PadLeft(3, '0');
             var month = (d.Month).ToString().PadLeft(2, '0');
@@ -51,6 +50,7 @@ namespace His_Pos.Service
             public int Months;
             public int Days;
         }
+
         public static Age CalculateAgeToMonth(DateTime birthDate)
         {
             int years = DateTime.Today.Year - birthDate.Year;
@@ -91,10 +91,11 @@ namespace His_Pos.Service
             result.Days = days;
             return result;
         }
+
         public static string NullableDateToTWCalender(DateTime? d, bool needSplit)
         {
             if (d is null) return string.Empty;
-            var convert = (DateTime) d;
+            var convert = (DateTime)d;
             var year = (convert.Year - 1911).ToString().PadLeft(3, '0');
             var month = (convert.Month).ToString().PadLeft(2, '0');
             var day = (convert.Day).ToString().PadLeft(2, '0');
@@ -105,10 +106,10 @@ namespace His_Pos.Service
 
         public static DateTime? TWDateStringToDateOnly(string date)
         {
-            var dateStr = date.Replace("/","");
+            var dateStr = date.Replace("/", "");
             if (dateStr.Length < 6 || dateStr.Length > 7)
             {
-                MessageWindow.ShowMessage("日期格式錯誤，請確認資料",MessageType.ERROR);
+                MessageWindow.ShowMessage("日期格式錯誤，請確認資料", MessageType.ERROR);
                 return null;
             }
 
@@ -119,7 +120,7 @@ namespace His_Pos.Service
             var year = int.Parse(dateStr.Substring(0, 3)) + 1911;
             var month = int.Parse(dateStr.Substring(3, 2));
             var day = int.Parse(dateStr.Substring(5, 2));
-            return new DateTime(year,month,day);
+            return new DateTime(year, month, day);
         }
 
         public static DateTime TWDateStringToDateTime(string date)
@@ -130,8 +131,9 @@ namespace His_Pos.Service
             var hour = int.Parse(date.Substring(7, 2));
             var min = int.Parse(date.Substring(9, 2));
             var sec = int.Parse(date.Substring(11, 2));
-            return new DateTime(year, month, day,hour,min,sec);
+            return new DateTime(year, month, day, hour, min, sec);
         }
+
         public static string ToStringWithSecond(DateTime d)
         {
             var year = (d.Year - 1911).ToString().PadLeft(3, '0');
@@ -154,7 +156,7 @@ namespace His_Pos.Service
             if (string.IsNullOrEmpty(datetime)) return false;
             try
             {
-                var dateTimeFormatInfo = new System.Globalization.DateTimeFormatInfo {FullDateTimePattern = format};
+                var dateTimeFormatInfo = new System.Globalization.DateTimeFormatInfo { FullDateTimePattern = format };
                 var dt = DateTime.ParseExact(datetime, "F", dateTimeFormatInfo);
                 return true;
             }
@@ -163,7 +165,8 @@ namespace His_Pos.Service
                 return false;
             }
         }
-        public static DateTime GetDateTimeWithDay(DateTime? declareDate,int day)
+
+        public static DateTime GetDateTimeWithDay(DateTime? declareDate, int day)
         {
             var date = (DateTime)declareDate;
             return new DateTime(date.Year, date.Month, day);
@@ -197,10 +200,10 @@ namespace His_Pos.Service
             var dateStr = text.Replace("-", "").Replace("/", "").Trim();
             var dateLength = dateStr.Length;
             if (dateLength < 5) return text;
-            var day = int.Parse(dateStr.Substring(dateLength-2,2));
-            var month = int.Parse(dateStr.Substring(dateLength-4,2));
+            var day = int.Parse(dateStr.Substring(dateLength - 2, 2));
+            var month = int.Parse(dateStr.Substring(dateLength - 4, 2));
             var year = int.Parse(dateStr.Substring(0, dateLength - 4));
-            return year.ToString().PadLeft(3, '0') + "/" + month.ToString().PadLeft(2,'0') + "/" + day.ToString().PadLeft(2,'0');
+            return year.ToString().PadLeft(3, '0') + "/" + month.ToString().PadLeft(2, '0') + "/" + day.ToString().PadLeft(2, '0');
         }
 
         public static string ConvertToTaiwanCalendarChineseFormat(DateTime? d, bool needSplit)

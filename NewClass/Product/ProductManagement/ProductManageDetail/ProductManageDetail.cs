@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
 {
@@ -14,7 +9,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
             SingdePackageAmount = row.Field<int>("SinData_PackageAmount");
             SingdePackagePrice = (double)row.Field<decimal>("SinData_PackagePrice");
             SindePrice = (double)row.Field<decimal>("SinData_SinglePrice");
-            SindeStock = row.Field<int>("SinData_Stock");
+            SindeStock = row.Field<string>("SinData_Stock");
 
             if (row.Table.Columns.Contains("Pro_RetailPrice"))
                 RetailPrice = row.Field<double>("Pro_RetailPrice");
@@ -29,7 +24,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
         public double SingdePackagePrice { get; }
         public int SingdePackageAmount { get; }
         public double SindePrice { get; }
-        public int SindeStock { get; }
+        public string SindeStock { get; }
 
         public double RetailPrice { get; set; }
         public double MemberPrice { get; set; }

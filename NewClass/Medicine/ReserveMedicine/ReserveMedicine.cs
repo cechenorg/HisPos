@@ -14,13 +14,14 @@ namespace His_Pos.NewClass.Medicine.ReserveMedicine
                 Name += "(常備)";
             if (!(indexReserveDetail.IsControl is null) && indexReserveDetail.IsControl > 0)
                 Name += "(管藥)";
-            if(indexReserveDetail.IsFrozen)
+            if (indexReserveDetail.IsFrozen)
                 Name += "(冰品)";
             PrepareAmount = indexReserveDetail.Amount - indexReserveDetail.SendAmount;
             Amount = indexReserveDetail.Amount;
             IsControlCommonFrozen = indexReserveDetail.IsFrozen || indexReserveDetail.IsCommon ||
                                     !(indexReserveDetail.IsControl is null) && indexReserveDetail.IsControl > 0;
         }
+
         public ReserveMedicine(PrescriptionSendData prescriptionSendData)
         {
             ID = prescriptionSendData.MedId;
@@ -29,14 +30,14 @@ namespace His_Pos.NewClass.Medicine.ReserveMedicine
                 Name += "(常備)";
             if (prescriptionSendData.IsControl)
                 Name += "(管藥)";
-            if(prescriptionSendData.IsFrozen)
+            if (prescriptionSendData.IsFrozen)
                 Name += "(冰品)";
             PrepareAmount = prescriptionSendData.TreatAmount - prescriptionSendData.SendAmount;
             Amount = prescriptionSendData.TreatAmount;
             IsControlCommonFrozen = prescriptionSendData.IsFrozen || prescriptionSendData.IsCommon ||
                                     prescriptionSendData.IsControl;
         }
-        
+
         public string ID { get; set; }
         public string Name { get; set; }
         public double Amount { get; set; }

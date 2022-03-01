@@ -8,8 +8,8 @@
     <Viewbox Stretch="Fill">
         <Grid Margin="10,10,10,0" Width="530">
             <Grid.RowDefinitions>
-                <RowDefinition Height="350"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="350" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <DataGrid Grid.Row="0" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding IcErrorCodeList}" HorizontalScrollBarVisibility="Disabled"
                       CanUserSortColumns="False" EnableRowVirtualization="False" SelectedItem="{Binding SelectedIcErrorCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -34,13 +34,13 @@
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Background>
-                    <StaticResource ResourceKey="GridBackGround"/>
+                    <StaticResource ResourceKey="GridBackGround" />
                 </DataGrid.Background>
                 <DataGrid.CellStyle>
-                    <StaticResource ResourceKey="DataGridCellStyle"/>
+                    <StaticResource ResourceKey="DataGridCellStyle" />
                 </DataGrid.CellStyle>
                 <DataGrid.ColumnHeaderStyle>
-                    <StaticResource ResourceKey="DataGridColumnHeaderStyle"/>
+                    <StaticResource ResourceKey="DataGridColumnHeaderStyle" />
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
@@ -75,8 +75,8 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Button Content="取消" Command="{Binding CancelClick}" Width="100" Background="DimGray" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Margin="320,9,10,9"/>
-                <Button Content="確認" Command="{Binding ConfirmClick}" Width="100" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Margin="0,9"/>
+                <Button Content="取消" Command="{Binding CancelClick}" Width="100" Background="DimGray" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Margin="320,9,10,9" />
+                <Button Content="確認" Command="{Binding ConfirmClick}" Width="100" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Margin="0,9" />
             </StackPanel>
         </Grid>
     </Viewbox>

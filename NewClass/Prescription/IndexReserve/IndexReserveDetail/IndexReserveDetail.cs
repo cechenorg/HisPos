@@ -1,15 +1,12 @@
-﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
 {
-   public class IndexReserveDetail : Product.Product {
-        public IndexReserveDetail(DataRow r):base(r) { 
+    public class IndexReserveDetail : Product.Product
+    {
+        public IndexReserveDetail(DataRow r) : base(r)
+        {
             Stock = r.Field<string>("Inventory");
             InvID = r.Field<int>("Inv_ID").ToString();
             OntheWay = r.Field<string>("OntheWay");
@@ -18,6 +15,7 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
             IsControl = r.Field<byte?>("Med_Control");
             SendAmount = r.Field<double>("SendAmount");
         }
+
         public string StoOrdID { get; set; }
         public string Stock { get; set; }
         public string OntheWay { get; set; }
@@ -26,15 +24,18 @@ namespace His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail
         public double Amount { get; set; }
         public string InvID { get; set; }
         private double frameAmount;
+
         public double FrameAmount
         {
             get => frameAmount;
             set
             {
-                Set(() => FrameAmount, ref frameAmount, value); 
+                Set(() => FrameAmount, ref frameAmount, value);
             }
         }
+
         private double sendAmount;
+
         public double SendAmount
         {
             get => sendAmount;

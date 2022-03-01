@@ -1,12 +1,9 @@
-﻿using System.Windows;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using System.Data;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTCControl
 {
@@ -31,6 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
                 MessageWindow.ShowMessage("架上安全量: 架上量小於安全量時，會在常備採購時轉出採購\r\n\r\n基準量: 架上量小於安全量時，會採購至基準量\r\n\r\n包裝量: 常備採購時，會採購包裝量的倍數", MessageType.TIPS);
             }
         }
+
         private void TextBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -47,6 +45,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTC
             if (textBox is null) return;
 
             textBox.SelectAll();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Combo_Loc_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Combo_Loc_DropDownClosed(object sender, System.EventArgs e)
+        {
+
         }
     }
 }

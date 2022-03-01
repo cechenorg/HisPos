@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using His_Pos.NewClass.Cooperative.CooperativeInstitution;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using His_Pos.NewClass.Cooperative.CooperativeInstitution;
-using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 
 namespace His_Pos.NewClass.Medicine.PreviewMedicine
 {
     public class PreviewMedicines : ObservableCollection<PreviewMedicine>
     {
-        public PreviewMedicines() { }
+        public PreviewMedicines()
+        {
+        }
 
         public PreviewMedicines(PreviewMedicines medicines)
         {
@@ -42,6 +44,7 @@ namespace His_Pos.NewClass.Medicine.PreviewMedicine
                 Add(new PreviewMedicine(r));
             }
         }
+
         public void GetDataByReserveId(int id)
         {
             var table = MedicineDb.GetDataByReserveId(id);

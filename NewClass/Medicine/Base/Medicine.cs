@@ -1,11 +1,10 @@
-﻿using System;
-using System.Data;
-using System.Windows;
-using His_Pos.ChromeTabViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
 using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.Service;
+using System;
+using System.Data;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
 
@@ -15,7 +14,6 @@ namespace His_Pos.NewClass.Medicine.Base
     {
         public Medicine() : base()
         {
-
         }
 
         public Medicine(DataRow r) : base(r)
@@ -53,9 +51,11 @@ namespace His_Pos.NewClass.Medicine.Base
                 case "":
                     TotalPrice = Amount * Convert.ToDouble(m.Price);
                     break;
+
                 case "-":
                     TotalPrice = 0;
                     break;
+
                 case "*":
                     TotalPrice = Convert.ToDouble(m.Price);
                     break;
@@ -82,12 +82,15 @@ namespace His_Pos.NewClass.Medicine.Base
                 case "":
                     TotalPrice = Amount * Convert.ToDouble(m.Price);
                     break;
+
                 case "-":
                     TotalPrice = 0;
                     break;
+
                 case "*":
                     TotalPrice = Convert.ToDouble(m.Price);
                     break;
+
                 default:
                     TotalPrice = Amount * Convert.ToDouble(m.Price);
                     break;
@@ -96,18 +99,21 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         #region Properties
+
         private double? dosage;//每次用量
+
         public double? Dosage
         {
             get => dosage;
             set
             {
-
                 Set(() => Dosage, ref dosage, value);
                 CalculateAmount();
             }
         }
+
         private bool canEdit;
+
         public bool CanEdit
         {
             get => canEdit;
@@ -116,8 +122,9 @@ namespace His_Pos.NewClass.Medicine.Base
                 Set(() => CanEdit, ref canEdit, value);
             }
         }
-        
+
         private string usageName;
+
         public string UsageName
         {
             get => usageName;
@@ -137,6 +144,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private Usage.Usage usage;//用法
+
         public Usage.Usage Usage
         {
             get => usage;
@@ -147,6 +155,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private string positionID;
+
         public string PositionID
         {
             get => positionID;
@@ -165,6 +174,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private Position.Position position;//途徑
+
         public Position.Position Position
         {
             get => position;
@@ -175,6 +185,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private int? days;//給藥天數
+
         public int? Days
         {
             get => days;
@@ -186,6 +197,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private double price;//售價
+
         public double Price
         {
             get => price;
@@ -197,6 +209,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private double totalPrice;//總價
+
         public double TotalPrice
         {
             get => totalPrice;
@@ -207,6 +220,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private double onTheFrameAmount;//庫存
+
         public double OnTheFrameAmount
         {
             get => onTheFrameAmount;
@@ -217,6 +231,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private int inventoryID;//庫存編號
+
         public int InventoryID
         {
             get => inventoryID;
@@ -228,7 +243,9 @@ namespace His_Pos.NewClass.Medicine.Base
                 }
             }
         }
+
         private double costPrice;//成本
+
         public double CostPrice
         {
             get => costPrice;
@@ -239,6 +256,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private double averagePrice;//均價
+
         public double AveragePrice
         {
             get => averagePrice;
@@ -249,6 +267,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private bool paySelf;//是否自費
+
         public bool PaySelf
         {
             get => paySelf;
@@ -256,7 +275,7 @@ namespace His_Pos.NewClass.Medicine.Base
             {
                 if (value != null && !value)
                 {
-                    if(this is MedicineOTC) return;
+                    if (this is MedicineOTC) return;
                 }
                 Set(() => PaySelf, ref paySelf, value);
                 CountTotalPrice();
@@ -264,6 +283,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private bool isBuckle = true;
+
         public bool IsBuckle
         {
             get => isBuckle;
@@ -274,6 +294,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private bool frozen;//是否為冷藏藥品
+
         public bool Frozen
         {
             get => frozen;
@@ -287,6 +308,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private bool enable;//是否停用
+
         public bool Enable
         {
             get => enable;
@@ -300,6 +322,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private string ingredient;//成分
+
         public string Ingredient
         {
             get => ingredient;
@@ -313,6 +336,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private string sideEffect;//副作用
+
         public string SideEffect
         {
             get => sideEffect;
@@ -326,6 +350,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private string indication;//適應症
+
         public string Indication
         {
             get => indication;
@@ -339,6 +364,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private double amount;//總量
+
         public double Amount
         {
             get => amount;
@@ -375,6 +401,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private double nhiPrice;//健保價
+
         public double NHIPrice
         {
             get => nhiPrice;
@@ -385,6 +412,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private bool isSelected;
+
         public bool IsSelected
         {
             get => isSelected;
@@ -392,18 +420,23 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private int order;
+
         public int Order
         {
             get => order;
             set { Set(() => Order, ref order, value); }
         }
+
         private double sendAmount;
+
         public double SendAmount
         {
             get => sendAmount;
             set { Set(() => SendAmount, ref sendAmount, value); }
         }
+
         private double usableAmount;
+
         public double UsableAmount
         {
             get => usableAmount;
@@ -414,6 +447,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private bool inventoryError;
+
         public bool InventoryError
         {
             get => inventoryError;
@@ -421,6 +455,7 @@ namespace His_Pos.NewClass.Medicine.Base
         }
 
         private bool adjustNoBuckle;//欠藥/調劑不扣庫
+
         public bool AdjustNoBuckle
         {
             get => adjustNoBuckle;
@@ -432,7 +467,8 @@ namespace His_Pos.NewClass.Medicine.Base
                 }
             }
         }
-        #endregion
+
+        #endregion Properties
 
         public bool CheckIsBloodGlucoseTestStrip()
         {
@@ -488,7 +524,6 @@ namespace His_Pos.NewClass.Medicine.Base
             PaySelf = !string.IsNullOrEmpty(setItem.Remark) && (setItem.Remark.Equals("*") || setItem.Remark.Equals("-"));
             if (LoginWindowViewModel.ReadSettingFilePharmacyName() == "宏昌藥局")
             {
-
                 SetPriceByRemarkHONGCHANG(setItem.Remark, setItem.Price);
             }
             else
@@ -506,29 +541,39 @@ namespace His_Pos.NewClass.Medicine.Base
                 case "":
                     TotalPrice = Amount * priceValue;
                     break;
+
                 case "-":
                     TotalPrice = 0;
                     break;
+
                 case "*":
                     TotalPrice = Amount * Price;
                     break;
             }
         }
 
-
-
         private void SetPriceByRemark(string remark, string itemPrice)
         {
-            var priceValue = Convert.ToDouble(itemPrice);
+            var priceValue = 0.0;
+            if (itemPrice == "")
+            {
+                priceValue = 0;
+            }
+            else
+            {
+                priceValue = Convert.ToDouble(itemPrice);
+            }
             if (priceValue < 0) priceValue *= -1;
             switch (remark)
             {
                 case "":
                     TotalPrice = Amount * priceValue;
                     break;
+
                 case "-":
                     TotalPrice = 0;
                     break;
+
                 case "*":
                     TotalPrice = priceValue;
                     break;
@@ -545,9 +590,8 @@ namespace His_Pos.NewClass.Medicine.Base
             return Days != null && Days > 0;
         }
 
-
         public object Clone()
-        { 
+        {
             if (this is MedicineNHI)
             {
                 var clonedMed = this as MedicineNHI;
@@ -583,7 +627,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     Frozen = clonedMed.Frozen,
                     CanEdit = true,
                     SendAmount = -1
-            };
+                };
                 return medNHI;
             }
 

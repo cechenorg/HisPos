@@ -1,5 +1,5 @@
-﻿using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
+using System.Data;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Division
@@ -7,7 +7,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
     [ZeroFormattable]
     public class Division : ObservableObject
     {
-        public Division() {
+        public Division()
+        {
         }
 
         public Division(DataRow r)
@@ -16,7 +17,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
             Name = r.Field<string>("Div_Name");
             FullName = r.Field<string>("Div_FullName");
         }
+
         private string id;
+
         [Index(0)]
         public virtual string ID
         {
@@ -26,7 +29,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
                 Set(() => ID, ref id, value);
             }
         }
+
         private string name;
+
         [Index(1)]
         public virtual string Name
         {
@@ -36,7 +41,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
                 Set(() => Name, ref name, value);
             }
         }
+
         private string fullName;
+
         [Index(2)]
         public virtual string FullName
         {
@@ -65,6 +72,5 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
             copy.FullName = this.ID;
             return copy;
         }
-
     }
 }

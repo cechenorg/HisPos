@@ -16,6 +16,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         public string Id { get; }
 
         private bool isMed;
+
         public bool IsMed
         {
             get
@@ -28,7 +29,9 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
                 NotifyPropertyChanged("IsMed");
             }
         }
+
         private bool isSelected;
+
         public bool IsSelected
         {
             get
@@ -52,9 +55,9 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         //    UserColor.Fill = userIconData.BackBrush;
         //    IsMed = userIconData.IsMed;
         //}
-        
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)

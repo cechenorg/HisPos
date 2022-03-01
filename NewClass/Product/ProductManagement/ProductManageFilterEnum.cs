@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace His_Pos.NewClass.Product.ProductManagement
+﻿namespace His_Pos.NewClass.Product.ProductManagement
 {
     public enum ProductManageFilterEnum
     {
@@ -14,7 +8,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
         FROZE = 4,
         DISABLE = 5,
         INV_ERROR = 6,
-        ZERO=7,
-        OTCMedicine = 8
+        ZERO = 7,
+        OTCMedicine = 8,
+        Medicine = 9
     }
 }

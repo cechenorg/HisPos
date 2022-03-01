@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
 
 namespace His_Pos.NewClass.Manufactory
@@ -9,18 +8,22 @@ namespace His_Pos.NewClass.Manufactory
         private Manufactories(DataTable dataTable)
         {
             foreach (DataRow row in dataTable.Rows)
-            { 
-               Add( new Manufactory(row)); 
+            {
+                Add(new Manufactory(row));
             }
         }
-        protected Manufactories( )
+
+        protected Manufactories()
         {
         }
+
         internal static Manufactories GetManufactories()
         {
             return new Manufactories(ManufactoryDB.GetAllManufactories());
         }
-        internal static Manufactories GetControlMedicineManufactories() {
+
+        internal static Manufactories GetControlMedicineManufactories()
+        {
             DataTable table = ManufactoryDB.GetAllManufactories();
             Manufactories manufactories = new Manufactories();
             foreach (DataRow row in table.Rows)

@@ -1,6 +1,6 @@
 ﻿namespace His_Pos.Interface
 {
-    interface IStockTakingRecord
+    internal interface IStockTakingRecord
     {
         string EmpName { get; set; }
         string OldValue { get; set; }

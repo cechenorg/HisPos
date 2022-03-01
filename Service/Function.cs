@@ -1,7 +1,16 @@
-﻿using System;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.HisApi;
+using His_Pos.NewClass.Prescription.ICCard.Upload;
+using ICSharpCode.SharpZipLib.Zip;
+using NChinese.Phonetic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,24 +18,11 @@ using System.Net;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.HisApi;
-using His_Pos.NewClass.Prescription.ICCard.Upload;
-using NChinese.Phonetic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using ICSharpCode.SharpZipLib.Zip;
-using ZipFile = System.IO.Compression.ZipFile;
-using System.Collections.Generic;
 
 namespace His_Pos.Service
 {
-
-    public class Function 
+    public class Function
     {
-
         //用途:將中文字轉成注音符號再轉成英文字母
         //輸入:中文字串
         //輸出:英文字串
@@ -36,7 +32,8 @@ namespace His_Pos.Service
             // 取得一串中文字的注音字根
             var zhuyinProvicer = new ZhuyinReverseConversionProvider();
             string[] zhuyinArray = zhuyinProvicer.Convert(txtInput);
-            foreach (var s in zhuyinArray) {
+            foreach (var s in zhuyinArray)
+            {
                 if (s == string.Empty) return txtInput;
                 resultOutput += GetEnumDescription("Alphabat", s.Substring(0, 1));
             }
@@ -72,27 +69,29 @@ namespace His_Pos.Service
             return reply;
         } //GetEnumDescription
 
-        public static string GetDateFormat(string date) {
+        public static string GetDateFormat(string date)
+        {
             if (date.Length == 1) date = "0" + date;
             return date;
         }
 
-        public static string ExportXml(XDocument xml, string FileTypeName,DateTime? declareDate,string fileName = null) {
+        public static string ExportXml(XDocument xml, string FileTypeName, DateTime? declareDate, string fileName = null)
+        {
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
             var month = DateTime.Now.Month.ToString();
-            var day = DateTime.Now.Day.ToString().PadLeft(2,'0');
+            var day = DateTime.Now.Day.ToString().PadLeft(2, '0');
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             string path_ymd;
             string path_file;
             if (FileTypeName.Equals("每月申報檔"))
             {
                 path += "\\藥健康系統申報";
-                path_ymd = path + "\\" +((DateTime)declareDate).Month + "月申報檔_" + 
-                           (DateTime.Now.Year-1911)+ "年" +DateTime.Now.Month.ToString().PadLeft(2,'0') + "月" +
-                           DateTime.Now.Day.ToString().PadLeft(2,'0') + "日" +
-                           DateTime.Now.Hour.ToString().PadLeft(2,'0') + "點" +
-                           DateTime.Now.Minute.ToString().PadLeft(2,'0') + "分轉出";
+                path_ymd = path + "\\" + ((DateTime)declareDate).Month + "月申報檔_" +
+                           (DateTime.Now.Year - 1911) + "年" + DateTime.Now.Month.ToString().PadLeft(2, '0') + "月" +
+                           DateTime.Now.Day.ToString().PadLeft(2, '0') + "日" +
+                           DateTime.Now.Hour.ToString().PadLeft(2, '0') + "點" +
+                           DateTime.Now.Minute.ToString().PadLeft(2, '0') + "分轉出";
                 path_file = path_ymd + "\\";
                 path_file += "DRUGT";
             }
@@ -114,7 +113,7 @@ namespace His_Pos.Service
             var info = File.ReadAllText(path_file + ".xml", Encoding.GetEncoding(950));
             File.WriteAllText(path_file + ".xml", info.Replace("big5", "Big5"), Encoding.GetEncoding(950));
             var input = path_file + ".xml";
-            var output =  (string.IsNullOrEmpty(fileName) ? path_file : path_ymd + "\\" + fileName) + ".zip";
+            var output = (string.IsNullOrEmpty(fileName) ? path_file : path_ymd + "\\" + fileName) + ".zip";
             //壓縮XML
             if (File.Exists(output)) File.Delete(output);
             List<string> inputList = new List<string>();
@@ -124,8 +123,9 @@ namespace His_Pos.Service
                 File.Delete(input);
             return path_file;
         }
-       
-        public string HttpGetJson(string url) {
+
+        public string HttpGetJson(string url)
+        {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = WebRequestMethods.Http.Get;
             request.ContentType = "application/json";
@@ -144,29 +144,35 @@ namespace His_Pos.Service
                 return string.Empty;
             }
         }
-        public class Holiday{
-          public  DateTime date { get; set; }
-          public  string name { get; set; }
-          public string isHoliday { get; set; }
-          public  string holidayCategory { get; set; }
-          public string description { get; set; }
+
+        public class Holiday
+        {
+            public DateTime date { get; set; }
+            public string name { get; set; }
+            public string isHoliday { get; set; }
+            public string holidayCategory { get; set; }
+            public string description { get; set; }
         }
-        public void GetLastYearlyHoliday() { //撈每年國定假日
-           var jsondata = HttpGetJson("http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000077-002");
-            if (jsondata != string.Empty) {
+
+        public void GetLastYearlyHoliday()
+        { //撈每年國定假日
+            var jsondata = HttpGetJson("http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000077-002");
+            if (jsondata != string.Empty)
+            {
                 var year = DateTime.Now.Year;
                 string data = JObject.Parse(jsondata)["result"]["records"].ToString();
                 Collection<Holiday> tempCollection = JsonConvert.DeserializeObject<Collection<Holiday>>(data);
                 Collection<Holiday> holidayCollection = new Collection<Holiday>(tempCollection.Where(x => x.date.Year == year).ToList());
-                foreach (Holiday day in holidayCollection) {
+                foreach (Holiday day in holidayCollection)
+                {
                     if (day.name == "軍人節") continue;
-                    if (day.isHoliday == "是")
-                        ;/// FunctionDb.UpdateLastYearlyHoliday(day);
+                    // if (day.isHoliday == "是");
+                    // FunctionDb.UpdateLastYearlyHoliday(day);
                 }
             }
         }
 
-        public static string ByteArrayToString(int length,byte[] pBuffer,int startIndex)
+        public static string ByteArrayToString(int length, byte[] pBuffer, int startIndex)
         {
             var tmpByteArr = new byte[length];
             Array.Copy(pBuffer, startIndex, tmpByteArr, 0, length);
@@ -174,11 +180,11 @@ namespace His_Pos.Service
             return result;
         }
 
-        public void DailyUpload(XDocument dailyUpload,string recCount)
+        public void DailyUpload(XDocument dailyUpload, string recCount)
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "DailyUpload",null);
+                var filePath = ExportXml(dailyUpload, "DailyUpload", null);
                 var fileName = filePath + ".xml";
                 var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
@@ -209,12 +215,12 @@ namespace His_Pos.Service
                         var receiveMinute = receiveDateTime.Substring(10, 2);
                         var receiveSecond = receiveDateTime.Substring(12, 2);
                         var receiveDateStr = $"{receiveYear}/{receiveMonth}/{receiveDay} {receiveHour}:{receiveMinute}:{receiveSecond}";
-                        var uploadTime = new DateTime(int.Parse(uploadYear),int.Parse(uploadMonth),int.Parse(uploadDay),int.Parse(uploadHour),int.Parse(uploadMinute),int.Parse(uploadSecond));
-                        var receiveTime = new DateTime(int.Parse(receiveYear),int.Parse(receiveMonth),int.Parse(receiveDay),int.Parse(receiveHour),int.Parse(receiveMinute),int.Parse(receiveSecond));
-                        MessageWindow.ShowMessage("上傳成功\n上傳時間:"+ uploadDateStr + "\n接收時間:"+ receiveDateStr, MessageType.SUCCESS);
+                        var uploadTime = new DateTime(int.Parse(uploadYear), int.Parse(uploadMonth), int.Parse(uploadDay), int.Parse(uploadHour), int.Parse(uploadMinute), int.Parse(uploadSecond));
+                        var receiveTime = new DateTime(int.Parse(receiveYear), int.Parse(receiveMonth), int.Parse(receiveDay), int.Parse(receiveHour), int.Parse(receiveMinute), int.Parse(receiveSecond));
+                        MessageWindow.ShowMessage("上傳成功\n上傳時間:" + uploadDateStr + "\n接收時間:" + receiveDateStr, MessageType.SUCCESS);
                         MainWindow.ServerConnection.OpenConnection();
                         IcDataUploadDb.InsertDailyUploadFile(dailyUpload);
-                        IcDataUploadDb.UpdateDailyUploadData(samCode,insID, uploadTime,receiveTime);
+                        IcDataUploadDb.UpdateDailyUploadData(samCode, insID, uploadTime, receiveTime);
                         MainWindow.ServerConnection.CloseConnection();
                     }
                     else
@@ -224,7 +230,7 @@ namespace His_Pos.Service
                 }
                 HisApiFunction.CloseCom();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageWindow.ShowMessage("上傳異常，請稍後再試。", MessageType.ERROR);
             }
@@ -234,7 +240,7 @@ namespace His_Pos.Service
         {
             try
             {
-                var filePath = ExportXml(dailyUpload, "DailyUpload",null);
+                var filePath = ExportXml(dailyUpload, "DailyUpload", null);
                 var fileName = filePath + ".xml";
                 var fileNameArr = ConvertData.StringToBytes(fileName, fileName.Length);
                 var fileInfo = new FileInfo(fileName);//每日上傳檔案
@@ -244,7 +250,7 @@ namespace His_Pos.Service
                 var iBufferLength = 50;
                 if (HisApiFunction.OpenCom() && ViewModelMainWindow.IsVerifySamDc)
                 {
-                    var res = HisApiBase.csUploadData(fileNameArr, fileSize, count ,pBuffer, ref iBufferLength);
+                    var res = HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                     if (res == 0)
                     {
                         var samCode = ConvertData.ByToString(pBuffer, 0, 12);
@@ -275,7 +281,6 @@ namespace His_Pos.Service
             }
             catch (Exception)
             {
-
             }
         }
 

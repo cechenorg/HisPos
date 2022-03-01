@@ -1,51 +1,113 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.AddNewOrderWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow"
-        xmlns:newOrderTypeControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
-        mc:Ignorable="d"
-        Title="新增進退貨單" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.AddNewOrderWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:newOrderTypeControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
+    Title="新增進退貨單"
+    Width="500"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.DataContext>
-        <local:AddNewOrderWindowViewModel/>
+        <local:AddNewOrderWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
         <DataTemplate x:Key="PurchaseTypeControl" DataType="{x:Type local:AddNewOrderWindowViewModel}">
-            <newOrderTypeControl:PurchaseTypeControl/>
+            <newOrderTypeControl:PurchaseTypeControl />
         </DataTemplate>
         <DataTemplate x:Key="ReturnTypeControl" DataType="{x:Type local:AddNewOrderWindowViewModel}">
-            <newOrderTypeControl:ReturnTypeControl/>
+            <newOrderTypeControl:ReturnTypeControl />
         </DataTemplate>
     </Window.Resources>
     <Grid Width="500">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <RadioButton Tag="P" Content="進貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" IsChecked="True" Command="{Binding ToPurchaseCommand}"/>
-            <RadioButton Tag="R" Content="退貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="50,0,0,0" Command="{Binding ToReturnCommand}"/>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <RadioButton
+                VerticalContentAlignment="Center"
+                Command="{Binding ToPurchaseCommand}"
+                Content="進貨"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                IsChecked="True"
+                Tag="P" />
+            <RadioButton
+                Margin="50,0,0,0"
+                VerticalContentAlignment="Center"
+                Command="{Binding ToReturnCommand}"
+                Content="退貨"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Tag="R" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-            <Label Content="選擇庫別:" Foreground="Black" Margin="10,0,0,0" Style="{StaticResource BoldLabelHeader25}"/>
-            <ComboBox Width="200" Margin="10,0,0,0" DisplayMemberPath="Name" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" ItemsSource="{Binding WareHouseCollection}"
-                      ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                Content="選擇庫別:"
+                Foreground="Black"
+                Style="{StaticResource BoldLabelHeader25}" />
+            <ComboBox
+                Width="200"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+                DisplayMemberPath="Name"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemsSource="{Binding WareHouseCollection}"
+                SelectedItem="{Binding SelectedWareHouse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
-        <ContentControl Grid.Row="2" Content="{Binding}">
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                Content="選擇單種類:"
+                Foreground="Black"
+                Style="{StaticResource BoldLabelHeader25}" />
+            <ComboBox
+                Width="200"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+           
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+               
+                ItemsSource="{Binding TypeCollection}"
+                SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+        <ContentControl Grid.Row="3" Content="{Binding}">
             <ContentControl.Style>
                 <Style TargetType="ContentControl">
-                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseTypeControl}"/>
+                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseTypeControl}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding OrderType}" Value="RETURN">
-                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnTypeControl}"/>
+                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnTypeControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ContentControl.Style>
         </ContentControl>
-        <Button Content="確認" Grid.Row="3" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Command="{Binding ConfirmAddCommand}"/>
+        <Button
+            Grid.Row="4"
+            Width="200"
+            Background="RoyalBlue"
+            BorderBrush="Transparent"
+            Command="{Binding ConfirmAddCommand}"
+            Content="確認"
+            FontFamily="Segoe UI Semibold"
+            FontSize="18" />
     </Grid>
 </Window>

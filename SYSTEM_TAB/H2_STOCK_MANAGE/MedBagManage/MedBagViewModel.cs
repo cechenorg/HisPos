@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.MedBagManage;
 using His_Pos.Service.ExportService;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
 {
@@ -23,11 +18,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
         }
 
         #region ----- Define Commands -----
+
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand ExportCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private bool isBusy;
         private string busyContent;
         private MedBagPrescriptionStructs reserveCollection;
@@ -40,28 +38,34 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
             get => isBusy;
             set { Set(() => IsBusy, ref isBusy, value); }
         }
+
         public string BusyContent
         {
             get => busyContent;
             set { Set(() => BusyContent, ref busyContent, value); }
         }
+
         public MedBagPrescriptionStructs ReserveCollection
         {
             get => reserveCollection;
             set { Set(() => ReserveCollection, ref reserveCollection, value); }
         }
+
         public MedBagPrescriptionStructs RegisterCollection
         {
             get => registerCollection;
             set { Set(() => RegisterCollection, ref registerCollection, value); }
         }
+
         public MedBagPrescriptionStructs PastReserveCollection
         {
             get => pastReserveCollection;
             set { Set(() => PastReserveCollection, ref pastReserveCollection, value); }
         }
-        public double TotalStockValue => (ReserveCollection is null || RegisterCollection is null)? 0 : ReserveCollection.TotalStockValue + RegisterCollection.TotalStockValue;
-        #endregion
+
+        public double TotalStockValue => (ReserveCollection is null || RegisterCollection is null) ? 0 : ReserveCollection.TotalStockValue + RegisterCollection.TotalStockValue;
+
+        #endregion ----- Define Variables -----
 
         public MedBagViewModel()
         {
@@ -70,6 +74,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
         }
 
         #region ----- Define Actions -----
+
         private void InitBackgroundWorker()
         {
             initBackgroundWorker = new BackgroundWorker();
@@ -93,6 +98,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
                 IsBusy = false;
             };
         }
+
         private void ExportAction()
         {
             IsBusy = true;
@@ -104,7 +110,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
 
             backgroundWorker.DoWork += (sender, args) =>
             {
-                Collection<object> tempCollection = new Collection<object>(){ ReserveCollection, RegisterCollection };
+                Collection<object> tempCollection = new Collection<object>() { ReserveCollection, RegisterCollection };
 
                 MainWindow.ServerConnection.OpenConnection();
                 ExportExcelService service = new ExportExcelService(tempCollection, new ExportMedBagTemplate());
@@ -124,18 +130,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage
 
             backgroundWorker.RunWorkerAsync();
         }
+
         private void ReloadAction()
         {
             initBackgroundWorker.RunWorkerAsync();
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void RegisterCommands()
         {
             ReloadCommand = new RelayCommand(ReloadAction);
             ExportCommand = new RelayCommand(ExportAction);
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

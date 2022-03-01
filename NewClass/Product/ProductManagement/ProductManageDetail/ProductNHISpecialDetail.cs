@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
 {
-    class ProductNHISpecialDetail : ProductManageDetail
+    internal class ProductNHISpecialDetail : ProductManageDetail
     {
         public ProductNHISpecialDetail(DataRow row) : base(row)
         {
@@ -16,12 +11,11 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductManageDetail
             SmallCategory = row.Field<string>("SpeMed_SmallCategory");
             Manufactory = row.Field<string>("SpeMed_Manufactory");
         }
-        
+
         public double NHIPrice { get; }
         public string BigCategory { get; }
         public string SmallCategory { get; }
 
         public string Manufactory { get; }
-        
     }
 }

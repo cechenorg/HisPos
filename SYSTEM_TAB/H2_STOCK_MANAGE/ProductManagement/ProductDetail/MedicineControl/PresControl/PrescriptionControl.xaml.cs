@@ -1,8 +1,8 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
-using His_Pos.NewClass.Prescription;
+﻿using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Product.ProductManagement;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl
 {
@@ -27,11 +27,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 case ProductRegisterPrescriptionTypeEnum.REGISTER:
                     PrescriptionService.ShowPrescriptionEditWindow(((ProductRegisterPrescription)row.Item).ID, PrescriptionType.ChronicReserve);
                     break;
+
                 case ProductRegisterPrescriptionTypeEnum.PRESCRIPTION:
                     PrescriptionService.ShowPrescriptionEditWindow(((ProductRegisterPrescription)row.Item).ID);
                     break;
             }
-
         }
     }
 }

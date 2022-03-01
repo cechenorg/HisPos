@@ -1,19 +1,16 @@
-﻿using System;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Security.Policy;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Product.PurchaseReturn;
+using System.Data;
+using System.Linq;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public class ReturnOrder: StoreOrder
+    public class ReturnOrder : StoreOrder
     {
         #region ----- Define Variables -----
+
         private ReturnProducts returnProducts;
         private ReturnProducts oldReturnProducts;
         private double returnStockValue;
@@ -23,11 +20,13 @@ namespace His_Pos.NewClass.StoreOrder
             get { return returnProducts; }
             set { Set(() => ReturnProducts, ref returnProducts, value); }
         }
+
         public ReturnProducts OldReturnProducts
         {
             get { return oldReturnProducts; }
             set { Set(() => OldReturnProducts, ref oldReturnProducts, value); }
         }
+
         public int ProductCount
         {
             get
@@ -36,15 +35,21 @@ namespace His_Pos.NewClass.StoreOrder
                 else return ReturnProducts.Count;
             }
         }
+
         public double ReturnStockValue
         {
             get { return returnStockValue; }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
-        public double ReturnDiff { get { return TotalPrice - ReturnStockValue; } }
-        #endregion
 
-        private ReturnOrder() { }
+        public double ReturnDiff { get { return TotalPrice - ReturnStockValue; } }
+
+        #endregion ----- Define Variables -----
+
+        private ReturnOrder()
+        {
+        }
+
         public ReturnOrder(DataRow row) : base(row)
         {
             OrderType = OrderTypeEnum.RETURN;
@@ -54,6 +59,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Override Function -----
 
         #region ///// Check Function /////
+
         protected override bool CheckUnProcessingOrder()
         {
             var flagNotOTC = 0;
@@ -68,12 +74,12 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 if (product.ReturnAmount == 0)
                 {
-                    MessageWindow.ShowMessage(product.ID + " 商品數量為0!", MessageType.ERROR);
+                    MessageWindow.ShowMessage(product.ID + " 退貨量為0!", MessageType.ERROR);
                     return false;
                 }
                 else if (product.ReturnAmount < 0)
                 {
-                    MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
+                    MessageWindow.ShowMessage(product.ID + " 退貨量不可小於0!", MessageType.ERROR);
                     return false;
                 }
                 else if (product.ReturnAmount > product.Inventory)
@@ -81,11 +87,11 @@ namespace His_Pos.NewClass.StoreOrder
                     MessageWindow.ShowMessage(product.ID + " 退貨量不可大於架上量", MessageType.ERROR);
                     return false;
                 }
-                else if (product.Type == 2)
+                else if (product.TypeOTC == 2)
                 {
                     flagOTC = 1;
                 }
-                else if (product.Type != 2)
+                else if (product.TypeOTC != 2)
                 {
                     flagNotOTC = 1;
                 }
@@ -98,7 +104,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認退貨?\n(確認後直接扣除庫存)", "", true);
 
-            if (!(bool) confirmWindow.DialogResult)
+            if (!(bool)confirmWindow.DialogResult)
                 return false;
 
             DataTable dataTable = StoreOrderDB.CheckReturnProductValid(this);
@@ -111,15 +117,21 @@ namespace His_Pos.NewClass.StoreOrder
 
             return true;
         }
+
         protected override bool CheckNormalProcessingOrder()
         {
             bool hasControlMed = false;
+            bool hasZeroPrice = false;
 
             foreach (var product in ReturnProducts)
             {
                 if (product is ReturnMedicine && (product as ReturnMedicine).IsControl != null)
                 {
                     hasControlMed = true;
+                }
+                else if (product.Price == 0) 
+                {
+                    hasZeroPrice = true;
                 }
             }
 
@@ -134,26 +146,37 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?\n(資料內容將不能修改)", "", false);
-
-            return (bool)confirmWindow.DialogResult;
+            if (hasZeroPrice)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow($"部分品項退貨價為0，\n是否確認完成退貨單?", "", false);
+                return (bool)confirmWindow.DialogResult;
+            }
+            else
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?", "", false);
+                return (bool)confirmWindow.DialogResult;
+            }
         }
+
         protected override bool CheckSingdeProcessingOrder()
         {
             return true;
         }
-        #endregion
+
+        #endregion ///// Check Function /////
 
         #region ///// Product Function /////
+
         public override void CalculateTotalPrice()
         {
-            if(OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+            if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
                 ReturnStockValue = ReturnProducts.Sum(p => p.ReturnStockValue);
 
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
 
             RaisePropertyChanged(nameof(ReturnDiff));
         }
+
         public override void GetOrderProducts()
         {
             SelectedItem = null;
@@ -162,7 +185,7 @@ namespace His_Pos.NewClass.StoreOrder
             OldReturnProducts = ReturnProducts.GetOldReturnProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
 
-            if(OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+            if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
                 ReturnProducts.SetReturnInventoryDetail();
 
             if (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.DONE)
@@ -172,6 +195,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             CalculateTotalPrice();
         }
+
         internal void CalculateReturnAmount()
         {
             foreach (var returnProduct in ReturnProducts)
@@ -181,11 +205,11 @@ namespace His_Pos.NewClass.StoreOrder
 
             CalculateTotalPrice();
         }
+
         internal void ReturnOrderRePurchase()
         {
-
             SaveOrder();
-            
+
             OrderStatus = OrderStatusEnum.DONE;
 
             DataTable result = StoreOrderDB.ReturnOrderRePurchase(ID);
@@ -198,10 +222,12 @@ namespace His_Pos.NewClass.StoreOrder
             else
                 MessageWindow.ShowMessage("已完成退貨單\r\n(詳細資料可至進退貨紀錄查詢)", MessageType.SUCCESS);
         }
+
         public override void SetProductToProcessingStatus()
         {
             ReturnProducts.SetToProcessing();
         }
+
         public override void AddProductByID(string iD, bool isFromAddButton)
         {
             if (ReturnProducts.Count(p => p.ID == iD) > 0)
@@ -223,6 +249,7 @@ namespace His_Pos.NewClass.StoreOrder
                         case "O":
                             tempProduct = new ReturnOTC(row);
                             break;
+
                         case "M":
                             tempProduct = new ReturnMedicine(row);
                             break;
@@ -269,6 +296,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             RaisePropertyChanged(nameof(ProductCount));
         }
+
         public override void DeleteSelectedProduct()
         {
             ReturnProducts.Remove((ReturnProduct)SelectedItem);
@@ -276,7 +304,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             RaisePropertyChanged(nameof(ProductCount));
         }
-        #endregion
+
+        #endregion ///// Product Function /////
 
         public override void SaveOrder()
         {
@@ -285,11 +314,12 @@ namespace His_Pos.NewClass.StoreOrder
 
             //backgroundWorker.DoWork += (sender, args) =>
             //{
-                StoreOrderDB.SaveReturnOrder(this);
+            StoreOrderDB.SaveReturnOrder(this);
             //};
 
             //backgroundWorker.RunWorkerAsync();
         }
+
         public override object Clone()
         {
             ReturnOrder returnOrder = new ReturnOrder();
@@ -300,14 +330,30 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override int GetOrderProductsIsOTC()
         {
-            ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
-            int type = ReturnProducts[0].Type;
+            ReturnProducts returnProductsOTC = new ReturnProducts();
+            returnProductsOTC = ReturnProducts.GetProductsByStoreOrderID(ID);
+            int type = returnProductsOTC[0].TypeOTC;
             return type;
         }
 
-        #endregion
+        public override void SaveOrderCus()
+        {
+        }
 
-        #region ----- Define Function -----
-        #endregion
+        public override void SetRealAmount(string id)
+        {
+        }
+
+        public override bool ChkPrice()
+        {
+            return true;
+        }
+
+        public override bool ChkPurchase()
+        {
+            return true;
+        }
+
+        #endregion ----- Override Function -----
     }
 }

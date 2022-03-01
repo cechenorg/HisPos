@@ -1,19 +1,36 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.UserIconPreview"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
-             mc:Ignorable="d" 
-             d:DesignHeight="45" d:DesignWidth="100">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.UserIconPreview"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
+    d:DesignHeight="45"
+    d:DesignWidth="100"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <workScheduleManage:IsMedConverter x:Key="IsMedConverter"/>
-        <workScheduleManage:IsSelectedConverter x:Key="IsSelectedConverter"/>
+        <workScheduleManage:IsMedConverter x:Key="IsMedConverter" />
+        <workScheduleManage:IsSelectedConverter x:Key="IsSelectedConverter" />
     </UserControl.Resources>
-    <Border Margin="20,0,0,8" CornerRadius="22" Background="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsSelectedConverter}}">
+    <Border
+        Margin="20,0,0,8"
+        Background="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsSelectedConverter}}"
+        CornerRadius="22">
         <StackPanel Orientation="Horizontal">
-            <Ellipse Name="UserColor" Width="20" Height="20" Stroke="Red" StrokeThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}" Margin="10,0,5,0"/>
-            <TextBlock Name="UserName" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold" Margin="5,0,10,0"/>
+            <Ellipse
+                Name="UserColor"
+                Width="20"
+                Height="20"
+                Margin="10,0,5,0"
+                Stroke="Red"
+                StrokeThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}" />
+            <TextBlock
+                Name="UserName"
+                Margin="5,0,10,0"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}" />
         </StackPanel>
     </Border>
 </UserControl>

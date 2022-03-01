@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Product.ExportProductRecord;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.Service.ExportService;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl.RecordControl
 {
     public class ProductRecordDetailControlViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand SearchProductRecordCommand { get; set; }
         public RelayCommand ExportRecordCommand { get; set; }
         public RelayCommand<string> FilterRecordCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private string productID;
         private string wareHouseID;
         private DateTime? startDate = DateTime.Today.AddMonths(-12);
@@ -41,27 +40,32 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             get { return startDate; }
             set { Set(() => StartDate, ref startDate, value); }
         }
+
         public DateTime? EndDate
         {
             get { return endDate; }
             set { Set(() => EndDate, ref endDate, value); }
         }
+
         public ProductInventoryRecords InventoryRecordCollection
         {
             get { return inventoryRecordCollection; }
             set { Set(() => InventoryRecordCollection, ref inventoryRecordCollection, value); }
         }
+
         public ProductInventoryRecord CurrentInventoryRecord
         {
             get { return currentInventoryRecord; }
             set { Set(() => CurrentInventoryRecord, ref currentInventoryRecord, value); }
         }
+
         public ICollectionView InventoryRecordCollectionView
         {
             get => inventoryRecordCollectionView;
             set { Set(() => InventoryRecordCollectionView, ref inventoryRecordCollectionView, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductRecordDetailControlViewModel()
         {
@@ -69,10 +73,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #region ----- Define Actions -----
+
         private void SearchProductRecordAction()
         {
             Messenger.Default.Send(new NotificationMessage<string>(this, productID, "RELOAD"));
         }
+
         private void ExportRecordAction()
         {
             Collection<object> tempCollection = new Collection<object>() { new List<object> { productID, StartDate, EndDate, wareHouseID } };
@@ -87,6 +93,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             else
                 MessageWindow.ShowMessage("匯出失敗 請稍後再試", MessageType.ERROR);
         }
+
         private void FilterRecordAction(string filterCondition)
         {
             if (filterCondition != null)
@@ -100,15 +107,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 CurrentInventoryRecord = (ProductInventoryRecord)InventoryRecordCollectionView.CurrentItem;
             }
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void RegisterCommand()
         {
             SearchProductRecordCommand = new RelayCommand(SearchProductRecordAction);
             FilterRecordCommand = new RelayCommand<string>(FilterRecordAction);
             ExportRecordCommand = new RelayCommand(ExportRecordAction);
         }
+
         private bool RecordFilter(object record)
         {
             if (ProductInventoryRecordType.All == filterType)
@@ -116,6 +126,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             else
                 return filterType == ((ProductInventoryRecord)record).Type;
         }
+
         private void SearchRecord()
         {
             if (StartDate is null || EndDate is null)
@@ -138,6 +149,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             MainWindow.ServerConnection.CloseConnection();
         }
+
         internal void ReloadData(string proID, string wareID)
         {
             productID = proID;
@@ -145,6 +157,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             SearchRecord();
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

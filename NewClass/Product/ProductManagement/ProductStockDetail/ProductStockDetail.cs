@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 {
     public class ProductStockDetail : ObservableObject
     {
         #region ----- Define Variables -----
+
         public double OnTheWayAmount { get; set; }
         public double TotalInventory { get; set; }
         public double StockValue { get; set; }
         public double LastPrice { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductStockDetail(DataRow row)
         {

@@ -9,9 +9,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameD
     public class SameDeclareConfirmViewModel : ViewModelBase
     {
         public bool Result { get; set; }
-        public string Patient { get;}
-        public SameDeclarePrescriptions Prescriptions { get;}
+        public string Patient { get; }
+        public SameDeclarePrescriptions Prescriptions { get; }
         private SameDeclarePrescription selectedPrescription;
+
         public SameDeclarePrescription SelectedPrescription
         {
             get => selectedPrescription;
@@ -24,8 +25,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameD
                 }
             }
         }
+
         public RelayCommand Back { get; set; }
         public RelayCommand Continue { get; set; }
+
         public SameDeclareConfirmViewModel(SameDeclarePrescriptions pres)
         {
             Prescriptions = pres;
@@ -42,7 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.SameD
 
         private void ContinueAction()
         {
-            var c = new ConfirmWindow("此病患已有內容重複處方，可能有重複申報疑慮，確認繼續調劑?","",false);
+            var c = new ConfirmWindow("此病患已有內容重複處方，可能有重複申報疑慮，確認繼續調劑?", "", false);
             Result = (bool)c.DialogResult;
             Messenger.Default.Send(new NotificationMessage("CloseSameDeclareConfirmWindow"));
         }

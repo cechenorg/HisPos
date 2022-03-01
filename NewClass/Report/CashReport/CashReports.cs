@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.CashReport
 {
-    public class CashReports: ObservableCollection<CashReport>
+    public class CashReports : ObservableCollection<CashReport>
     {
-        public CashReports(DateTime sDate, DateTime eDate) {
-            GetDataByDate( sDate, eDate);
+        public CashReports()
+        {
         }
 
+        public CashReports(DateTime sDate, DateTime eDate)
+        {
+            GetDataByDate(sDate, eDate);
+        }
 
-        public void GetDataByDate(DateTime sDate,DateTime eDate) { 
-            DataTable table = CashReportDb.GetDataByDate(sDate,eDate);
-            foreach (DataRow r in table.Rows) {
+        public void GetDataByDate(DateTime sDate, DateTime eDate)
+        {
+            DataTable table = CashReportDb.GetDataByDate(sDate, eDate);
+            foreach (DataRow r in table.Rows)
+            {
                 Add(new CashReport(r));
             }
         }
-      
-        
     }
 }

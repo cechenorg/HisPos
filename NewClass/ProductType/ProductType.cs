@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.ProductType
 {
     public class ProductType : ObservableObject
     {
         #region ----- Define Variables -----
+
         private string name;
 
         public int ID { get; set; }
         public int ParentID { get; set; }
+
         public string Name
         {
             get => name;
             set { Set(() => Name, ref name, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductType(DataRow row)
         {

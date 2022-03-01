@@ -1,15 +1,15 @@
 ﻿<UserControl x:Class="His_Pos.GeneralCustomControl.MenuListItem"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="40" d:DesignWidth="180">
     <Grid>
         <StackPanel x:Name="MenuStack" Width="210" Background="Transparent" Margin="10,0,0,0">
-            <DockPanel LastChildFill="False" >
-                <Image Name="ListMenuImage" VerticalAlignment="Top" Height="25" Width="25" Margin="10,10,5,5"  MouseEnter="DockPanel_MouseEnter" MouseLeave="DockPanel_MouseLeave"/>
-                <Label Name="ListMenuLabel" FontFamily="Arial" Foreground="GhostWhite" Margin="5,10,0,0" FontWeight="Medium" FontSize="18" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" FontStretch="SemiExpanded"/>
+            <DockPanel LastChildFill="False">
+                <Image Name="ListMenuImage" VerticalAlignment="Top" Height="25" Width="25" Margin="10,10,5,5"  MouseEnter="DockPanel_MouseEnter" MouseLeave="DockPanel_MouseLeave" />
+                <Label Name="ListMenuLabel" FontFamily="Arial" Foreground="GhostWhite" Margin="5,10,0,0" FontWeight="Medium" FontSize="18" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" FontStretch="SemiExpanded" />
             </DockPanel>
             <Menu Name="ListMenu" Background="Transparent" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,3,0,0">
             </Menu>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Windows;
-using His_Pos.ChromeTabViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
@@ -12,6 +7,12 @@ using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.ICCard.Upload;
 using His_Pos.Properties;
 using His_Pos.Service;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows;
+
 // ReSharper disable All
 
 namespace His_Pos.HisApi
@@ -136,12 +137,15 @@ namespace His_Pos.HisApi
                     case 1:
                         ViewModelMainWindow.IsConnectionOpened = status;
                         break;
+
                     case 2:
                         ViewModelMainWindow.IsVerifySamDc = status;
                         break;
+
                     case 3:
                         ViewModelMainWindow.IsHpcValid = status;
                         break;
+
                     case 4:
                         status = ViewModelMainWindow.IsIcCardValid;
                         break;
@@ -160,12 +164,15 @@ namespace His_Pos.HisApi
                     case 1:
                         status = ViewModelMainWindow.IsConnectionOpened;
                         break;
+
                     case 2:
                         status = ViewModelMainWindow.IsVerifySamDc;
                         break;
+
                     case 3:
                         status = ViewModelMainWindow.IsHpcValid;
                         break;
+
                     case 4:
                         status = ViewModelMainWindow.IsIcCardValid;
                         break;
@@ -184,7 +191,7 @@ namespace His_Pos.HisApi
             {
                 res = HisApiBase.hpcVerifyHPCPIN();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ShowMessage(Resources.控制軟體異常);
             }
@@ -221,7 +228,8 @@ namespace His_Pos.HisApi
 
         private static void ShowMessage(string message)
         {
-            Application.Current.Dispatcher.Invoke(delegate {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
                 ViewModelMainWindow.HisApiException = true;
                 MessageWindow.ShowMessage(message, MessageType.ERROR);
             });
@@ -229,11 +237,11 @@ namespace His_Pos.HisApi
 
         public static void CheckDailyUpload()
         {
-            if(ViewModelMainWindow.CurrentPharmacy.NewInstitution) return;
+            if (ViewModelMainWindow.CurrentPharmacy.NewInstitution) return;
             var uploadTable = UploadFunctions.CheckUpload();
             if (uploadTable.Rows.Count > 0 && ViewModelMainWindow.IsVerifySamDc)
             {
-                var dailyUploadConfirm = new ConfirmWindow("尚有" + uploadTable.Rows.Count + "筆健保資料未上傳，是否執行上傳作業", "每日上傳確認",true);
+                var dailyUploadConfirm = new ConfirmWindow("尚有" + uploadTable.Rows.Count + "筆健保資料未上傳，是否執行上傳作業", "每日上傳確認", true);
                 bool upload = (bool)dailyUploadConfirm.DialogResult;
                 if (upload)
                     UploadFunctions.StartDailyUpload(uploadTable);
@@ -242,7 +250,7 @@ namespace His_Pos.HisApi
 
         public static void CheckDailyUpload100()
         {
-            if(ViewModelMainWindow.CurrentPharmacy.NewInstitution) return;
+            if (ViewModelMainWindow.CurrentPharmacy.NewInstitution) return;
             var uploadTable = UploadFunctions.CheckUpload();
             if (uploadTable.Rows.Count >= 100 && ViewModelMainWindow.IsVerifySamDc)
             {

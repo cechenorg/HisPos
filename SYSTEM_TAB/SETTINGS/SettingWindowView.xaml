@@ -1,59 +1,83 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingWindowView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS"
-        xmlns:cooperativeClinicControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
-        xmlns:settingControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl"
-        xmlns:myPharmacyControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl"
-        xmlns:printerControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl"
-        xmlns:wareHouseControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl"
-        mc:Ignorable="d"
-        Title="設定" Height="600" Width="1000" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingWindowView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cooperativeClinicControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:invoiceControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.InvoiceControl"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:myPharmacyControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl"
+    xmlns:printerControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl"
+    xmlns:wareHouseControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl"
+    Title="設定"
+    Width="1000"
+    Height="600"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.DataContext>
-        <local:SettingWindowViewModel/>
+        <local:SettingWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
         <DataTemplate x:Key="NoTab">
             <Grid Background="{StaticResource GridBackGround}">
-                <Label Content="無選擇設定頁面" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="無選擇設定頁面"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="28"
+                    Foreground="DimGray" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="MyPharmacy">
-            <myPharmacyControl:MyPharmacyControl/>
+            <myPharmacyControl:MyPharmacyControl />
+        </DataTemplate>
+        <DataTemplate x:Key="Invoice">
+            <invoiceControl:InvoiceControl />
         </DataTemplate>
         <DataTemplate x:Key="Printer">
-            <printerControl:PrinterControl/>
+            <printerControl:PrinterControl />
         </DataTemplate>
         <DataTemplate x:Key="CooperativeClinic">
-            <cooperativeClinicControl:CooperativeClinicControl/>
+            <cooperativeClinicControl:CooperativeClinicControl />
         </DataTemplate>
         <DataTemplate x:Key="WareHouse">
-            <wareHouseControl:WareHouseControl/>
+            <wareHouseControl:WareHouseControl />
         </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="30"/>
+            <RowDefinition />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <DataGrid Grid.Column="0" Grid.Row="0" HeadersVisibility="None" Background="{StaticResource MenuBarBackGround}" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
-                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
-                  ItemsSource="{Binding SettingTabCollection}" SelectedItem="{Binding SelectedSettingTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid
+            Grid.Row="0"
+            Grid.Column="0"
+            AutoGenerateColumns="False"
+            Background="{StaticResource MenuBarBackGround}"
+            CanUserAddRows="False"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            GridLinesVisibility="None"
+            HeadersVisibility="None"
+            HorizontalScrollBarVisibility="Hidden"
+            ItemsSource="{Binding SettingTabCollection}"
+            SelectedItem="{Binding SelectedSettingTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            VerticalScrollBarVisibility="Hidden">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Height" Value="70"/>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Height" Value="70" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridBackGround}"/>
+                            <Setter Property="Background" Value="{StaticResource GridBackGround}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -62,21 +86,29 @@
                 <DataGridTemplateColumn Width="200">
                     <DataGridTemplateColumn.CellStyle>
                         <Style TargetType="DataGridCell">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
                         </Style>
                     </DataGridTemplateColumn.CellStyle>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Image Source="{Binding Icon}" Width="28" Margin="15,6,0,5"/>
-                                <Label Content="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold">
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                <Image
+                                    Width="28"
+                                    Margin="15,6,0,5"
+                                    Source="{Binding Icon}" />
+                                <Label
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Name}"
+                                    FontFamily="Segoe UI Semibold"
+                                    FontSize="20">
                                     <Label.Style>
                                         <Style TargetType="Label">
-                                            <Setter Property="Foreground" Value="DarkGray"/>
+                                            <Setter Property="Foreground" Value="DarkGray" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
-                                                    <Setter Property="Foreground" Value="DimGray"/>
+                                                    <Setter Property="Foreground" Value="DimGray" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -88,10 +120,22 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1" Grid.Column="0" Background="{StaticResource MenuBarBackGround}">
-            <Label Content="{Binding Version}" FontSize="15" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Background="{StaticResource MenuBarBackGround}">
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding Version}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="15"
+                Foreground="DimGray" />
         </StackPanel>
-        <ContentControl Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+        <ContentControl
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="1">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource NoTab}" />
@@ -99,6 +143,10 @@
                         <DataTrigger Binding="{Binding SelectedSettingTab.Tab, UpdateSourceTrigger=PropertyChanged}" Value="MyPharmacy">
                             <Setter Property="ContentTemplate" Value="{StaticResource MyPharmacy}" />
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedSettingTab.Tab, UpdateSourceTrigger=PropertyChanged}" Value="Invoice">
+                            <Setter Property="ContentTemplate" Value="{StaticResource Invoice}" />
+                        </DataTrigger>
+
                         <DataTrigger Binding="{Binding SelectedSettingTab.Tab, UpdateSourceTrigger=PropertyChanged}" Value="Printer">
                             <Setter Property="ContentTemplate" Value="{StaticResource Printer}" />
                         </DataTrigger>

@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Report.CashReport;
-using Newtonsoft.Json.Bson;
+using System;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
     public class PayableViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private StrikeDatas strikeDatas;
         private StrikeData selectedData;
 
@@ -33,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeDatas));
             }
         }
+
         public StrikeData SelectedData
         {
             get { return selectedData; }
@@ -42,7 +41,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(SelectedData));
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public PayableViewModel()
         {
@@ -50,12 +50,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         #region ----- Define Actions -----
+
         private void StrikeAction(RelayCommand command)
         {
             if (!StrikeValueIsValid()) return;
-
+            if (SelectedData.SelectedType.ID == null) { MessageWindow.ShowMessage("請選擇正確的沖帳對象", MessageType.ERROR); return; }
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.Type, BalanceSheetTypeEnum.Payable, Double.Parse(SelectedData.StrikeValue), SelectedData.ID);
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.SelectedType.ID, BalanceSheetTypeEnum.Payable, Double.Parse(SelectedData.StrikeValue), SelectedData.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -69,9 +70,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             command.Execute(null);
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private bool StrikeValueIsValid()
         {
             double temp;
@@ -88,11 +91,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 MessageWindow.ShowMessage("輸入金額非數字", MessageType.ERROR);
                 return false;
             }
-
-            return true;
-
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

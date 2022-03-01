@@ -1,21 +1,55 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.LeaveTotalControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d">
-    <Grid Width="100" Height="100" Margin="10" Background="{StaticResource GridBackGround}">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.LeaveTotalControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid
+        Width="100"
+        Height="100"
+        Margin="10"
+        Background="{StaticResource GridBackGround}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="50" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <DockPanel Background="{Binding TopBackGroundBrush}">
-            <Label Content="{Binding LeaveType}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding LeaveType}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="25"
+                Foreground="Black" />
         </DockPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Label Content="{Binding DayLeftCount}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="/" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="-10,0,0,0"/>
-            <Label Content="{Binding TotalDayCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="-12,0,0,1"/>
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding DayLeftCount}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="Black" />
+            <Label
+                Margin="-10,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Content="/"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                Foreground="{StaticResource ForeGround}" />
+            <Label
+                Margin="-12,0,0,1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Content="{Binding TotalDayCount}"
+                FontFamily="Segoe UI Semi"
+                FontSize="10"
+                Foreground="{StaticResource ForeGround}" />
         </StackPanel>
     </Grid>
 </UserControl>

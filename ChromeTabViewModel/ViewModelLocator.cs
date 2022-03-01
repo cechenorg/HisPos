@@ -4,7 +4,7 @@
       <vm:ViewModelLocator xmlns:vm="clr-namespace:His_Pos"
                            x:Key="Locator" />
   </Application.Resources>
-  
+
   In the View:
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
 
@@ -16,7 +16,6 @@ using GalaSoft.MvvmLight.Ioc;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
-using His_Pos.SYSTEM_TAB.OfflineOperation;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -32,7 +31,7 @@ namespace His_Pos.ChromeTabViewModel
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            
+
             SimpleIoc.Default.Register<ViewModelMainWindow>();
             SimpleIoc.Default.Register<ViewModelProductDetailWindow>();
             SimpleIoc.Default.Register<ProductPurchaseReturnViewModel>();
@@ -40,13 +39,15 @@ namespace His_Pos.ChromeTabViewModel
             SimpleIoc.Default.Register<ViewModelOfflineOperationWindow>();
             SimpleIoc.Default.Register<CustomerManageViewModel>();
         }
-     
+
         public ViewModelMainWindow ViewModelMainWindow => ServiceLocator.Current.GetInstance<ViewModelMainWindow>();
         public ViewModelProductDetailWindow ViewModelProductDetailWindow => ServiceLocator.Current.GetInstance<ViewModelProductDetailWindow>();
         public ProductPurchaseReturnViewModel ProductPurchaseReturn => ServiceLocator.Current.GetInstance<ProductPurchaseReturnViewModel>();
         public ProductPurchaseRecordViewModel ProductPurchaseRecord => ServiceLocator.Current.GetInstance<ProductPurchaseRecordViewModel>();
+
         public ViewModelOfflineOperationWindow ViewModelOfflineOperationWindow => ServiceLocator.Current.GetInstance<ViewModelOfflineOperationWindow>();
         public CustomerManageViewModel CustomerManageView => ServiceLocator.Current.GetInstance<CustomerManageViewModel>();
+
         public static void Cleanup()
         {
         }

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Data;
-using System.Threading;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using MySql.Data.MySqlClient;
+using System;
+using System.Data;
+using System.Threading;
 
 namespace His_Pos.Database
 {
-    public class MySQLConnection: DatabaseConnection
+    public class MySQLConnection : DatabaseConnection
     {
         private MySqlConnection connection = new MySqlConnection(Properties.Settings.Default.SingdeServer);
 
@@ -20,11 +20,11 @@ namespace His_Pos.Database
             }
             catch (Exception e)
             {
-                System.Windows.Application.Current.Dispatcher.Invoke((Action) delegate
-                {
-                    NewFunction.ExceptionLog(e.Message);
-                    MessageWindow.ShowMessage("網路異常 無法連線到杏德倉庫", MessageType.ERROR);
-                });
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+               {
+                   NewFunction.ExceptionLog(e.Message);
+                   MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
+               });
             }
         }
 
@@ -42,7 +42,7 @@ namespace His_Pos.Database
             try
             {
                 MySqlCommand cmd = new MySqlCommand(sqlString, connection);
-                cmd.CommandTimeout = 180;
+                cmd.CommandTimeout = 120;
                 var sqlDapter = new MySqlDataAdapter(cmd);
                 sqlDapter.Fill(table);
             }
@@ -53,6 +53,7 @@ namespace His_Pos.Database
 
             return table;
         }
+
         public ConnectionState ConnectionStatus()
         {
             return connection.State;

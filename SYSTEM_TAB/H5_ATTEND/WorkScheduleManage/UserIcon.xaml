@@ -1,17 +1,33 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.UserIcon"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
-             mc:Ignorable="d" 
-             d:DesignHeight="18" d:DesignWidth="25">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.UserIcon"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
+    d:DesignHeight="18"
+    d:DesignWidth="25"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <workScheduleManage:IsMedConverter x:Key="IsMedConverter"/>
-        <workScheduleManage:BorderShowConverter x:Key="ShowConverter"/>
-        <workScheduleManage:MarginShowConverter x:Key="MarginShowConverter"/>
+        <workScheduleManage:IsMedConverter x:Key="IsMedConverter" />
+        <workScheduleManage:BorderShowConverter x:Key="ShowConverter" />
+        <workScheduleManage:MarginShowConverter x:Key="MarginShowConverter" />
     </UserControl.Resources>
-    <Border Name="Back" CornerRadius="6" Margin="{Binding Show, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MarginShowConverter}}" Width="{Binding Show, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ShowConverter}}" Background="{StaticResource Shadow}" BorderBrush="Red" BorderThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}">
-        <TextBlock Name="UserName" FontSize="12" Width="24" FontFamily="Segoe UI Semi" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+    <Border
+        Name="Back"
+        Width="{Binding Show, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ShowConverter}}"
+        Margin="{Binding Show, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MarginShowConverter}}"
+        Background="{StaticResource Shadow}"
+        BorderBrush="Red"
+        BorderThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}"
+        CornerRadius="6">
+        <TextBlock
+            Name="UserName"
+            Width="24"
+            Margin="5,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontFamily="Segoe UI Semi"
+            FontSize="12" />
     </Border>
 </UserControl>

@@ -1,16 +1,19 @@
-﻿using System;
+﻿using His_Pos.NewClass.Cooperative.CooperativeInstitution;
+using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using His_Pos.Service;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Xml;
-using His_Pos.NewClass.Cooperative.CooperativeInstitution;
-using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 {
     public class CusPrePreviewBases : ObservableCollection<CusPrePreviewBase>
     {
-        public CusPrePreviewBases() { }
+        public CusPrePreviewBases()
+        {
+        }
+
         private void GetOrthopedics(DateTime sDate, DateTime eDate)
         {
             var table = PrescriptionDb.GetOrthopedicsPrescriptions(sDate, eDate);
@@ -29,7 +32,20 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             {
                 var xDocument = new XmlDocument();
                 xDocument.LoadXml(r["CooCli_XML"].ToString());
-                Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml), r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead")));
+                Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml), r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
+            }
+        }
+
+        public void GetAutoCooperative(DateTime sDate, DateTime eDate)
+        {
+            NewFunction.GetXmlFiles();
+            GetOrthopedics(sDate, eDate);
+            var table = PrescriptionDb.GetXmlOfPrescriptionsByDateAuto(sDate, eDate);
+            foreach (DataRow r in table.Rows)
+            {
+                var xDocument = new XmlDocument();
+                xDocument.LoadXml(r["CooCli_XML"].ToString());
+                Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml), r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
             }
         }
 
@@ -42,7 +58,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             }
         }
 
-        public void GetCooperativeByCusIDNumber(string idNumber) //取得合作XML格式處方  
+        public void GetCooperativeByCusIDNumber(string idNumber) //取得合作XML格式處方
         {
             Clear();
             var table = PrescriptionDb.GetXmlOfPrescriptionsByCusIDNumber(idNumber);

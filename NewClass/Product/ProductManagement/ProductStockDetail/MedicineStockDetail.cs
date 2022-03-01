@@ -1,49 +1,55 @@
-﻿using System;
+﻿using His_Pos.NewClass.Product.ProductManagement.MedBagDetail;
+using His_Pos.NewClass.Product.ProductManagement.OnTheWayDetail;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.NewClass.Product.ProductManagement.MedBagDetail;
-using His_Pos.NewClass.Product.ProductManagement.OnTheWayDetail;
 
 namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 {
     public class MedicineStockDetail : ProductStockDetail
     {
         #region ----- Define Variables -----
+
         private string stockDetail = "";
         private MedBagDetailStructs medBagDetails;
         private OnTheWayDetailStructs onTheWayDetail;
 
         public double MedBagOnTheWayAmount { get; set; }
+
         public double TotalOnTheWayAmount
         {
             get { return OnTheWayAmount + MedBagOnTheWayAmount; }
         }
+
         public double ShelfInventory { get; set; }
         public double MedBagInventory { get; set; }
         public double ConsumeIn90Days { get; set; }
+
         public string StockDetail
         {
             get { return stockDetail; }
             set { Set(() => StockDetail, ref stockDetail, value); }
         }
+
         public OnTheWayDetailStructs OnTheWayDetail
         {
             get { return onTheWayDetail; }
             set { Set(() => OnTheWayDetail, ref onTheWayDetail, value); }
         }
+
         public IEnumerable<MedBagDetailStruct> MedBagStockDetails
         {
             get { return medBagDetails.Where(d => d.SelfAmount != 0); }
         }
+
         public IEnumerable<MedBagDetailStruct> MedBagSendDetails
         {
             get { return medBagDetails.Where(d => d.SendAmount != 0); }
         }
+
         public bool IsInventoryError => MedBagInventory > TotalInventory;
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public MedicineStockDetail(DataRow row) : base(row)
         {
@@ -54,10 +60,11 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         }
 
         #region ----- Define Functions -----
+
         public void GetStockDetailByID(string proID, string wareID)
         {
             DataTable dataTable = ProductDetailDB.GetStockDetailByID(proID, wareID);
-            
+
             string tempStockDetail = "";
 
             for (int x = 0; x < dataTable.Rows.Count; x++)
@@ -72,19 +79,22 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
                 if (x < dataTable.Rows.Count - 1)
                     tempStockDetail += "\n";
             }
-            
+
             StockDetail = tempStockDetail;
         }
+
         internal void GetMedBagDetailByID(string proID, string wareID)
         {
             medBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID);
             RaisePropertyChanged(nameof(MedBagStockDetails));
             RaisePropertyChanged(nameof(MedBagSendDetails));
         }
+
         internal void GetOnTheWayDetailByID(string proID, string wareID)
         {
             OnTheWayDetail = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID);
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

@@ -1,24 +1,21 @@
-﻿using System;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
+using His_Pos.Service;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Xml;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
-using His_Pos.NewClass.Prescription.Declare.DeclareFile;
-using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
 {
-    public class DeclarePrescriptions:ObservableCollection<DeclarePrescription>
+    public class DeclarePrescriptions : ObservableCollection<DeclarePrescription>
     {
         public DeclarePrescriptions()
         {
-
         }
 
         public void GetSearchPrescriptions(DateTime decStart, DateTime decEnd, string pharmacyID)
@@ -29,6 +26,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Add(new DeclarePrescription(r));
             }
         }
+
         public void AddPrescriptions(List<DeclarePrescription> pres)
         {
             foreach (var p in pres.OrderBy(p => p.IsDeclare))
@@ -100,12 +98,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 else
                 {
                     var warningMsg = g[0].AdjustDate.Month + "/" + g[0].AdjustDate.Day + " 超過合理調劑量但並未設定欲調整藥師，按ok繼續";
-                    NewFunction.ShowMessageFromDispatcher(warningMsg,MessageType.WARNING);
+                    NewFunction.ShowMessageFromDispatcher(warningMsg, MessageType.WARNING);
                 }
             }
         }
 
-        private IEnumerable<List<T>> Partition<T>(IList<T> source,int pharmacistCount)
+        private IEnumerable<List<T>> Partition<T>(IList<T> source, int pharmacistCount)
         {
             var size = source.Count / pharmacistCount;
             for (var i = 0; i < Math.Ceiling(source.Count / (double)size); i++)
@@ -127,7 +125,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 foreach (var pres in g.GroupBy(pres => pres.Pharmacist.IDNumber))
                 {
                     var pharmacist = ViewModelMainWindow.GetMedicalPersonByIDNumber(pres.Key);
-                    var pList = pres.OrderByDescending(pre => (int)Math.Round(Convert.ToDouble((pre.MedicalServicePoint * double.Parse(pre.FileContent.Dbody.Pdata.SingleOrDefault(p => p.P1.Equals("9")) is null ? "0" : pre.FileContent.Dbody.Pdata.SingleOrDefault(p => p.P1.Equals("9")).P6)  / 100).ToString()), MidpointRounding.AwayFromZero)).ThenBy(p => p.InsertTime).ToList();
+                    var pList = pres.OrderByDescending(pre => (int)Math.Round(Convert.ToDouble((pre.MedicalServicePoint * double.Parse(pre.FileContent.Dbody.Pdata.SingleOrDefault(p => p.P1.Equals("9")) is null ? "0" : pre.FileContent.Dbody.Pdata.SingleOrDefault(p => p.P1.Equals("9")).P6) / 100).ToString()), MidpointRounding.AwayFromZero)).ThenBy(p => p.InsertTime).ToList();
                     for (var j = 1; j <= pList.Count; j++)
                     {
                         var k = j - 1;
@@ -145,28 +143,28 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                             {
                                 if (days >= 28)
                                 {
-                                    servicePoint = 69;
+                                    servicePoint = (int)ServicePoint.CODE_05210B; ;
                                     pre.MedicalServiceID = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
                                 }
                                 else if (days > 7 && days < 14)
                                 {
-                                    servicePoint = 48;
+                                    servicePoint = (int)ServicePoint.CODE_05223B;
                                     pre.MedicalServiceID = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
                                 }
                                 else if (days >= 14 && days < 28)
                                 {
-                                    servicePoint = 59;
+                                    servicePoint = (int)ServicePoint.CODE_05206B;
                                     pre.MedicalServiceID = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
                                 }
                                 else
                                 {
-                                    servicePoint = 48;
+                                    servicePoint = (int)ServicePoint.CODE_05202B;
                                     pre.MedicalServiceID = "05202B";//一般處方給付(7天以內)
                                 }
                             }
                             else if (j > 80 && j <= 100)
                             {
-                                servicePoint = 18;
+                                servicePoint = (int)ServicePoint.CODE_05234D;
                                 pre.MedicalServiceID = "05234D";//門診藥事服務費－每人每日81-100件內
                             }
                             else
@@ -200,6 +198,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 }
             }
         }
+
         private void AdjustSerialNumber()
         {
             foreach (var g in this.Where(p => p.IsDeclare).OrderBy(d => int.Parse(d.AdjustCase.ID)).GroupBy(d => d.AdjustCase.ID).Select(group => group.ToList()).ToList())
@@ -212,7 +211,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                     serial++;
                 }
             }
-
         }
     }
 }

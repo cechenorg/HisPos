@@ -1,6 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using His_Pos.NewClass.Medicine.Base;
+using System.Collections.ObjectModel;
 using System.Linq;
-using His_Pos.NewClass.Medicine.Base;
 
 namespace His_Pos.NewClass.Medicine.MedBag
 {

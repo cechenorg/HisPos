@@ -1,24 +1,21 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlTypes;
-using System.Xml.Linq;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
+using System;
+using System.Data;
+using System.Data.SqlTypes;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
 {
-    public class DeclarePrescription:ObservableObject
+    public class DeclarePrescription : ObservableObject
     {
         public DeclarePrescription()
         {
-
         }
 
         public DeclarePrescription(DataRow r)
@@ -53,11 +50,12 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             AdjustCase.FullName = AdjustCase.ID + " " + AdjustCase.Name;
             IsGetCard = r.Field<bool>("PreMas_IsGetCard");
             FileContent = XmlService.Deserialize<Ddata>(r.Field<string>("PreMas_DeclareContent"));
-            InsertTime = r.Field<DateTime?>("PreMas_InsertTime") is null? AdjustDate : r.Field<DateTime>("PreMas_InsertTime");
+            InsertTime = r.Field<DateTime?>("PreMas_InsertTime") is null ? AdjustDate : r.Field<DateTime>("PreMas_InsertTime");
             MedicineDays = r.Field<byte>("PreMas_MedicineDays");
             MedicalServiceID = r.Field<string>("PreMas_MedicalServiceID");
             SerialNumber = r.Field<int?>("PreMas_SerialNumber");
         }
+
         public int ID { get; }
         private bool isDeclare;
 
@@ -69,6 +67,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => IsDeclare, ref isDeclare, value);
             }
         }
+
         public bool IsGetCard { get; set; }
         private Customer patient;
 
@@ -80,6 +79,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => Patient, ref patient, value);
             }
         }
+
         private Institution institution;
 
         public Institution Institution
@@ -90,6 +90,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => Institution, ref institution, value);
             }
         }
+
         private Division division;
 
         public Division Division
@@ -100,6 +101,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => Division, ref division, value);
             }
         }
+
         private DateTime adjustDate;
 
         public DateTime AdjustDate
@@ -110,6 +112,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => AdjustDate, ref adjustDate, value);
             }
         }
+
         private Employee pharmacist;
 
         public Employee Pharmacist
@@ -120,6 +123,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => Pharmacist, ref pharmacist, value);
             }
         }
+
         private int medicinePoint;
 
         public int MedicinePoint
@@ -130,6 +134,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => MedicinePoint, ref medicinePoint, value);
             }
         }
+
         private int medicalServicePoint;
 
         public int MedicalServicePoint
@@ -140,6 +145,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => MedicalServicePoint, ref medicalServicePoint, value);
             }
         }
+
         private int totalPoint;
 
         public int TotalPoint
@@ -150,6 +156,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => TotalPoint, ref totalPoint, value);
             }
         }
+
         private int applyPoint;
 
         public int ApplyPoint
@@ -160,6 +167,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => ApplyPoint, ref applyPoint, value);
             }
         }
+
         private int copaymentPoint;
 
         public int CopaymentPoint
@@ -170,7 +178,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => CopaymentPoint, ref copaymentPoint, value);
             }
         }
+
         private string pharmacyID;
+
         public string PharmacyID
         {
             get => pharmacyID;
@@ -179,7 +189,9 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => PharmacyID, ref pharmacyID, value);
             }
         }
+
         private AdjustCase adjustCase;
+
         public AdjustCase AdjustCase
         {
             get => adjustCase;
@@ -188,6 +200,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
                 Set(() => AdjustCase, ref adjustCase, value);
             }
         }
+
         public Ddata FileContent { get; set; }
         public DateTime InsertTime { get; set; }
         public int MedicineDays { get; set; }

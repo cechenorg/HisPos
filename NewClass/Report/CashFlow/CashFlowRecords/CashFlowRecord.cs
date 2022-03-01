@@ -1,7 +1,7 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
 using System.Linq;
-using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
 {
@@ -14,10 +14,10 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
 
         public CashFlowRecord(DataRow r)
         {
-
         }
 
         private decimal totalValue;
+
         public decimal TotalValue
         {
             get => totalValue;
@@ -28,6 +28,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
         }
 
         private DateTime? date;
+
         public DateTime? Date
         {
             get => date;
@@ -38,6 +39,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
         }
 
         private CashFlowRecordDetails.CashFlowRecordDetail selectedDetail;
+
         public CashFlowRecordDetails.CashFlowRecordDetail SelectedDetail
         {
             get => selectedDetail;
@@ -50,11 +52,11 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
 
                 if (selectedDetail != null)
                     (selectedDetail).IsSelected = true;
-                
             }
         }
 
         private CashFlowRecordDetails.CashFlowRecordDetails details;
+
         public CashFlowRecordDetails.CashFlowRecordDetails Details
         {
             get => details;
@@ -65,6 +67,7 @@ namespace His_Pos.NewClass.Report.CashFlow.CashFlowRecords
         }
 
         private string content;
+
         public string Content
         {
             get => content;

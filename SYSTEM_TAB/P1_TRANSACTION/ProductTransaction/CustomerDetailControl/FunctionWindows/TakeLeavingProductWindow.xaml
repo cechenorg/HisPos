@@ -1,12 +1,13 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.FunctionWindows.TakeLeavingProductWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.FunctionWindows"
-        mc:Ignorable="d"
-        Title="TakeLeavingProductWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.FunctionWindows.TakeLeavingProductWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDetailControl.FunctionWindows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="TakeLeavingProductWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Grid />
 </Window>

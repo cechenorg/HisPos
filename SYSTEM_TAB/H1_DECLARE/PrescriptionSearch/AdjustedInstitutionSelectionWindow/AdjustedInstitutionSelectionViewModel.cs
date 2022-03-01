@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
-using OfficeOpenXml.ConditionalFormatting;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSelectionWindow
 {
@@ -23,7 +16,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             get => institutions;
             set { Set(() => Institutions, ref institutions, value); }
         }
+
         private CollectionViewSource insCollectionViewSource;
+
         private CollectionViewSource InsCollectionViewSource
         {
             get => insCollectionViewSource;
@@ -32,7 +27,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
                 Set(() => InsCollectionViewSource, ref insCollectionViewSource, value);
             }
         }
+
         private ICollectionView insCollectionView;
+
         public ICollectionView InsCollectionView
         {
             get => insCollectionView;
@@ -45,7 +42,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
                 }
             }
         }
+
         private string search;
+
         public string Search
         {
             get => search;
@@ -55,7 +54,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
                 InsCollectionViewSource.Filter += FilterBySearchText;
             }
         }
+
         private bool isEditing = false;
+
         public bool IsEditing
         {
             get => isEditing;
@@ -64,18 +65,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
                 Set(() => IsEditing, ref isEditing, value);
             }
         }
+
         public string SelectedCount
         {
             get => "已選 " + Institutions.Count(i => i.Selected) + " 間";
         }
+
         public RelayCommand<string> FocusUpDownCommand { get; set; }
         public RelayCommand SelectAll { get; set; }
         public RelayCommand CancelSelectAll { get; set; }
         public RelayCommand SelectedChanged { get; set; }
+
         public AdjustedInstitutionSelectionViewModel(PrescriptionSearchInstitutions adjustedInstitutions)
         {
             Institutions = adjustedInstitutions;
-            InsCollectionViewSource = new CollectionViewSource {Source = Institutions};
+            InsCollectionViewSource = new CollectionViewSource { Source = Institutions };
             InsCollectionView = InsCollectionViewSource.View;
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             SelectAll = new RelayCommand(SelectAllAction);
@@ -95,6 +99,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
                 i.Selected = true;
             }
         }
+
         private void CancelSelectAllAction()
         {
             foreach (var i in Institutions)
@@ -113,12 +118,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
                     if (InsCollectionView.CurrentPosition > 0)
                         InsCollectionView.MoveCurrentToPrevious();
                     break;
+
                 case "DOWN":
                     if (InsCollectionView.CurrentPosition < maxIndex)
                         InsCollectionView.MoveCurrentToNext();
                     break;
             }
         }
+
         private void FilterBySearchText(object sender, FilterEventArgs e)
         {
             if (!(e.Item is PrescriptionSearchInstitution src))

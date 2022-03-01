@@ -1,8 +1,8 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
 
 namespace His_Pos.Class.Person
 {
@@ -56,7 +56,7 @@ namespace His_Pos.Class.Person
             set
             {
                 _icNumber = value;
-               OnPropertyChanged(nameof(IcNumber));
+                OnPropertyChanged(nameof(IcNumber));
             }
         }
 
@@ -72,9 +72,10 @@ namespace His_Pos.Class.Person
                 OnPropertyChanged("BirthdayStr");
             }
         }
-          
-        public string BirthdayStr {
-            get => Birthday.ToString("yyyy/MM/dd"); 
+
+        public string BirthdayStr
+        {
+            get => Birthday.ToString("yyyy/MM/dd");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Report.CashReport;
+using System;
+using System.ComponentModel;
+using System.Data;
+using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
     public class PayViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private StrikeDatas strikeDatas;
         private StrikeData selectedData;
         private Institution target;
@@ -39,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 FilterData();
             }
         }
+
         public StrikeDatas StrikeDatas
         {
             get { return strikeDatas; }
@@ -48,6 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeDatas));
             }
         }
+
         public StrikeData SelectedData
         {
             get { return selectedData; }
@@ -57,6 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(SelectedData));
             }
         }
+
         public ICollectionView StrikeDataCollectionView
         {
             get => strikeDataCollectionView;
@@ -65,7 +67,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 Set(() => StrikeDataCollectionView, ref strikeDataCollectionView, value);
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public PayViewModel()
         {
@@ -73,12 +76,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         #region ----- Define Actions -----
+
         private void StrikeAction(RelayCommand command)
         {
             if (!StrikeValueIsValid()) return;
-
+            if (SelectedData.SelectedType.ID == null) { MessageWindow.ShowMessage("請選擇正確的沖帳對象", MessageType.ERROR); return; }
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.Type, BalanceSheetTypeEnum.Pay, Double.Parse(SelectedData.StrikeValue), SelectedData.Name, SelectedData.ID);
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.SelectedType.ID, BalanceSheetTypeEnum.Pay, Double.Parse(SelectedData.StrikeValue), SelectedData.Name, SelectedData.ID);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -92,9 +96,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             command.Execute(null);
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private bool StrikeValueIsValid()
         {
             double temp;
@@ -120,6 +126,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             return true;
         }
+
         private void FilterData()
         {
             StrikeDataCollectionView = CollectionViewSource.GetDefaultView(StrikeDatas);
@@ -127,12 +134,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             RaisePropertyChanged(nameof(StrikeDataCollectionView));
         }
+
         private bool DataFilter(object data)
         {
             StrikeData d = data as StrikeData;
 
             return d.ID.Equals(Target.ID);
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

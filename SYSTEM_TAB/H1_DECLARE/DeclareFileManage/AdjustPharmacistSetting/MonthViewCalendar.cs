@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using Microsoft.Windows.Controls;
+using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using Microsoft.Windows.Controls;
 using Calendar = Microsoft.Windows.Controls.Calendar;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
 {
-    public class MonthViewCalendar : Calendar, INotifyPropertyChanged 
+    public class MonthViewCalendar : Calendar, INotifyPropertyChanged
     {
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        #endregion
+        #endregion INotifyPropertyChanged Members
 
         static MonthViewCalendar()
         {
@@ -24,7 +21,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
 
         public MonthViewCalendar() : base()
         {
-
         }
 
         public MonthViewCalendar(DateTime declare) : base()

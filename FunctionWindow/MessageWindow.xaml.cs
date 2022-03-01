@@ -1,8 +1,8 @@
-﻿using System;
+﻿using His_Pos.Class;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using His_Pos.Class;
 
 namespace His_Pos.FunctionWindow
 {
@@ -14,16 +14,20 @@ namespace His_Pos.FunctionWindow
         private MessageWindow(string message, MessageType type)
         {
             InitializeComponent();
-            switch (type) {
+            switch (type)
+            {
                 case MessageType.ERROR:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png", UriKind.Relative));
                     break;
+
                 case MessageType.SUCCESS:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Success.png", UriKind.Relative));
                     break;
+
                 case MessageType.WARNING:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Warning.png", UriKind.Relative));
                     break;
+
                 case MessageType.TIPS:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Tips.png", UriKind.Relative));
                     break;
@@ -46,7 +50,7 @@ namespace His_Pos.FunctionWindow
 
         private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 e.Handled = true;
                 Close();

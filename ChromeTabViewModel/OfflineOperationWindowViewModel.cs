@@ -1,12 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using ChromeTabs;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using ChromeTabs;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -16,8 +16,10 @@ namespace His_Pos.ChromeTabViewModel
         public RelayCommand<string> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
+
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
         private TabBase _selectedTab;
+
         public TabBase SelectedTab
         {
             get { return _selectedTab; }
@@ -31,6 +33,7 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         private bool _canAddTabs;
+
         public bool CanAddTabs
         {
             get { return _canAddTabs; }
@@ -43,6 +46,7 @@ namespace His_Pos.ChromeTabViewModel
                 }
             }
         }
+
         public OfflineOperationWindowViewModel()
         {
             this.ItemCollection = new ObservableCollection<TabBase>();
@@ -80,7 +84,7 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         //We need to set the TabNumber property on the viewmodels when the item source changes to keep it in sync.
-        void ItemCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ItemCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -103,6 +107,7 @@ namespace His_Pos.ChromeTabViewModel
                     item.TabNumber = tabCollection.IndexOf(item);
             }
         }
+
         private void CloseTabCommandAction(TabBase vm)
         {
             this.ItemCollection.Remove(vm);
@@ -112,13 +117,10 @@ namespace His_Pos.ChromeTabViewModel
                 ProductDetail.Instance.Close();
                 ProductDetail.Instance = null;
             }
-
         }
 
         public void AddTabCommandAction(string tabName)
         {
-            TabBase newTab;
-
             foreach (TabBase tab in ItemCollection)
             {
                 if (tab.TabName == "調劑")
@@ -133,6 +135,7 @@ namespace His_Pos.ChromeTabViewModel
                 case "調劑":
                     //newTab = new OfflineAdjustViewModel { TabName = "調劑", Icon = "/Images/PrescriptionIcon.png" };
                     break;
+
                 default:
                     return;
             }

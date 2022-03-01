@@ -1,194 +1,401 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.AdditionalCashFlowManage"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:service="clr-namespace:His_Pos.Service"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:command="http://www.galasoft.ch/mvvmlight"
-             mc:Ignorable="d" 
-             d:DesignHeight="870" d:DesignWidth="1365" FontFamily="Segoe UI Semibold">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.AdditionalCashFlowManage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="870"
+    d:DesignWidth="1365"
+    FontFamily="Segoe UI Semibold"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <UserControl.DataContext>
-        <local:AdditionalCashFlowManageViewModel/>
+        <local:AdditionalCashFlowManageViewModel />
     </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="50" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <RadioButton Content="收入" Tag="3" Margin="15,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding GainCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>  
-            <RadioButton Content="支出" Tag="4" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding PayCheck,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="科目" FontSize="18" VerticalAlignment="Center"/>
-            <ComboBox Width="100" Margin="10,0,0,0" FontSize="16" ItemsSource="{Binding CashFlowAccounts,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="AccountName" SelectedItem="{Binding SelectedCashFlowAccount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="金額" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Width="80" Text="{Binding CashFlowValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center" PreviewTextInput="NumberValidationTextBox"/>
-            <Label Content="備註" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox Width="400" Text="{Binding CashFlowNote,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" FontSize="16" Margin="10,0,0,0" TextAlignment="Center"/>
-            <Button   Command="{Binding SubmitCommand}" Width="80" Content="新增" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <RadioButton
+                Margin="15,0,5,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="收入"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsChecked="{Binding GainCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Tag="3" />
+            <RadioButton
+                Margin="10,0,5,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="支出"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsChecked="{Binding PayCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Tag="4" />
+            <Label
+                VerticalAlignment="Center"
+                Content="科目"
+                FontSize="18" />
+            <ComboBox
+                Width="230"
+                Margin="10,0,0,0"
+                DisplayMemberPath="AccountName"
+                FontSize="16"
+                ItemsSource="{Binding CashFlowAccounts, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedCashFlowAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="金額"
+                FontSize="18" />
+            <TextBox
+                Width="80"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                FontSize="16"
+                PreviewTextInput="NumberValidationTextBox"
+                Text="{Binding CashFlowValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextAlignment="Center" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="來源"
+                FontSize="20" />
+            <ComboBox
+                Width="210"
+                Margin="10,0,0,0"
+                DisplayMemberPath="Name"
+                FontSize="16"
+                ItemsSource="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedBank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="備註"
+                FontSize="18" />
+            <TextBox
+                Width="170"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                FontSize="16"
+                Text="{Binding CashFlowNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextAlignment="Center" />
+            <Button
+                Width="80"
+                Margin="10,0,0,0"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding SubmitCommand}"
+                Content="新增"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="1">
+        <StackPanel Grid.Row="1" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <Label Content="收支歷程" FontSize="20" Margin="10,0,0,0"/>
-                <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" Margin="10,0,0,0"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" PreviewKeyDown="StartDate_OnPreviewKeyDown">
-                    <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                <Label
+                    Margin="10,0,0,0"
+                    Content="額外收支歷程"
+                    FontSize="20" />
+                <xctk:MaskedTextBox
+                    x:Name="StartDate"
+                    Width="100"
+                    Height="35"
+                    Margin="10,0,0,0"
+                    HorizontalContentAlignment="Center"
+                    FontSize="16"
+                    Foreground="{StaticResource ForeGround}"
+                    InputMethod.IsInputMethodEnabled="False"
+                    InputScope="Number"
+                    InsertKeyMode="Overwrite"
+                    Mask="000/00/00"
+                    PreviewKeyDown="StartDate_OnPreviewKeyDown"
+                    PromptChar="-"
+                    Style="{StaticResource MaterialDesignTextBox}"
+                    ValueDataType="{x:Type xctk:DateTimeFormat}">
+                    <Binding
+                        Converter="{StaticResource NullableDateConverter}"
+                        Mode="TwoWay"
+                        NotifyOnValidationError="True"
+                        Path="StartDate"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
                         <Binding.ValidationRules>
-                            <service:DateValidationRule/>
+                            <service:DateValidationRule />
                         </Binding.ValidationRules>
                     </Binding>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
-                            <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=StartDate}"/>
+                            <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=StartDate}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </xctk:MaskedTextBox>
-                <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}"/>
-                <xctk:MaskedTextBox x:Name="EndDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False" InputScope="Number"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="{x:Type xctk:DateTimeFormat}" InsertKeyMode="Overwrite" PreviewKeyDown="EndDate_OnPreviewKeyDown">
-                    <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}" />
+                <xctk:MaskedTextBox
+                    x:Name="EndDate"
+                    Width="100"
+                    Height="35"
+                    HorizontalContentAlignment="Center"
+                    FontSize="16"
+                    Foreground="{StaticResource ForeGround}"
+                    InputMethod.IsInputMethodEnabled="False"
+                    InputScope="Number"
+                    InsertKeyMode="Overwrite"
+                    Mask="000/00/00"
+                    PreviewKeyDown="EndDate_OnPreviewKeyDown"
+                    PromptChar="-"
+                    Style="{StaticResource MaterialDesignTextBox}"
+                    ValueDataType="{x:Type xctk:DateTimeFormat}">
+                    <Binding
+                        Converter="{StaticResource NullableDateConverter}"
+                        Mode="TwoWay"
+                        NotifyOnValidationError="True"
+                        Path="EndDate"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
                         <Binding.ValidationRules>
-                            <service:DateValidationRule/>
+                            <service:DateValidationRule />
                         </Binding.ValidationRules>
                     </Binding>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
-                            <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=EndDate}"/>
+                            <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=EndDate}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </xctk:MaskedTextBox>
-                <Button Command="{Binding DataContext.Search, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Width="80" Background="RoyalBlue" BorderBrush="RoyalBlue" Content="查詢" Margin="10,0,0,0" FontSize="16"/>
+                <Button
+                    Width="80"
+                    Margin="10,0,0,0"
+                    Background="RoyalBlue"
+                    BorderBrush="RoyalBlue"
+                    Command="{Binding DataContext.Search, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    Content="查詢"
+                    FontSize="16" />
+                <Button
+                    Width="120"
+                    Margin="20,0,0,0"
+                    Background="RoyalBlue"
+                    BorderBrush="RoyalBlue"
+                    Command="{Binding DataContext.ToExcel, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    Content="匯出Excel"
+                    FontSize="16" />
             </StackPanel>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="153*" />
+                    <ColumnDefinition Width="962*" />
                 </Grid.ColumnDefinitions>
-                <DataGrid Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"              
-                      ItemsSource="{Binding CashFlowRecords,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled">
+                <DataGrid
+                    Grid.Column="0"
+                    Margin="10,10,9.6,-0.4"
+                    AutoGenerateColumns="False"
+                    Height="750"
+                    Background="{StaticResource GridBackGround}"
+                    CanUserAddRows="False"
+                    CellStyle="{StaticResource DataGridCellStyle}"
+                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                    HorizontalScrollBarVisibility="Disabled"
+                    ItemsSource="{Binding CashFlowRecords, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedCashFlowRecord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
-                            <Setter Property="Foreground"  Value="#FF535353" />
+                            <Setter Property="Foreground" Value="#FF535353" />
                         </Style>
                     </DataGrid.Resources>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
                                 <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
                                 </Trigger>
                             </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="FontSize" Value="15"/>
-                            <Setter Property="Height" Value="40"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="FontSize" Value="15" />
+                            <Setter Property="Height" Value="40" />
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="100" Header="日期" IsReadOnly="True" Binding="{Binding Date,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource NullableDateConverter}}">
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding Date, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
+                            Header="日期"
+                            IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="150" Header="金額合計" IsReadOnly="True" Binding="{Binding TotalValue ,StringFormat='{}{0:C}',UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn
+                            Width="90"
+                            Binding="{Binding TotalValue, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}"
+                            Header="金額合計"
+                            IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid Grid.Column="1" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="760"       
-                          ItemsSource="{Binding SelectedCashFlowRecord.Details,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0,10,10,0" HorizontalScrollBarVisibility="Disabled">
-                    <DataGrid.Resources>
-                        <Style TargetType="ScrollBar">
-                            <Setter Property="Background" Value="#FFA8A8A8" />
-                            <Setter Property="Foreground"  Value="#FF535353" />
-                        </Style>
-                    </DataGrid.Resources>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="FontSize" Value="15"/>
-                            <Setter Property="Height" Value="35"/>
-                        </Style>
-                    </DataGrid.RowStyle>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="100" Header="科目" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Margin" Value="5,0,0,0"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="80" Header="金額" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding CashFlowValue,UpdateSourceTrigger=PropertyChanged}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Margin" Value="5,0,0,0"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="200" Header="備註" IsReadOnly="True" Binding="{Binding Note,UpdateSourceTrigger=PropertyChanged}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="登錄人" IsReadOnly="True"  Binding="{Binding EmpName,UpdateSourceTrigger=PropertyChanged}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="登錄時間" IsReadOnly="True" Binding="{Binding Date,StringFormat='{}{0:MM/dd HH:mm}',UpdateSourceTrigger=PropertyChanged}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                <ScrollViewer 
+                    HorizontalScrollBarVisibility="Auto" 
+                    VerticalScrollBarVisibility="Disabled"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2">
+                    <DataGrid
+                    Height="750"
+                    Margin="0.4,10,9.8,-0.4"
+                    AutoGenerateColumns="False"
+                    Background="{StaticResource GridBackGround}"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    CanUserReorderColumns="False"
+                    CanUserResizeColumns="False"
+                    CanUserSortColumns="False"
+                    CellStyle="{StaticResource DataGridCellStyle}"
+                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                    GridLinesVisibility="Horizontal"
+                    HorizontalScrollBarVisibility="Disabled"
+                    ItemsSource="{Binding SelectedCashFlowRecord.Details, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedCashFlowRecord.SelectedDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.Resources>
+                            <Style TargetType="ScrollBar">
+                                <Setter Property="Background" Value="#FFA8A8A8" />
+                                <Setter Property="Foreground" Value="#FF535353" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="FontSize" Value="15" />
+                                <Setter Property="Height" Value="35" />
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold"
+                            Header="科目"
+                            IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Margin" Value="5,0,0,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                            Width="80"
+                            Binding="{Binding CashFlowValue, UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold"
+                            Header="金額"
+                            IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Margin" Value="5,0,0,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                            Width="400"
+                            Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}"
+                            Header="備註"
+                            IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                            Width="120"
+                            Binding="{Binding EmpName, UpdateSourceTrigger=PropertyChanged}"
+                            Header="登錄人"
+                            IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                            Width="120"
+                            Binding="{Binding Date, StringFormat='{}{0:MM/dd HH:mm}', UpdateSourceTrigger=PropertyChanged}"
+                            Header="登錄時間"
+                            IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding Bank, UpdateSourceTrigger=PropertyChanged}"
+                            Header="來源"
+                            IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <!--<DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button x:Name="EditCashFlowRecordButton" Content="編輯" Background="RoyalBlue" BorderBrush="Transparent" Command="{Binding DataContext.EditCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Button x:Name="EditCashFlowRecordButton" Content="編輯" Background="RoyalBlue" BorderBrush="Transparent" Command="{Binding DataContext.EditCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button x:Name="DeleteCashFlowRecordButton" Content="刪除" Background="Red" BorderBrush="Transparent" Command="{Binding DataContext.DeleteCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                        </DataGridTemplateColumn>-->
+                            <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                        x:Name="DeleteCashFlowRecordButton"
+                                        HorizontalAlignment="Center"
+                                        HorizontalContentAlignment="Center"
+                                        Background="IndianRed"
+                                        BorderBrush="Transparent"
+                                        Command="{Binding DataContext.DeleteCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        Content="刪除"
+                                        IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+                
             </Grid>
         </StackPanel>
     </Grid>

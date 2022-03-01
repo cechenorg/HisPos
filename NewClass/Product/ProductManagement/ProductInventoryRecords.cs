@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
     public class ProductInventoryRecords : Collection<ProductInventoryRecord>
     {
-        public double RangePurchaseReturnAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.PurchaseReturn).Sum(r => r.Amount);} }
+        public double RangePurchaseReturnAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.PurchaseReturn).Sum(r => r.Amount); } }
 
-        public double RangePrescriptionAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.Prescription|| r.Type == ProductInventoryRecordType.Transaction).Sum(r => r.Amount); } }
+        public double RangePrescriptionAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.Prescription || r.Type == ProductInventoryRecordType.Transaction).Sum(r => r.Amount); } }
 
         public double RangeStockTakingAmount { get { return Items.Where(r => r.Type == ProductInventoryRecordType.StockTaking).Sum(r => r.Amount); } }
 

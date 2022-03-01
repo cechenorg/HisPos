@@ -5,7 +5,8 @@ namespace His_Pos.Class.Employee
 {
     public class Employee : ICloneable
     {
-        public Employee() {
+        public Employee()
+        {
             Id = "";
             Qname = "";
             Name = "新人";
@@ -24,7 +25,9 @@ namespace His_Pos.Class.Employee
             PurchaseLimit = "3000";
             Description = "";
         }
-        private Employee(Employee employee) {
+
+        private Employee(Employee employee)
+        {
             Id = employee.Id;
             Qname = employee.Qname;
             Name = employee.Name;
@@ -43,6 +46,7 @@ namespace His_Pos.Class.Employee
             PurchaseLimit = employee.PurchaseLimit;
             Description = employee.Description;
         }
+
         public Employee(DataRow row)
         {
             Id = row["EMP_ID"].ToString();
@@ -63,6 +67,7 @@ namespace His_Pos.Class.Employee
             PurchaseLimit = row["EMP_PURCHASELIMIT"].ToString();
             Description = row["EMP_DESCRIPTION"].ToString();
         }
+
         public string Id { get; set; }
         public string Qname { get; set; }
         public string Name { get; set; }

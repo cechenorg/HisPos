@@ -1,29 +1,33 @@
-﻿using System;
-using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.CustomerHistoryProduct;
+using System;
+using System.Data;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
-    public class CustomerHistory:ObservableObject
+    public class CustomerHistory : ObservableObject
     {
-        public CustomerHistory() { }
+        public CustomerHistory()
+        {
+        }
+
         public CustomerHistory(DataRow r)
         {
-            switch (r.Field<string>("Type")) {
+            switch (r.Field<string>("Type"))
+            {
                 case "Adjust":
                     Type = HistoryType.AdjustRecord;
                     break;
-                //case "Register":
-                //    Type = HistoryType.RegisterRecord;
-                //    CopyOnly = false;
-                //    break;
-                //case "Reserve":
-                //    Type = HistoryType.ReservedPrescription;
-                //    CopyOnly = false;
-                //    break; 
+                    //case "Register":
+                    //    Type = HistoryType.RegisterRecord;
+                    //    CopyOnly = false;
+                    //    break;
+                    //case "Reserve":
+                    //    Type = HistoryType.ReservedPrescription;
+                    //    CopyOnly = false;
+                    //    break;
             }
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             AdjustDate = r.Field<DateTime>("AdjustDate");
@@ -38,10 +42,12 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
                 case "0":
                     Case = "自費";
                     break;
+
                 case "1":
                 case "3":
                     Case = "一般";
                     break;
+
                 case "2":
                     if (ChronicTotal is null)
                         Case = "慢箋";
@@ -49,7 +55,8 @@ namespace His_Pos.NewClass.Person.Customer.CustomerHistory
                         Case = ChronicTotal + "-" + ChronicSeq;
                     break;
             }
-        } 
+        }
+
         public HistoryType Type { get; }
         public string InsName { get; }
         public string DivName { get; }

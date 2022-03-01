@@ -1,14 +1,16 @@
-﻿using System;
+﻿using His_Pos.Interface;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Media.Imaging;
-using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
     public class InventoryMedicine : AbstractClass.Product, IInventory, ICloneable, INotifyPropertyChanged
     {
-        private InventoryMedicine() {}
+        private InventoryMedicine()
+        {
+        }
 
         public InventoryMedicine(DataRow dataRow) : base(dataRow)
         {
@@ -29,6 +31,7 @@ namespace His_Pos.Class.Product
             BarCode = dataRow["PRO_BARCODE"].ToString();
             Warnings = dataRow["HISMED_NOTE"].ToString();
         }
+
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }
@@ -51,6 +54,7 @@ namespace His_Pos.Class.Product
         }
 
         private string stockValue;
+
         public string StockValue
         {
             get
@@ -63,7 +67,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("StockValue");
             }
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -71,6 +77,7 @@ namespace His_Pos.Class.Product
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+
         public object Clone()
         {
             InventoryMedicine newInventoryMedicine = new InventoryMedicine();

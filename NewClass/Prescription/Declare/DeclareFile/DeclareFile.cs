@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
+﻿using His_Pos.Class;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
 using His_Pos.Service;
-using Prescription = His_Pos.NewClass.Prescription.Prescription;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
 
 namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
 {
@@ -18,9 +18,11 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     [XmlRoot(ElementName = "tdata")]
     public class Tdata
     {
-        public Tdata() { }
-        
-        public Tdata(DeclarePreviewOfMonth selectedFile, string pharmacyID,DateTime startDate,DateTime endDate)
+        public Tdata()
+        {
+        }
+
+        public Tdata(DeclarePreviewOfMonth selectedFile, string pharmacyID, DateTime startDate, DateTime endDate)
         {
             T1 = "30";
             T2 = pharmacyID;
@@ -49,30 +51,43 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
 
         [XmlElement(ElementName = "t1")]
         public string T1 { get; set; }
+
         [XmlElement(ElementName = "t2")]
         public string T2 { get; set; }
+
         [XmlElement(ElementName = "t3")]
         public string T3 { get; set; }
+
         [XmlElement(ElementName = "t4")]
         public string T4 { get; set; }
+
         [XmlElement(ElementName = "t5")]
         public string T5 { get; set; }
+
         [XmlElement(ElementName = "t6")]
         public string T6 { get; set; }
+
         [XmlElement(ElementName = "t7")]
         public string T7 { get; set; }
+
         [XmlElement(ElementName = "t8")]
         public string T8 { get; set; }
+
         [XmlElement(ElementName = "t9")]
         public string T9 { get; set; }
+
         [XmlElement(ElementName = "t10")]
         public string T10 { get; set; }
+
         [XmlElement(ElementName = "t11")]
         public string T11 { get; set; }
+
         [XmlElement(ElementName = "t12")]
         public string T12 { get; set; }
+
         [XmlElement(ElementName = "t13")]
         public string T13 { get; set; }
+
         [XmlElement(ElementName = "t14")]
         public string T14 { get; set; }
     }
@@ -83,7 +98,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         public DeclareFile()
         {
         }
-        
+
         public DeclareFile(DeclarePreviewOfMonth selectedFile, string pharmacyID, DateTime startDate, DateTime endDate)
         {
             Tdata = new Tdata(selectedFile, pharmacyID, startDate, endDate);
@@ -95,7 +110,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 foreach (var pdata in p.FileContent.Dbody.Pdata)
                 {
                     if (pdata.P1.Equals("3"))
-                        pdata.P2 = pdata.P2.Substring(0, 12);
+                        if (pdata.P2.Length > 12) 
+                        {
+                            pdata.P2 = pdata.P2.Substring(0, 12);
+                        }
                 }
                 tempList.Add(p.FileContent);
             }
@@ -116,6 +134,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
 
         [XmlElement(ElementName = "tdata")]
         public Tdata Tdata { get; set; }
+
         [XmlElement(ElementName = "ddata")]
         public List<Ddata> Ddata { get; set; }
     }
@@ -123,7 +142,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     [XmlRoot(ElementName = "ddata")]
     public class Ddata
     {
-        public Ddata() { }
+        public Ddata()
+        {
+        }
+
         public Ddata(Prescription p, List<Pdata> details)
         {
             Dhead = new Dhead(p);
@@ -134,8 +156,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
             Dhead.D18 = $"{totalPoint:00000000}";
             Dhead.D16 = $"{int.Parse(Dhead.D18) - int.Parse(Dhead.D17):00000000}";
         }
+
         [XmlElement(ElementName = "dhead")]
         public Dhead Dhead { get; set; }
+
         [XmlElement(ElementName = "dbody")]
         public Dbody Dbody { get; set; }
     }
@@ -143,7 +167,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     [XmlRoot(ElementName = "dhead")]
     public class Dhead
     {
-        public Dhead() { }
+        public Dhead()
+        {
+        }
+
         public Dhead(Prescription p)
         {
             var point = p.PrescriptionPoint;
@@ -171,46 +198,67 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 D24 = string.Empty;
             D25 = p.Pharmacist.IDNumber;
         }
+
         [XmlElement(ElementName = "d1")]
         public string D1 { get; set; }
+
         [XmlElement(ElementName = "d2")]
         public string D2 { get; set; }
+
         [XmlElement(ElementName = "d3")]
         public string D3 { get; set; }
+
         [XmlElement(ElementName = "d4")]
         public string D4 { get; set; }
+
         [XmlElement(ElementName = "d5")]
         public string D5 { get; set; }
+
         [XmlElement(ElementName = "d6")]
         public string D6 { get; set; }
+
         [XmlElement(ElementName = "d7")]
         public string D7 { get; set; }
+
         [XmlElement(ElementName = "d8")]
         public string D8 { get; set; }
+
         [XmlElement(ElementName = "d9")]
         public string D9 { get; set; }
+
         [XmlElement(ElementName = "d13")]
         public string D13 { get; set; }
+
         [XmlElement(ElementName = "d14")]
         public string D14 { get; set; }
+
         [XmlElement(ElementName = "d15")]
         public string D15 { get; set; }
+
         [XmlElement(ElementName = "d16")]
         public string D16 { get; set; }
+
         [XmlElement(ElementName = "d17")]
         public string D17 { get; set; }
+
         [XmlElement(ElementName = "d18")]
         public string D18 { get; set; }
+
         [XmlElement(ElementName = "d20")]
         public string D20 { get; set; }
+
         [XmlElement(ElementName = "d21")]
         public string D21 { get; set; }
+
         [XmlElement(ElementName = "d22")]
         public string D22 { get; set; }
+
         [XmlElement(ElementName = "d23")]
         public string D23 { get; set; }
+
         [XmlElement(ElementName = "d24")]
         public string D24 { get; set; }
+
         [XmlElement(ElementName = "d25")]
         public string D25 { get; set; }
     }
@@ -218,7 +266,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
     [XmlRoot(ElementName = "dbody")]
     public class Dbody
     {
-        public Dbody() { }
+        public Dbody()
+        {
+        }
+
         public Dbody(Prescription p, List<Pdata> details)
         {
             var point = p.PrescriptionPoint;
@@ -248,28 +299,40 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 Pdata.Add(pdata);
             }
         }
+
         [XmlElement(ElementName = "d26")]
         public string D26 { get; set; }
+
         [XmlElement(ElementName = "d30")]
         public string D30 { get; set; }
+
         [XmlElement(ElementName = "d31")]
         public string D31 { get; set; }
+
         [XmlElement(ElementName = "d32")]
         public string D32 { get; set; }
+
         [XmlElement(ElementName = "d33")]
         public string D33 { get; set; }
+
         [XmlElement(ElementName = "d35")]
         public string D35 { get; set; }
+
         [XmlElement(ElementName = "d36")]
         public string D36 { get; set; }
+
         [XmlElement(ElementName = "d37")]
         public string D37 { get; set; }
+
         [XmlElement(ElementName = "d38")]
         public string D38 { get; set; }
+
         [XmlElement(ElementName = "d43")]
         public string D43 { get; set; }
+
         [XmlElement(ElementName = "d44")]
         public string D44 { get; set; }
+
         [XmlElement(ElementName = "pdata")]
         public List<Pdata> Pdata { get; set; }
     }
@@ -386,16 +449,18 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                     {
                         case "05202B":
                         case "05223B":
-                            P8 = $"{48:0000000.00}";
-                            P9 = $"{48 * percentage * 0.01:00000000}";
+                            P8 = $"{(int)ServicePoint.CODE_05223B:0000000.00}";
+                            P9 = $"{(int)ServicePoint.CODE_05223B * percentage * 0.01:00000000}";
                             break;
+
                         case "05210B":
-                            P8 = $"{69:0000000.00}";
-                            P9 = $"{69 * percentage * 0.01:00000000}";
+                            P8 = $"{(int)ServicePoint.CODE_05210B:0000000.00}";
+                            P9 = $"{(int)ServicePoint.CODE_05210B * percentage * 0.01:00000000}";
                             break;
+
                         case "05206B":
-                            P8 = $"{59:0000000.00}";
-                            P9 = $"{59 * percentage * 0.01:00000000}";
+                            P8 = $"{(int)ServicePoint.CODE_05206B:0000000.00}";
+                            P9 = $"{(int)ServicePoint.CODE_05206B * percentage * 0.01:00000000}";
                             break;
                     }
 
@@ -405,6 +470,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                     IsBuckle = true;
                     AdjustNoBuckle = true;
                     break;
+
                 case PDataType.SimpleForm:
                     P1 = "1";
                     switch (code)
@@ -412,12 +478,15 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                         case "22":
                             P2 = "MA1";
                             break;
+
                         case "31":
                             P2 = "MA2";
                             break;
+
                         case "37":
                             P2 = "MA3";
                             break;
+
                         case "41":
                             P2 = "MA4";
                             break;

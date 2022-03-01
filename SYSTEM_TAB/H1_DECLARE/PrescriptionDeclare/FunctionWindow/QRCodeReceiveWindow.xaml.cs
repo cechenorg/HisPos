@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Windows;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -12,6 +7,12 @@ using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Treatment.DiseaseCode;
 using His_Pos.Service;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
@@ -23,22 +24,42 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
     public partial class QRCodeReceiveWindow : Window
     {
         private Prescription p;
+        private System.Timers.Timer timer = new System.Timers.Timer(200);
+
         public QRCodeReceiveWindow()
         {
             InitializeComponent();
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(InputIdle);
             p = new Prescription();
             QRCodeReceiver.Focus();
             ShowDialog();
         }
 
+        private void InputIdle(object source, System.Timers.ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                btnFinish.IsEnabled = true;
+            });
+        }
+
         private void QRCodeReceiver_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            btnFinish.IsEnabled = false;
+            if (timer.Enabled)
+            {
+                timer.Interval = 200;
+            }
+            else
+            {
+                timer.Start();
+            }
+            /*int count = 0;
             if (e.Key == Key.Return)
             {
-                SetPrescriptionData();
-                Close();
-                Messenger.Default.Send(new NotificationMessage<Prescription>(this, p, "CustomerPrescriptionSelected"));
-            }
+                count++;
+                lblInfo.Content = $"已掃描 {count} 個QRcode";
+            }*/
         }
 
         private void SetPrescriptionData()
@@ -55,7 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
             }
             catch (Exception e)
             {
-                MessageWindow.ShowMessage(e.Message,MessageType.ERROR);
+                MessageWindow.ShowMessage(e.Message, MessageType.ERROR);
             }
         }
 
@@ -88,7 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
             var year = int.Parse(dateString.Substring(0, dateStringLength - 4)) + 1911;
             var month = int.Parse(dateString.Substring(dateStringLength - 4, 2));
             var date = int.Parse(dateString.Substring(dateStringLength - 2, 2));
-            return new DateTime(year,month,date);
+            return new DateTime(year, month, date);
         }
 
         private void SetAdjustCase(IReadOnlyList<string> result)
@@ -99,9 +120,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                 case "1":
                     p.AdjustCase = ViewModelMainWindow.GetAdjustCase("1");
                     break;
+
                 case "2":
                     p.AdjustCase = ViewModelMainWindow.GetAdjustCase("2");
                     break;
+
                 default:
                     p.AdjustCase = ViewModelMainWindow.GetAdjustCase("1");
                     break;
@@ -168,10 +191,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                         medicine = new MedicineNHI(table.Rows[i]);
                         p.Medicines.Add(medicine);
                         break;
+
                     case 2:
                         medicine = new MedicineOTC(table.Rows[i]);
                         p.Medicines.Add(medicine);
                         break;
+
                     case 3:
                         medicine = new MedicineSpecialMaterial(table.Rows[i]);
                         p.Medicines.Add(medicine);
@@ -184,7 +209,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
         {
             var medIdList = CreateMedicineIDList(result);
             MainWindow.ServerConnection.OpenConnection();
-            var table = MedicineDb.GetMedicinesBySearchIds(medIdList, p.WareHouse?.ID, p.AdjustDate);
+            var table = MedicineDb.GetQRcodeMedicine(medIdList, p.WareHouse?.ID, p.AdjustDate);
             MainWindow.ServerConnection.CloseConnection();
             return table;
         }
@@ -243,6 +268,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                         case "QDPC":
                             p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_QD(total, dosage);
                             break;
+
                         case "BD":
                         case "BID":
                         case "BIDA":
@@ -253,6 +279,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                         case "QAMHS":
                             p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_BID(total, dosage);
                             break;
+
                         case "TID":
                         case "TIDA":
                         case "TIDHS":
@@ -262,6 +289,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                         case "BIDACHS":
                             p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_TID(total, dosage);
                             break;
+
                         case "QID":
                         case "QIDA":
                         case "QIDAC":
@@ -270,15 +298,41 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                         case "QIDACHS":
                             p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_QID(total, dosage);
                             break;
+
                         case "QOD":
                             p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_QOD(total, dosage);
                             break;
+
                         case "PID":
                             p.Medicines[i].Days = UsagesFunction.GetDaysByUsage_PID(total, dosage);
                             break;
                     }
                 }
                 i++;
+            }
+        }
+
+        private void btnFinish_Click(object sender, RoutedEventArgs e)
+        {
+            SetPrescriptionData();
+            Close();
+            Messenger.Default.Send(new NotificationMessage<Prescription>(this, p, "CustomerPrescriptionSelected"));
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnFinish.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+            if (e.Key == Key.Escape)
+            {
+                btnCancel.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
         }
     }

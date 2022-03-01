@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl
 {
@@ -22,9 +10,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl
     public partial class AddWareHouseWindow : Window
     {
         #region ----- Define Variables -----
+
         public string NewName { get; set; }
         public bool IsNewNameConfirmed { get; set; } = false;
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public AddWareHouseWindow()
         {
@@ -33,9 +23,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl
         }
 
         #region ----- Define Functions -----
+
         private void ConfirmClick(object sender, RoutedEventArgs e)
         {
-            if(!CheckNewName()) return;
+            if (!CheckNewName()) return;
 
             IsNewNameConfirmed = true;
             Close();
@@ -51,6 +42,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

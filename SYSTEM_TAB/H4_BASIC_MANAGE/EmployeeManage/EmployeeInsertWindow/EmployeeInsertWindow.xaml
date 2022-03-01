@@ -1,69 +1,167 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow.EmployeeInsertWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow"
-        mc:Ignorable="d"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:service="clr-namespace:His_Pos.Service"
-        Title="新增員工" Height="400" Width="320" WindowStartupLocation="CenterScreen"  >
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow.EmployeeInsertWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="新增員工"
+    Width="320"
+    Height="400"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </Window.Resources>
     <Window.DataContext>
-        <local:EmployeeInsertWindowViewModel/>
+        <local:EmployeeInsertWindowViewModel />
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/> 
-        </Grid.RowDefinitions> 
-        <StackPanel Grid.Row="0"   Orientation="Horizontal">
-            <Label  Content="姓名" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBox Width="120" Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
-            </TextBox>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label
+                VerticalAlignment="Center"
+                Content="姓名"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <TextBox
+                Width="120"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                IsEnabled="{Binding IsIdNumEnable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding Employee.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
-        <StackPanel Grid.Row="1"   Orientation="Horizontal">
-            <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBox Width="120" Text="{Binding Employee.IDNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsIdNumEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
-            <Button Content="檢查" Grid.Row="0" FontSize="20" Margin="20,0,0,0"  Width="80" BorderThickness="0" HorizontalAlignment="Right" Background="DarkCyan"  FontFamily="Segoe UI Semibold" Command="{Binding CheckIdNumberCommand}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label
+                VerticalAlignment="Center"
+                Content="身分證"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <TextBox
+                Width="120"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                IsEnabled="{Binding IsIdNumEnable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding Employee.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                Grid.Row="0"
+                Width="80"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Right"
+                Background="DarkCyan"
+                BorderThickness="0"
+                Command="{Binding CheckIdNumberCommand}"
+                Content="檢查"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Label  Content="帳號" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBox Width="120" Text="{Binding Employee.Account,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+            <Label
+                VerticalAlignment="Center"
+                Content="帳號"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <TextBox
+                Width="120"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Text="{Binding Employee.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Label  Content="密碼" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <TextBox Width="120" Text="{Binding Employee.Password,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+            <Label
+                VerticalAlignment="Center"
+                Content="密碼"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <TextBox
+                Width="120"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Text="{Binding Employee.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
-            <Label  Content="職位" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <ComboBox  Width="145" ItemsSource="{Binding WorkPositions,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="WorkPositionName" Text="{Binding Employee.WorkPosition.WorkPositionName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                       SelectedItem="{Binding Employee.WorkPosition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
-            </ComboBox>
+            <Label
+                VerticalAlignment="Center"
+                Content="職位"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <ComboBox
+                Width="145"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+                DisplayMemberPath="WorkPositionName"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemsSource="{Binding WorkPositions, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding Employee.WorkPosition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding Employee.WorkPosition.WorkPositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Grid.Row="5" Orientation="Horizontal">
-            <Label  Content="到職日" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            <xctk:MaskedTextBox Width="130" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
-                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar="-" ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" PreviewKeyDown="DateMaskedTextBoxOnPreviewKeyDown">
+            <Label
+                VerticalAlignment="Center"
+                Content="到職日"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <xctk:MaskedTextBox
+                Width="130"
+                Height="34"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}"
+                InputMethod.IsInputMethodEnabled="False"
+                InsertKeyMode="Overwrite"
+                Mask="000/00/00"
+                PreviewKeyDown="DateMaskedTextBoxOnPreviewKeyDown"
+                PromptChar="-"
+                Style="{StaticResource MaterialDesignTextBox}"
+                ValueDataType="xctk:DateTimeFormat">
                 <xctk:MaskedTextBox.Text>
-                    <Binding Path="Employee.StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
-                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource NullableDateConverter}">
+                    <Binding
+                        Converter="{StaticResource NullableDateConverter}"
+                        Mode="TwoWay"
+                        NotifyOnValidationError="True"
+                        Path="Employee.StartDate"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
                         <Binding.ValidationRules>
-                            <service:DateValidationRule/>
+                            <service:DateValidationRule />
                         </Binding.ValidationRules>
                     </Binding>
-                </xctk:MaskedTextBox.Text> 
+                </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
         </StackPanel>
         <StackPanel Grid.Row="6" Orientation="Horizontal">
-            <Button Content="新增" Grid.Row="0" FontSize="20"  Margin="200,0,0,0" Width="100" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue"  FontFamily="Segoe UI Semibold" Command="{Binding SubbmitCommand}"/>
+            <Button
+                Grid.Row="0"
+                Width="100"
+                Margin="200,0,0,0"
+                HorizontalAlignment="Right"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding SubbmitCommand}"
+                Content="新增"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
         </StackPanel>
     </Grid>
 </Window>

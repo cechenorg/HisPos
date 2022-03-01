@@ -4,7 +4,7 @@ using System.Data;
 
 namespace His_Pos.NewClass.Medicine.Position
 {
-    public class Positions:Collection<Position>
+    public class Positions : Collection<Position>
     {
         public Positions()
         {

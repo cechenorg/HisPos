@@ -1,14 +1,14 @@
-﻿using System;
+﻿using His_Pos.Database;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using His_Pos.Database;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
     public class ProductDetailDB
     {
-        internal static DataTable GetProductManageStructsByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID)
+        internal static DataTable GetProductManageStructsByConditions(string searchID, string searchName, bool searchIsEnable, bool searchIsInventoryZero, string wareID, bool searchIsSingdeInventory)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", searchID));
@@ -16,8 +16,17 @@ namespace His_Pos.NewClass.Product.ProductManagement
             parameters.Add(new SqlParameter("SHOW_DISABLE", searchIsEnable));
             parameters.Add(new SqlParameter("SHOW_INV_ZERO", searchIsInventoryZero));
             parameters.Add(new SqlParameter("WAREID", int.Parse(wareID)));
-
+            parameters.Add(new SqlParameter("SHOW_INV_SINGDE", searchIsSingdeInventory));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageStructBySearchCondition]", parameters);
+        }
+
+        internal static DataTable GetOTCMedBagDetailByID(string proID, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proID));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductOTCMedBagDetailByID]", parameters);
         }
 
         internal static DataTable GetOnTheWayDetailByID(string proID, string wareID)
@@ -120,8 +129,10 @@ namespace His_Pos.NewClass.Product.ProductManagement
             DataBaseFunction.AddSqlParameter(parameters, "PRO_SIDEEFFECT", productManageMedicine.SideEffect);
             DataBaseFunction.AddSqlParameter(parameters, "PRO_WARNING", productManageMedicine.Warnings);
             DataBaseFunction.AddSqlParameter(parameters, "PRO_NOTE", productManageMedicine.Note);
-            DataBaseFunction.AddSqlParameter(parameters, "PRO_SELFPAYTYPE", productManageMedicine.SelfPayType == SelfPayTypeEnum.Default? "D" : "C");
+            DataBaseFunction.AddSqlParameter(parameters, "PRO_SELFPAYTYPE", productManageMedicine.SelfPayType == SelfPayTypeEnum.Default ? "D" : "C");
             DataBaseFunction.AddSqlParameter(parameters, "PRO_SELFPAYPRICE", productManageMedicine.SelfPayPrice);
+            parameters.Add(new SqlParameter("Pro_IsReward", productManageMedicine.IsReward));
+            DataBaseFunction.AddSqlParameter(parameters, "Pro_RewardPercent", productManageMedicine.RewardPercent);
 
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateMedicineDetailData]", parameters);
         }
@@ -134,7 +145,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductTotalStockValue]", parameters);
         }
 
-        internal static void StockTakingProductManageMedicineByID(string productID, string newInventory,string warID)
+        internal static void StockTakingProductManageMedicineByID(string productID, string newInventory, string warID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ProID", productID));
@@ -205,6 +216,15 @@ namespace His_Pos.NewClass.Product.ProductManagement
             parameters.Add(new SqlParameter("WARE_ID", wareID));
 
             return MainWindow.ServerConnection.ExecuteProc("[Get].[MedicineStockDetailByID]", parameters);
+        }
+
+        internal static DataTable GetOTCStockDetailByID(string id, string wareID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("WARE_ID", wareID));
+
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[OTCStockDetailByID]", parameters);
         }
 
         internal static DataTable RecycleProductByID(string id, string recycleAmount, string wareID)

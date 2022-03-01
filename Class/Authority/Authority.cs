@@ -2,6 +2,6 @@
 {
     public class Authority
     {
-       public string AuthorityValue { get; set; }
+        public string AuthorityValue { get; set; }
     }
 }

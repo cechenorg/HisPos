@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
@@ -11,7 +7,6 @@ namespace His_Pos.NewClass.Report.IncomeStatement
     {
         public CostAndInventoryMatrix()
         {
-
         }
 
         public CostAndInventoryMatrix(DataTable costAndInventoryTable)
@@ -24,13 +19,15 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             PopulateCellValueProviderMap();
         }
 
-
         #region Fields
 
-        readonly CostInventory[] costInventories;
-        readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
+        private readonly CostInventory[] costInventories;
+        private readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
+
         private delegate object CellValueProvider(CostInventory pharmacyIncome);
-        #endregion
+
+        #endregion Fields
+
         protected override IEnumerable<CostInventory> GetColumnHeaderValues()
         {
             return costInventories;
@@ -46,7 +43,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             return rowHeaderToValueProviderMap[rowHeaderValue](columnHeaderValue);
         }
 
-        void PopulateCellValueProviderMap()
+        private void PopulateCellValueProviderMap()
         {
             rowHeaderToValueProviderMap.Add("費用", cost => cost.Expense);
             rowHeaderToValueProviderMap.Add("庫存盤盈", cost => cost.InventoryOverage);
@@ -76,12 +73,15 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                 case 0:
                     income.Expense = row.Field<decimal>($"{month}");
                     break;
+
                 case 1:
                     income.InventoryOverage = row.Field<decimal>($"{month}");
                     break;
+
                 case 2:
                     income.InventoryShortage = row.Field<decimal>($"{month}");
                     break;
+
                 default:
                     income.InventoryScrapped = row.Field<decimal>($"{month}");
                     break;

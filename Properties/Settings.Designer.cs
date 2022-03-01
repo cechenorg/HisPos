@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using His_Pos.NewClass.StoreOrder;
+
 namespace His_Pos.Properties {
     
     
@@ -128,7 +130,118 @@ namespace His_Pos.Properties {
                 this["ReaderComPort"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InvoiceComPort
+        {
+            get
+            {
+                return ((string)(this["InvoiceComPort"]));
+            }
+            set
+            {
+                this["InvoiceComPort"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         
+        public string InvoiceNumber
+        {
+            get
+            {
+                return ((string)(this["InvoiceNumber"]));
+            }
+            set
+            {
+                this["InvoiceNumber"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
+
+        public string InvoiceNumberStart
+        {
+            get
+            {
+                return ((string)(this["InvoiceNumberStart"]));
+            }
+            set
+            {
+                this["InvoiceNumberStart"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
+
+
+        public string InvoiceNumberCount
+        {
+            get
+            {
+                return ((string)(this["InvoiceNumberCount"]));
+            }
+            set
+            {
+                this["InvoiceNumberCount"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
+        public string InvoiceNumberEng
+        {
+            get
+            {
+                return ((string)(this["InvoiceNumberEng"]));
+            }
+            set
+            {
+                this["InvoiceNumberEng"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
+        public StoreOrder MinusID
+        {
+            get
+            {
+                return ((StoreOrder)(this["MinusID"]));
+            }
+            set
+            {
+                this["MinusID"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+
+
+
+        public string InvoiceCheck
+        {
+            get
+            {
+                return ((string)(this["InvoiceCheck"]));
+            }
+            set
+            {
+                this["InvoiceCheck"] = value;
+            }
+        }
+
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -138,6 +251,20 @@ namespace His_Pos.Properties {
             }
             set {
                 this["ReceiptForm"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PrePrint
+        {
+            get
+            {
+                return ((string)(this["PrePrint"]));
+            }
+            set
+            {
+                this["PrePrint"] = value;
             }
         }
     }

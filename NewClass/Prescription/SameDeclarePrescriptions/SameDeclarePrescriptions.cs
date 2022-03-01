@@ -5,7 +5,9 @@ namespace His_Pos.NewClass.Prescription.SameDeclarePrescriptions
 {
     public class SameDeclarePrescriptions : Collection<SameDeclarePrescription>
     {
-        public SameDeclarePrescriptions() { }
+        public SameDeclarePrescriptions()
+        {
+        }
 
         public void AddItems(DataTable table)
         {

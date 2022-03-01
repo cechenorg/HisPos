@@ -1,5 +1,5 @@
-﻿using System.Data;
-using His_Pos.Interface;
+﻿using His_Pos.Interface;
+using System.Data;
 
 namespace His_Pos.Class.StockTakingOrder
 {
@@ -16,6 +16,7 @@ namespace His_Pos.Class.StockTakingOrder
 
         //PROCHE_ID, EMP_NAME, PROCHE_DATE, PROCHE_OLDVAL, PROCHE_NEWVAL
         public string StockTakingId { get; set; }
+
         public string StockTakingDate { get; set; }
         public string EmpName { get; set; }
         public string OldValue { get; set; }

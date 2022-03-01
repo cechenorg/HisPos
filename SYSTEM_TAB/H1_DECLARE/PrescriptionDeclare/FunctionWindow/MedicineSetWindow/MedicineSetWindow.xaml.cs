@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Medicine.MedicineSet;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow
 {
@@ -17,6 +17,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
     public partial class MedicineSetWindow : Window
     {
         private MedicineSetViewModel medicineSetViewModel;
+
         public MedicineSetWindow(MedicineSetMode mode, MedicineSet selected = null)
         {
             InitializeComponent();
@@ -30,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                 }
             });
         }
+
         private void ShowMedicineDetail(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
@@ -37,12 +39,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             ProductDetailWindow.ShowProductDetailWindow();
             Messenger.Default.Send(new NotificationMessage<Medicine>(this, med, nameof(MedicineSetWindow)));
         }
+
         private void MedicineID_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
             if (e.Key != Key.Enter) return;
             e.Handled = true;
-            if(MedicineSetGrid.CurrentCell.Item is null) return;
+            if (MedicineSetGrid.CurrentCell.Item is null) return;
             if (MedicineSetGrid.CurrentCell.Item.ToString().Equals("{NewItemPlaceholder}") && !textBox.Text.Equals(string.Empty))
             {
                 var itemsCount = MedicineSetGrid.Items.Count;
@@ -73,6 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             if (firstChild is TextBox)
                 firstChild.Focus();
         }
+
         private void DoubleTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox t = sender as TextBox;
@@ -82,6 +86,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                 t.CaretIndex++;
             }
         }
+
         private void InputTextbox_OnGotFocus(object sender, RoutedEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
@@ -100,6 +105,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             e.Handled = true;
             textBox.Focus();
         }
+
         private void MedicineSetGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //按 Enter 下一欄
@@ -108,6 +114,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             e.Handled = true;
             MoveFocusNext(sender);
         }
+
         private void MoveFocusNext(object sender)
         {
             if (sender is TextBox box)
@@ -158,6 +165,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
                 FocusDataGridCell("MedicineID", MedicineSetGrid, focusIndex);
             }
         }
+
         private int GetCurrentRowIndex(object sender)
         {
             switch (sender)
@@ -176,6 +184,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Medic
             }
             return -1;
         }
+
         private void FocusDataGridCell(string controlName, DataGrid focusGrid, int rowIndex)
         {
             var dataGridCells = new List<TextBox>();

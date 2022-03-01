@@ -1,24 +1,25 @@
-﻿using System;
+﻿using JetBrains.Annotations;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
-using JetBrains.Annotations;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl
 {
     /// <summary>
     /// PrescriptionPrepareStatusLabel.xaml 的互動邏輯
     /// </summary>
-    public partial class PrescriptionPrepareStatusLabel : System.Windows.Controls.UserControl,INotifyPropertyChanged
+    public partial class PrescriptionPrepareStatusLabel : System.Windows.Controls.UserControl, INotifyPropertyChanged
     {
         #region OrderStatus
+
         public static readonly DependencyProperty OrderStatusProperty =
             DependencyProperty.Register(
                 "OrderStatus",
                 typeof(string),
                 typeof(PrescriptionPrepareStatusLabel),
                 new PropertyMetadata(null));
+
         public string OrderStatus
         {
             get { return (string)GetValue(OrderStatusProperty); }
@@ -27,9 +28,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl
                 SetValue(OrderStatusProperty, value);
             }
         }
-        #endregion
+
+        #endregion OrderStatus
 
         private int labelWidth;
+
         public int LabelWidth
         {
             get => labelWidth;

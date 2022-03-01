@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Linq;
-using System.Windows;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.InventoryMedicineStruct;
 using His_Pos.NewClass.Medicine.MedicineSet;
@@ -17,20 +8,29 @@ using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductManageDetail;
 using His_Pos.Properties;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEnoughMedicinePurchaseWindow;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
 using CooperativeMedicine = His_Pos.NewClass.Cooperative.XmlOfPrescription.CooperativePrescription.Item;
 using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
+
 // ReSharper disable TooManyDeclarations
 
 namespace His_Pos.NewClass.Medicine.Base
 {
-    public class Medicines:ObservableCollection<Medicine>
+    public class Medicines : ObservableCollection<Medicine>
     {
         public Medicines()
         {
-
         }
 
         #region OrthopedicsFunctions
+
         [SuppressMessage("ReSharper", "TooManyArguments")]
         public void GetDataByOrthopedicsPrescription(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID, bool isBuckle, DateTime? adjustDate)
         {
@@ -45,7 +45,8 @@ namespace His_Pos.NewClass.Medicine.Base
             SetBuckleAmount(isBuckle);
             ReOrder();
         }
-        private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID,DateTime? adjustDate)
+
+        private Medicines CreateTempMedicinesByOrthopedics(List<OrthopedicsMedicine> medicineOrderItem, string wareHouseID, DateTime? adjustDate)
         {
             var idList = medicineOrderItem.Select(m => m.Id).ToList();
             var table = MedicineDb.GetMedicinesBySearchIds(idList, wareHouseID, adjustDate);
@@ -55,6 +56,7 @@ namespace His_Pos.NewClass.Medicine.Base
             AddOrthopedicsIDEmptyMedicine(tempList, medicineOrderItem);
             return tempList;
         }
+
         private void AddOrthopedicsMedicineByDataTable(Medicines tempList, DataTable table, List<OrthopedicsMedicine> medicineOrderItem)
         {
             for (var i = 0; i < table.Rows.Count; i++)
@@ -67,9 +69,11 @@ namespace His_Pos.NewClass.Medicine.Base
                         case 1:
                             medicine = new MedicineNHI(table.Rows[i]);
                             break;
+
                         case 3:
                             medicine = new MedicineSpecialMaterial(table.Rows[i]);
                             break;
+
                         default:
                             medicine = new MedicineOTC(table.Rows[i]);
                             break;
@@ -79,6 +83,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 }
             }
         }
+
         private void AddOrthopedicsMedicineNotFound(Medicines tempList, List<OrthopedicsMedicine> medicineOrderItem)
         {
             foreach (var order in medicineOrderItem)
@@ -94,6 +99,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 tempList.Add(medicine);
             }
         }
+
         private void AddOrthopedicsIDEmptyMedicine(Medicines tempList, List<OrthopedicsMedicine> medicineOrderItem)
         {
             foreach (var order in medicineOrderItem.Where(m => string.IsNullOrEmpty(m.Id)))
@@ -102,9 +108,11 @@ namespace His_Pos.NewClass.Medicine.Base
                 tempList.Add(medicine);
             }
         }
-        #endregion
+
+        #endregion OrthopedicsFunctions
 
         #region CooperativeFunctions
+
         [SuppressMessage("ReSharper", "TooManyArguments")]
         public void GetDataByCooperativePrescription(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, bool isBuckle, DateTime? adjustDate)
         {
@@ -119,6 +127,7 @@ namespace His_Pos.NewClass.Medicine.Base
             SetBuckleAmount(isBuckle);
             ReOrder();
         }
+
         private Medicines CreateTempMedicinesByCooperative(List<CooperativeMedicine> medicineOrderItem, string wareHouseID, DateTime? adjustDate)
         {
             var idList = medicineOrderItem.Select(m => m.Id).ToList();
@@ -129,6 +138,7 @@ namespace His_Pos.NewClass.Medicine.Base
             AddCooperativeIDEmptyMedicine(tempList, medicineOrderItem);
             return tempList;
         }
+
         private void AddCooperativeMedicineByDataTable(Medicines tempList, DataTable table, List<CooperativeMedicine> medicineOrderItem)
         {
             for (var i = 0; i < table.Rows.Count; i++)
@@ -141,24 +151,27 @@ namespace His_Pos.NewClass.Medicine.Base
                         case 1:
                             medicine = new MedicineNHI(table.Rows[i]);
                             break;
+
                         case 3:
                             medicine = new MedicineSpecialMaterial(table.Rows[i]);
                             break;
+
                         default:
                             medicine = new MedicineOTC(table.Rows[i]);
                             break;
                     }
-                    
+
                     medicine.SetValueByCooperativeMedicine(item);
                     tempList.Add(medicine);
                 }
             }
         }
+
         private void AddCooperativeMedicineNotFound(Medicines tempList, List<CooperativeMedicine> medicineOrderItem)
         {
             foreach (var order in medicineOrderItem)
             {
-                if(string.IsNullOrEmpty(order.Id)) continue;
+                if (string.IsNullOrEmpty(order.Id)) continue;
                 if (tempList.Count(m => m.ID.Equals(order.Id)) > 0) continue;
                 var medicine = new MedicineOTC
                 {
@@ -169,6 +182,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 tempList.Add(medicine);
             }
         }
+
         private void AddCooperativeIDEmptyMedicine(Medicines tempList, List<CooperativeMedicine> medicineOrderItem)
         {
             foreach (var order in medicineOrderItem.Where(m => string.IsNullOrEmpty(m.Id)))
@@ -178,7 +192,7 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        #endregion
+        #endregion CooperativeFunctions
 
         public void GetDataByPrescriptionId(int id)
         {
@@ -204,15 +218,19 @@ namespace His_Pos.NewClass.Medicine.Base
                     case 0:
                         medicine = new MedicineVirtual(r);
                         break;
+
                     case 1:
                         medicine = new MedicineNHI(r);
                         break;
+
                     case 2:
                         medicine = new MedicineOTC(r);
                         break;
+
                     case 3:
                         medicine = new MedicineSpecialMaterial(r);
                         break;
+
                     default:
                         continue;
                 }
@@ -270,7 +288,7 @@ namespace His_Pos.NewClass.Medicine.Base
             return Items.Count(m => m is MedicineNHI med && !string.IsNullOrEmpty(med.Note) && med.Note.Contains(Resources.口服液劑));
         }
 
-        public void AddMedicine(string medicineId,bool paySelf,int? selectedMedicinesIndex,string wareHouseId,DateTime? adjustDate)
+        public void AddMedicine(string medicineId, bool paySelf, int? selectedMedicinesIndex, string wareHouseId, DateTime? adjustDate)
         {
             var table = MedicineDb.GetMedicinesBySearchIds(new List<string> { medicineId }, wareHouseId, adjustDate);
             var medicine = AddMedicineByDataType(table);
@@ -279,7 +297,7 @@ namespace His_Pos.NewClass.Medicine.Base
             if (medicine.ID.EndsWith("00") || medicine.ID.EndsWith("G0"))
                 medicine.PositionID = "PO";
             medicine.IsBuckle = !string.IsNullOrEmpty(wareHouseId);
-            medicine.UsableAmount = medicine.OnTheFrameAmount;            
+            medicine.UsableAmount = medicine.OnTheFrameAmount;
             if (selectedMedicinesIndex != null)
             {
                 if (selectedMedicinesIndex >= 0)
@@ -308,8 +326,9 @@ namespace His_Pos.NewClass.Medicine.Base
                     case 1:
                         medicine = new MedicineNHI(r);
                         break;
+
                     case 2:
-                        medicine = new MedicineOTC(r);                        
+                        medicine = new MedicineOTC(r);
                         medicine.PaySelf = true;
 
                         /* Retail Price */
@@ -318,6 +337,7 @@ namespace His_Pos.NewClass.Medicine.Base
                         medicine.Price = detail.RetailPrice;
 
                         break;
+
                     case 3:
                         medicine = new MedicineSpecialMaterial(r);
                         break;
@@ -347,11 +367,11 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             if (!Items.Any())
                 return Resources.MedicineEmpty;
-            return Items.Count(m => m.Amount == 0) == 0 ? string.Empty : 
+            return Items.Count(m => m.Amount == 0) == 0 ? string.Empty :
                 Items.Where(m => !(m is MedicineVirtual) && m.Amount == 0).Aggregate(string.Empty, (current, m) => current + ("藥品:" + m.FullName + "總量不可為0\r\n"));
         }
 
-        public void Update(bool buckle, int id,PrescriptionType type,DateTime? adjustDate = null,string wareHouseID = null)
+        public void Update(bool buckle, int id, PrescriptionType type, DateTime? adjustDate = null, string wareHouseID = null)
         {
             SetBuckleAmount(buckle);
             DataTable table;
@@ -381,7 +401,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 var medList = this.Where(m => m.InventoryID.Equals(r.Field<int>("Inv_ID")));
                 foreach (var m in medList)
                 {
-                    m.NHIPrice = (double)r.Field<decimal>("Med_Price");
+                    m.NHIPrice = r.Field<decimal?>("Med_Price") is null ? 0 : (double)r.Field<decimal>("Med_Price");
                     m.UsableAmount = r.Field<double?>("CanUseAmount") is null ? 0 : r.Field<double>("CanUseAmount");
                 }
             }
@@ -422,14 +442,14 @@ namespace His_Pos.NewClass.Medicine.Base
                     case MedicineNHI _:
                     case MedicineOTC _:
                     case MedicineSpecialMaterial _:
-                    {
-                        if (!buckle)
-                            m.BuckleAmount = 0;
-                        else
-                            m.BuckleAmount = m.Amount;
-                        m.IsBuckle = buckle;
-                        break;
-                    }
+                        {
+                            if (!buckle)
+                                m.BuckleAmount = 0;
+                            else
+                                m.BuckleAmount = m.Amount;
+                            m.IsBuckle = buckle;
+                            break;
+                        }
                     case MedicineVirtual _:
                         m.BuckleAmount = 0;
                         m.IsBuckle = false;
@@ -449,11 +469,13 @@ namespace His_Pos.NewClass.Medicine.Base
                 switch (med)
                 {
                     case MedicineNHI _:
-                        CreateMedicineNHIData(ref result,med);
+                        CreateMedicineNHIData(ref result, med);
                         break;
+
                     case MedicineVirtual _:
-                        CreateMedicineVirtualData(ref result,med);
+                        CreateMedicineVirtualData(ref result, med);
                         break;
+
                     default:
                         CreateMedicineSpecialMaterialData(ref result, med);
                         break;
@@ -467,7 +489,7 @@ namespace His_Pos.NewClass.Medicine.Base
             return (medicine is MedicineNHI || medicine is MedicineSpecialMaterial || medicine is MedicineVirtual) && !medicine.PaySelf;
         }
 
-        private void CreateMedicineNHIData(ref string result,Medicine med)
+        private void CreateMedicineNHIData(ref string result, Medicine med)
         {
             result += "1";
             result += med.ID.PadLeft(12, ' ');
@@ -553,14 +575,17 @@ namespace His_Pos.NewClass.Medicine.Base
                     medicine = new MedicineNHI(r);
                     SetValue(medicine, setItem);
                     return medicine;
+
                 case 2:
                     medicine = new MedicineOTC(r);
                     SetValue(medicine, setItem);
                     return medicine;
+
                 case 3:
                     medicine = new MedicineSpecialMaterial(r);
                     SetValue(medicine, setItem);
                     return medicine;
+
                 default:
                     return null;
             }
@@ -599,24 +624,21 @@ namespace His_Pos.NewClass.Medicine.Base
             }
         }
 
-        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList,string cusName,  string note = null)
+        public string CheckNegativeStock(string warID, MedicineInventoryStructs usableAmountList, string cusName, string note = null)
         {
-
-
-           
             var inventoryIDList = new List<int>();
             foreach (var med in this)
             {
-                if(med is MedicineVirtual) continue;
+                if (med is MedicineVirtual) continue;
                 if (!inventoryIDList.Contains(med.InventoryID))
                     inventoryIDList.Add(med.InventoryID);
             }
 
-            var buckleMedicines = 
-                (from inv in inventoryIDList 
-                    let editMed = this.Where(m => m.InventoryID.Equals(inv))
-                    let buckleAmount = editMed.Sum(m => m.BuckleAmount) 
-                    select new MedicineInventoryStruct(inv, buckleAmount)).ToList();
+            var buckleMedicines =
+                (from inv in inventoryIDList
+                 let editMed = this.Where(m => m.InventoryID.Equals(inv))
+                 let buckleAmount = editMed.Sum(m => m.BuckleAmount)
+                 select new MedicineInventoryStruct(inv, buckleAmount)).ToList();
 
             var medIDs = this.Where(m => !(m is MedicineVirtual)).Select(m => m.InventoryID).ToList();
             MainWindow.ServerConnection.OpenConnection();
@@ -646,7 +668,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 {
                     if (!m.InventoryID.Equals(inv.ID) || m is MedicineVirtual) continue;
                     var controlLevel = m is MedicineNHI nhiMed ? nhiMed.ControlLevel : null;
-                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID,m.FullName,m.Amount-m.UsableAmount,m.IsCommon,m.Frozen,controlLevel,m.AveragePrice, m.Amount - m.UsableAmount));
+                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount));
                 }
                 negativeStock = this.Where(med => !(med is MedicineVirtual))
                     .Where(med => med.InventoryID.Equals(inv.ID))
@@ -685,7 +707,7 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             for (var i = 1; i <= Count; i++)
             {
-                this[i-1].Order = i;
+                this[i - 1].Order = i;
             }
         }
 
@@ -697,7 +719,7 @@ namespace His_Pos.NewClass.Medicine.Base
                 foreach (var m in this)
                 {
                     if (!m.InventoryID.Equals(usableMedicine.ID)) continue;
-                        m.UsableAmount = usableMedicine.Amount;
+                    m.UsableAmount = usableMedicine.Amount;
                 }
             }
         }

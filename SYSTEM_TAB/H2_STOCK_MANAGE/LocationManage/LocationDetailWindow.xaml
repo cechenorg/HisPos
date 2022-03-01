@@ -1,18 +1,44 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage.LocationDetailWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        Title="LocationDetailWindow" Height="710" Width="1000" WindowStartupLocation="CenterScreen" WindowStyle="None" Deactivated="Window_Deactivated">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage.LocationDetailWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="LocationDetailWindow"
+    Width="1000"
+    Height="710"
+    Deactivated="Window_Deactivated"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
     <Viewbox Stretch="Fill">
-        <Grid Name="LocationDetails" Height="710" Width="1000">
+        <Grid
+            Name="LocationDetails"
+            Width="1000"
+            Height="710">
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
             </Grid.RowDefinitions>
-            <TextBox Name="LocationName"  FontSize="30" Grid.Row="0"  Height="50" Background="{StaticResource Shadow}" Foreground="DimGray"  Margin="5"/>
-            <Button Name="ButtonAddRow" Grid.Row="1" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddRows"/>
+            <TextBox
+                Name="LocationName"
+                Grid.Row="0"
+                Height="50"
+                Margin="5"
+                Background="{StaticResource Shadow}"
+                FontSize="30"
+                Foreground="DimGray" />
+            <Button
+                Name="ButtonAddRow"
+                Grid.Row="1"
+                Height="50"
+                Margin="5"
+                Background="{StaticResource Shadow}"
+                BorderThickness="0"
+                Click="AddRows"
+                Content="+"
+                FontSize="30"
+                Foreground="DimGray" />
         </Grid>
     </Viewbox>
 </Window>

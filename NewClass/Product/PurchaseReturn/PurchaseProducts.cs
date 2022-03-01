@@ -1,17 +1,20 @@
-﻿using System;
+﻿using His_Pos.NewClass.StoreOrder;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
-using His_Pos.NewClass.StoreOrder;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
     public class PurchaseProducts : ObservableCollection<PurchaseProduct>, ICloneable
     {
-        public PurchaseProducts() { }
+        public PurchaseProducts()
+        {
+        }
+
         private PurchaseProducts(DataTable dataTable)
         {
             string lastID = "";
-            
+
             foreach (DataRow row in dataTable.Rows)
             {
                 PurchaseProduct purchaseProduct;
@@ -21,9 +24,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     case "O":
                         purchaseProduct = new PurchaseOTC(row);
                         break;
+
                     case "M":
                         purchaseProduct = new PurchaseMedicine(row);
                         break;
+
                     default:
                         purchaseProduct = null;
                         break;
@@ -37,7 +42,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 lastID = row.Field<string>("Pro_ID");
             }
         }
-        
+
         internal static PurchaseProducts GetProductsByStoreOrderID(string orederID)
         {
             return new PurchaseProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID));
@@ -56,21 +61,25 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             return true;
         }
+
         internal void SetToSingde()
         {
             foreach (var product in Items)
                 product.IsSingde = true;
         }
+
         internal void SetToProcessing()
         {
             foreach (var product in Items)
                 product.IsProcessing = true;
         }
+
         internal void SetStartEditToPrice()
         {
-            foreach (var product in Items)
-                product.StartInputVariable = ProductStartInputVariableEnum.PRICE;
+            //foreach (var product in Items)
+                //product.StartInputVariable = ProductStartInputVariableEnum.PRICE;
         }
+
         public object Clone()
         {
             PurchaseProducts products = new PurchaseProducts();

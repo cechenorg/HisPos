@@ -1,5 +1,4 @@
-﻿using System;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -8,80 +7,108 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.WareHouse;
+using System.Collections.Generic;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow
 {
     public class AddNewOrderWindowViewModel : ViewModelBase
     {
         #region ----- Define Command -----
+
         public RelayCommand ToPurchaseCommand { get; set; }
         public RelayCommand ToReturnCommand { get; set; }
         public RelayCommand ConfirmAddCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Command -----
 
         #region ----- Define Variables -----
+
         private OrderTypeEnum orderType = OrderTypeEnum.PURCHASE;
         private Manufactory purchaseOrderManufactory;
         private Manufactory returnOrderManufactory;
         private WareHouse selectedWareHouse;
 
         public StoreOrder NewStoreOrder { get; set; }
+
         public OrderTypeEnum OrderType
         {
             get { return orderType; }
             set { Set(() => OrderType, ref orderType, value); }
         }
+
         public Manufactory PurchaseOrderManufactory
         {
             get { return purchaseOrderManufactory; }
             set { Set(() => PurchaseOrderManufactory, ref purchaseOrderManufactory, value); }
         }
+
         public Manufactory ReturnOrderManufactory
         {
             get { return returnOrderManufactory; }
             set { Set(() => ReturnOrderManufactory, ref returnOrderManufactory, value); }
         }
+
         public WareHouse SelectedWareHouse
         {
             get { return selectedWareHouse; }
             set { Set(() => SelectedWareHouse, ref selectedWareHouse, value); }
         }
+        private string selectedType;
+        public string SelectedType
+        {
+            get { return selectedType; }
+            set { Set(() => SelectedType, ref selectedType, value); }
+        }
+
         public Manufactories ManufactoryCollection { get; set; }
         public WareHouses WareHouseCollection { get; set; }
+
+        public List<string> TypeCollection { get; set; }
+
         public StoreOrders DonePurchaseOrders { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public AddNewOrderWindowViewModel()
         {
             ToPurchaseCommand = new RelayCommand(ToPurchaseAction);
             ToReturnCommand = new RelayCommand(ToReturnAction);
             ConfirmAddCommand = new RelayCommand(ConfirmAddAction);
+            TypeCollection = new List<string>();
+            TypeCollection.Add("藥品");
+            TypeCollection.Add("OTC");
+            SelectedType = "藥品";
 
             InitVariables();
         }
 
         #region ----- Define Actions -----
+
         private void ToPurchaseAction()
         {
             OrderType = OrderTypeEnum.PURCHASE;
         }
+
         private void ToReturnAction()
         {
             OrderType = OrderTypeEnum.RETURN;
         }
+
         private void ConfirmAddAction()
         {
-            if(!CheckInputValid()) return;
+            if (!CheckInputValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID, int.Parse(SelectedWareHouse.ID));
-            MainWindow.ServerConnection.CloseConnection(); 
+            NewStoreOrder = StoreOrder.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE) ? PurchaseOrderManufactory : ReturnOrderManufactory, ViewModelMainWindow.CurrentUser.ID, int.Parse(SelectedWareHouse.ID),SelectedType);
+            MainWindow.ServerConnection.CloseConnection();
 
-            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseAddNewOrderWindow"));
+            Messenger.Default.Send(new NotificationMessage("CloseAddNewOrderWindow"));
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void InitVariables()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -95,15 +122,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
 
             SelectedWareHouse = WareHouseCollection[0];
         }
+
         private bool CheckInputValid()
         {
             bool isValid = false;
-            
+
             switch (OrderType)
             {
                 case OrderTypeEnum.PURCHASE:
                     isValid = CheckPurchaseValid();
                     break;
+
                 case OrderTypeEnum.RETURN:
                     isValid = CheckReturnValid();
                     break;
@@ -133,6 +162,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

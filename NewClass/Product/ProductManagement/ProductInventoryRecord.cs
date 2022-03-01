@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.ReportingServices.RdlExpressions.ExpressionHostObjectModel;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
     public struct ProductInventoryRecord
     {
         #region ----- Define Variables -----
+
         public string ID { get; }
         public string Name { get; }
         public ProductInventoryRecordType Type { get; }
@@ -18,7 +14,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public double Amount { get; }
         public double Stock { get; set; }
         public string Note { get; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductInventoryRecord(DataRow row)
         {
@@ -29,21 +26,27 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 case "進貨":
                     Type = ProductInventoryRecordType.PurchaseReturn;
                     break;
+
                 case "處方調劑":
                     Type = ProductInventoryRecordType.Prescription;
                     break;
+
                 case "庫存管理":
                     Type = ProductInventoryRecordType.StockTaking;
                     break;
+
                 case "合併拆分":
                     Type = ProductInventoryRecordType.MergeSplit;
                     break;
+
                 case "銷售":
                     Type = ProductInventoryRecordType.Transaction;
                     break;
+
                 case "銷售刪單":
                     Type = ProductInventoryRecordType.Transaction;
                     break;
+
                 default:
                     Type = ProductInventoryRecordType.Error;
                     break;

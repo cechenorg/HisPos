@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Interactivity;
-using GalaSoft.MvvmLight.CommandWpf;
 
 namespace His_Pos.Behaviors
 {
@@ -14,7 +11,8 @@ namespace His_Pos.Behaviors
             base.OnAttached();
             AssociatedObject.SelectionChanged += AssociatedObject_SelectionChanged;
         }
-        void AssociatedObject_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void AssociatedObject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is DataGrid)
             {
@@ -30,6 +28,7 @@ namespace His_Pos.Behaviors
                 }));
             }
         }
+
         protected override void OnDetaching()
         {
             base.OnDetaching();

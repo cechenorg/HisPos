@@ -17,11 +17,11 @@ namespace His_Pos.NewClass.StoreOrder
                     case "P":
                         Add(new PurchaseOrder(row));
                         break;
+
                     case "R":
                         Add(new ReturnOrder(row));
                         break;
                 }
-
             }
         }
 
@@ -29,9 +29,17 @@ namespace His_Pos.NewClass.StoreOrder
         {
         }
 
+        public StoreOrders()
+        {
+        }
+
         public static StoreOrders GetOrdersNotDone()
         {
             return new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
+        }
+        internal static  StoreOrders GetOrdersMinus(string ID)
+        {
+            return new StoreOrders(StoreOrderDB.GetNotDoneMinus(ID));
         }
 
         public static StoreOrders GetOrdersDone(DateTime? searchStartDate, DateTime? searchEndDate, string searchOrderID, string searchManufactoryID, string searchProductID, string searchWareName)
@@ -41,7 +49,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public void ReloadCollection()
         {
-            var tempOrder =  this.SingleOrDefault(s => s.OrderStatus == OrderStatusEnum.DONE);
+            var tempOrder = this.SingleOrDefault(s => s.OrderStatus == OrderStatusEnum.DONE);
 
             if (tempOrder != null)
                 Remove(tempOrder);
@@ -67,7 +75,7 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 DataTable table = StoreOrderDB.AddNewStoreOrderFromSingde(row);
 
-                if(table != null && table.Rows.Count > 0)
+                if (table != null && table.Rows.Count > 0)
                     StoreOrderDB.UpdateSingdeStoreOrderSyncFlagByID(row.Field<string>("sht_no"));
             }
         }
@@ -78,7 +86,7 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 DataTable table = StoreOrderDB.AddNewPrescriptionOrderFromSingde(row);
 
-                 if (table != null && table.Rows.Count > 0)
+                if (table != null && table.Rows.Count > 0)
                     StoreOrderDB.UpdateSingdeStoreOrderSyncFlagByID(row.Field<string>("rx_order"));
             }
         }

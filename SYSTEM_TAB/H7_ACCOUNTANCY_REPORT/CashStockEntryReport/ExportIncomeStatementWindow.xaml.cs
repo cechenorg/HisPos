@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.AccountReport;
 using His_Pos.Service.ExportService;
 using JetBrains.Annotations;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
 {
@@ -29,6 +18,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
     public partial class ExportIncomeStatementWindow : Window, INotifyPropertyChanged
     {
         private string templateFile = "";
+
         public string TemplateFile
         {
             get { return templateFile; }
@@ -38,7 +28,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 OnPropertyChanged(nameof(TemplateFile));
             }
         }
+
         private int year;
+
         public int Year
         {
             get => year;
@@ -48,6 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 OnPropertyChanged(nameof(Year));
             }
         }
+
         public ExportIncomeStatementWindow()
         {
             InitializeComponent();
@@ -85,7 +78,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             Collection<object> tempCollection = new Collection<object> { Year };
 
             if (TemplateFile.Equals(""))
-                templateFile = @"NewClass\AccountReport\年度損益表.xlsx"; 
+                templateFile = @"NewClass\AccountReport\年度損益表.xlsx";
 
             MainWindow.ServerConnection.OpenConnection();
             ExportExcelService service = new ExportExcelService(tempCollection, new ExportIncomeStatementTemplate(), templateFile);

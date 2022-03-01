@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 
 namespace His_Pos.NewClass.Report.CashFlow
 {
     public class CashFlowAccount
     {
-        public CashFlowAccount(CashFlowType type,string accountName)
+        public CashFlowAccount(CashFlowType type, string accountName, int ID)
         {
             Type = type;
             AccountName = accountName;
+            AccountID = ID;
         }
-        public CashFlowType Type{ get; set; }
+
+        public CashFlowType Type { get; set; }
         public string AccountName { get; set; }
+        public int AccountID { get; set; }
     }
 }

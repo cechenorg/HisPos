@@ -1,11 +1,9 @@
-﻿using System;
+﻿using His_Pos.NewClass.Report.CashReport;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.NewClass.Report.CashReport;
+using System.Data.SqlClient;
 
 namespace His_Pos.NewClass.BalanceSheet
 {
@@ -13,7 +11,6 @@ namespace His_Pos.NewClass.BalanceSheet
     {
         public StrikeHistories()
         {
-
         }
 
         public void GetData()
@@ -24,6 +21,16 @@ namespace His_Pos.NewClass.BalanceSheet
             {
                 Add(new StrikeHistory(r));
             }
+        }
+
+        public void GetSelectData(DataTable dt)
+        {
+            Clear();
+            foreach (DataRow r in dt.Rows)
+            {
+                Add(new StrikeHistory(r));
+            }
+            
         }
     }
 }

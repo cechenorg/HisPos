@@ -1,15 +1,14 @@
-﻿using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
+using System.Data;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
 {
     [ZeroFormattable]
-    public class AdjustCase:ObservableObject
+    public class AdjustCase : ObservableObject
     {
         public AdjustCase()
         {
-
         }
 
         public AdjustCase(DataRow r)
@@ -18,11 +17,15 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
             Name = r.Field<string>("Adj_Name");
             FullName = r.Field<string>("Adj_FullName");
         }
+
         [Index(0)]
         public virtual string ID { get; set; } = string.Empty;
+
         [Index(1)]
         public virtual string Name { get; set; } = string.Empty;
+
         private string fullName = string.Empty;
+
         [Index(2)]
         public virtual string FullName
         {
@@ -47,6 +50,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
         {
             return !string.IsNullOrEmpty(ID) && ID.Equals("5");
         }
+
         public bool CheckIsHomeCare()
         {
             return !string.IsNullOrEmpty(ID) && ID.Equals("D");

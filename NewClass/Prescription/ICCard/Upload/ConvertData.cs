@@ -14,56 +14,73 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                 case "1":
                     sOrganDonate = "(1) 同意器官捐贈";
                     break;
+
                 case "2":
                     sOrganDonate = "(2) 同意安寧緩和醫療";
                     break;
+
                 case "3":
                     sOrganDonate = "(3) 同意不施行心肺復甦術";
                     break;
+
                 case "4":
                     //sOrganDonate = "(4) 同意器官捐贈、同意安寧緩和醫療、同意不施行心肺復甦術";
                     sOrganDonate = "(4) 同意器官捐贈、同意安寧緩和醫療、同意不施行心肺復甦術、同意不施行維生醫療(舊)";
                     break;
+
                 case "5":
                     sOrganDonate = "(5) 同意器官捐贈、同意安寧緩和醫療";
                     break;
+
                 case "6":
                     sOrganDonate = "(6) 同意器官捐贈、同意不施行心肺復甦術";
                     break;
+
                 case "7":
                     //sOrganDonate = "(7) 同意安寧緩和醫療、同意不施行心肺復甦術";
                     sOrganDonate = "(7) 同意安寧緩和醫療、同意不施行心肺復甦術、同意不施行維生醫療(舊)";
                     break;
+
                 case "A":
                     sOrganDonate = "(A) 同意不施行維生醫療";
                     break;
+
                 case "B":
                     sOrganDonate = "(B) 同意器官捐贈、同意不施行維生醫療";
                     break;
+
                 case "C":
                     sOrganDonate = "(C) 同意安寧緩和醫療、同意不施行維生醫療";
                     break;
+
                 case "D":
                     sOrganDonate = "(D) 同意不施行心肺復甦術、同意不施行維生醫療";
                     break;
+
                 case "E":
                     sOrganDonate = "(E) 同意器官捐贈、同意安寧緩和醫療、同意不施行心肺復甦術、同意不施行維生醫療";
                     break;
+
                 case "F":
                     sOrganDonate = "(F) 同意器官捐贈、同意安寧緩和醫療、同意不施行維生醫療";
                     break;
+
                 case "G":
                     sOrganDonate = "(G) 同意器官捐贈、同意不施行心肺復甦術、同意不施行維生醫療";
                     break;
+
                 case "H":
                     sOrganDonate = "(H) 同意安寧緩和醫療、同意不施行心肺復甦術、同意不施行維生醫療";
                     break;
+
                 case "I":
                     sOrganDonate = "(I) 同意器官捐贈、同意安寧緩和醫療、同意不施行心肺復甦術";
                     break;
+
                 case "J":
                     sOrganDonate = "(J) 同意安寧緩和醫療、同意不施行心肺復甦術";
                     break;
+
                 default:
                     sOrganDonate = "未表示";
                     break;
@@ -82,12 +99,15 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                 case "1":
                     sNote = "福民";
                     break;
+
                 case "2":
                     sNote = "榮民";
                     break;
+
                 case "3":
                     sNote = "一般";
                     break;
+
                 default:
                     sNote = "";
                     break;
@@ -111,8 +131,8 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             byte[] l_byte = l_Encoding.GetBytes(a_SrcStr);
             if (a_Cnt <= 0)
                 return "";
-            //例若長度10 
-            //若a_StartIndex傳入9 -> ok, 10 ->不行 
+            //例若長度10
+            //若a_StartIndex傳入9 -> ok, 10 ->不行
             if (a_StartIndex + 1 > l_byte.Length)
                 return "";
             else
@@ -127,10 +147,10 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
         {
             return Encoding.ASCII.GetBytes(s.ToCharArray(), 0, 1)[0];
         }
+
         //字串轉btyes
         public static byte[] StringToBytes(string newString, int len)
         {
-
             int byteLength = newString.Length;
             byte[] bytes = new byte[len];
             //string hex;

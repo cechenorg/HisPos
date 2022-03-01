@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Data;
 using System.Text.RegularExpressions;
-using GalaSoft.MvvmLight;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Person
 {
     [ZeroFormattable]
-    public class Person:ObservableObject
+    public class Person : ObservableObject
     {
-        public Person(){}
+        public Person()
+        {
+        }
 
         public Person(DataRow r)
         {
@@ -27,11 +28,14 @@ namespace His_Pos.NewClass.Person
             Email = r.Field<string>("Person_Email");
             Line = r.Field<string>("Person_LINE");
             Note = r.Field<string>("Person_Note");
+            SecondPhone = r.Field<string>("Person_SecondPhone");
         }
+
         [Index(0)]
         public virtual int ID { get; set; }
 
         private string name;
+
         [Index(1)]
         public virtual string Name
         {
@@ -41,6 +45,7 @@ namespace His_Pos.NewClass.Person
                 Set(() => Name, ref name, value);
             }
         }//姓名
+
         [Index(2)]
         public virtual string Gender { get; set; }//性別
 
@@ -57,6 +62,7 @@ namespace His_Pos.NewClass.Person
         }//身分證字號
 
         private DateTime? birthday;
+
         [Index(4)]
         public virtual DateTime? Birthday
         {
@@ -68,6 +74,7 @@ namespace His_Pos.NewClass.Person
         }//生日
 
         private string tel;
+
         [Index(5)]
         public virtual string Tel
         {
@@ -79,6 +86,7 @@ namespace His_Pos.NewClass.Person
         }//家電
 
         private string cellPhone;
+
         [Index(6)]
         public virtual string CellPhone
         {
@@ -88,6 +96,19 @@ namespace His_Pos.NewClass.Person
                 Set(() => CellPhone, ref cellPhone, value);
             }
         }//手機
+
+        private string secondPhone;
+
+        [IgnoreFormat]
+        public virtual string SecondPhone
+        {
+            get => secondPhone;
+            set
+            {
+                Set(() => SecondPhone, ref secondPhone, value);
+            }
+        }//手機2
+
         [IgnoreFormat]
         public virtual string FormattedPhoneNumber
         {
@@ -100,19 +121,25 @@ namespace His_Pos.NewClass.Person
                 {
                     case 10:
                         return Regex.Replace(CellPhone, @"(\d{4})(\d{3})(\d{3})", "$1-$2-$3");
+
                     default:
                         return CellPhone;
                 }
             }
         }
+
         [IgnoreFormat]
         public string Address { get; set; }//地址
+
         [IgnoreFormat]
         public string Email { get; set; }//信箱
+
         [IgnoreFormat]
         public string Line { get; set; }
+
         [IgnoreFormat]
         public string Note { get; set; }//備註
+
         public string CheckGender()
         {
             if (string.IsNullOrEmpty(IDNumber) || IDNumber.Length != 10) return Properties.Resources.Male;
@@ -123,11 +150,13 @@ namespace His_Pos.NewClass.Person
                 case 'D':
                     Gender = Properties.Resources.Female;
                     break;
+
                 case '1':
                 case 'A':
                 case 'C':
                     Gender = Properties.Resources.Male;
                     break;
+
                 default:
                     Gender = Properties.Resources.Male;
                     break;

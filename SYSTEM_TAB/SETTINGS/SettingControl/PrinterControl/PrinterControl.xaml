@@ -1,75 +1,155 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl.PrinterControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:command="http://www.galasoft.ch/mvvmlight"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl.PrinterControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.DataContext>
-        <local:PrinterControlViewModel/>
+        <local:PrinterControlViewModel />
     </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="DataNotChanged">
-            <Label Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+            <Label
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="未修改"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
         </DataTemplate>
         <DataTemplate x:Key="DataChanged">
-            <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
+            <Label
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="已修改"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Red" />
         </DataTemplate>
     </UserControl.Resources>
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="100" />
+            <RowDefinition />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label Content="藥袋印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="300" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
-                      SelectedItem="{Binding MedBagPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="藥袋印表機"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            
+            <ComboBox
+                Width="300"
+                Margin="20,0,0,0"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemsSource="{Binding Printers}"
+                SelectedItem="{Binding MedBagPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <command:EventToCommand Command="{Binding DataChangedCommand}"/>
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="自動列印"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <CheckBox  IsChecked="{Binding PrePrint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="收據印表機"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <ComboBox
+                Width="300"
+                Margin="20,0,0,0"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemsSource="{Binding Printers}"
+                SelectedItem="{Binding ReceiptPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="格式"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <ComboBox
+                Width="110"
+                Margin="20,0,0,0"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemsSource="{Binding PrintForms}"
+                SelectedItem="{Binding ReceiptForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Content="收據印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="300" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
-                      SelectedItem="{Binding ReceiptPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Label
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Content="報表印表機"
+                FontFamily="Segoe UI Semibold"
+                FontSize="30"
+                Foreground="DimGray" />
+            <ComboBox
+                Width="300"
+                Margin="20,0,0,0"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemsSource="{Binding Printers}"
+                SelectedItem="{Binding ReportPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <command:EventToCommand Command="{Binding DataChangedCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ComboBox>
-            <Label Content="格式" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="110" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding PrintForms}"
-                      SelectedItem="{Binding ReceiptForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <command:EventToCommand Command="{Binding DataChangedCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ComboBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
-            <Label Content="報表印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="300" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding Printers}"
-                      SelectedItem="{Binding ReportPrinter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <command:EventToCommand Command="{Binding DataChangedCommand}"/>
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="4">
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
             <ContentControl Margin="415,0,0,0">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
@@ -82,8 +162,23 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <Button  Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0" Command="{Binding CancelChangeCommand}"/>
-            <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding ConfirmChangeCommand}"/>
+            <Button
+                Width="120"
+                Margin="10,0,10,0"
+                Background="Gray"
+                BorderThickness="0"
+                Command="{Binding CancelChangeCommand}"
+                Content="取消"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
+            <Button
+                Width="150"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding ConfirmChangeCommand}"
+                Content="確認"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
         </StackPanel>
     </Grid>
 </UserControl>

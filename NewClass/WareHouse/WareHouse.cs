@@ -6,11 +6,12 @@ namespace His_Pos.NewClass.WareHouse
 {
     public class WareHouse : ObservableObject, ICloneable
     {
-
         #region ----- Define Variables -----
+
         public string ID { get; set; }
         public string Name { get; set; }
         private bool isSelected;
+
         public bool IsSelected
         {
             get { return isSelected; }
@@ -19,15 +20,19 @@ namespace His_Pos.NewClass.WareHouse
                 Set(() => IsSelected, ref isSelected, value);
             }
         }
-        #endregion
 
-        private WareHouse() { }
+        #endregion ----- Define Variables -----
+
+        private WareHouse()
+        {
+        }
+
         public WareHouse(DataRow row)
         {
             ID = row.Field<int>("War_ID").ToString();
             Name = row.Field<string>("War_Name");
         }
-        
+
         public object Clone()
         {
             WareHouse wareHouse = new WareHouse();

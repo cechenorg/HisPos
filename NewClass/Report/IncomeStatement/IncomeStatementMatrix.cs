@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using MySqlX.XDevAPI.Relational;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
-    public class IncomeStatementMatrix : MatrixLib.Matrix.MatrixBase<string,IncomeStatement>
+    public class IncomeStatementMatrix : MatrixLib.Matrix.MatrixBase<string, IncomeStatement>
     {
         public IncomeStatementMatrix()
         {
-
         }
 
         public IncomeStatementMatrix(DataSet incomeSet)
@@ -23,7 +21,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             cooperativeInstitutionIncomeHeaderTable = incomeSet.Tables[7];
             incomeStatement = new IncomeStatement[12];
             for (var i = 0; i < incomeStatement.Length; i++)
-                incomeStatement[i] = new IncomeStatement(i+1);
+                incomeStatement[i] = new IncomeStatement(i + 1);
             SetDeclareIncome(declareIncomeTable);
             SetPharmacyCost(pharmacyCostTable);
             SetPrescribeIncome(prescribeIncomeTable);
@@ -40,7 +38,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                 var month = 1;
                 foreach (var income in incomeStatement)
                 {
-                    SetDeclareIncomeField(income,row, rowCount, month);
+                    SetDeclareIncomeField(income, row, rowCount, month);
                     month++;
                 }
                 rowCount++;
@@ -105,19 +103,22 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             }
         }
 
-        private void SetDeclareIncomeField(IncomeStatement income, DataRow row, int rowCount,int month)
+        private void SetDeclareIncomeField(IncomeStatement income, DataRow row, int rowCount, int month)
         {
             switch (rowCount)
             {
                 case 0:
                     income.ChronicIncome = row.Field<decimal>($"{month}");
                     break;
+
                 case 1:
                     income.NormalIncome = row.Field<decimal>($"{month}");
                     break;
+
                 case 2:
                     income.OtherIncome = row.Field<decimal>($"{month}");
                     break;
+
                 default:
                     SetCooperativeDeclareIncome(income, row, rowCount, month);
                     break;
@@ -131,6 +132,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                 case 0:
                     income.ChronicCost = row.Field<decimal>($"{month}");
                     break;
+
                 case 1:
                     income.NormalCost = row.Field<decimal>($"{month}");
                     break;
@@ -148,9 +150,11 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                     c.MedicalServiceIncome = row.Field<decimal>($"{month}");
                     income.CooperativeInstitutionsIncome.Add(c);
                     break;
+
                 case 1:
                     income.CooperativeInstitutionsIncome[insIndex].MedicineIncome = row.Field<decimal>($"{month}");
                     break;
+
                 case 2:
                     income.CooperativeInstitutionsIncome[insIndex].OtherIncome = row.Field<decimal>($"{month}");
                     break;
@@ -164,6 +168,7 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                 case 0:
                     income.AdditionalIncome = row.Field<decimal>($"{month}");
                     break;
+
                 case 1:
                     income.PrescribeCost = row.Field<decimal>($"{month}");
                     break;
@@ -177,12 +182,15 @@ namespace His_Pos.NewClass.Report.IncomeStatement
                 case 0:
                     income.Expense = row.Field<decimal>($"{month}");
                     break;
+
                 case 1:
                     income.InventoryOverage = row.Field<decimal>($"{month}");
                     break;
+
                 case 2:
                     income.InventoryShortage = row.Field<decimal>($"{month}");
                     break;
+
                 default:
                     income.InventoryScrapped = row.Field<decimal>($"{month}");
                     break;
@@ -206,13 +214,16 @@ namespace His_Pos.NewClass.Report.IncomeStatement
 
         #region Fields
 
-        readonly IncomeStatement[] incomeStatement;
-        readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
-        private delegate object CellValueProvider(IncomeStatement incomeStatement);
-        private DataTable cooperativeInstitutionIncomeHeaderTable { get; set; }
-        #endregion
+        private readonly IncomeStatement[] incomeStatement;
+        private readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
 
-        void PopulateCellValueProviderMap()
+        private delegate object CellValueProvider(IncomeStatement incomeStatement);
+
+        private DataTable cooperativeInstitutionIncomeHeaderTable { get; set; }
+
+        #endregion Fields
+
+        private void PopulateCellValueProviderMap()
         {
             rowHeaderToValueProviderMap.Add("配藥收入", income => income.PrescribeIncome);
             rowHeaderToValueProviderMap.Add("額外收入", income => income.AdditionalIncome);

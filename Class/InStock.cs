@@ -7,7 +7,9 @@ namespace His_Pos.Class
     public class InStock : INotifyPropertyChanged, ICloneable
     {
         #region ----- Define Variables -----
+
         private string onTheWayAmount;
+
         public string OnTheWayAmount
         {
             get { return onTheWayAmount; }
@@ -19,6 +21,7 @@ namespace His_Pos.Class
         }
 
         private double inventory;
+
         public double Inventory
         {
             get { return inventory; }
@@ -30,6 +33,7 @@ namespace His_Pos.Class
         }
 
         private string safeAmount;
+
         public string SafeAmount
         {
             get { return safeAmount; }
@@ -41,6 +45,7 @@ namespace His_Pos.Class
         }
 
         private string basicAmount;
+
         public string BasicAmount
         {
             get { return basicAmount; }
@@ -52,6 +57,7 @@ namespace His_Pos.Class
         }
 
         private string minOrderAmount;
+
         public string MinOrderAmount
         {
             get { return minOrderAmount; }
@@ -71,9 +77,12 @@ namespace His_Pos.Class
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        #endregion
 
-        public InStock() { }
+        #endregion ----- Define Variables -----
+
+        public InStock()
+        {
+        }
 
         public InStock(DataRow dataRow)
         {

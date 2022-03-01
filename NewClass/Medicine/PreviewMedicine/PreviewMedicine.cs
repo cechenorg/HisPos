@@ -1,6 +1,6 @@
-﻿using System;
+﻿using His_Pos.NewClass.Cooperative.XmlOfPrescription;
+using System;
 using System.Data;
-using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
 
 namespace His_Pos.NewClass.Medicine.PreviewMedicine
@@ -9,7 +9,6 @@ namespace His_Pos.NewClass.Medicine.PreviewMedicine
     {
         public PreviewMedicine()
         {
-
         }
 
         public PreviewMedicine(OrthopedicsMedicine m) : base(m)
@@ -21,12 +20,14 @@ namespace His_Pos.NewClass.Medicine.PreviewMedicine
             Days = Convert.ToInt32(m.Days);
         }
 
-        public PreviewMedicine(CooperativePrescription.Item m):base(m)
+        public PreviewMedicine(CooperativePrescription.Item m) : base(m)
         {
             Usage = m.Freq;
             Position = m.Way;
             Amount = Convert.ToDouble(m.Total_dose);
-            Dosage = Convert.ToDouble(m.Divided_dose);
+          
+                Dosage = Convert.ToDouble(m.Divided_dose);
+            
             Days = (int)Convert.ToDouble(m.Days);
         }
 

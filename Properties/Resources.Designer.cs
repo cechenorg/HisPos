@@ -19,7 +19,7 @@ namespace His_Pos.Properties {
     // 類別透過 ResGen 或 Visual Studio 這類工具。
     // 若要加入或移除成員，請編輯您的 .ResX 檔，然後重新執行 ResGen
     // (利用 /str 選項)，或重建您的 VS 專案。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -70,6 +70,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 會計科目 的當地語系化字串。
+        /// </summary>
+        internal static string AccountsManage {
+            get {
+                return ResourceManager.GetString("AccountsManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 促銷管理 的當地語系化字串。
         /// </summary>
         internal static string Activity {
@@ -79,7 +88,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 額外收入登錄 的當地語系化字串。
+        ///   查詢類似 額外收支 的當地語系化字串。
         /// </summary>
         internal static string AdditionalCashFlowManage {
             get {
@@ -162,7 +171,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 每日總帳報表 的當地語系化字串。
+        ///   查詢類似 會計總帳報表 的當地語系化字串。
         /// </summary>
         internal static string CashStockEntryReport {
             get {
@@ -206,6 +215,33 @@ namespace His_Pos.Properties {
         internal static string ClockIn {
             get {
                 return ResourceManager.GetString("ClockIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 打卡記錄查詢 的當地語系化字串。
+        /// </summary>
+        internal static string ClockInSearch {
+            get {
+                return ResourceManager.GetString("ClockInSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 關班帳務查詢 的當地語系化字串。
+        /// </summary>
+        internal static string ClosingCashSelect {
+            get {
+                return ResourceManager.GetString("ClosingCashSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 關班作業 的當地語系化字串。
+        /// </summary>
+        internal static string ClosingWork {
+            get {
+                return ResourceManager.GetString("ClosingWork", resourceCulture);
             }
         }
         
@@ -586,6 +622,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 每日總帳報表 的當地語系化字串。
+        /// </summary>
+        internal static string NewTodayCashStockEntryReport {
+            get {
+                return ResourceManager.GetString("NewTodayCashStockEntryReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 請填寫給付類別
         /// 的當地語系化字串。
         /// </summary>
@@ -769,11 +814,29 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 沖帳作業 的當地語系化字串。
+        /// </summary>
+        internal static string StrikeManage {
+            get {
+                return ResourceManager.GetString("StrikeManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 系統教學文件 的當地語系化字串。
         /// </summary>
         internal static string SystemTutorial {
             get {
                 return ResourceManager.GetString("SystemTutorial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 舊每日總帳報表 的當地語系化字串。
+        /// </summary>
+        internal static string TodayCashStockEntryReport {
+            get {
+                return ResourceManager.GetString("TodayCashStockEntryReport", resourceCulture);
             }
         }
         

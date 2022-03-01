@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.IncomeStatement
 {
@@ -11,7 +7,6 @@ namespace His_Pos.NewClass.Report.IncomeStatement
     {
         public PrescriptionCountMatrix()
         {
-            
         }
 
         public PrescriptionCountMatrix(DataTable cooperativeTable, DataTable prescriptionCountTable)
@@ -20,18 +15,21 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             cooperativeInstitutionNameTable = cooperativeTable;
             prescriptionCounts = new PrescriptionCount[12];
             for (var i = 0; i < prescriptionCounts.Length; i++)
-                prescriptionCounts[i] = new PrescriptionCount(i+1);
+                prescriptionCounts[i] = new PrescriptionCount(i + 1);
             SetPrescriptionCount(prescriptionCountTable);
             PopulateCellValueProviderMap();
         }
 
-
         #region Fields
-        readonly PrescriptionCount[] prescriptionCounts;
-        readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
+
+        private readonly PrescriptionCount[] prescriptionCounts;
+        private readonly Dictionary<string, CellValueProvider> rowHeaderToValueProviderMap;
+
         private delegate object CellValueProvider(PrescriptionCount prescriptionCount);
+
         private DataTable cooperativeInstitutionNameTable { get; set; }
-        #endregion
+
+        #endregion Fields
 
         protected override IEnumerable<PrescriptionCount> GetColumnHeaderValues()
         {
@@ -48,11 +46,11 @@ namespace His_Pos.NewClass.Report.IncomeStatement
             return rowHeaderToValueProviderMap[rowHeaderValue](columnHeaderValue);
         }
 
-        void PopulateCellValueProviderMap()
+        private void PopulateCellValueProviderMap()
         {
             rowHeaderToValueProviderMap.Add("一般箋", c => c.Count[0]);
             rowHeaderToValueProviderMap.Add("慢箋", c => c.Count[1]);
-            
+
             foreach (DataRow row in cooperativeInstitutionNameTable.Rows)
             {
                 var index = cooperativeInstitutionNameTable.Rows.IndexOf(row) + 2;

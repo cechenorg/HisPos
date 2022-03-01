@@ -1,8 +1,7 @@
-﻿using System.Data;
+﻿using His_Pos.Service;
+using System.Data;
 using System.Linq;
 using System.Xml.Linq;
-using System.Xml.XPath;
-using His_Pos.Service;
 
 namespace His_Pos.NewClass.Prescription.ICCard.Upload
 {
@@ -35,6 +34,5 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             MainWindow.ServerConnection.CloseConnection();
             return dailyUploadTable;
         }
-
     }
 }

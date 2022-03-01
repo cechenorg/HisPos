@@ -1,30 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Manufactory.ManufactoryManagement;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow
 {
     public class AddManufactoryWindowViewModel
     {
         #region ----- Define Commands -----
+
         public RelayCommand ConfirmAddManufactoryCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         public string ManufactoryName { get; set; }
         public string ManufactoryNickName { get; set; }
         public string ManufactoryTelephone { get; set; }
         public string ManufactoryAddress { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public AddManufactoryWindowViewModel()
         {
@@ -32,9 +31,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWin
         }
 
         #region ----- Define Actions -----
+
         private void ConfirmAddManufactoryAction()
         {
-            if(!CheckNewDataValid()) return;
+            if (!CheckNewDataValid()) return;
 
             MainWindow.ServerConnection.OpenConnection();
             DataTable dataTable = ManufactoryDB.AddNewManufactory(ManufactoryName, ManufactoryNickName, ManufactoryTelephone, ManufactoryAddress);
@@ -50,13 +50,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWin
 
             Messenger.Default.Send(new NotificationMessage(this, "CloseAddManufactoryWindow"));
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void RegisterCommands()
         {
             ConfirmAddManufactoryCommand = new RelayCommand(ConfirmAddManufactoryAction);
         }
+
         private bool CheckNewDataValid()
         {
             if (ManufactoryName.Trim().Equals(string.Empty))
@@ -67,6 +70,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWin
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

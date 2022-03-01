@@ -8,10 +8,10 @@
             {
                 case PrescriptionType.Cooperative:
                     return new OrthopedicsPrescriptionService();
+
                 default:
                     return new NormalPrescriptionService();
             }
         }
-
     }
 }

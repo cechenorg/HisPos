@@ -1,8 +1,8 @@
-﻿using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
-using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
 using His_Pos.NewClass.Medicine.MedicineSet;
+using System.Data;
+using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.Item;
 
 namespace His_Pos.NewClass.Product
 {
@@ -10,7 +10,6 @@ namespace His_Pos.NewClass.Product
     {
         public Product()
         {
-
         }
 
         public Product(DataRow row)
@@ -27,6 +26,7 @@ namespace His_Pos.NewClass.Product
             ChineseName = p.ChineseName;
             EnglishName = p.EnglishName;
         }
+
         public Product(MedicineSetItem m)
         {
             ID = m.ID;
@@ -47,9 +47,11 @@ namespace His_Pos.NewClass.Product
             ChineseName = m.Desc;
             EnglishName = m.Desc;
         }
+
         #region ----- Define Variables -----
 
         private string id;
+
         public string ID
         {
             get => id;
@@ -58,7 +60,9 @@ namespace His_Pos.NewClass.Product
                 Set(() => ID, ref id, value);
             }
         }
+
         private string chineseName;
+
         public string ChineseName
         {
             get { return chineseName; }
@@ -70,6 +74,7 @@ namespace His_Pos.NewClass.Product
         }
 
         private string englishName;
+
         public string EnglishName
         {
             get { return englishName; }
@@ -84,12 +89,14 @@ namespace His_Pos.NewClass.Product
         {
             get
             {
-                if(!string.IsNullOrEmpty(EnglishName))
-                    return (EnglishName.Contains(" ")? EnglishName.Substring(0, EnglishName.IndexOf(" ")) : EnglishName) + ChineseName;
+                if (!string.IsNullOrEmpty(EnglishName))
+                    return (EnglishName.Contains(" ") ? EnglishName.Substring(0, EnglishName.IndexOf(" ")) : EnglishName) + ChineseName;
                 return !string.IsNullOrEmpty(ChineseName) ? ChineseName : string.Empty;
             }
         }
+
         private bool isCommon;//常備品項
+
         public bool IsCommon
         {
             get => isCommon;
@@ -101,11 +108,7 @@ namespace His_Pos.NewClass.Product
                 }
             }
         }
-        #endregion
 
-        #region ----- Define Functions -----
-
-
-        #endregion
+        #endregion ----- Define Variables -----
     }
 }

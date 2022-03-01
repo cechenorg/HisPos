@@ -1,13 +1,13 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow
 {
@@ -15,6 +15,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
     {
         public Institutions Institutions { get; set; }
         private CollectionViewSource insCollectionViewSource;
+
         private CollectionViewSource InsCollectionViewSource
         {
             get => insCollectionViewSource;
@@ -23,7 +24,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 Set(() => InsCollectionViewSource, ref insCollectionViewSource, value);
             }
         }
+
         private ICollectionView insCollectionView;
+
         public ICollectionView InsCollectionView
         {
             get => insCollectionView;
@@ -37,13 +40,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 }
             }
         }
+
         private string search;
+
         public string Search
         {
             get => search;
             set { Set(() => Search, ref search, value); }
         }
+
         private bool isEditing = true;
+
         public bool IsEditing
         {
             get => isEditing;
@@ -52,17 +59,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 Set(() => IsEditing, ref isEditing, value);
             }
         }
+
         public RelayCommand SearchTextChanged { get; set; }
         public RelayCommand InstitutionSelected { get; set; }
         public RelayCommand<string> FocusUpDownCommand { get; set; }
 
         private Institution selectedInstitution;
+
         public Institution SelectedInstitution
         {
             get => selectedInstitution;
             set { Set(() => SelectedInstitution, ref selectedInstitution, value); }
         }
+
         public bool ShowDialog { get; private set; }
+
         private void ExecuteSearchTextChanged()
         {
             if (IsEditing)
@@ -74,6 +85,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                     case 0:
                         MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
                         break;
+
                     default:
                         InsCollectionViewSource.View.MoveCurrentToFirst();
                         SelectedInstitution = (Institution)InsCollectionViewSource.View.CurrentItem;
@@ -85,11 +97,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 ExecuteInstitutionSelected();
             }
         }
+
         private void ExecuteInstitutionSelected()
         {
             Messenger.Default.Send(SelectedInstitution, "GetSelectedInstitution");
             Messenger.Default.Send(new NotificationMessage("CloseInstitutionSelection"));
         }
+
         private void FilterBySearchText(object sender, FilterEventArgs e)
         {
             if (!(e.Item is Institution src))
@@ -101,6 +115,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                 e.Accepted = false;
             }
         }
+
         public InstitutionSelectionViewModel(string searchText)
         {
             Institutions = ViewModelMainWindow.Institutions;
@@ -115,11 +130,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                     ShowDialog = false;
                     MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
                     break;
+
                 case 1:
                     ShowDialog = false;
                     SelectedInstitution = resultList[0];
                     ExecuteInstitutionSelected();
                     break;
+
                 default:
                     ShowDialog = true;
                     break;
@@ -148,6 +165,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
                         if (InsCollectionView.CurrentPosition > 0)
                             InsCollectionView.MoveCurrentToPrevious();
                         break;
+
                     case "DOWN":
                         if (InsCollectionView.CurrentPosition < maxIndex)
                             InsCollectionView.MoveCurrentToNext();

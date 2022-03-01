@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.NewClass.Product;
+﻿using His_Pos.NewClass.Product;
 using His_Pos.NewClass.WareHouse;
 using LiveCharts;
 using LiveCharts.Wpf;
+using System;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Windows;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ConsumeRecordWindow
 {
@@ -27,20 +16,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public partial class ProductConsumeRecordWindow : Window
     {
         #region ----- Define Variables -----
+
         public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
         public Collection<string> Days { get; set; } = new Collection<string>();
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductConsumeRecordWindow(string productID, WareHouse selectedWareHouse)
         {
             InitializeComponent();
             DataContext = this;
             Title = $"{productID} 耗用折線圖({selectedWareHouse.Name})";
-            
+
             InitChart(productID, selectedWareHouse.ID);
         }
 
         #region ----- Define Functions -----
+
         private void InitChart(string productID, string wareID)
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -48,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             MainWindow.ServerConnection.CloseConnection();
 
             SeriesCollection.Add(new LineSeries { Title = "月耗用", Values = new ChartValues<double>(), LineSmoothness = 0 });
-            SeriesCollection.Add(new LineSeries { Title = "預估月耗用", Values = new ChartValues<double>(), LineSmoothness = 0, StrokeDashArray = new DoubleCollection {2} });
+            SeriesCollection.Add(new LineSeries { Title = "預估月耗用", Values = new ChartValues<double>(), LineSmoothness = 0, StrokeDashArray = new DoubleCollection { 2 } });
             SeriesCollection.Add(new LineSeries { Title = "平均月耗用", Values = new ChartValues<double>(), PointGeometry = null, Fill = Brushes.Transparent });
 
             double totalAmount = 0;
@@ -80,11 +72,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             }
 
             for (int x = 0; x < dataTable.Rows.Count; x++)
-                SeriesCollection[2].Values.Add(totalAmount / (dataTable.Rows.Count / 2 + 1)); 
-
+                SeriesCollection[2].Values.Add(totalAmount / (dataTable.Rows.Count / 2 + 1));
         }
-        #endregion
 
-        
+        #endregion ----- Define Functions -----
     }
 }

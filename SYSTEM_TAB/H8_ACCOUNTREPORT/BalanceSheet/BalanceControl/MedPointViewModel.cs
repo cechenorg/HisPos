@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Report.CashReport;
+using System;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
     public class MedPointViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand<RelayCommand> StrikeCommand { get; set; }
         public RelayCommand<RelayCommand> StrikeFinalCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private StrikeDatas strikeDatas;
         private StrikeData selectedData;
 
@@ -33,6 +32,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(StrikeDatas));
             }
         }
+
         public StrikeData SelectedData
         {
             get { return selectedData; }
@@ -42,7 +42,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 RaisePropertyChanged(nameof(SelectedData));
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public MedPointViewModel()
         {
@@ -51,12 +52,15 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         }
 
         #region ----- Define Actions -----
+
         private void StrikeAction(RelayCommand command)
         {
             if (!StrikeValueIsValid()) return;
-
+            if (SelectedData.SelectedType.ID == null) { MessageWindow.ShowMessage("請選擇正確的沖帳對象", MessageType.ERROR); return; }
+            ConfirmWindow cw = new ConfirmWindow("是否進行沖帳?", "確認");
+            if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.Type, BalanceSheetTypeEnum.MedPoint, Double.Parse(SelectedData.StrikeValue), SelectedData.Name);
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.SelectedType.ID, BalanceSheetTypeEnum.MedPoint, Double.Parse(SelectedData.StrikeValue), SelectedData.Name);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -70,9 +74,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             command.Execute(null);
         }
+
         private void StrikeFinalAction(RelayCommand command)
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認結案\r\n(此月份前的所有金額將會結案)", "", false);
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認結案", "", false);
 
             if (!(bool)confirmWindow.DialogResult) return;
 
@@ -94,9 +99,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             command.Execute(null);
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private bool StrikeValueIsValid()
         {
             double temp;
@@ -122,6 +129,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             return true;
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

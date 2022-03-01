@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ExportProductUsageTemplate;
 using His_Pos.Service.ExportService;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.PresControl
 {
@@ -46,13 +36,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
                 return;
             }
 
-            if (DateTime.Compare((DateTime)StartDateTime,(DateTime)EndDateTime) > 0)
+            if (DateTime.Compare((DateTime)StartDateTime, (DateTime)EndDateTime) > 0)
             {
                 MessageWindow.ShowMessage("起始日期不可大於結束日期!", MessageType.ERROR);
                 return;
             }
-            
-            Collection<object> tempCollection = new Collection<object>() { new List<object>(){ productID, (DateTime)StartDateTime, (DateTime)EndDateTime, wareHouseID } };
+
+            Collection<object> tempCollection = new Collection<object>() { new List<object>() { productID, (DateTime)StartDateTime, (DateTime)EndDateTime, wareHouseID } };
 
             MainWindow.ServerConnection.OpenConnection();
             ExportExcelService service = new ExportExcelService(tempCollection, new ExportProductUsageTemplate());

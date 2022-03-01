@@ -1,27 +1,47 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl.MedPointControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
-             mc:Ignorable="d" >
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl.MedPointControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
     <Grid DataContext="{Binding MedPointViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="50" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
-            <Label Content="申報應收" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" VerticalAlignment="Center"/>
-            
+        <StackPanel
+            Grid.Row="0"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="申報應收"
+                FontFamily="Segoe UI Semibold"
+                FontSize="25" />
         </StackPanel>
-        <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserDeleteRows="False"
-                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False" CanUserReorderColumns="False" ItemsSource="{Binding StrikeDatas, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedItem="{Binding SelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            Background="{StaticResource GridDarkerBackGround}"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
+            CanUserSortColumns="False"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            FrozenColumnCount="2"
+            GridLinesVisibility="Horizontal"
+            ItemsSource="{Binding StrikeDatas, UpdateSourceTrigger=PropertyChanged}"
+            SelectedIndex="0"
+            SelectedItem="{Binding SelectedData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
-                    <Setter Property="SnapsToDevicePixels" Value="True"/>
-                    <Setter Property="OverridesDefaultStyle" Value="true"/>
-                    <Setter Property="Width" Value="100"/>
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="Width" Value="100" />
                     <Style.Triggers>
                         <Trigger Property="Orientation" Value="Horizontal">
                             <Setter Property="Width" Value="Auto" />
@@ -29,8 +49,8 @@
                             <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                         </Trigger>
                         <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="Width" Value="15"/>
-                            <Setter Property="Height" Value="Auto"/>
+                            <Setter Property="Width" Value="15" />
+                            <Setter Property="Height" Value="Auto" />
                             <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                         </Trigger>
                     </Style.Triggers>
@@ -40,60 +60,116 @@
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource Shadow}"/>
+                            <Setter Property="Background" Value="{StaticResource Shadow}" />
                         </Trigger>
                     </Style.Triggers>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="FontSize" Value="16"/>
-                    <Setter Property="Height" Value="41"/>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Height" Value="50" />
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="年月" Width="100" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                <DataGridTextColumn
+                    Width="120"
+                    Binding="{Binding Name}"
+                    CellStyle="{StaticResource DataGridSpecialCellStyle}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Header="年月"
+                    IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="金額" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Value, StringFormat=N2}">
+                <DataGridTextColumn
+                    Width="120"
+                    Binding="{Binding Value, StringFormat=N0}"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="20"
+                    Header="金額"
+                    IsReadOnly="True">
+                    <!--<DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>-->
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Right"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="110" Header="沖帳金額" IsReadOnly="True">
+                <!--<DataGridTemplateColumn
+                    Width="100"
+                    Header="沖帳金額"
+                    IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Amount" Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="100" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            <TextBox
+                                x:Name="Amount"
+                                Width="80"
+                                Margin="0,0,0,2"
+                                HorizontalContentAlignment="Center"
+                                FontFamily="Segoe UI Semi"
+                                FontSize="18"
+                                InputMethod.IsInputMethodEnabled="False"
+                                InputScope="Number"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
+                                PreviewMouseLeftButtonDown="Amount_PreviewMouseLeftButtonDown"
+                                PreviewTextInput="Amount_PreviewTextInput"
+                                Text="{Binding StrikeValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="90" Header="沖帳來源" IsReadOnly="True">
+                <DataGridTemplateColumn
+                    Width="150"
+                    Header="沖帳來源"
+                    IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding StrikeTypes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <ComboBox
+                                HorizontalContentAlignment="Center"
+                                DisplayMemberPath="Name"
+                                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                                ItemsSource="{Binding StrikeTypes, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="70" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="沖帳" Padding="0" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" Command="{Binding DataContext.MedPointViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <Button
+                                Margin="10,0,0,0"
+                                Padding="0"
+                                Background="RoyalBlue"
+                                BorderThickness="0"
+                                Command="{Binding DataContext.MedPointViewModel.StrikeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                Content="沖帳" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="70" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="結案" Padding="0" Margin="10,0,0,0" Background="IndianRed" BorderThickness="0" Command="{Binding DataContext.MedPointViewModel.StrikeFinalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <Button
+                                Margin="10,0,0,0"
+                                Padding="0"
+                                Background="IndianRed"
+                                BorderThickness="0"
+                                Command="{Binding DataContext.MedPointViewModel.StrikeFinalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding DataContext.ReloadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                Content="結案" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

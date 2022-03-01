@@ -1,16 +1,15 @@
-﻿using System;
+﻿using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
-using His_Pos.NewClass.Prescription.Treatment.Division;
-using His_Pos.NewClass.Prescription.Treatment.Institution;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
     public class PrescriptionSearchPreviews : ObservableCollection<PrescriptionSearchPreview>
     {
-
         public void GetSearchPrescriptionsRe(Dictionary<string, string> conditionTypes, Dictionary<string, string> conditions, Dictionary<string, DateTime?> dates, AdjustCase adj, List<string> insIDList, Division div)
         {
             var table = PrescriptionDb.GetSearchPrescriptionsDataRe(conditionTypes, conditions, dates, adj, insIDList, div);
@@ -22,6 +21,7 @@ namespace His_Pos.NewClass.Prescription.Search
                         Add(new PrescriptionSearchPreview(r, PrescriptionType.ChronicReserve));
                     }
                     break;
+
                 default:
                     foreach (DataRow r in table.Rows)
                     {
@@ -31,15 +31,14 @@ namespace His_Pos.NewClass.Prescription.Search
             }
         }
 
-        public void GetNoBucklePrescriptions(DateTime? sDate, DateTime? eDate)
+        public void GetNoBucklePrescriptions()
         {
-            var table = PrescriptionDb.GetNoBucklePrescriptions(sDate, eDate);
+            var table = PrescriptionDb.GetNoBucklePrescriptions();
             foreach (DataRow r in table.Rows)
             {
                 Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));
             }
         }
-
 
         public void GetSearchPrescriptions(DateTime? sDate, DateTime? eDate, string patientName, string patientIDNumber, DateTime? patientBirth, AdjustCase adj, string medID, string medName, Institution ins, Division div)
         {

@@ -1,13 +1,12 @@
-﻿using System;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.Service;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.Service;
 
 namespace His_Pos.Database
 {
@@ -22,7 +21,7 @@ namespace His_Pos.Database
             {
                 connection.Open();
             }
-            catch (SqlException e)
+            catch (SqlException)
             {
                 return false;
             }
@@ -36,15 +35,14 @@ namespace His_Pos.Database
             return false;
         }
 
-
         public void OpenConnection()
         {
             try
             {
-                if(connection.State == ConnectionState.Closed)
+                if (connection.State == ConnectionState.Closed)
                     connection.Open();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
             }
@@ -52,8 +50,8 @@ namespace His_Pos.Database
 
         public void CloseConnection()
         {
-            if( connection.State != ConnectionState.Executing && connection.State != ConnectionState.Fetching && connection.State == ConnectionState.Open)
-            connection.Close();
+            if (connection.State != ConnectionState.Executing && connection.State != ConnectionState.Fetching && connection.State == ConnectionState.Open)
+                connection.Close();
         }
 
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
@@ -67,7 +65,7 @@ namespace His_Pos.Database
             try
             {
                 SqlCommand myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." + procName, connection);
-                
+
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandTimeout = 120;
                 if (parameterList != null)
@@ -90,9 +88,10 @@ namespace His_Pos.Database
             }
             catch (Exception ex)
             {
-                NewFunction.ExceptionLog(ex.Message); 
+                NewFunction.ExceptionLog(ex.Message);
 
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
                     MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
                 });
             }
@@ -101,7 +100,9 @@ namespace His_Pos.Database
 
             return table;
         }
-        public DataTable ExecuteProcBySchema(string schema,string procName, List<SqlParameter> parameterList = null) {
+
+        public DataTable ExecuteProcBySchema(string schema, string procName, List<SqlParameter> parameterList = null)
+        {
             while (isBusy)
                 Thread.Sleep(500);
 
@@ -136,7 +137,8 @@ namespace His_Pos.Database
             {
                 NewFunction.ExceptionLog(ex.Message);
 
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
                     MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
                 });
             }
@@ -145,6 +147,7 @@ namespace His_Pos.Database
 
             return table;
         }
+
         public DataSet ExecuteProcReturnDataSet(string procName, List<SqlParameter> parameterList = null)
         {
             while (isBusy)
@@ -180,7 +183,8 @@ namespace His_Pos.Database
             {
                 NewFunction.ExceptionLog(ex.Message);
 
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
                     MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
                 });
             }
@@ -189,6 +193,12 @@ namespace His_Pos.Database
 
             return dataSet;
         }
+
+        public SqlConnection GetConnection()
+        {
+            return connection;
+        }
+
         private void LogError(string procName, string parameters, string error)
         {
             var parameterList = new List<SqlParameter>();
@@ -197,6 +207,5 @@ namespace His_Pos.Database
             parameterList.Add(new SqlParameter("ERROR", error));
             ExecuteProc("[HIS_POS_DB].[LOG].[InsertProcLog]", parameterList);
         }
-
     }
 }

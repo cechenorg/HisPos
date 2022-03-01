@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace His_Pos.NewClass.BalanceSheet
 {
     public class BalanceSheetData
     {
         #region ----- Define Variables -----
+
         public string ID { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public double Value { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public BalanceSheetData(DataRow row)
         {

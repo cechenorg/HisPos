@@ -1,4 +1,4 @@
-﻿/* 
+﻿/*
  Licensed under the Apache License, Version 2.0
 
  http://www.apache.org/licenses/LICENSE-2.0
@@ -14,6 +14,7 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "Value", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Value { get; set; }
+
         [XmlElement(ElementName = "Style", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Style { get; set; }
     }
@@ -30,6 +31,7 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "TextRuns", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public TextRuns TextRuns { get; set; }
+
         [XmlElement(ElementName = "Style", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Style Style { get; set; }
     }
@@ -60,16 +62,22 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "Border", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Border Border { get; set; }
+
         [XmlElement(ElementName = "PaddingLeft", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string PaddingLeft { get; set; }
+
         [XmlElement(ElementName = "PaddingRight", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string PaddingRight { get; set; }
+
         [XmlElement(ElementName = "PaddingTop", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string PaddingTop { get; set; }
+
         [XmlElement(ElementName = "PaddingBottom", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string PaddingBottom { get; set; }
+
         [XmlElement(ElementName = "BackgroundImage", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public BackgroundImage BackgroundImage { get; set; }
+
         [XmlElement(ElementName = "TextAlign", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string TextAlign { get; set; }
     }
@@ -79,24 +87,34 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "CanGrow", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string CanGrow { get; set; }
+
         [XmlElement(ElementName = "KeepTogether", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string KeepTogether { get; set; }
+
         [XmlElement(ElementName = "Paragraphs", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Paragraphs Paragraphs { get; set; }
+
         [XmlElement(ElementName = "DefaultName", Namespace = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner")]
         public string DefaultName { get; set; }
+
         [XmlElement(ElementName = "Top", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Top { get; set; }
+
         [XmlElement(ElementName = "Left", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Left { get; set; }
+
         [XmlElement(ElementName = "Height", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Height { get; set; }
+
         [XmlElement(ElementName = "Width", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Width { get; set; }
+
         [XmlElement(ElementName = "Visibility", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Visibility Visibility { get; set; }
+
         [XmlElement(ElementName = "Style", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Style Style { get; set; }
+
         [XmlAttribute(AttributeName = "Name")]
         public string Name { get; set; }
     }
@@ -120,8 +138,10 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "KeepTogether", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string KeepTogether { get; set; }
+
         [XmlElement(ElementName = "Style", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Style Style { get; set; }
+
         [XmlAttribute(AttributeName = "Name")]
         public string Name { get; set; }
     }
@@ -152,6 +172,7 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "Height", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Height { get; set; }
+
         [XmlElement(ElementName = "TablixCells", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public TablixCells TablixCells { get; set; }
     }
@@ -168,6 +189,7 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "TablixColumns", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public TablixColumns TablixColumns { get; set; }
+
         [XmlElement(ElementName = "TablixRows", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public TablixRows TablixRows { get; set; }
     }
@@ -212,22 +234,31 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "TablixBody", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public TablixBody TablixBody { get; set; }
+
         [XmlElement(ElementName = "TablixColumnHierarchy", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public TablixColumnHierarchy TablixColumnHierarchy { get; set; }
+
         [XmlElement(ElementName = "TablixRowHierarchy", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public TablixRowHierarchy TablixRowHierarchy { get; set; }
+
         [XmlElement(ElementName = "Top", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Top { get; set; }
+
         [XmlElement(ElementName = "Left", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Left { get; set; }
+
         [XmlElement(ElementName = "Height", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Height { get; set; }
+
         [XmlElement(ElementName = "Width", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Width { get; set; }
+
         [XmlElement(ElementName = "ZIndex", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string ZIndex { get; set; }
+
         [XmlElement(ElementName = "Style", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Style Style { get; set; }
+
         [XmlAttribute(AttributeName = "Name")]
         public string Name { get; set; }
     }
@@ -237,6 +268,7 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "Textbox", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public ObservableCollection<Textbox> Textbox { get; set; } = new ObservableCollection<Textbox>();
+
         [XmlElement(ElementName = "Tablix", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Tablix Tablix { get; set; }
     }
@@ -246,6 +278,7 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "Source", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Source { get; set; }
+
         [XmlElement(ElementName = "Value", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Value { get; set; }
     }
@@ -255,8 +288,10 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "ReportItems", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public ReportItems ReportItems { get; set; }
+
         [XmlElement(ElementName = "Height", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Height { get; set; }
+
         [XmlElement(ElementName = "Style", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Style Style { get; set; }
     }
@@ -266,18 +301,25 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "PageHeight", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string PageHeight { get; set; }
+
         [XmlElement(ElementName = "PageWidth", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string PageWidth { get; set; }
+
         [XmlElement(ElementName = "LeftMargin", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string LeftMargin { get; set; }
+
         [XmlElement(ElementName = "RightMargin", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string RightMargin { get; set; }
+
         [XmlElement(ElementName = "TopMargin", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string TopMargin { get; set; }
+
         [XmlElement(ElementName = "BottomMargin", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string BottomMargin { get; set; }
+
         [XmlElement(ElementName = "ColumnSpacing", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string ColumnSpacing { get; set; }
+
         [XmlElement(ElementName = "Style", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Style { get; set; }
     }
@@ -287,20 +329,28 @@ namespace His_Pos.RDLC
     {
         [XmlElement(ElementName = "Body", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Body Body { get; set; }
+
         [XmlElement(ElementName = "Width", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string Width { get; set; }
+
         [XmlElement(ElementName = "Page", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public Page Page { get; set; }
+
         [XmlElement(ElementName = "AutoRefresh", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string AutoRefresh { get; set; }
+
         [XmlElement(ElementName = "ReportUnitType", Namespace = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner")]
         public string ReportUnitType { get; set; }
+
         [XmlElement(ElementName = "ConsumeContainerWhitespace", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public string ConsumeContainerWhitespace { get; set; }
+
         [XmlElement(ElementName = "ReportID", Namespace = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner")]
         public string ReportID { get; set; }
+
         [XmlAttribute(AttributeName = "xmlns")]
         public string Xmlns { get; set; }
+
         [XmlAttribute(AttributeName = "rd", Namespace = "http://www.w3.org/2000/xmlns/")]
         public string Rd { get; set; }
     }

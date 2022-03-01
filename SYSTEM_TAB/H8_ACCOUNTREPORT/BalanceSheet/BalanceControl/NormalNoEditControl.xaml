@@ -1,0 +1,113 @@
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl.NormalNoEditControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid DataContext="{Binding NormalNoEditViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="690" />
+            <RowDefinition Height="80" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="新增會計科目"
+                FontFamily="Segoe UI Semibold"
+                FontSize="25" />
+
+            <TextBox
+                Width="100"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsEnabled="False"
+                Text="{Binding TransferValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                Width="120"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Background="DimGray"
+                BorderThickness="0"
+                Command="{Binding InsertCommand}"
+                Content="新增"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                IsEnabled="False" />
+        </StackPanel>
+
+        <DataGrid
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            Height="760"
+            AutoGenerateColumns="False"
+            Background="{StaticResource GridBackGround}"
+            CanUserAddRows="False"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            HorizontalScrollBarVisibility="Disabled"
+            ItemsSource="{Binding AccDataNoEdit, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Background" Value="#FFA8A8A8" />
+                    <Setter Property="Foreground" Value="#FF535353" />
+                </Style>
+                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontSize" Value="15" />
+                    <Setter Property="Height" Value="35" />
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="200"
+                    Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="Segoe UI Semibold"
+                    Header="科目"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Margin" Value="5,0,0,0" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="80"
+                    Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                    FontFamily="Segoe UI Semibold"
+                    Header="金額"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Margin" Value="5,0,0,0" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Background="{StaticResource GridDarkerBackGround}" />
+    </Grid>
+</UserControl>

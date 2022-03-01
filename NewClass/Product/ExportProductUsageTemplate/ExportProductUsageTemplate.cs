@@ -1,11 +1,8 @@
-﻿using System;
+﻿using His_Pos.Service.ExportService;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Service.ExportService;
 
 namespace His_Pos.NewClass.Product.ExportProductUsageTemplate
 {

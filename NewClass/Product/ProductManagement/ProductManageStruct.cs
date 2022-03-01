@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 namespace His_Pos.NewClass.Product.ProductManagement
 {
@@ -26,13 +27,22 @@ namespace His_Pos.NewClass.Product.ProductManagement
             IsEnable = row.Field<bool>("Pro_IsEnable");
             InventoryError = row.Field<bool>("ERROR_FLAG");
             IsZero = row.Field<decimal>("NHIMED_PRICE");
+            DepRec_Amount = row.Field<int>("DepRec_Amount");
+            SINGINV = row.Field<int>("inv_qty");
+            ProLoc_Name = row.Field<string>("ProLoc_Name");
+
+            //IsMerged = row.Field<int?>("Cnt") == 0 ? false : true;
+            IsMerged = false;
         }
 
         public ProductTypeEnum ProductType { get; set; }
         public string ID { get; set; }
+        public string ProLoc_Name { get; set; }
         public int WareHouseID { get; set; }
+        public int DepRec_Amount { get; set; }
         public string ChineseName { get; set; }
         public string EnglishName { get; set; }
+
         public string FullName
         {
             get
@@ -42,6 +52,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
                 return !string.IsNullOrEmpty(ChineseName) ? ChineseName : string.Empty;
             }
         }
+
+        public int SINGINV { get; set; }
         public double Inventory { get; set; }
         public double ShelfAmount { get; set; }
         public double MedBagAmount { get; set; }
@@ -49,7 +61,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public int BasicAmount { get; set; }
         public double OnTheWayAmount { get; set; }
         public double MedBagOnTheWayAmount { get; set; }
-        public double AllOnTheWayAmount { get {return OnTheWayAmount + MedBagOnTheWayAmount;} }
+        public double AllOnTheWayAmount { get { return OnTheWayAmount + MedBagOnTheWayAmount; } }
         public double StockValue { get; set; }
         public double ShelfStockValue { get; set; }
         public int? ControlLevel { get; set; }
@@ -58,5 +70,8 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public bool IsEnable { get; set; }
         public bool InventoryError { get; set; }
         public decimal IsZero { get; set; }
+
+        // 子品項
+        public bool IsMerged { get; set; }
     }
 }

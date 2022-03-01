@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.FunctionWindow.ErrorUploadWindow;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
+using System.Windows;
+using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
@@ -49,6 +37,10 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                 switch (notificationMessage.Notification)
                 {
                     case "CloseAddCustomerWindow":
+                        Close();
+                        break;
+
+                    case "SuccessCloseAddCustomerWindow":
                         Close();
                         break;
                 }

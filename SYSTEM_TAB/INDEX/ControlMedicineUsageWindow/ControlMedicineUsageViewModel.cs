@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.ControlMedicineDeclare;
+using System;
+using System.ComponentModel;
+using System.Windows.Data;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
@@ -19,6 +15,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         #region Properties
 
         private DateTime? startDate;
+
         public DateTime? StartDate
         {
             get => startDate;
@@ -27,7 +24,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
                 Set(() => StartDate, ref startDate, value);
             }
         }
+
         private DateTime? endDate;
+
         public DateTime? EndDate
         {
             get => endDate;
@@ -38,6 +37,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         }
 
         private CollectionViewSource controlCollectionViewSource;
+
         private CollectionViewSource ControlCollectionViewSource
         {
             get => controlCollectionViewSource;
@@ -48,6 +48,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         }
 
         private ICollectionView controlCollectionView;
+
         public ICollectionView ControlCollectionView
         {
             get => controlCollectionView;
@@ -57,8 +58,8 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
             }
         }
 
-
         private ControlMedicineDeclares controlMedicineDeclares;
+
         public ControlMedicineDeclares ControlMedicineDeclares
         {
             get { return controlMedicineDeclares; }
@@ -69,6 +70,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         }
 
         private ControlMedicineDeclare selectedItem;
+
         public ControlMedicineDeclare SelectedItem
         {
             get { return selectedItem; }
@@ -77,14 +79,16 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
                 Set(() => SelectedItem, ref selectedItem, value);
             }
         }
-        #endregion
+
+        #endregion Properties
 
         #region Commands
 
         public RelayCommand GetData { get; set; }
         public RelayCommand<MaskedTextBox> DateMouseDoubleClick { get; set; }
 
-        #endregion
+        #endregion Commands
+
         public ControlMedicineUsageViewModel()
         {
             InitSearchDate();
@@ -97,17 +101,17 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
         {
             if (StartDate is null)
             {
-                MessageWindow.ShowMessage("起始日期格式錯誤。",MessageType.ERROR);
+                MessageWindow.ShowMessage("起始日期格式錯誤。", MessageType.ERROR);
                 return;
             }
             if (EndDate is null)
             {
-                MessageWindow.ShowMessage("結束日期格式錯誤。",MessageType.ERROR);
+                MessageWindow.ShowMessage("結束日期格式錯誤。", MessageType.ERROR);
                 return;
             }
             ControlMedicineDeclares = new ControlMedicineDeclares();
             ControlMedicineDeclares.GetUsageData((DateTime)StartDate, (DateTime)EndDate);
-            ControlCollectionViewSource = new CollectionViewSource {Source = ControlMedicineDeclares};
+            ControlCollectionViewSource = new CollectionViewSource { Source = ControlMedicineDeclares };
             ControlCollectionView = ControlCollectionViewSource.View;
         }
 
@@ -118,6 +122,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ControlMedicineUsageWindow
                 case "StartDate":
                     StartDate = DateTime.Today;
                     break;
+
                 case "EndDate":
                     EndDate = DateTime.Today;
                     break;

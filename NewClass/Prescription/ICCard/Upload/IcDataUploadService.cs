@@ -1,12 +1,12 @@
-﻿using System;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.FunctionWindow.ErrorUploadWindow;
+using His_Pos.HisApi;
+using His_Pos.NewClass.Medicine.Base;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Xml.Serialization;
-using His_Pos.ChromeTabViewModel;
-using His_Pos.FunctionWindow.ErrorUploadWindow;
-using His_Pos.HisApi;
-using His_Pos.NewClass.Medicine.Base;
 using DateTimeEx = His_Pos.Service.DateTimeExtensions;
 
 namespace His_Pos.NewClass.Prescription.ICCard.Upload
@@ -17,7 +17,6 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
         [XmlElement(ElementName = "REC")]
         public List<Rec> Rec { get; set; }
     }
-
 
     [XmlRoot(ElementName = "REC")]
     public class Rec
@@ -40,16 +39,15 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
 
         public Rec(DataRow row)
         {
-
         }
 
         public Rec()
         {
-
         }
 
         [XmlElement(ElementName = "MSH")]
         public Header HeaderMessage { get; set; }
+
         [XmlElement(ElementName = "MB")]
         public MainMessage MainMessage { get; set; }
     }
@@ -60,10 +58,11 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
         public Header()
         {
         }
-        
+
         //V
         [XmlElement(ElementName = "A00")]
         public string DataType { get; set; } = "1";//資料型態
+
         /*
          * V : 必填欄位 ~ : 不填欄位 * : 選填欄位
          * 資料格式 :
@@ -72,6 +71,7 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
          * 3:補正上傳 (正常資料)
          * 4:補正上傳 (異常資料))
          */
+
         //V
         [XmlElement(ElementName = "A01")]
         public string DataFormat { get; set; }//資料格式
@@ -84,11 +84,15 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
     [XmlRoot(ElementName = "MB")]
     public class MainMessage
     {
-        public MainMessage() { }
+        public MainMessage()
+        {
+        }
+
         public MainMessage(IcData icData)
         {
             IcMessage = icData;
         }
+
         public MainMessage(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
         {
             IcMessage = new IcData(p, e, makeUp);
@@ -102,8 +106,10 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                     : new MedicalData(medList[i], treatDateTime));
             }
         }
+
         [XmlElement(ElementName = "MB1")]
         public IcData IcMessage { get; set; }
+
         [XmlElement(ElementName = "MB2")]
         public List<MedicalData> MedicalMessageList { get; set; } = new List<MedicalData>();
     }
@@ -111,7 +117,9 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
     [XmlRoot(ElementName = "MB1")]
     public class IcData
     {
-        public IcData() { }
+        public IcData()
+        {
+        }
 
         public IcData(Prescription p, ErrorUploadWindowViewModel.IcErrorCode e, bool makeUp)
         {
@@ -188,7 +196,7 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
         [XmlElement(ElementName = "A15")]
         public string MedicalPersonIcNumber { get; set; }//健保資料段 8-7-1.醫事人員身分證號
 
-        //1,3 V  2,4 ~ 
+        //1,3 V  2,4 ~
         [XmlElement(ElementName = "A16")]
         public string SamCode { get; set; }//安全模組代碼
 
@@ -203,7 +211,7 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
         //V
         [XmlElement(ElementName = "A19")]
         public string MakeUpMark { get; set; } = "1";//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
-        
+
         //*
         [XmlElement(ElementName = "A20")]
         public string NewbornBirthDay { get; set; }//健保資料段 7-1.新生兒出生日期
@@ -254,7 +262,6 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
 
         [XmlElement(ElementName = "A54")]
         public string ActualTreatDate { get; set; }//健保資料段8-10-5.住院部分負擔費用（當次急性31天、慢性181天以上）(get by HISAPI : hisGetTreatmentNoNeedHPC)
-
     }
 
     [XmlRoot(ElementName = "MB2")]
@@ -262,13 +269,13 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
     {
         public MedicalData()
         {
-
         }
+
         public MedicalData(Medicine.Base.Medicine med, string treatDateTime, string preSig = null)
         {
             MedicalOrderTreatDateTime = treatDateTime;
             MedicalOrderCategory = med is MedicineSpecialMaterial ? "4" : "1";
-            TreatmentProjectCode = med is MedicineSpecialMaterial ? med.ID.Substring(0,12) : med.ID;
+            TreatmentProjectCode = med is MedicineSpecialMaterial ? med.ID.Substring(0, 12) : med.ID;
             if (!string.IsNullOrEmpty(med.PositionID))
                 TreatmentPosition = med.PositionID;
             Usage = med.UsageName;
@@ -279,20 +286,25 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
                 case "1":
                     PrescriptionDeliveryMark = "01";
                     break;
+
                 case "A":
                     PrescriptionDeliveryMark = "02";
                     break;
+
                 case "2":
                     PrescriptionDeliveryMark = "05";
                     break;
+
                 case "B":
                     PrescriptionDeliveryMark = "06";
                     break;
+
                 case "3":
                 case "4":
                 case "5":
                     PrescriptionDeliveryMark = "03";
                     break;
+
                 case "C":
                 case "D":
                 case "E":
@@ -302,15 +314,16 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             if (!string.IsNullOrEmpty(preSig))
                 PrescriptionSignature = preSig;
         }
-        //V 
+
+        //V
         [XmlElement(ElementName = "A71")]
         public string MedicalOrderTreatDateTime { get; set; }//醫療專區 1-1.醫令就診日期時間
 
-        //V 
+        //V
         [XmlElement(ElementName = "A72")]
         public string MedicalOrderCategory { get; set; }//醫療專區 1-2-1醫令類別
 
-        //V 
+        //V
         [XmlElement(ElementName = "A73")]
         public string TreatmentProjectCode { get; set; }//醫療專區 1-2-2.診療項目代號
 
@@ -318,15 +331,15 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
         [XmlElement(ElementName = "A74")]
         public string TreatmentPosition { get; set; }//醫療專區 1-2-3診療部位
 
-        //V 
+        //V
         [XmlElement(ElementName = "A75")]
         public string Usage { get; set; }//醫療專區 1-2-4.用法
 
-        //V 
+        //V
         [XmlElement(ElementName = "A76")]
         public string Days { get; set; }// 醫療專區 1-2-5天數
 
-        //V 
+        //V
         [XmlElement(ElementName = "A77")]
         public string TotalAmount { get; set; }//醫療專區 1-2-6.總量
 

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using His_Pos.Interface;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
@@ -25,7 +25,7 @@ namespace His_Pos.Class.Product
             BatchNumbers batchNumber = new BatchNumbers(dataRow);
             BatchNumbersCollection.Add(batchNumber);
         }
-        
+
         public string Category { get; set; }
         public double Inventory { get; set; }
         public string EmpId { get; set; }
@@ -35,6 +35,7 @@ namespace His_Pos.Class.Product
         public string Location { get; set; }
         public bool Status { get; set; }
         private string takingReason;
+
         public string TakingReason
         {
             get
@@ -47,7 +48,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("TakingReason");
             }
         }
+
         private ObservableCollection<BatchNumbers> batchNumbersCollection = new ObservableCollection<BatchNumbers>();
+
         public ObservableCollection<BatchNumbers> BatchNumbersCollection
         {
             get
@@ -60,7 +63,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("BatchNumbersCollection");
             }
         }
+
         private string takingResult;
+
         public string TakingResult
         {
             get
@@ -79,7 +84,7 @@ namespace His_Pos.Class.Product
 
         private void CountValueDiff()
         {
-            if(takingResult.Equals(String.Empty)) return;
+            if (takingResult.Equals(String.Empty)) return;
 
             double diff = Double.Parse(takingResult) - Inventory;
 
@@ -98,7 +103,7 @@ namespace His_Pos.Class.Product
                     }
                     else
                     {
-                        valueDiff += batchNumbersCollection[x].Amount  * batchNumbersCollection[x].Price;
+                        valueDiff += batchNumbersCollection[x].Amount * batchNumbersCollection[x].Price;
                     }
 
                     diff += batchNumbersCollection[x].Amount;
@@ -112,6 +117,7 @@ namespace His_Pos.Class.Product
         {
             IsEqual = (TakingResult == Inventory.ToString()) || TakingResult.Equals(String.Empty);
         }
+
         private void UserFilledResult()
         {
             if (takingResult.Equals(String.Empty))
@@ -121,7 +127,9 @@ namespace His_Pos.Class.Product
                 IsChecked = true;
             }
         }
+
         private string source;
+
         public string Source
         {
             get
@@ -134,7 +142,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Source");
             }
         }
+
         private bool isChecked;
+
         public bool IsChecked
         {
             get
@@ -149,6 +159,7 @@ namespace His_Pos.Class.Product
         }
 
         private bool isEqual;
+
         public bool IsEqual
         {
             get
@@ -163,9 +174,10 @@ namespace His_Pos.Class.Product
         }
 
         private double valueDiff;
+
         public double ValueDiff
         {
-            get{ return valueDiff; }
+            get { return valueDiff; }
             set
             {
                 valueDiff = value;

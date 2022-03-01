@@ -1,16 +1,16 @@
-﻿using System;
-using System.Data;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl.StockControl
 {
     public class MedicineStockViewModel : ViewModelBase
     {
         #region ----- Define Variables -----
+
         private string medicineID;
         private string wareHouseID;
         private MedicineStockDetail stockDetail;
@@ -20,9 +20,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             get { return stockDetail; }
             set { Set(() => StockDetail, ref stockDetail, value); }
         }
-        #endregion
-        
+
+        #endregion ----- Define Variables -----
+
         #region ----- Define Functions -----
+
         public void ReloadData(string medID, string wareID)
         {
             medicineID = medID;
@@ -38,18 +40,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
 
             StockDetail = new MedicineStockDetail(stockDataTable.Rows[0]);
         }
+
         internal void GetMedBagDetailByID()
         {
             StockDetail.GetMedBagDetailByID(medicineID, wareHouseID);
         }
+
         internal void GetStockDetailByID()
         {
             StockDetail.GetStockDetailByID(medicineID, wareHouseID);
         }
+
         internal void GetOnTheWayDetailByID()
         {
             StockDetail.GetOnTheWayDetailByID(medicineID, wareHouseID);
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

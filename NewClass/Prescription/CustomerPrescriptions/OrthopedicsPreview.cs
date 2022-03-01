@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using His_Pos.NewClass.Cooperative.CooperativeInstitution;
+﻿using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Medicine.PreviewMedicine;
 using His_Pos.NewClass.Prescription.Service;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 {
     public class OrthopedicsPreview : CusPrePreviewBase
     {
-        public OrthopedicsPreview(OrthopedicsPrescription c) :base(c)
+        public OrthopedicsPreview(OrthopedicsPrescription c) : base(c)
         {
             Content = c;
-            DoctorName = "醫師 "+c.DeclareXmlDocument.Prescription.Study.Doctor_Name;
+            DoctorName = "醫師 " + c.DeclareXmlDocument.Prescription.Study.Doctor_Name;
         }
-        public OrthopedicsPrescription Content { get;}
+
+        public OrthopedicsPrescription Content { get; }
         public string DoctorName { get; }
+
         public override void Print()
         {
             var printPre = CreatePrescription();
@@ -28,6 +30,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 service.Print(false);
             }
         }
+
         public override Prescription CreatePrescription()
         {
             var pre = new Prescription(Content);
@@ -80,6 +83,11 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                     idList.Add(med.Id);
             }
             return idList;
+        }
+
+        public override void PrintDir()
+        {
+            throw new NotImplementedException();
         }
     }
 }

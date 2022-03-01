@@ -5,44 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:functionWindow="clr-namespace:His_Pos.FunctionWindow"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:local="clr-namespace:His_Pos.FunctionWindow"
         mc:Ignorable="d"
         Title="Login" Height="900" Width="700"
         WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
     <Window.DataContext>
-        <functionWindow:LoginWindowViewModel/>
+        <local:LoginWindowViewModel/>
     </Window.DataContext>
     <Viewbox Stretch="Fill">
         <StackPanel Width="700" Height="900">
             <StackPanel.Background>
-                <ImageBrush ImageSource="/Images/login.png"/>
+                <ImageBrush ImageSource="/Images/login.png" />
             </StackPanel.Background>
             <StackPanel Orientation="Vertical" Width="300" Height="350" Margin ="10,480,0,0">
                 <StackPanel Orientation="Horizontal" Width="260" Height="50" Margin="25,0,0,0">
-                    <materialDesign:PackIcon Kind ="Account" Height="30" Width="30" Margin="0,0,0,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Bottom"/>
-                    <TextBox Name="UserName" Text="{Binding Account}" Width="200" Height="50" Margin="0,0,0,0" materialDesign:HintAssist.Hint="帳號" InputMethod.IsInputMethodEnabled="False" materialDesign:HintAssist.IsFloating="True" FontSize="20" FontWeight="Bold" KeyUp="UserName_OnKeyUp"/>
+                    <materialDesign:PackIcon Kind ="Account" Height="30" Width="30" Margin="0,0,0,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" />
+                    <TextBox Name="UserName" Text="{Binding Account}" Width="200" Height="50" Margin="0,0,0,0" materialDesign:HintAssist.Hint="帳號" InputMethod.IsInputMethodEnabled="False" materialDesign:HintAssist.IsFloating="True" FontSize="20" FontWeight="Bold" KeyUp="UserName_OnKeyUp" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
-                    <materialDesign:PackIcon Kind ="Lock" Height="28" Width="28" Margin="1.5,0,1.5,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom"/>
+                    <materialDesign:PackIcon Kind ="Lock" Height="28" Width="28" Margin="1.5,0,1.5,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" />
                     <PasswordBox Name="Password" Width="200" Height="50" Margin="0,30,0,0" materialDesign:HintAssist.Hint="密碼" materialDesign:HintAssist.IsFloating="True" FontSize="20" FontWeight="Bold">
                         <PasswordBox.InputBindings>
-                            <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Password}" Key="Enter"/>
+                            <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Password}" Key="Enter" />
                         </PasswordBox.InputBindings>
                     </PasswordBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="32,25,0,0" Visibility="{Binding IsAccountWrong, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <materialDesign:PackIcon Kind ="Alert" Foreground="Red" Height="22" Width="22" Margin="1.5,0,1.5,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom"/>
-                    <Label Content="帳 號 或 密 碼 錯 誤" Foreground="Red" FontWeight="Bold" FontSize="20"/>
+                    <materialDesign:PackIcon Kind ="Alert" Foreground="Red" Height="22" Width="22" Margin="1.5,0,1.5,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" />
+                    <Label Content="帳 號 或 密 碼 錯 誤" Foreground="Red" FontWeight="Bold" FontSize="20" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
-                    <Button Content="登入" Width="220" Height="45" BorderThickness="0" Background="RoyalBlue" Margin="0,30,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Password}" Opacity="0.8"/>
+                    <Button Content="登入" Width="220" Height="45" BorderThickness="0" Background="RoyalBlue" Margin="0,30,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Password}" Opacity="0.8" />
                     <Button Content="離開" Width="220" Height="40" BorderThickness="0" Background="Transparent" Margin="0,10,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Foreground="DimGray" Command="{Binding LeaveCommand}" />
                 </StackPanel>
             </StackPanel>
-            <Label x:Name="Version" Content="{Binding Version}" Margin="30,0,30,0" FontSize="20" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right"/>
-            <Button Content="離線作業" Width="100" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right" Margin="10,30,10,10" Background="CornflowerBlue" BorderBrush="CornflowerBlue" Click="ButtonBase_OnClick" Visibility="Collapsed"/>
+            <Label x:Name="Version" Content="{Binding Version}" Margin="30,0,30,0" FontSize="20" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right" />
+            <Button Content="離線作業" Width="100" FontFamily="Microsoft YaHei UI" HorizontalAlignment="Right" Margin="10,30,10,10" Background="CornflowerBlue" BorderBrush="CornflowerBlue" Click="ButtonBase_OnClick" Visibility="Collapsed" />
         </StackPanel>
     </Viewbox>
 </Window>

@@ -6,8 +6,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 {
     public class ReturnProducts : ObservableCollection<ReturnProduct>, ICloneable
     {
-        private ReturnProducts() { }
-        private ReturnProducts(DataTable dataTable)
+        public ReturnProducts()
+        {
+        }
+
+        public ReturnProducts(DataTable dataTable)
         {
             ReturnProduct tempProduct = null;
             short tempID = 0;
@@ -21,6 +24,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         case "O":
                             tempProduct = new ReturnOTC(row);
                             break;
+
                         case "M":
                             tempProduct = new ReturnMedicine(row);
                             break;
@@ -51,11 +55,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
             return products;
         }
+
         internal void SetToProcessing()
         {
             foreach (var product in Items)
                 product.IsProcessing = true;
         }
+
         internal void SetStartEditToPrice()
         {
             foreach (var product in Items)

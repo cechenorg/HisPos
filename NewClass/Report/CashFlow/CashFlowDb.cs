@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.ChromeTabViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Database;
 using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace His_Pos.NewClass.Report.CashFlow
 {
@@ -22,7 +19,7 @@ namespace His_Pos.NewClass.Report.CashFlow
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CashFlowRecordDetailsByDate]", parameterList);
         }
 
-        public static void InsertCashFlowRecordDetail(CashFlowAccount account, string note, double value)
+        public static void InsertCashFlowRecordDetail(CashFlowAccount account, string note, double value, string ID)
         {
             double cashFlowValue;
             if (account.Type == CashFlowType.Expenses)
@@ -32,13 +29,14 @@ namespace His_Pos.NewClass.Report.CashFlow
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Name", account.AccountName);
             DataBaseFunction.AddSqlParameter(parameterList, "Value", cashFlowValue);
-            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", 0);
+            DataBaseFunction.AddSqlParameter(parameterList, "SourceId", account.AccountID);
             DataBaseFunction.AddSqlParameter(parameterList, "CurrentUserId", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "Note", note);
+            DataBaseFunction.AddSqlParameter(parameterList, "Bank", ID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCashFlowRecordDetail]", parameterList);
         }
 
-        public static void UpdateCashFlowRecordDetail(CashFlowAccount account,CashFlowRecordDetail editedDetail)
+        public static void UpdateCashFlowRecordDetail(CashFlowAccount account, CashFlowRecordDetail editedDetail)
         {
             decimal cashFlowValue;
             if (account.Type == CashFlowType.Expenses && editedDetail.CashFlowValue > 0)

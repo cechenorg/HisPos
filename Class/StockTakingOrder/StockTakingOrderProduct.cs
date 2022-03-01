@@ -5,7 +5,7 @@ using System.Data;
 
 namespace His_Pos.Class.StockTakingOrder
 {
-   public class StockTakingOrderProduct :AbstractClass.Product,IStockTakingRecord, INotifyPropertyChanged
+    public class StockTakingOrderProduct : AbstractClass.Product, IStockTakingRecord, INotifyPropertyChanged
     {
         public StockTakingOrderProduct(DataRow dataRow) : base(dataRow)
         {
@@ -16,12 +16,14 @@ namespace His_Pos.Class.StockTakingOrder
             double priceDiff = string.IsNullOrEmpty(dataRow["PROCHE_VALUEDIFF"].ToString()) ? 0 : Convert.ToDouble(dataRow["PROCHE_VALUEDIFF"].ToString());
             PriceDiff = Convert.ToInt32(ValueDiff) > 0 ? "+" + Math.Round(priceDiff) : "-" + Math.Round(priceDiff);
         }
+
         public string empName;
         public string oldValue;
         public string newValue;
         public string reason;
         public string priceDiff;
-        public string ValueDiff => (Convert.ToInt32(newValue) - Convert.ToInt32(oldValue)) > 0 ? "+" + (Math.Round(Convert.ToDouble(newValue) - Convert.ToDouble(oldValue), 2)).ToString():Math.Round(Convert.ToDouble(newValue) - Convert.ToDouble(oldValue), 2).ToString();
+        public string ValueDiff => (Convert.ToInt32(newValue) - Convert.ToInt32(oldValue)) > 0 ? "+" + (Math.Round(Convert.ToDouble(newValue) - Convert.ToDouble(oldValue), 2)).ToString() : Math.Round(Convert.ToDouble(newValue) - Convert.ToDouble(oldValue), 2).ToString();
+
         public string PriceDiff
         {
             get
@@ -34,6 +36,7 @@ namespace His_Pos.Class.StockTakingOrder
                 NotifyPropertyChanged("PriceDiff");
             }
         }
+
         public string EmpName
         {
             get
@@ -46,7 +49,8 @@ namespace His_Pos.Class.StockTakingOrder
                 NotifyPropertyChanged("EmpName");
             }
         }
-       public string OldValue
+
+        public string OldValue
         {
             get
             {
@@ -58,7 +62,8 @@ namespace His_Pos.Class.StockTakingOrder
                 NotifyPropertyChanged("OldValue");
             }
         }
-       public string NewValue
+
+        public string NewValue
         {
             get
             {
@@ -70,6 +75,7 @@ namespace His_Pos.Class.StockTakingOrder
                 NotifyPropertyChanged("NewValue");
             }
         }
+
         public string Reason
         {
             get

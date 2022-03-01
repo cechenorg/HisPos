@@ -3,40 +3,39 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Medicine.ControlMedicineEdit
 {
     public class ControlMedicineEditDb
     {
-        internal static DataTable GetData(string medID,string warID)
+        internal static DataTable GetData(string medID, string warID)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "medID", medID);
-            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID); 
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ControlMedicineEditByMedID]", parameterList);
         }
-        internal static void Update(string medID,string warID,ControlMedicineEdits controlMedicineEdits)
+
+        internal static void Update(string medID, string warID, ControlMedicineEdits controlMedicineEdits)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>(); 
+            List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "MedID", medID);
             DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
-            DataBaseFunction.AddSqlParameter(parameterList, "Mediciines", SetControlMedicineEdit(controlMedicineEdits)); 
-            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateControlMedicineEdit]", parameterList); 
+            DataBaseFunction.AddSqlParameter(parameterList, "Mediciines", SetControlMedicineEdit(controlMedicineEdits));
+            MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateControlMedicineEdit]", parameterList);
         }
-        #region TableSet
-        public static DataTable SetControlMedicineEdit(ControlMedicineEdits controlMedicineEdits)
-        {  
 
+        #region TableSet
+
+        public static DataTable SetControlMedicineEdit(ControlMedicineEdits controlMedicineEdits)
+        {
             DataTable controlMedicineEditTable = ControlMedicineEditTable();
 
             foreach (var c in controlMedicineEdits)
             {
                 if (c.IsNew) continue;
                 DataRow newRow = controlMedicineEditTable.NewRow();
-               
+
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_MedicineID", c.MedicineID);
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_WareHouseID", c.WarID);
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_Date", c.Date);
@@ -44,11 +43,12 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineEdit
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_ManufactoryID", c.Manufactory is null ? null : c.Manufactory.ID);
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_Amount", c.Amount);
                 DataBaseFunction.AddColumnValue(newRow, "ConMedEdit_BatchNumber", c.BatchNumber);
-                
+
                 controlMedicineEditTable.Rows.Add(newRow);
             }
             return controlMedicineEditTable;
         }
+
         public static DataTable ControlMedicineEditTable()
         {
             DataTable detailTable = new DataTable();
@@ -59,11 +59,10 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineEdit
             detailTable.Columns.Add("ConMedEdit_ManufactoryID", typeof(int));
             detailTable.Columns.Add("ConMedEdit_Amount", typeof(int));
             detailTable.Columns.Add("ConMedEdit_BatchNumber", typeof(string));
-            
-            return detailTable; 
+
+            return detailTable;
         }
 
-        #endregion
-
+        #endregion TableSet
     }
 }

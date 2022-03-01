@@ -1,100 +1,283 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl.MyPharmacyControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:command="http://www.galasoft.ch/mvvmlight"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl.MyPharmacyControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.DataContext>
-        <local:MyPharmacyControlViewModel/>
+        <local:MyPharmacyControlViewModel />
     </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="DataNotChanged">
-            <Label Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+            <Label
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="未修改"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
         </DataTemplate>
         <DataTemplate x:Key="DataChanged">
-            <Label Content="已修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" Foreground="Red" FontSize="20"/>
+            <Label
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="已修改"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Red" />
         </DataTemplate>
     </UserControl.Resources>
-    <xctk:BusyIndicator IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+    <xctk:BusyIndicator BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Background="LightGray" DataContext="{Binding MyPharmacy, UpdateSourceTrigger=PropertyChanged}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="60"/>
-                <RowDefinition/>
-                <RowDefinition Height="120"/>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition />
+                <RowDefinition Height="120" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="{Binding Name}" FontSize="45" FontFamily="Segoe UI Semibold" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-            <Border Grid.Row="0" BorderBrush="DimGray" BorderThickness="0,0,0,1" Width="450"/>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Text="機構代碼" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0">
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,0,0,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                FontFamily="Segoe UI Semibold"
+                FontSize="45"
+                Text="{Binding Name}" />
+            <Border
+                Grid.Row="0"
+                Width="450"
+                BorderBrush="DimGray"
+                BorderThickness="0,0,0,1" />
+            <StackPanel
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="28"
+                    Foreground="DimGray"
+                    Text="機構代碼" />
+                <TextBox
+                    Margin="20,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="25"
+                    Foreground="DimGray"
+                    Text="{Binding ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
-                            <command:EventToCommand Command="{Binding DataContext.PharmacyIDChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <command:EventToCommand Command="{Binding DataContext.PharmacyIDChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
-                <TextBox Text="{Binding Tel}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0" HorizontalContentAlignment="Center">
+            <StackPanel
+                Grid.Row="2"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBox
+                    Margin="20,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="25"
+                    Foreground="DimGray"
+                    Text="{Binding Tel}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
-                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
-                <TextBox Text="{Binding Address}" FontSize="25" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0" HorizontalContentAlignment="Center">
+            <StackPanel
+                Grid.Row="3"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBox
+                    Margin="20,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="25"
+                    Foreground="DimGray"
+                    Text="{Binding Address}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
-                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <Grid Grid.Row="5" Margin="10" Background="{StaticResource Shadow}">
+
+            <StackPanel
+                Grid.Row="4"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="28"
+                    Foreground="DimGray"
+                    Text="統一編號" />
+                <TextBox
+                    Margin="20,0,0,0"
+                    Width="200"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="25"
+                    Foreground="DimGray"
+                    Text="{Binding TAXNUM}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
+            <Grid
+                Grid.Row="5"
+                Margin="10"
+                Background="{StaticResource Shadow}">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <TextBlock Text="讀卡機設定" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
-                    <TextBlock Text="COM" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
-                    <ComboBox Margin="10,0,0,0" Width="150" FontSize="25" Height="40" FontFamily="Segoe UI Semi" Foreground="DimGray" HorizontalContentAlignment="Center"
-                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedIndex="{Binding ReaderCom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <TextBlock Text="COM0" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM1" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM2" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM3" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM4" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM5" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM6" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM7" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM8" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
-                        <TextBlock Text="COM9" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="28"
+                        Foreground="Black"
+                        Text="讀卡機設定" />
+                    <TextBlock
+                        Margin="20,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="25"
+                        Foreground="DimGray"
+                        Text="COM" />
+                    <ComboBox
+                        Width="150"
+                        Height="40"
+                        Margin="10,0,0,0"
+                        HorizontalContentAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="25"
+                        Foreground="DimGray"
+                        ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                        SelectedIndex="{Binding ReaderCom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM0" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM1" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM2" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM3" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM4" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM5" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM6" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM7" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM8" />
+                        <TextBlock
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="DimGray"
+                            Text="COM9" />
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </ComboBox>
-                    <Button Content="安全模組認證" FontSize="16" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="10,0,0,0" BorderBrush="RoyalBlue" Command="{Binding DataContext.VerifySAMDCCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                    <CheckBox Content="新特約關閉每日上傳" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" IsChecked="{Binding DataContext.MyPharmacy.NewInstitution,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" Command="{Binding DataContext.NewInstitutionOnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    <Button
+                        Margin="10,0,0,0"
+                        Background="RoyalBlue"
+                        BorderBrush="RoyalBlue"
+                        Command="{Binding DataContext.VerifySAMDCCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Content="安全模組認證"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="16" />
+                    <CheckBox
+                        Margin="10,0,0,0"
+                        Command="{Binding DataContext.NewInstitutionOnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Content="新特約關閉每日上傳"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="16"
+                        IsChecked="{Binding DataContext.MyPharmacy.NewInstitution, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="1">
-                    <TextBlock Text="健保局IP" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
-                    <TextBox Text="{Binding VpnIp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="23" FontFamily="Segoe UI Semi" Foreground="DimGray" Margin="20,0,0,8" Width="185" HorizontalContentAlignment="Center">
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="28"
+                        Foreground="Black"
+                        Text="健保局IP" />
+                    <TextBox
+                        Width="185"
+                        Margin="20,0,0,8"
+                        HorizontalContentAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="23"
+                        Foreground="DimGray"
+                        Text="{Binding VpnIp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
-                                <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                <command:EventToCommand Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
@@ -110,8 +293,23 @@
                             </Style>
                         </ContentControl.Style>
                     </ContentControl>
-                    <Button  Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0" Command="{Binding DataContext.CancelChangeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-                    <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Command="{Binding DataContext.ConfirmChangeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    <Button
+                        Width="120"
+                        Margin="10,0,10,0"
+                        Background="Gray"
+                        BorderThickness="0"
+                        Command="{Binding DataContext.CancelChangeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Content="取消"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="16" />
+                    <Button
+                        Width="150"
+                        Background="IndianRed"
+                        BorderThickness="0"
+                        Command="{Binding DataContext.ConfirmChangeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Content="確認"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="16" />
                 </StackPanel>
             </Grid>
         </Grid>

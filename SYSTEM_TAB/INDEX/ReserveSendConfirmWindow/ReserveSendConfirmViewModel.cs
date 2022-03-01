@@ -7,7 +7,6 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.IndexReserve;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
 using His_Pos.NewClass.Product;
-using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using Microsoft.Reporting.WinForms;
 using System;
@@ -15,14 +14,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+
 namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
 {
     public class ReserveSendConfirmViewModel : ViewModelBase
     {
         private bool isAllSend;
+
         public bool IsAllSend
         {
             get => isAllSend;
@@ -32,7 +32,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 CaculateReserveSendAmount();
             }
         }
+
         private IndexReserves indexReserveCollection;
+
         public IndexReserves IndexReserveCollection
         {
             get => indexReserveCollection;
@@ -41,7 +43,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 Set(() => IndexReserveCollection, ref indexReserveCollection, value);
             }
         }
+
         private IndexReserve indexReserveSelectedItem;
+
         public IndexReserve IndexReserveSelectedItem
         {
             get => indexReserveSelectedItem;
@@ -52,21 +56,24 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 CaculateReserveSendAmount();
             }
         }
+
         private IndexReserveDetail indexReserveMedicineSelectedItem;
+
         public IndexReserveDetail IndexReserveMedicineSelectedItem
         {
             get => indexReserveMedicineSelectedItem;
             set
             {
                 Set(() => IndexReserveMedicineSelectedItem, ref indexReserveMedicineSelectedItem, value);
-                
             }
         }
-         
-        public RelayCommand SubmitCommand { get; set; } 
+
+        public RelayCommand SubmitCommand { get; set; }
         public RelayCommand SendAmountChangeCommand { get; set; }
         public RelayCommand ShowMedicineDetailCommand { get; set; }
-        public ReserveSendConfirmViewModel(IndexReserves indexReserves) {
+
+        public ReserveSendConfirmViewModel(IndexReserves indexReserves)
+        {
             SubmitCommand = new RelayCommand(SubmitAction);
             SendAmountChangeCommand = new RelayCommand(SendAmountChangeAction);
             ShowMedicineDetailCommand = new RelayCommand(ShowMedicineDetailAction);
@@ -76,72 +83,88 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                     CaculateReserveSendAmount();
             });
             IndexReserveCollection = indexReserves;
-            if (IndexReserveCollection.Count > 0) {
+            if (IndexReserveCollection.Count > 0)
+            {
                 IndexReserveSelectedItem = IndexReserveCollection[0];
                 CaculateReserveSendAmount();
             }
-                
         }
+
         #region Action
-        private void SubmitAction() {
+
+        private void SubmitAction()
+        {
             if (IndexReserveSelectedItem is null) return;
             ConfirmWindow confirmWindow;
+            ConfirmWindow printWindow;
+            var confirm = false;
             var print = false;
             switch (IndexReserveSelectedItem.PrepareMedType)
             {
                 case ReserveSendType.AllPrepare:
-                    confirmWindow = new ConfirmWindow("是否列印封包明細", "預約慢箋採購");
-                    print = (bool) confirmWindow.DialogResult;
+                    printWindow = new ConfirmWindow("是否列印封包明細?", "預約慢箋採購");
+                    print = (bool)printWindow.DialogResult;
                     SendReserveStoOrder(print);
                     break;
+
                 default:
                     confirmWindow = new ConfirmWindow("是否傳送藥健康?", "預約慢箋採購");
-                    print = (bool) confirmWindow.DialogResult;
-                    if(!print) return;
+                    confirm = (bool)confirmWindow.DialogResult;
+                    if (!confirm) return;
+                    printWindow = new ConfirmWindow("是否列印封包明細?", "預約慢箋採購");
+                    print = (bool)printWindow.DialogResult;
                     SendReserveStoOrder(print);
                     break;
             }
-            if (IndexReserveCollection.Count == 0) {
+            if (IndexReserveCollection.Count == 0)
+            {
                 MessageWindow.ShowMessage("未有備藥傳送處方", MessageType.SUCCESS);
                 Messenger.Default.Send(new NotificationMessage("CloseReserveSendConfirmWindow"));
-            }  
+            }
         }
-        private void SendAmountChangeAction() {
+
+        private void SendAmountChangeAction()
+        {
             CheckSendStatus();
         }
-        private void SendReserveStoOrder(bool print) {
+
+        private void SendReserveStoOrder(bool print)
+        {
             MainWindow.ServerConnection.OpenConnection();
-            switch (IndexReserveSelectedItem.PrepareMedType) {
-                case ReserveSendType.AllPrepare: 
+            switch (IndexReserveSelectedItem.PrepareMedType)
+            {
+                case ReserveSendType.AllPrepare:
                     IndexReserveSelectedItem.PrepareMedStatus = IndexPrepareMedType.Prepare;
                     IndexReserveSelectedItem.SaveStatus();
-                    if(print)
+                    if (print)
                         PrintPackage();
                     IndexReserveCollection.Remove(IndexReserveSelectedItem);
                     break;
+
                 case ReserveSendType.AllSend:
                 case ReserveSendType.CoPrepare:
-                    if (IndexReserveSelectedItem.StoreOrderToSingde()) {
+                    if (IndexReserveSelectedItem.StoreOrderToSingde())
+                    {
                         if (print)
                             PrintPackage();
                         IndexReserveCollection.Remove(IndexReserveSelectedItem);
                     }
-                        
-                    break;
 
+                    break;
             }
-             
+
             if (IndexReserveCollection.Count > 0)
                 IndexReserveSelectedItem = IndexReserveCollection[0];
-            MainWindow.ServerConnection.CloseConnection(); 
-           
+            MainWindow.ServerConnection.CloseConnection();
         }
-        private void SavePrepareMedMessage() {
+
+        private void SavePrepareMedMessage()
+        {
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "封包架上量統計表";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;   //@是取消转义字符的意思
             fdlg.Filter = "Csv檔案|*.csv";
-            fdlg.FileName =  DateTime.Today.ToString("yyyyMMdd") +  ViewModelMainWindow.CurrentPharmacy.Name + "封包架上量統計表";
+            fdlg.FileName = DateTime.Today.ToString("yyyyMMdd") + ViewModelMainWindow.CurrentPharmacy.Name + "封包架上量統計表";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -153,15 +176,15 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                     using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
                     {
                         file.WriteLine("藥品代碼,藥品名稱,調劑量,傳送量,病患,備藥訊息");
-                         
+
                         foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection)
                         {
                             if (med.Amount > med.SendAmount)
                             {
                                 file.WriteLine($"{med.ID},{med.FullName},{med.Amount},{med.SendAmount},{IndexReserveSelectedItem.CusName},需從架上拿{med.Amount - med.SendAmount}個單位至封包");
                             }
-                        } 
-                       
+                        }
+
                         file.Close();
                         file.Dispose();
                     }
@@ -171,9 +194,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }
-            }  
+            }
         }
-        private void CheckSendStatus() {
+
+        private void CheckSendStatus()
+        {
             int sameCount = 0;
             int zeroSendCount = 0;
             foreach (var s in IndexReserveSelectedItem.IndexReserveDetailCollection)
@@ -188,12 +213,14 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
             else if (sameCount == IndexReserveSelectedItem.IndexReserveDetailCollection.Count)
                 IndexReserveSelectedItem.PrepareMedType = ReserveSendType.AllSend;
             else
-                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.CoPrepare; 
+                IndexReserveSelectedItem.PrepareMedType = ReserveSendType.CoPrepare;
         }
-        private void CaculateReserveSendAmount() {
+
+        private void CaculateReserveSendAmount()
+        {
             if (IndexReserveSelectedItem is null) return;
             MainWindow.ServerConnection.OpenConnection();
-           
+
             IndexReserveSelectedItem.GetIndexSendDetail();
             List<string> MedicineIds = new List<string>();
             foreach (var med in IndexReserveSelectedItem.IndexReserveDetailCollection)
@@ -201,7 +228,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 MedicineIds.Add(med.ID);
             }
             Inventorys InventoryCollection = Inventorys.GetAllInventoryByProIDs(MedicineIds);
-            
+
             for (int j = 0; j < IndexReserveSelectedItem.IndexReserveDetailCollection.Count; j++)
             {
                 var pro = IndexReserveSelectedItem.IndexReserveDetailCollection[j];
@@ -213,11 +240,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                     pro.SendAmount = IsAllSend ? pro.Amount : target.OnTheFrame - pro.Amount > 0 ? 0 : pro.Amount - target.OnTheFrame;
                     pro.FrameAmount = target.OnTheFrame;
                 }
-            } 
+            }
             MainWindow.ServerConnection.CloseConnection();
             CheckSendStatus();
         }
-        private void PrintPackage() {
+
+        private void PrintPackage()
+        {
             ReportViewer rptViewer = new ReportViewer();
             IndexReserveSelectedItem.SetReserveMedicinesSheetReportViewer(rptViewer);
             MainWindow.Instance.Dispatcher.Invoke(() =>
@@ -225,12 +254,13 @@ namespace His_Pos.SYSTEM_TAB.INDEX.ReserveSendConfirmWindow
                 ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
             });
         }
+
         private void ShowMedicineDetailAction()
-        { 
+        {
             ProductDetailWindow.ShowProductDetailWindow();
-            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveMedicineSelectedItem.ID, "0" }, "ShowProductDetail")); 
+            Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { IndexReserveMedicineSelectedItem.ID, "0" }, "ShowProductDetail"));
         }
-      
-        #endregion
+
+        #endregion Action
     }
 }

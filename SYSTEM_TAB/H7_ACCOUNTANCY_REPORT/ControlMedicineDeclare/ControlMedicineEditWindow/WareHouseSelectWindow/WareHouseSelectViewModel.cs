@@ -11,24 +11,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.ControlMedicineEditWindow.WareHouseSelectWindow
 {
     public class WareHouseSelectViewModel : ViewModelBase
-    { 
+    {
         public DateTime SDateTime { get; set; }
         public DateTime EDateTime { get; set; }
         public WareHouses WareHouseCollection { get; set; } = WareHouses.GetWareHouses();
         public RelayCommand SubmitCommand { get; set; }
 
-        public WareHouseSelectViewModel(DateTime sDate ,DateTime eDate) {
+        public WareHouseSelectViewModel(DateTime sDate, DateTime eDate)
+        {
             SDateTime = sDate;
             EDateTime = eDate;
             SubmitCommand = new RelayCommand(SubmitAction);
         }
-        private void SubmitAction( )
+
+        private void SubmitAction()
         {
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "管制藥品批次申報檔";
@@ -46,7 +47,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
                     using (var file = new StreamWriter(fdlg.FileName, false, Encoding.UTF8))
                     {
                         List<string> warList = new List<string>();
-                        foreach (var w in WareHouseCollection) {
+                        foreach (var w in WareHouseCollection)
+                        {
                             if (w.IsSelected)
                                 warList.Add(w.ID);
                         }
@@ -66,7 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
                                  $"{c.Date.AddYears(-1911).ToString("yyyMMdd")},{c.TypeName}," +
                                  $"{c.InputAmount},{c.InputAmount},,{c.ManufactoryControlMedicinesID},{c.ManufactoryName},,,,,,,,,,,,,,,");
                             index++;
-                        } 
+                        }
                         file.Close();
                         file.Dispose();
                     }
@@ -79,7 +81,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                 }
             }
-
         }
     }
 }

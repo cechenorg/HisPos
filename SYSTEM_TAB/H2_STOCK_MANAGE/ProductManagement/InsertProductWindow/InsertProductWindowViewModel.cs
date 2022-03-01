@@ -1,34 +1,36 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using System.Data;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow {
-    public class InsertProductWindowViewModel : ViewModelBase{
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWindow
+{
+    public class InsertProductWindowViewModel : ViewModelBase
+    {
         #region Var
+
         private string proTypeName;
+
         public string ProTypeName
         {
             get => proTypeName;
             set
             {
                 Set(() => ProTypeName, ref proTypeName, value);
-                switch (ProTypeName) {
+                switch (ProTypeName)
+                {
                     case "OTC藥品":
                         ProID = ProductDB.GetProductNewID(2);
                         break;
                 }
             }
         }
+
         private string proID;
+
         public string ProID
         {
             get => proID;
@@ -37,7 +39,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                 Set(() => ProID, ref proID, value);
             }
         }
+
         private string proChineseName;
+
         public string ProChineseName
         {
             get => proChineseName;
@@ -46,7 +50,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                 Set(() => ProChineseName, ref proChineseName, value);
             }
         }
+
         private string proEnglishName;
+
         public string ProEnglishName
         {
             get => proEnglishName;
@@ -55,20 +61,27 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                 Set(() => ProEnglishName, ref proEnglishName, value);
             }
         }
-       
+
         public RelayCommand InsertProductCommand { get; set; }
-        #endregion
-        public InsertProductWindowViewModel() {
-            InsertProductCommand = new RelayCommand(InsertProductAction); 
+
+        #endregion Var
+
+        public InsertProductWindowViewModel()
+        {
+            InsertProductCommand = new RelayCommand(InsertProductAction);
         }
+
         #region Action
-        private void InsertProductAction() {
+
+        private void InsertProductAction()
+        {
             string typeID = "";
             switch (ProTypeName)
             {
                 case "健保品":
                     typeID = "1";
                     break;
+
                 case "OTC商品":
                     typeID = "2";
                     break;
@@ -96,6 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
             else
                 MessageWindow.ShowMessage("新增失敗", Class.MessageType.ERROR);
         }
-        #endregion
+
+        #endregion Action
     }
 }

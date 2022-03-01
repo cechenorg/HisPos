@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System.Data;
 
 namespace His_Pos.NewClass.WareHouse
 {
     public class WareHouseSetting : WareHouse
     {
         #region ----- Define Variables -----
+
         public bool CanDelete { get; set; }
         public double StockValue { get; set; }
         public double NegativeStockValue { get; set; }
         public double TotalStockValue { get { return StockValue + NegativeStockValue; } }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public WareHouseSetting(DataRow row) : base(row)
         {

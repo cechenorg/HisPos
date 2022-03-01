@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using His_Pos.NewClass.Medicine.Usage;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using His_Pos.NewClass.Medicine.Usage;
 
 namespace His_Pos.Service
 {
@@ -59,7 +59,7 @@ namespace His_Pos.Service
         private static int QWxyz(string str, int days)
         {
             var values = FindNumberInString(str);
-            var remainDays = days % 7; 
+            var remainDays = days % 7;
             return days / 7 * values.Count + remainDays;
         }
 
@@ -91,7 +91,7 @@ namespace His_Pos.Service
         {
             var values = FindNumberInString(str);
             if (days % (7 * values[0]) != 0)
-                return days / (7 * values[0])+1;
+                return days / (7 * values[0]) + 1;
             return days / (7 * values[0]);
         }
 
@@ -99,7 +99,7 @@ namespace His_Pos.Service
         {
             var values = FindNumberInString(str);
             if (days % values[0] != 0)
-                return days / values[0]+1;
+                return days / values[0] + 1;
             return days / values[0];
         }
 
@@ -130,7 +130,7 @@ namespace His_Pos.Service
             return values;
         }
 
-        public static int GetDaysByUsage_QD(double amount,double dosage)
+        public static int GetDaysByUsage_QD(double amount, double dosage)
         {
             var dosagePerDay = dosage;
             return CountDaysByDosagePerDay(amount, dosagePerDay);

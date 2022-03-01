@@ -1,42 +1,63 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow.InstitutionSelectionWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow"
-        xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
-        mc:Ignorable="d"
-        Title="選擇釋出院所" Height="400" Width="695" WindowStartupLocation="CenterScreen">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow.InstitutionSelectionWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="選擇釋出院所"
+    Width="695"
+    Height="400"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
-        <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
-            <Setter Property="HorizontalAlignment"  Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+        <Style x:Key="TextInMiddleCellStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <DataTemplate x:Key="EditingDataGrid" DataType="{x:Type local:InstitutionSelectionViewModel}">
-            <Label Content="輸入搜尋字串中..." Width="695" Height="270" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <Label
+                Width="695"
+                Height="270"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Background="{StaticResource GridBackGround}"
+                Content="輸入搜尋字串中..."
+                Style="{StaticResource BoldLabelHeader25}" />
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="{x:Type local:InstitutionSelectionViewModel}">
-            <DataGrid Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="675" HorizontalAlignment="Left" ItemsSource="{Binding InsCollectionView}"
-                      AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" EnableRowVirtualization="True" 
-                      SelectedItem="{Binding SelectedInstitution,Mode=TwoWay}">
+            <DataGrid
+                Grid.Row="1"
+                Width="675"
+                HorizontalAlignment="Left"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridBackGround}"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                EnableRowVirtualization="True"
+                FontFamily="Segoe UI Semi"
+                HorizontalScrollBarVisibility="Hidden"
+                ItemsSource="{Binding InsCollectionView}"
+                SelectedItem="{Binding SelectedInstitution, Mode=TwoWay}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding InstitutionSelected}"/>
+                        <i:InvokeCommandAction Command="{Binding InstitutionSelected}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <i:Interaction.Behaviors>
-                    <behaviors:ScrollIntoView/>
+                    <behaviors:ScrollIntoView />
                 </i:Interaction.Behaviors>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Width" Value="15" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                             </Trigger>
@@ -47,18 +68,28 @@
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}" />
                             </Trigger>
                         </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="FontSize" Value="18"/>
-                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FontSize" Value="18" />
+                        <Setter Property="Height" Value="40" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="院所代碼" Width="120" MaxWidth="120" Binding="{Binding ID}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="院所名稱" Width="570" MaxWidth="570" Binding="{Binding Name}" IsReadOnly="True"/>
+                    <DataGridTextColumn
+                        Width="120"
+                        MaxWidth="120"
+                        Binding="{Binding ID}"
+                        Header="院所代碼"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="570"
+                        MaxWidth="570"
+                        Binding="{Binding Name}"
+                        Header="院所名稱"
+                        IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
         </DataTemplate>
@@ -66,18 +97,37 @@
     <Viewbox Stretch="Fill">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="270"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="270" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
-            <TextBox Name="SearchStringTextBox" Grid.Row="0" Width="300" Text="{Binding Search, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="20" Margin="10,5,0,5" HorizontalAlignment="Left">
+            <TextBox
+                Name="SearchStringTextBox"
+                Grid.Row="0"
+                Width="300"
+                Margin="10,5,0,5"
+                HorizontalAlignment="Left"
+                materialDesign:HintAssist.Hint="輸入搜尋字串"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.InputBindings>
-                    <KeyBinding Command="{Binding SearchTextChanged}" Key="Enter" />
-                    <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Up" CommandParameter="UP"/>
-                    <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
+                    <KeyBinding Key="Enter" Command="{Binding SearchTextChanged}" />
+                    <KeyBinding
+                        Key="Up"
+                        Command="{Binding FocusUpDownCommand}"
+                        CommandParameter="UP" />
+                    <KeyBinding
+                        Key="Down"
+                        Command="{Binding FocusUpDownCommand}"
+                        CommandParameter="DOWN" />
                 </TextBox.InputBindings>
             </TextBox>
-            <ContentControl Name="ResultGrid" Grid.Row="1" Content="{Binding}" Margin="10,10,10,0">
+            <ContentControl
+                Name="ResultGrid"
+                Grid.Row="1"
+                Margin="10,10,10,0"
+                Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource ShowResultDataGrid}" />
@@ -92,11 +142,25 @@
                     </Style>
                 </ContentControl.Style>
                 <ContentControl.InputBindings>
-                    <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Up" CommandParameter="UP"/>
-                    <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
+                    <KeyBinding
+                        Key="Up"
+                        Command="{Binding FocusUpDownCommand}"
+                        CommandParameter="UP" />
+                    <KeyBinding
+                        Key="Down"
+                        Command="{Binding FocusUpDownCommand}"
+                        CommandParameter="DOWN" />
                 </ContentControl.InputBindings>
             </ContentControl>
-            <Button Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Command="{Binding InstitutionSelected}"/>
+            <Button
+                Grid.Row="2"
+                Width="200"
+                Background="RoyalBlue"
+                BorderBrush="Transparent"
+                Command="{Binding InstitutionSelected}"
+                Content="確認"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18" />
         </Grid>
     </Viewbox>
 </Window>

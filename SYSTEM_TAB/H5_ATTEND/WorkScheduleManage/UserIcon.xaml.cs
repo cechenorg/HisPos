@@ -15,6 +15,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         public string Id { get; }
 
         private bool isMed;
+
         public bool IsMed
         {
             get
@@ -29,6 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         }
 
         private bool show;
+
         public bool Show
         {
             get
@@ -64,6 +66,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -108,13 +111,14 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
             return null;
         }
     }
+
     public class MarginShowConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((bool)value)
             {
-                return new Thickness(0,0,2,0);
+                return new Thickness(0, 0, 2, 0);
             }
 
             return new Thickness(0);

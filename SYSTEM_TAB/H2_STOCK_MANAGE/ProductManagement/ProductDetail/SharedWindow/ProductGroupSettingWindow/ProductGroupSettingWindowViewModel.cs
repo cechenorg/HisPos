@@ -6,25 +6,22 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.ProductGroupSetting;
-using His_Pos.NewClass.WareHouse;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
-using System.Threading.Tasks;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow {
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow
+{
     public class ProductGroupSettingWindowViewModel : ViewModelBase
     {
         #region ----- Define Commands -----
+
         public RelayCommand MergeProductGroupCommand { get; set; }
         public RelayCommand SplitProductGroupCommand { get; set; }
         public RelayCommand SearchMergeProductCommand { get; set; }
-        #endregion
+
+        #endregion ----- Define Commands -----
 
         #region ----- Define Variables -----
+
         private bool isMergeProduct = true;
         private string wareHouseID;
         private ProductGroupSettings productGroupSettingCollection;
@@ -37,24 +34,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             get { return isMergeProduct; }
             set { Set(() => IsMergeProduct, ref isMergeProduct, value); }
         }
+
         public ProductGroupSettings ProductGroupSettingCollection
         {
             get { return productGroupSettingCollection; }
             set { Set(() => ProductGroupSettingCollection, ref productGroupSettingCollection, value); }
         }
+
         public ProductGroupSetting CurrentProductGroupSetting
         {
             get { return currentProductGroupSetting; }
             set { Set(() => CurrentProductGroupSetting, ref currentProductGroupSetting, value); }
         }
+
         public double TotalInventory { get; set; }
         public double SplitAmount { get; set; }
+
         public string SearchString
         {
             get { return searchString; }
             set { Set(() => SearchString, ref searchString, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public ProductGroupSettingWindowViewModel(ProductGroupSettings productGroupSettingCollection, string wareID, double inventory)
         {
@@ -66,6 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #region ----- Define Actions -----
+
         private void MergeProductGroupAction()
         {
             SearchMergeProductAction();
@@ -77,7 +80,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             if (!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = ProductGroupSettingDB.MergeProduct(ProductGroupSettingCollection[0].ID ,mergeProductStruct.ID, wareHouseID);
+            DataTable dataTable = ProductGroupSettingDB.MergeProduct(ProductGroupSettingCollection[0].ID, mergeProductStruct.ID, wareHouseID);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable?.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
@@ -88,13 +91,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             else
                 MessageWindow.ShowMessage("合併失敗 請稍後再試", MessageType.ERROR);
         }
+
         private void SplitProductGroupAction()
         {
-            if(!IsSplitValid()) return;
+            if (!IsSplitValid()) return;
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將 {CurrentProductGroupSetting.ID} 從群組中拆出\n拆出數量為 {SplitAmount}", "");
 
-            if(!(bool)confirmWindow.DialogResult) return;
+            if (!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
             DataTable dataTable = ProductGroupSettingDB.SplitProduct(CurrentProductGroupSetting.ID, SplitAmount, wareHouseID);
@@ -140,15 +144,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 MessageWindow.ShowMessage("查無此商品", MessageType.WARNING);
             }
         }
-        #endregion
+
+        #endregion ----- Define Actions -----
 
         #region ----- Define Functions -----
+
         private void RegisterCommands()
         {
             MergeProductGroupCommand = new RelayCommand(MergeProductGroupAction);
             SplitProductGroupCommand = new RelayCommand(SplitProductGroupAction);
             SearchMergeProductCommand = new RelayCommand(SearchMergeProductAction);
         }
+
         private bool IsSplitValid()
         {
             if (ProductGroupSettingCollection.Count == 1)
@@ -177,6 +184,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             return true;
         }
+
         private bool IsMergeValid()
         {
             if (mergeProductStruct.Inventory < 0)
@@ -202,6 +210,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             return true;
         }
+
         private void GetSelectedProduct(NotificationMessage<ProductStruct> notificationMessage)
         {
             if (notificationMessage.Notification == nameof(ProductGroupSettingWindowViewModel))
@@ -210,6 +219,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 SearchString = mergeProductStruct.ID;
             }
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

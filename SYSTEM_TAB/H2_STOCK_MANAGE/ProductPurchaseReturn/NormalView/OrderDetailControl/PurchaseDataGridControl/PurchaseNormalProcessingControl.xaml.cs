@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using Button = System.Windows.Controls.Button;
 using DataGridCell = System.Windows.Controls.DataGridCell;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -31,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         #region ----- Define Functions -----
 
         #region ///// Enter MoveNext Functions /////
+
         private void MaskedTextBox_OnKeyDown(object sender, KeyEventArgs e)
         {
             Xceed.Wpf.Toolkit.MaskedTextBox maskedTextBox = sender as Xceed.Wpf.Toolkit.MaskedTextBox;
@@ -51,8 +52,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 if (firstChild is TextBox)
                     firstChild.Focus();
             }
-
         }
+
         private void UIElement_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -72,6 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 textBox.CaretIndex++;
             }
         }
+
         private void MoveFocusNext(object sender)
         {
             (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
@@ -121,6 +123,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 FocusRow(secondChild as TextBox);
             }
         }
+
         private void ProductSubTotalTextbox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -133,7 +136,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
                 int index = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentCell.Item);
 
-                if(ProductDataGrid.Items.Count == index + 1)
+                if (ProductDataGrid.Items.Count == index + 1)
                     MoveFocusNext(textBox);
                 else
                 {
@@ -156,9 +159,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 textBox.CaretIndex++;
             }
         }
-        #endregion
+
+        #endregion ///// Enter MoveNext Functions /////
 
         #region ///// Focus Functions /////
+
         private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -168,6 +173,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             textBox.SelectAll();
             FocusRow(textBox);
         }
+
         private void UIElement_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -177,6 +183,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             e.Handled = true;
             textBox.Focus();
         }
+
         private void FocusRow(TextBox textBox)
         {
             List<TextBox> textBoxs = new List<TextBox>();
@@ -186,7 +193,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             ProductDataGrid.SelectedItem = (ProductDataGrid.Items[index] as Product);
         }
-        #endregion
+
+        #endregion ///// Focus Functions /////
 
         private void ShowDetail(object sender, MouseButtonEventArgs e)
         {
@@ -199,6 +207,33 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
         }
 
-        #endregion
+        #endregion ----- Define Functions -----
+
+        private void Amount_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+        }
+
+        private void ProductSubTotalTextbox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (string.IsNullOrEmpty(textBox.Text))
+            {
+                textBox.Text = "0";
+            }
+        }
+
+        private void tgPay_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)tgPay.IsChecked)
+            {
+                lbCashPay.Foreground = Brushes.Black;
+                lbNormalPay.Foreground = Brushes.DimGray;
+            }
+            else
+            {
+                lbCashPay.Foreground = Brushes.DimGray;
+                lbNormalPay.Foreground = Brushes.Black;
+            }
+        }
     }
 }

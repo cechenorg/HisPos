@@ -1,14 +1,12 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Person.Customer.CustomerHistory;
+using His_Pos.Service;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Medicine.Base;
-using His_Pos.NewClass.Person.Customer.CustomerHistory;
-using His_Pos.Service;
 using Xceed.Wpf.Toolkit;
 using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
 
@@ -19,8 +17,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
     /// </summary>
     public partial class PrescriptionDeclareView : System.Windows.Controls.UserControl
     {
-        int prevRowIndex = -1;
+        private int prevRowIndex = -1;
+        public static TextBox FromPOSCuslblcheck;
+
         public delegate Point GetDragDropPosition(IInputElement theElement);
+
         public PrescriptionDeclareView()
         {
             InitializeComponent();
@@ -31,16 +32,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Messenger.Default.Register<NotificationMessage>("FocusMainDisease", FocusMainDisease);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
             PrescriptionMedicines.Drop += PrescriptionMedicines_Drop;
+            FromPOSCuslblcheck = this.tbFromPOS;
         }
 
         private void FocusMainDisease(NotificationMessage msg)
         {
-
             if (!(msg.Sender is PrescriptionDeclareViewModel) || !msg.Notification.Equals("FocusMainDisease")) return;
             MainDiagnosis.Focus();
             MainDiagnosis.SelectionStart = 0;
-
         }
+
         private void FocusDivision(NotificationMessage msg)
         {
             if (msg.Sender is PrescriptionDeclareViewModel && msg.Notification.Equals("FocusDivision"))
@@ -57,7 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void CheckPharmacistSelected()
         {
-            if(DivisionCombo.SelectedIndex == 0 || DivisionCombo.SelectionBoxItem is null) return;
+            if (DivisionCombo.SelectedIndex == 0 || DivisionCombo.SelectionBoxItem is null) return;
             if (PharmacistCombo.SelectedIndex < 0)
                 PharmacistCombo.Focus();
             else
@@ -68,6 +69,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (sender is MaskedTextBox t) t.SelectionStart = 0;
         }
+
         private void Division_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -81,6 +83,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         MedicalNumber.SelectAll();
                     }
                     break;
+
                 case Key.Left:
                     e.Handled = true;
                     ReleaseHospital.Focus();
@@ -95,10 +98,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case Key.Space:
                     e.Handled = true;
                     break;
+
                 case Key.Enter:
                     TreatDateTextBox.Focus();
                     TreatDateTextBox.SelectionStart = 0;
                     break;
+
                 case Key.Left:
                     PharmacistCombo.Focus();
                     break;
@@ -117,6 +122,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                         AdjustDateTextBox.SelectionStart = 0;
                         e.Handled = true;
                         break;
+
                     case Key.Left:
                         MedicalNumber.Focus();
                         break;
@@ -135,17 +141,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     MainDiagnosis.SelectionStart = 0;
                     e.Handled = true;
                     break;
-                //case Key.Left:
-                //    TreatDateTextBox.Focus();
-                //    break;
+                    //case Key.Left:
+                    //    TreatDateTextBox.Focus();
+                    //    break;
             }
         }
 
         private void FocusSubDisease(NotificationMessage msg)
         {
-
             if (!(msg.Sender is PrescriptionDeclareViewModel) || !msg.Notification.Equals("FocusSubDisease")) return;
-            
+
             SecondDiagnosis.Focus();
             SecondDiagnosis.SelectionStart = 0;
         }
@@ -156,7 +161,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ChronicTotal.Focus();
             ChronicTotal.SelectionStart = 0;
         }
-
 
         private void MainDiagnosis_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -182,6 +186,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     ChronicSequence.Focus();
                     ChronicSequence.SelectionStart = 0;
                     break;
+
                 case Key.Left:
                     SecondDiagnosis.Focus();
                     break;
@@ -195,6 +200,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case Key.Enter:
                     AdjustCombo.Focus();
                     break;
+
                 case Key.Left:
                     ChronicTotal.Focus();
                     break;
@@ -208,12 +214,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case Key.Enter:
                     PrescriptionCaseCombo.Focus();
                     break;
+
                 case Key.Left:
                     e.Handled = true;
                     ChronicSequence.Focus();
                     break;
             }
         }
+
         private void PrescriptionCaseCombo_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -221,6 +229,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case Key.Enter:
                     CopaymentCombo.Focus();
                     break;
+
                 case Key.Left:
                     e.Handled = true;
                     AdjustCombo.Focus();
@@ -235,6 +244,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case Key.Enter:
                     PaymentCategoryCombo.Focus();
                     break;
+
                 case Key.Left:
                     e.Handled = true;
                     PrescriptionCaseCombo.Focus();
@@ -249,6 +259,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case Key.Enter:
                     SpecialTreatCombo.Focus();
                     break;
+
                 case Key.Left:
                     e.Handled = true;
                     CopaymentCombo.Focus();
@@ -261,50 +272,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (e.Key)
             {
                 case Key.Enter:
-                {
-                    var dataGridTextBox = new List<TextBox>();
-                    NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID",
-                        ref dataGridTextBox);
-                    dataGridTextBox[0].Focus();
-                    dataGridTextBox[0].SelectionStart = 0;
-                    PrescriptionMedicines.SelectedItem = PrescriptionMedicines.Items[0];
-                    break;
-                }
+                    {
+                        var dataGridTextBox = new List<TextBox>();
+                        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID",
+                            ref dataGridTextBox);
+                        dataGridTextBox[0].Focus();
+                        dataGridTextBox[0].SelectionStart = 0;
+                        PrescriptionMedicines.SelectedItem = PrescriptionMedicines.Items[0];
+                        break;
+                    }
                 case Key.Left:
                     e.Handled = true;
                     PaymentCategoryCombo.Focus();
                     break;
             }
         }
+
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             //按 Enter 下一欄
-            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up && e.Key != Key.Left && e.Key != Key.Right ) return;
-            e.Handled = true;
-            if(sender is null) return;
-            switch (e.Key)
-            {
-                case Key.Enter:
-                    MoveFocusNext(sender,FocusNavigationDirection.Next);
-                    break;
-                case Key.Up:
-                    MoveFocusNext(sender,FocusNavigationDirection.Up);
-                    break;
-                case Key.Down:
-                    MoveFocusNext(sender,FocusNavigationDirection.Down);
-                    break;
-                case Key.Left:
-                    MoveFocusNext(sender, FocusNavigationDirection.Left);
-                    break;
-                case Key.Right:
-                    MoveFocusNext(sender, FocusNavigationDirection.Next);
-                    break;
-            }
-        }
-        private void MedicinePrice_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            //按 Enter 下一欄
-            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up  && e.Key != Key.Right) return;
+            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up && e.Key != Key.Left && e.Key != Key.Right) return;
             e.Handled = true;
             if (sender is null) return;
             switch (e.Key)
@@ -312,28 +299,62 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case Key.Enter:
                     MoveFocusNext(sender, FocusNavigationDirection.Next);
                     break;
+
                 case Key.Up:
                     MoveFocusNext(sender, FocusNavigationDirection.Up);
                     break;
+
                 case Key.Down:
                     MoveFocusNext(sender, FocusNavigationDirection.Down);
                     break;
-                
+
+                case Key.Left:
+                    MoveFocusNext(sender, FocusNavigationDirection.Left);
+                    break;
+
                 case Key.Right:
                     MoveFocusNext(sender, FocusNavigationDirection.Next);
                     break;
             }
         }
-        private void MoveFocusNext(object sender,FocusNavigationDirection direction)
+
+        private void MedicinePrice_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            //按 Enter 下一欄
+            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up && e.Key != Key.Right) return;
+            e.Handled = true;
+            if (sender is null) return;
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    MoveFocusNext(sender, FocusNavigationDirection.Next);
+                    break;
+
+                case Key.Up:
+                    MoveFocusNext(sender, FocusNavigationDirection.Up);
+                    break;
+
+                case Key.Down:
+                    MoveFocusNext(sender, FocusNavigationDirection.Down);
+                    break;
+
+                case Key.Right:
+                    MoveFocusNext(sender, FocusNavigationDirection.Next);
+                    break;
+            }
+        }
+
+        private void MoveFocusNext(object sender, FocusNavigationDirection direction)
         {
             switch (sender)
             {
                 case null:
                     return;
+
                 case TextBox box:
-                    if(direction.Equals(FocusNavigationDirection.Next))
+                    if (direction.Equals(FocusNavigationDirection.Next))
                         box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                    else if(direction.Equals(FocusNavigationDirection.Up))
+                    else if (direction.Equals(FocusNavigationDirection.Up))
                         box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Up));
                     else if (direction.Equals(FocusNavigationDirection.Left))
                         box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Left));
@@ -383,14 +404,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 FocusDataGridCell("MedicineID", PrescriptionMedicines, focusIndex);
             }
             else if (e.Key == Key.Up)
-                MoveFocusNext(sender,FocusNavigationDirection.Up);
+                MoveFocusNext(sender, FocusNavigationDirection.Up);
             else if (e.Key == Key.Down)
-                MoveFocusNext(sender,FocusNavigationDirection.Down);
+                MoveFocusNext(sender, FocusNavigationDirection.Down);
             else if (e.Key == Key.Left)
                 MoveFocusNext(sender, FocusNavigationDirection.Left);
             /*else if (e.Key == Key.Right)
                 MoveFocusNext(sender, FocusNavigationDirection.Next);*/
         }
+
         private int GetCurrentRowIndex(object sender)
         {
             switch (sender)
@@ -409,6 +431,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             return -1;
         }
+
         private void FocusDataGridCell(string controlName, DataGrid focusGrid, int rowIndex)
         {
             var dataGridCells = new List<TextBox>();
@@ -488,13 +511,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (PrescriptionMedicines.CurrentCell.Item)
             {
                 case Medicine _:
-                {
-                    var textBoxList = new List<TextBox>();
-                    NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID", ref textBoxList);
-                    var index = textBoxList.IndexOf((TextBox)sender) + 1;
-                    PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[2]);
-                    break;
-                }
+                    {
+                        var textBoxList = new List<TextBox>();
+                        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineID", ref textBoxList);
+                        var index = textBoxList.IndexOf((TextBox)sender) + 1;
+                        PrescriptionMedicines.CurrentCell = new DataGridCellInfo(PrescriptionMedicines.Items[index], PrescriptionMedicines.Columns[2]);
+                        break;
+                    }
                 default:
                     return;
             }
@@ -535,9 +558,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     e.Handled = true;
                     if (t != null) t.CaretIndex++;
                     break;
+
                 case Key.Subtract:
                     e.Handled = true;
                     break;
+
                 default:
                     return;
             }
@@ -582,7 +607,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     e.Handled = true;
                     tb.Focus();
-                    PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
+                    if (PrescriptionMedicines.CurrentCell.Item != null) 
+                    {
+                        PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
+                    }
                 }
             }
         }
@@ -591,14 +619,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (prevRowIndex < 0)
                 return;
-           
+
             var index = GetDataGridItemCurrentRowIndex(e.GetPosition);
 
             if (index < 0)
                 return;
             if (index == prevRowIndex)
                 return;
-            if (index == PrescriptionMedicines.Items.Count-1)
+            if (index == PrescriptionMedicines.Items.Count - 1)
                 return;
 
             var medicines = ((PrescriptionDeclareViewModel)DataContext).CurrentPrescription.Medicines;
@@ -613,7 +641,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!(sender is DataGridCell cell) || !(cell.DataContext is Medicine med)) return;
             prevRowIndex = GetDataGridItemCurrentRowIndex(e.GetPosition);
 
-            if (prevRowIndex < 0 || prevRowIndex >= PrescriptionMedicines.Items.Count-1)
+            if (prevRowIndex < 0 || prevRowIndex >= PrescriptionMedicines.Items.Count - 1)
                 return;
             PrescriptionMedicines.SelectedIndex = prevRowIndex;
 
@@ -660,7 +688,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void ChangeMedicineIDToMostPriced(object sender, MouseButtonEventArgs e)
         {
             PrescriptionMedicines_PreviewMouseLeftButtonDown(sender, e);
-            ((PrescriptionDeclareViewModel) DataContext).ChangeMedicineIDToMostPriced.Execute(null);
+            ((PrescriptionDeclareViewModel)DataContext).ChangeMedicineIDToMostPriced.Execute(null);
         }
 
         private void TextBox_SelectAll(object sender, RoutedEventArgs e)
@@ -678,6 +706,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     case Key.Enter:
                         MedicalNumber.Focus();
                         break;
+
                     case Key.Left:
                         e.Handled = true;
                         DivisionCombo.Focus();
@@ -708,10 +737,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (PrescriptionMedicines.CurrentCell.Item is Medicine med)
             {
                 PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
-                
             }
-            
         }
-
     }
 }

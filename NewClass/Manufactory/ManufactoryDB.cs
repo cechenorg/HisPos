@@ -1,15 +1,15 @@
-﻿using System;
+﻿using His_Pos.Database;
+using His_Pos.NewClass.Manufactory.ManufactoryManagement;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using His_Pos.Database;
-using His_Pos.NewClass.Manufactory.ManufactoryManagement;
 
 namespace His_Pos.NewClass.Manufactory
 {
     public class ManufactoryDB
     {
         #region ----- Define DataTable -----
+
         public static DataTable ManufactoryPrincipalTable()
         {
             DataTable dataTable = new DataTable();
@@ -22,11 +22,13 @@ namespace His_Pos.NewClass.Manufactory
             dataTable.Columns.Add("ManPri_Note", typeof(string));
             return dataTable;
         }
-        #endregion
+
+        #endregion ----- Define DataTable -----
 
         #region ----- Set DataTable -----
 
         #region ///// ManufactoryPrincipalTable /////
+
         public static DataTable SetManufactoryPrincipal(ManufactoryPrincipals principals)
         {
             DataTable manufactoryPrincipalTable = ManufactoryPrincipalTable();
@@ -44,12 +46,13 @@ namespace His_Pos.NewClass.Manufactory
 
                 manufactoryPrincipalTable.Rows.Add(newRow);
             }
-            
+
             return manufactoryPrincipalTable;
         }
-        #endregion
 
-        #endregion
+        #endregion ///// ManufactoryPrincipalTable /////
+
+        #endregion ----- Set DataTable -----
 
         internal static DataTable GetAllManufactories()
         {

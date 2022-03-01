@@ -1,12 +1,5 @@
 ﻿#region Using
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Windows;
+
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
@@ -44,8 +37,15 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerS
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedicineSetWindow;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
-using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow;
+using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Application = System.Windows.Application;
 using Label = System.Windows.Controls.Label;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
@@ -53,29 +53,43 @@ using Prescription = His_Pos.NewClass.Prescription.Prescription;
 using Resources = His_Pos.Properties.Resources;
 using TextBox = System.Windows.Controls.TextBox;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+
 // ReSharper disable ClassTooBig
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedVariable
 // ReSharper disable UnusedMember.Global
-#endregion
+
+#endregion Using
+
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {
     public class PrescriptionDeclareViewModel : TabBase
     {
+        public static TabBase TabThis;
+
+        public static TabBase getThis()
+        {
+            return TabThis;
+        }
+
         public override TabBase getTab()
         {
             return this;
         }
+
         #region ItemsSource
+
         public Divisions Divisions => VM.Divisions;
         private Employees medicalPersonnels;
+
         public Employees MedicalPersonnels
         {
             get => medicalPersonnels;
-            set { Set(() => MedicalPersonnels,ref medicalPersonnels,value ); }
+            set { Set(() => MedicalPersonnels, ref medicalPersonnels, value); }
         }
+
         public AdjustCases AdjustCases => VM.AdjustCases;
         public PaymentCategories PaymentCategories => VM.PaymentCategories;
         public PrescriptionCases PrescriptionCases => VM.PrescriptionCases;
@@ -83,6 +97,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         public SpecialTreats SpecialTreats => VM.SpecialTreats;
         private MedicineSets medicineSets;
+
         public MedicineSets MedicineSets
         {
             get => medicineSets;
@@ -91,10 +106,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => MedicineSets, ref medicineSets, value);
             }
         }
-        #endregion
+
+        #endregion ItemsSource
+
         #region Variables
+
         private BackgroundWorker worker;
         private bool isBusy;
+
         public bool IsBusy
         {
             get => isBusy;
@@ -103,7 +122,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => IsBusy, ref isBusy, value);
             }
         }
+
         private string busyContent;
+
         public string BusyContent
         {
             get => busyContent;
@@ -115,7 +136,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         public bool CanSearchPatient => CurrentPrescription != null &&
                                         (CurrentPrescription.Patient is null || CurrentPrescription.Patient.ID < 0);
+
         private bool customerEdited;
+
         public bool CustomerEdited
         {
             get => customerEdited;
@@ -124,7 +147,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CustomerEdited, ref customerEdited, value);
             }
         }
+
         private Prescription currentPrescription;
+
         public Prescription CurrentPrescription
         {
             get => currentPrescription;
@@ -133,7 +158,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CurrentPrescription, ref currentPrescription, value);
             }
         }
+
         private int prescriptionCount;
+
         public int PrescriptionCount
         {
             get => prescriptionCount;
@@ -143,7 +170,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     Set(() => PrescriptionCount, ref prescriptionCount, value);
             }
         }
+
         private Employee selectedPharmacist;
+
         public Employee SelectedPharmacist
         {
             get => selectedPharmacist;
@@ -152,7 +181,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => SelectedPharmacist, ref selectedPharmacist, value);
             }
         }
+
         private CustomerHistory selectedHistory;
+
         public CustomerHistory SelectedHistory
         {
             get => selectedHistory;
@@ -166,10 +197,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     MainWindow.ServerConnection.CloseConnection();
                 }
                 Set(() => SelectedHistory, ref selectedHistory, value);
-
             }
         }
+
         private bool canSendOrder;
+
         public bool CanSendOrder
         {
             get => canSendOrder;
@@ -178,7 +210,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CanSendOrder, ref canSendOrder, value);
             }
         }
+
         private PrescriptionDeclareStatus declareStatus;
+
         public PrescriptionDeclareStatus DeclareStatus
         {
             get => declareStatus;
@@ -192,7 +226,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
             }
         }
+
         private MedicineSet currentSet;
+
         public MedicineSet CurrentSet
         {
             get => currentSet;
@@ -201,13 +237,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => CurrentSet, ref currentSet, value);
             }
         }
+
         private string selectedPatientDetail;
+
         public string SelectedPatientDetail
         {
             get => selectedPatientDetail;
             set
             {
-                if(value is null) return;
+                if (value is null) return;
                 if (!string.IsNullOrEmpty(value) && value.Equals("Option2"))
                 {
                     if (CurrentPrescription.Patient is null || CurrentPrescription.Patient.ID <= 0)
@@ -231,7 +269,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => SelectedPatientDetail, ref selectedPatientDetail, value);
             }
         }
+
         private string reserveStatus;
+
         public string ReserveStatus
         {
             get => reserveStatus;
@@ -240,6 +280,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => ReserveStatus, ref reserveStatus, value);
             }
         }
+
+        private string cusFromPOS;
+
+        public string CusFromPOS
+        {
+            get => cusFromPOS;
+            set
+            {
+                cusFromPOS = value;
+                if (cusFromPOS.Length > 1)
+                {
+                    GetCustomersFromPOSAction();
+                }
+            }
+        }
+
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;
@@ -247,8 +303,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private bool isNotInit;
         private bool isAdjusting;
         private bool isCardReading;
-        #endregion
+
+        #endregion Variables
+
         #region Commands
+
         public RelayCommand OpenCustomerManage { get; set; }
         public RelayCommand ScanPrescriptionQRCode { get; set; }
         public RelayCommand<TextBox> GetCustomers { get; set; }
@@ -291,12 +350,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand Adjust { get; set; }
         public RelayCommand Register { get; set; }
         public RelayCommand PrescribeAdjust { get; set; }
-        #endregion
+        public RelayCommand CustomerFromPOS { get; set; }
+
+        #endregion Commands
+
         public PrescriptionDeclareViewModel()
         {
             Init();
         }
+
         #region InitFunctions
+
         private void Init()
         {
             InitCommands();
@@ -307,13 +371,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             SetPharmacist();
             MainWindow.ServerConnection.CloseConnection();
             Messenger.Default.Register<NotificationMessage>("UpdateUsableAmountMessage", UpdateInventories);
+            TabThis = this;
         }
 
         private void UpdateInventories(NotificationMessage msg)
         {
             if (msg.Notification == "UpdateUsableAmountMessage" && CurrentPrescription != null)
             {
-                if(CurrentPrescription.Medicines != null && CurrentPrescription.Medicines.Count > 0)
+                if (CurrentPrescription.Medicines != null && CurrentPrescription.Medicines.Count > 0)
                     CurrentPrescription.UpdateMedicines();
             }
         }
@@ -355,7 +420,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             OpenCustomerManage = new RelayCommand(OpenCustomerManageAction);
             ScanPrescriptionQRCode = new RelayCommand(ScanPrescriptionQRCodeAction);
             GetCooperativePres = new RelayCommand(GetCooperativePresAction);
-            GetPatientData = new RelayCommand(GetPatientDataAction,CheckIsCardReading);
+            GetPatientData = new RelayCommand(GetPatientDataAction, CheckIsCardReading);
             AddCustomer = new RelayCommand(AddCustomerAction);
             GetCustomers = new RelayCommand<TextBox>(GetCustomersAction);
             GetCustomersEditedToday = new RelayCommand<Label>(GetCustomersEditedTodayAction);
@@ -377,7 +442,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ChangeMedicineIDToMostPriced = new RelayCommand(ChangeMedicineIDToMostPricedAction);
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
-            MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction,SetBuckleAmount);
+            MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction, SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
             ResetBuckleAmount = new RelayCommand(ResetBuckleAmountAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
@@ -391,16 +456,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             Clear = new RelayCommand(ClearAction);
             ErrorAdjust = new RelayCommand(ErrorAdjustAction, CheckIsAdjusting);
             DepositAdjust = new RelayCommand(DepositAdjustAction, CheckDepositAdjustEnable);
-            Adjust = new RelayCommand(AdjustAction,CheckIsAdjusting);
-            Register = new RelayCommand(RegisterAction,CheckIsAdjusting);
+            Adjust = new RelayCommand(AdjustAction, CheckIsAdjusting);
+            Register = new RelayCommand(RegisterAction, CheckIsAdjusting);
             PrescribeAdjust = new RelayCommand(PrescribeAdjustAction, CheckIsAdjusting);
+            CustomerFromPOS = new RelayCommand(GetCustomersFromPOSAction);
         }
-        #endregion
+
+        #endregion InitFunctions
+
         #region CommandAction
+
         private void OpenCustomerManageAction()
         {
             var viewModel = (App.Current.Resources["Locator"] as ViewModelLocator)?.CustomerManageView;
-            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, CurrentPrescription.Patient.IDNumber, "CustomerManageResearch"));
+            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, CurrentPrescription.Patient.ID.ToString(), "CustomerManageResearch"));
         }
 
         private void ScanPrescriptionQRCodeAction()
@@ -456,9 +525,44 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
             if (!CheckConditionEmpty(condition.Name))
+            {
                 ShowCustomerSearchEditedToday(condition.Name);
+            }
             else
+            {
                 ShowCustomerSearch(condition.Name);
+            }
+            if (ProductTransactionView.FromHISCuslblcheck == null)
+            {
+                return;
+            }
+            else if (CurrentPrescription.Patient.CellPhone != null || CurrentPrescription.Patient.CellPhone != "")
+            {
+                ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.CellPhone;
+            }
+            else if (CurrentPrescription.Patient.Tel != null || CurrentPrescription.Patient.Tel != "" || ProductTransactionView.FromHISCuslblcheck != null)
+            {
+                ProductTransactionView.FromHISCuslblcheck.Text = CurrentPrescription.Patient.Tel;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        public void GetCustomersFromPOSAction()
+        {
+            if (CusFromPOS.Length > 1)
+            {
+                GetCustomersFromPOSAction(CusFromPOS);
+                CusFromPOS = "";
+            }
+        }
+
+        private void GetCustomersFromPOSAction(string condition)
+        {
+            Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
+            ShowCustomerFromPOSSearch(condition);
         }
 
         private void GetCustomersEditedTodayAction(Label condition)
@@ -489,25 +593,49 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             switch (conditionName)
             {
                 case "PatientIDNumber":
-                    customerSearch = new CustomerSearchWindow( CustomerSearchCondition.IDNumber,CurrentPrescription.Patient.IDNumber.Trim());
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.IDNumber, CurrentPrescription.Patient.IDNumber.Trim());
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+
                 case "PatientName":
-                    customerSearch = new CustomerSearchWindow( CustomerSearchCondition.Name,CurrentPrescription.Patient.Name.Trim());
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Name, CurrentPrescription.Patient.Name.Trim());
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+
                 case "PatientBirthday":
                     customerSearch = new CustomerSearchWindow((DateTime)CurrentPrescription.Patient.Birthday);
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+
                 case "PatientTel":
-                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Tel,CurrentPrescription.Patient.Tel.Trim());
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Tel, CurrentPrescription.Patient.Tel.Trim());
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+
                 case "PatientCellPhone":
-                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone,CurrentPrescription.Patient.CellPhone.Trim());
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, CurrentPrescription.Patient.CellPhone.Trim());
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+            }
+        }
+
+        private void ShowCustomerFromPOSSearch(string conditionName)
+        {
+            if (conditionName.Length > 1)
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                CustomerSearchWindow customerSearch;
+                bool isCell = conditionName.StartsWith("09");
+                if (isCell)
+                {
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone, 0, conditionName.Trim());
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
+                }
+                else
+                {
+                    customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Tel, 0, conditionName.Trim());
+                    Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
+                }
             }
         }
 
@@ -521,18 +649,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     customerSearch = new CustomerSearchWindow(CustomerSearchCondition.IDNumber);
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+
                 case "PatientName":
                     customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Name);
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+
                 case "PatientBirthday":
                     customerSearch = new CustomerSearchWindow(null);
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+
                 case "PatientTel":
                     customerSearch = new CustomerSearchWindow(CustomerSearchCondition.Tel);
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     break;
+
                 case "PatientCellPhone":
                     customerSearch = new CustomerSearchWindow(CustomerSearchCondition.CellPhone);
                     Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
@@ -546,14 +678,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case "PatientIDNumber" when CurrentPrescription.CheckPatientDataEmpty("IDNumber"):
                     return false;
+
                 case "PatientName" when CurrentPrescription.CheckPatientDataEmpty("Name"):
                     return false;
+
                 case "PatientBirthday" when CurrentPrescription.CheckPatientDataEmpty("Birthday"):
                     return false;
+
                 case "PatientTel" when CurrentPrescription.CheckPatientDataEmpty("Tel"):
                     return false;
+
                 case "PatientCellPhone" when CurrentPrescription.CheckPatientDataEmpty("CellPhone"):
                     return false;
+
                 default:
                     return true;
             }
@@ -573,9 +710,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetInstitutionAction(string insID)
         {
             #region ReSharperDisable
+
             // ReSharper disable RedundantAssignment
             // ReSharper disable once UnusedVariable
-            #endregion
+
+            #endregion ReSharperDisable
+
             if (CheckFocusDivision(insID))
             {
                 Messenger.Default.Send(new NotificationMessage(this, "FocusDivision"));
@@ -590,9 +730,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void GetCommonInstitutionAction()
         {
             #region ReSharperDisable
+
             // ReSharper disable RedundantAssignment
             // ReSharper disable once UnusedVariable
-            #endregion
+
+            #endregion ReSharperDisable
+
             Messenger.Default.Register<Institution>(this, "GetSelectedInstitution", GetSelectedInstitution);
             CurrentPrescription.Institution = new Institution();
             var commonHospitalsWindow = new CommonHospitalsWindow();
@@ -602,7 +745,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             PrescriptionCount = UpdatePrescriptionCount();
             if (PrescriptionCount >= 80) MessageWindow.ShowMessage(Resources.調劑張數提醒 + prescriptionCount + "張", MessageType.WARNING);
-            if(isNotInit && SelectedPharmacist != null)
+            if (isNotInit && SelectedPharmacist != null)
                 Messenger.Default.Send(new NotificationMessage(this, "FocusMedicalNumber"));
         }
 
@@ -613,6 +756,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case "AdjustDateTextBox":
                     CurrentPrescription.AdjustDate = DateTime.Today;
                     break;
+
                 case "TreatDateTextBox":
                     CurrentPrescription.TreatDate = DateTime.Today;
                     break;
@@ -621,12 +765,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void AdjustDateChangedAction()
         {
-            MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(CurrentPrescription.AdjustDate??DateTime.Today);
-            if(CurrentPrescription.AdjustDate != null)
+            MedicalPersonnels = VM.CurrentPharmacy.GetPharmacists(CurrentPrescription.AdjustDate ?? DateTime.Today);
+            if (CurrentPrescription.AdjustDate != null)
                 CurrentPrescription.UpdateMedicines();
             CheckDeclareStatus();
         }
-
 
         private void GetDiseaseCodeCheck(object sender)
         {
@@ -640,46 +783,44 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else if (!string.IsNullOrEmpty(diseaseID))
 
-
             {
                 switch (elementName)
                 {
                     case "MainDiagnosis":
                         CurrentPrescription.MainDisease = new DiseaseCode();
                         break;
+
                     case "SecondDiagnosis":
                         CurrentPrescription.SubDisease = new DiseaseCode();
                         break;
                 }
             }
             //診斷碼查詢
-            
+
             switch (elementName)
             {
-                
                 case "MainDiagnosis":
 
-         
                     CurrentPrescription.MainDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     if (CurrentPrescription.MainDisease == null)
                     {
                         Messenger.Default.Send(new NotificationMessage(this, "FocusMainDisease"));
-                        
+
                         return;
                     }
                     break;
+
                 case "SecondDiagnosis":
                     CurrentPrescription.SubDisease = DiseaseCode.GetDiseaseCodeByID(diseaseID);
                     if (CurrentPrescription.SubDisease == null)
                     {
                         Messenger.Default.Send(new NotificationMessage(this, "FocusSubDisease"));
-                       
+
                         return;
                     }
                     break;
             }
         }
-
 
         private void GetDiseaseCodeAction(object sender)
         {
@@ -689,9 +830,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CheckClearDiseaseAction(object sender)
         {
             //LostFocus()
-            
+
             GetDiseaseCodeCheck(sender);
-            
         }
 
         private void DiseaseFocusNext(string elementName)
@@ -719,12 +859,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void CopaymentSelectionChangedAction()
         {
-            if(CurrentPrescription.Copayment is null || CurrentPrescription.PrescriptionPoint is null) return;
+            if (CurrentPrescription.Copayment is null || CurrentPrescription.PrescriptionPoint is null) return;
             switch (CurrentPrescription.Copayment.Id)
             {
                 case "I21" when CurrentPrescription.PrescriptionPoint.MedicinePoint > 100:
                     CurrentPrescription.Copayment = VM.GetCopayment("I20");
                     break;
+
                 case "I20" when CurrentPrescription.PrescriptionPoint.MedicinePoint <= 100:
                     CurrentPrescription.Copayment = VM.GetCopayment("I21");
                     break;
@@ -734,7 +875,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void AddMedicineAction(string medicineID)
         {
             if (string.IsNullOrEmpty(medicineID)) return;
-            if(!CheckMedicineIDLength(medicineID)) return;
+            if (!CheckMedicineIDLength(medicineID)) return;
             var productCount = GetProductCount(medicineID);
             if (productCount == 0)
                 MessageWindow.ShowMessage(Resources.查無藥品, MessageType.WARNING);
@@ -746,6 +887,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 if (productCount > 1)
                     addMedicineWindow.ShowDialog();
             }
+            CountMedicinePointAction();
         }
 
         private void DeleteMedicineAction()
@@ -783,6 +925,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     CurrentPrescription.SelectedMedicine.AdjustNoBuckle = false;
                     CurrentPrescription.SelectedMedicine.BuckleAmount = CurrentPrescription.SelectedMedicine.Amount;
                     break;
+
                 case false:
                     CurrentPrescription.SelectedMedicine.AdjustNoBuckle = true;
                     CurrentPrescription.SelectedMedicine.BuckleAmount = 0;
@@ -843,9 +986,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case "Get":
                     GetMedicinesFromMedicineSet();
                     break;
+
                 case "Add":
                     AddMedicineSet();
                     break;
+
                 case "Edit":
                     EditCurrentMedicineSet();
                     break;
@@ -871,7 +1016,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MainWindow.ServerConnection.OpenConnection();
             CurrentPrescription.Patient.Save();
             MainWindow.ServerConnection.CloseConnection();
-            MessageWindow.ShowMessage("編輯成功",MessageType.SUCCESS);
+            MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
             CustomerEdited = false;
         }
 
@@ -894,12 +1039,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!currentService.CheckCustomerSelected())
                 return;
             CheckCustomerEdited();
-            if(!CheckAdjustDate()) return;
-            if(!ErrorAdjustConfirm()) return;
+            if (!CheckAdjustDate()) return;
+            CheckWay();
+            if (!ErrorAdjustConfirm()) return;
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
             CheckChronicCopayment();
-            if (!CheckPrescription(false,true)) return;
+            if (!CheckPrescription(false, true)) return;
             StartErrorAdjust();
         }
 
@@ -910,10 +1056,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!currentService.CheckCustomerSelected())
                 return;
             CheckCustomerEdited();
-            if(!CheckAdjustDate()) return;
+            if (!CheckAdjustDate()) return;
+            CheckWay();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(true,false)) return;
+            if (!CheckPrescription(true, false)) return;
             StartDepositAdjust();
         }
 
@@ -924,11 +1071,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (!currentService.CheckCustomerSelected())
                 return;
             CheckCustomerEdited();
-            if(!CheckAdjustDate()) return;
+            if (!CheckAdjustDate()) return;
+            CheckWay();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
             CheckChronicCopayment();
-            if (!CheckPrescription(false,false)) return;
+            if (!CheckPrescription(false, false)) return;
             if (VM.CurrentPharmacy.NewInstitution)
             {
                 SetNewInstitutionUploadData();
@@ -950,9 +1098,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.PrescriptionPoint.MedicinePoint = CurrentPrescription.Medicines.CountMedicinePoint();
             if (CurrentPrescription.AdjustCase.IsChronic() && CurrentPrescription.MedicineDays < 28)
             {
-                var confirm = new ConfirmWindow("此處方為28天以下之慢性病處方箋，請確認藥品是否為同一療程(如荷爾蒙製劑)。如為同一療程免收部分負擔，是否計算部分負擔?","部分負擔確認");
+                var confirm = new ConfirmWindow("此處方為28天以下之慢性病處方箋，請確認藥品是否為同一療程(如荷爾蒙製劑)。如為同一療程免收部分負擔，是否計算部分負擔?", "部分負擔確認");
                 Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
-                if ((bool) confirm.DialogResult)
+                if ((bool)confirm.DialogResult)
                 {
                     CurrentPrescription.Copayment = VM.GetCopayment(CurrentPrescription.PrescriptionPoint.MedicinePoint <= 100 ? "I21" : "I20");
                 }
@@ -969,7 +1117,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
-            if (!CheckPrescription(false,false))
+            if (!CheckRegisterPrescription(false, false))
             {
                 CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
                 return;
@@ -985,11 +1133,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CheckCustomerEdited();
             isAdjusting = true;
             if (!CheckMedicinesNegativeStock()) return;
-            if (!CheckPrescription(false,false)) return;
+            if (!CheckPrescription(false, false)) return;
             StartPrescribeAdjust();
         }
-        #endregion
+
+        #endregion CommandAction
+
         #region MessengerFunctions
+
         private void GetPatientFromIcCard()
         {
             var patientFromCard = new Customer(currentCard);
@@ -1014,7 +1165,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 var insertResult = patientFromCard.InsertData();
                 if (!insertResult)
                 {
-                    MessageWindow.ShowMessage("請重新讀取卡片。",MessageType.WARNING);
+                    MessageWindow.ShowMessage("請重新讀取卡片。", MessageType.WARNING);
                     return;
                 }
                 checkedPatient = patientFromCard;
@@ -1028,13 +1179,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (receiveSelectedCustomer.Content is null)
             {
                 if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
-                if(!CheckInsertCustomerData()) return;
+                if (!CheckInsertCustomerData()) return;
             }
             else
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
             RaisePropertyChanged("CanSearchPatient");
             CurrentPrescription.Patient.UpdateEditTime();
             CurrentPrescription.Patient.GetHistories();
+            CurrentPrescription.Patient.GetRecord();
             MainWindow.ServerConnection.CloseConnection();
             CheckCustomPrescriptions();
             CustomerEdited = false;
@@ -1066,8 +1218,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription.Patient.GetHistories();
             MainWindow.ServerConnection.CloseConnection();
         }
-        #endregion
+
+        #endregion MessengerFunctions
+
         #region ICCardFunctions
+
         private void CheckIsReadCard()
         {
             worker = new BackgroundWorker();
@@ -1135,6 +1290,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 NewFunction.ShowMessageFromDispatcher("讀卡作業異常，請重開處方登錄頁面並重試，如持續異常請先異常代碼上傳並連絡資訊人員", MessageType.WARNING);
             }
         }
+
         private bool AskErrorUpload()
         {
             var e = new ErrorUploadWindow(currentCard.IsGetMedicalNumber);
@@ -1149,16 +1305,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             ErrorCode = ((ErrorUploadWindowViewModel)e.DataContext).SelectedIcErrorCode;
             return true;
         }
+
         private void SetNewInstitutionUploadData()
         {
             ErrorCode = new ErrorUploadWindowViewModel.IcErrorCode("G000", "新特約使用");
             currentService.SetCard(currentCard);
             currentService.SetCreateSign();
         }
+
         private void WriteCard()
         {
             if (!CheckIsGetMedicalNumber()) return;
-            if(!CheckPatientMatch()) return;
+            if (!CheckPatientMatch()) return;
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -1195,12 +1353,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             isAdjusting = false;
             return false;
         }
+
         private bool CheckIsCardReading()
         {
             return !isCardReading;
         }
-        #endregion
+
+        #endregion ICCardFunctions
+
         #region PatinetFunctions
+
         private void GetPatientDataComplete()
         {
             IsBusy = false;
@@ -1209,9 +1371,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 GetPatientFromIcCard();
             else
             {
-                MessageWindow.ShowMessage("讀取卡片異常，請確認卡面及讀卡機燈號正常，如持續異常且其他健保卡可正常讀取請使用異常上傳。",MessageType.WARNING);
+                MessageWindow.ShowMessage("讀取卡片異常，請確認卡面及讀卡機燈號正常，如持續異常且其他健保卡可正常讀取請使用異常上傳。", MessageType.WARNING);
             }
         }
+
         private void CheckCustomPrescriptions()
         {
             Messenger.Default.Register<NotificationMessage<Prescription>>("CustomerPrescriptionSelected", GetCustomerPrescription);
@@ -1227,11 +1390,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MessageWindow.ShowMessage("代入處方病患資料與目前病患資料不符，請確認。", MessageType.ERROR);
             return false;
         }
+
         private void CheckCustomerEdited()
         {
             if (CustomerEdited)
             {
-                var savePatientData = new ConfirmWindow("顧客資料已被編輯，是否儲存變更?","顧客編輯確認");
+                var savePatientData = new ConfirmWindow("顧客資料已被編輯，是否儲存變更?", "顧客編輯確認");
                 if ((bool)savePatientData.DialogResult)
                 {
                     MainWindow.ServerConnection.OpenConnection();
@@ -1246,8 +1410,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 }
             }
         }
-        #endregion
+
+        #endregion PatinetFunctions
+
         #region MedicinesFunctions
+
         private int GetProductCount(string medicineID)
         {
             var wareHouse = CurrentPrescription.WareHouse;
@@ -1269,6 +1436,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case "R005":
                     CurrentPrescription.Medicines.Add(new MedicineVirtual(medicineID));
                     break;
+
                 default:
                     MessageWindow.ShowMessage(Resources.搜尋字串長度不足 + "5", MessageType.WARNING);
                     break;
@@ -1281,9 +1449,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return setBuckleAmount;
         }
 
+        #endregion MedicinesFunctions
 
-        #endregion
         #region AdjustFunctions
+
         private void StartNormalAdjust()
         {
             if (!currentService.StartNormalAdjust())
@@ -1349,7 +1518,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.RunWorkerCompleted += (o, ea) =>
             {
                 IsBusy = false;
-                if(result) 
+                if (result)
                     DeclareSuccess();
             };
             IsBusy = true;
@@ -1406,7 +1575,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return (bool)errorAdjustConfirm.DialogResult;
         }
 
-        private bool CheckPrescription(bool noCard,bool errorAdjust)
+        private bool CheckPrescription(bool noCard, bool errorAdjust)
         {
             currentService = PrescriptionService.CreateService(CurrentPrescription);
             var setPharmacist = currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount);
@@ -1416,9 +1585,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 return false;
             }
             MainWindow.ServerConnection.OpenConnection();
-            var checkPrescription = currentService.CheckPrescription(noCard,errorAdjust);
+            var checkPrescription = currentService.CheckPrescription(noCard, errorAdjust);
             MainWindow.ServerConnection.CloseConnection();
-            if(!checkPrescription)
+            if (!checkPrescription)
+                isAdjusting = false;
+            else
+                CurrentPrescription.SetDetail();
+            return checkPrescription;
+        }
+
+        private bool CheckRegisterPrescription(bool noCard, bool errorAdjust)
+        {
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            var setPharmacist = currentService.SetRegisterPharmacist(SelectedPharmacist, PrescriptionCount);
+            if (!setPharmacist)
+            {
+                isAdjusting = false;
+                return false;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var checkPrescription = currentService.CheckPrescription(noCard, errorAdjust);
+            MainWindow.ServerConnection.CloseConnection();
+            if (!checkPrescription)
                 isAdjusting = false;
             else
                 CurrentPrescription.SetDetail();
@@ -1447,20 +1635,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             isAdjusting = false;
         }
+
         private void StartPrint(bool noCard)
         {
             currentService.Print(noCard);
         }
+
         private bool CheckIsAdjusting()
         {
             return !isAdjusting;
         }
+
         private bool CheckDepositAdjustEnable()
         {
             return !isAdjusting && string.IsNullOrEmpty(currentCard.CardNumber);
         }
-        #endregion
+
+        #endregion AdjustFunctions
+
         #region CheckDeclareStatus
+
         private void CheckDeclareStatus()
         {
             if (string.IsNullOrEmpty(CurrentPrescription.AdjustCase.ID)) return;
@@ -1524,8 +1718,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return true;
         }
 
-        #endregion
+        #endregion CheckDeclareStatus
+
         #region MedicineSetFunctions
+
         private void GetMedicinesFromMedicineSet()
         {
             CurrentSet.MedicineSetItems = new MedicineSetItems();
@@ -1557,8 +1753,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentSet = MedicineSets.SingleOrDefault(s => s.ID.Equals(tempID));
         }
 
-        #endregion
+        #endregion MedicineSetFunctions
+
         #region OtherFunctions
+
         private void CheckNewCustomer()
         {
             // ReSharper disable once TooManyChainedReferences
@@ -1569,6 +1767,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 case 0:
                     CheckInsertCustomerData();
                     break;
+
                 case 1:
                     CurrentPrescription.Patient = customers[0];
                     CurrentPrescription.Patient.GetHistories();
@@ -1610,11 +1809,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (CurrentPrescription.AdjustDate is null)
             {
-                MessageWindow.ShowMessage("請填寫調劑日期",MessageType.ERROR);
+                MessageWindow.ShowMessage("請填寫調劑日期", MessageType.ERROR);
                 return false;
             }
             return true;
         }
-        #endregion
+
+        private void CheckWay()
+        {
+            foreach (var c in CurrentPrescription.Medicines)
+            {
+                if (c.PositionID == null)
+                {
+                }
+                else if (c.PositionID.Length > 4)
+                {
+                    c.PositionID = c.PositionID.Substring(0, 4);
+                }
+            }
+        }
+
+        #endregion OtherFunctions
     }
 }

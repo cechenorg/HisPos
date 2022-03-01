@@ -2,7 +2,7 @@
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
 {
-    class AuthenticationManage : TabBase
+    internal class AuthenticationManage : TabBase
     {
         public override TabBase getTab()
         {

@@ -8,7 +8,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
     {
         public AdjustCases(bool init)
         {
-            if(init) Init();
+            if (init) Init();
         }
 
         public AdjustCases(IList<AdjustCase> list)

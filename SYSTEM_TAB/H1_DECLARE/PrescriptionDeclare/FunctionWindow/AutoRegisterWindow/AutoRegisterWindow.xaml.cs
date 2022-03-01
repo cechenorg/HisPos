@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Prescription;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Prescription;
 using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoRegisterWindow
@@ -30,10 +21,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
             InitializeComponent();
         }
 
-        public AutoRegisterWindow(Prescription current,Prescriptions registerList)
+        public AutoRegisterWindow(Prescription current, Prescriptions registerList)
         {
             InitializeComponent();
-            DataContext = new AutoRegisterViewModel(current,registerList);
+            DataContext = new AutoRegisterViewModel(current, registerList);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 switch (notificationMessage.Notification)
@@ -42,13 +33,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
                         RegisterResult = true;
                         Close();
                         break;
+
                     case "AutoRegisterCancel":
                         RegisterResult = false;
                         Close();
                         break;
                 }
             });
-            if(registerList.Count > 0)
+            if (registerList.Count > 0)
                 ShowDialog();
         }
 
@@ -59,7 +51,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true;  
+            e.Cancel = true;
             this.Hide();
         }
 
@@ -73,9 +65,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
                 case Key.Enter:
                     MoveFocusNext(sender, FocusNavigationDirection.Next);
                     break;
+
                 case Key.Up:
                     MoveFocusNext(sender, FocusNavigationDirection.Up);
                     break;
+
                 case Key.Down:
                     MoveFocusNext(sender, FocusNavigationDirection.Down);
                     break;
@@ -88,6 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.AutoR
             {
                 case null:
                     return;
+
                 case MaskedTextBox box:
                     if (direction.Equals(FocusNavigationDirection.Next))
                         box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));

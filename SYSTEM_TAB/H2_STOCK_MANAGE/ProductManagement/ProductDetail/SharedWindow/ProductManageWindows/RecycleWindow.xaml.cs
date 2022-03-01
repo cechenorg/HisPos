@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.ProductManagement;
+using System.Data;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductManageWindows
 {
@@ -24,12 +12,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
     public partial class RecycleWindow : Window
     {
         #region ----- Define Variables -----
+
         private string productID;
         private string wareHouseID;
         private double totalInventory;
 
         public string RecycleAmount { get; set; }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public RecycleWindow(string proID, string wareID, double totalInv)
         {
@@ -43,6 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         }
 
         #region ----- Define Functions -----
+
         private bool IsRecycleValid()
         {
             double tempRecycle = 0;
@@ -62,6 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             return true;
         }
+
         private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
             if (!IsRecycleValid()) return;
@@ -81,6 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             Close();
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

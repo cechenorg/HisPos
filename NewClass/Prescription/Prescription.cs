@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Xml.Linq;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
@@ -29,13 +22,20 @@ using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Windows;
+using System.Xml.Linq;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
+using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
 using Resources = His_Pos.Properties.Resources;
-using Employee = His_Pos.NewClass.Person.Employee.Employee;
-using System.Windows;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+
 // ReSharper disable ClassTooBig
 
 namespace His_Pos.NewClass.Prescription
@@ -48,6 +48,7 @@ namespace His_Pos.NewClass.Prescription
         ChronicRegister = 3,
         ChronicReserve = 4
     }
+
     public class Prescription : ObservableObject, ICloneable
     {
         #region Constructors
@@ -84,6 +85,8 @@ namespace His_Pos.NewClass.Prescription
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
             Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(r.Field<string>("Emp_IDNumber")));
             AdjustDate = r.Field<DateTime>("AdjustDate");
+            AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
+            AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");
             TreatDate = r.Field<DateTime?>("TreatmentDate");
             if (!string.IsNullOrEmpty(r.Field<byte?>("ChronicSequence").ToString()))
                 ChronicSeq = r.Field<byte>("ChronicSequence");
@@ -100,8 +103,8 @@ namespace His_Pos.NewClass.Prescription
             SpecialTreat = VM.GetSpecialTreat(r.Field<string>("SpecialTreatID"));
             PrescriptionPoint = new PrescriptionPoint(r, type);
             PrescriptionStatus = new PrescriptionStatus(r, type);
-            MedicalNumber = string.IsNullOrEmpty(r.Field<string>("MedicalNumber"))? r.Field<string>("MedicalNumber") : r.Field<string>("MedicalNumber").Trim();
-            OriginalMedicalNumber = string.IsNullOrEmpty(r.Field<string>("OldMedicalNumber"))? r.Field<string>("OldMedicalNumber"): r.Field<string>("OldMedicalNumber").Trim();
+            MedicalNumber = string.IsNullOrEmpty(r.Field<string>("MedicalNumber")) ? r.Field<string>("MedicalNumber") : r.Field<string>("MedicalNumber").Trim();
+            OriginalMedicalNumber = string.IsNullOrEmpty(r.Field<string>("OldMedicalNumber")) ? r.Field<string>("OldMedicalNumber") : r.Field<string>("OldMedicalNumber").Trim();
             if (AdjustCase.ID.Equals("2"))
             {
                 TempMedicalNumber = ChronicSeq == 1 ? MedicalNumber : OriginalMedicalNumber;
@@ -119,9 +122,11 @@ namespace His_Pos.NewClass.Prescription
                         case "N":
                             PrescriptionStatus.OrderStatus += "未處理";
                             break;
+
                         case "D":
                             PrescriptionStatus.OrderStatus += "已備藥";
                             break;
+
                         default:
                             PrescriptionStatus.OrderStatus += "不備藥";
                             break;
@@ -131,6 +136,7 @@ namespace His_Pos.NewClass.Prescription
                     if (!string.IsNullOrEmpty(r.Field<string>("StoreOrderID")))
                         OrderContent += " 單號:" + r.Field<string>("StoreOrderID");
                     break;
+
                 case PrescriptionType.ChronicRegister:
                     Medicines = new Medicines();
                     Medicines.GetDataByPrescriptionId(ID);
@@ -140,15 +146,19 @@ namespace His_Pos.NewClass.Prescription
                         case "W":
                             PrescriptionStatus.OrderStatus += "等待確認";
                             break;
+
                         case "P":
                             PrescriptionStatus.OrderStatus += "等待收貨";
                             break;
+
                         case "D":
                             PrescriptionStatus.OrderStatus += "已收貨";
                             break;
+
                         case "S":
                             PrescriptionStatus.OrderStatus += "訂單做廢";
                             break;
+
                         default:
                             PrescriptionStatus.OrderStatus += "無訂單";
                             break;
@@ -161,6 +171,7 @@ namespace His_Pos.NewClass.Prescription
                         OrderContent += " 單號:" + OrderID;
                     }
                     break;
+
                 default:
                     Medicines = new Medicines();
                     Medicines.GetDataByPrescriptionId(ID);
@@ -177,6 +188,7 @@ namespace His_Pos.NewClass.Prescription
         public Prescription(OrthopedicsPrescription c)
         {
             #region CooPreVariable
+
             var prescription = c.DeclareXmlDocument.Prescription;
             var study = prescription.Study;
             var diseases = study.Diseases.Disease;
@@ -186,14 +198,18 @@ namespace His_Pos.NewClass.Prescription
             var birthYear = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1911 : int.Parse(customer.Birth.Substring(0, 3)) + 1911;
             var birthMonth = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(3, 2));
             var birthDay = string.IsNullOrEmpty(customer.Birth.Trim()) ? 1 : int.Parse(customer.Birth.Substring(5, 2));
-            #endregion 
+            #endregion CooPreVariable
+
             Type = PrescriptionType.Cooperative;
+
             SourceId = c.CooperativePrescriptionId;
             Remark = customer.Remark;
             PrescriptionStatus.IsVIP = Remark.EndsWith("Y");
             MedicineDays = string.IsNullOrEmpty(prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(prescription.MedicineOrder.Days);
             Patient = new Customer(customer, birthYear, birthMonth, birthDay);
+
             #region InitTreatment
+
             int.TryParse(chronic.Count, out var seq);
             if (seq != 0)
                 ChronicSeq = seq;
@@ -224,18 +240,23 @@ namespace His_Pos.NewClass.Prescription
             GetCopayment(insurance.CopaymentCode);
             if (string.IsNullOrEmpty(TempMedicalNumber) && !string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode)) //例外就醫
                 TempMedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.IcErrorCode.Trim();
-            #endregion
+
+            #endregion InitTreatment
+
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = c.IsRead?.Equals("D") ?? false;
             Medicines = new Medicines();
+            AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
+            AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");
             Medicines.GetDataByOrthopedicsPrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle, AdjustDate);
         }
 
         [SuppressMessage("ReSharper", "TooManyDependencies")]
-        public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead)
+        public Prescription(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead ,bool isPrint)
         {
             #region CooPreVariable
+
             var prescription = c;
             var customer = prescription.CustomerProfile.Customer;
             var study = prescription.Study;
@@ -250,7 +271,9 @@ namespace His_Pos.NewClass.Prescription
                 birthMonth = string.IsNullOrEmpty(cusBirth) ? 1 : int.Parse(cusBirth.Substring(3, 2));
                 birthDay = string.IsNullOrEmpty(cusBirth) ? 1 : int.Parse(cusBirth.Substring(5, 2));
             }
-            #endregion
+
+            #endregion CooPreVariable
+
             Type = PrescriptionType.XmlOfPrescription;
             SourceId = sourceId;
             int.TryParse(chronic.Count, out var seq);
@@ -280,6 +303,10 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionCase = VM.GetPrescriptionCases(insurance.PrescriptionCase);
             TreatDate = treatDate.Date;
             AdjustDate = DateTime.Today;
+            AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
+            AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");
+            AdjustYear = Convert.ToDateTime(AdjustDate).ToString("yyyy");
+
             SpecialTreat = new SpecialTreat();
             CooperativeGetDisease(diseases);
             GetCopayment(insurance.CopaymentCode);
@@ -288,17 +315,20 @@ namespace His_Pos.NewClass.Prescription
             PrescriptionStatus.IsSendToSingde = false;
             PrescriptionStatus.IsAdjust = false;
             PrescriptionStatus.IsRead = isRead;
+            PrescriptionStatus.IsPrint = isPrint;
             Medicines = new Medicines();
             Medicines.GetDataByCooperativePrescription(prescription.MedicineOrder.Item, WareHouse?.ID, IsBuckle, AdjustDate);
         }
 
-        #endregion
+        #endregion Constructors
+
         #region Properties
+
         public int ID { get; set; }
         public string SourceId { get; set; }
         public string Remark { get; set; }
         public int MedicineDays { get; set; } //給藥日份
-        public string MedicalServiceCode { get; set; } //藥事服務代碼 
+        public string MedicalServiceCode { get; set; } //藥事服務代碼
         public XDocument DeclareContent { get; set; } = new XDocument(); //申報檔內容
         public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
         public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區
@@ -307,12 +337,15 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionType Type { get; set; }
         public IcCard Card { get; set; }
         private Customer patient;
+
         public Customer Patient
         {
             get => patient;
             set { Set(() => Patient, ref patient, value); }
         }
+
         private Institution institution;//釋出院所 D21
+
         public Institution Institution
         {
             get => institution;
@@ -326,6 +359,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private Division division;//就醫科別 D13
+
         public Division Division
         {
             get => division;
@@ -337,6 +371,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private Employee pharmacist;//醫事人員代號 D25
+
         public Employee Pharmacist
         {
             get => pharmacist;
@@ -345,9 +380,11 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => Pharmacist, ref pharmacist, value);
             }
         }
+
         public string MedicalNumber { get; set; } //就醫序號 D7
 
         private DateTime? treatDate;//就醫日期 D7
+
         public DateTime? TreatDate
         {
             get => treatDate;
@@ -358,6 +395,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private DateTime? adjustDate;//調劑日期 D23
+
         public DateTime? AdjustDate
         {
             get => adjustDate;
@@ -367,7 +405,41 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
+        private string adjustDay;//調劑日期 D23
+
+        public string AdjustDay
+        {
+            get => adjustDay;
+            set
+            {
+                Set(() => AdjustDay, ref adjustDay, value);
+            }
+        }
+
+
+        private string adjustMonth;//調劑日期 D23
+
+        public string AdjustMonth
+        {
+            get => adjustMonth;
+            set
+            {
+                Set(() => AdjustMonth, ref adjustMonth, value);
+            }
+        }
+
+        private string adjustYear;//調劑日期 D23
+
+        public string AdjustYear
+        {
+            get => adjustYear;
+            set
+            {
+                Set(() => AdjustYear, ref adjustYear, value);
+            }
+        }
         private DiseaseCode mainDisease;//主診斷代碼(國際疾病分類碼1) D8
+
         public DiseaseCode MainDisease
         {
             get => mainDisease;
@@ -378,6 +450,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private DiseaseCode subDisease;//副診斷代碼(國際疾病分類碼2) D9
+
         public DiseaseCode SubDisease
         {
             get => subDisease;
@@ -388,6 +461,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private int? chronicTotal;//連續處方可調劑次數 D36
+
         public int? ChronicTotal
         {
             get => chronicTotal;
@@ -398,6 +472,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private int? chronicSeq;
+
         public int? ChronicSeq
         {
             get => chronicSeq;
@@ -409,6 +484,7 @@ namespace His_Pos.NewClass.Prescription
         }//連續處方箋調劑序號 D35
 
         private AdjustCase adjustCase;//調劑案件 D1
+
         public AdjustCase AdjustCase
         {
             get => adjustCase;
@@ -430,6 +506,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private PrescriptionCase prescriptionCase;//原處方服務機構之案件分類  D22
+
         public PrescriptionCase PrescriptionCase
         {
             get => prescriptionCase;
@@ -455,6 +532,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private Copayment copayment;//部分負擔代碼  D15
+
         public Copayment Copayment
         {
             get => copayment;
@@ -476,6 +554,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private PaymentCategory paymentCategory;//給付類別 D5
+
         public PaymentCategory PaymentCategory
         {
             get => paymentCategory;
@@ -488,6 +567,7 @@ namespace His_Pos.NewClass.Prescription
         public string OriginalMedicalNumber { get; set; } //原處方就醫序號 D43
 
         private SpecialTreat specialTreat;//特定治療代碼 D26
+
         public SpecialTreat SpecialTreat
         {
             get => specialTreat;
@@ -496,6 +576,7 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => SpecialTreat, ref specialTreat, value);
             }
         }
+
         private string tempMedicalNumber;
 
         public string TempMedicalNumber
@@ -508,6 +589,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private Medicine.Base.Medicine selectedMedicine;
+
         public Medicine.Base.Medicine SelectedMedicine
         {
             get => selectedMedicine;
@@ -526,6 +608,7 @@ namespace His_Pos.NewClass.Prescription
         public WareHouse.WareHouse WareHouse => VM.CooperativeClinicSettings.GetWareHouseByPrescription(Institution, AdjustCase?.ID);
         public bool IsPrescribe => Medicines != null && Medicines.Count(m => m.PaySelf) == Medicines.Count && Medicines.Count > 0;
         private bool isBuckle = true;
+
         public bool IsBuckle
         {
             get => isBuckle;
@@ -537,11 +620,12 @@ namespace His_Pos.NewClass.Prescription
                 switch (Type)
                 {
                     case PrescriptionType.ChronicReserve:
-                        Medicines.Update(IsBuckle, int.Parse(SourceId),Type);
+                        Medicines.Update(IsBuckle, int.Parse(SourceId), Type);
                         break;
+
                     default:
                         if (ID == 0)
-                            Medicines.Update(IsBuckle, ID, Type,AdjustDate,WareHouse?.ID);
+                            Medicines.Update(IsBuckle, ID, Type, AdjustDate, WareHouse?.ID);
                         else
                             Medicines.Update(IsBuckle, ID, Type);
                         break;
@@ -556,6 +640,7 @@ namespace His_Pos.NewClass.Prescription
         public DateTime? InsertTime { get; set; }
 
         private string orderContent;
+
         public string OrderContent
         {
             get => orderContent;
@@ -566,6 +651,7 @@ namespace His_Pos.NewClass.Prescription
         }
 
         private string orderID;
+
         public string OrderID
         {
             get => orderID;
@@ -574,7 +660,8 @@ namespace His_Pos.NewClass.Prescription
                 Set(() => OrderID, ref orderID, value);
             }
         }
-        #endregion
+
+        #endregion Properties
 
         public bool CheckDiseaseEquals(List<string> parameters)
         {
@@ -652,6 +739,7 @@ namespace His_Pos.NewClass.Prescription
                         MainDisease.ID = diseases[i].Code;
                         MainDisease.GetData();
                         break;
+
                     case 1:
                         SubDisease.ID = diseases[i].Code;
                         SubDisease.GetData();
@@ -659,6 +747,7 @@ namespace His_Pos.NewClass.Prescription
                 }
             }
         }
+
         private void CooperativeGetDisease(IReadOnlyList<CooperativePrescription.Item> diseases)
         {
             MainDisease = new DiseaseCode();
@@ -674,6 +763,7 @@ namespace His_Pos.NewClass.Prescription
                         MainDisease.ID = diseases[i].Code;
                         MainDisease.GetData();
                         break;
+
                     case 1:
                         SubDisease.ID = diseases[i].Code;
                         SubDisease.GetData();
@@ -767,6 +857,7 @@ namespace His_Pos.NewClass.Prescription
                 case "905":
                 case "906":
                     return true;
+
                 default:
                     return false;
             }
@@ -778,19 +869,22 @@ namespace His_Pos.NewClass.Prescription
             {
                 case int n when n >= 28:
                     MedicalServiceCode = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
-                    PrescriptionPoint.MedicalServicePoint = 69;
+                    PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05210B;
                     break;
+
                 case int n when n >= 14 && n < 28:
                     MedicalServiceCode = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
-                    PrescriptionPoint.MedicalServicePoint = 59;
+                    PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05206B;
                     break;
+
                 case int n when n >= 7 && n < 14:
                     MedicalServiceCode = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
-                    PrescriptionPoint.MedicalServicePoint = 48;
+                    PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05223B;
                     break;
+
                 default:
                     MedicalServiceCode = "05202B";//一般處方給付(7天以內)
-                    PrescriptionPoint.MedicalServicePoint = 48;
+                    PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05202B;
                     break;
             }
         }
@@ -801,7 +895,7 @@ namespace His_Pos.NewClass.Prescription
             CreateMedicinesDetail();
             if (IsPrescribe || CheckOnlyBloodGlucoseTestStrip()) return;
             MedicineDays = Medicines.CountMedicineDays();//計算最大給藥日份
-            var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1,(DateTime)AdjustDate);
+            var medicalService = new Pdata(PDataType.Service, MedicalServiceCode, Patient.CheckAgePercentage(), 1, (DateTime)AdjustDate);
             Details.Add(medicalService);
             if (CheckNotNormalPrescription()) return;
             var dailyPrice = CheckIfSimpleFormDeclare();
@@ -818,7 +912,7 @@ namespace His_Pos.NewClass.Prescription
                 d.P8 = $"{0.00:0000000.00}";
                 d.P9 = "00000000";
             }
-            var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays,(DateTime)AdjustDate);
+            var simpleForm = new Pdata(PDataType.SimpleForm, dailyPrice.ToString(), 100, MedicineDays, (DateTime)AdjustDate);
             Details.Add(simpleForm);
         }
 
@@ -827,10 +921,10 @@ namespace His_Pos.NewClass.Prescription
             var serialNumber = 1;
             foreach (var med in Medicines.GetDeclare())
             {
-                Details.Add(new Pdata(med, serialNumber.ToString(),(DateTime)AdjustDate));
+                Details.Add(new Pdata(med, serialNumber.ToString(), (DateTime)AdjustDate));
                 serialNumber++;
             }
-            Details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty,(DateTime)AdjustDate)));
+            Details.AddRange(Medicines.Where(m => m.PaySelf).Select(med => new Pdata(med, string.Empty, (DateTime)AdjustDate)));
         }
 
         private bool CheckNotNormalPrescription()
@@ -887,16 +981,30 @@ namespace His_Pos.NewClass.Prescription
         }
 
         #region PrintFunctions
-
+        public void PrintMedBagSingleModeByCE()
+        {
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            var medBagMedicines = new MedBagMedicines(Medicines, true);
+            var medDays = Medicines.CountMedicineDays();
+            for (int i = 1; i <= medBagMedicines.Count; i++)
+            {
+                SetSingleModeReportByCEViewer(rptViewer, medBagMedicines[i - 1], $"{i}/{medBagMedicines.Count}", medDays);
+                MainWindow.Instance.Dispatcher.Invoke(() =>
+                {
+                    ((VM)MainWindow.Instance.DataContext).StartPrintMedBagCE(rptViewer);
+                });
+            }
+        }
         public void PrintMedBagSingleMode()
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
             var medBagMedicines = new MedBagMedicines(Medicines, true);
             var medDays = Medicines.CountMedicineDays();
-            for (int i = 1;i <= medBagMedicines.Count;i++ )
+            for (int i = 1; i <= medBagMedicines.Count; i++)
             {
-                SetSingleModeReportViewer(rptViewer, medBagMedicines[i-1], $"{i}/{medBagMedicines.Count}",medDays);
+                SetSingleModeReportViewer(rptViewer, medBagMedicines[i - 1], $"{i}/{medBagMedicines.Count}", medDays);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintMedBag(rptViewer);
@@ -943,16 +1051,19 @@ namespace His_Pos.NewClass.Prescription
                 ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
             });
         }
+
         #region ReportViewerSettingFunctions
-        private void SetSingleModeReportViewer(ReportViewer rptViewer, MedBagMedicine m,string orderNumber,int medDays)
+
+        private void SetSingleModeReportViewer(ReportViewer rptViewer, MedBagMedicine m, string orderNumber, int medDays)
         {
             rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingle.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
-            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this, orderNumber,medDays);
+            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this, orderNumber, medDays);
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
         }
+
         private void SetMultiModeReportViewer(ReportViewer rptViewer)
         {
             var medBagMedicines = new MedBagMedicines(Medicines, false);
@@ -967,6 +1078,15 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.DataSources.Add(rd);
             rptViewer.LocalReport.Refresh();
         }
+        private void SetSingleModeReportByCEViewer(ReportViewer rptViewer, MedBagMedicine m, string orderNumber, int medDays)
+        {
+            rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingleByCE.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var parameters = PrescriptionService.CreateSingleMedBagParameter(m, this, orderNumber, medDays);
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.Refresh();
+        }
         private void SetReceiptReportViewer(ReportViewer rptViewer)
         {
             switch (Properties.Settings.Default.ReceiptForm)
@@ -974,6 +1094,7 @@ namespace His_Pos.NewClass.Prescription
                 case "一般":
                     rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt_A5.rdlc";
                     break;
+
                 default:
                     rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
                     break;
@@ -984,6 +1105,7 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
         }
+
         private void SetDepositReportViewer(ReportViewer rptViewer)
         {
             switch (Properties.Settings.Default.ReceiptForm)
@@ -991,6 +1113,7 @@ namespace His_Pos.NewClass.Prescription
                 case "一般":
                     rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet_A5.rdlc";
                     break;
+
                 default:
                     rptViewer.LocalReport.ReportPath = @"RDLC\DepositSheet.rdlc";
                     break;
@@ -1001,8 +1124,10 @@ namespace His_Pos.NewClass.Prescription
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
         }
-        #endregion
-        #endregion
+
+        #endregion ReportViewerSettingFunctions
+
+        #endregion PrintFunctions
 
         public void AddMedicine(string medicineID)
         {
@@ -1022,6 +1147,9 @@ namespace His_Pos.NewClass.Prescription
             SpecialTreat = null;
             TreatDate = DateTime.Today;
             AdjustDate = DateTime.Today;
+            AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
+            AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");
+            AdjustYear = Convert.ToDateTime(AdjustDate).ToString("yyyy");
             AdjustCase = VM.GetAdjustCase("1");
             PrescriptionCase = VM.GetPrescriptionCases("09");
             Copayment = VM.GetCopayment("I21");
@@ -1035,13 +1163,16 @@ namespace His_Pos.NewClass.Prescription
                 case "D":
                     Copayment = VM.GetCopayment("009");
                     break;
+
                 case "1":
                 case "3":
                     SetNormalVariables();
                     break;
+
                 case "2":
                     SetChronicVariables();
                     break;
+
                 case "5":
                     SetQuitSmokeVariables();
                     break;
@@ -1095,6 +1226,7 @@ namespace His_Pos.NewClass.Prescription
                     PrescriptionCase = VM.GetPrescriptionCases("19");
                     Copayment = VM.GetCopayment("I22");
                     break;
+
                 default:
                     PrescriptionCase = VM.GetPrescriptionCases("09");
                     break;
@@ -1125,6 +1257,10 @@ namespace His_Pos.NewClass.Prescription
                 TempMedicalNumber = TempMedicalNumber,
                 TreatDate = TreatDate,
                 AdjustDate = AdjustDate,
+                
+                AdjustDay = AdjustDay,
+                AdjustYear = AdjustYear,
+                AdjustMonth = AdjustMonth,
                 MainDisease = MainDisease.DeepCloneViaJson(),
                 SubDisease = SubDisease?.DeepCloneViaJson(),
                 ChronicSeq = ChronicSeq,
@@ -1149,20 +1285,23 @@ namespace His_Pos.NewClass.Prescription
                     case MedicineNHI _:
                         clone.Medicines.Add((MedicineNHI)m.Clone());
                         break;
+
                     case MedicineSpecialMaterial _:
                         clone.Medicines.Add((MedicineSpecialMaterial)m.Clone());
                         break;
+
                     case MedicineOTC _:
                         clone.Medicines.Add((MedicineOTC)m.Clone());
                         break;
+
                     default:
                         clone.Medicines.Add((MedicineVirtual)m.Clone());
                         break;
                 }
             }
             return clone;
-
         }
+
         public object Clone()
         {
             var clone = new Prescription
@@ -1189,7 +1328,12 @@ namespace His_Pos.NewClass.Prescription
                 Type = Type,
                 OrderContent = OrderContent,
                 OrderID = OrderID,
+                AdjustDay = AdjustDay,
+                AdjustYear = AdjustYear,
+                AdjustMonth = AdjustMonth,
                 Medicines = new Medicines()
+       
+                
             };
             foreach (var m in Medicines)
             {
@@ -1198,12 +1342,15 @@ namespace His_Pos.NewClass.Prescription
                     case MedicineNHI _:
                         clone.Medicines.Add((MedicineNHI)m.Clone());
                         break;
+
                     case MedicineSpecialMaterial _:
                         clone.Medicines.Add((MedicineSpecialMaterial)m.Clone());
                         break;
+
                     case MedicineOTC _:
                         clone.Medicines.Add((MedicineOTC)m.Clone());
                         break;
+
                     default:
                         clone.Medicines.Add((MedicineVirtual)m.Clone());
                         break;
@@ -1284,7 +1431,7 @@ namespace His_Pos.NewClass.Prescription
         {
             CreateDeclareFileContent();//產生申報資料
             var resultTable = PrescriptionDb.InsertPrescriptionByType(this, Details);
-            
+
             while (NewFunction.CheckTransaction(resultTable))
             {
                 var retry = new ConfirmWindow("處方登錄異常，是否重試?", "登錄異常", true);
@@ -1296,7 +1443,6 @@ namespace His_Pos.NewClass.Prescription
                     return false;
                 }
             }
-
 
             ID = resultTable.Rows[0].Field<int>("DecMasId");
 
@@ -1324,6 +1470,7 @@ namespace His_Pos.NewClass.Prescription
                         }
                     }
                     break;
+
                 case PrescriptionType.ChronicReserve:
                     PrescriptionDb.UpdateReserve(this, Details);
                     break;
@@ -1355,7 +1502,7 @@ namespace His_Pos.NewClass.Prescription
         {
             if (!CheckMedicineDays28()) return false;
             MedicalServiceCode = "05210B";//門診藥事服務費－每人每日80件內-慢性病處方給藥28天以上-特約藥局(山地離島地區每人每日100件內)
-            PrescriptionPoint.MedicalServicePoint = 69;
+            PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05210B;
             return true;
         }
 
@@ -1363,7 +1510,7 @@ namespace His_Pos.NewClass.Prescription
         {
             if (!CheckMedicineDaysBetween14And28()) return false;
             MedicalServiceCode = "05206B";//門診藥事服務費－每人每日80件內-慢性病處方給藥14-27天-特約藥局(山地離島地區每人每日100件內)
-            PrescriptionPoint.MedicalServicePoint = 59;
+            PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05206B;
             return true;
         }
 
@@ -1371,14 +1518,14 @@ namespace His_Pos.NewClass.Prescription
         {
             if (!CheckMedicineDaysBetween7And14()) return false;
             MedicalServiceCode = "05223B";//門診藥事服務費-每人每日80件內-慢性病處方給藥13天以內-特約藥局(山地離島地區每人每日100件內)
-            PrescriptionPoint.MedicalServicePoint = 48;
+            PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05223B;
             return true;
         }
 
         private void SetMedicalServiceLessThan7Days()
         {
             MedicalServiceCode = "05202B";//一般處方給付(7天以內)
-            PrescriptionPoint.MedicalServicePoint = 48;
+            PrescriptionPoint.MedicalServicePoint = (int)ServicePoint.CODE_05202B;
         }
 
         private bool CheckMedicineDaysBetween14And28()
@@ -1396,7 +1543,7 @@ namespace His_Pos.NewClass.Prescription
             return MedicineDays >= 28;
         }
 
-        #endregion
+        #endregion CheckMedicalServiceFunctions
 
         private void SetPrescribeValue()
         {
@@ -1644,14 +1791,19 @@ namespace His_Pos.NewClass.Prescription
             {
                 case "IDNumber":
                     return Patient.CheckIDNumberEmpty();
+
                 case "Name":
                     return Patient.CheckNameEmpty();
+
                 case "Birthday":
                     return Patient.CheckBirthdayNull();
+
                 case "Tel":
                     return Patient.CheckTelEmpty();
+
                 case "CellPhone":
                     return Patient.CheckCellPhoneEmpty();
+
                 default:
                     return false;
             }
@@ -1687,8 +1839,7 @@ namespace His_Pos.NewClass.Prescription
             MainWindow.ServerConnection.CloseConnection();
             Medicines.CheckUsableAmount(usableAmountList);
 
-            
-            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList, Patient.Name, $"{Patient.Name} {DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(AdjustDate,true)} 欠藥採購" );
+            return WareHouse is null ? string.Empty : Medicines.CheckNegativeStock(WareHouse?.ID, usableAmountList, Patient.Name, $"{Patient.Name} {DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(AdjustDate, true)} 欠藥採購");
         }
 
         public void CountSelfPay()
@@ -1715,10 +1866,7 @@ namespace His_Pos.NewClass.Prescription
                 default:
                     var resultTable = PrescriptionDb.DeletePrescription(this);
 
-
                     PrescriptionDb.DeleteStoreOrder(this.ID);
-                    
-
 
                     while (resultTable.Rows.Count == 0 || !resultTable.Rows[0].Field<bool>("Result"))
                     {
@@ -1726,11 +1874,13 @@ namespace His_Pos.NewClass.Prescription
                         resultTable = PrescriptionDb.DeletePrescription(this);
                     }
                     break;
+
                 case PrescriptionType.ChronicReserve:
                     PrescriptionDb.DeleteReserve(SourceId);
                     break;
             }
         }
+
         public string CheckMedicinesIdEmpty()
         {
             var emptyMedicine = string.Empty;
@@ -1746,6 +1896,7 @@ namespace His_Pos.NewClass.Prescription
                     Medicines.Clear();
                     Medicines.GetDataByReserveId(int.Parse(SourceId));
                     break;
+
                 default:
                     Medicines.Clear();
                     Medicines.GetDataByPrescriptionId(ID);
@@ -1761,6 +1912,7 @@ namespace His_Pos.NewClass.Prescription
                 case PrescriptionType.ChronicRegister:
                     usableInventoryStructs.GetUsableAmountByPrescriptionID(ID);
                     break;
+
                 case PrescriptionType.ChronicReserve:
                     usableInventoryStructs.GetUsableAmountByReserveID(int.Parse(SourceId));
                     break;
@@ -1784,13 +1936,14 @@ namespace His_Pos.NewClass.Prescription
 
         public bool CheckChronicAdjustDateValid()
         {
-            var adjust = (DateTime) AdjustDate;
-            var treat = (DateTime) TreatDate;
-            var seq = (int) ChronicSeq - 1;
+            var adjust = (DateTime)AdjustDate;
+            var treat = (DateTime)TreatDate;
+            var seq = (int)ChronicSeq - 1;
             switch (ChronicSeq)
             {
                 case 1:
                     return DateTime.Compare(adjust, treat.AddDays(10)) <= 0 && DateTime.Compare(adjust, treat) >= 0;
+
                 default:
                     var standardDate = treat.AddDays(MedicineDays * seq);
                     var start = standardDate.AddDays(-10);

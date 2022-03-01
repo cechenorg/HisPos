@@ -1,20 +1,21 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
-using His_Pos.NewClass.Person.MedicalPerson;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
+using System;
+using System.Data;
+using System.Globalization;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
     public class PrescriptionSearchPreview : ObservableObject
     {
-        public PrescriptionSearchPreview() { }
+        public PrescriptionSearchPreview()
+        {
+        }
 
         public PrescriptionSearchPreview(DataRow r, PrescriptionType s)
         {
@@ -34,7 +35,7 @@ namespace His_Pos.NewClass.Prescription.Search
             MedicalServicePoint = r.Field<int>("MedicalServicePoint");
             MedicinePoint = r.Field<int>("MedicinePoint");
             CopaymentPoint = r.Field<int>("CopaymentPoint");
-            SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint"); 
+            SpecialMaterialPoint = r.Field<int>("SpecialMaterialPoint");
             if (NewFunction.CheckDataRowContainsColumn(r, "NoBuckleStatus"))
             {
                 NoBuckleStatus = r.Field<int?>("NoBuckleStatus");
@@ -64,15 +65,19 @@ namespace His_Pos.NewClass.Prescription.Search
                     case "W":
                         StoStatus = "等待確認";
                         break;
+
                     case "P":
                         StoStatus = "等待收貨";
                         break;
+
                     case "D":
                         StoStatus = "已收貨";
                         break;
+
                     case "S":
                         StoStatus = "訂單做廢";
                         break;
+
                     default:
                         StoStatus = "無訂單";
                         break;
@@ -86,6 +91,7 @@ namespace His_Pos.NewClass.Prescription.Search
         }
 
         private Customer patient;
+
         public Customer Patient
         {
             get => patient;
@@ -94,7 +100,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => Patient, ref patient, value);
             }
         }
+
         private Institution institution;
+
         public Institution Institution
         {
             get => institution;
@@ -103,7 +111,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => Institution, ref institution, value);
             }
         }
+
         private Division division;
+
         public Division Division
         {
             get => division;
@@ -112,7 +122,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => Division, ref division, value);
             }
         }
+
         private AdjustCase adjustCase;
+
         public AdjustCase AdjustCase
         {
             get => adjustCase;
@@ -121,7 +133,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => AdjustCase, ref adjustCase, value);
             }
         }
+
         private DateTime adjustDate;
+
         public DateTime AdjustDate
         {
             get => adjustDate;
@@ -130,7 +144,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => AdjustDate, ref adjustDate, value);
             }
         }
+
         private DateTime? treatDate;
+
         public DateTime? TreatDate
         {
             get => treatDate;
@@ -139,7 +155,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => TreatDate, ref treatDate, value);
             }
         }
+
         private int id;
+
         public int ID
         {
             get => id;
@@ -148,7 +166,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => ID, ref id, value);
             }
         }
+
         private bool isAdjust;
+
         public bool IsAdjust
         {
             get => isAdjust;
@@ -157,7 +177,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => IsAdjust, ref isAdjust, value);
             }
         }
+
         private bool isDeposit;
+
         public bool IsDeposit
         {
             get => isDeposit;
@@ -166,7 +188,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => IsDeposit, ref isDeposit, value);
             }
         }
+
         private int? noBuckleStatus;
+
         public int? NoBuckleStatus
         {
             get => noBuckleStatus;
@@ -175,7 +199,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => NoBuckleStatus, ref noBuckleStatus, value);
             }
         }
+
         private string stoStatus;
+
         public string StoStatus
         {
             get => stoStatus;
@@ -184,7 +210,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => StoStatus, ref stoStatus, value);
             }
         }
+
         private string medicalNumber;
+
         public string MedicalNumber
         {
             get => medicalNumber;
@@ -193,7 +221,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => MedicalNumber, ref medicalNumber, value);
             }
         }
+
         private string insertDate;
+
         public string InsertDate
         {
             get => insertDate;
@@ -202,7 +232,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => InsertDate, ref insertDate, value);
             }
         }
+
         private string registerDate;
+
         public string RegisterDate
         {
             get => registerDate;
@@ -210,8 +242,10 @@ namespace His_Pos.NewClass.Prescription.Search
             {
                 Set(() => RegisterDate, ref registerDate, value);
             }
-        } 
+        }
+
         private int totalPoint;
+
         public int TotalPoint
         {
             get => totalPoint;
@@ -220,7 +254,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => TotalPoint, ref totalPoint, value);
             }
         }
+
         private int medicalServicePoint;
+
         public int MedicalServicePoint
         {
             get => medicalServicePoint;
@@ -229,7 +265,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => MedicalServicePoint, ref medicalServicePoint, value);
             }
         }
+
         private int medicinePoint;
+
         public int MedicinePoint
         {
             get => medicinePoint;
@@ -238,7 +276,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => MedicinePoint, ref medicinePoint, value);
             }
         }
+
         private int copaymentPoint;
+
         public int CopaymentPoint
         {
             get => copaymentPoint;
@@ -247,7 +287,9 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => CopaymentPoint, ref copaymentPoint, value);
             }
         }
+
         private int specialMaterialPoint;
+
         public int SpecialMaterialPoint
         {
             get => specialMaterialPoint;
@@ -256,6 +298,7 @@ namespace His_Pos.NewClass.Prescription.Search
                 Set(() => SpecialMaterialPoint, ref specialMaterialPoint, value);
             }
         }
+
         public PrescriptionType Type { get; set; }
     }
 }

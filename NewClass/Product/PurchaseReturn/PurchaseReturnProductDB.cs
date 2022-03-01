@@ -1,8 +1,7 @@
-﻿using System;
+﻿using His_Pos.ChromeTabViewModel;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {

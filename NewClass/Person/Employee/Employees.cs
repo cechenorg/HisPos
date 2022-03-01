@@ -1,26 +1,55 @@
-﻿using System;
+﻿using His_Pos.ChromeTabViewModel;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
-using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.Person.Employee
-{ 
+{
     public class Employees : ObservableCollection<Employee>
     {
         public Employees()
         {
-
         }
 
         public void Init()
         {
             Clear();
             var table = EmployeeDb.GetData();
+            
+            foreach (DataRow row in table.Rows)
+            {
+                Add(new Employee(row));
+            }
+            
+        }
+
+        public void ClockIn(string WYear, string WMonth,int? EmpID)
+        {
+            Clear();
+            var table = EmployeeDb.EmployeeClockInList(WYear, WMonth, EmpID);
             foreach (DataRow row in table.Rows)
             {
                 Add(new Employee(row));
             }
         }
+
+        public void ClockInEmp(string WYear, string WMonth, string StoreNo, string EmpId, int Permit)
+        {
+            Clear();
+            var table = EmployeeDb.EmployeeClockInListTest(WYear, WMonth, StoreNo, EmpId, Permit);
+            if (table.Rows.Count > 0)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    Add(new Employee(row));
+                }
+            }
+            else
+            { 
+            
+            }
+        }
+
 
         public void GetEnablePharmacist(DateTime selectedDate)
         {
@@ -32,7 +61,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
             foreach (var emp in tempEmpList)
             {
-                if(emp.CheckLeave(selectedDate) && emp.WorkPosition.WorkPositionName.Contains("藥師") && emp.IsLocal)
+                if (emp.CheckLeave(selectedDate) && emp.WorkPosition.WorkPositionName.Contains("藥師") && emp.IsLocal)
                     Add(emp);
                 else
                 {
@@ -64,7 +93,7 @@ namespace His_Pos.NewClass.Person.Employee
             var localPharmacists = new Employees();
             foreach (var e in Items)
             {
-                if(e.IsLocal || e.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber))
+                if (e.IsLocal || e.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber))
                     localPharmacists.Add(e);
             }
             return localPharmacists;

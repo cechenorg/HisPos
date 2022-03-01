@@ -1,16 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.NewClass.Medicine;
+using System.Collections.ObjectModel;
+using System.Data;
 
 namespace His_Pos.NewClass.Product.CustomerHistoryProduct
 {
-    public class CustomerHistoryProducts:ObservableCollection<CustomerHistoryProduct>
+    public class CustomerHistoryProducts : ObservableCollection<CustomerHistoryProduct>
     {
         public CustomerHistoryProducts()
         {
-            
         }
+
         public CustomerHistoryProducts(DataTable dataTable)
         {
             foreach (DataRow r in dataTable.Rows)
@@ -18,10 +18,12 @@ namespace His_Pos.NewClass.Product.CustomerHistoryProduct
                 Add(new CustomerHistoryProduct(r));
             }
         }
-        internal void GetCustomerHistoryProducts(int id,HistoryType type)
+
+        internal void GetCustomerHistoryProducts(int id, HistoryType type)
         {
             GetDataByPrescriptionId(id);
         }
+
         public void GetDataByPrescriptionId(int preId)
         {
             DataTable table = MedicineDb.GetDataByPrescriptionId(preId);

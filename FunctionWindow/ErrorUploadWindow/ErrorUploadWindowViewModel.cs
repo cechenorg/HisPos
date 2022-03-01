@@ -1,12 +1,12 @@
-﻿using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
+using System.Collections.ObjectModel;
 
 namespace His_Pos.FunctionWindow.ErrorUploadWindow
 {
-    public class ErrorUploadWindowViewModel:ViewModelBase
+    public class ErrorUploadWindowViewModel : ViewModelBase
     {
         public class IcErrorCode
         {
@@ -23,6 +23,7 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
             {
             }
         }
+
         public class IcErrorCodes : Collection<IcErrorCode>
         {
             public IcErrorCodes(bool isMedicalNumberGet)
@@ -62,8 +63,10 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
                 }
             }
         }
+
         public IcErrorCodes IcErrorCodeList { get; set; }
         private IcErrorCode selectedIcErrorCode;
+
         public IcErrorCode SelectedIcErrorCode
         {
             get => selectedIcErrorCode;
@@ -75,6 +78,7 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
 
         public RelayCommand ConfirmClick { get; set; }
         public RelayCommand CancelClick { get; set; }
+
         public ErrorUploadWindowViewModel(bool isGetMedicalNumber)
         {
             IcErrorCodeList = new IcErrorCodes(isGetMedicalNumber);
@@ -86,12 +90,13 @@ namespace His_Pos.FunctionWindow.ErrorUploadWindow
         {
             if (SelectedIcErrorCode is null)
             {
-                MessageWindow.ShowMessage("尚未選擇異常代碼",MessageType.ERROR);
+                MessageWindow.ShowMessage("尚未選擇異常代碼", MessageType.ERROR);
                 return;
             }
             Messenger.Default.Send(SelectedIcErrorCode, "SelectedIcErrorCode");
             Messenger.Default.Send(new NotificationMessage("CloseErrorUploadWindow"));
         }
+
         private void CancelClickAction()
         {
             SelectedIcErrorCode = null;

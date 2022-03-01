@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace His_Pos.NewClass.Setting
+﻿namespace His_Pos.NewClass.Setting
 {
     public struct SettingTabData
     {
@@ -14,6 +8,7 @@ namespace His_Pos.NewClass.Setting
             Name = name;
             Icon = icon;
         }
+
         public SettingTabs Tab { get; }
         public string Name { get; }
         public string Icon { get; }

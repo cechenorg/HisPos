@@ -10,6 +10,5 @@
             ID = id;
             Amount = amount;
         }
-         
     }
 }

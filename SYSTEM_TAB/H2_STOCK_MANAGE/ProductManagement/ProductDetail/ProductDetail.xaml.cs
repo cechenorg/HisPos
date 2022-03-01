@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows;
-using His_Pos.AbstractClass;
+﻿using His_Pos.AbstractClass;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using System;
+using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
 {

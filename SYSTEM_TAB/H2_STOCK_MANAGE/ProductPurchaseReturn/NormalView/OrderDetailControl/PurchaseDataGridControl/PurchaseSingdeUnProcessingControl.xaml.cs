@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl
 {
@@ -22,6 +22,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         }
 
         #region ----- Define Functions -----
+
         private void InputTextbox_OnGotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -37,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             ProductDataGrid.SelectedItem = (ProductDataGrid.Items[index] as Product);
         }
+
         private void InputTextbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -46,6 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             e.Handled = true;
             textBox.Focus();
         }
+
         private void ProductIDTextbox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -65,7 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                     textBox.Text = "";
 
                     if (ProductDataGrid.Items.Count != oldCount)
-                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[6]);
+                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[7]);
                 }
                 else if (ProductDataGrid.CurrentCell.Item is Product)
                 {
@@ -80,7 +83,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                     if (!(ProductDataGrid.Items[index] as Product).ID.Equals(textBox.Text))
                         textBox.Text = (ProductDataGrid.Items[index] as Product).ID;
 
-                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[6]);
+                    ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index], ProductDataGrid.Columns[7]);
                 }
 
                 ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
@@ -91,8 +94,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 if (firstChild is TextBox)
                     firstChild.Focus();
             }
-
         }
+
         private void OrderAmountTextbox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -116,6 +119,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                     firstChild.Focus();
             }
         }
+
         private void ShowDetail(object sender, MouseButtonEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;
@@ -126,18 +130,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { ((PurchaseProduct)cell.DataContext).ID, ((PurchaseProduct)cell.DataContext).WareHouseID.ToString() }, "ShowProductDetail"));
         }
+
         private void GetProductToolTip(object sender, MouseEventArgs e)
         {
             DataGridCell cell = sender as DataGridCell;
 
             if (!(cell?.DataContext is PurchaseProduct)) return;
 
-            MainWindow.ServerConnection.OpenConnection();
+            /*MainWindow.ServerConnection.OpenConnection();
             ((PurchaseProduct)cell.DataContext).GetOnTheWayDetail();
-            MainWindow.ServerConnection.CloseConnection();
+            MainWindow.ServerConnection.CloseConnection();*/
         }
-        #endregion
 
+        #endregion ----- Define Functions -----
 
+    
     }
 }

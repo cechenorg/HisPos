@@ -1,20 +1,21 @@
 #region License and Terms
+
 // MoreLINQ - Extensions to LINQ to Objects
 // Copyright (c) 2008 Jonathan Skeet. All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#endregion
 
+#endregion License and Terms
 
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace His_Pos.Service.MoreLinq
         /// <param name="keySelector">Projection for determining "distinctness"</param>
         /// <returns>A sequence consisting of distinct elements from the source sequence,
         /// comparing them by the specified key projection.</returns>
-        
+
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector)
         {
@@ -66,7 +67,7 @@ namespace His_Pos.Service.MoreLinq
         /// If null, the default equality comparer for <c>TSource</c> is used.</param>
         /// <returns>A sequence consisting of distinct elements from the source sequence,
         /// comparing them by the specified key projection.</returns>
-        
+
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
@@ -90,7 +91,7 @@ namespace His_Pos.Service.MoreLinq
 #else
             //
             // On platforms where LINQ is available but no HashSet<T>
-            // (like on Silverlight), implement this operator using 
+            // (like on Silverlight), implement this operator using
             // existing LINQ operators. Using GroupBy is slightly less
             // efficient since it has do all the grouping work before
             // it can start to yield any one element from the source.

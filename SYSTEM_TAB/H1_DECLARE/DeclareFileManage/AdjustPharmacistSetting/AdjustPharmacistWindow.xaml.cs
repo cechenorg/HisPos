@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting
 {
@@ -22,6 +11,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
     public partial class AdjustPharmacistWindow : Window
     {
         private AdjustPharmacistViewModel adjustPharmacistViewModel;
+
         public AdjustPharmacistWindow(DateTime declare)
         {
             InitializeComponent();
@@ -31,7 +21,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSettin
                     Close();
             });
             adjustPharmacistViewModel = new AdjustPharmacistViewModel(declare);
-            this.DataContext = adjustPharmacistViewModel;
+            DataContext = adjustPharmacistViewModel;
             ShowDialog();
             UpdateLayout();
         }

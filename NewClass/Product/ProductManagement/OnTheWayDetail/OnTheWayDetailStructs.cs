@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.ProductManagement.OnTheWayDetail
 {
@@ -19,10 +14,12 @@ namespace His_Pos.NewClass.Product.ProductManagement.OnTheWayDetail
         }
 
         #region ----- Define Functions -----
+
         internal static OnTheWayDetailStructs GetOnTheWayDetailByID(string proID, string wareID)
         {
             return new OnTheWayDetailStructs(ProductDetailDB.GetOnTheWayDetailByID(proID, wareID));
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

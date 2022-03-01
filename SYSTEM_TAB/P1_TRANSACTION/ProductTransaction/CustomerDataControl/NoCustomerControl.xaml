@@ -1,65 +1,185 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl.NoCustomerControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" >
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl.NoCustomerControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="660"/>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="240" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="390" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-            <TextBox x:Name="tbSearch" Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="手機 / 家電" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="Black" Margin="10,0,0,2" KeyDown="tbSearch_KeyDown">
-            </TextBox>
-            <Button x:Name="btnAddCustomer" Width="100" Content="新增顧客" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Click="btnAddCustomer_Click"/>
-            <Button x:Name="btnClearCustomer" Width="65" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="DimGray" Click="btnClearCustomer_Click"/>
+        <StackPanel
+            Grid.Row="0"
+            Background="{StaticResource GridBackGround}"
+            Orientation="Horizontal">
+            <TextBox
+                x:Name="tbSearch"
+                Width="180"
+                Margin="10,0,0,2"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                materialDesign:HintAssist.Hint="手機 / 家電"
+                FontFamily="Segoe UI Semibold"
+                FontSize="22"
+                Foreground="Black"
+                KeyDown="tbSearch_KeyDown"
+                Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                x:Name="btnAddCustomer"
+                Width="100"
+                Margin="10,0,0,0"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Click="btnAddCustomer_Click"
+                Content="新增顧客"
+                FontFamily="Segoe UI Semibold"
+                FontSize="17" />
+            <Button
+                x:Name="btnClearCustomer"
+                Width="65"
+                Margin="10,0,0,0"
+                Background="DimGray"
+                BorderThickness="0"
+                Click="btnClearCustomer_Click"
+                Content="清除"
+                FontFamily="Segoe UI Semibold"
+                FontSize="17" />
         </StackPanel>
-        <Rectangle Grid.Row="1" Fill="{StaticResource GridDarkerBackGround}"/>
+        <Rectangle Grid.Row="1" Fill="{StaticResource GridDarkerBackGround}" />
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="60"/>
-                <RowDefinition/>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <Label Content="姓名：" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
-                <Label x:Name="lbName" Content="" Width="120" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
-                <Label Content="姓別：" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
-                <Label x:Name="lbGender" Content="" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content="姓名："
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <Label
+                    x:Name="lbName"
+                    Width="120"
+                    VerticalContentAlignment="Center"
+                    Content=""
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content="姓別："
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <Label
+                    x:Name="lbGender"
+                    VerticalContentAlignment="Center"
+                    Content=""
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
             </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Label Content="生日：" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
-                <Label x:Name="lbBirthDay" Content="" Width="200" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content="生日："
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <Label
+                    x:Name="lbBirthDay"
+                    Width="200"
+                    VerticalContentAlignment="Center"
+                    Content=""
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal">
-                <Label Content="手機：" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
-                <Label x:Name="lbCellphone" Content="" Width="200" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content="手機："
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <Label
+                    x:Name="lbCellphone"
+                    Width="120"
+                    VerticalContentAlignment="Center"
+                    Content=""
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content="家電："
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <Label
+                    x:Name="lbTelephone"
+                    Width="120"
+                    VerticalContentAlignment="Center"
+                    Content=""
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
             </StackPanel>
             <StackPanel Grid.Row="3" Orientation="Horizontal">
-                <Label Content="家電：" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
-                <Label x:Name="lbTelephone" Content="" Width="200" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content="地址："
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <TextBlock
+                    x:Name="tbAddress"
+                    Width="280"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17"
+                    Text=""
+                    TextWrapping="Wrap" />
             </StackPanel>
             <StackPanel Grid.Row="4" Orientation="Horizontal">
-                <Label Content="地址：" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
-                <TextBlock x:Name="tbAddress" Text="" Width="280" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
-            </StackPanel>
-            <StackPanel Grid.Row="5" Orientation="Horizontal">
-                <Label Content="備註：" FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,0,0,0" VerticalContentAlignment="Center"></Label>
-                <TextBlock x:Name="tbNote" Text="" Width="280" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
-            </StackPanel>
-            <StackPanel Grid.Row="6">
-                <Separator/>
-                <Label Content="消費紀錄" Width="400" Padding="10" FontFamily="Segoe UI Semibold" FontSize="18" VerticalContentAlignment="Top" HorizontalContentAlignment="Center"></Label>
-                <Separator/>
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content="備註："
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17" />
+                <TextBlock
+                    x:Name="tbNote"
+                    Width="280"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="17"
+                    Text=""
+                    TextWrapping="Wrap" />
             </StackPanel>
         </Grid>
-        
+        <StackPanel
+            Grid.Row="2"
+            Margin="0,10,0,0"
+            Background="{StaticResource GridBackGround}"
+            Orientation="Horizontal">
+            <Label
+                Width="120"
+                Margin="130,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="消費紀錄"
+                FontFamily="Segoe UI Semibold"
+                FontSize="22" />
+            <Button
+                x:Name="btnDepositManage"
+                Width="100"
+                Margin="25,0,0,0"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Content="寄庫管理"
+                FontFamily="Segoe UI Semibold"
+                FontSize="17" />
+        </StackPanel>
+        <Rectangle Grid.Row="3" Fill="{StaticResource GridDarkerBackGround}" />
+        <DataGrid Grid.Row="3" />
     </Grid>
 </UserControl>

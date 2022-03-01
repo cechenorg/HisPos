@@ -1,39 +1,61 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl.GetCustomerWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d"
-        Title="取得顧客" Height="400" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl.GetCustomerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction.CustomerDataControl"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="取得顧客"
+    Width="700"
+    Height="400"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
-        <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
-            <Setter Property="HorizontalAlignment"  Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+        <Style x:Key="TextInMiddleCellStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <DataTemplate x:Key="EditingDataGrid" DataType="UserControl">
-            <Label Content="輸入搜尋字串中..." Width="680" Height="304" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Style="{StaticResource BoldLabelHeader25}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <Label
+                Width="680"
+                Height="304"
+                Margin="10,0,10,10"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Background="{StaticResource GridBackGround}"
+                Content="輸入搜尋字串中..."
+                Style="{StaticResource BoldLabelHeader25}" />
         </DataTemplate>
         <DataTemplate x:Key="ShowResultDataGrid" DataType="UserControl">
-            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="680" HorizontalAlignment="Left" Margin="10,0,10,10"
-                  AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}"
-                  SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ProStructCollectionView, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid
+                Width="680"
+                Margin="10,0,10,10"
+                HorizontalAlignment="Left"
+                AutoGenerateColumns="False"
+                Background="{StaticResource GridBackGround}"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                FontFamily="Segoe UI Semi"
+                HorizontalScrollBarVisibility="Hidden"
+                ItemsSource="{Binding ProStructCollectionView, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedProductStruct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Behaviors>
-                    <behaviors:ScrollIntoView/>
+                    <behaviors:ScrollIntoView />
                 </i:Interaction.Behaviors>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding ProductSelected}"/>
+                        <i:InvokeCommandAction Command="{Binding ProductSelected}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Horizontal">
                                 <Setter Property="Width" Value="Auto" />
@@ -41,7 +63,7 @@
                                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                             </Trigger>
                             <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Width" Value="15" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                             </Trigger>
@@ -52,32 +74,65 @@
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}" />
                             </Trigger>
                         </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="FontSize" Value="18"/>
-                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FontSize" Value="18" />
+                        <Setter Property="Height" Value="40" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="60" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ID}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="姓名" Width="150" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding Inventory}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="生日" Width="150" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding OnTheWayAmount}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="身分證" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding SafeAmount}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="手機" Width="120" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding BasicAmount}" IsReadOnly="True"/>
+                    <DataGridTextColumn
+                        Width="60"
+                        Binding="{Binding ID}"
+                        ElementStyle="{StaticResource TextInMiddleCellStyle}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding Inventory}"
+                        ElementStyle="{StaticResource TextInMiddleCellStyle}"
+                        Header="姓名"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding OnTheWayAmount}"
+                        ElementStyle="{StaticResource TextInMiddleCellStyle}"
+                        Header="生日"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="120"
+                        Binding="{Binding SafeAmount}"
+                        ElementStyle="{StaticResource TextInMiddleCellStyle}"
+                        Header="身分證"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="120"
+                        Binding="{Binding BasicAmount}"
+                        ElementStyle="{StaticResource TextInMiddleCellStyle}"
+                        Header="手機"
+                        IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
         </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
+            <RowDefinition Height="50" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="10,0,0,0" Grid.Row="0">
-            <TextBox Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="500" Margin="0,0,0,5" materialDesign:HintAssist.Hint="篩 選 條 件" FontFamily="Segoe UI Semibold" FontSize="28"/>
+        <StackPanel
+            Grid.Row="0"
+            Margin="10,0,0,0"
+            Orientation="Horizontal">
+            <TextBox
+                Width="500"
+                Margin="0,0,0,5"
+                materialDesign:HintAssist.Hint="篩 選 條 件"
+                FontFamily="Segoe UI Semibold"
+                FontSize="28"
+                Text="{Binding SearchString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <ContentControl Grid.Row="1" Content="{Binding}">
             <ContentControl.Style>
@@ -94,8 +149,14 @@
                 </Style>
             </ContentControl.Style>
             <ContentControl.InputBindings>
-                <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Up" CommandParameter="UP"/>
-                <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN"/>
+                <KeyBinding
+                    Key="Up"
+                    Command="{Binding FocusUpDownCommand}"
+                    CommandParameter="UP" />
+                <KeyBinding
+                    Key="Down"
+                    Command="{Binding FocusUpDownCommand}"
+                    CommandParameter="DOWN" />
             </ContentControl.InputBindings>
         </ContentControl>
     </Grid>

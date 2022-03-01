@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Product.ProductTransaction;
+using System;
 
 namespace His_Pos.NewClass.Trade
 {
     public class Transaction : ObservableObject
     {
         #region ----- Define Variables -----
+
         private TradeProduct selectedItem;
 
         public TransactionTypeEnum Type { get; set; }
@@ -38,7 +35,8 @@ namespace His_Pos.NewClass.Trade
             get => selectedItem;
             set { Set(() => SelectedItem, ref selectedItem, value); }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public Transaction()
         {
@@ -46,22 +44,27 @@ namespace His_Pos.NewClass.Trade
         }
 
         #region ----- Define Functions -----
+
         internal void Clear()
         {
             throw new NotImplementedException();
         }
+
         internal void CalculateTotalPrice()
         {
             throw new NotImplementedException();
         }
+
         internal void DeleteSelectedProduct()
         {
             throw new NotImplementedException();
         }
+
         internal void AddProductByID(string productID)
         {
             throw new NotImplementedException();
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

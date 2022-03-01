@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using System.Data;
+using System.Linq;
 
 namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 {
     public class SingdeTotalOrder : ObservableObject
     {
         #region ----- Define Variables -----
+
         public string Date { get; set; }
         public int PurchaseCount { get; set; }
         public int ReturnCount { get; set; }
@@ -28,6 +25,7 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                 return StoreOrders.Count(s => s.Status == OrderStatusEnum.SINGDE_PROCESSING) == 0;
             }
         }
+
         public double Total
         {
             get
@@ -35,7 +33,8 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                 return PurchasePrice - ReturnPrice;
             }
         }
-        #endregion
+
+        #endregion ----- Define Variables -----
 
         public SingdeTotalOrder(DataRow dataRow)
         {
@@ -46,12 +45,13 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             ReturnPrice = (double)dataRow.Field<decimal>("R_TOTAL");
         }
 
-
         #region ----- Define Functions -----
+
         internal void GetProcessingOrders()
         {
             StoreOrders = ProcessingStoreOrders.GetProcessingStoreOrdersByDate(Date);
         }
+
         internal void OrderToDone(string id)
         {
             foreach (var order in StoreOrders)
@@ -65,8 +65,9 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                     switch (order.Type)
                     {
                         case OrderTypeEnum.PURCHASE:
-                            result = StoreOrderDB.PurchaseStoreOrderToDone(id);
+                            result = StoreOrderDB.PurchaseStoreOrderToDone(id, false);
                             break;
+
                         case OrderTypeEnum.RETURN:
                             result = StoreOrderDB.ReturnStoreOrderToDone(id);
                             break;
@@ -94,8 +95,9 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                     switch (order.Type)
                     {
                         case OrderTypeEnum.PURCHASE:
-                            result = StoreOrderDB.PurchaseStoreOrderToDone(order.ID);
+                            result = StoreOrderDB.PurchaseStoreOrderToDone(order.ID, false);
                             break;
+
                         case OrderTypeEnum.RETURN:
                             result = StoreOrderDB.ReturnStoreOrderToDone(order.ID);
                             break;
@@ -108,6 +110,7 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
             RaisePropertyChanged(nameof(IsAllDone));
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

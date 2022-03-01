@@ -1,37 +1,36 @@
-﻿using System;
+﻿using OfficeOpenXml;
 using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using OfficeOpenXml;
 
 namespace His_Pos.Service.ExportService
 {
     public class ExportClassExcelSetting : ExportExcelSetting
     {
         #region ----- Define Variables -----
+
         private new ICollection Data;
 
         #region ///// Header Variables /////
+
         private string[] headers = new string[0];
         private int headerFontSize = 12;
         private Color headerFontColor = Color.Black;
         private Color headerBackGroundColor = Color.LightBlue;
         private bool headerIsBold = true;
-        #endregion
+
+        #endregion ///// Header Variables /////
 
         #region ///// Data Variables /////
+
         private string[] selectedProperties = new string[0];
         private int dataFontSize = 12;
         private Color dataFontColor = Color.Black;
         private Color dataBackGroundColor = Color.Transparent;
         private bool dataIsBold = false;
-        #endregion
 
-        #endregion
+        #endregion ///// Data Variables /////
+
+        #endregion ----- Define Variables -----
 
         public ExportClassExcelSetting(ICollection data, int row, int column, string[] properties) : base("", row, column)
         {
@@ -42,64 +41,76 @@ namespace His_Pos.Service.ExportService
         }
 
         #region ----- Define Fluent Interface Functions -----
+
         public ExportClassExcelSetting SetHeaderFontSize(int _fontSize)
         {
             headerFontSize = _fontSize;
             return this;
         }
+
         public ExportClassExcelSetting SetHeaderFontColor(Color _fontColor)
         {
             headerFontColor = _fontColor;
             return this;
         }
+
         public ExportClassExcelSetting SetHeaderBackGroundColor(Color _backGroundColor)
         {
             headerBackGroundColor = _backGroundColor;
             return this;
         }
+
         public ExportClassExcelSetting SetHeaderIsBold(bool _isBold)
         {
             headerIsBold = _isBold;
             return this;
         }
+
         public ExportClassExcelSetting SetDataFontSize(int _fontSize)
         {
             dataFontSize = _fontSize;
             return this;
         }
+
         public ExportClassExcelSetting SetDataFontColor(Color _fontColor)
         {
             dataFontColor = _fontColor;
             return this;
         }
+
         public ExportClassExcelSetting SetDataBackGroundColor(Color _backGroundColor)
         {
             dataBackGroundColor = _backGroundColor;
             return this;
         }
+
         public ExportClassExcelSetting SetDataIsBold(bool _isBold)
         {
             dataIsBold = _isBold;
             return this;
         }
+
         public ExportClassExcelSetting SetHeaders(string[] _headers)
         {
             headers = _headers;
             return this;
         }
-        #endregion
+
+        #endregion ----- Define Fluent Interface Functions -----
 
         #region ----- Define Functions -----
+
         public override void InsertDataToSheet(ExcelWorksheet worksheet)
         {
             SetHeader(worksheet);
             SetData(worksheet);
         }
+
         private void SetData(ExcelWorksheet worksheet)
         {
             int row = 0;
 
-            foreach(var d in Data)
+            foreach (var d in Data)
             {
                 for (int col = 0; col < selectedProperties.Length; col++)
                 {
@@ -119,6 +130,7 @@ namespace His_Pos.Service.ExportService
                 row++;
             }
         }
+
         private void SetHeader(ExcelWorksheet worksheet)
         {
             for (int col = 0; col < selectedProperties.Length; col++)
@@ -139,6 +151,7 @@ namespace His_Pos.Service.ExportService
                     worksheet.Cells[Row, Column + col].Value = selectedProperties[col];
             }
         }
-        #endregion
+
+        #endregion ----- Define Functions -----
     }
 }

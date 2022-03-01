@@ -1,18 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using ChromeTabs;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Product.ProductManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.OTCControl;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Data;
-using ChromeTabs;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Product;
-using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -22,8 +22,10 @@ namespace His_Pos.ChromeTabViewModel
         public RelayCommand<string[]> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
+
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
         private TabBase _selectedTab;
+
         public TabBase SelectedTab
         {
             get { return _selectedTab; }
@@ -37,6 +39,7 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         private bool _canAddTabs;
+
         public bool CanAddTabs
         {
             get { return _canAddTabs; }
@@ -87,7 +90,7 @@ namespace His_Pos.ChromeTabViewModel
         }
 
         //We need to set the TabNumber property on the viewmodels when the item source changes to keep it in sync.
-        void ItemCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ItemCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -110,6 +113,7 @@ namespace His_Pos.ChromeTabViewModel
                     item.TabNumber = tabCollection.IndexOf(item);
             }
         }
+
         private void CloseTabCommandAction(TabBase vm)
         {
             this.ItemCollection.Remove(vm);
@@ -119,9 +123,8 @@ namespace His_Pos.ChromeTabViewModel
                 ProductDetail.Instance.Close();
                 ProductDetail.Instance = null;
             }
-                
         }
-        
+
         public void AddTabCommandAction(string[] newProduct)
         {
             TabBase newTab;
@@ -148,17 +151,23 @@ namespace His_Pos.ChromeTabViewModel
             switch (type)
             {
                 case ProductTypeEnum.NHIMedicine:
+                    newTab = new MedicineControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
+                    break;
+
                 case ProductTypeEnum.OTCMedicine:
+                    newTab = new OTCControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
+                    break;
+
                 case ProductTypeEnum.SpecialMedicine:
                     newTab = new MedicineControlViewModel(newProduct[0], type, newProduct[1]) { TabName = newProduct[0], Icon = "/Images/BlueDot.png" };
                     break;
+
                 default:
                     return;
             }
-            
+
             ItemCollection.Add(newTab.getTab());
             SelectedTab = ItemCollection[ItemCollection.Count - 1];
         }
     }
 }
-

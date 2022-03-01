@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.AccountReport.InstitutionDeclarePoint;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePharmacy;
@@ -21,6 +11,14 @@ using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage.AdjustPharmacistSetting;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Windows;
+using System.Windows.Threading;
 using StringRes = His_Pos.Properties.Resources;
 
 // ReSharper disable InconsistentNaming
@@ -29,14 +27,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
     // ReSharper disable once ClassTooBig
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
-    public class DeclareFileManageViewModel:TabBase
+    public class DeclareFileManageViewModel : TabBase
     {
         #region Variables
+
         public override TabBase getTab()
         {
             return this;
         }
+
         private DeclarePreviewOfMonth declareFile;
+
         public DeclarePreviewOfMonth DeclareFile
         {
             get => declareFile;
@@ -45,27 +46,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => DeclareFile, ref declareFile, value);
             }
         }
+
         private DateTime? declareDateStart;
+
         public DateTime? DeclareDateStart
         {
             get => declareDateStart;
             set
             {
-                if(value != null)
+                if (value != null)
                     Set(() => DeclareDateStart, ref declareDateStart, value);
             }
         }
+
         private DateTime? declareDateEnd;
+
         public DateTime? DeclareDateEnd
         {
             get => declareDateEnd;
             set
             {
-                if(value != null)
+                if (value != null)
                     Set(() => DeclareDateEnd, ref declareDateEnd, value);
             }
         }
+
         private bool isBusy;
+
         public bool IsBusy
         {
             get => isBusy;
@@ -74,7 +81,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => IsBusy, ref isBusy, value);
             }
         }
+
         private string busyContent;
+
         public string BusyContent
         {
             get => busyContent;
@@ -94,7 +103,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => DeclarePharmacies, ref declarePharmacies, value);
             }
         }
+
         private PharmacistSchedule pharmacistScheduleWithPrescriptionCount;
+
         public PharmacistSchedule PharmacistScheduleWithPrescriptionCount
         {
             get => pharmacistScheduleWithPrescriptionCount;
@@ -105,6 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         }
 
         private PharmacistSchedule pharmacistSchedule;
+
         public PharmacistSchedule PharmacistSchedule
         {
             get => pharmacistSchedule;
@@ -124,6 +136,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => SelectedPharmacy, ref selectedPharmacy, value);
             }
         }
+
         private DeclarePrescriptions editedList;
 
         public DeclarePrescriptions EditedList
@@ -134,9 +147,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 Set(() => EditedList, ref editedList, value);
             }
         }
+
         private BackgroundWorker worker;
-        #endregion
+
+        #endregion Variables
+
         #region Commands
+
         public RelayCommand GetPreviewPrescriptions { get; set; }
         public RelayCommand AdjustPharmacistSetting { get; set; }
         public RelayCommand AdjustPharmacistOfDay { get; set; }
@@ -145,21 +162,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         public RelayCommand SetDecFilePreViewSummary { get; set; }
         public RelayCommand CreateDeclareFileCommand { get; set; }
         public RelayCommand AddToEditListCommand { get; set; }
-        #endregion
+
+        #endregion Commands
+
         public DeclareFileManageViewModel()
         {
             InitialVariables();
             InitialCommands();
             GetPreviewPrescriptionsActions();
         }
+
         #region Functions
+
         #region Initial
+
         private void InitialVariables()
         {
             DeclarePharmacies = new DeclarePharmacies();
+            if (DeclarePharmacies.Count==0) 
+            {
+                return;  
+            }
             SelectedPharmacy = DeclarePharmacies.SingleOrDefault(p => p.ID.Equals(ViewModelMainWindow.CurrentPharmacy.ID));
             DeclareFile = new DeclarePreviewOfMonth();
-            DeclareDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month,1).AddMonths(-1);
+            DeclareDateStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-1);
             var decDate = (DateTime)DeclareDateStart;
             DeclareDateEnd = new DateTime(decDate.Year, decDate.Month, DateTime.DaysInMonth(decDate.Year, decDate.Month));
             GetPharmacistSchedule();
@@ -169,6 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
                 duplicatePrescriptionWindow.Show();
             EditedList = new DeclarePrescriptions();
         }
+
         private void InitialCommands()
         {
             GetPreviewPrescriptions = new RelayCommand(GetPreviewPrescriptionsActions);
@@ -180,11 +207,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             CreateDeclareFileCommand = new RelayCommand(CreateDeclareFileAction);
             AddToEditListCommand = new RelayCommand(AddToEditListAction);
         }
-        #endregion
+
+        #endregion Initial
+
         #region CommandActions
+
         private void GetPreviewPrescriptionsActions()
         {
-            if(!CheckStartOrEndDayNull()) return;
+            if (!CheckStartOrEndDayNull()) return;
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
@@ -201,7 +231,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
 
         private void GetDeclarePrescriptions()
         {
-            if(!CheckStartOrEndDayNull()) return;
+            if (!CheckStartOrEndDayNull()) return;
             MainWindow.ServerConnection.OpenConnection();
             GetPrescriptions();
             MainWindow.ServerConnection.CloseConnection();
@@ -227,6 +257,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             GetPharmacistSchedule();
             MainWindow.ServerConnection.CloseConnection();
         }
+
         private void AdjustPharmacistOfDayAction()
         {
             worker = new BackgroundWorker();
@@ -352,7 +383,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         private void CreateDeclareFile()
         {
             Debug.Assert(DeclareDateStart != null, nameof(DeclareDateStart) + " != null");
-            var decDate = (DateTime)DeclareDateStart; 
+            var decDate = (DateTime)DeclareDateStart;
             MainWindow.ServerConnection.OpenConnection();
             BusyContent = "處方排序中...";
             DeclareFile.DeclarePres.AdjustMedicalServiceAndSerialNumber();
@@ -367,17 +398,27 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             SetDecFilePreViewSummaryAction();
             DeclareFile.SelectedDayPreview.CheckNotDeclareCount();
         }
-        #endregion
+
+        #endregion CommandActions
+
         private void GetPrescriptions()
         {
             Debug.Assert(DeclareDateStart != null, nameof(DeclareDateStart) + " != null");
             Debug.Assert(DeclareDateEnd != null, nameof(DeclareDateEnd) + " != null");
-            var sDate = (DateTime) DeclareDateStart;
-            var eDate = (DateTime) DeclareDateEnd;
+            var sDate = (DateTime)DeclareDateStart;
+            var eDate = (DateTime)DeclareDateEnd;
+
+            if (SelectedPharmacy==null) 
+            {
+                NewFunction.ShowMessageFromDispatcher("查無處方！", MessageType.ERROR);
+                //MessageWindow.ShowMessage("查無處方！", MessageType.ERROR);
+                return;
+            }
             DeclareFile.GetSearchPrescriptions(sDate, eDate, SelectedPharmacy.ID);
             DeclareFile.SetSummary();
             DeclareFile.DeclareDate = (DateTime)DeclareDateStart;
         }
+
         private void PrescriptionEditedRefresh(NotificationMessage msg)
         {
             if (msg.Notification.Equals("PrescriptionEdited"))
@@ -388,8 +429,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             Debug.Assert(DeclareDateStart != null, nameof(DeclareDateStart) + " != null");
             Debug.Assert(DeclareDateEnd != null, nameof(DeclareDateEnd) + " != null");
-            var sDate = (DateTime) DeclareDateStart;
-            var eDate = (DateTime) DeclareDateEnd;
+            var sDate = (DateTime)DeclareDateStart;
+            var eDate = (DateTime)DeclareDateEnd;
             MainWindow.ServerConnection.OpenConnection();
             PharmacistSchedule = new PharmacistSchedule();
             PharmacistSchedule.GetPharmacistSchedule(sDate, eDate);
@@ -415,6 +456,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-        #endregion
+
+        #endregion Functions
     }
 }

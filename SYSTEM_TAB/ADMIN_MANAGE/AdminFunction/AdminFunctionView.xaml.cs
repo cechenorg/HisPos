@@ -1,32 +1,30 @@
-﻿using System;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.HisApi;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription;
-using His_Pos.NewClass.Prescription.ICCard.Upload;
+using System.Windows;
+using System.Windows.Controls;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
-namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
+namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction
+{
     /// <summary>
     /// AdminFunctionView.xaml 的互動邏輯
     /// </summary>
-    public partial class AdminFunctionView : UserControl {
-        public AdminFunctionView() {
+    public partial class AdminFunctionView : UserControl
+    {
+        public AdminFunctionView()
+        {
             InitializeComponent();
         }
 
-        private void ButtonPredictChronic_Click(object sender, RoutedEventArgs e) {
+        private void ButtonPredictChronic_Click(object sender, RoutedEventArgs e)
+        {
             PrescriptionDb.PredictThreeMonthPrescription();
-            MessageWindow.ShowMessage("預約慢箋完成!",MessageType.SUCCESS);
+            MessageWindow.ShowMessage("預約慢箋完成!", MessageType.SUCCESS);
         }
 
-       
         public static T Deserialize<T>(XDocument doc)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
@@ -75,14 +73,14 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
 
         private void CooperApi_Click(object sender, RoutedEventArgs e)
         {
-            while (WebApi.SendToCooperClinicLoop100()) {
+            while (WebApi.SendToCooperClinicLoop100())
+            {
             }
-            MessageWindow.ShowMessage("骨科重拋成功",MessageType.SUCCESS);
+            MessageWindow.ShowMessage("骨科重拋成功", MessageType.SUCCESS);
         }
 
         private void MergeProduct_OnClick(object sender, RoutedEventArgs e)
         {
-            
         }
     }
 }

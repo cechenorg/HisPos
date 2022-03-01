@@ -1,6 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using His_Pos.FunctionWindow.AddProductWindow;
+using System.Collections.ObjectModel;
 using System.Data;
-using His_Pos.FunctionWindow.AddProductWindow;
 
 namespace His_Pos.NewClass.Product
 {
@@ -13,13 +13,14 @@ namespace His_Pos.NewClass.Product
                 Add(new ProductStruct(row));
             }
         }
+
         internal static ProductStructs GetProductStructsBySearchString(string searchString, string wareID)
         {
             DataTable dataTable = ProductDB.GetProductStructsBySearchString(searchString.Trim(), wareID);
             return new ProductStructs(dataTable);
         }
 
-        internal static int GetProductStructCountBySearchString(string searchString, AddProductEnum addProductEnum, string wareID = "0")
+        internal static int GetProductStructCountBySearchString(string searchString, AddProductEnum addProductEnum,string wareID = "0")
         {
             DataTable dataTable;
             switch (addProductEnum)
@@ -27,9 +28,11 @@ namespace His_Pos.NewClass.Product
                 case AddProductEnum.ProductReturn:
                     dataTable = ProductDB.GetReturnProductStructCountBySearchString(searchString.Trim(), wareID);
                     break;
+
                 case AddProductEnum.Trade:
                     dataTable = ProductDB.GetTradeProductStructCountBySearchString(searchString.Trim());
                     break;
+
                 default:
                     dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString.Trim());
                     break;

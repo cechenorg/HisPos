@@ -1,9 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass.Product.ProductManagement;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 {
@@ -34,6 +32,41 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
 
             //e.Handled = true;
             textBox.Focus();
+        }
+
+        private void btnMed_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnTrade.Background = Brushes.Transparent;
+            btnTrade.Foreground = Brushes.DimGray;
+            btnMed.Foreground = Brushes.White;
+            btnMed.Background = Brushes.DimGray;
+            ConRB.Visibility = Visibility.Visible;
+            IceRB.Visibility = Visibility.Visible;
+            StopRB.Visibility = Visibility.Visible;
+            ZeroRB.Visibility = Visibility.Visible;
+            MedBagAmt.Visibility = Visibility.Visible;
+            ErrorAmt.Visibility = Visibility.Visible;
+            tbMedBagAmt.Visibility = Visibility.Visible;
+            tbErrorAmt.Visibility = Visibility.Visible;
+            MedGroup.Visibility = Visibility.Visible;
+            OTCGroup.Visibility = Visibility.Collapsed;
+        }
+
+        private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            btnMed.Background = Brushes.Transparent;
+            btnMed.Foreground = Brushes.DimGray;
+            btnTrade.Foreground = Brushes.White;
+            btnTrade.Background = Brushes.DimGray;
+            ConRB.Visibility = Visibility.Collapsed;
+            IceRB.Visibility = Visibility.Collapsed;
+            ZeroRB.Visibility = Visibility.Collapsed;
+            MedBagAmt.Visibility = Visibility.Visible;
+            ErrorAmt.Visibility = Visibility.Visible;
+            tbMedBagAmt.Visibility = Visibility.Visible;
+            tbErrorAmt.Visibility = Visibility.Visible;
+            OTCGroup.Visibility = Visibility.Visible;
+            MedGroup.Visibility = Visibility.Collapsed;
         }
     }
 }

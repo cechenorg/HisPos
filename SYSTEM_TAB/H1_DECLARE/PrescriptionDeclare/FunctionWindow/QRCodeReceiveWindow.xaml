@@ -1,13 +1,55 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.QRCodeReceiveWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow"
-        mc:Ignorable="d"
-        Title="掃描處方條碼" Height="100" Width="200" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Label Content="等待掃描處方條碼中..." FontFamily="Segoe UI Semibold" FontSize="16"/>
-        <TextBox Name="QRCodeReceiver" Visibility="Visible" InputMethod.IsInputMethodEnabled="False" InputScope="AlphanumericHalfWidth" PreviewKeyDown="QRCodeReceiver_OnPreviewKeyDown" Width="0" Height="0"/>
+﻿<Window
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.QRCodeReceiveWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="掃描處方條碼"
+    Width="250"
+    Height="140"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid PreviewKeyDown="Grid_PreviewKeyDown">
+        <Label
+            x:Name="lblInfo"
+            Margin="0,5,0,0"
+            HorizontalAlignment="Center"
+            Content="等待掃描處方條碼中..."
+            FontFamily="Segoe UI Semibold"
+            FontSize="18" />
+        <TextBox
+            Name="QRCodeReceiver"
+            Width="0"
+            Height="0"
+            InputMethod.IsInputMethodEnabled="False"
+            InputScope="AlphanumericHalfWidth"
+            PreviewKeyDown="QRCodeReceiver_OnPreviewKeyDown"
+            Visibility="Visible" />
+        <Button
+            x:Name="btnFinish"
+            Width="80"
+            Height="35"
+            Margin="35,40,0,0"
+            HorizontalAlignment="Left"
+            Background="RoyalBlue"
+            BorderThickness="0"
+            Click="btnFinish_Click"
+            Content="完成"
+            FontFamily="Segoe UI Semibold"
+            FontSize="16"
+            IsEnabled="False" />
+        <Button
+            x:Name="btnCancel"
+            Width="80"
+            Height="35"
+            Margin="0,40,35,0"
+            HorizontalAlignment="Right"
+            Background="IndianRed"
+            BorderThickness="0"
+            Click="btnCancel_Click"
+            Content="取消"
+            FontFamily="Segoe UI Semibold"
+            FontSize="16" />
     </Grid>
 </Window>

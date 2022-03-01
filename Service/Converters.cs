@@ -1,18 +1,57 @@
-﻿using System;
+﻿using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
+using His_Pos.NewClass.Product;
+using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
-using His_Pos.NewClass.Product;
 
 namespace His_Pos.Service
 {
+    public class NumberConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+                return 0;
+            return System.Convert.ToInt32(value) + 1;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class SelectedItemConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value ?? DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value == null || value.GetType().Name == "NamedObject") ? null : value;
+        }
+    }
+
     public class SentinelConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value ?? DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value == null || value.GetType().Name == "NamedObject") ? null : value;
+        }
+
+        /*public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;
         }
@@ -26,7 +65,7 @@ namespace His_Pos.Service
             }
 
             return value;
-        }
+        }*/
     }
 
     public class DateConverter : IValueConverter
@@ -123,11 +162,20 @@ namespace His_Pos.Service
                 case 0:
                     result = null;
                     break;
+
                 case 7:
                     year = int.Parse(dateStr.Substring(0, 3)) + 1911;
                     month = int.Parse(dateStr.Substring(3, 2));
                     date = int.Parse(dateStr.Substring(5, 2));
-                    result = new DateTime(year, month, date);
+                    string dt = year.ToString() + "/" + month.ToString() + "/" + date.ToString();
+                    if (DateTime.TryParse(dt, out DateTime res))
+                    {
+                        result = res;
+                    }
+                    else
+                    {
+                        result = null;
+                    }
                     break;
             }
 
@@ -175,12 +223,12 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !(bool) value;
+            return !(bool)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !(bool) value;
+            return !(bool)value;
         }
     }
 
@@ -194,8 +242,8 @@ namespace His_Pos.Service
             var valueStr = value.ToString().Replace("/", "").Replace("-", "").Trim();
             if (string.IsNullOrEmpty(valueStr))
                 value = "---/--/--";
-            if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
-            if(((string)value).Equals("---/--/--")) return new ValidationResult(true, null);
+            if (string.IsNullOrEmpty((string)value)) return new ValidationResult(true, null);
+            if (((string)value).Equals("---/--/--")) return new ValidationResult(true, null);
             int year = 0, month = 0, date = 0;
             string checkStr = string.Empty;
             switch (valueStr.Length)
@@ -223,7 +271,7 @@ namespace His_Pos.Service
 
     public class EnumBooleanConverter : IValueConverter
     {
-        enum RadioOptions
+        private enum RadioOptions
         {
             Option1 = 0,
             Option2 = 1,
@@ -250,7 +298,7 @@ namespace His_Pos.Service
             if (value == null || parameter == null)
                 return null;
 
-            bool useValue = (bool) value;
+            bool useValue = (bool)value;
             string targetValue = parameter.ToString();
             if (useValue)
                 return Enum.Parse(typeof(RadioOptions), targetValue);
@@ -264,7 +312,7 @@ namespace His_Pos.Service
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is null) return string.Empty;
-            var doubleType = (double) value;
+            var doubleType = (double)value;
             return doubleType.ToString(CultureInfo.InvariantCulture);
         }
 
@@ -305,7 +353,7 @@ namespace His_Pos.Service
         // Implementing the abstract method in the Validation Rule class
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
+            if (string.IsNullOrEmpty((string)value)) return new ValidationResult(true, null);
 
             if (value.ToString().Length == 6 && !value.ToString().Contains("-"))
             {
@@ -349,13 +397,14 @@ namespace His_Pos.Service
             return result;
         }
     }
+
     [ValueConversion(typeof(int), typeof(string))]
     public class NullableIntConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is null) return string.Empty;
-            var intValue = (int) value;
+            var intValue = (int)value;
             return intValue.ToString(CultureInfo.InvariantCulture);
         }
 
@@ -395,8 +444,9 @@ namespace His_Pos.Service
             throw new NotImplementedException();
         }
 
-        #endregion
+        #endregion IMultiValueConverter Members
     }
+
     [ValueConversion(typeof(string), typeof(string))]
     public class DayNameConverter : IValueConverter
     {
@@ -449,9 +499,9 @@ namespace His_Pos.Service
         {
             if ((bool)value)
             {
-                return new SolidColorBrush(Color.FromRgb(251,60,78));
+                return new SolidColorBrush(Color.FromRgb(251, 60, 78));
             }
-            return new SolidColorBrush(Color.FromArgb(255,66,64,64));
+            return new SolidColorBrush(Color.FromArgb(255, 66, 64, 64));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -493,7 +543,7 @@ namespace His_Pos.Service
             throw new NotSupportedException();
         }
 
-        #endregion
+        #endregion IValueConverter Members
     }
 
     [ValueConversion(typeof(bool), typeof(string))]

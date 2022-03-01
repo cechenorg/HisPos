@@ -1,37 +1,39 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Report.PrescriptionProfitReport
 {
-    public class PrescriptionProfitReport: ObservableObject
+    public class PrescriptionProfitReport : ObservableObject
     {
         public PrescriptionProfitReport()
         {
         }
-        public PrescriptionProfitReport(DataRow r) {
+
+        public PrescriptionProfitReport(DataRow r)
+        {
             TypeId = r.Field<string>("TypeId");
             TypeName = r.Field<string>("TypeName");
             Count = r.Field<int>("Count");
             MedicalServicePoint = r.Field<int>("MedicalServicePoint");
             MedicinePoint = r.Field<int>("MedicinePoint");
             PaySelfPoint = r.Field<int>("PaySelfPoint");
-            MedUse = r.Field<int>("MedUse"); 
-            Profit = r.Field<int>("Profit"); 
+            MedUse = r.Field<int>("MedUse");
+            Profit = r.Field<int>("Profit");
         }
+
         private string typeId;
-        public string TypeId {
+
+        public string TypeId
+        {
             get => typeId;
             set
             {
                 Set(() => TypeId, ref typeId, value);
             }
         }
+
         private string typeName;
+
         public string TypeName
         {
             get => typeName;
@@ -40,7 +42,9 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => TypeName, ref typeName, value);
             }
         }
+
         private int count;
+
         public int Count
         {
             get => count;
@@ -49,7 +53,9 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => Count, ref count, value);
             }
         }
+
         private int medicalServicePoint;
+
         public int MedicalServicePoint
         {
             get => medicalServicePoint;
@@ -58,7 +64,9 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => MedicalServicePoint, ref medicalServicePoint, value);
             }
         }
+
         private int medicinePoint;
+
         public int MedicinePoint
         {
             get => medicinePoint;
@@ -67,7 +75,9 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => MedicinePoint, ref medicinePoint, value);
             }
         }
+
         private int paySelfPoint;
+
         public int PaySelfPoint
         {
             get => paySelfPoint;
@@ -76,7 +86,9 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => PaySelfPoint, ref paySelfPoint, value);
             }
         }
+
         private int medUse;
+
         public int MedUse
         {
             get => medUse;
@@ -85,13 +97,26 @@ namespace His_Pos.NewClass.Report.PrescriptionProfitReport
                 Set(() => MedUse, ref medUse, value);
             }
         }
+
         private int profit;
+
         public int Profit
         {
             get => profit;
             set
             {
                 Set(() => Profit, ref profit, value);
+            }
+        }
+
+        private int totalMed;
+
+        public int TotalMed
+        {
+            get => totalMed;
+            set
+            {
+                Set(() => TotalMed, ref totalMed, value);
             }
         }
 

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using His_Pos.Database;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Medicine.PreviewMedicine;
 using His_Pos.NewClass.Prescription.Service;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Windows;
 
 namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 {
@@ -18,8 +19,14 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             Content = c;
             SourceID = sourceId;
         }
+        public CooperativePreview(CooperativePrescription.Prescription c, DateTime treatDate, string sourceId, bool isRead, bool isPrint) : base(c, treatDate, isRead,isPrint)
+        {
+            Content = c;
+            SourceID = sourceId;
+        }
         public CooperativePrescription.Prescription Content { get; }
         public string SourceID { get; }
+
         public override void Print()
         {
             var printPre = CreatePrescription();
@@ -30,12 +37,30 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 service.Print(false);
             }
         }
+        public override void PrintDir()
+        {
+            var printPre = CreatePrescription();
+            var service = PrescriptionService.CreateService(printPre);
+            service.CloneTempPre();
+            if (service.PrintConfirmDir())
+            {
+                service.PrintDir(true);
+            }
+          
+            
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ID", printPre.SourceId);
+             MainWindow.ServerConnection.ExecuteProc("[Set].[IsPrePrintByID]", parameterList);
+            MainWindow.ServerConnection.CloseConnection();
 
+
+        }
         public override NewClass.Prescription.Prescription CreatePrescription()
         {
-            var pre = new NewClass.Prescription.Prescription(Content, TreatDate, SourceID, IsRead);
+            var pre = new NewClass.Prescription.Prescription(Content, TreatDate, SourceID, IsRead, IsPrint);
             PrescriptionDb.UpdateCooperativePrescriptionIsRead(pre.SourceId);
-            
+
             pre.Medicines.CountSelfPay();
             pre.CountPrescriptionPoint();
             pre.CountSelfPay();
@@ -53,9 +78,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 var medList = tempList.Where(m => m.ID.Equals(setItem.ID));
                 foreach (var item in medList)
                 {
-                    
                     medicines.Add(item);
-
                 }
             }
             Medicines.Clear();

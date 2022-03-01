@@ -4,7 +4,7 @@ using System.Data;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Copayment
 {
-    public class Copayments:Collection<Copayment>
+    public class Copayments : Collection<Copayment>
     {
         public Copayments()
         {
@@ -24,6 +24,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.Copayment
             {
                 Add(new Copayment(row));
             }
-        } 
+        }
     }
 }

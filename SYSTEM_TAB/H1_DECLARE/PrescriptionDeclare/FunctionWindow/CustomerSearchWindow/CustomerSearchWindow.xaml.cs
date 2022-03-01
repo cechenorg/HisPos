@@ -1,8 +1,7 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerSearchWindow
 {
@@ -12,15 +11,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Custo
     public partial class CustomerSearchWindow : Window
     {
         private CustomerSearchViewModel customerSearchViewModel { get; set; }
-        public CustomerSearchWindow(CustomerSearchCondition condition,string search = null)
+
+        public CustomerSearchWindow(CustomerSearchCondition condition, string search = null)
         {
             InitializeComponent();
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) => 
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification.Equals("CloseCustomerSearchWindow"))
                     Close();
             });
             customerSearchViewModel = new CustomerSearchViewModel(search, condition);
+            DataContext = customerSearchViewModel;
+            SearchStringTextBox.Focus();
+            if (customerSearchViewModel.ShowDialog)
+                ShowDialog();
+        }
+
+        public CustomerSearchWindow(CustomerSearchCondition condition, int phone, string search = null)
+        {
+            InitializeComponent();
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseCustomerSearchWindow"))
+                    Close();
+            });
+            customerSearchViewModel = new CustomerSearchViewModel(search, condition, 0);
             DataContext = customerSearchViewModel;
             SearchStringTextBox.Focus();
             if (customerSearchViewModel.ShowDialog)

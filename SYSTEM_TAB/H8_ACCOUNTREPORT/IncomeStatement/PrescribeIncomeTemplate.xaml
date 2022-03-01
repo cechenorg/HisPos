@@ -1,67 +1,69 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.IncomeStatement"
-                    xmlns:mx="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib">
-    <!-- Shared Resources -->
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mx="clr-namespace:MatrixLib.Matrix;assembly=MatrixLib">
+    <!--  Shared Resources  -->
     <SolidColorBrush x:Key="BackBrush" Color="LightBlue" />
     <SolidColorBrush x:Key="BorderBrush" Color="Black" />
-    <Thickness x:Key="BorderThickness" Left="0" Top="0" Right="0.7" Bottom="0.7" />
+    <Thickness
+        x:Key="BorderThickness"
+        Bottom="0.7"
+        Left="0"
+        Right="0.7"
+        Top="0" />
     <SolidColorBrush x:Key="HeaderForeground" Color="DarkBlue" />
 
-    <!-- MatrixEmptyHeaderItem -->
+    <!--  MatrixEmptyHeaderItem  -->
     <DataTemplate DataType="{x:Type mx:MatrixEmptyHeaderItem}">
         <Border Background="SteelBlue" />
     </DataTemplate>
 
-    <!-- MatrixColumnHeaderItem -->
+    <!--  MatrixColumnHeaderItem  -->
     <DataTemplate DataType="{x:Type mx:MatrixColumnHeaderItem}">
-        <Border 
-            Background="{StaticResource BackBrush}" 
-            BorderBrush="{StaticResource BorderBrush}" 
-            BorderThickness="{StaticResource BorderThickness}" 
-            Padding="0,4">
+        <Border
+            Padding="0,4"
+            Background="{StaticResource BackBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="{StaticResource BorderThickness}">
             <DockPanel>
                 <TextBlock
+                    FontSize="16"
                     FontWeight="Bold"
                     Foreground="{StaticResource HeaderForeground}"
-                    Text="{Binding Path=ColumnHeader.Month}" 
-                    TextAlignment="Center"
-                    FontSize="16"/>
+                    Text="{Binding Path=ColumnHeader.Month}"
+                    TextAlignment="Center" />
             </DockPanel>
         </Border>
     </DataTemplate>
 
-    <!-- MatrixRowHeaderItem -->
+    <!--  MatrixRowHeaderItem  -->
     <DataTemplate DataType="{x:Type mx:MatrixRowHeaderItem}">
-        <Border 
-            Background="{StaticResource BackBrush}" 
-            BorderBrush="{StaticResource BorderBrush}" 
-            BorderThickness="{StaticResource BorderThickness}"  
-            Padding="4,0">
-            <TextBlock 
+        <Border
+            Padding="4,0"
+            Background="{StaticResource BackBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="{StaticResource BorderThickness}">
+            <TextBlock
+                Width="100"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="16"
                 FontWeight="Bold"
                 Foreground="{StaticResource HeaderForeground}"
                 Text="{Binding Path=RowHeader}"
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Center"
-                TextAlignment="Right"
-                FontSize="16"
-                Width="100"/>
+                TextAlignment="Right" />
         </Border>
     </DataTemplate>
 
-    <!-- MatrixCellItem -->
+    <!--  MatrixCellItem  -->
     <DataTemplate DataType="{x:Type mx:MatrixCellItem}">
-        <Border 
-            BorderBrush="{StaticResource BorderBrush}" 
-            BorderThickness="{StaticResource BorderThickness}" >
-            <TextBlock 
-                HorizontalAlignment="Right"
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="{StaticResource BorderThickness}">
+            <TextBlock
                 Margin="0,0,4,0"
-                Text="{Binding Path=Value,StringFormat='{}{0:N2}'}"  
-                VerticalAlignment="Center" 
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
                 FontSize="15"
-                />
+                Text="{Binding Path=Value, StringFormat='{}{0:N2}'}" />
         </Border>
     </DataTemplate>
 </ResourceDictionary>
