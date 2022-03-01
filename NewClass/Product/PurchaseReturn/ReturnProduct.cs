@@ -1,13 +1,12 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.Interface;
 using System;
 using System.Data;
 using System.Linq;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public abstract class ReturnProduct : Product, IDeletableProduct, ICloneable
+    public abstract class ReturnProduct : Product, ICloneable
     {
         #region ----- Define Variables -----
 
