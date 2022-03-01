@@ -922,9 +922,9 @@
     <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCase.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayment.cs" />
-    <Compile Include="Class\InStock.cs" />
-    <Compile Include="Class\Enum.cs" />
-    <Compile Include="Class\Feature.cs" />
+    <Compile Include="NewClass\InStock.cs" />
+    <Compile Include="NewClass\Enum.cs" />
+    <Compile Include="NewClass\Feature.cs" />
     <Compile Include="NewClass\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Medicine\Position\PositionDb.cs" />
     <Compile Include="NewClass\Medicine\MedBag\MedBagMedicine.cs" />
@@ -1489,17 +1489,6 @@
     <Compile Include="SYSTEM_TAB\INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interface\IDeletable.cs" />
-    <Compile Include="Interface\IInventory.cs" />
-    <Compile Include="Interface\IPrincipal.cs" />
-    <Compile Include="Interface\IProductDeclare.cs" />
-    <Compile Include="Interface\IProductPurchase.cs" />
-    <Compile Include="Interface\IProductReturn.cs" />
-    <Compile Include="Interface\IProductType.cs" />
-    <Compile Include="Interface\IStockTaking.cs" />
-    <Compile Include="Interface\ISelection.cs" />
-    <Compile Include="Interface\IStockTakingRecord.cs" />
-    <Compile Include="Interface\ITrade.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetail.xaml.cs">
       <DependentUpon>ProductDetail.xaml</DependentUpon>
     </Compile>
