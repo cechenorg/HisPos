@@ -11,7 +11,6 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H11_CLOSING.Closing;
 using His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
@@ -361,9 +360,9 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ProductTypeManageViewModel() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.櫃位管理):
-                    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[3].Functions[5], Icon = MainWindow.HisFeatures[3].Icon };
-                    break;
+                //case nameof(FeatureItem.櫃位管理):
+                //    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[3].Functions[5], Icon = MainWindow.HisFeatures[3].Icon };
+                //    break;
 
                 //盤點
                 case nameof(FeatureItem.新增盤點):
