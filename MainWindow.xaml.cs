@@ -1,6 +1,5 @@
 ﻿using ChromeTabs;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
 using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;

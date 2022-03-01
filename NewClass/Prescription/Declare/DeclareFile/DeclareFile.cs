@@ -1,4 +1,4 @@
-﻿using His_Pos.Class;
+﻿using His_Pos.NewClass;
 using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Prescription.Declare.DeclarePreview;
 using His_Pos.Service;

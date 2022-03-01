@@ -1,4 +1,4 @@
-﻿using His_Pos.Class;
+﻿using His_Pos.NewClass;
 
 namespace His_Pos.NewClass.Report.Accounts
 {

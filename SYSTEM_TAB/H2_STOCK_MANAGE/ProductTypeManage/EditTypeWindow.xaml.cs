@@ -40,13 +40,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         {
             if (BigTypeName.Equals(String.Empty))
             {
-                MessageWindow.ShowMessage("大類別名稱不可為空", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("大類別名稱不可為空", NewClass.MessageType.ERROR);
                 return;
             }
 
             if (SelectedType.CurrentDetailType != null && SmallTypeName.Equals(String.Empty))
             {
-                MessageWindow.ShowMessage("小類別名稱不可為空", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("小類別名稱不可為空", NewClass.MessageType.ERROR);
                 return;
             }
 
@@ -56,7 +56,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             if (dataTable is null || dataTable.Rows.Count == 0)
             {
-                MessageWindow.ShowMessage("新增失敗 請稍後再試", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("新增失敗 請稍後再試", NewClass.MessageType.ERROR);
                 return;
             }
 

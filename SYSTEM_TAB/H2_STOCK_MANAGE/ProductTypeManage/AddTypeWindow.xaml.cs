@@ -58,7 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             if (error.Length != 0)
             {
-                MessageWindow.ShowMessage(error, Class.MessageType.ERROR);
+                MessageWindow.ShowMessage(error, NewClass.MessageType.ERROR);
 
                 return false;
             }
@@ -85,7 +85,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
                 if (dataTable is null || dataTable.Rows.Count == 0)
                 {
-                    MessageWindow.ShowMessage("新增失敗 請稍後再試", Class.MessageType.ERROR);
+                    MessageWindow.ShowMessage("新增失敗 請稍後再試", NewClass.MessageType.ERROR);
                     return;
                 }
 

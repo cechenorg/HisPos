@@ -1,4 +1,4 @@
-﻿using His_Pos.Class;
+﻿using His_Pos.NewClass;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.ProductType;
 using System.Data;
@@ -43,7 +43,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             if (dataTable is null || dataTable.Rows.Count == 0)
             {
-                MessageWindow.ShowMessage("新增失敗 請稍後再試", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("新增失敗 請稍後再試", NewClass.MessageType.ERROR);
                 return;
             }
 

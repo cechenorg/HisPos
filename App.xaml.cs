@@ -76,7 +76,7 @@ namespace His_Pos
                 }
                 catch (Exception ex)
                 {
-                    MessageWindow.ShowMessage(ex.Message, Class.MessageType.ERROR);
+                    MessageWindow.ShowMessage(ex.Message, NewClass.MessageType.ERROR);
                 }
                 Environment.Exit(0);
             }

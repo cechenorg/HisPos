@@ -176,14 +176,14 @@ namespace His_Pos.NewClass.Person.Employee
 
             if (!VerifyService.VerifyIDNumber(IDNumber))
             {
-                MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("身分證格式錯誤!", NewClass.MessageType.ERROR);
                 return false;
             }
 
             var table = EmployeeDb.CheckIdNumber(IDNumber);
             if (table.Rows[0].Field<int>("Count") > 0)
             {
-                MessageWindow.ShowMessage("此身分證已經存在!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("此身分證已經存在!", NewClass.MessageType.ERROR);
                 return false;
             }
 

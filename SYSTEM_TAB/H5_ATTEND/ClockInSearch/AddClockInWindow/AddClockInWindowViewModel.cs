@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
@@ -92,13 +91,13 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
             //1.如果全部都沒有,查無帳號,請確認帳號
             if (Employee.CheckEmployeeAccountSame())
             {
-                MessageWindow.ShowMessage("此帳號不存在!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("此帳號不存在!", NewClass.MessageType.ERROR);
                 return false;
             }
             //檢查帳密 密碼錯誤
             else if (user == null)
             {
-                MessageWindow.ShowMessage("密碼錯誤!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("密碼錯誤!", NewClass.MessageType.ERROR);
                 return false;
             }
             else

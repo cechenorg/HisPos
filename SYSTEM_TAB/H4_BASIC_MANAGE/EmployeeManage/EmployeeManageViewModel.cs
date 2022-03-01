@@ -146,7 +146,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         private void SubmitAction()
         {
             Employee.Update();
-            MessageWindow.ShowMessage("修改成功", Class.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("修改成功", NewClass.MessageType.SUCCESS);
         }
 
         private void DeleteAction()
@@ -155,7 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             if ((bool)confirmWindow.DialogResult)
             {
                 Employee.Delete();
-                MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("刪除成功!", NewClass.MessageType.SUCCESS);
                 Init();
             }
         }

@@ -25,10 +25,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         private void SubmitAction()
         {
             if (Remark.Trim().Length != 16)
-                MessageWindow.ShowMessage("單號須為16碼 請重新確認 ^皿^", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("單號須為16碼 請重新確認 ^皿^", NewClass.MessageType.ERROR);
             else
             {
-                MessageWindow.ShowMessage("叮咚叮咚 輸入完成~", Class.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("叮咚叮咚 輸入完成~", NewClass.MessageType.SUCCESS);
                 Messenger.Default.Send(new NotificationMessage("CooperativeRemarkInsert"));
             }
         }

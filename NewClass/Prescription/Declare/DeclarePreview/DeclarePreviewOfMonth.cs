@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
+using His_Pos.NewClass;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.AccountReport.InstitutionDeclarePoint;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;

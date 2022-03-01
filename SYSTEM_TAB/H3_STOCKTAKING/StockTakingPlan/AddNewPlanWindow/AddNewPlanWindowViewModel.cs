@@ -44,7 +44,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewPlanWindow
         private void InsertStockPlanAction()
         {
             StockTakingPlan.NewStockTakingPlan();
-            MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("新增成功!", NewClass.MessageType.SUCCESS);
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseAddNewPlanWindow"));
         }
 

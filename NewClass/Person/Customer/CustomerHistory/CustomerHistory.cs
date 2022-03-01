@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using His_Pos.Class;
+using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Product.CustomerHistoryProduct;
 using System;

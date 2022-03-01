@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.Class;
+using His_Pos.NewClass;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.ClockIn;
@@ -174,7 +174,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             }
             if (string.IsNullOrEmpty(SingInEmployee.Password) && string.IsNullOrEmpty(SingInEmployee.Account))
             {
-                MessageWindow.ShowMessage("請輸入帳號密碼!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("請輸入帳號密碼!", NewClass.MessageType.ERROR);
                 return;
             }
             else
@@ -196,7 +196,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         private void DataChangeAction(object sender)
         {
             
-            MessageWindow.ShowMessage(SearchMonth, Class.MessageType.ERROR);
+            MessageWindow.ShowMessage(SearchMonth, NewClass.MessageType.ERROR);
 
 
         }
@@ -219,7 +219,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             //1.如果全部都沒有,查無帳號,請確認帳號
             if (SingInEmployee.CheckEmployeeAccountSame())
             {
-                MessageWindow.ShowMessage("此帳號不存在!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("此帳號不存在!", NewClass.MessageType.ERROR);
                 return false;
             }
 
@@ -230,7 +230,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             //檢查帳密 密碼錯誤
             if (SingInEmployee == null)
             {
-                MessageWindow.ShowMessage("密碼錯誤!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("密碼錯誤!", NewClass.MessageType.ERROR);
                 return false;
             }
 
@@ -380,7 +380,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         {
             if (SingInEmployee == null)
             {
-                MessageWindow.ShowMessage("請先登入查詢!!!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("請先登入查詢!!!", NewClass.MessageType.ERROR);
                 return ;
             }
 

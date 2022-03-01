@@ -98,7 +98,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
             if ((bool)confirmWindow.DialogResult)
             {
                 ControlMedicineEditCollection.Update(MedicineID, WarID);
-                MessageWindow.ShowMessage("更新成功", Class.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("更新成功", NewClass.MessageType.SUCCESS);
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("ControlMedicineDeclareSearch"));
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseControlMedicineEditWindow"));
             }
@@ -128,17 +128,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
         {
             if (ControlMedicineEditSelectedItem.Amount <= 0)
             {
-                MessageWindow.ShowMessage("數量不可小於等於0", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("數量不可小於等於0", NewClass.MessageType.ERROR);
                 return false;
             }
             if (ControlMedicineEditSelectedItem.Manufactory is null && ControlMedicineEditSelectedItem.Type == "進貨")
             {
-                MessageWindow.ShowMessage("請選擇供應商", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("請選擇供應商", NewClass.MessageType.ERROR);
                 return false;
             }
             if (string.IsNullOrEmpty(ControlMedicineEditSelectedItem.Type))
             {
-                MessageWindow.ShowMessage("請選擇類別", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("請選擇類別", NewClass.MessageType.ERROR);
                 return false;
             }
             return true;

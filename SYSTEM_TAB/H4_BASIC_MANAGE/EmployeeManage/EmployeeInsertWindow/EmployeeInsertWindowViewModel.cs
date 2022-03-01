@@ -58,7 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
         private void CheckIdNumberAction()
         {
             if (Employee.CheckIdNumber())
-                MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("檢查通過!", NewClass.MessageType.SUCCESS);
         }
 
         private void SubbmitAction()
@@ -69,12 +69,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
             }
             if (!Employee.CheckEmployeeAccountSame())
             {
-                MessageWindow.ShowMessage("此帳號已經存在!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("此帳號已經存在!", NewClass.MessageType.ERROR);
                 return;
             }
             Employee.Insert();
 
-            MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("新增成功!", NewClass.MessageType.SUCCESS);
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeInsertWindow"));
         }
     }

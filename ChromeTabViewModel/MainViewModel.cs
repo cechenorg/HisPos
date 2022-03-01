@@ -1,7 +1,7 @@
 ﻿using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using His_Pos.Class;
+using His_Pos.NewClass;
 using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage;
