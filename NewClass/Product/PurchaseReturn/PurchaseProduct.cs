@@ -1,10 +1,9 @@
-﻿using His_Pos.Interface;
-using System;
+﻿using System;
 using System.Data;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public abstract class PurchaseProduct : Product, IDeletableProduct, ICloneable
+    public abstract class PurchaseProduct : Product, ICloneable
     {
         #region ----- Define Variables -----
 

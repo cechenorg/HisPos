@@ -1,12 +1,11 @@
-﻿using His_Pos.Interface;
-using His_Pos.NewClass.Product;
+﻿using His_Pos.NewClass.Product;
 using His_Pos.Service;
 using System.Data;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Medicine.MedicineSet
 {
-    public class MedicineSetItem : Product.Product, IDeletableProduct
+    public class MedicineSetItem : Product.Product
     {
         public MedicineSetItem()
         {

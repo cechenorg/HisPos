@@ -409,7 +409,6 @@
     <Compile Include="FunctionWindow\VerifyPharmacyWindow\VerifyPharmacyWindow.xaml.cs">
       <DependentUpon>VerifyPharmacyWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interface\IDeletableProduct.cs" />
     <Compile Include="NewClass\BindingProxy.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJson.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />

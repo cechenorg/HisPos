@@ -1,9 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
-using His_Pos.Interface;
 
 namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
 {
-    public class NotEnoughMedicine : ObservableObject, IDeletableProduct
+    public class NotEnoughMedicine : ObservableObject
     {
         public string ID { get; }
         public string Name { get; }

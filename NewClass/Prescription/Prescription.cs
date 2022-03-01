@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.Interface;
 using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine.Base;
@@ -596,12 +595,12 @@ namespace His_Pos.NewClass.Prescription
             set
             {
                 if (selectedMedicine != null)
-                    ((IDeletableProduct)selectedMedicine).IsSelected = false;
+                    selectedMedicine.IsSelected = false;
 
                 Set(() => SelectedMedicine, ref selectedMedicine, value);
 
                 if (selectedMedicine != null)
-                    ((IDeletableProduct)selectedMedicine).IsSelected = true;
+                    selectedMedicine.IsSelected = true;
             }
         }
 

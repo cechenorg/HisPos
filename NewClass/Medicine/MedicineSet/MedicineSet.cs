@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using His_Pos.Interface;
 using His_Pos.NewClass.Product;
 using System.Data;
 
@@ -49,12 +48,12 @@ namespace His_Pos.NewClass.Medicine.MedicineSet
             set
             {
                 if (selectedMedicine != null)
-                    ((IDeletableProduct)selectedMedicine).IsSelected = false;
+                    selectedMedicine.IsSelected = false;
 
                 Set(() => SelectedMedicine, ref selectedMedicine, value);
 
                 if (selectedMedicine != null)
-                    ((IDeletableProduct)selectedMedicine).IsSelected = true;
+                    selectedMedicine.IsSelected = true;
             }
         }
 

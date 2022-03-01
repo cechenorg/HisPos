@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.Interface;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using System;
 using System.Data;
@@ -26,18 +25,8 @@ namespace His_Pos.NewClass.StoreOrder
                 return selectedItem;
             }
             set
-            {
-                if (selectedItem != null)
-                    ((IDeletableProduct)selectedItem).IsSelected = false;
-
-                Set(() => SelectedItem, ref selectedItem, value);
-
-                if (selectedItem != null)
-                    ((IDeletableProduct)selectedItem).IsSelected = true;
-
-                if (selectedItem == null)
-                {
-                }
+            { 
+                Set(() => SelectedItem, ref selectedItem, value); 
             }
         }
 

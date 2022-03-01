@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Interface;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 
@@ -30,12 +29,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             set
             {
                 if (selectedMedicine != null)
-                    ((IDeletableProduct)selectedMedicine).IsSelected = false;
+                    selectedMedicine.IsSelected = false;
 
                 Set(() => SelectedMedicine, ref selectedMedicine, value);
 
                 if (selectedMedicine != null)
-                    ((IDeletableProduct)selectedMedicine).IsSelected = true;
+                    selectedMedicine.IsSelected = true;
             }
         }
 

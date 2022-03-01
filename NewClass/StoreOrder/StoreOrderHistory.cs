@@ -1,8 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
-using His_Pos.Interface;
-using His_Pos.NewClass.Product.PurchaseReturn;
 using System;
 using System.Data;
 using System.Windows;

@@ -1,6 +1,5 @@
 ﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
-using His_Pos.Interface;
 using His_Pos.NewClass.Medicine.MedBag;
 using His_Pos.Service;
 using System;
@@ -10,7 +9,7 @@ using OrthopedicsMedicine = His_Pos.NewClass.Cooperative.CooperativeInstitution.
 
 namespace His_Pos.NewClass.Medicine.Base
 {
-    public abstract class Medicine : Product.Product, IDeletableProduct, ICloneable
+    public abstract class Medicine : Product.Product, ICloneable
     {
         public Medicine() : base()
         {

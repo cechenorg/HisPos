@@ -1,9 +1,8 @@
-﻿using His_Pos.Interface;
-using System.Data;
+﻿using System.Data;
 
 namespace His_Pos.NewClass.Product.ProductTransaction
 {
-    public class TradeProduct : Product, IDeletableProduct
+    public class TradeProduct : Product
     {
         #region ----- Define Variables -----
 
