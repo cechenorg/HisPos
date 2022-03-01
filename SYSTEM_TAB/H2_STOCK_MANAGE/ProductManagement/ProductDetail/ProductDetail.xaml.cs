@@ -1,5 +1,4 @@
-﻿using His_Pos.AbstractClass;
-using His_Pos.ChromeTabViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using System;
 using System.Windows;
@@ -11,7 +10,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
     /// </summary>
     public partial class ProductDetail : Window
     {
-        public static Product NewProduct;
         public static ProductDetail Instance;
 
         public double StartTop => (SystemParameters.WorkArea.Height - this.Height) / 2;
@@ -42,12 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail
             Instance = this;
         }
 
-        public void AddNewTab(Product newProduct)
-        {
-            NewProduct = newProduct;
-
-            //((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id, (NewProduct is InventoryMedicine) ? SearchType.MED : SearchType.OTC));
-        }
+       
 
         private void ProductDetail_OnClosed(object sender, EventArgs e)
         {
