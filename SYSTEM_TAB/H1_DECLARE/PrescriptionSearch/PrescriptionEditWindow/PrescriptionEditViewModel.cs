@@ -264,7 +264,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             OriginalPrescription = p;
             ChronicTimesCanEdit = !OriginalPrescription.AdjustCase.IsChronic();
             EditedPrescription = (Prescription)OriginalPrescription.Clone();
-            if (EditedPrescription.Institution.ID == "3532082753")
+            if (EditedPrescription.Institution != null && EditedPrescription.Institution.ID == "3532082753")
             {
                 PrintEditedPrescription = (Prescription)OriginalPrescription.PrintClone();
             }
@@ -297,7 +297,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(OriginalPrescription.Pharmacist.IDNumber));
             EditedPrescription.AdjustCase = VM.GetAdjustCase(OriginalPrescription.AdjustCase.ID);
             EditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
-            if (EditedPrescription.Institution.ID == "3532082753")
+            if (EditedPrescription.Institution != null &&  EditedPrescription.Institution.ID == "3532082753")
             {
                 PrintEditedPrescription.Copayment = VM.GetCopayment(OriginalPrescription.Copayment?.Id);
             }
