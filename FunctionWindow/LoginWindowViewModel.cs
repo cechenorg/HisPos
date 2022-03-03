@@ -101,10 +101,14 @@ namespace His_Pos.FunctionWindow
                 var PharmacyAddress = xml.SelectSingleNode("CurrentPharmacyInfo/Address").InnerText;
                 var dbtargetIp = xml.SelectSingleNode("CurrentPharmacyInfo/DbTargetIp").InnerText;
                 Properties.Settings.Default.SQL_local =
-                    $"Data Source={dbtargetIp};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword";
+                    $"Data Source={dbtargetIp};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword"; 
                 Properties.Settings.Default.SQL_global =
                     $"Data Source={dbtargetIp};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword";
                 Properties.Settings.Default.SystemSerialNumber = verifyKey;
+
+                Properties.Settings.Default.SQL_localWithDB =
+                    $"Data Source={dbtargetIp};Database={verifyKey};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword";
+
                 var medBagPrinter = fileReader.ReadLine();
                 var receiptPrinter = fileReader.ReadLine();
                 var reportPrinter = fileReader.ReadLine();

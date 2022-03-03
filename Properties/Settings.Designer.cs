@@ -267,5 +267,21 @@ namespace His_Pos.Properties {
                 this["PrePrint"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SQL_localWithDB
+        {
+            get
+            {
+                return ((string)(this["SQL_localWithDB"]));
+            }
+            set
+            {
+                this["SQL_localWithDB"] = value;
+            }
+        }
+        
     }
 }

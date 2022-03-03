@@ -342,6 +342,7 @@
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockIn.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInDb.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountReport\ClosingAccountReportRepository.cs" />
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingAccountTargetSettingWindow\ClosingAccountTargetSettingVM.cs" />
@@ -3243,6 +3244,12 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="packages\ZeroFormatter.Analyzer.1.1.1\analyzers\dotnet\cs\ZeroFormatterAnalyzer.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InfraStructure\InfraStructure.csproj">
+      <Project>{80c7a5be-46f5-46ee-9e10-c14dd8a6e281}</Project>
+      <Name>InfraStructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
