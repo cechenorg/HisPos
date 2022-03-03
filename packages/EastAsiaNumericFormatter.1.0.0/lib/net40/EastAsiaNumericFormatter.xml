@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>EastAsiaNumericFormatter</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.International.Formatters.EastAsiaNumericFormatter">
+      <summary>
+        提供一个格式化类，把数值型的数据转换为东亚的本地数字表示形式的字符串。
+      </summary>
+      <remarks>
+        这个类支持以下的东亚语言：
+        <list type="bullet">
+          <item>
+            简体中文
+          </item>
+          <item>
+            繁体中文
+          </item>
+          <item>
+            日语
+          </item>
+          <item>
+            韩语
+          </item>
+        </list>
+
+        这个类支持以下格式化字符串：
+        <list type="bullet">
+          <item>
+            标准格式(L)：又称大写。
+          </item>
+          <item>
+            普通格式(Ln)：又称小写。
+          </item>
+          <item>
+            货币格式(Lc)：用来表示货币。
+          </item>
+          <item>
+            字译格式(Lt)：以数字符号字母表示数值型数据，只支持日文。
+          </item>
+        </list>
+
+        为了解释文化和格式化组合如何工作，我们将以“12345”举例。
+        <list type="bullet">
+          <item>
+            简体中文
+            <list type="bullet">
+              <item>
+                标准：壹万贰仟叁佰肆拾伍
+              </item>
+              <item>
+                普通：一万二千三百四十五
+              </item>
+              <item>
+                货币：壹万贰仟叁佰肆拾伍
+              </item>
+              <item>
+                字译：抛出ArgumentException异常
+              </item>
+            </list>
+          </item>
+          <item>
+            繁体中文
+            <list type="bullet">
+              <item>
+                标准：壹萬貳仟參佰肆拾伍
+              </item>
+              <item>
+                普通：一萬二千三百四十五
+              </item>
+              <item>
+                货币：壹萬貳仟參佰肆拾伍
+              </item>
+              <item>
+                字译：抛出ArgumentException异常
+              </item>
+            </list>
+          </item>
+          <item>
+            日语
+            <list type="bullet">
+              <item>
+                标准：壱萬弐阡参百四拾伍
+              </item>
+              <item>
+                普通：一万二千三百四十五
+              </item>
+              <item>
+                货币：抛出ArgumentException异常
+              </item>
+              <item>
+                字译：一二三四五
+              </item>
+            </list>
+          </item>
+          <item>
+            韩语
+            <list type="bullet">
+              <item>
+                标准：일만 이천삼백사십오
+              </item>
+              <item>
+                普通：抛出ArgumentException异常
+              </item>
+              <item>
+                货币：일만 이천삼백사십오
+              </item>
+              <item>
+                字译：抛出ArgumentException异常
+              </item>
+            </list>
+          </item>
+          <item>
+            其他语言：抛出ArgumentException异常
+          </item>
+        </list>
+        被支持的数据类型，包括 double、float、int、uint、long、ulong、short、ushort、sbyte、byte和decimal。
+      </remarks>
+      <example>
+        以下的代码演示了一个把数值转换为东亚的本地数字表示形式的字符串的实例。
+        <code source = "../../Example_CS/Program.cs" lang = "cs"></code>
+        <code source = "../../Example_VB/Main.vb" lang = "vbnet"></code>
+        <code source = "../../Example_CPP/Example_CPP.cpp" lang = "cpp"></code>
+      </example>
+    </member>
+    <member name="M:Microsoft.International.Formatters.EastAsiaNumericFormatter.#ctor">
+      <summary>
+        初始化EastAsiaNumericFormatter类的一个新实例。
+      </summary>
+    </member>
+    <member name="M:Microsoft.International.Formatters.EastAsiaNumericFormatter.GetFormat(System.Type)">
+      <summary>
+        返回一个实现了ICustomFormatter接口的格式化对象。
+      </summary>
+      <remarks>
+        请参阅<see cref="T:Microsoft.International.Formatters.EastAsiaNumericFormatter"/>来查看使用EastAsiaNumericFormatter的实例。
+      </remarks>
+      <param name="formatType">格式类型。</param>
+      <returns>
+        如果参数formatType是<see cref="T:System.ICustomFormatter"/>，则返回formatType本身，否则返回一个空引用。
+      </returns>
+    </member>
+    <member name="M:Microsoft.International.Formatters.EastAsiaNumericFormatter.Format(System.String,System.Object,System.IFormatProvider)">
+      <summary>
+        将对象格式化为东亚文化表示形式。
+      </summary>
+      <remarks>
+         请参阅<see cref="T:Microsoft.International.Formatters.EastAsiaNumericFormatter"/>来查看使用EastAsiaNumericFormatter的实例。
+      </remarks>
+      <param name="format">格式类型。</param>
+      <param name="arg">将被格式化的数据。</param>
+      <param name="formatProvider">格式提供者。</param>
+      <returns>用东亚语言格式化过的本地化字符串。</returns>
+      <exception cref="T:System.ArgumentNullException">
+        format，arg或者culture是一个空引用。
+      </exception>
+      <exception cref="T:System.ArgumentException">
+        localFmt在此文化中不被支持。
+      </exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        arg超出范围。
+      </exception>
+      <exception cref="T:System.ArgumentException">
+        arg是一个无效类型。
+      </exception>
+    </member>
+    <member name="M:Microsoft.International.Formatters.EastAsiaNumericFormatter.FormatWithCulture(System.String,System.Object,System.IFormatProvider,System.Globalization.CultureInfo)">
+      <summary>
+        将对象格式化为指定的东亚文化表示形式。
+      </summary>
+      <remarks>
+         请参阅<see cref="T:Microsoft.International.Formatters.EastAsiaNumericFormatter">EastAsiaNumericFormatter</see>以获取使用EastAsiaNumericFormatter的实例。
+      </remarks>
+      <param name="format">格式类型。</param>
+      <param name="arg">将被格式化的数据。</param>
+      <param name="formatProvider">格式提供者。</param>
+      <param name="culture">文化类型。</param>
+      <returns>用东亚语言格式化过的本地化字符串。</returns>
+      <exception cref="T:System.ArgumentNullException">
+        format，arg或者culture是一个空引用。
+      </exception>
+      <exception cref="T:System.ArgumentException">
+        localFmt在此文化中不被支持。
+      </exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        num超出范围。
+      </exception>
+      <exception cref="T:System.ArgumentException">
+        arg是一个无效类型。
+      </exception>
+    </member>
+    
+  </members>
+</doc>

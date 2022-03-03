@@ -1,0 +1,17 @@
+C:\Users\PC\Source\Repos\InfraStructure\bin\Debug\InfraStructure.dll
+C:\Users\PC\Source\Repos\InfraStructure\bin\Debug\InfraStructure.pdb
+C:\Users\PC\Source\Repos\InfraStructure\bin\Debug\Dapper.dll
+C:\Users\PC\Source\Repos\InfraStructure\bin\Debug\Dapper.xml
+C:\Users\PC\Source\Repos\InfraStructure\obj\Debug\InfraStructure.csproj.AssemblyReference.cache
+C:\Users\PC\Source\Repos\InfraStructure\obj\Debug\InfraStructure.csproj.CoreCompileInputs.cache
+C:\Users\PC\Source\Repos\InfraStructure\obj\Debug\InfraStructure.csproj.CopyComplete
+C:\Users\PC\Source\Repos\InfraStructure\obj\Debug\InfraStructure.dll
+C:\Users\PC\Source\Repos\InfraStructure\obj\Debug\InfraStructure.pdb
+C:\Users\PC\Source\Repos\InfraStructure\bin\Debug\Newtonsoft.Json.dll
+C:\Users\PC\Source\Repos\InfraStructure\bin\Debug\Newtonsoft.Json.xml
+C:\Users\PC\Source\Repos\藥健康\InfraStructure\obj\Debug\InfraStructure.csproj.CoreCompileInputs.cache
+C:\Users\PC\Source\Repos\藥健康\InfraStructure\obj\Debug\InfraStructure.dll
+C:\Users\PC\Source\Repos\藥健康\InfraStructure\obj\Debug\InfraStructure.pdb
+C:\Users\PC\Source\Repos\藥健康\HISPOS\bin\Debug\InfraStructure.dll
+C:\Users\PC\Source\Repos\藥健康\HISPOS\bin\Debug\InfraStructure.pdb
+C:\Users\PC\Source\Repos\藥健康\InfraStructure\obj\Debug\InfraStructure.csproj.CopyComplete
