@@ -10,6 +10,7 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.StoreOrder
 {

@@ -2,6 +2,7 @@
 using His_Pos.Service.ExportService;
 using System.Data;
 using System.Drawing;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.StoreOrder.ExportOrderRecord
 {

@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.StoreOrder;
 using System.Windows;
+using DomainModel.Enum;
 
 namespace His_Pos.FunctionWindow.AddProductWindow
 {

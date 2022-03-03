@@ -7,19 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using DomainModel.Class.StoreOrder;
 using Newtonsoft.Json;
 
 namespace InfraStructure.SQLService.SQLServer.StoreOrder
 {
     public class StoreOrderService : SQLServerServiceBase
     {
-        public StoreOrderService(string connectionString):base(connectionString)
-        { 
+        public StoreOrderService(string connectionString) : base(connectionString)
+        {
         }
 
-        public DataTable Get_SingdeTotalOrdersNotDone()
+        public List<dSingdeTotalOrder> Get_SingdeTotalOrdersNotDone()
         {
-             
+
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 string strSql = @"DECLARE @THREEDAYBEFORE NVARCHAR(8) = (SELECT CONVERT(NVARCHAR(8), GETDATE() - 3, 112));
@@ -37,18 +38,17 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
                 WHERE StoOrd_IsEnable = 1 AND StoOrd_ManufactoryID = 0 AND SUBSTRING(StoOrd_ReceiveID, 1, 7) IN(SELECT DATE FROM #TOTAL_ORDER)
                 GROUP BY SUBSTRING(StoOrd_ReceiveID, 1, 7)
 
-                SELECT SUBSTRING(StoOrd_ReceiveID, 1, 7) AS DATE, P_COUNT, R_COUNT,
-                    SUM(IIF(StoOrd_Type = 'P', StoOrdDet_SubTotal, 0)) AS P_TOTAL, SUM(IIF(StoOrd_Type = 'R', StoOrdDet_SubTotal, 0)) AS R_TOTAL
+                SELECT SUBSTRING(StoOrd_ReceiveID, 1, 7) AS Date,  P_COUNT As PurchaseCount,R_COUNT As ReturnCount,
+                    SUM(IIF(StoOrd_Type = 'P', StoOrdDet_SubTotal, 0)) AS PurchasePrice, SUM(IIF(StoOrd_Type = 'R', StoOrdDet_SubTotal, 0)) AS ReturnPrice
                 FROM[StoreOrder].[Master] AS M JOIN[StoreOrder].[Detail] AS D ON M.StoOrd_ID = D.StoOrdDet_MasterID
 
                 JOIN #T AS T ON T.DATE = SUBSTRING(StoOrd_ReceiveID, 1, 7)
                 WHERE StoOrd_IsEnable = 1 AND StoOrd_ManufactoryID = 0 AND SUBSTRING(StoOrd_ReceiveID, 1, 7) IN(SELECT DATE FROM #TOTAL_ORDER)
                 GROUP BY SUBSTRING(StoOrd_ReceiveID, 1, 7), P_COUNT, R_COUNT";
 
-                var result = conn.Query(strSql);
-                var json = JsonConvert.SerializeObject(result);
-                DataTable dt = JsonConvert.DeserializeObject<DataTable>(json);
-                return null;
+                var result = conn.Query<dSingdeTotalOrder>(strSql);
+
+                return result.ToList();
             }
         }
     }

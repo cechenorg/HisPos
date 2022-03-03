@@ -753,7 +753,6 @@
     <Compile Include="NewClass\StockValue\StockValues.cs" />
     <Compile Include="NewClass\StoreOrder\ExportOrderRecord\ExportOrderRecordTemplate.cs" />
     <Compile Include="NewClass\StoreOrder\OrderFilterStatusEnum.cs" />
-    <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderUITypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />
@@ -3246,6 +3245,10 @@
     <Analyzer Include="packages\ZeroFormatter.Analyzer.1.1.1\analyzers\dotnet\cs\ZeroFormatterAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DomainModel\DomainModel.csproj">
+      <Project>{2719a667-ad03-4056-8d56-116c802564c2}</Project>
+      <Name>DomainModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InfraStructure\InfraStructure.csproj">
       <Project>{80c7a5be-46f5-46ee-9e10-c14dd8a6e281}</Project>
       <Name>InfraStructure</Name>

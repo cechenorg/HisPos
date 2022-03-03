@@ -4,6 +4,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using System;
 using System.Data;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.StoreOrder
 {

@@ -15,3 +15,4 @@ C:\Users\PC\Source\Repos\藥健康\InfraStructure\obj\Debug\InfraStructure.pdb
 C:\Users\PC\Source\Repos\藥健康\HISPOS\bin\Debug\InfraStructure.dll
 C:\Users\PC\Source\Repos\藥健康\HISPOS\bin\Debug\InfraStructure.pdb
 C:\Users\PC\Source\Repos\藥健康\InfraStructure\obj\Debug\InfraStructure.csproj.CopyComplete
+C:\Users\PC\Source\Repos\藥健康\InfraStructure\obj\Debug\InfraStructure.csproj.AssemblyReference.cache

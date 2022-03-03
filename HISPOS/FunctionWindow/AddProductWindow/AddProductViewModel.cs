@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using DomainModel.Enum;
 using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
 

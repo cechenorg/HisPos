@@ -4,6 +4,7 @@ using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using System.Data;
 using System.Linq;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.StoreOrder
 {

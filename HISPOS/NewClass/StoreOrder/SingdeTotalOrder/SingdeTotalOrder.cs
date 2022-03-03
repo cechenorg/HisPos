@@ -3,6 +3,8 @@ using His_Pos.NewClass;
 using His_Pos.FunctionWindow;
 using System.Data;
 using System.Linq;
+using DomainModel.Class.StoreOrder;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 {
@@ -36,15 +38,20 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
         #endregion ----- Define Variables -----
 
-        public SingdeTotalOrder(DataRow dataRow)
+        public SingdeTotalOrder() // for Dapper
         {
-            Date = dataRow.Field<string>("DATE");
-            PurchaseCount = dataRow.Field<int>("P_COUNT");
-            ReturnCount = dataRow.Field<int>("R_COUNT");
-            PurchasePrice = (double)dataRow.Field<decimal>("P_TOTAL");
-            ReturnPrice = (double)dataRow.Field<decimal>("R_TOTAL");
+
         }
 
+        public SingdeTotalOrder(dSingdeTotalOrder data)
+        {
+            Date = data.Date;
+            PurchaseCount = data.PurchaseCount;
+            ReturnCount = data.ReturnCount;
+            PurchasePrice = data.PurchasePrice;
+            ReturnPrice = data.ReturnPrice;
+        }
+        
         #region ----- Define Functions -----
 
         internal void GetProcessingOrders()
