@@ -16,3 +16,5 @@ C:\Users\PC\Source\Repos\藥健康\DomainModel\obj\Debug\DomainModel.csproj.Core
 C:\Users\PC\Source\Repos\藥健康\DomainModel\obj\Debug\DomainModel.csproj.CopyComplete
 C:\Users\PC\Source\Repos\藥健康\DomainModel\obj\Debug\DomainModel.dll
 C:\Users\PC\Source\Repos\藥健康\DomainModel\obj\Debug\DomainModel.pdb
+C:\Users\PC\Source\Repos\藥健康\HISPOS\bin\Debug\DomainModel.dll
+C:\Users\PC\Source\Repos\藥健康\HISPOS\bin\Debug\DomainModel.pdb

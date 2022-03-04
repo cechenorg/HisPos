@@ -10,9 +10,9 @@ namespace InfraStructure.SQLService.SQLServer
     {
         protected string _connectionString { get; set; }
 
-        public SQLServerServiceBase(string connectionString)
+        public SQLServerServiceBase(string connectionString,string dataBaseName)
         {
-            _connectionString = connectionString;
+            _connectionString = connectionString + $"DataBase={dataBaseName};";
         }
     }
 }

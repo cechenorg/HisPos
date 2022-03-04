@@ -14,7 +14,7 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 {
     public class StoreOrderService : SQLServerServiceBase
     {
-        public StoreOrderService(string connectionString) : base(connectionString)
+        public StoreOrderService(string connectionString,string dataTable) : base(connectionString, dataTable)
         {
         }
 
