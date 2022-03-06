@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using System.Data;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.StoreOrder.Report
 {

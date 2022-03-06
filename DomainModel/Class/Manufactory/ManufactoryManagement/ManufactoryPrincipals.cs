@@ -22,19 +22,15 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 
         #region ///// Static Functions /////
 
-        internal static ManufactoryPrincipals GetManufactoryPrincipals(string manufactoryID)
-        {
-            return new ManufactoryPrincipals(ManufactoryDB.GetManufactoryPrincipals(manufactoryID));
-        }
-
+       
         #endregion ///// Static Functions /////
 
-        internal void AddNewPrincipal()
+        public void AddNewPrincipal()
         {
             Add(new ManufactoryPrincipal());
         }
 
-        internal void ResetData(ManufactoryPrincipals principals)
+        public void ResetData(ManufactoryPrincipals principals)
         {
             Clear();
 

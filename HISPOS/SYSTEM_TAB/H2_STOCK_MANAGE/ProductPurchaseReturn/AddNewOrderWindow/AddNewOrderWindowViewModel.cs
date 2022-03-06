@@ -8,6 +8,7 @@ using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.WareHouse;
 using System.Collections.Generic;
+using DomainModel.Enum;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow
 {

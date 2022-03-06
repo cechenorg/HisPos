@@ -1,6 +1,6 @@
-﻿using His_Pos.NewClass.StoreOrder;
-using System;
+﻿using System;
 using System.Data;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {

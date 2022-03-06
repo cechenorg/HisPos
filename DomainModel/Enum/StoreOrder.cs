@@ -18,4 +18,11 @@ namespace DomainModel.Enum
         DONE = 6,
         SCRAP = 7
     }
+
+    public enum OrderTypeEnum
+    {
+        NODATA = 0,
+        PURCHASE = 1,
+        RETURN = 2
+    }
 }

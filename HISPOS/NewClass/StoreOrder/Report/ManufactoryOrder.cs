@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 using System.Windows.Forms;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.StoreOrder.Report
 {

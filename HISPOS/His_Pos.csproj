@@ -425,13 +425,6 @@
     <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescriptionDb.cs" />
     <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescriptions.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
-    <Compile Include="NewClass\Manufactory\ManufactoryManagement\CurrentManufactoryTypeEnum.cs" />
-    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetail.cs" />
-    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetails.cs" />
-    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryPrincipal.cs" />
-    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryPrincipals.cs" />
-    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryTradeRecord.cs" />
-    <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryTradeRecords.cs" />
     <Compile Include="NewClass\OfflineDataSet\OfflineDataSet.cs" />
     <Compile Include="NewClass\OfflineDataSet\Product.cs" />
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
@@ -750,7 +743,6 @@
     <Compile Include="NewClass\StockValue\StockValues.cs" />
     <Compile Include="NewClass\StoreOrder\ExportOrderRecord\ExportOrderRecordTemplate.cs" />
     <Compile Include="NewClass\StoreOrder\OrderFilterStatusEnum.cs" />
-    <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderUITypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />
     <Compile Include="NewClass\StoreOrder\Report\ManufactoryOrderDetail.cs" />

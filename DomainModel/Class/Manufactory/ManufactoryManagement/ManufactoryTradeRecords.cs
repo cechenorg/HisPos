@@ -5,7 +5,7 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
 {
     public class ManufactoryTradeRecords : Collection<ManufactoryTradeRecord>
     {
-        private ManufactoryTradeRecords(DataTable dataTable)
+        public ManufactoryTradeRecords(DataTable dataTable)
         {
             foreach (DataRow row in dataTable.Rows)
             {
@@ -13,9 +13,6 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             }
         }
 
-        internal static ManufactoryTradeRecords GetManufactoryTradeRecords(string manufactoryID)
-        {
-            return new ManufactoryTradeRecords(ManufactoryDB.GetManufactoryTradeRecords(manufactoryID));
-        }
+      
     }
 }

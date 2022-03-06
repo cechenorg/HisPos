@@ -59,6 +59,13 @@
     <Compile Include="Class\Manufactory\ControlManufactory.cs" />
     <Compile Include="Class\Manufactory\Manufactories.cs" />
     <Compile Include="Class\Manufactory\Manufactory.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryManagement\CurrentManufactoryTypeEnum.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryManagement\ManufactoryManageDetail.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryManagement\ManufactoryManageDetails.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryManagement\ManufactoryPrincipal.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryManagement\ManufactoryPrincipals.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryManagement\ManufactoryTradeRecord.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryManagement\ManufactoryTradeRecords.cs" />
     <Compile Include="Class\StoreOrder\SingdeTotalOrders.cs" />
     <Compile Include="Class\WareHouse\WareHouse.cs" />
     <Compile Include="Class\WareHouse\WareHouses.cs" />

@@ -3,8 +3,10 @@ using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Manufactory.ManufactoryManagement;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
@@ -48,7 +50,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             set
             {
                 MainWindow.ServerConnection.OpenConnection();
-                value?.GetManufactoryDetailData();
+             
+                if (value != null)
+                {
+                    CurrentManufactory.Principals = new ManufactoryPrincipals(ManufactoryDB.GetManufactoryPrincipals(CurrentManufactory.ID)); 
+                    CurrentManufactory.TradeRecords = new ManufactoryTradeRecords(ManufactoryDB.GetManufactoryTradeRecords(CurrentManufactory.ID));
+
+                    if (CurrentManufactory.Principals.Count > 0)
+                        CurrentManufactory.CurrentPrincipal = CurrentManufactory.Principals[0];
+                }
+
                 MainWindow.ServerConnection.CloseConnection();
                 currentManufactoryBackUp = value?.Clone() as ManufactoryManageDetail;
                 Set(() => CurrentManufactory, ref currentManufactory, value);
@@ -93,7 +104,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         private void SearchAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            ManufactoryManageCollection = ManufactoryManageDetails.GetManufactoryManageDetailsBySearchCondition(SearchManufactoryName, SearchPrincipalName);
+            ManufactoryManageCollection = new ManufactoryManageDetails(ManufactoryDB.GetManufactoryManageDetailsBySearchCondition(SearchManufactoryName, SearchPrincipalName));
+            
             MainWindow.ServerConnection.CloseConnection();
 
             if (ManufactoryManageCollection.Count > 0)
@@ -123,7 +135,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             if ((bool)confirmWindow.DialogResult)
             {
                 MainWindow.ServerConnection.OpenConnection();
-                bool isSuccess = CurrentManufactory.DeleteManufactory();
+
+                bool isSuccess;
+                DataTable dataTable = ManufactoryDB.DeleteManufactory(CurrentManufactory.ID);
+
+                if (dataTable.Rows.Count == 0)
+                    isSuccess = false;
+                else
+                    isSuccess = dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+
+                
                 MainWindow.ServerConnection.CloseConnection();
 
                 if (isSuccess)
@@ -162,18 +183,48 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
 
-        private void ConfirmChangeAction()
+        private bool CheckUpdateDataValid()
         {
-            if (!CurrentManufactory.CheckUpdateDataValid()) return;
+            if (CurrentManufactory.Name.Equals(""))
+            {
+                MessageWindow.ShowMessage("供應商名稱不可為空!", MessageType.ERROR);
+                return false;
+            }
+
+            foreach (var principal in CurrentManufactory.Principals)
+            {
+                if (principal.Name.Equals(""))
+                {
+                    MessageWindow.ShowMessage("聯絡人名稱不可為空!", MessageType.ERROR);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool UpdateManufactoryDetail()
+        { 
+            DataTable dataTable = ManufactoryDB.UpdateManufactoryDetail(CurrentManufactory);
+         
+            if (dataTable.Rows.Count == 0)
+                return false;
+            else
+                return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+             
+        }
+
+        private void ConfirmChangeAction()
+        { 
+            if (!CheckUpdateDataValid()) return;
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認修改資料?", "");
 
             if ((bool)confirmWindow.DialogResult)
             {
                 MainWindow.ServerConnection.OpenConnection();
-                bool isSuccess = CurrentManufactory.UpdateManufactoryDetail();
+                bool isSuccess = UpdateManufactoryDetail();
                 MainWindow.ServerConnection.CloseConnection();
-
                 if (isSuccess)
                     MessageWindow.ShowMessage("更新成功!", MessageType.SUCCESS);
                 else

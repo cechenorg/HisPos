@@ -1,6 +1,4 @@
-﻿using His_Pos.NewClass;
-using His_Pos.FunctionWindow;
-using System;
+﻿using System;
 using System.Data;
 using System.Linq;
 
@@ -135,27 +133,8 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
         }
 
         #region ----- Define Functions -----
-
-        public void GetManufactoryDetailData()
-        {
-            Principals = ManufactoryPrincipals.GetManufactoryPrincipals(ID);
-            TradeRecords = ManufactoryTradeRecords.GetManufactoryTradeRecords(ID);
-
-            if (Principals.Count > 0)
-                CurrentPrincipal = Principals[0];
-        }
-
-        public bool DeleteManufactory()
-        {
-            DataTable dataTable = ManufactoryDB.DeleteManufactory(ID);
-
-            if (dataTable.Rows.Count == 0)
-                return false;
-            else
-                return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
-        }
-
-        internal void ResetData(ManufactoryManageDetail currentManufactoryBackUp)
+         
+        public void ResetData(ManufactoryManageDetail currentManufactoryBackUp)
         {
             ID = currentManufactoryBackUp.ID;
             Name = currentManufactoryBackUp.Name;
@@ -180,39 +159,13 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
                 CurrentPrincipal = null;
         }
 
-        internal bool UpdateManufactoryDetail()
-        {
-            DataTable dataTable = ManufactoryDB.UpdateManufactoryDetail(this);
+      
 
-            if (dataTable.Rows.Count == 0)
-                return false;
-            else
-                return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
-        }
-
-        internal bool CheckUpdateDataValid()
-        {
-            if (Name.Equals(""))
-            {
-                MessageWindow.ShowMessage("供應商名稱不可為空!", MessageType.ERROR);
-                return false;
-            }
-
-            foreach (var principal in Principals)
-            {
-                if (principal.Name.Equals(""))
-                {
-                    MessageWindow.ShowMessage("聯絡人名稱不可為空!", MessageType.ERROR);
-                    return false;
-                }
-            }
-
-            return true;
-        }
+       
 
         #region ///// Principal Functions /////
 
-        internal void AddManufactoryPrincipal()
+        public void AddManufactoryPrincipal()
         {
             Principals.AddNewPrincipal();
             CurrentPrincipal = Principals.Last();
