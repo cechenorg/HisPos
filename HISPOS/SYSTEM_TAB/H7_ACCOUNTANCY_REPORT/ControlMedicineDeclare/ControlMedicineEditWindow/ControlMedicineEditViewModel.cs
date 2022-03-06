@@ -5,6 +5,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Medicine.ControlMedicineEdit;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.ControlMedicineEditWindow
@@ -77,7 +78,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
             MedicineID = medID;
             WarID = warID;
             ControlMedicineEditCollection = ControlMedicineEdits.GetData(MedicineID, WarID);
-            ManufactoryCollection = Manufactories.GetControlMedicineManufactories();
+             
+            DataTable table = ManufactoryDB.GetAllManufactories();
+            Manufactories manufactories = new Manufactories();
+            foreach (DataRow row in table.Rows)
+            {
+                ControlManufactory manufactory = new ControlManufactory(row);
+                if (!string.IsNullOrEmpty(manufactory.ControlmedicineID))
+                    manufactories.Add(manufactory);
+            }
+
+            ManufactoryCollection = manufactories;
+
             TypeList = new List<string>() { "進貨", "報廢" };
             for (int i = 0; i < ControlMedicineEditCollection.Count; i++)
             {

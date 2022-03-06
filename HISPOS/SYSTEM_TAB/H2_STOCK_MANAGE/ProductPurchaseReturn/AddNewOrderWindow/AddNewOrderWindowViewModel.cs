@@ -112,7 +112,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         private void InitVariables()
         {
             MainWindow.ServerConnection.OpenConnection();
-            ManufactoryCollection = Manufactories.GetManufactories();
+            ManufactoryCollection = new Manufactories(ManufactoryDB.GetAllManufactories());
             WareHouseCollection = new WareHouses(WareHouseDb.Init());
             //DonePurchaseOrders = new StoreOrders(StoreOrderDB.GetDonePurchaseOrdersInOneWeek());
             MainWindow.ServerConnection.CloseConnection();

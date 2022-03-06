@@ -365,7 +365,6 @@
     <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSetting.cs" />
     <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSettings.cs" />
     <Compile Include="NewClass\Invoice\InvoiceSetting\InvoiceSettingDb.cs" />
-    <Compile Include="NewClass\Manufactory\ControlManufactory.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdit.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEditDb.cs" />
     <Compile Include="NewClass\Medicine\ControlMedicineEdit\ControlMedicineEdits.cs" />
@@ -425,8 +424,6 @@
     <Compile Include="NewClass\Cooperative\XmlOfPrescription\CooperativePrescription.cs" />
     <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescriptionDb.cs" />
     <Compile Include="NewClass\Cooperative\XmlOfPrescription\XmlOfPrescriptions.cs" />
-    <Compile Include="NewClass\Manufactory\Manufactories.cs" />
-    <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryManagement\CurrentManufactoryTypeEnum.cs" />
     <Compile Include="NewClass\Manufactory\ManufactoryManagement\ManufactoryManageDetail.cs" />

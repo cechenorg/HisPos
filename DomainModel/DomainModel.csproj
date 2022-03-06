@@ -56,6 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\Manufactory\ControlManufactory.cs" />
+    <Compile Include="Class\Manufactory\Manufactories.cs" />
+    <Compile Include="Class\Manufactory\Manufactory.cs" />
     <Compile Include="Class\StoreOrder\SingdeTotalOrders.cs" />
     <Compile Include="Class\WareHouse\WareHouse.cs" />
     <Compile Include="Class\WareHouse\WareHouses.cs" />
