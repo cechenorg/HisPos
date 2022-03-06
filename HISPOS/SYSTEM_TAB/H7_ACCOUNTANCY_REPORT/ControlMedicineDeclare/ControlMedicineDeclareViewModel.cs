@@ -129,7 +129,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
             }
         }
 
-        public WareHouses WareHouseCollection { get; set; } = WareHouses.GetWareHouses();
+        public WareHouses WareHouseCollection { get; set; } = new WareHouses(WareHouseDb.Init());
 
         #endregion Var
 

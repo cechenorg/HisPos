@@ -118,7 +118,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         public EntrySearchViewModel()
         {
-            WareHouseCollection = WareHouses.GetWareHouses();
+            WareHouseCollection = new WareHouses(WareHouseDb.Init());
             SelectedWareHouse = WareHouseCollection[0];
             Search();
             SearchCommand = new RelayCommand(Search);

@@ -109,7 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         {
             RegisterCommands();
 
-            WareHouseCollection = WareHouses.GetWareHouses();
+            WareHouseCollection = new WareHouses(WareHouseDb.Init());
             SelectedWareHouse = WareHouseCollection[0];
         }
 

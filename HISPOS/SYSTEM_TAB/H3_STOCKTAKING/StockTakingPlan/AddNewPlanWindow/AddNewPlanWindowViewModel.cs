@@ -34,7 +34,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan.AddNewPlanWindow
 
         public AddNewPlanWindowViewModel()
         {
-            WareHouseCollection = WareHouses.GetWareHouses();
+            WareHouseCollection = new WareHouses(WareHouseDb.Init());
             StockTakingPlan.WareHouse = WareHouseCollection[0];
             InsertStockPlanCommand = new RelayCommand(InsertStockPlanAction);
         }

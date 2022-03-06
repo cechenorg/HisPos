@@ -188,7 +188,7 @@ namespace His_Pos.ChromeTabViewModel
             {
                 MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "取得庫別名";
-                WareHouses = WareHouses.GetWareHouses();
+                WareHouses = new WareHouses(WareHouseDb.Init());
                 BusyContent = StringRes.取得院所;
                 Institutions = new Institutions(true);
                 BusyContent = StringRes.取得科別;

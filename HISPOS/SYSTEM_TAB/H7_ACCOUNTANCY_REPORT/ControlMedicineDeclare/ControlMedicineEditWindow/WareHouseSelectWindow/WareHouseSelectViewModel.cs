@@ -19,7 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
     {
         public DateTime SDateTime { get; set; }
         public DateTime EDateTime { get; set; }
-        public WareHouses WareHouseCollection { get; set; } = WareHouses.GetWareHouses();
+        public WareHouses WareHouseCollection { get; set; } = new WareHouses(WareHouseDb.Init());
         public RelayCommand SubmitCommand { get; set; }
 
         public WareHouseSelectViewModel(DateTime sDate, DateTime eDate)

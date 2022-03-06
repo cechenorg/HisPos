@@ -287,7 +287,7 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 				END
 				Select @NEWSTOORD_ID StoOrdID";
 
-				var result = conn.QueryFirst(strSql);
+				string result = conn.QueryFirst<string>(strSql);
 
 				return result;
 			}

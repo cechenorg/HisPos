@@ -5,7 +5,7 @@ namespace His_Pos.NewClass.WareHouse
 {
     public class WareHouses : ObservableCollection<WareHouse>
     {
-        private WareHouses(DataTable dataTable)
+        public WareHouses(DataTable dataTable)
         {
             foreach (DataRow row in dataTable.Rows)
             {
@@ -13,9 +13,6 @@ namespace His_Pos.NewClass.WareHouse
             }
         }
 
-        internal static WareHouses GetWareHouses()
-        {
-            return new WareHouses(WareHouseDb.Init());
-        }
+         
     }
 }

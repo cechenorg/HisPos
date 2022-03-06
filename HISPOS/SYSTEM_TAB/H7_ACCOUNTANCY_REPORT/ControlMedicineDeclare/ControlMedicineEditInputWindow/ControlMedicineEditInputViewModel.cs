@@ -29,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare.Contro
             }
         }
 
-        public WareHouses WareHouseCollection { get; set; } = WareHouses.GetWareHouses();
+        public WareHouses WareHouseCollection { get; set; } = new WareHouses(WareHouseDb.Init());
         public RelayCommand SubmitCommand { get; set; }
 
         public ControlMedicineEditInputViewModel()

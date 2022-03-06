@@ -380,7 +380,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         private void InitData()
         {
             MainWindow.ServerConnection.OpenConnection();
-            WareHouseCollection = WareHouses.GetWareHouses();
+            WareHouseCollection = new WareHouses(WareHouseDb.Init());
             MainWindow.ServerConnection.CloseConnection();
 
             if (WareHouseCollection is null || WareHouseCollection.Count == 0)

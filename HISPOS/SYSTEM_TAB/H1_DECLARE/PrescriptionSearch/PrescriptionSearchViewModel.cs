@@ -789,7 +789,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         {
             using (var file = new StreamWriter(fileDialog.FileName, false, Encoding.UTF8))
             {
-                var wareHouses = WareHouses.GetWareHouses();
+                var wareHouses = new WareHouses(WareHouseDb.Init());
                 foreach (var w in wareHouses)
                 {
                     file.WriteLine("庫名," + w.Name);

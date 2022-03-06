@@ -75,7 +75,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Med
             InitViewModels();
             RegisterCommand();
 
-            WareHouseCollection = WareHouses.GetWareHouses();
+            WareHouseCollection = new WareHouses(WareHouseDb.Init());
             if (WareHouseCollection is null || WareHouseCollection.Count == 0)
             {
                 MessageWindow.ShowMessage("網路異常 請稍後再試", MessageType.ERROR);
