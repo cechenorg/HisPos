@@ -786,8 +786,6 @@
     <Compile Include="NewClass\Tutorial\TutorialDb.cs" />
     <Compile Include="NewClass\Tutorial\Tutorials.cs" />
     <Compile Include="NewClass\WareHouse\WareHouseDb.cs" />
-    <Compile Include="NewClass\WareHouse\WareHouseSetting.cs" />
-    <Compile Include="NewClass\WareHouse\WareHouseSettings.cs" />
     <Compile Include="RDLC\MedicineTagDataSet.cs">
       <DependentUpon>MedicineTagDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

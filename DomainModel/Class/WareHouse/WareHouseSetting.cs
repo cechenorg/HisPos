@@ -1,5 +1,4 @@
 ﻿using His_Pos.NewClass;
-using His_Pos.FunctionWindow;
 using System.Data;
 
 namespace His_Pos.NewClass.WareHouse
@@ -21,26 +20,6 @@ namespace His_Pos.NewClass.WareHouse
             StockValue = row.Field<double>("STOCKVALUE");
             NegativeStockValue = row.Field<double>("NEG_STOCKVALUE");
         }
-
-        internal bool DeleteWareHouse()
-        {
-            DataTable dataTable = WareHouseDb.DeleteWareHouse(ID);
-
-            if (dataTable is null || dataTable.Rows.Count == 0)
-                return false;
-            else
-                return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
-        }
-
-        internal bool IsDeletable()
-        {
-            if (!CanDelete)
-            {
-                MessageWindow.ShowMessage("欲刪除之庫別庫存需清空!", MessageType.ERROR);
-                return false;
-            }
-
-            return true;
-        }
+         
     }
 }

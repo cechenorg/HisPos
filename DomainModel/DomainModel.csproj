@@ -59,6 +59,8 @@
     <Compile Include="Class\StoreOrder\SingdeTotalOrders.cs" />
     <Compile Include="Class\WareHouse\WareHouse.cs" />
     <Compile Include="Class\WareHouse\WareHouses.cs" />
+    <Compile Include="Class\WareHouse\WareHouseSetting.cs" />
+    <Compile Include="Class\WareHouse\WareHouseSettings.cs" />
     <Compile Include="Enum\StoreOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

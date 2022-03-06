@@ -62,15 +62,27 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl
         }
 
         private void DeleteWareHouseAction()
-        {
-            if (!SelectedWareHouse.IsDeletable()) return;
+        { 
+            if (!SelectedWareHouse.CanDelete)
+            {
+                MessageWindow.ShowMessage("欲刪除之庫別庫存需清空!", MessageType.ERROR);
+                return;
+            }
 
             ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認刪除 {SelectedWareHouse.Name}", "刪除庫別");
 
             if ((bool)confirmWindow.DialogResult)
             {
                 MainWindow.ServerConnection.OpenConnection();
-                bool isSuccess = SelectedWareHouse.DeleteWareHouse();
+
+                bool isSuccess = false;
+                DataTable dataTable = WareHouseDb.DeleteWareHouse(SelectedWareHouse.ID);
+
+                if (dataTable is null || dataTable.Rows.Count == 0)
+                    isSuccess = false;
+                else
+                    isSuccess = dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+               
                 MainWindow.ServerConnection.CloseConnection();
 
                 if (isSuccess)
