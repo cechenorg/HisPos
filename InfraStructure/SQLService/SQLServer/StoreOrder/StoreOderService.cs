@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using Dapper;
 using DomainModel.Class.StoreOrder;
 using Newtonsoft.Json;
@@ -295,15 +296,21 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 		//寫入訂單資料
 		public void Set_SaveStoreOrder()
 		{
+            using (var tranScope = new TransactionScope())
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    string strSql = @" ";
 
-			using (SqlConnection conn = new SqlConnection(_connectionString))
-			{
-				string strSql = @" ";
+                    var result = conn.Query<dSingdeTotalOrder>(strSql);
 
-				var result = conn.Query<dSingdeTotalOrder>(strSql);
-				 
+                }
+
+
+                tranScope.Complete();
+
 			}
-		}
+        }
 
 		//不足訂購量轉新訂單 
 		public void Set_StoreOrderAddLowerThenOrderAmount()
@@ -313,6 +320,7 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 			//@MAN_ID INT,
 			//@WARE_ID INT,
 			//@PRODUCTS[StoreOrder].[DetailTable] READONLY
+
 			using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 string strSql = @"DECLARE @STOORD_COUNT NVARCHAR(3) = (SELECT TOP(1) FORMAT(SUBSTRING(StoOrd_ID, 11, 2) + 1, '-00') FROM [StoreOrder].[Master] WHERE CONVERT(DATE, GETDATE()) = CONVERT(DATE, StoOrd_CreateTime) AND SUBSTRING(StoOrd_ID, 1, 1)in ('P','R') ORDER BY SUBSTRING(StoOrd_ID, 11, 2) DESC);
