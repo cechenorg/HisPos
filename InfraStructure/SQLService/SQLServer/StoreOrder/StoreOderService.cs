@@ -296,11 +296,179 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 		//寫入訂單資料
 		public void Set_SaveStoreOrder()
 		{
-            using (var tranScope = new TransactionScope())
+
+			//@STOORD_ID nvarchar(20),
+			//@STOORD_NOTE nvarchar(200),
+			//@CUS_NAME NVARCHAR(20),
+			//@TARGET_CUS_NAME NVARCHAR(20),
+			//@PLAN_DATE DATE,
+			//@STOORD_DETAIL [StoreOrder].[DetailTable] Readonly
+			using (var tranScope = new TransactionScope())
             {
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
-                    string strSql = @" ";
+                    string strSql = @"DECLARE @STATUS NVARCHAR(1) = (SELECT stoord_status
+					   FROM   [StoreOrder].[master]
+					   WHERE  stoord_id = @STOORD_ID);
+					DECLARE @MAN_ID INT = (SELECT stoord_manufactoryid
+					   FROM   [StoreOrder].[master]
+					   WHERE  stoord_id = @STOORD_ID)
+					
+					IF @STATUS = 'U'
+					  BEGIN
+					      DELETE [StoreOrder].[detail]
+					      WHERE  [stoorddet_masterid] = @STOORD_ID
+					
+					      UPDATE [StoreOrder].[master]
+					      SET    [stoord_note] = @STOORD_NOTE,
+					             [stoord_customername] = @CUS_NAME,
+					             [stoord_targetcustomername] = @TARGET_CUS_NAME,
+					             [stoord_planarrivaldate] = @PLAN_DATE
+					      WHERE  [stoord_id] = @STOORD_ID
+					
+					      INSERT INTO [StoreOrder].[detail]
+					                  (stoorddet_masterid,
+					                   stoorddet_productid,
+					                   stoorddet_id,
+					                   stoorddet_orderamount,
+					                   stoorddet_unitname,
+					                   stoorddet_unitamount,
+					                   stoorddet_realamount,
+					                   stoorddet_price,
+					                   stoorddet_subtotal,
+					                   stoorddet_validdate,
+					                   stoorddet_batchnumber,
+					                   stoorddet_note,
+					                   stoorddet_freeamount,
+					                   stoorddet_invoice,
+					                   [stoorddet_originprice])
+					      SELECT stoorddet_masterid,
+					             stoorddet_productid,
+					             stoorddet_id,
+					             stoorddet_orderamount,
+					             stoorddet_unitname,
+					             stoorddet_unitamount,
+					             stoorddet_realamount,
+					             stoorddet_price,
+					             stoorddet_subtotal,
+					             stoorddet_validdate,
+					             stoorddet_batchnumber,
+					             stoorddet_note,
+					             stoorddet_freeamount,
+					             stoorddet_invoice,
+					             stoorddet_price
+					      FROM   @STOORD_DETAIL
+					  END
+					
+					-- STATUS P>>>>>>>>>>>>>>>>>>>>>>
+					
+					ELSE IF ( @STATUS = 'P' )
+					  BEGIN
+					
+					SELECT stoorddet_productid
+					INTO   #double
+					FROM   @STOORD_DETAIL
+					GROUP  BY stoorddet_productid
+					HAVING Count(stoorddet_productid) > 1
+					
+					UPDATE [StoreOrder].[detail]
+					SET    stoorddet_realamount = DD.stoorddet_realamount,
+					       stoorddet_price = DD.stoorddet_price,
+					       stoorddet_subtotal = DD.stoorddet_subtotal,
+						   stoorddet_batchnumber = DD.stoorddet_batchnumber,
+					       stoorddet_validdate = DD.stoorddet_validdate,
+					       stoorddet_note = DD.stoorddet_note
+					FROM   @STOORD_DETAIL DD
+					WHERE  [StoreOrder].[detail].stoorddet_productid = DD.stoorddet_productid
+					       AND [StoreOrder].[detail].stoorddet_masterid = @STOORD_ID
+						   AND [StoreOrder].[detail].stoorddet_productid NOT IN (SELECT stoorddet_productid FROM #double)
+					
+					      --AND [StoreOrder].[Detail].StoOrdDet_Note<>'已拆批'  --AND [StoreOrder].[Detail].StoOrdDet_ID=dd.StoOrdDet_ID  
+					      --UPDATE [StoreOrder].[Master] SET [StoOrd_Note] = @STOORD_NOTE, [StoOrd_CustomerName] = @CUS_NAME, [StoOrd_TargetCustomerName] = @TARGET_CUS_NAME, [StoOrd_PlanArrivalDate] = @PLAN_DATE WHERE [StoOrd_ID] = @STOORD_ID
+					      INSERT INTO [StoreOrder].[detail]
+					                  (stoorddet_masterid,
+					                   stoorddet_id,
+					                   stoorddet_productid,
+					                   stoorddet_orderamount,
+					                   stoorddet_unitname,
+					                   stoorddet_unitamount,
+					                   stoorddet_realamount,
+					                   stoorddet_price,
+					                   stoorddet_subtotal,
+					                   stoorddet_validdate,
+					                   stoorddet_batchnumber,
+					                   stoorddet_note,
+					                   stoorddet_freeamount,
+					                   stoorddet_invoice,
+					                   [stoorddet_originprice])
+					      SELECT stoorddet_masterid,
+					             stoorddet_id,
+					             stoorddet_productid,
+					             stoorddet_orderamount,
+					             stoorddet_unitname,
+					             stoorddet_unitamount,
+					             stoorddet_realamount,
+					             stoorddet_price,
+					             stoorddet_subtotal,
+					             stoorddet_validdate,
+					             stoorddet_batchnumber,
+					             stoorddet_note,
+					             stoorddet_freeamount,
+					             stoorddet_invoice,
+					             stoorddet_price
+					      FROM   @STOORD_DETAIL DD
+					      WHERE  DD.stoorddet_productid NOT IN (SELECT stoorddet_productid
+					                                            FROM [StoreOrder].[detail]
+					                                            WHERE stoorddet_masterid = @STOORD_ID)
+					             AND DD.stoorddet_masterid = @STOORD_ID
+					
+					
+					--手動拆批>>>>>>>>>>>>>>>>>>>
+					SELECT *
+					INTO   #double_detail
+					FROM   @STOORD_DETAIL DD
+					WHERE  DD.stoorddet_productid IN (SELECT stoorddet_productid
+					                                  FROM   #double)
+					
+					    INSERT INTO [StoreOrder].[detail]
+					            (stoorddet_masterid,
+					             stoorddet_productid,
+					             stoorddet_id,
+					             stoorddet_orderamount,
+					             stoorddet_unitname,
+					             stoorddet_unitamount,
+					             stoorddet_realamount,
+					             stoorddet_price,
+					             stoorddet_subtotal,
+					             stoorddet_validdate,
+					             stoorddet_batchnumber,
+					             stoorddet_note,
+					             stoorddet_freeamount,
+					             stoorddet_invoice,
+					             [stoorddet_originprice])
+						SELECT stoorddet_masterid,
+							   stoorddet_productid,
+							   stoorddet_id,
+							   stoorddet_orderamount,
+							   stoorddet_unitname,
+							   stoorddet_unitamount,
+							   stoorddet_realamount,
+							   stoorddet_price,
+							   stoorddet_subtotal,
+							   stoorddet_validdate,
+							   stoorddet_batchnumber,
+							   stoorddet_note,
+							   stoorddet_freeamount,
+							   stoorddet_invoice,
+							   stoorddet_price
+						FROM   #double_detail DD
+						WHERE CONCAT(stoorddet_masterid, stoorddet_productid, ISNULL(stoorddet_batchnumber,' ')) NOT IN (SELECT CONCAT(SD.stoorddet_masterid, SD.stoorddet_productid, ISNULL(SD.stoorddet_batchnumber,' ')) 
+							   FROM [StoreOrder].[detail] SD)
+					
+					
+					UPDATE [StoreOrder].[detail]
+					SET [StoOrdDet_SubTotal] = 0
+					WHERE [StoOrdDet_RealAmount] = 0 AND [StoOrdDet_SubTotal] <> 0";
 
                     var result = conn.Query<dSingdeTotalOrder>(strSql);
 
