@@ -413,8 +413,6 @@
       <DependentUpon>VerifyPharmacyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewClass\BindingProxy.cs" />
-    <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJson.cs" />
-    <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonClass.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicJson\CooperativeClinicJsonDb.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSetting.cs" />
     <Compile Include="NewClass\Cooperative\CooperativeClinicSetting\CooperativeClinicSettingDb.cs" />
@@ -721,9 +719,6 @@
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReport.cs" />
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReportDb.cs" />
     <Compile Include="NewClass\Report\TradeProfitReport\TradeProfitReports.cs" />
-    <Compile Include="NewClass\Setting\SettingTabData.cs" />
-    <Compile Include="NewClass\Setting\SettingTabDatas.cs" />
-    <Compile Include="NewClass\Setting\SettingTabs.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingDB.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlan.cs" />
     <Compile Include="NewClass\StockTaking\StockTakingPlan\StockTakingPlans.cs" />

@@ -29,20 +29,6 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicJson
             public string Id { get; set; }
             public double Amount { get; set; }
         }
-
-        #region Function
-
-        public List<Medicines> GetCooperAdjustMedicines()
-        {
-            List<Medicines> temp = new List<Medicines>();
-            DataTable table = CooperativeClinicJsonDb.GetCooperAdjustMedicines(Id);
-            foreach (DataRow r in table.Rows)
-            {
-                temp.Add(new Medicines(r));
-            }
-            return temp;
-        }
-
-        #endregion Function
+         
     }
 }
