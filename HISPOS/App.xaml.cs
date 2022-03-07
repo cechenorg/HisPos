@@ -19,7 +19,7 @@ namespace His_Pos
         {
             base.OnStartup(e);
 
-            //CheckAdministrator();
+            CheckAdministrator();
             StartupUri = new Uri("FunctionWindow/LoginWindow.xaml", UriKind.RelativeOrAbsolute);
 
             // Select the text in a TextBox when it receives focus.
