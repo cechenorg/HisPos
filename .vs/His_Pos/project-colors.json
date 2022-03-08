@@ -25,7 +25,12 @@
       "ProjectGuid": "2719a667-ad03-4056-8d56-116c802564c2",
       "DisplayName": "DomainModel",
       "ColorIndex": 3
+    },
+    "2a682a8e-ab02-4fb1-9e54-9aaec7ecf6bc": {
+      "ProjectGuid": "2a682a8e-ab02-4fb1-9e54-9aaec7ecf6bc",
+      "DisplayName": "InfraStructure.Test",
+      "ColorIndex": 4
     }
   },
-  "NextColorIndex": 4
+  "NextColorIndex": 5
 }

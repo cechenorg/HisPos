@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -11,6 +12,7 @@ using Dapper;
 using DomainModel.Class.StoreOrder;
 using InfraStructure.SQLService.SQLServer.GeneralService;
 using InfraStructure.SQLService.SQLServer.Product;
+using InfraStructure.SQLService.SQLServer.UserDefinedDataType;
 using Newtonsoft.Json;
 
 namespace InfraStructure.SQLService.SQLServer.StoreOrder
@@ -95,8 +97,17 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
             {
 
                 ProductDBService productDbService = new ProductDBService(_connectionString,string.Empty);
-                string selectProductsql = productDbService.GetProductMasterSelectString() + " where Pro_TypeID<>2;";
 
+                string selectProductsql = @"SELECT Pro_ID as MedicineID FROM Product.Master where Pro_TypeID<>2; "; 
+                var medicineList = conn.Query<MedicineListTable>(selectProductsql);
+
+                var medMapper = MedicineListTable.SetMedicines(medicineList);
+                  
+				var result = conn.Query("[Get].[AllInventoryByProIDs]",
+                    new {
+                        Products = medMapper,  WARE_ID = 0 },
+                        commandType: CommandType.StoredProcedure);
+				 
 				string strSql = $@"DECLARE @PRO [HIS].[MedicineListTable];
 	            INSERT INTO @PRO
 	            SELECT Pro_ID FROM Product.Master 
@@ -165,7 +176,7 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 	            
 	            SELECT '' AS StoOrdID";
 
-                conn.Execute(strSql);
+                //conn.Execute(strSql);
 				  
             }
         }
