@@ -649,7 +649,7 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
-            if (TempPre.Institution.ID == "3532082753")
+            if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
             {
                 TempPrint.Division.Name = "";
                 var singleMode = (bool)PrintResult[1];
@@ -833,7 +833,7 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
-            if (TempPre.Institution.ID == "3532082753")
+            if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
             {
                 TempPrint = (Prescription)Current.PrintClone();
             }
