@@ -19,9 +19,9 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
         internal static SingdeTotalOrders GetSingdeTotalOrders()
         {
-            StoreOrderService storeOrderService = new StoreOrderService(Properties.Settings.Default.SQL_local,Properties.Settings.Default.SystemSerialNumber); 
+            StoreOrderDBService storeOrderDbService = new StoreOrderDBService(Properties.Settings.Default.SQL_local,Properties.Settings.Default.SystemSerialNumber); 
 
-            return new SingdeTotalOrders(storeOrderService.Get_SingdeTotalOrdersNotDone());
+            return new SingdeTotalOrders(storeOrderDbService.Get_SingdeTotalOrdersNotDone());
         }
     }
 }

@@ -113,9 +113,9 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
                 fileWriter.WriteLine("Com ");
             }
             Properties.Settings.Default.SQL_local =
-                string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword", dbtargetIp);
+                string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword;", dbtargetIp);
             Properties.Settings.Default.SQL_global =
-               string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword", dbtargetIp);
+               string.Format("Data Source={0};Persist Security Info=True;User ID=HISPOSUser;Password=HISPOSPassword;", dbtargetIp);
             Properties.Settings.Default.SystemSerialNumber = VerifyNumber;
             Properties.Settings.Default.MedBagPrinter = "";
             Properties.Settings.Default.ReceiptPrinter = "";

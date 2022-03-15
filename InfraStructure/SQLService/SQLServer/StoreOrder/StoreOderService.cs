@@ -4,19 +4,52 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using Dapper;
 using DomainModel.Class.StoreOrder;
+using InfraStructure.SQLService.SQLServer.GeneralService;
+using InfraStructure.SQLService.SQLServer.Product;
+using InfraStructure.SQLService.SQLServer.UserDefinedDataType;
 using Newtonsoft.Json;
 
 namespace InfraStructure.SQLService.SQLServer.StoreOrder
 {
-    public class StoreOrderService : SQLServerServiceBase
+    public class StoreOrderDBService : SQLServerServiceBase
     {
-        public StoreOrderService(string connectionString, string dataTable) : base(connectionString, dataTable)
+        public StoreOrderDBService(string connectionString, string dataTable) : base(connectionString, dataTable)
         {
+        }
+
+        private static readonly string[] StoreOrderMasterColumns =
+        {
+			"StoOrd_ID", "StoOrd_ReceiveID", "StoOrd_OrderEmployeeID", "StoOrd_ReceiveEmployeeID", "StoOrd_CreateTime",
+			"StoOrd_ReceiveTime", "StoOrd_ManufactoryID", "StoOrd_Status",  "StoOrd_Type","StoOrd_WarehouseID",
+			"StoOrd_Note", "StoOrd_PrescriptionID", "StoOrd_PlanArrivalDate",  "StoOrd_CustomerName","StoOrd_TargetCustomerName",
+			"StoOrd_IsEnable", "StoOrd_History", "StoOrd_IsOTCType",  "StoOrd_IsPayCash"
+		};
+
+        private string GetStoreOrderMasterSelectString()
+        {
+            string sql = "Select * from StoreOrder.Master";
+
+            return sql;
+        }
+
+        private bool InsertStoreOrderMaster(SqlConnection conn, dStoreOrderMaster masterData)
+        { 
+            string sql = $@"Insert into StoreOrder.Master ({DBInvoker.GetTableColumns(StoreOrderMasterColumns)}) Values({DBInvoker.GetTableParameterColumns(StoreOrderMasterColumns)})";
+
+            int result = conn.Execute(sql, masterData);
+
+			return result == 0;
+        }
+
+		private bool InsertStoreOrderDetail()
+        {
+            return true;
         }
 
         public List<dSingdeTotalOrder> Get_SingdeTotalOrdersNotDone()
@@ -24,7 +57,11 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                string strSql = @"DECLARE @THREEDAYBEFORE NVARCHAR(8) = (SELECT CONVERT(NVARCHAR(8), GETDATE() - 3, 112));
+                DateDBService dateService = new DateDBService();
+                
+                string threeDayBeforeDate = dateService.GetDateTime(conn, -3);
+
+				string strSql = @"DECLARE @THREEDAYBEFORE NVARCHAR(8) = (SELECT CONVERT(NVARCHAR(8), GETDATE() - 3, 112));
 
                 SET @THREEDAYBEFORE = (SELECT CAST(SUBSTRING(@THREEDAYBEFORE, 1, 4) - 1911 AS NVARCHAR(4)) + SUBSTRING(@THREEDAYBEFORE, 5, 4))
 
@@ -58,7 +95,20 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                string strSql = $@"DECLARE @PRO [HIS].[MedicineListTable];
+
+                ProductDBService productDbService = new ProductDBService(_connectionString,string.Empty);
+
+                string selectProductsql = @"SELECT Pro_ID as MedicineID FROM Product.Master where Pro_TypeID<>2; "; 
+                var medicineList = conn.Query<MedicineListTable>(selectProductsql);
+
+                var medMapper = MedicineListTable.SetMedicines(medicineList);
+                  
+				var result = conn.Query("[Get].[AllInventoryByProIDs]",
+                    new {
+                        Products = medMapper,  WARE_ID = 0 },
+                        commandType: CommandType.StoredProcedure);
+				 
+				string strSql = $@"DECLARE @PRO [HIS].[MedicineListTable];
 	            INSERT INTO @PRO
 	            SELECT Pro_ID FROM Product.Master 
 	            where Pro_TypeID<>2;
@@ -126,7 +176,7 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 	            
 	            SELECT '' AS StoOrdID";
 
-                conn.Execute(strSql);
+                //conn.Execute(strSql);
 				  
             }
         }
@@ -513,4 +563,47 @@ namespace InfraStructure.SQLService.SQLServer.StoreOrder
 		
 
 	}
+
+    public class dStoreOrderMaster
+    {
+        public dStoreOrderMaster() { } // for Dapper
+
+        public string StoOrd_ID { get; set; }
+
+        public string StoOrd_ReceiveID { get; set; }
+
+        public int StoOrd_OrderEmployeeID { get; set; }
+
+        public int StoOrd_ReceiveEmployeeID { get; set; }
+
+        public DateTime StoOrd_CreateTime { get; set; }
+
+        public DateTime StoOrd_ReceiveTime { get; set; }
+
+        public int StoOrd_ManufactoryID { get; set; }
+
+        public string StoOrd_Status { get; set; }
+
+        public string StoOrd_Type { get; set; }
+
+        public int StoOrd_WarehouseID { get; set; }
+
+        public string StoOrd_Note { get; set; }
+
+        public int StoOrd_PrescriptionID { get; set; }
+
+        public DateTime StoOrd_PlanArrivalDate { get; set; }
+
+        public string StoOrd_CustomerName { get; set; }
+
+        public string StoOrd_TargetCustomerName { get; set; }
+
+        public bool StoOrd_IsEnable { get; set; }
+
+        public string StoOrd_History { get; set; }
+
+        public string StoOrd_IsOTCType { get; set; }
+
+        public bool StoOrd_IsPayCash { get; set; }
+    }
 }
