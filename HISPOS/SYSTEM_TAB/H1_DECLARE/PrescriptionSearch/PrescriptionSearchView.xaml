@@ -14,6 +14,7 @@
     d:DesignHeight="839"
     d:DesignWidth="1365"
     FontFamily="Segoe UI Semibold"
+    d:DataContext="{d:DesignInstance Type=local:PrescriptionSearchViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -532,7 +533,7 @@
                         Content="藥服"
                         Style="{StaticResource BoldLabelContent18}" />
                     <Label
-                        Width="100"
+                        Width="70"
                         Height="35"
                         Content="{Binding MedicalServicePoint, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource BoldLabelContent18}" />
@@ -541,7 +542,7 @@
                         Content="申請點數"
                         Style="{StaticResource BoldLabelContent18}" />
                     <Label
-                        Width="100"
+                        Width="80"
                         Height="35"
                         Content="{Binding ApplyPoint, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource BoldLabelContent18}" />
@@ -559,36 +560,36 @@
                         Content="總點數"
                         Style="{StaticResource BoldLabelContent18}" />
                     <Label
-                        Width="100"
+                        Width="90"
                         Height="35"
                         Content="{Binding TotalPoint, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource BoldLabelContent18}" />
                     <Button
-                        Width="120"
+                        Width="100"
                         Height="35"
-                        Margin="25,0,0,0"
+                        Margin="15,0,0,0"
                         Background="DarkCyan"
                         BorderThickness="0"
                         Command="{Binding ExportMedicineCsv}"
-                        Content="匯出藥品檔"
+                        Content="匯出藥品"
                         FontSize="16" />
                     <Button
-                        Width="120"
+                        Width="100"
                         Height="35"
-                        Margin="10,0,10,0"
+                        Margin="10,0,0,0"
                         Background="CornflowerBlue"
                         BorderThickness="0"
                         Command="{Binding ExportPrescriptionCsv}"
-                        Content="匯出處方檔"
+                        Content="匯出處方"
                         FontSize="16" />
                     <Button
-                        Width="120"
+                        Width="100"
                         Height="35"
                         Margin="10,0,0,0"
                         Background="IndianRed"
                         BorderThickness="0"
                         Command="{Binding ImportDeclareFileCommand}"
-                        Content="匯入申報檔"
+                        Content="匯入申報"
                         FontSize="16"
                         Visibility="Visible" />
                 </StackPanel>
