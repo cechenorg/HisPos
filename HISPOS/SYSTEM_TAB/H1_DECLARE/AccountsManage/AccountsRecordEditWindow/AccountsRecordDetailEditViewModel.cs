@@ -124,7 +124,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
             var type = selectedDetail.CashFlowValue >= 0 ? "收入" : "支出";
             OriginContent =
                 $"類別 : {type}  科目 : {selectedDetail.Name}  金額 : {Math.Abs(selectedDetail.CashFlowValue)} \n備註 : {selectedDetail.Note}  登錄時間 : {DateTimeExtensions.ConvertToTaiwanCalenderWithTime(selectedDetail.Date, true)} 登錄人 : {selectedDetail.EmpName}";
-            SelectedCashFlowAccount = CashFlowAccounts.Single(acc => acc.AccountName.Equals(selectedDetail.Name));
+            SelectedCashFlowAccount = CashFlowAccounts.SingleOrDefault(acc => acc.AccountName == selectedDetail.Name);
+            if (SelectedCashFlowAccount == null)
+                SelectedCashFlowAccount = CashFlowAccounts.FirstOrDefault();
+
             CashFlowValue = Math.Abs(EditedCashFlowRecord.CashFlowValue);
         }
 
