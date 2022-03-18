@@ -2,6 +2,7 @@
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.Service;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -738,6 +739,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 PrescriptionMedicines.SelectedItem = PrescriptionMedicines.CurrentCell.Item;
             }
+        }
+
+        private void btnCloud_Info_Click(object sender, RoutedEventArgs e)
+        {
+            string url = @"https://medcloud.nhi.gov.tw/imme0008/IMME0008S01.aspx";
+            Process pro = new Process();
+            pro.StartInfo.FileName = "iexplore.exe";
+            pro.StartInfo.Arguments = url;
+            pro.Start();
         }
     }
 }

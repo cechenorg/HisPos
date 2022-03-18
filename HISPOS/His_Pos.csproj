@@ -2669,6 +2669,7 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\cloud_info.png" />
     <Resource Include="Images\down.png" />
     <Resource Include="Images\up.png" />
     <Resource Include="Images\up24.png" />

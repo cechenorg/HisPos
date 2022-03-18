@@ -125,8 +125,8 @@
             </Grid.RowDefinitions>
             <StackPanel
                 Grid.Row="0"
-                Width="1345"
-                Margin="10,0,10,0"
+                Width="1365"
+                Margin="0,0,10,0"
                 Orientation="Horizontal">
                 <ContentControl Content="{Binding}">
                     <ContentControl.Style>
@@ -166,9 +166,20 @@
                 </TextBox>
                 <Label Content="處方數" Style="{StaticResource BoldLabelContent18}" />
                 <Label
-                    Width="40"
+                    Width="32"
                     Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    Style="{StaticResource BoldLabelContent18}" />
+                    Style="{StaticResource BoldLabelContent18}" Margin="0,20" />
+                <Button
+                    Name="btnCloud_Info"
+                    Width="40"
+                    Height="35"
+                    Margin="0,0,0,0"
+                    Padding="0"
+                    Background="#378AE5"
+                    BorderBrush="Transparent"
+                    Click="btnCloud_Info_Click">
+                    <Image Margin="0,0,0,0" Source="/Images/cloud_info.png" RenderOptions.BitmapScalingMode="HighQuality" UseLayoutRounding="True" HorizontalAlignment="Center" Width="40" Height="35"/>
+                </Button>
                 <Button
                     Width="40"
                     Height="35"
@@ -179,7 +190,7 @@
                     Click="ButtonBase_OnClick"
                     Content="{StaticResource QrCode}"
                     IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    Visibility="Visible" />
+                    Visibility="Visible"/>
                 <Button
                     Height="35"
                     Margin="10,0,0,0"
