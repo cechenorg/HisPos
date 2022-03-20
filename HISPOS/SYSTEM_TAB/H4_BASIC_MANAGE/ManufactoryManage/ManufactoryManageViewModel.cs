@@ -51,7 +51,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             {
                 MainWindow.ServerConnection.OpenConnection();
              
-                if (value != null)
+                if (value != null && CurrentManufactory != null)
                 {
                     CurrentManufactory.Principals = new ManufactoryPrincipals(ManufactoryDB.GetManufactoryPrincipals(CurrentManufactory.ID)); 
                     CurrentManufactory.TradeRecords = new ManufactoryTradeRecords(ManufactoryDB.GetManufactoryTradeRecords(CurrentManufactory.ID));

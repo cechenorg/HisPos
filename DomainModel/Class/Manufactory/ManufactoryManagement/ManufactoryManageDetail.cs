@@ -202,7 +202,8 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             newManufactoryManageDetail.ControlMedicineID = ControlMedicineID;
             newManufactoryManageDetail.Note = Note;
 
-            newManufactoryManageDetail.Principals = Principals.Clone() as ManufactoryPrincipals;
+            if(Principals != null)
+                newManufactoryManageDetail.Principals = Principals.Clone() as ManufactoryPrincipals;
 
             return newManufactoryManageDetail;
         }
