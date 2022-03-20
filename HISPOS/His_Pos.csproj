@@ -339,6 +339,11 @@
     <Compile Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml.cs">
       <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewClass\Enum.cs" />
+    <Compile Include="NewClass\Feature.cs" />
+    <Compile Include="NewClass\Location\Location.cs" />
+    <Compile Include="NewClass\Location\LocationDb.cs" />
+    <Compile Include="NewClass\Location\LocationDetail.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockIn.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInDb.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />
@@ -904,9 +909,6 @@
     <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCase.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayment.cs" />
-    <Compile Include="NewClass\InStock.cs" />
-    <Compile Include="NewClass\Enum.cs" />
-    <Compile Include="NewClass\Feature.cs" />
     <Compile Include="NewClass\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Medicine\Position\PositionDb.cs" />
     <Compile Include="NewClass\Medicine\MedBag\MedBagMedicine.cs" />
@@ -2965,6 +2967,9 @@
     <Resource Include="Images\ClockIn.png" />
     <Resource Include="Images\Genders.png" />
     <Resource Include="Images\User_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\LOGO_HISPOS.png" />
