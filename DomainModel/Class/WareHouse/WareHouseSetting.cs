@@ -1,6 +1,4 @@
 ﻿using His_Pos.NewClass;
-using His_Pos.Class;
-using His_Pos.FunctionWindow;
 using System.Data;
 
 namespace His_Pos.NewClass.WareHouse
