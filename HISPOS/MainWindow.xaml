@@ -1,0 +1,522 @@
+﻿<Window
+    x:Class="His_Pos.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:AccountsManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage"
+    xmlns:AdditionalCashFlowManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage"
+    xmlns:InstitutionDeclarePointReport="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport"
+    xmlns:activityManage="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ActivityManage"
+    xmlns:addclockIn="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn"
+    xmlns:adminFunction="clr-namespace:His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction"
+    xmlns:authenticationManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage"
+    xmlns:balanceSheet="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet"
+    xmlns:cashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport"
+    xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
+    xmlns:clockInSearch="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch"
+    xmlns:closingCashSelect="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect"
+    xmlns:closingWork="clr-namespace:His_Pos.SYSTEM_TAB.H11_CLOSING.Closing"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:companyWeb="clr-namespace:His_Pos.SYSTEM_TAB.H10_WEB.CompanyWeb"
+    xmlns:controlMedicineDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare"
+    xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
+    xmlns:cooperativeEntry="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
+    xmlns:cooperativeEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntryReport"
+    xmlns:customerManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:declareFile="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage"
+    xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
+    xmlns:entrySearch="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach"
+    xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:incomeStatement="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement"
+    xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX" 
+    xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage"
+    xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
+    xmlns:prescriptionSearch="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch"
+    xmlns:productManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement"
+    xmlns:productPurchaseRecord="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
+    xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
+    xmlns:productTransaction="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction"
+    xmlns:productTransactionRecord="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord"
+    xmlns:productTypeManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage"
+    xmlns:purchaseReturnReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
+    xmlns:stockTaking="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
+    xmlns:stockTakingPlan="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan"
+    xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
+    xmlns:systemtutorial="clr-namespace:His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial"
+    xmlns:todaycashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport"
+        xmlns:newtodaycashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport"
+    xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="藥健康 HIS POS 系統"
+    Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
+    Height="{Binding Height, Source={x:Static SystemParameters.WorkArea}}"
+    MinWidth="800"
+    MinHeight="450"
+    Background="{DynamicResource MaterialDesignPaper}"
+    Closing="Window_Closing"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Loaded="Window_Loaded"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type adminFunction:AdminFunction}">
+            <adminFunction:AdminFunctionView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prescriptionDeclare:PrescriptionDeclareViewModel}">
+            <prescriptionDeclare:PrescriptionDeclareView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prescriptionSearch:PrescriptionSearchViewModel}">
+            <prescriptionSearch:PrescriptionSearchView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productManagement:ProductManagementViewModel}">
+            <productManagement:ProductManagementView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <productPurchaseReturn:ProductPurchaseReturnView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productPurchaseRecord:ProductPurchaseRecordViewModel}">
+            <productPurchaseRecord:ProductPurchaseRecordView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stockTaking:StockTakingViewModel}">
+            <stockTaking:StockTakingView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stockTakingRecord:StockTakingRecord}">
+            <stockTakingRecord:StockTakingRecordView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productTypeManage:ProductTypeManageViewModel}">
+            <productTypeManage:ProductTypeManageView />
+        </DataTemplate> 
+        <DataTemplate DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
+            <manufactoryManage:ManufactoryManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type employeeManage:EmployeeManageViewModel}">
+            <employeeManage:EmployeeManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type customerManage:CustomerManageViewModel}">
+            <customerManage:CustomerManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type workScheduleManage:WorkScheduleManage}">
+            <workScheduleManage:WorkScheduleManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type authenticationManage:AuthenticationManage}">
+            <authenticationManage:AuthenticationManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type index:Index}">
+            <index:IndexView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type declareFile:DeclareFileManageViewModel}">
+            <declareFile:DeclareFileManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type entrySearch:EntrySearchViewModel}">
+            <entrySearch:EntrySearchView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
+            <purchaseReturnReport:PurchaseReturnReportView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type cooperativeEntry:CooperativeEntry}">
+            <cooperativeEntry:CooperativeEntryView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type cashStockEntryReport:CashStockEntryReportViewModel}">
+            <cashStockEntryReport:CashStockEntryReport />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type todaycashStockEntryReport:TodayCashStockEntryReportViewModel}">
+            <todaycashStockEntryReport:TodayCashStockEntryReport />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type newtodaycashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
+            <newtodaycashStockEntryReport:NewTodayCashStockEntryReport />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type cooperativeEntryReport:CooperativeEntryReportViewModel}">
+            <cooperativeEntryReport:CooperativeEntryReport />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type controlMedicineDeclare:ControlMedicineDeclareViewModel}">
+            <controlMedicineDeclare:ControlMedicineDeclare />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type AdditionalCashFlowManage:AdditionalCashFlowManageViewModel}">
+            <AdditionalCashFlowManage:AdditionalCashFlowManage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type AccountsManage:AccountsManageViewModel}">
+            <AccountsManage:AccountsManage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type InstitutionDeclarePointReport:InstitutionDeclarePointReportViewModel}">
+            <InstitutionDeclarePointReport:InstitutionDeclarePointReport />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type stockTakingPlan:StockTakingPlanViewModel}">
+            <stockTakingPlan:StockTakingPlanView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productTransaction:ProductTransactionViewModel}">
+            <productTransaction:ProductTransactionView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type productTransactionRecord:ProductTransactionRecordViewModel}">
+            <productTransactionRecord:ProductTransactionRecordView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type activityManage:ActivityManageViewModel}">
+            <activityManage:ActivityManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type medBagManage:MedBagViewModel}">
+            <medBagManage:MedBagView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type companyWeb:CompanyWebViewModel}">
+            <companyWeb:CompanyWeb />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type systemtutorial:TutorialViewModel}">
+            <systemtutorial:Tutorial />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type incomeStatement:NewIncomeStatementViewModel}">
+            <incomeStatement:NewIncomeStatementView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type balanceSheet:BalanceSheetViewModel}">
+            <balanceSheet:BalanceSheetView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type balanceSheet:StrikeManageViewModel}">
+            <balanceSheet:StrikeManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type closingWork:ClosingWorkViewModel}">
+            <closingWork:ClosingWorkView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type closingCashSelect:ClosingCashSelectViwModel}">
+            <closingCashSelect:ClosingCashSelect />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type clockInSearch:ClockInSearchViewModel}">
+            <clockInSearch:ClockInSearchView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type addclockIn:AddClockInViewModel}">
+            <addclockIn:AddClockInView />
+        </DataTemplate>
+
+        <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border Background="Transparent" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Background="LightGray" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition />
+                    <RowDefinition Height="0" />
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="3" Background="DimGray" />
+                <Track
+                    x:Name="PART_Track"
+                    Grid.Row="1"
+                    IsDirectionReversed="True">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageUpCommand" Style="{DynamicResource ScrollBarPageButton}" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb
+                            Width="8"
+                            Margin="0"
+                            Style="{DynamicResource ScrollBarThumb}" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageDownCommand" Style="{DynamicResource ScrollBarPageButton}" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Path="ViewModelMainWindow" Source="{StaticResource Locator}" />
+    </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding InitialData}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Viewbox Stretch="Fill">
+        <xctk:BusyIndicator BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid x:Name="MainGrid" Background="#FF333337">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="230" />
+                    <ColumnDefinition Width="1365" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    x:Name="MenuStack"
+                    Grid.Column="0"
+                    Background="#FF2D2D30"
+                    Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            x:Name="SystemIcon"
+                            Width="60"
+                            Height="60"
+                            Margin="0,-2,0,5"
+                            Source="Images/LOGO_HISPOS.png" />
+                        <Label
+                            x:Name="HisSwitch"
+                            Margin="25,10,0,0"
+                            Content="調劑"
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="LightSkyBlue"
+                            MouseDown="Shortcut_OnMouseLeftButtonDown" />
+                        <Label
+                            x:Name="PosSwitch"
+                            Margin="25,10,0,0"
+                            Content="交易"
+                            FontFamily="Segoe UI Semi"
+                            FontSize="20"
+                            Foreground="Orange"
+                            MouseDown="Shortcut_OnMouseLeftButtonDown" />
+                    </StackPanel>
+                    <ScrollViewer
+                        x:Name="HisMenu"
+                        Height="760"
+                        HorizontalAlignment="Left"
+                        VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="OverridesDefaultStyle" Value="true" />
+                                <Setter Property="Width" Value="100" />
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="8" />
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{DynamicResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ScrollViewer.Resources>
+                        <StackPanel Height="Auto" Orientation="Vertical">
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature1"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature2"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature3"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature4"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature5"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature6"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature7"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature8"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature9"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature10"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature11"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                            <generalCustomControl:MenuListItem
+                                x:Name="HisFeature12"
+                                MouseDown="FeatureMouseDown"
+                                Visibility="Collapsed" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="0"
+                    VerticalAlignment="Bottom"
+                    Background="#FF333337"
+                    Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            x:Name="UserName"
+                            Width="90"
+                            Margin="10,10,0,0"
+                            FontFamily="Arial"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Foreground="White" />
+                        <Label
+                            x:Name="PharmacyName"
+                            Width="120"
+                            Margin="0,10,0,0"
+                            HorizontalContentAlignment="Right"
+                            FontSize="18"
+                            Foreground="CornflowerBlue" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Height="20"
+                            Margin="10,5,0,10"
+                            MouseLeftButtonDown="Settings_OnMouseLeftButtonDown"
+                            Source="Images/Settings.png" />
+                        <TextBlock
+                            x:Name="SystemTime"
+                            Margin="10,5,10,10"
+                            VerticalAlignment="Center"
+                            FontSize="15"
+                            Foreground="DarkGray"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+                <DockPanel Grid.Row="0" Grid.Column="1">
+                    <DockPanel.Background>
+                        <ImageBrush ImageSource="Images/tabViewBackground.jpg" />
+                    </DockPanel.Background>
+                    <chromeTabs:ChromeTabControl
+                        x:Name="Tabs"
+                        Height="900"
+                        AddTabButtonBehavior="OpenNewTab"
+                        AddTabCommand="{Binding AddTabCommand}"
+                        Background="AliceBlue"
+                        CanMoveTabs="{Binding CanMoveTabs}"
+                        CloseTabCommand="{Binding CloseTabCommand}"
+                        ContainerItemPreparedForOverride="TabControl_ContainerItemPreparedForOverride"
+                        DragWindowWithOneTab="True"
+                        IsAddButtonVisible="{Binding ShowAddButton}"
+                        ItemsSource="{Binding ItemCollection}"
+                        MaximumTabWidth="200"
+                        PinTabCommand="{Binding PinTabCommand}"
+                        PinnedTabWidth="120"
+                        ReorderTabsCommand="{Binding ReorderTabsCommand}"
+                        SelectedItem="{Binding SelectedTab}"
+                        SelectedTabBrush="White"
+                        TabPersistBehavior="All">
+                        <chromeTabs:ChromeTabControl.Template>
+                            <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
+                                <ControlTemplate.Resources>
+                                    <converters:TabPersistBehaviorToContentPresenterVisibilityConverter x:Key="TabPersistBehaviorToContentPresenterVisibilityConverter" />
+                                    <converters:TabPersistBehaviorToItemHolderVisibilityConverter x:Key="TabPersistBehaviorToItemHolderVisibilityConverter" />
+                                </ControlTemplate.Resources>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Border
+                                        Grid.Row="0"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="Gray"
+                                        BorderThickness="0,0,0,1">
+                                        <chromeTabs:ChromeTabPanel Background="{TemplateBinding Background}" IsItemsHost="True" />
+                                    </Border>
+                                    <Grid Grid.Row="1" Visibility="{TemplateBinding TabPersistBehavior, Converter={StaticResource TabPersistBehaviorToContentPresenterVisibilityConverter}}">
+                                        <ContentPresenter Content="{TemplateBinding SelectedContent}" />
+                                    </Grid>
+                                    <Grid
+                                        x:Name="PART_ItemsHolder"
+                                        Grid.Row="1"
+                                        Visibility="{TemplateBinding TabPersistBehavior,
+                                                                     Converter={StaticResource TabPersistBehaviorToItemHolderVisibilityConverter}}" />
+                                </Grid>
+                            </ControlTemplate>
+                        </chromeTabs:ChromeTabControl.Template>
+                        <chromeTabs:ChromeTabControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type chromeTabs:ChromeTabItem}}}">
+                                    <StackPanel Background="Transparent" Orientation="Horizontal">
+                                        <Image
+                                            Width="20"
+                                            Height="20"
+                                            Margin="5,2,0,0"
+                                            Source="{Binding Icon}" />
+                                        <TextBlock
+                                            Margin="10,0,0,0"
+                                            VerticalAlignment="Center"
+                                            FontFamily="Segoe UI Semibold"
+                                            FontSize="15"
+                                            Text="{Binding TabName}"
+                                            TextTrimming="CharacterEllipsis"
+                                            TextWrapping="NoWrap" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </chromeTabs:ChromeTabControl.ItemTemplate>
+                    </chromeTabs:ChromeTabControl>
+                </DockPanel>
+                <StatusBar
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Background="#FF4B4B4D">
+                    <StatusBar.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </StatusBar.ItemsPanel>
+                    <StatusBarItem>
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            FontFamily="Segoe UI Semi"
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding CardReaderStatus, UpdateSourceTrigger=PropertyChanged}" />
+                    </StatusBarItem>
+                    <StatusBarItem Grid.Column="1">
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            FontFamily="Segoe UI Semi"
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding SamDcStatus, UpdateSourceTrigger=PropertyChanged}" />
+                    </StatusBarItem>
+                    <StatusBarItem Grid.Column="2">
+                        <TextBlock
+                            Margin="10,0,0,0"
+                            FontFamily="Segoe UI Semi"
+                            FontSize="14"
+                            Foreground="White"
+                            Text="{Binding HpcCardStatus, UpdateSourceTrigger=PropertyChanged}" />
+                    </StatusBarItem>
+                </StatusBar>
+            </Grid>
+        </xctk:BusyIndicator>
+    </Viewbox>
+</Window>
