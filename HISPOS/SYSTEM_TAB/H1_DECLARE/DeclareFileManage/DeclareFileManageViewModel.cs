@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;

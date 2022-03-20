@@ -1,4 +1,4 @@
-﻿namespace His_Pos.NewClass
+﻿namespace His_Pos.Class
 {
     public class Feature
     {

@@ -341,6 +341,11 @@
     <Compile Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml.cs">
       <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewClass\Enum.cs" />
+    <Compile Include="NewClass\Feature.cs" />
+    <Compile Include="NewClass\Location\Location.cs" />
+    <Compile Include="NewClass\Location\LocationDb.cs" />
+    <Compile Include="NewClass\Location\LocationDetail.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockIn.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInDb.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />
@@ -906,9 +911,6 @@
     <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCase.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayment.cs" />
-    <Compile Include="NewClass\InStock.cs" />
-    <Compile Include="NewClass\Enum.cs" />
-    <Compile Include="NewClass\Feature.cs" />
     <Compile Include="NewClass\Medicine\Position\Position.cs" />
     <Compile Include="NewClass\Medicine\Position\PositionDb.cs" />
     <Compile Include="NewClass\Medicine\MedBag\MedBagMedicine.cs" />
@@ -956,6 +958,19 @@
       <DependentUpon>PrescriptionSearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionSearch\PrescriptionSearchViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\InsertLocationDetailWindow.xaml.cs">
+      <DependentUpon>InsertLocationDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\AddLocationWindow.xaml.cs">
+      <DependentUpon>AddLocationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\DeleteLocationWindow.xaml.cs">
+      <DependentUpon>DeleteLocationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\EditLocationWindow.xaml.cs">
+      <DependentUpon>EditLocationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagView.xaml.cs">
       <DependentUpon>MedBagView.xaml</DependentUpon>
     </Compile>
@@ -1206,6 +1221,23 @@
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\LeaveTotalControl.xaml.cs">
       <DependentUpon>LeaveTotalControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ChangeResultWindow.xaml.cs">
+      <DependentUpon>ChangeResultWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ItemChangeWindow.xaml.cs">
+      <DependentUpon>ItemChangeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationControl.xaml.cs">
+      <DependentUpon>LocationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationDetailWindow.xaml.cs">
+      <DependentUpon>LocationDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\MoveThumb.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml.cs">
+      <DependentUpon>NewLocationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ResizeThumb.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml.cs">
       <DependentUpon>LocationManageView.xaml</DependentUpon>
     </Compile>
@@ -1474,6 +1506,10 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductManagement\ProductDetail\ProductDetail.xaml.cs">
       <DependentUpon>ProductDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManage.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml.cs">
+      <DependentUpon>LocationManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="FunctionWindow\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
@@ -1835,6 +1871,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\InsertLocationDetailWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\AddLocationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\DeleteLocationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\EditLocationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\MedBagManage\MedBagView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -2128,6 +2180,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\LeaveTotalControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ChangeResultWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ItemChangeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2464,6 +2536,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\INDEX\IndexView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -2841,6 +2917,7 @@
   <ItemGroup>
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
+    <Folder Include="packages\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -2892,6 +2969,9 @@
     <Resource Include="Images\ClockIn.png" />
     <Resource Include="Images\Genders.png" />
     <Resource Include="Images\User_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\LOGO_HISPOS.png" />

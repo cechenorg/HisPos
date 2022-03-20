@@ -83,13 +83,13 @@ namespace His_Pos.FunctionWindow.VerifyPharmacyWindow
         {
             if (string.IsNullOrEmpty(VerifyNumber))
             {
-                MessageWindow.ShowMessage("請輸入認證碼", NewClass.MessageType.WARNING);
+                MessageWindow.ShowMessage("請輸入認證碼", Class.MessageType.WARNING);
                 return;
             }
             XmlDocument xml = WebApi.GetPharmacyInfoByVerify(VerifyNumber);
             if (string.IsNullOrEmpty(xml.InnerText))
             {
-                MessageWindow.ShowMessage("找不到認證藥局 請聯絡工程師", NewClass.MessageType.WARNING);
+                MessageWindow.ShowMessage("找不到認證藥局 請聯絡工程師", Class.MessageType.WARNING);
                 return;
             }
             PharmacyName = xml.SelectSingleNode("CurrentPharmacyInfo/Name").InnerText;
