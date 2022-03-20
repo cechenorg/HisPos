@@ -27,13 +27,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://kaokaodepon.singde.com.tw:46046/</InstallUrl>
+    <InstallUrl>http://kaokaodepon.singde.com.tw:60000/</InstallUrl>
     <MinimumRequiredVersion>2.10.4.2</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>4</ApplicationRevision>
-    <ApplicationVersion>2.10.4.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>3.11.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
