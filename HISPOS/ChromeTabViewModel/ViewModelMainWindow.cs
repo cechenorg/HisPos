@@ -850,7 +850,7 @@ namespace His_Pos.ChromeTabViewModel
             }
             catch (Exception ex)
             {
-                FunctionWindow.MessageWindow.ShowMessage(ex.Message, NewClass.MessageType.ERROR);
+                FunctionWindow.MessageWindow.ShowMessage(ex.Message, Class.MessageType.ERROR);
             }
     
         }

@@ -1,4 +1,4 @@
-﻿using His_Pos.NewClass;
+﻿using His_Pos.Class;
 using His_Pos.NewClass.Medicine;
 using System.Collections.ObjectModel;
 using System.Data;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
+using System;
 using System.Data;
 using System.Linq;
 

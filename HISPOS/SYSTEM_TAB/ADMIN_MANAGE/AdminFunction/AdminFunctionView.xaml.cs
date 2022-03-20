@@ -1,4 +1,5 @@
-﻿using His_Pos.FunctionWindow;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Prescription;
 using System.Windows;

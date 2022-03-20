@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.NewClass.Report.Accounts;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
 using His_Pos.Service;

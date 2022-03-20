@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace His_Pos.NewClass
+namespace His_Pos.Class
 {
     public enum InventoryDetailOverviewType
     {

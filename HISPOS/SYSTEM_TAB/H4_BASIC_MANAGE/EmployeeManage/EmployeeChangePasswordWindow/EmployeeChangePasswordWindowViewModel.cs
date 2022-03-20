@@ -68,12 +68,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeChangePasswo
         {
             if (OldPassword != EmployeeSelected.Password)
             {
-                MessageWindow.ShowMessage("舊密碼錯誤!", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("舊密碼錯誤!", Class.MessageType.ERROR);
                 return;
             }
             else if (ConfirmPassword != NewPassword)
             {
-                MessageWindow.ShowMessage("新密碼確認錯誤!", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("新密碼確認錯誤!", Class.MessageType.ERROR);
                 return;
             }
 
@@ -82,7 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeChangePasswo
             {
                 EmployeeSelected.Password = NewPassword;
                 EmployeeSelected.Update();
-                MessageWindow.ShowMessage("修改成功!", NewClass.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("修改成功!", Class.MessageType.SUCCESS);
                 Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeChangePasswordWindow"));
             }
         }

@@ -1,4 +1,4 @@
-﻿using His_Pos.NewClass;
+﻿using His_Pos.Class;
 using System;
 using System.Windows;
 using System.Windows.Input;

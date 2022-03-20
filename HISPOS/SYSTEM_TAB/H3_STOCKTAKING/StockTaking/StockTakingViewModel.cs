@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.StockTaking.StockTakingPlanProduct;
@@ -463,7 +463,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             }
             StockTakingResult.WareHouse = CurrentPlan.WareHouse;
             StockTakingResult.InsertStockTaking("盤點單盤點");
-            MessageWindow.ShowMessage("盤點完成", NewClass.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("盤點完成", Class.MessageType.SUCCESS);
             StockTakingType = StockTakingType.Choose;
         }
 
