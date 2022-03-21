@@ -305,7 +305,7 @@
                             BorderThickness="0"
                             BorderBrush="Transparent"
                             Click="btnCloud_Info_Click"
-                            Content="VPN">
+                            Content="健保VPN">
                             <!--<Image Margin="0,0,0,0" Source="/Images/cloud_info_2.png" RenderOptions.BitmapScalingMode="HighQuality" UseLayoutRounding="True" HorizontalAlignment="Center" Width="70" Height="70"/>-->
                         </Button>
                     </StackPanel>
