@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Cooperative.CooperativeInstitution;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;

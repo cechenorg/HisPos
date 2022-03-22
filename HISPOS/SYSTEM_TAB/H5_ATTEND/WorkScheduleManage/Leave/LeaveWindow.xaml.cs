@@ -1,4 +1,4 @@
-﻿using His_Pos.NewClass;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using System;
 using System.Windows;

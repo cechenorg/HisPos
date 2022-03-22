@@ -1,5 +1,5 @@
 ﻿using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.NewClass.Person.MedicalPerson.PharmacistSchedule;
 using His_Pos.Service;
 using System;

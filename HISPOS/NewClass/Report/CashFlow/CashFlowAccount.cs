@@ -1,4 +1,4 @@
-﻿using His_Pos.NewClass;
+﻿using His_Pos.Class;
 
 namespace His_Pos.NewClass.Report.CashFlow
 {

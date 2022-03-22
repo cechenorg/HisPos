@@ -304,7 +304,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteCustomer]", parameters);
                 MainWindow.ServerConnection.CloseConnection();
 
-                MessageWindow.ShowMessage("刪除成功!", NewClass.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
                 Customer = new Customer();
                 CustomerCollection = new Customers();
             }
@@ -342,7 +342,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         {
             if (string.IsNullOrEmpty(TextCusName) && TextCusBirthDay == null && string.IsNullOrEmpty(IdNumber) && string.IsNullOrEmpty(PhoneNumber))
             {
-                MessageWindow.ShowMessage("查詢欄位不可全空", NewClass.MessageType.WARNING);
+                MessageWindow.ShowMessage("查詢欄位不可全空", Class.MessageType.WARNING);
                 return;
             }
 
@@ -408,7 +408,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 {
                     if (!VerifyService.VerifyIDNumber(Customer.IDNumber))
                     {
-                        MessageWindow.ShowMessage("身分證格式錯誤!", NewClass.MessageType.ERROR);
+                        MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
                         return;
                     }
                     MainWindow.ServerConnection.OpenConnection();
@@ -418,7 +418,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                     MainWindow.ServerConnection.CloseConnection();
                     if (result.Rows.Count == 1)
                     {
-                        MessageWindow.ShowMessage("身分證已存在!", NewClass.MessageType.ERROR);
+                        MessageWindow.ShowMessage("身分證已存在!", Class.MessageType.ERROR);
                         return;
                     }
                 }
@@ -428,7 +428,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 if (dataTable.Rows.Count == 1)
                 {
                     CustomerDb.UpdateCustomerByPhone((int)dataTable.Rows[0]["Person_Id"], Customer.ID, Customer.CellPhone, Customer.Tel);
-                    MessageWindow.ShowMessage("POS顧客已併入HIS!", NewClass.MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("POS顧客已併入HIS!", Class.MessageType.SUCCESS);
                 }
 
                 if (!Customer.IsEnable)
@@ -438,7 +438,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                     {
                         Customer.Save();
                         UpdateIsEmployee();
-                        MessageWindow.ShowMessage("更新成功!", NewClass.MessageType.SUCCESS);
+                        MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
                     }
                 }
                 else
@@ -448,7 +448,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 }
 
                 InitDataChanged();
-                MessageWindow.ShowMessage("更新成功!", NewClass.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("更新成功!", Class.MessageType.SUCCESS);
             }
         }
 

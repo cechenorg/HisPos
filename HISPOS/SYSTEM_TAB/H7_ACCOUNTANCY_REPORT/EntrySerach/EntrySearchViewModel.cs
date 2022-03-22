@@ -14,7 +14,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass;
+using His_Pos.Class;
 
 
 

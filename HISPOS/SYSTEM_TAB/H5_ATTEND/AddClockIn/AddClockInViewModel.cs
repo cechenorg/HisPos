@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.ClockIn;
@@ -106,7 +106,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
             }
             if (string.IsNullOrEmpty(Employee.Password) && string.IsNullOrEmpty(Employee.Account))
             {
-                MessageWindow.ShowMessage("請輸入帳號密碼!", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("請輸入帳號密碼!", Class.MessageType.ERROR);
                 return;
             }
             else
@@ -125,7 +125,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 
             (sender as System.Windows.Controls.PasswordBox)?.Clear();
             this.Account = "";
-            MessageWindow.ShowMessage("打卡成功!!", NewClass.MessageType.SUCCESS); 
+            MessageWindow.ShowMessage("打卡成功!!", Class.MessageType.SUCCESS); 
         }
 
         #endregion ----- Define Actions -----
@@ -142,7 +142,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
             //1.如果全部都沒有,查無帳號,請確認帳號
             if (Employee.CheckEmployeeAccountSame())
             {
-                MessageWindow.ShowMessage("此帳號不存在!", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("此帳號不存在!", Class.MessageType.ERROR);
                 return false;
             }
 
@@ -153,7 +153,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
             //檢查帳密 密碼錯誤
             if (Employee == null)
             {
-                MessageWindow.ShowMessage("密碼錯誤!", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("密碼錯誤!", Class.MessageType.ERROR);
                 return false;
             }
             

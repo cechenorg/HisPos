@@ -1,5 +1,5 @@
 ﻿using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Prescription.ICCard.Upload;

@@ -1,5 +1,5 @@
 ﻿using ClosedXML.Excel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
@@ -59,7 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
                 if (dataTable is null || dataTable.Rows.Count == 0)
                 {
-                    MessageWindow.ShowMessage("刪除失敗 請稍後再試", NewClass.MessageType.ERROR);
+                    MessageWindow.ShowMessage("刪除失敗 請稍後再試", Class.MessageType.ERROR);
                     return;
                 }
             }
@@ -302,17 +302,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
                 if (dataTable is null || dataTable.Rows.Count == 0)
                 {
-                    MessageWindow.ShowMessage("查無商品 請重新輸入", NewClass.MessageType.ERROR);
+                    MessageWindow.ShowMessage("查無商品 請重新輸入", Class.MessageType.ERROR);
                     InsertID.Text = "";
                     return;
                 }
                 {
                     if (dataTable.Rows[0]["RESULT"].ToString() == "DOUBLE")
                     {
-                        MessageWindow.ShowMessage("商品已在櫃位內 請先執行刪除", NewClass.MessageType.ERROR);
+                        MessageWindow.ShowMessage("商品已在櫃位內 請先執行刪除", Class.MessageType.ERROR);
                         return;
                     }
-                    MessageWindow.ShowMessage("新增成功", NewClass.MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
                     InsertID.Text = "";
                     InitLocationDetail();
                     InitLocation();
@@ -329,7 +329,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             if (error.Length != 0)
             {
-                MessageWindow.ShowMessage(error, NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage(error, Class.MessageType.ERROR);
 
                 return false;
             }
@@ -348,11 +348,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             MainWindow.ServerConnection.CloseConnection();
             if (result is null || result.Rows.Count == 0)
             {
-                MessageWindow.ShowMessage("刪除時發生錯誤 請再試一次", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("刪除時發生錯誤 請再試一次", Class.MessageType.ERROR);
                 return;
             }
             {
-                MessageWindow.ShowMessage("刪除成功", NewClass.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("刪除成功", Class.MessageType.SUCCESS);
                 InitLocationDetail();
                 InitLocation();
             }

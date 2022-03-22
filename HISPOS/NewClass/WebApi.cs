@@ -1,6 +1,6 @@
 ﻿using System;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.NewClass.Cooperative.CooperativeClinicJson;
 using His_Pos.Service;
 using Newtonsoft.Json;
