@@ -5,11 +5,16 @@
     xmlns:balanceControl="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+    xmlns:command="http://www.galasoft.ch/mvvmlight" 
+    d:DataContext="{d:DesignInstance Type=local:BalanceSheetViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <service:NullableDateConverter x:Key="NullableDateConverter" />
         <DataTemplate x:Key="MedPointControl" DataType="UserControl">
             <balanceControl:MedPointControl />
         </DataTemplate>
@@ -44,7 +49,7 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Margin="10,0,10,10">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="70" />
+                    <RowDefinition Height="100" />
                     <RowDefinition />
                     <RowDefinition Height="50" />
                 </Grid.RowDefinitions>
@@ -59,38 +64,13 @@
                     Orientation="Horizontal">
                     <Label
                         Margin="10,0,0,0"
-                        VerticalAlignment="Center"
+                        VerticalAlignment="Top"
                         Content="資產負債表"
                         FontFamily="Segoe UI Semibold"
                         FontSize="35" />
-
-                    <!--<TextBox
-                        x:Name="tb_Value"
-                        Width="100"
-                        Margin="10,0,0,0"
-                        VerticalAlignment="Center"
-                        FontSize="18"
-                        GotFocus="tb_Value_GotFocus"
-                        InputScope="Number"
-                        Text="{Binding FirstValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        TextAlignment="Center"
-                        Visibility="Hidden" />-->
-
-                    <!--<Button
-                        Width="130"
-                        Margin="10,0,0,0"
-                        VerticalAlignment="Center"
-                        Background="RoyalBlue"
-                        BorderThickness="0"
-                        Command="{Binding FirstCommand}"
-                        Content="輸入期初"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="18"
-                        Visibility="Hidden" />-->
-
                     <Button
                         Width="130"
-                        Margin="30,0,0,0"
+                        Margin="30,-35,0,0"
                         VerticalAlignment="Center"
                         Background="RoyalBlue"
                         BorderThickness="0"
@@ -100,7 +80,7 @@
                         FontSize="18" />
                     <Button
                         Width="130"
-                        Margin="10,0,0,0"
+                        Margin="10,-35,0,0"
                         VerticalAlignment="Center"
                         Background="DimGray"
                         BorderThickness="0"
@@ -110,7 +90,7 @@
                         FontSize="18" />
                     <Button
                         Width="130"
-                        Margin="10,0,0,0"
+                        Margin="10,-35,0,0"
                         VerticalAlignment="Center"
                         Background="IndianRed"
                         BorderThickness="0"
@@ -120,7 +100,7 @@
                         FontSize="18" />
                     <Button
                         Width="130"
-                        Margin="10,0,0,0"
+                        Margin="10,-35,0,0"
                         VerticalAlignment="Center"
                         Background="DarkCyan"
                         BorderThickness="0"
@@ -128,7 +108,30 @@
                         Content="匯出Excel"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18" />
-                    
+                    <Label Name="lbEndDate" Margin="-200,65,0,0" Content="結算日期" FontSize="18" FontWeight="Black">
+                    </Label>
+                    <xctk:MaskedTextBox
+                        x:Name="EndDate"
+                        Width="100"
+                        Height="35"
+                        Margin="-130,50,0,0"
+                        HorizontalContentAlignment="Center"
+                        FontSize="16"
+                        InputMethod.IsInputMethodEnabled="False"
+                        InputScope="Number"
+                        InsertKeyMode="Overwrite"
+                        Mask="0000/00/00"
+                        PromptChar="-"
+                        Style="{StaticResource MaterialDesignTextBox}">
+                        <Binding 
+                            Mode="TwoWay"
+                            NotifyOnValidationError="True"
+                            StringFormat="yyyy/MM/dd"
+                            Path="EndDate"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True">
+                        </Binding>
+                    </xctk:MaskedTextBox>
                 </StackPanel>
                 <DataGrid
                     x:Name="dg_Left"

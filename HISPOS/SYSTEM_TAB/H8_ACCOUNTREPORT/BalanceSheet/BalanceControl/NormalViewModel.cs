@@ -7,6 +7,8 @@ using His_Pos.NewClass.Report.Accounts;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System;
+using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
@@ -29,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         private int strikeValue;
         private string target;
         public string IDClone;
+        public DateTime EndDate;
 
         public string SelectClone;
         public string SelectDetailClone;
@@ -177,7 +180,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
         #endregion ----- Define Variables -----
 
-        public NormalViewModel(string ID)
+        public NormalViewModel(string ID,DateTime endDate)
         {
             AccDataDetail = new AccountsDetailReport();
             SelectedType = new List<AccountsReports>();
@@ -195,6 +198,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
             AccData = new AccountsReport();
             IDClone = ID;
+            EndDate = endDate;
             Init();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
@@ -294,6 +298,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", IDClone));
+            parameters.Add(new SqlParameter("edate", EndDate));
             DataTable Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
             int index = 0;
             int nowindex = 0;
