@@ -166,9 +166,9 @@
                 </TextBox>
                 <Label Content="處方數" Style="{StaticResource BoldLabelContent18}" />
                 <Label
-                    Width="32"
+                    Width="40"
                     Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    Style="{StaticResource BoldLabelContent18}" Margin="0,20" />
+                    Style="{StaticResource BoldLabelContent18}"  />
                 <Button
                     Name="btnCloud_Info"
                     Width="40"
