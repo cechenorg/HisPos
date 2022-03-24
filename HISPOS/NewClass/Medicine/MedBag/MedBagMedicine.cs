@@ -134,18 +134,24 @@ namespace His_Pos.NewClass.Medicine.MedBag
             {
                 Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
                 ChiName = Strings.StrConv(m.ChineseName, VbStrConv.Narrow);
-                Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
-                SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
-                Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
-                if (m.Days is null)
-                    MedicineDays = m.Days + "天";
-                else
-                {
-                    MedicineDays = string.Empty;
-                }
+                Ingredient = Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
+                SideEffect = Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
+                Indication = Strings.StrConv(m.Indication, VbStrConv.Narrow);
+                MedicineDays = m.Days + "天";
                 Usage = string.Empty;
                 Form = string.Empty;
                 Total = m.Amount.ToString();
+                var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage;
+                if (m.ID.EndsWith("100") || m.ID.EndsWith("1G0"))
+                {
+                    Total += "粒";
+                    usagePrint += "粒";
+                }
+                else
+                {
+                    usagePrint += "(  )";
+                }
+                Usage = usagePrint;
                 Note = string.Empty;
             }
             else
@@ -154,12 +160,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
                 Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
                 SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
-                if (m.Days is null)
-                    MedicineDays = string.Empty;
-                else
-                {
-                    MedicineDays = "共" + m.Days + "天";
-                }
+                MedicineDays = "共" + m.Days + "天";
                 Dosage = string.Empty;
                 if (m.Days is null)
                     Total = m.Amount.ToString();
@@ -168,6 +169,16 @@ namespace His_Pos.NewClass.Medicine.MedBag
                     Total = m.Days + "天" + m.Amount;
                 }
                 Usage = string.Empty;
+                var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage;
+                if (m.ID.EndsWith("100") || m.ID.EndsWith("1G0"))
+                {
+                    Total += "粒";
+                    usagePrint += "粒";
+                }
+                else
+                {
+                    usagePrint += "(  )";
+                }
             }
         }
 
