@@ -134,9 +134,9 @@ namespace His_Pos.NewClass.Medicine.MedBag
             {
                 Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
                 ChiName = Strings.StrConv(m.ChineseName, VbStrConv.Narrow);
-                Ingredient = string.Empty;
-                SideEffect = string.Empty;
-                Indication = string.Empty;
+                Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
+                SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
+                Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 if (m.Days is null)
                     MedicineDays = m.Days + "天";
                 else
