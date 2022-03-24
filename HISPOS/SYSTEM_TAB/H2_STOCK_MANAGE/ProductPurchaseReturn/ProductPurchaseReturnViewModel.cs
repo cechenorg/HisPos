@@ -142,18 +142,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
                         storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
                     }
+                    //(20220324)
+                    SingdeTotalViewModel.InitData();
+                    NormalViewModel.InitData(storeOrderCollection);
+                    IsBusy = false;
+                    //
                 }
 
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
             };
 
-            initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                SingdeTotalViewModel.InitData();
-                NormalViewModel.InitData(storeOrderCollection);
-                IsBusy = false;
-            };
+            //initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
+            //{
+                //SingdeTotalViewModel.InitData();
+                //NormalViewModel.InitData(storeOrderCollection);
+                //IsBusy = false;
+            //};
         }
 
         private void InitVariables()
