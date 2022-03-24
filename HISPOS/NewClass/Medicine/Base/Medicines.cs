@@ -235,7 +235,23 @@ namespace His_Pos.NewClass.Medicine.Base
                         continue;
                 }
                 medicine.SetValueByDataRow(r);
+                AddElseValue(medicine,r);
                 Add(medicine);
+            }
+        }
+
+        private void AddElseValue(Medicine medicine,DataRow dr)
+        {
+            if(dr != null)
+            {
+                if(dr["Med_Indication"] != null)
+                {
+                    medicine.Indication = Convert.ToString(dr["Med_Indication"]);
+                }
+                if (dr["Med_Ingredient"] != null)
+                {
+                    medicine.Ingredient = Convert.ToString(dr["Med_Ingredient"]);
+                }
             }
         }
 

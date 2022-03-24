@@ -94,9 +94,9 @@ namespace His_Pos.NewClass.Medicine.MedBag
             else
             {
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
-                Ingredient = "成分:" + string.Empty;
-                SideEffect = "副作用:" + string.Empty;
-                Indication = "適應症:" + string.Empty;
+                Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
+                SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
+                Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 if (m.Days != null)
                     MedicineDays = "共" + m.Days + "天";
                 else
@@ -151,9 +151,9 @@ namespace His_Pos.NewClass.Medicine.MedBag
             else
             {
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
-                Ingredient = "成分:" + string.Empty;
-                SideEffect = "副作用:" + string.Empty;
-                Indication = "適應症:" + string.Empty;
+                Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
+                SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
+                Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 if (m.Days is null)
                     MedicineDays = string.Empty;
                 else
