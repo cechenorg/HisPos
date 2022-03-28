@@ -18,6 +18,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using DomainModel.Enum;
+using System.Threading;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -164,7 +165,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (viewModel.NewStoreOrder != null)
             {
-                storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
+                //storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
+                AddOrderByMinus();
                 CurrentStoreOrder = storeOrderCollection[0];
             }
         }
@@ -179,7 +181,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (isSuccess)
             {
-                storeOrderCollection.Remove(CurrentStoreOrder);
+                //storeOrderCollection.Remove(CurrentStoreOrder);
+                AddOrderByMinus();
                 CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
             }
         }
@@ -194,7 +197,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (isSuccess)
             {
-                storeOrderCollection.Remove(CurrentStoreOrder);
+                //storeOrderCollection.Remove(CurrentStoreOrder);
+                AddOrderByMinus();
                 CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
             }
         }
