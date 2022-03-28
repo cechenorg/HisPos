@@ -617,8 +617,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             
             
             MainWindow.ServerConnection.CloseConnection();
-            
 
+            MessageWindow.ShowMessage("匯入申報檔", MessageType.SUCCESS);
         }
 
         #endregion InitFunctions
