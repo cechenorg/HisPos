@@ -132,6 +132,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         private void ShowEntryDetailAction()
         {
+            if(SelectStockValue == null)
+                return;
+
             EntryDetailWindow.EntryDetailWindow entryDetailWindow = new EntryDetailWindow.EntryDetailWindow(SelectStockValue.Date);
         }
 
