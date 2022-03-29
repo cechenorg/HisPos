@@ -52,8 +52,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             var tempOrder = this.SingleOrDefault(s => s.OrderStatus == OrderStatusEnum.DONE);
 
-            if (tempOrder != null)
-                Remove(tempOrder);
+            //if (tempOrder != null)
+                //Remove(tempOrder);
         }
 
         internal void UpdateSingdeOrderStatus(DataTable dataTable)

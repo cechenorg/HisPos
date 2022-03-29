@@ -131,6 +131,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
+                AddOrderByMinus();
             }
         }
 
@@ -226,6 +227,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
+                AddOrderByMinus();
             }
             else
             {
@@ -416,6 +418,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
+                AddOrderByMinus();
             }
         }
 
