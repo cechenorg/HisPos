@@ -168,7 +168,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 //storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
                 AddOrderByMinus();
-                CurrentStoreOrder = storeOrderCollection[0];
+                storeOrderCollection = (StoreOrders)StoreOrderCollectionView.SourceCollection;
+                string tempId = Convert.ToString(viewModel.NewStoreOrder.ID);
+                int count = -1;
+                if(!string.IsNullOrEmpty(tempId))
+                {
+                    foreach (StoreOrder item in storeOrderCollection)
+                    {
+                        string orderId = Convert.ToString(item.ID);
+                        if (!string.IsNullOrEmpty(orderId) && tempId == orderId)
+                        {
+                            count = storeOrderCollection.IndexOf(item);
+                            break;
+                        }
+                    }
+                }
+                if(count >= 0 && count < storeOrderCollection.Count)
+                {
+                    CurrentStoreOrder = storeOrderCollection[count];
+                }
+                else
+                {
+                    CurrentStoreOrder = storeOrderCollection[0];
+                }
             }
         }
 
@@ -419,6 +441,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
                 AddOrderByMinus();
+                StoreOrderCollectionView.MoveCurrentToFirst();
             }
         }
 
