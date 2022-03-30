@@ -64,12 +64,32 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
                 Foreground="{StaticResource ForeGround}" />
-            <Label
+            <xctk:MaskedTextBox
+                Name="end"
+                Width="100"
                 HorizontalContentAlignment="Center"
-                Content="{Binding EDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
-                FontFamily="Segoe UI Semibold"
                 FontSize="18"
-                Foreground="{StaticResource ForeGround}" />
+                Foreground="{StaticResource ForeGround}"
+                InsertKeyMode="Overwrite"
+                Mask="000/00/00"
+                PreviewKeyDown="DateMaskedTextBoxOnPreviewKeyDown"
+                PromptChar="-"
+                Style="{StaticResource MaterialDesignTextBox}"
+                ValueDataType="xctk:DateTimeFormat">
+                <xctk:MaskedTextBox.Text>
+                    <Binding
+                        Converter="{StaticResource NullableDateConverter}"
+                        Mode="TwoWay"
+                        NotifyOnValidationError="True"
+                        Path="EDateTime"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
+                        <Binding.ValidationRules>
+                            <service:DateValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </xctk:MaskedTextBox.Text>
+            </xctk:MaskedTextBox>
 
             <Rectangle Width="680" />
             <Button

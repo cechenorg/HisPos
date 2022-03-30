@@ -18,7 +18,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             ControlMedicineDetail rowOne = new ControlMedicineDetail();
             rowOne.Date = sDate;
             rowOne.FinalStock = tempstock;
-            rowOne.TypeName = "上次結存";
+            rowOne.TypeName = "上期結存";
             rowOne.MedID = medId;
             Add(rowOne);
             DataTable table = ControlMedicineDetailDb.GetDataById(medId, sDate, eDate, warID);
