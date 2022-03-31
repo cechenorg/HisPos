@@ -448,6 +448,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("SideEffect", m.SideEffect),
                         new ReportParameter("Note", m.Note),
                         new ReportParameter("Usage", m.Usage),
+                        new ReportParameter("FreqRemark", m.FreqRemark),
                         new ReportParameter("MedicineDay", m.MedicineDays),
                         new ReportParameter("Amount", m.Total),
                         new ReportParameter("Form", m.Form),

@@ -705,6 +705,12 @@ namespace His_Pos.ChromeTabViewModel
                 Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).SingleOrDefault(u => u.QuickName.Equals(quickName)) : null;
         }
 
+        public static Usage FindUsageByName(string name)
+        {
+            return Usages.Where(u => !string.IsNullOrEmpty(u.Name)).Count(u => u.Name.Equals(name)) == 1 ?
+                Usages.Where(u => !string.IsNullOrEmpty(u.Name)).SingleOrDefault(u => u.Name.Equals(name)) : null;
+        }
+
         public static Position GetPosition(string id)
         {
             if (string.IsNullOrEmpty(id)) return new Position();

@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public MedBagMedicine(MedicineNHI m, bool isSingle)
         {
             Id = m.ID;
+            FreqRemark = m.Usage.FreqRemark;
             if (isSingle)
             {
                 if (m.ControlLevel > 0)
@@ -68,6 +69,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public MedBagMedicine(MedicineOTC m, bool isSingle)
         {
             Id = m.ID;
+            FreqRemark = m.Usage.FreqRemark;
             if (isSingle)
             {
                 Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
@@ -136,6 +138,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public MedBagMedicine(MedicineSpecialMaterial m, bool isSingle)
         {
             Id = m.ID;
+            FreqRemark = m.Usage.FreqRemark;
             if (isSingle)
             {
                 Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
@@ -202,6 +205,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public string Total { get; set; }
         public string Dosage { get; set; }
         public string Usage { get; set; }
+        public string FreqRemark { get; set; }
         public string Form { get; set; }
         public string Note { get; set; }
         public int Order { get; set; }
