@@ -52,7 +52,6 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="18"
                     IsEditable="True"
-                    IsTextSearchEnabled="True"
                     KeyUp="cbTargetAccount_KeyUp"
                     SelectedIndex="-1"
                     SelectionChanged="cbTargetAccount_SelectionChanged">
@@ -81,7 +80,6 @@
                     Height="45"
                     Margin="10,0,0,0"
                     IsEditable="True"
-                    IsTextSearchEnabled="True"
                     KeyUp="cbTargetAccount_KeyUp"
                     VerticalContentAlignment="Center"
                     FontSize="18"

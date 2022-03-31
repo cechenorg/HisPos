@@ -142,7 +142,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             {
                 Accounts accounts = new Accounts();
                 accounts.Accounts_ID = Convert.ToString(dr["Accounts_ID"]);
-                accounts.Accounts_Name = Convert.ToString(dr["Accounts_Name"]);
+                accounts.Accounts_Name = " " + Convert.ToString(dr["Accounts_Name"]);//預留空格，防止關鍵字搜尋帶入第一筆
+                accounts.Accounts_Merge = accounts.Accounts_ID + "-" + accounts.Accounts_Name;
                 accounts.Accounts_InsertTime = Convert.ToDateTime(dr["Accounts_InsertTime"]);
                 accounts.Accounts_Enable = Convert.ToInt32(dr["Accounts_Enable"]);
                 SourceAccounts.Add(accounts);
@@ -152,7 +153,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             {
                 Accounts accounts = new Accounts();
                 accounts.Accounts_ID = Convert.ToString(dr["Accounts_ID"]);
-                accounts.Accounts_Name = Convert.ToString(dr["Accounts_Name"]);
+                accounts.Accounts_Name = " " + Convert.ToString(dr["Accounts_Name"]);//預留空格，防止關鍵字搜尋帶入第一筆
+                accounts.Accounts_Merge = accounts.Accounts_ID + "-" + accounts.Accounts_Name;
                 accounts.Accounts_InsertTime = Convert.ToDateTime(dr["Accounts_InsertTime"]);
                 accounts.Accounts_Enable = Convert.ToInt32(dr["Accounts_Enable"]);
                 DestinationAccounts.Add(accounts);
@@ -340,7 +342,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     }
                     else
                     {
-                        if (accounts.Accounts_ID.StartsWith(cmb.Text))
+                        if (accounts.Accounts_ID.StartsWith(cmb.Text) || accounts.Accounts_Name.Contains(cmb.Text))
                         {
                             return true;
                         }
