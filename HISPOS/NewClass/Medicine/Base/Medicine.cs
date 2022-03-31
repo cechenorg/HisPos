@@ -130,11 +130,17 @@ namespace His_Pos.NewClass.Medicine.Base
             set
             {
                 Set(() => UsageName, ref usageName, value);
-                Usage = ViewModelMainWindow.FindUsageByQuickName(value);
+                Usage = ViewModelMainWindow.FindUsageByName(value);
                 if (Usage is null)
                 {
-                    Usage = ViewModelMainWindow.GetUsage(value);
-                    Usage.Name = UsageName;
+                    Usage = ViewModelMainWindow.FindUsageByQuickName(value);
+                    if (Usage is null)
+                    {
+                        Usage = ViewModelMainWindow.GetUsage(value);
+                        Usage.Name = UsageName;
+                    }
+                    else
+                        usageName = Usage.Name;
                 }
                 else
                     usageName = Usage.Name;
