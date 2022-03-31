@@ -1,6 +1,7 @@
 ﻿using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Accounts;
 using His_Pos.NewClass.BalanceSheet;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl;
 using System;
@@ -29,6 +30,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private DataTable transferAccList = new DataTable();
 
         private DataTable dgDetails = new DataTable();
+
+        public List<Accounts> SourceAccounts;
+        public List<Accounts> DestinationAccounts;
+        
 
         private int count = 0;
         private int subtotal = 0;
@@ -115,11 +120,42 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 debitAccList = results.Tables[0];
                 creditAccList = results.Tables[1];
                 transferAccList = results.Tables[2];
+                TableToType(results.Tables[0], results.Tables[1]);
+                cbTargetAccount.ItemsSource = SourceAccounts;
+                cbSourceAccount.ItemsSource = DestinationAccounts;
             }
             catch
             {
                 MessageWindow.ShowMessage("發生錯誤請再試一次", MessageType.ERROR);
                 return;
+            }
+        }
+        /// <summary>
+        /// (20220331)載入會計科目至Model
+        /// </summary>
+        /// <param name="Source_Table"></param>
+        /// <param name="Des_Table"></param>
+        private void TableToType(DataTable Source_Table,DataTable Des_Table)
+        {
+            SourceAccounts = new List<Accounts>();
+            foreach (DataRow dr in Source_Table.Rows)
+            {
+                Accounts accounts = new Accounts();
+                accounts.Accounts_ID = Convert.ToString(dr["Accounts_ID"]);
+                accounts.Accounts_Name = Convert.ToString(dr["Accounts_Name"]);
+                accounts.Accounts_InsertTime = Convert.ToDateTime(dr["Accounts_InsertTime"]);
+                accounts.Accounts_Enable = Convert.ToInt32(dr["Accounts_Enable"]);
+                SourceAccounts.Add(accounts);
+            }
+            DestinationAccounts = new List<Accounts>();
+            foreach (DataRow dr in Des_Table.Rows)
+            {
+                Accounts accounts = new Accounts();
+                accounts.Accounts_ID = Convert.ToString(dr["Accounts_ID"]);
+                accounts.Accounts_Name = Convert.ToString(dr["Accounts_Name"]);
+                accounts.Accounts_InsertTime = Convert.ToDateTime(dr["Accounts_InsertTime"]);
+                accounts.Accounts_Enable = Convert.ToInt32(dr["Accounts_Enable"]);
+                DestinationAccounts.Add(accounts);
             }
         }
 
@@ -289,27 +325,32 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void cbTargetAccount_KeyUp(object sender, KeyEventArgs e)
         {
             ComboBox cmb = (ComboBox)sender;
-            var itemsViewOriginal = CollectionViewSource.GetDefaultView(cmb.ItemsSource);
-
-            itemsViewOriginal.Filter = (o) =>
+            ICollectionView itemsViewOriginal = CollectionViewSource.GetDefaultView(cmb.ItemsSource);
+            cbTargetAccount.ItemsSource = SourceAccounts;
+            cbSourceAccount.ItemsSource = DestinationAccounts;
+            bool isFilter = itemsViewOriginal.CanFilter;
+            if (isFilter)
             {
-                if (string.IsNullOrEmpty(cmb.Text))
+                itemsViewOriginal.Filter = (o) =>
                 {
-                    return false;
-                }
-                else
-                {
-                    if (((string)o).StartsWith(cmb.Text))
+                    Accounts accounts = (Accounts)o;
+                    if (string.IsNullOrEmpty(cmb.Text))
                     {
                         return true;
                     }
                     else
                     {
-                        return false;
+                        if (accounts.Accounts_ID.StartsWith(cmb.Text))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
-                }
-            };
-
+                };
+            }
             cmb.IsDropDownOpen = true;
             itemsViewOriginal.Refresh();
         }
