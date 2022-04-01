@@ -52,10 +52,10 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="57" />
-            <RowDefinition Height="38" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
+            <RowDefinition Height="55" />
+            <RowDefinition Height="39" />
+            <RowDefinition Height="34" />
+            <RowDefinition Height="34" />
             <RowDefinition Height="700" />
         </Grid.RowDefinitions>
         <StackPanel
@@ -222,33 +222,29 @@
                     Foreground="Black" />
             </StackPanel>
         </StackPanel>
-        <StackPanel
-            Grid.Row="4"
-            Orientation="Horizontal">
-        <ContentControl Grid.Row="1" Height="700">
-                <ContentControl.Style>
-                    <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalUnProcessingControl}" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeUnProcessingControl}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="WAITING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseWaitingControl}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
-                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeProcessingControl}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
-                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>
-            </ContentControl>
-        </StackPanel>
+        <ContentControl Grid.Row="4">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalUnProcessingControl}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeUnProcessingControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="WAITING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseWaitingControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_PROCESSING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeProcessingControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
     </Grid>
 </UserControl>
