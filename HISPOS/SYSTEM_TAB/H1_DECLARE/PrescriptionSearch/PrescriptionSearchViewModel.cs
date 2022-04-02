@@ -611,10 +611,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
                 j += 300;
                 listGroup.Add(cList);
-                PrescriptionDb.ImportDeclareXml(cList, cList2, "1");
+                bool isSucess = PrescriptionDb.ImportDeclareXml(cList, cList2, "1");
+                if(isSucess == false)
+                {
+                    MainWindow.ServerConnection.CloseConnection();
+
+                    MessageWindow.ShowMessage("請勿匯入重複申報檔!!", MessageType.ERROR);
+                    return;
+                }
             }
-           
-            
             
             MainWindow.ServerConnection.CloseConnection();
 

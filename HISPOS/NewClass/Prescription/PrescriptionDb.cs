@@ -256,7 +256,7 @@ namespace His_Pos.NewClass.Prescription
             return MainWindow.ServerConnection.ExecuteProc("[Get].[RegisterPrescriptionByCusId]", parameterList);
         }
 
-        public static void ImportDeclareXml(List<ImportDeclareXml.ImportDeclareXml.Ddata> ddatas, List<string> declareFiles, string fileId)
+        public static bool ImportDeclareXml(List<ImportDeclareXml.ImportDeclareXml.Ddata> ddatas, List<string> declareFiles, string fileId)
         {
             Customers cs = new Customers();
             cs = cs.SetCustomersByPrescriptions(ddatas);
@@ -264,7 +264,11 @@ namespace His_Pos.NewClass.Prescription
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetImportDeclareXmlMaster(ddatas, declareFiles, preId, cs, fileId));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetImportDeclareXmlDetail(ddatas, preId));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
+
+            string txtResult = result.Rows[0][0].ToString();
+
+            return txtResult == "True";
         }
 
         public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)
