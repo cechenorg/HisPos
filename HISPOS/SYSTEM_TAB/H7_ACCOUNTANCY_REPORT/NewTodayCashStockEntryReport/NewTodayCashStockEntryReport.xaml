@@ -9,8 +9,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:newTodayCashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport"
     d:DesignHeight="839"
     d:DesignWidth="1365"
+    d:DataContext="{d:DesignInstance Type=newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />

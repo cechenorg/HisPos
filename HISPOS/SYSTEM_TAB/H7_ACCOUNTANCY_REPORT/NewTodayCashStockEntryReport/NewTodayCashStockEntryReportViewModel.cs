@@ -1294,7 +1294,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 Set(() => PrescriptionDetailReportSumMain, ref prescriptionDetailReportSumMain, value);
             }
-        }
+        }  
 
         public PrescriptionDetailReport PrescriptionCoopDetailReportSumMain
         {
@@ -1671,7 +1671,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         public NewTodayCashStockEntryReportViewModel()
         {
-            SearchCommand = new RelayCommand(SearchAction);
+            SearchCommand = new RelayCommand(GetData);
             SelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionSelectionChangedAction);
 
             AllPrescriptionSelectionChangedCommand = new RelayCommand(AllPrescriptionSelectionChangedAction);
@@ -2688,10 +2688,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
             CoopSelectItem = "全部";
-
-            //PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumCoopPrescriptionDetailMain();
-
+           
             SelfPrescriptionSelectedItem = null;
             CashflowSelectedItem = null;
             StockTakingSelectedItem = null;
@@ -3268,14 +3265,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CooperativePrescriptionSelectedItem = null;*/
             CashflowSelectedItem = null;
         }
-
-        private void SearchAction()
-        {
-            GetData();
-        }
-
+         
         private void GetData()
         {
+            PrescriptionDetailReportSumMain = new PrescriptionDetailReport();
+            PrescriptionCoopDetailReportSumMain = new PrescriptionDetailReport();
+            TradeDetailReportSum = new TradeProfitDetailReport();
+            StockTakingDetailReportSum = new StockTakingDetailReport();
+            StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
+
             BusyContent = "報表查詢中";
 
             MainWindow.ServerConnection.OpenConnection();
@@ -3303,26 +3301,22 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             ALLCHANGE.Merge(Ds.Tables[5]);
             ALLCHANGE.Merge(Ds.Tables[7]);
             PrescriptionDetailReportCollectionChanged = new PrescriptionDetailReports(ALLCHANGE);
-
-
-            PrescriptionDetailReportSumMain = new PrescriptionDetailReport();
-            PrescriptionCoopDetailReportSumMain = new PrescriptionDetailReport();
-            TradeDetailReportSum = new TradeProfitDetailReport();
-            StockTakingDetailReportSum = new StockTakingDetailReport();
-            StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
              
             TradeProfitDetailReportCollection = new TradeProfitDetailReports(Ds.Tables[10]);
             TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
             TradeProfitDetailReportCollectionChanged = new TradeProfitDetailReports(Ds.Tables[11]);
-            TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
             PrescriptionCoopChangeDetailReportCollectionChanged = new PrescriptionDetailReports(Ds.Tables[1]);
            
-            PrescriptionCoopDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[0]);
+           
             PrescriptionDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[4]);
             StockTakingOTCDetailReportCollection = new StockTakingOTCDetailReports(Ds.Tables[9]);
             StockTakingDetailReportCollection = new StockTakingDetailReports(Ds.Tables[8]);
 
-            TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
+            PrescriptionCoopDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[0]);
+            PrescriptionCoopDetailReportSumMain.CoopCount = PrescriptionCoopDetailReportCollection.Count();
+            PrescriptionCoopDetailReportSumMain.CoopMeduse = (int)PrescriptionCoopDetailReportCollection.Sum(s => s.Meduse);
+            PrescriptionCoopDetailReportSumMain.CoopIncome = (int)PrescriptionCoopDetailReportCollection.Sum(s => s.MedicalPoint) + (int)PrescriptionCoopDetailReportCollection.Sum(s => s.MedicalServicePoint) + (int)PrescriptionCoopDetailReportCollection.Sum(s => s.PaySelfPoint);
+
 
             TradeProfitReportSelectionChangedActionMain();
             TradeChangeReportSelectionChangedActionMain();
@@ -3720,28 +3714,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSumMain.SlowChange = tempCollectionSlowChange.Sum(s => s.Meduse + (decimal)s.MedicalServicePoint + (decimal)s.MedicalPoint + (decimal)s.PaySelfPoint);
             PrescriptionDetailReportSumMain.PaySelfChange = tempCollectionPaySelfChange.Sum(s => s.Meduse + (decimal)s.MedicalServicePoint + (decimal)s.MedicalPoint+(decimal)s.PaySelfPoint);
         }
-
-        private void SumCoopPrescriptionDetailMain()
-        {
-            //PrescriptionDetailReportSum.InsName = "總計";
-            var tempCollectionCoop = PrescriptionCoopDetailReportCollection.Where(p => true);
-            tempCollectionCoop = PrescriptionCoopDetailReportCollection;//.Where(p => p.InsName == CoopSelectItem);
-            PrescriptionCoopDetailReportSumMain.CoopCount = tempCollectionCoop.Count();
-            PrescriptionCoopDetailReportSumMain.CoopMeduse = (int)tempCollectionCoop.Sum(s => s.Meduse);
-            //PrescriptionCoopDetailReportSumMain.CoopProfit = (int)tempCollectionCoop.Sum(s => s.Profit);
-            PrescriptionCoopDetailReportSumMain.CoopIncome = (int)tempCollectionCoop.Sum(s => s.MedicalPoint) + (int)tempCollectionCoop.Sum(s => s.MedicalServicePoint) + (int)tempCollectionCoop.Sum(s => s.PaySelfPoint);
         
-
-            
-        }
-
-        //private void SumCoopPrescriptionChangeDetailMain()
-        //{
-        //    var tempCollectionCoop = PrescriptionCoopChangeDetailReportCollection.Where(p => true);
-        //    tempCollectionCoop = PrescriptionCoopChangeDetailReportCollection.Where(p => p.InsName == CoopSelectItem);
-        //    PrescriptionCoopDetailReportSumMain.CoopChange = tempCollectionCoop.Sum(s => s.Meduse);
-        //}
-
         private void SumOTCReportMainChanged(string ID)
         {
             var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => true);
