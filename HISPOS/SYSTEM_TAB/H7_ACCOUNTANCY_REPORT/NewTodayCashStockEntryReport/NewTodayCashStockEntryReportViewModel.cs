@@ -2288,14 +2288,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
             ChangeVis = Visibility.Hidden;
-
-            MainWindow.ServerConnection.OpenConnection();
-            BusyContent = "報表查詢中";
-            TradeProfitDetailReportCollection = new TradeProfitDetailReports(Ds.Tables[10]);
-            TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
-
-            MainWindow.ServerConnection.CloseConnection();
-
+             
             TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
             TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
             TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
@@ -2327,13 +2320,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             ChangeVis = Visibility.Visible;
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                BusyContent = "報表查詢中";
-                TradeProfitDetailReportCollectionChanged = new TradeProfitDetailReports(Ds.Tables[11]);
-                TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
-
-                MainWindow.ServerConnection.CloseConnection();
+            { 
                 var StringCopy = new List<string>() { };
                 foreach (var r in TradeProfitDetailReportCollectionChanged)
                 {
@@ -2374,14 +2361,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
 
-            ChangeVis = Visibility.Visible;
-
-            MainWindow.ServerConnection.OpenConnection();
-            BusyContent = "報表查詢中";
-            TradeProfitDetailReportCollectionChanged = new TradeProfitDetailReports(Ds.Tables[11]);
-            TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
-
-            MainWindow.ServerConnection.CloseConnection();
+            ChangeVis = Visibility.Visible; 
             var StringCopy = new List<string>() { };
             foreach (var r in TradeProfitDetailReportCollectionChanged)
             {
@@ -2416,12 +2396,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         private void StockTakingReportSelectionChangedAction()
         {
             CashStockEntryReportEnum = CashStockEntryReportEnum.StockTaking;
-
-            //MainWindow.ServerConnection.OpenConnection();
-
-            StockTakingDetailReportCollection = new StockTakingDetailReports(Ds.Tables[8]);
-
-            //MainWindow.ServerConnection.CloseConnection();
+             
             var CashCoopStringCopy = new List<string>() { };
             foreach (var r in StockTakingDetailReportCollection)
             {
@@ -2453,7 +2428,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CashStockEntryReportEnum = CashStockEntryReportEnum.OTCStockTaking;
 
-            StockTakingOTCDetailReportCollection = new StockTakingOTCDetailReports(Ds.Tables[9]);
             var CashCoopStringCopy = new List<string>() { };
             foreach (var r in StockTakingOTCDetailReportCollection)
             {
@@ -2646,11 +2620,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Visible;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            MainWindow.ServerConnection.OpenConnection();
-            BusyContent = "報表查詢中";
-            PrescriptionCoopDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[0]);
-
+             
             var CoopStringCopy = new List<string>() { };
             foreach (var r in PrescriptionCoopDetailReportCollection)
             {
@@ -2701,11 +2671,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Visible;
             //CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            MainWindow.ServerConnection.OpenConnection();
-
-            PrescriptionCoopDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[0]);
-
+             
             var CoopStringCopy = new List<string>() { };
             foreach (var r in PrescriptionCoopDetailReportCollection)
             {
@@ -2717,8 +2683,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 CoopString.Add(item);
             }
-
-            MainWindow.ServerConnection.CloseConnection();
+             
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
@@ -2918,11 +2883,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            MainWindow.ServerConnection.OpenConnection();
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[4]);
-            MainWindow.ServerConnection.CloseConnection();
-
+             
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
             CoopSelectItem = "全部";
@@ -3093,16 +3054,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
             var worker = new BackgroundWorker();
-
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable ALLCHANGE = new DataTable();
-            ALLCHANGE.Merge(Ds.Tables[1]);
-            ALLCHANGE.Merge(Ds.Tables[3]);
-            ALLCHANGE.Merge(Ds.Tables[5]);
-            ALLCHANGE.Merge(Ds.Tables[7]);
-            PrescriptionDetailReportCollectionChanged = new PrescriptionDetailReports(ALLCHANGE);
-            MainWindow.ServerConnection.CloseConnection();
-
+             
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollectionChanged };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
             CoopSelectItem = "全部";
@@ -3167,17 +3119,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            MainWindow.ServerConnection.OpenConnection();
-
-            DataTable ccc = new DataTable();
-            ccc.Merge(Ds.Tables[3]);
-            ccc.Merge(Ds.Tables[5]);
-            ccc.Merge(Ds.Tables[7]);
-
-            PrescriptionDetailReportCollectionChanged = new PrescriptionDetailReports(ccc);
-            MainWindow.ServerConnection.CloseConnection();
-
+             
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollectionChanged };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
             CoopSelectItem = "全部";
@@ -3231,11 +3173,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Visible;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            MainWindow.ServerConnection.OpenConnection();
-            BusyContent = "報表查詢中";
-            PrescriptionCoopChangeDetailReportCollectionChanged = new PrescriptionDetailReports(Ds.Tables[1]);
-
+             
             var CoopStringCopy = new List<string>() { };
             foreach (var r in PrescriptionCoopChangeDetailReportCollectionChanged)
             {
@@ -3246,9 +3184,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             foreach (var item in DistinctItems)
             {
                 CoopString.Add(item);
-            }
-
-            MainWindow.ServerConnection.CloseConnection();
+            } 
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopChangeDetailReportCollectionChanged };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
@@ -3340,12 +3276,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void GetData()
         {
+            BusyContent = "報表查詢中";
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", StartDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", EndDate);
             Ds = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList);
+            MainWindow.ServerConnection.CloseConnection();
+
             ddd = new DataTable();
             sss = new DataTable();
             ddd.Merge(Ds.Tables[0]);
@@ -3357,7 +3296,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             sss.Merge(Ds.Tables[6]);
             PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports(ddd);
             PrescriptionDetailReportCollection= new PrescriptionDetailReports(sss);
-            MainWindow.ServerConnection.CloseConnection();
+
+            DataTable ALLCHANGE = new DataTable();
+            ALLCHANGE.Merge(Ds.Tables[1]);
+            ALLCHANGE.Merge(Ds.Tables[3]);
+            ALLCHANGE.Merge(Ds.Tables[5]);
+            ALLCHANGE.Merge(Ds.Tables[7]);
+            PrescriptionDetailReportCollectionChanged = new PrescriptionDetailReports(ALLCHANGE);
 
 
             PrescriptionDetailReportSumMain = new PrescriptionDetailReport();
@@ -3365,8 +3310,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeDetailReportSum = new TradeProfitDetailReport();
             StockTakingDetailReportSum = new StockTakingDetailReport();
             StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
-
+             
+            TradeProfitDetailReportCollection = new TradeProfitDetailReports(Ds.Tables[10]);
+            TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
+            TradeProfitDetailReportCollectionChanged = new TradeProfitDetailReports(Ds.Tables[11]);
+            TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
+            PrescriptionCoopChangeDetailReportCollectionChanged = new PrescriptionDetailReports(Ds.Tables[1]);
            
+            PrescriptionCoopDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[0]);
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[4]);
+            StockTakingOTCDetailReportCollection = new StockTakingOTCDetailReports(Ds.Tables[9]);
+            StockTakingDetailReportCollection = new StockTakingDetailReports(Ds.Tables[8]);
+
+            TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
 
             TradeProfitReportSelectionChangedActionMain();
             TradeChangeReportSelectionChangedActionMain();

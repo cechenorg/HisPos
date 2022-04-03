@@ -2916,6 +2916,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NewClass\Report\TodayCashStockEntryReport\" />
     <Folder Include="NewClass\Trade\LeavingProductRecord\" />
     <Folder Include="NewClass\Trade\PrescriptionRecord\" />
     <Folder Include="packages\" />
