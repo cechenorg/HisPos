@@ -13,19 +13,19 @@ namespace His_Pos.NewClass.Report.DepositReport
     {
         public List<DepositReportData> DepositReportDataCollection { get; set; }
 
-        public int NormalCount
+        public int NormalDeposit
         {
-            get { return DepositReportDataCollection.Count(_ => _.AdjustCase.IsNormal()); }
+            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.IsNormal()).Sum(s => s.Deposit); }
         }
 
-        public int ChronicCount
+        public int ChronicDeposit
         {
-            get { return DepositReportDataCollection.Count(_ => _.AdjustCase.IsChronic()); }
+            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.IsChronic()).Sum(s => s.Deposit); }
         }
 
-        public int PrescribeCount
+        public int PrescribeDeposit
         {
-            get { return DepositReportDataCollection.Count(_ => _.AdjustCase.CheckIsPrescribe()); }
+            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.CheckIsPrescribe()).Sum(s => s.Deposit); }
         }
 
         public DepositReportDataList(DataTable table)
@@ -52,7 +52,7 @@ namespace His_Pos.NewClass.Report.DepositReport
              
             AdjustCase = new AdjustCase();
             AdjustCase.ID = r.Field<string>("PreMas_AdjustCaseID");
-            Deposit = Convert.ToDouble(r["CashFlow_Value"].ToString());
+            Deposit = (int)Convert.ToDouble(r["CashFlow_Value"].ToString());
         }
 
         private int _premasID;
@@ -71,9 +71,9 @@ namespace His_Pos.NewClass.Report.DepositReport
             set { Set(() => AdjustCase, ref _adjustCase, value); }
         }
 
-        private double _deposit;
+        private int _deposit;
 
-        public double Deposit
+        public int Deposit
         {
             get { return _deposit; }
             set { Set(() => Deposit, ref _deposit, value); }
