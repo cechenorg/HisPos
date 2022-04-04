@@ -32,6 +32,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -43,6 +44,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Forms;
+using His_Pos.NewClass.Report.DepositReport;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 {
@@ -1533,6 +1535,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             set
             {
                 Set(() => CashStockEntryReportEnum, ref cashStockEntryReportEnum, value);
+            }
+        }
+
+        private DepositReportDataList _depositReportDataSumMain ;
+
+        public DepositReportDataList DepositReportDataSumMain
+        {
+            get => _depositReportDataSumMain;
+            set
+            {
+                Set(() => DepositReportDataSumMain, ref _depositReportDataSumMain, value);
             }
         }
 
@@ -3318,6 +3331,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionCoopDetailReportSumMain.CoopIncome = (int)PrescriptionCoopDetailReportCollection.Sum(s => s.MedicalPoint) + (int)PrescriptionCoopDetailReportCollection.Sum(s => s.MedicalServicePoint) + (int)PrescriptionCoopDetailReportCollection.Sum(s => s.PaySelfPoint);
 
 
+            DataTable depositTable = Ds.Tables[14];
+            DepositReportDataSumMain = new DepositReportDataList(depositTable); 
+             
             TradeProfitReportSelectionChangedActionMain();
             TradeChangeReportSelectionChangedActionMain();
             
