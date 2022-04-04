@@ -2258,44 +2258,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CooperativePrescriptionSelectedItem = null;*/
             CashflowSelectedItem = null;
         }
-
-        //private void TradeProfitCostReportSelectionChangedAction()
-        //{
-        //    CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
-        //    ChangeVis = Visibility.Hidden;
-        //    var worker = new BackgroundWorker();
-        //    worker.DoWork += (o, ea) =>
-        //    {
-        //        MainWindow.ServerConnection.OpenConnection();
-        //        BusyContent = "報表查詢中";
-        //        TradeProfitDetailReportCollection = new TradeProfitDetailReports("0", StartDate, EndDate);
-        //        TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports("0", StartDate, EndDate);
-
-        //        MainWindow.ServerConnection.CloseConnection();
-        //    };
-        //    worker.RunWorkerCompleted += (o, ea) =>
-        //    {
-        //        TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
-        //        TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
-        //        TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
-
-        //        TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
-        //        //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
-        //        //SumStockTakingDetailReport();
-        //        TradeChangeSelectItem = "全部";
-        //        TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-        //        SumOTCReport("0");
-        //        TradeDetailCount = TradeProfitDetailReportCollection.Count();
-        //        TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
-        //        EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
-        //        IsBusy = false;
-        //    };
-        //    IsBusy = true;
-        //    worker.RunWorkerAsync();
-        //    /*SelfPrescriptionSelectedItem = null;
-        //    CooperativePrescriptionSelectedItem = null;*/
-        //    CashflowSelectedItem = null;
-        //}
+         
 
         private void TradeProfitReportSelectionChangedActionMain()
         {
@@ -2728,34 +2691,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CashflowSelectedItem = null;
             StockTakingSelectedItem = null;
         }
-
-        //private void SelfPrescriptionChangeSelectionChangedAction()
-        //{
-        //    CoopVis = Visibility.Collapsed;
-        //    CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-        //    var worker = new BackgroundWorker();
-        //    worker.DoWork += (o, ea) =>
-        //    {
-        //        MainWindow.ServerConnection.OpenConnection();
-
-        //        PrescriptionChangeDetailReportCollection = new PrescriptionDetailReports("11", StartDate, EndDate);
-        //        MainWindow.ServerConnection.CloseConnection();
-        //    };
-        //    worker.RunWorkerCompleted += (o, ea) =>
-        //    {
-        //        PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionChangeDetailReportCollection };
-        //        PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-        //        CoopSelectItem = "全部";
-        //        PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-        //        SumPrescriptionDetailReport();
-        //        IsBusy = false;
-        //    };
-        //    IsBusy = true;
-        //    worker.RunWorkerAsync();
-        //    CooperativePrescriptionSelectedItem = null;
-        //    CashflowSelectedItem = null;
-        //    StockTakingSelectedItem = null;
-        //}
+         
 
         /******* 各種箋明細 *******/
 

@@ -15,19 +15,25 @@ namespace His_Pos.NewClass.Report.DepositReport
 
         public int NormalDeposit
         {
-            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.IsNormal()).Sum(s => s.Deposit); }
+            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.IsNormal() && _.IsCooperative == false).Sum(s => s.Deposit); }
         }
 
         public int ChronicDeposit
         {
-            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.IsChronic()).Sum(s => s.Deposit); }
+            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.IsChronic() && _.IsCooperative == false).Sum(s => s.Deposit); }
         }
 
         public int PrescribeDeposit
         {
-            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.CheckIsPrescribe()).Sum(s => s.Deposit); }
+            get { return DepositReportDataCollection.Where(_ => _.AdjustCase.CheckIsPrescribe() && _.IsCooperative == false).Sum(s => s.Deposit); }
         }
 
+        public int CooperativeDeposit
+        {
+            get { return DepositReportDataCollection.Where(_ => _.IsCooperative).Sum(s => s.Deposit); }
+        }
+         
+        
         public DepositReportDataList(DataTable table)
         {
             DepositReportDataCollection = new List<DepositReportData>();
@@ -53,6 +59,7 @@ namespace His_Pos.NewClass.Report.DepositReport
             AdjustCase = new AdjustCase();
             AdjustCase.ID = r.Field<string>("PreMas_AdjustCaseID");
             Deposit = (int)Convert.ToDouble(r["CashFlow_Value"].ToString());
+            IsCooperative = Convert.ToInt32(r["Is_Cooperative"].ToString()) == 1;  
         }
 
         private int _premasID;
@@ -78,5 +85,14 @@ namespace His_Pos.NewClass.Report.DepositReport
             get { return _deposit; }
             set { Set(() => Deposit, ref _deposit, value); }
         }
+
+        private bool _isCooperative;
+
+        public bool IsCooperative
+        {
+            get { return _isCooperative; }
+            set { Set(() => IsCooperative, ref _isCooperative, value); }
+        }
+        
     }
 }
