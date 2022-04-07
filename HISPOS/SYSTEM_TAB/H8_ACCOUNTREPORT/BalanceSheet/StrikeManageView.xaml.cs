@@ -328,8 +328,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             ComboBox cmb = (ComboBox)sender;
             ICollectionView itemsViewOriginal = CollectionViewSource.GetDefaultView(cmb.ItemsSource);
-            cbTargetAccount.ItemsSource = SourceAccounts;
-            cbSourceAccount.ItemsSource = DestinationAccounts;
+            int dcSwitch = listDC.SelectedIndex;
+            if(dcSwitch != null && dcSwitch == 0)
+            {
+                cbTargetAccount.ItemsSource = SourceAccounts;
+                cbSourceAccount.ItemsSource = DestinationAccounts;
+            }
+            else
+            {
+                cbTargetAccount.ItemsSource = DestinationAccounts;
+                cbSourceAccount.ItemsSource = SourceAccounts;
+            }
+            
             bool isFilter = itemsViewOriginal.CanFilter;
             if (isFilter)
             {
