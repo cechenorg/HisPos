@@ -574,7 +574,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
 
             //判斷申報檔重複
             DataTable currentPreMas = PrescriptionDb.GetPrescriptionForImportXml();
-             
+
+
+
+            int totalPrescriptionCount = precriptionList.Count;
             foreach (DataRow currentPrescription in currentPreMas.Rows)
             {
                 string cusIDnumber = currentPrescription["Cus_IDNumber"].ToString();
@@ -597,11 +600,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
                     }
                 } 
             }
-             
+            int notRepeatPrescriptionCount = precriptionList.Count;
 
             if (precriptionList.Count == 0)
             {
-                MessageWindow.ShowMessage("請勿匯入重複的申報檔!", MessageType.ERROR);
+                MessageWindow.ShowMessage("此申報檔全部處方重複!", MessageType.ERROR);
                 MainWindow.ServerConnection.CloseConnection();
                 return;
             }
@@ -622,7 +625,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             
             MainWindow.ServerConnection.CloseConnection();
 
-            MessageWindow.ShowMessage("匯入申報檔", MessageType.SUCCESS);
+            MessageWindow.ShowMessage($@"欲匯入{totalPrescriptionCount}張處方箋
+            重複處方張數:{totalPrescriptionCount - notRepeatPrescriptionCount}
+            成功匯入處方張數:{notRepeatPrescriptionCount}", MessageType.SUCCESS);
         }
 
         #endregion InitFunctions
