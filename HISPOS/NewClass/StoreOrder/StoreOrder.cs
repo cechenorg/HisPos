@@ -313,16 +313,24 @@ namespace His_Pos.NewClass.StoreOrder
                     if (!(bool)confirmWindow.DialogResult)
                         return;
                     result = StoreOrderDB.PurchaseStoreOrderToDone(ID, IsPayCash);
-                    MessageWindow.ShowMessage("收貨成功!", MessageType.SUCCESS);
+                    if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                    {
+                        MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                    }
+                    else
+                    {
+                        MessageWindow.ShowMessage("收貨成功!", MessageType.SUCCESS);
+                    }
                     break;
 
                 case OrderTypeEnum.RETURN:
                     result = StoreOrderDB.ReturnStoreOrderToDone(ID);
+                    if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                    {
+                        MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                    }
                     break;
             }
-
-            if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
-                MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
         }
 
         #endregion ///// Status Function /////
