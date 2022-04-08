@@ -228,7 +228,14 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     break;
 
                 case ProductStartInputVariableEnum.PRICE:
-                    subTotal = Price * OrderAmount;
+                    if(Price > 0 && RealAmount > 0)//20220408更改成單價*實際進貨數量(原:單價*預定數量)
+                    {
+                        subTotal = Price * RealAmount;
+                    }
+                    else
+                    {
+                        subTotal = 0;
+                    }
                     break;
 
                 case ProductStartInputVariableEnum.SUBTOTAL:
