@@ -10,6 +10,7 @@
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     d:DesignHeight="450"
     d:DesignWidth="1365"
+    d:DataContext="{d:DesignInstance Type=local:NewIncomeStatementViewModel}"
     mc:Ignorable="d">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -99,21 +100,12 @@
                         Width="30"
                         Padding="0"
                         Background="Transparent"
-                        BorderThickness="0"
-                        Click="btnLeft_Click">
+                        BorderThickness="0" >
                         <Image Height="16" Source="/Images/left.png" />
                     </Button>
-                    <TextBox
-                        x:Name="tbYear"
-                        Width="100"
-                        Margin="0,0,0,0"
-                        VerticalAlignment="Center"
-                        HorizontalContentAlignment="Center"
-                        FontFamily="Segoe UI Semi"
-                        FontSize="16"
-                        Foreground="Black"
-                        GotFocus="tbYear_GotFocus"
-                        PreviewKeyDown="tbYear_PreviewKeyDown">
+                    <TextBox Text="{Binding InputYear,UpdateSourceTrigger=PropertyChanged}" 
+                             Width="100"  Margin="0,0,0,0"  VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                        FontFamily="Segoe UI Semi"  FontSize="16" Foreground="Black" GotFocus="tbYear_GotFocus" >
                         <TextBox.InputScope>
                             <InputScope>
                                 <InputScope.Names>
@@ -127,26 +119,15 @@
                         Width="30"
                         Padding="0"
                         Background="Transparent"
-                        BorderThickness="0"
-                        Click="btnRight_Click">
+                        BorderThickness="0" >
                         <Image Height="16" Source="/Images/right.png" />
                     </Button>
-                    <Button
-                        Margin="10,0,0,0"
-                        Background="RoyalBlue"
-                        BorderThickness="0"
-                        Click="Button_Click"
-                        Content="重新整理"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="17" />
-                    <Button
-                        Margin="10,0,0,0"
-                        Background="RoyalBlue"
-                        BorderThickness="0"
-                        Click="ExportExcelCommand"
-                        Content="匯出Excel"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="17" />
+                    <Button  Margin="10,0,0,0" Command="{Binding SearchCommand}"
+                        Background="RoyalBlue" BorderThickness="0"  Content="重新整理"
+                        FontFamily="Segoe UI Semibold" FontSize="17" />
+                    <Button Command="{Binding ExportCsvCommand}"
+                        Margin="10,0,0,0"  Background="RoyalBlue"  BorderThickness="0" 
+                        Content="匯出Excel"  FontFamily="Segoe UI Semibold" FontSize="17" />
                 </StackPanel>
                 <Expander
                     Grid.Row="1"
@@ -158,13 +139,10 @@
                     IsExpanded="True">
                     <StackPanel Margin="24,0,24,0" Orientation="Vertical">
                         <DataGrid
-                            x:Name="dgTotal"
-                            AutoGenerateColumns="False"
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            CanUserReorderColumns="False"
-                            CanUserResizeColumns="False"
-                            CanUserSortColumns="False"
+                            ItemsSource="{Binding TotalDataView}"
+                            AutoGenerateColumns="False" CanUserAddRows="False"
+                            CanUserDeleteRows="False" CanUserReorderColumns="False"
+                            CanUserResizeColumns="False" CanUserSortColumns="False"
                             CellStyle="{StaticResource cell}"
                             ColumnHeaderStyle="{StaticResource columnHeader}"
                             IsReadOnly="True"
@@ -172,60 +150,54 @@
                             RowStyle="{StaticResource row}"
                             SelectionUnit="Cell">
                             <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="160"
-                                    Binding="{Binding Path=MONTH}"
-                                    Header="" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JAN, StringFormat=N0}"
-                                    Header="1月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=FEB, StringFormat=N0}"
-                                    Header="2月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAR, StringFormat=N0}"
-                                    Header="3月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=APR, StringFormat=N0}"
-                                    Header="4月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAY, StringFormat=N0}"
-                                    Header="5月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUN, StringFormat=N0}"
-                                    Header="6月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUL, StringFormat=N0}"
-                                    Header="7月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=AUG, StringFormat=N0}"
-                                    Header="8月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=SEP, StringFormat=N0}"
-                                    Header="9月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=OCT, StringFormat=N0}"
-                                    Header="10月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=NOV, StringFormat=N0}"
-                                    Header="11月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=DEC, StringFormat=N0}"
-                                    Header="12月" />
-                                <DataGridTextColumn
-                                    Width="*"
+                                <DataGridTextColumn Width="160" Binding="{Binding Path=MONTH}" Header="" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JAN, StringFormat=N0}" Header="1月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUL, StringFormat=N0}" Header="7月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}" Header="8月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=SEP, StringFormat=N0}" Header="9月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=OCT, StringFormat=N0}" Header="10月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=NOV, StringFormat=N0}" Header="11月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=DEC, StringFormat=N0}" Header="12月" />
+                                <DataGridTextColumn  Width="*" Binding="{Binding Path=TOTAL, StringFormat=N0}"
+                                    CellStyle="{StaticResource totalCell}"
+                                    ElementStyle="{StaticResource totalTextBlock}"
+                                    Header="總計" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Expander>
+                <Expander  Grid.Row="2" Margin="0,20,0,0" FontSize="20"
+                    HorizontalAlignment="Stretch" Background="{x:Null}"   Header="營業毛利"
+                    HeaderTemplate="{StaticResource expanderHeader}">
+                    <StackPanel Margin="24,0,24,0" Orientation="Vertical">
+                        <DataGrid
+                            ItemsSource="{Binding IncomeDataView}"
+                            AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                            CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                            CellStyle="{StaticResource cell}" RowStyle="{StaticResource row}"
+                            ColumnHeaderStyle="{StaticResource columnHeader}"
+                            IsReadOnly="True" PreviewMouseWheel="dg_PreviewMouseWheel"
+                             SelectionUnit="Cell">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="160" Binding="{Binding Path=MONTH}" Header="" />
+                                <DataGridTextColumn Width="85"  Binding="{Binding Path=JAN, StringFormat=N0}"  Header="1月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUL, StringFormat=N0}" Header="7月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}"  Header="8月" />
+                                <DataGridTextColumn Width="85"  Binding="{Binding Path=SEP, StringFormat=N0}" Header="9月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=OCT, StringFormat=N0}"  Header="10月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=NOV, StringFormat=N0}" Header="11月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=DEC, StringFormat=N0}" Header="12月" />
+                                <DataGridTextColumn Width="*"
                                     Binding="{Binding Path=TOTAL, StringFormat=N0}"
                                     CellStyle="{StaticResource totalCell}"
                                     ElementStyle="{StaticResource totalTextBlock}"
@@ -234,169 +206,35 @@
                         </DataGrid>
                     </StackPanel>
                 </Expander>
-                <Expander
-                    Grid.Row="2"
-                    Margin="0,20,0,0"
-                    HorizontalAlignment="Stretch"
-                    Background="{x:Null}"
-                    FontSize="20"
-                    Header="營業毛利"
+                <Expander Grid.Row="3" Margin="0,20,0,0"
+                    HorizontalAlignment="Stretch" Background="{x:Null}" Header="費用"
                     HeaderTemplate="{StaticResource expanderHeader}">
                     <StackPanel Margin="24,0,24,0" Orientation="Vertical">
                         <DataGrid
-                            x:Name="dgIncome"
-                            AutoGenerateColumns="False"
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            CanUserReorderColumns="False"
-                            CanUserResizeColumns="False"
-                            CanUserSortColumns="False"
+                            ItemsSource="{Binding ExpanseDataView}"
+                            AutoGenerateColumns="False"  CanUserAddRows="False"
+                            CanUserDeleteRows="False" CanUserReorderColumns="False"
+                            CanUserResizeColumns="False" CanUserSortColumns="False"
                             CellStyle="{StaticResource cell}"
                             ColumnHeaderStyle="{StaticResource columnHeader}"
                             IsReadOnly="True"
                             PreviewMouseWheel="dg_PreviewMouseWheel"
                             RowStyle="{StaticResource row}"
                             SelectionUnit="Cell">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="160"
-                                    Binding="{Binding Path=MONTH}"
-                                    Header="" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JAN, StringFormat=N0}"
-                                    Header="1月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=FEB, StringFormat=N0}"
-                                    Header="2月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAR, StringFormat=N0}"
-                                    Header="3月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=APR, StringFormat=N0}"
-                                    Header="4月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAY, StringFormat=N0}"
-                                    Header="5月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUN, StringFormat=N0}"
-                                    Header="6月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUL, StringFormat=N0}"
-                                    Header="7月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=AUG, StringFormat=N0}"
-                                    Header="8月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=SEP, StringFormat=N0}"
-                                    Header="9月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=OCT, StringFormat=N0}"
-                                    Header="10月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=NOV, StringFormat=N0}"
-                                    Header="11月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=DEC, StringFormat=N0}"
-                                    Header="12月" />
-                                <DataGridTextColumn
-                                    Width="*"
-                                    Binding="{Binding Path=TOTAL, StringFormat=N0}"
-                                    CellStyle="{StaticResource totalCell}"
-                                    ElementStyle="{StaticResource totalTextBlock}"
-                                    Header="總計" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                </Expander>
-                <Expander
-                    Grid.Row="3"
-                    Margin="0,20,0,0"
-                    HorizontalAlignment="Stretch"
-                    Background="{x:Null}"
-                    Header="費用"
-                    HeaderTemplate="{StaticResource expanderHeader}">
-                    <StackPanel Margin="24,0,24,0" Orientation="Vertical">
-                        <DataGrid
-                            x:Name="dgExpanse"
-                            AutoGenerateColumns="False"
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            CanUserReorderColumns="False"
-                            CanUserResizeColumns="False"
-                            CanUserSortColumns="False"
-                            CellStyle="{StaticResource cell}"
-                            ColumnHeaderStyle="{StaticResource columnHeader}"
-                            IsReadOnly="True"
-                            PreviewMouseWheel="dg_PreviewMouseWheel"
-                            RowStyle="{StaticResource row}"
-                            SelectionUnit="Cell">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="160"
-                                    Binding="{Binding Path=MONTH}"
-                                    Header="" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JAN, StringFormat=N0}"
-                                    Header="1月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=FEB, StringFormat=N0}"
-                                    Header="2月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAR, StringFormat=N0}"
-                                    Header="3月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=APR, StringFormat=N0}"
-                                    Header="4月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAY, StringFormat=N0}"
-                                    Header="5月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUN, StringFormat=N0}"
-                                    Header="6月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUL, StringFormat=N0}"
-                                    Header="7月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=AUG, StringFormat=N0}"
-                                    Header="8月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=SEP, StringFormat=N0}"
-                                    Header="9月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=OCT, StringFormat=N0}"
-                                    Header="10月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=NOV, StringFormat=N0}"
-                                    Header="11月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=DEC, StringFormat=N0}"
-                                    Header="12月" />
-                                <DataGridTextColumn
-                                    Width="*"
+                            <DataGrid.Columns> <DataGridTextColumn Width="160"  Binding="{Binding Path=MONTH}" Header="" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding Path=JAN, StringFormat=N0}" Header="1月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUL, StringFormat=N0}" Header="7月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}" Header="8月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=SEP, StringFormat=N0}" Header="9月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=OCT, StringFormat=N0}" Header="10月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=NOV, StringFormat=N0}" Header="11月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=DEC, StringFormat=N0}" Header="12月" />
+                                <DataGridTextColumn  Width="*"
                                     Binding="{Binding Path=TOTAL, StringFormat=N0}"
                                     CellStyle="{StaticResource totalCell}"
                                     ElementStyle="{StaticResource totalTextBlock}"
@@ -414,13 +252,10 @@
                     HeaderTemplate="{StaticResource expanderHeader}">
                     <StackPanel Margin="24,0,24,0" Orientation="Vertical">
                         <DataGrid
-                            x:Name="dgDiff"
-                            AutoGenerateColumns="False"
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            CanUserReorderColumns="False"
-                            CanUserResizeColumns="False"
-                            CanUserSortColumns="False"
+                            ItemsSource="{Binding ClosedDataView}"
+                            AutoGenerateColumns="False" CanUserAddRows="False"
+                            CanUserDeleteRows="False"  CanUserReorderColumns="False"
+                            CanUserResizeColumns="False" CanUserSortColumns="False"
                             CellStyle="{StaticResource cell}"
                             ColumnHeaderStyle="{StaticResource columnHeader}"
                             IsReadOnly="True"
@@ -428,60 +263,20 @@
                             RowStyle="{StaticResource row}"
                             SelectionUnit="Cell">
                             <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="160"
-                                    Binding="{Binding Path=MONTH}"
-                                    Header="" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JAN, StringFormat=N0}"
-                                    Header="1月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=FEB, StringFormat=N0}"
-                                    Header="2月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAR, StringFormat=N0}"
-                                    Header="3月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=APR, StringFormat=N0}"
-                                    Header="4月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAY, StringFormat=N0}"
-                                    Header="5月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUN, StringFormat=N0}"
-                                    Header="6月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUL, StringFormat=N0}"
-                                    Header="7月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=AUG, StringFormat=N0}"
-                                    Header="8月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=SEP, StringFormat=N0}"
-                                    Header="9月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=OCT, StringFormat=N0}"
-                                    Header="10月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=NOV, StringFormat=N0}"
-                                    Header="11月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=DEC, StringFormat=N0}"
-                                    Header="12月" />
-                                <DataGridTextColumn
-                                    Width="*"
+                                <DataGridTextColumn Width="160" Binding="{Binding Path=MONTH}" Header="" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JAN, StringFormat=N0}" Header="1月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUL, StringFormat=N0}" Header="7月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}" Header="8月" />
+                                <DataGridTextColumn Width="85"  Header="9月"  Binding="{Binding Path=SEP, StringFormat=N0}"/>
+                                <DataGridTextColumn Width="85"  Header="10月" Binding="{Binding Path=OCT, StringFormat=N0}"/>
+                                <DataGridTextColumn Width="85"  Header="11月" Binding="{Binding Path=NOV, StringFormat=N0}"/>
+                                <DataGridTextColumn Width="85"  Header="12月" Binding="{Binding Path=DEC, StringFormat=N0}"/>
+                                <DataGridTextColumn Width="*"
                                     Binding="{Binding Path=TOTAL, StringFormat=N0}"
                                     CellStyle="{StaticResource totalCell}"
                                     ElementStyle="{StaticResource totalTextBlock}"
@@ -499,78 +294,30 @@
                     HeaderTemplate="{StaticResource expanderHeader}">
                     <StackPanel Margin="24,0,24,0" Orientation="Vertical">
                         <DataGrid
-                            x:Name="dgPreCount"
-                            AutoGenerateColumns="False"
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            CanUserReorderColumns="False"
-                            CanUserResizeColumns="False"
-                            CanUserSortColumns="False"
+                            ItemsSource="{Binding CountDataView}"
+                            AutoGenerateColumns="False" CanUserAddRows="False"
+                            CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
                             CellStyle="{StaticResource cell}"
                             ColumnHeaderStyle="{StaticResource columnHeader}"
-                            IsReadOnly="True"
-                            PreviewMouseWheel="dg_PreviewMouseWheel"
-                            RowStyle="{StaticResource row}"
-                            SelectionUnit="Cell">
+                            IsReadOnly="True" PreviewMouseWheel="dg_PreviewMouseWheel"
+                            RowStyle="{StaticResource row}" SelectionUnit="Cell">
                             <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Width="160"
-                                    Binding="{Binding Path=MONTH}"
-                                    Header="" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JAN, StringFormat=N0}"
-                                    Header="1月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=FEB, StringFormat=N0}"
-                                    Header="2月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAR, StringFormat=N0}"
-                                    Header="3月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=APR, StringFormat=N0}"
-                                    Header="4月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=MAY, StringFormat=N0}"
-                                    Header="5月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUN, StringFormat=N0}"
-                                    Header="6月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=JUL, StringFormat=N0}"
-                                    Header="7月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=AUG, StringFormat=N0}"
-                                    Header="8月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=SEP, StringFormat=N0}"
-                                    Header="9月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=OCT, StringFormat=N0}"
-                                    Header="10月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=NOV, StringFormat=N0}"
-                                    Header="11月" />
-                                <DataGridTextColumn
-                                    Width="85"
-                                    Binding="{Binding Path=DEC, StringFormat=N0}"
-                                    Header="12月" />
-                                <DataGridTextColumn
-                                    Width="*"
-                                    Binding="{Binding Path=TOTAL, StringFormat=N0}"
-                                    CellStyle="{StaticResource totalCell}"
-                                    ElementStyle="{StaticResource totalTextBlock}"
-                                    Header="總計" />
+                                <DataGridTextColumn Width="160" Binding="{Binding  MONTH}" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding JAN, StringFormat=N0}" Header="1月" />
+                                <DataGridTextColumn  Width="85"  Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" />
+                                <DataGridTextColumn  Width="85"  Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" />
+                                <DataGridTextColumn  Width="85"  Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" />
+                                <DataGridTextColumn  Width="85"  Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" />
+                                <DataGridTextColumn Width="85"  Binding="{Binding  JUL, StringFormat=N0}" Header="7月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}" Header="8月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=SEP, StringFormat=N0}"  Header="9月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=OCT, StringFormat=N0}" Header="10月" />
+                                <DataGridTextColumn Width="85"  Binding="{Binding Path=NOV, StringFormat=N0}" Header="11月" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding Path=DEC, StringFormat=N0}" Header="12月" />
+                                <DataGridTextColumn Width="*" Header="總計" 
+                                    Binding="{Binding TOTAL, StringFormat=N0}"
+                                    CellStyle="{StaticResource totalCell}" ElementStyle="{StaticResource totalTextBlock}" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
