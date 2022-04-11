@@ -3773,6 +3773,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TotalCashFlow.AllStock = StockTakingOTCDetailReportSum.Price + StockTakingDetailReportSum.Price;
 
             TotalCashFlow.AllProfit = (int)(TradeDetailReportSum.TotalProfit + PrescriptionDetailReportSumMain.MedTotalProfit);
+            TotalCashFlow.AllDeposit = DepositReportDataSumMain.NormalDeposit +
+                                       DepositReportDataSumMain.ChronicDeposit +
+                                       DepositReportDataSumMain.CooperativeDeposit+ DepositReportDataSumMain.PrescribeDeposit;
         }
 
         private void SumStockTakingOTCDetailReport()

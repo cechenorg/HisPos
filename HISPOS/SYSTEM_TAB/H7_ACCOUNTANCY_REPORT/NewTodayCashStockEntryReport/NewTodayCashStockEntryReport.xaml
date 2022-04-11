@@ -54,7 +54,7 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
-                Orientation="Horizontal" Margin="0,0,-0.2,399.6" Grid.RowSpan="2">
+                Orientation="Horizontal" Margin="0,0,0,400" Grid.RowSpan="2">
                 <xctk:MaskedTextBox
                     x:Name="StartDate"
                     Width="130"
@@ -84,33 +84,20 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Label
-                    VerticalAlignment="Center"
-                    Content="~"
-                    FontSize="25" />
+                <Label VerticalAlignment="Center" Content="~" FontSize="25" />
                 <xctk:MaskedTextBox
-                    x:Name="EndDate"
-                    Width="130"
-                    Margin="10,0,0,5"
-                    HorizontalContentAlignment="Center"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="27"
+                    x:Name="EndDate" Width="130" Margin="10,0,0,5" HorizontalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold" FontSize="27"
                     Foreground="{StaticResource ForeGround}"
-                    InputScope="Number"
-                    InsertKeyMode="Overwrite"
-                    Mask="000/00/00"
+                    InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00"
                     PreviewKeyDown="EndDate_PreviewKeyDown"
                     PromptChar="-"
                     Style="{StaticResource MaterialDesignTextBox}"
                     ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
-                        <Binding
-                            Converter="{StaticResource NullableDateConverter}"
-                            Mode="TwoWay"
-                            NotifyOnValidationError="True"
-                            Path="EndDate"
-                            UpdateSourceTrigger="PropertyChanged"
-                            ValidatesOnDataErrors="True">
+                        <Binding Converter="{StaticResource NullableDateConverter}"
+                            Mode="TwoWay" NotifyOnValidationError="True" Path="EndDate"
+                            UpdateSourceTrigger="PropertyChanged"  ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>
                                 <service:DateValidationRule />
                             </Binding.ValidationRules>
@@ -120,11 +107,8 @@
 
                 <Button
                     x:Name="SearchButton"
-                    Width="120"
-                    Height="35"
-                    Margin="835,0,0,0"
-                    Background="RoyalBlue"
-                    BorderThickness="0"
+                    Width="120" Height="35"
+                    Margin="875,0,0,0"  Background="RoyalBlue"  BorderThickness="0"
                     Command="{Binding SearchCommand}"
                     Content="查詢"
                     FontFamily="Segoe UI Semibold"
@@ -1119,6 +1103,16 @@
                             <Label
                                 Width="200" VerticalAlignment="Center"  HorizontalContentAlignment="Right"
                                 Content="{Binding TotalCashFlow.AllProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold"
+                                FontSize="20"  Padding="0,0,70,0"/>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="7" Grid.Column="9"  Background="Transparent" Orientation="Horizontal">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label
+                                Width="200" VerticalAlignment="Center"  HorizontalContentAlignment="Right"
+                                Content="{Binding TotalCashFlow.AllDeposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold"
                                 FontSize="20"  Padding="0,0,70,0"/>
                         </Border>
