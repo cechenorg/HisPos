@@ -1451,8 +1451,8 @@
       <DependentUpon>PayControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\PayViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\StrikeHistoryViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\StrikeHistoryWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\StrikeHistoryWindow\StrikeHistoryViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\StrikeHistoryWindow\StrikeHistoryWindow.xaml.cs">
       <DependentUpon>StrikeHistoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\NormalControl.xaml.cs">
@@ -2457,7 +2457,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\StrikeHistoryWindow.xaml">
+    <Page Include="SYSTEM_TAB\H8_ACCOUNTREPORT\BalanceSheet\BalanceControl\StrikeHistoryWindow\StrikeHistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
