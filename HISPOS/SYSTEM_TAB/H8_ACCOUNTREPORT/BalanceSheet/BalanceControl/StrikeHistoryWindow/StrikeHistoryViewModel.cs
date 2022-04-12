@@ -178,17 +178,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             SearchStrikeHistory = new RelayCommand(SearchStrikeHistoryAction);
             PrintHistory = new RelayCommand(PrintAction);
             StrikeHistories = new StrikeHistories();
-            Init();
+            GetData();
         }
-
-        private void Init()
-        {
-            GetData(true);
-        }
-
+         
         private void SearchStrikeHistoryAction()
         {
-            GetData(false);
+            GetData();
         }
 
         private void DeleteStrikeHistoryAction()
@@ -198,7 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
             MainWindow.ServerConnection.OpenConnection();
             CashReportDb.DeleteStrikeHistory(SelectedHistory);
-            Init();
+            GetData();
             MainWindow.ServerConnection.CloseConnection();
         }
 
@@ -287,7 +282,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
         }
 
-        private void GetData(bool isInit)
+        private void GetData()
         {
             StrikeHistories = new StrikeHistories();
             MainWindow.ServerConnection.OpenConnection();
@@ -306,31 +301,28 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             {
                 StrikeHistories.GetSelectData(result.Tables[0]);
 
-                if (isInit)
-                {
-                    DataRow dr1 = result.Tables[1].NewRow();
-                    dr1[0] = "";
-                    result.Tables[1].Rows.InsertAt(dr1, 0);
-                    TypeTable = result.Tables[1];
+                DataRow dr1 = result.Tables[1].NewRow();
+                dr1[0] = "";
+                result.Tables[1].Rows.InsertAt(dr1, 0);
+                TypeTable = result.Tables[1];
 
-                    DataRow dr2 = result.Tables[2].NewRow();
-                    dr2[0] = "";
-                    result.Tables[2].Rows.InsertAt(dr2, 0);
-                    SujectTable = result.Tables[2];
+                DataRow dr2 = result.Tables[2].NewRow();
+                dr2[0] = "";
+                result.Tables[2].Rows.InsertAt(dr2, 0);
+                SujectTable = result.Tables[2];
 
-                    DataRow dr3 = result.Tables[3].NewRow();
-                    dr3[0] = "";
-                    result.Tables[3].Rows.InsertAt(dr3, 0);
-                    AccountTable = result.Tables[3];
+                DataRow dr3 = result.Tables[3].NewRow();
+                dr3[0] = "";
+                result.Tables[3].Rows.InsertAt(dr3, 0);
+                AccountTable = result.Tables[3];
 
-                    DataRow dr4 = result.Tables[4].NewRow();
-                    dr4[0] = "";
-                    result.Tables[4].Rows.InsertAt(dr4, 0);
-                    EmpTable = result.Tables[4];
+                DataRow dr4 = result.Tables[4].NewRow();
+                dr4[0] = "";
+                result.Tables[4].Rows.InsertAt(dr4, 0);
+                EmpTable = result.Tables[4];
 
 
-                    ResultTable = result.Tables[0];
-                }
+                ResultTable = result.Tables[0];
 
             }
 
