@@ -686,6 +686,11 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}')");
         }
 
+        internal static DataTable GetSingdeOrderNewStatusByNo(string dateTime, string storeOrderID)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatusByNo('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}', '{storeOrderID}')");
+        }
+
         public static DataTable RemoveSingdeStoreOrderByID(string storeOrderID)
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call RemoveOrder('{ViewModelMainWindow.CurrentPharmacy.ID}', '{storeOrderID}')");

@@ -36,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private bool isBusy;
         private string busyContent;
         private BackgroundWorker initBackgroundWorker;
+        private StoreOrder currentStoreOrder;
         private StoreOrders storeOrderCollection;
         private OrderUITypeEnum uiType;
 
@@ -136,11 +137,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
 
                     BusyContent = "取得杏德訂單最新狀態...";
-                    dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
-                    if (dataTable.Rows.Count > 0)
+                    for (int i = 0; i < storeOrders.Count; i++)
                     {
-                        storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
-                        storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                        dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].ID);
+                        if (dataTable.Rows.Count > 0)
+                        {
+                            currentStoreOrder = storeOrders[i];
+                            DataRow[] dataRows = dataTable.Select();
+                            currentStoreOrder.UpdateOrderDataFromSingde(dataRows[0]);
+                            storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                        }
                     }
                     //(20220324)
                     SingdeTotalViewModel.InitData();
