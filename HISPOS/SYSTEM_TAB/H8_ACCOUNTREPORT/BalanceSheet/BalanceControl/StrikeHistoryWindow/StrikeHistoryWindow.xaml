@@ -152,7 +152,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn  Width="60" FontFamily="Segoe UI Semi" Header="類別" IsReadOnly="True"
+                <DataGridTextColumn  Width="80" FontFamily="Segoe UI Semi" Header="類別" IsReadOnly="True"
                     Binding="{Binding StrikeWay}" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
