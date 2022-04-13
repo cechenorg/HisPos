@@ -477,7 +477,7 @@
                        
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0" Height="50" VerticalAlignment="Top">
                             <Label  Width="200"   VerticalAlignment="Center"  HorizontalContentAlignment="Right"
-                                    Content="{Binding DepositReportDataSumMain.NormalDeposit}"
+                                    Content="{Binding TotalCashFlow.AllDeposit}"
                                     ContentStringFormat="{}{0:N0}"  FontFamily="Segoe UI Semibold" FontSize="20"  Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
