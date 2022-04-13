@@ -522,6 +522,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 if (tempOrder is PurchaseOrder && !string.IsNullOrEmpty((tempOrder as PurchaseOrder).PatientData) && (tempOrder as PurchaseOrder).PatientData.Contains(SearchString))
                     returnValue = true;
 
+                //預定客戶
+                if (string.IsNullOrEmpty(tempOrder.TargetPreOrderCustomer)  == false && tempOrder.TargetPreOrderCustomer.Contains(SearchString))
+                    returnValue = true;
+
+                //採購人
+                if (string.IsNullOrEmpty(tempOrder.OrderEmployeeName) == false && tempOrder.OrderEmployeeName.Contains(SearchString))
+                    returnValue = true;
+                
+
                 //Order Product ID Name Note Filter
                 //if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )
                 //{
