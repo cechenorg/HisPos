@@ -207,21 +207,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         private void CalculatePrice()
         {
-            //if (IsSingde)
-            //{
-            //    if (OrderAmount >= SingdePackageAmount && SingdePackageAmount > 0)
-            //    {
-            //        double tempTotal = (OrderAmount % SingdePackageAmount) * SingdePrice + (OrderAmount - (OrderAmount % SingdePackageAmount)) * SingdePackagePrice;
-
-            //        price = tempTotal / OrderAmount;
-            //    }
-            //    else
-            //        price = SingdePrice;
-
-            //    subTotal = Price * OrderAmount;
-            //}
-            //else
-            //{
             switch (StartInputVariable)
             {
                 case ProductStartInputVariableEnum.INIT:
@@ -230,7 +215,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 case ProductStartInputVariableEnum.PRICE:
                     if(Price > 0 && RealAmount > 0)//20220408更改成單價*實際進貨數量(原:單價*預定數量)
                     {
-                        subTotal = Price * RealAmount;
+                        decimal amt = Math.Round((Convert.ToDecimal(Price) * Convert.ToDecimal(RealAmount)),0, MidpointRounding.AwayFromZero);
+                        subTotal = Convert.ToDouble(amt);
                     }
                     else
                     {
@@ -274,11 +260,6 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                         price = SubTotal / RealAmount;
                     break;
             }
-
-            /*if (SubTotal == 0) 
-            {
-                price = 0;
-            }*/
 
             RaisePropertyChanged(nameof(Price));
             RaisePropertyChanged(nameof(SubTotal));

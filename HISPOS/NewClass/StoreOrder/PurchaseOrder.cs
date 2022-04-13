@@ -224,7 +224,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void CalculateTotalPrice()
         {
-            TotalPrice = OrderProducts.Sum(p => Math.Round(p.SubTotal));
+            TotalPrice = Math.Round(OrderProducts.Sum(p => Math.Round(p.SubTotal,2,MidpointRounding.AwayFromZero)));
         }
 
         public override void SetProductToProcessingStatus()
@@ -243,7 +243,6 @@ namespace His_Pos.NewClass.StoreOrder
         public override void GetOrderProducts()
         {
             OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
-            TotalPrice = OrderProducts.Sum(p => Math.Round(p.SubTotal));
 
             if (OrderManufactory.ID.Equals("0"))
                 // OrderProducts.SetToSingde();

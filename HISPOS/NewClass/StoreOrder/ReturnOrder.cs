@@ -5,6 +5,7 @@ using His_Pos.NewClass.Product.PurchaseReturn;
 using System.Data;
 using System.Linq;
 using DomainModel.Enum;
+using System;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -39,7 +40,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public double ReturnStockValue
         {
-            get { return returnStockValue; }
+            get { return Math.Round(returnStockValue,0); }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
 
@@ -173,8 +174,8 @@ namespace His_Pos.NewClass.StoreOrder
             if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
                 ReturnStockValue = ReturnProducts.Sum(p => p.ReturnStockValue);
 
-            TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
-
+            TotalPrice = ReturnProducts.Sum(p => Math.Round(p.SubTotal,2, MidpointRounding.AwayFromZero));
+            TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
             RaisePropertyChanged(nameof(ReturnDiff));
         }
 
