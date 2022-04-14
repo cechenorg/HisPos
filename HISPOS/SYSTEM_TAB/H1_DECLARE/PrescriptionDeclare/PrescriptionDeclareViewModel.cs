@@ -1070,13 +1070,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             currentService = PrescriptionService.CreateService(CurrentPrescription);
             if (!currentService.CheckCustomerSelected())
                 return;
+
             CheckCustomerEdited();
-            if (!CheckAdjustDate()) return;
+            if (!CheckAdjustDate()) 
+                return;
             CheckWay();
+
             isAdjusting = true;
-            if (!CheckMedicinesNegativeStock()) return;
+
+            if (!CheckMedicinesNegativeStock()) 
+                return;
+
             CheckChronicCopayment();
-            if (!CheckPrescription(false, false)) return;
+
+            if (!CheckPrescription(false, false)) 
+                return;
+
             if (VM.CurrentPharmacy.NewInstitution)
             {
                 SetNewInstitutionUploadData();
