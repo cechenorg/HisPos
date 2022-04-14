@@ -376,7 +376,7 @@
                             </DataGridTextColumn>
                             <DataGridTextColumn
                                 Width="120"
-                                Binding="{Binding Date, StringFormat='{}{0:MM/dd HH:mm}', UpdateSourceTrigger=PropertyChanged}"
+                                Binding="{Binding InsertDate, StringFormat='{}{0:MM/dd HH:mm}', UpdateSourceTrigger=PropertyChanged}"
                                 Header="登錄時間"
                                 IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
