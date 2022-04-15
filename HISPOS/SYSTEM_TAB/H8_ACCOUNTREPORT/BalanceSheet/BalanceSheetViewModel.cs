@@ -515,7 +515,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             rightAccount.Add("105", "代收-代付");
             rightAccount.Add("201", "資本-股本(登記)");
             rightAccount.Add("202", "公積及盈餘-本期損益");
-            rightAccount.Add("203", "公積及盈餘-本年損益");
+            rightAccount.Add("203", "公積及盈餘-未分配損益");
             rightAccount.Add("204", "公積及盈餘-累積盈虧");
 
             foreach (KeyValuePair<string, string> pair in rightAccount)
