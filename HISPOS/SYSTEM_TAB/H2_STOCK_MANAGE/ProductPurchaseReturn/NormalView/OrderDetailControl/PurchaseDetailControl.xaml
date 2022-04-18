@@ -8,6 +8,8 @@
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
     xmlns:purchaseDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl"
     xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:storeOrder="clr-namespace:His_Pos.NewClass.StoreOrder"
+    d:DataContext="{d:DesignInstance Type=storeOrder:PurchaseOrder}"
     DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -151,7 +153,7 @@
                 Foreground="Black" />
             <Label
                 Margin="10,0,0,0"
-                Content="預約"
+                Content="慢箋預約"
                 Foreground="Black"
                 Style="{StaticResource BoldLabelContent18}"
                 Visibility="{Binding HasCustomer, Converter={StaticResource BooleanToVisibilityConverter}}" />

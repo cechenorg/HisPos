@@ -526,6 +526,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 if (string.IsNullOrEmpty(tempOrder.TargetPreOrderCustomer)  == false && tempOrder.TargetPreOrderCustomer.Contains(SearchString))
                     returnValue = true;
 
+                //慢箋預約
+                if (tempOrder is PurchaseOrder)
+                {
+                    if(string.IsNullOrEmpty((tempOrder as PurchaseOrder).PreOrderCustomer) == false && (tempOrder as PurchaseOrder).PreOrderCustomer.Contains(SearchString))
+                        returnValue = true;
+                }
+                   
+
                 //採購人
                 if (string.IsNullOrEmpty(tempOrder.OrderEmployeeName) == false && tempOrder.OrderEmployeeName.Contains(SearchString))
                     returnValue = true;
