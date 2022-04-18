@@ -8,6 +8,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow.InsertInstitutionWindow;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.InstitutionSelectionWindow
 {
@@ -128,7 +129,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
             {
                 case 0:
                     ShowDialog = false;
-                    MessageWindow.ShowMessage("查無此院所", MessageType.WARNING);
+                    MessageWindow.ShowMessage("查無此院所,跳轉至新增院所頁面!", MessageType.WARNING);
+                    InsertInstitutionWindow.InsertInstitutionWindow insertInstitutionWindow =
+                        new InsertInstitutionWindow.InsertInstitutionWindow();
+
+                    InsertInstitutionViewModel insertInstitutionViewModel = new InsertInstitutionViewModel(){ InsID = searchText };
+
+                    insertInstitutionViewModel.SetInsertDataCallback(callbackInsID =>
+                    {
+                        ViewModelMainWindow.Institutions = new Institutions(true);
+                        SelectedInstitution = ViewModelMainWindow.Institutions.SingleOrDefault(_ => _.ID == callbackInsID);
+                        ExecuteInstitutionSelected();
+                    });
+                    insertInstitutionWindow.DataContext = insertInstitutionViewModel;
+
+                    insertInstitutionWindow.Show();
+
+
                     break;
 
                 case 1:
