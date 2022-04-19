@@ -36,7 +36,9 @@
         <DataTemplate x:Key="BankControl" DataType="UserControl">
             <balanceControl:BankControl />
         </DataTemplate>
-
+        <DataTemplate x:Key="ProductControl" DataType="UserControl">
+            <balanceControl:ProductControl />
+        </DataTemplate>
         <DataTemplate x:Key="NoControl" DataType="UserControl">
             <StackPanel Background="{StaticResource GridDarkerBackGround}" />
         </DataTemplate>
@@ -384,6 +386,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding BalanceSheetType, UpdateSourceTrigger=PropertyChanged}" Value="Bank">
                                 <Setter Property="ContentTemplate" Value="{StaticResource BankControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding BalanceSheetType, UpdateSourceTrigger=PropertyChanged}" Value="Product">
+                                <Setter Property="ContentTemplate" Value="{StaticResource ProductControl}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

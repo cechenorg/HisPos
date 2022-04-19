@@ -9,6 +9,7 @@
         Transfer = 5,
         Normal = 6,
         NormalNoEdit = 7,
-        Bank = 8
+        Bank = 8,
+        Product = 9
     }
 }

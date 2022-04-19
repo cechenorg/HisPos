@@ -1,0 +1,82 @@
+﻿<UserControl 
+    x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl.ProductControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    d:DataContext="{d:DesignData Type=local:ProductViewModel}"
+    mc:Ignorable="d">
+    <Grid DataContext="{Binding ProductViewModel}">
+        <DataGrid
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            AutoGenerateColumns="False"
+            Background="{StaticResource GridBackGround}"
+            CanUserAddRows="False"
+            CellStyle="{StaticResource DataGridCellStyle}"
+            ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            HorizontalScrollBarVisibility="Disabled"
+            ItemsSource="{Binding AccData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding DetailChangeCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Background" Value="#FFA8A8A8" />
+                    <Setter Property="Foreground" Value="#FF535353" />
+                </Style>
+                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontSize" Value="15" />
+                    <Setter Property="Height" Value="55" />
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="250"
+                    Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="Segoe UI Semibold"
+                    Header="科目"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Margin" Value="10,0,0,0" />
+                            <Setter Property="FontSize" Value="20" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="120"
+                    Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                    FontFamily="Segoe UI Semibold"
+                    Header="金額"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Margin" Value="5,0,0,0" />
+                            <Setter Property="FontSize" Value="20" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
