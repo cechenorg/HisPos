@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -77,7 +78,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Insti
             if(CheckInsInfo() == false)
                 return;
               
-            InstitutionDb.InsertInstitution(insID,insName,insAddress,insPhone);
+            InstitutionDb.InsertInstitution(insID,insName,insAddress,insPhone, ViewModelMainWindow.CurrentPharmacy.VerifyKey);
             MessageWindow.ShowMessage("新增成功",MessageType.SUCCESS);
             _insertDataCallback?.Invoke(InsID);
             window.Close();

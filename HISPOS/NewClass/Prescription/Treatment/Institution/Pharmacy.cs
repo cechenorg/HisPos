@@ -26,6 +26,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             NewInstitution = r.Field<bool>("CurPha_NewInstitution");
             GroupServerName = r.Field<string>("GroupServerName");
             TAXNUM = r.Field<string>("PHAMAS_TAXNUM");
+            VerifyKey = r.Field<string>("PHAMAS_VerifyKey"); 
         }
 
         private string id;
@@ -97,6 +98,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
         [IgnoreFormat]
         public string HISPOS_ServerName { get; set; } = "HIS_POS_Server";
+
+        [IgnoreFormat]
+        public string VerifyKey { get; set; }
         #region Function
 
         public static Pharmacy GetCurrentPharmacy()
