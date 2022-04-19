@@ -12,6 +12,9 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System;
+using System.Reflection;
+using Excel = Microsoft.Office.Interop.Excel;
+
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
@@ -30,6 +33,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         public PayViewModel PayViewModel { get; set; }
         public NormalViewModel NormalViewModel { get; set; }
         public NormalNoEditViewModel NormalNoEditViewModel { get; set; }
+        public ProductViewModel ProductViewModel { get; set; }
         public BankViewModel BankViewModel { get; set; }
 
         #endregion ----- Define ViewModels -----
@@ -171,23 +175,19 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             ExportCSVCommand = new RelayCommand(ExportCSVAction);
             ReloadAction();
         }
-
+        DataSet _outputDataSet;
         private void ExportCSVAction()
         {
-            System.Windows.Forms.SaveFileDialog diag = new System.Windows.Forms.SaveFileDialog();
-            diag.FileName =   "資產負債表.csv";
+            SaveFileDialog diag = new SaveFileDialog();
+            diag.FileName = "資產負債表.csv";
             diag.Filter = "csv (*.csv)|*.csv";
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 string filePath = diag.FileName;
-
                 string result = "科別\t項目\t金額\t\t\t科別\t項目\t金額\r\n";
-
                 int maxSize = LeftBalanceSheetDatas.Count > RightBalanceSheetDatas.Count
                     ? LeftBalanceSheetDatas.Count
                     : RightBalanceSheetDatas.Count;
-
-
                 for (int i = 0; i < maxSize; i++)
                 {
                     if (LeftBalanceSheetDatas.Count > i)
@@ -200,7 +200,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     {
                         result += $" \t\t";
                     }
-
                     result += "\t\t\t";
                     if (RightBalanceSheetDatas.Count > i)
                     {
@@ -210,9 +209,61 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     }
                     result += "\r\n";
                 }
-                 
-                File.WriteAllText(filePath, result, Encoding.Unicode);
+                result += DetailToExcel(filePath);//(20220419明細匯出)
+                try
+                {
+                    File.WriteAllText(filePath, result, Encoding.Unicode);
+                    ConfirmWindow cw = new ConfirmWindow("是否開啟檔案", "確認");//(20220419匯出完成詢問使用者是否開啟檔案)
+                    if ((bool)cw.DialogResult)
+                    {
+                        System.Diagnostics.Process.Start(filePath);
+                    }
+                }
+                catch(Exception e)
+                {
+                    MessageWindow.ShowMessage(e.Message, MessageType.WARNING);
+                }
             }
+        }
+
+        /// <summary>
+        /// 資產負債表明細匯出(20220419)
+        /// </summary>
+        /// <returns></returns>
+        private string DetailToExcel(string path)
+        {
+            bool isExist_00 = true; //正資產類      //判斷是否已加入"正資產類"
+            bool isExist_10 = true; //負資產類      //判斷是否已加入"負資產類"
+            bool isExist_20 = true; //負股東權益類  //判斷是否已加入"負股東權益類"
+            string result = "\r\n\r\n\r\n科別\t項目\t金額\r\n";
+            foreach (DataTable table in _outputDataSet.Tables)
+            {
+                string tableName = Convert.ToString(table.TableName);
+                if (tableName.Substring(0, 2) == "00" && isExist_00)
+                {
+                    result += "00" + "\t" + "正資產類" + "\t" + _amt_00 + "\r\n";
+                    isExist_00 = false;
+                }
+                if (tableName.Substring(0, 2) == "10" && isExist_10)
+                {
+                    result += "10" + "\t" + "負資產類" + "\t" + _amt_10 + "\r\n";
+                    isExist_10 = false;
+                }
+                if (tableName.Substring(0, 2) == "20" && isExist_20)
+                {
+                    result += "20" + "\t" + "負股東權益類" + "\t" + _amt_20 + "\r\n";
+                    isExist_20 = false;
+                }
+                foreach (DataRow dr in table.Rows)
+                {
+                    foreach (DataColumn dc in table.Columns)
+                    {
+                        result += dr[dc.ColumnName] + "\t";
+                    }
+                    result += "\r\n";
+                }
+            }
+            return result;
         }
 
         private void FirstAction()
@@ -273,7 +324,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             MainWindow.ServerConnection.OpenConnection();
             DataSet dataSet = GetBalanceSheet();
 
-            if (dataSet.Tables.Count != 5)
+            if (dataSet.Tables.Count != 4)
             {
                 MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
                 return;
@@ -296,10 +347,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 {
                     RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("Value");
                 }
-                if (dataSet.Tables[4] != null)
-                {
-                    MedPointViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[4]);
-                }
+                //if (dataSet.Tables[4] != null)
+                //{
+                //    MedPointViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[4]);
+                //}
             }
             MainWindow.ServerConnection.CloseConnection();
             MessageWindow.ShowMessage("載入完成。", MessageType.SUCCESS);
@@ -350,7 +401,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     {
                         if (LeftSelectedData.ID == "006")
                         {
+                            ProductViewModel = new ProductViewModel(LeftSelectedData.ID, _endDate);
                             BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                            BalanceSheetType = BalanceSheetTypeEnum.Product;
                         }
                         else if (LeftSelectedData.ID == "007")
                         {
@@ -420,8 +473,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         #endregion ----- Define Functions -----
 
         #region 資產負債表
+        decimal _amt_00;//+資產總額
+        decimal _amt_10;//-資產總額
+        decimal _amt_20;//-股東權益
         private DataSet GetBalanceSheet()
         {
+            _outputDataSet = new DataSet();
             DataSet ds = new DataSet();
             DataTable leftTable = new DataTable();//正資產--DataSet1
             DataColumn dcID = new DataColumn();
@@ -470,6 +527,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 parameters.Add(new SqlParameter("ID", pair.Key));
                 parameters.Add(new SqlParameter("edate", _endDate));
                 DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
+                table.TableName = pair.Key;
                 DataRow newRow = leftTable.NewRow();
                 newRow["ID"] = pair.Key;
                 newRow["Header"] = pair.Value;
@@ -481,8 +539,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     if (pair.Key == "004")
                     {
                         table.Columns["Name"].ColumnName = "Header";
-                        archeck = table;
+                        //archeck = table;
                     }
+                    _outputDataSet.Tables.Add(table);
                 }
                 else
                 {
@@ -496,10 +555,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             newLeftRow["Type"] = string.Empty;
             if (leftTable != null && leftTable.Rows.Count > 0)
             {
-                newLeftRow["Value"] = Convert.ToDecimal(leftTable.Compute("Sum(Value)",""));
+                _amt_00 = Convert.ToDecimal(leftTable.Compute("Sum(Value)", ""));
+                newLeftRow["Value"] = _amt_00;
             }
             else
             {
+                _amt_00 = 0;
                 newLeftRow["Value"] = 0;
             }
             leftTable.Rows.Add(newLeftRow);
@@ -524,6 +585,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 parameters.Add(new SqlParameter("ID", pair.Key));
                 parameters.Add(new SqlParameter("edate", _endDate));
                 DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
+                table.TableName = pair.Key;
                 DataRow newRow = rightTable.NewRow();
                 newRow["ID"] = pair.Key;
                 newRow["Header"] = pair.Value;
@@ -533,11 +595,13 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     decimal leftAmt = Convert.ToDecimal(leftTable.Compute("Sum(Value)", "ID = '00'"));
                     decimal rightAmt = Convert.ToDecimal(rightTable.Compute("Sum(Value)", ""));
                     newRow["Value"] = leftAmt - rightAmt;
+                    _outputDataSet.Tables.Add(table);
                 }
                 else if (table != null && table.Rows.Count > 0)
                 {
                     decimal amt = Convert.ToDecimal(table.Compute("Sum(Value)", ""));
                     newRow["Value"] = amt;
+                    _outputDataSet.Tables.Add(table);
                 }
                 else
                 {
@@ -552,10 +616,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             newRightRow["Type"] = string.Empty;
             if (rightTable != null && rightTable.Rows.Count > 0)
             {
-                newRightRow["Value"] = Convert.ToDecimal(rightTable.Compute("Sum(Value)",@"ID Like '10%'"));
+                _amt_10 = Convert.ToDecimal(rightTable.Compute("Sum(Value)", @"ID Like '10%'"));
+                newRightRow["Value"] = _amt_10;
             }
             else
             {
+                _amt_10 = 0;
                 newRightRow["Value"] = 0;
             }
             rightTable.Rows.Add(newRightRow);
@@ -565,10 +631,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             newRightRow["Type"] = string.Empty;
             if (rightTable != null && rightTable.Rows.Count > 0)
             {
-                newRightRow["Value"] = Convert.ToDecimal(rightTable.Compute("Sum(Value)", @"ID Like '20%'"));
+                _amt_20 = Convert.ToDecimal(rightTable.Compute("Sum(Value)", @"ID Like '20%'"));
+                newRightRow["Value"] = _amt_20;
             }
             else
             {
+                _amt_20 = 0;
                 newRightRow["Value"] = 0;
             }
             rightTable.Rows.Add(newRightRow);
@@ -585,9 +653,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             rightTotal.Rows.Add(rightTotalRow);
             ds.Tables.Add(rightTotal);
             #endregion
-            #region 申報應收帳款
-            ds.Tables.Add(archeck);
-            #endregion
+            //#region 申報應收帳款
+            //ds.Tables.Add(archeck);
+            //#endregion
             return ds;
         }
         #endregion
