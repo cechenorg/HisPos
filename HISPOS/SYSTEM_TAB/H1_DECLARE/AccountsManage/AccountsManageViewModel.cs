@@ -320,9 +320,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
 
         private void DeleteCashFlowRecordAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
             ConfirmWindow cw = new ConfirmWindow("是否刪除選擇項目", "確認");
             if (!(bool)cw.DialogResult) { return; }
-            MainWindow.ServerConnection.OpenConnection();
+            DataTable strikeData = AccountsDb.GetStrikeDataById(SelectedCashFlowRecord.SelectedDetail);
+            if (strikeData != null && strikeData.Rows.Count > 0)
+            {
+                MessageWindow.ShowMessage("已沖帳，請先刪除沖帳紀錄", MessageType.WARNING);
+                return;
+            }
             AccountsDb.DeleteCashFlow(SelectedCashFlowRecord.SelectedDetail);
             MainWindow.ServerConnection.CloseConnection();
             SearchAction();

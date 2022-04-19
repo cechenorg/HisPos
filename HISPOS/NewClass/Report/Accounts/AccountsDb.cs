@@ -59,5 +59,11 @@ namespace His_Pos.NewClass.Report.Accounts
             DataBaseFunction.AddSqlParameter(parameterList, "EMP", ViewModelMainWindow.CurrentUser.ID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteAccountsRecord]", parameterList);
         }
+        public static DataTable GetStrikeDataById(AccountsRecordDetail selectedDetail)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ID", selectedDetail.ID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StrikeHistoriesById]", parameterList);
+        }
     }
 }
