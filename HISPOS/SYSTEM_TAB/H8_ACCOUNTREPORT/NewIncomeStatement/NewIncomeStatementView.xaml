@@ -100,7 +100,8 @@
                         Width="30"
                         Padding="0"
                         Background="Transparent"
-                        BorderThickness="0" >
+                        BorderThickness="0"
+                        Command="{Binding btn_LeftCommand}">
                         <Image Height="16" Source="/Images/left.png" />
                     </Button>
                     <TextBox Text="{Binding InputYear,UpdateSourceTrigger=PropertyChanged}" 
@@ -119,7 +120,8 @@
                         Width="30"
                         Padding="0"
                         Background="Transparent"
-                        BorderThickness="0" >
+                        BorderThickness="0"
+                        Command="{Binding btn_RightCommand}">
                         <Image Height="16" Source="/Images/right.png" />
                     </Button>
                     <Button  Margin="10,0,0,0" Command="{Binding SearchCommand}"

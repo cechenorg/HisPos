@@ -87,7 +87,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
             get { return _closedDataView; }
             set { Set(() => ClosedDataView, ref _closedDataView, value); }
         }
-        
+        public RelayCommand btn_LeftCommand { get; set; }
+        public RelayCommand btn_RightCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
 
         public RelayCommand ExportCsvCommand { get; set; }
@@ -98,8 +99,19 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement
             SearchData();
             SearchCommand = new RelayCommand(SearchAction);
             ExportCsvCommand = new RelayCommand(ExportCsvAction);
+            btn_LeftCommand = new RelayCommand(btnLeftClick);
+            btn_RightCommand = new RelayCommand(btnRightClick);
         }
-
+        private void btnLeftClick()
+        {
+            InputYear -= 1;
+            GetData(InputYear);
+        }
+        private void btnRightClick()
+        {
+            InputYear += 1;
+            GetData(InputYear);
+        }
         private void ExportCsvAction()
         {
             System.Windows.Forms.SaveFileDialog diag = new System.Windows.Forms.SaveFileDialog();
