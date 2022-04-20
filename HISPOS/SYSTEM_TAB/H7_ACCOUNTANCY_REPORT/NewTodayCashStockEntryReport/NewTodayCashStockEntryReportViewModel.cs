@@ -415,16 +415,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             }
         }
 
-        private PrescriptionProfitReport selfPrescriptionSelectedItem;
-
-        public PrescriptionProfitReport SelfPrescriptionSelectedItem
-        {
-            get => selfPrescriptionSelectedItem;
-            set
-            {
-                Set(() => SelfPrescriptionSelectedItem, ref selfPrescriptionSelectedItem, value);
-            }
-        }
+        
 
         private PrescriptionProfitReport cooperativePrescriptionSelectedItem;
 
@@ -552,9 +543,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             }
         }
 
-        public StockTakingReports TotalStockTakingReportCollection { get; set; } = new StockTakingReports();
-
-        //9.3新增^^^^
+         
 
         //9.4新增
         private StockTakingReport stockTakingSelectedItem;
@@ -830,8 +819,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 Set(() => TotalStockTakingOTCReport, ref totalStockTakingOTCReport, value);
             }
         }
-
-        public StockTakingOTCReports TotalStockTakingOTCReportCollection { get; set; } = new StockTakingOTCReports();
+         
 
         private StockTakingOTCReport stockTakingOTCSelectedItem;
 
@@ -946,7 +934,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             }
         }
 
-        public RewardReports TotalRewardReportCollection { get; set; } = new RewardReports();
+        
 
         private RewardReport rewardSelectedItem;
 
@@ -1613,8 +1601,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         #region Command
 
         public RelayCommand SelfPrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand CooperativePrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand SelfPrescriptionChangeSelectionChangedCommand { get; set; }
+        public RelayCommand CooperativePrescriptionSelectionChangedCommand { get; set; } 
         public RelayCommand CooperativePrescriptionChangeSelectionChangedCommand { get; set; }
         public RelayCommand CashDetailMouseDoubleClickCommand { get; set; }
         public RelayCommand CashSelectionChangedCommand { get; set; }
@@ -1630,19 +1617,16 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand StockTakingReportSelectionChangedCommand { get; set; }
         public RelayCommand StockTakingDetailClickCommand { get; set; }
         public RelayCommand StockTakingOTCReportSelectionChangedCommand { get; set; }
-        public RelayCommand StockTakingOTCDetailClickCommand { get; set; }
-        public RelayCommand StockTakingDetailMedicineDoubleClickCommand { get; set; }
+        public RelayCommand StockTakingOTCDetailClickCommand { get; set; } 
         public RelayCommand TradeProfitReportSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitDetailClickCommand { get; set; }
         public RelayCommand TradeProfitDetailDoubleClickCommand { get; set; }
         public RelayCommand TradeProfitDetailEmpClickCommand { get; set; }
         public RelayCommand ExtraMoneyReportSelectionChangedCommand { get; set; }
-        public RelayCommand ExtraMoneyDetailClickCommand { get; set; }
-        public RelayCommand<string> ChangeUiTypeCommand { get; set; }
+        public RelayCommand ExtraMoneyDetailClickCommand { get; set; } 
 
         public RelayCommand RewardReportSelectionChangedCommand { get; set; }
-
-        public RelayCommand TradeProfitCostReportSelectionChangedCommand { get; set; }
+         
 
         public RelayCommand RewardDetailClickCommand { get; set; }
         public RelayCommand RewardDetailMedicineDoubleClickCommand { get; set; }
@@ -2472,8 +2456,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             IsBusy = true;
             worker.RunWorkerAsync();
 
-            CooperativePrescriptionSelectedItem = null;
-            SelfPrescriptionSelectedItem = null;
+            CooperativePrescriptionSelectedItem = null; 
             StockTakingSelectedItem = null;
         }
 
@@ -2517,8 +2500,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             IsBusy = true;
             worker.RunWorkerAsync();
 
-            CooperativePrescriptionSelectedItem = null;
-            SelfPrescriptionSelectedItem = null;
+            CooperativePrescriptionSelectedItem = null; 
             StockTakingSelectedItem = null;
         }
 
@@ -2563,8 +2545,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             IsBusy = true;
             worker.RunWorkerAsync();
 
-            CooperativePrescriptionSelectedItem = null;
-            SelfPrescriptionSelectedItem = null;
+            CooperativePrescriptionSelectedItem = null; 
             StockTakingSelectedItem = null;
         }
 
@@ -2616,8 +2597,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
             SumCoopPrescriptionDetailReport();
-
-            SelfPrescriptionSelectedItem = null;
+             
             CashflowSelectedItem = null;
             StockTakingSelectedItem = null;
         }
@@ -2664,8 +2644,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
             CoopSelectItem = "全部";
-           
-            SelfPrescriptionSelectedItem = null;
+            
             CashflowSelectedItem = null;
             StockTakingSelectedItem = null;
         }
@@ -3109,8 +3088,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             AdjustCaseSelectItem = "全部";
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
             SumCoopChangePrescriptionDetailReport();
-
-            SelfPrescriptionSelectedItem = null;
+             
             CashflowSelectedItem = null;
             StockTakingSelectedItem = null;
         }
@@ -3139,8 +3117,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
             SumCoopChangePrescriptionDetailReport();
             //SumCoopPrescriptionChangeDetailMain();
-
-            SelfPrescriptionSelectedItem = null;
+             
             CashflowSelectedItem = null;
             StockTakingSelectedItem = null;
         }
@@ -3174,9 +3151,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 IsBusy = false;
             };
             IsBusy = true;
-            worker.RunWorkerAsync();
-            /*SelfPrescriptionSelectedItem = null;
-            CooperativePrescriptionSelectedItem = null;*/
+            worker.RunWorkerAsync(); 
             CashflowSelectedItem = null;
         }
 
