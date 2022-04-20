@@ -1,5 +1,6 @@
 ﻿using His_Pos.Service;
 using System.Data;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
@@ -9,7 +10,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
         }
 
-        public PurchaseOTC(DataRow dataRow) : base(dataRow)
+        public PurchaseOTC(DataRow dataRow, OrderStatusEnum orderStatus) : base(dataRow, orderStatus)
         {
         }
 

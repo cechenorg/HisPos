@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
@@ -169,14 +170,18 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double SingdePrice { get; }
         public int SingdeStock { get; }
 
+        public OrderStatusEnum OrderStatus { get; }
+
         #endregion ----- Define Variables -----
 
         public PurchaseProduct() : base()
         {
         }
 
-        public PurchaseProduct(DataRow dataRow) : base(dataRow)
+        public PurchaseProduct(DataRow dataRow, OrderStatusEnum orderStatus) : base(dataRow)
         {
+            OrderStatus = orderStatus;
+
             Type = dataRow.Field<int>("Pro_TypeID");
             WareHouseID = dataRow.Field<int>("ProInv_WareHouseID");
             Inventory = dataRow.Field<double>("Inv_Inventory");
@@ -213,17 +218,22 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     break;
 
                 case ProductStartInputVariableEnum.PRICE:
-                    if(Price > 0 && RealAmount > 0)//20220408更改成單價*實際進貨數量(原:單價*預定數量)
+                    subTotal = 0;
+
+                    //key單時 => 小計 = 單價*預定數量
+                    if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING ||
+                        OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+                    {
+                        decimal amt = Math.Round((Convert.ToDecimal(Price) * Convert.ToDecimal(OrderAmount)), 0, MidpointRounding.AwayFromZero);
+                        subTotal = Convert.ToDouble(amt);
+                    } 
+                    else//收貨時 => 小計 = 單價*實際進貨數量
                     {
                         decimal amt = Math.Round((Convert.ToDecimal(Price) * Convert.ToDecimal(RealAmount)),0, MidpointRounding.AwayFromZero);
                         subTotal = Convert.ToDouble(amt);
                     }
-                    else
-                    {
-                        subTotal = 0;
-                    }
-                    break;
-
+                   
+                    break; 
                 case ProductStartInputVariableEnum.SUBTOTAL:
                     if (RealAmount <= 0)
                         price = 0;

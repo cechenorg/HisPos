@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
@@ -11,7 +12,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
         }
 
-        private PurchaseProducts(DataTable dataTable)
+        private PurchaseProducts(DataTable dataTable, OrderStatusEnum orderStatus)
         {
             string lastID = "";
 
@@ -22,11 +23,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                 switch (row.Field<string>("TYPE"))
                 {
                     case "O":
-                        purchaseProduct = new PurchaseOTC(row);
+                        purchaseProduct = new PurchaseOTC(row, orderStatus);
                         break;
 
                     case "M":
-                        purchaseProduct = new PurchaseMedicine(row);
+                        purchaseProduct = new PurchaseMedicine(row, orderStatus);
                         break;
 
                     default:
@@ -43,9 +44,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             }
         }
 
-        internal static PurchaseProducts GetProductsByStoreOrderID(string orederID)
+        internal static PurchaseProducts GetProductsByStoreOrderID(string orederID, OrderStatusEnum orderStatus)
         {
-            return new PurchaseProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID));
+            return new PurchaseProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID), orderStatus);
         }
 
         internal static bool UpdateSingdeProductsByStoreOrderID(string orederID, string receiveID)

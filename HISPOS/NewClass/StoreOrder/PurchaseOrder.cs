@@ -233,16 +233,15 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         public override int GetOrderProductsIsOTC()
-        {
-            PurchaseProducts purchaseProductsOTC = new PurchaseProducts();
-            purchaseProductsOTC = PurchaseProducts.GetProductsByStoreOrderID(ID);
+        { 
+            PurchaseProducts purchaseProductsOTC = PurchaseProducts.GetProductsByStoreOrderID(ID, OrderStatus);
             int type = purchaseProductsOTC[0].Type;
             return type;
         }
 
         public override void GetOrderProducts()
         {
-            OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
+            OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID, OrderStatus );
 
             if (OrderManufactory.ID.Equals("0"))
                 // OrderProducts.SetToSingde();
@@ -270,11 +269,11 @@ namespace His_Pos.NewClass.StoreOrder
             switch (dataTable.Rows[0].Field<string>("TYPE"))
             {
                 case "O":
-                    purchaseProduct = new PurchaseOTC(dataTable.Rows[0]);
+                    purchaseProduct = new PurchaseOTC(dataTable.Rows[0], OrderStatus);
                     break;
 
                 case "M":
-                    purchaseProduct = new PurchaseMedicine(dataTable.Rows[0]);
+                    purchaseProduct = new PurchaseMedicine(dataTable.Rows[0], OrderStatus);
                     break;
 
                 default:
