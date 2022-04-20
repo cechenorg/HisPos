@@ -3186,33 +3186,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
             SumAllProfit();
         }
 
-        //private void GetInventoryDifference()
-        //{
-        //    var table = CashReportDb.GetInventoryDifferenceByDate(StartDate, EndDate);
-        //    if (table.Rows.Count > 0)
-        //    {
-        //        InventoryDifference = new InventoryDifference(table.Rows[0]);
-        //    }
-        //}
-
-        //private void RevertSelfPrescriptionProfitByEditRecords()
-        //{
-        //    foreach (var s in SelfPrescriptionProfitReportCollection)
-        //    {
-        //        var editRecords = PrescriptionPointEditRecords.Where(r => r.TypeID.EndsWith(s.TypeId));
-        //        if (editRecords.Any())
-        //        {
-        //            var medicalServicePoint = editRecords.Sum(e => e.MedicalServiceDifference) * -1;
-        //            var medicinePoint = editRecords.Sum(e => e.MedicineDifference) * -1;
-        //            var paySelfPoint = editRecords.Sum(e => e.PaySelfDifference) * -1;
-        //            var profit = editRecords.Sum(e => e.ProfitDifference) * -1;
-        //            s.MedicalServicePoint += medicalServicePoint;
-        //            s.MedicinePoint += medicinePoint;
-        //            s.PaySelfPoint += paySelfPoint;
-        //            s.Profit += profit;
-        //        }
-        //    }
-        //}
+        
 
         private void SumCashDetailReport()
         {
