@@ -2084,7 +2084,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             //SumStockTakingDetailReport();
             TradeChangeSelectItem = "全部";
             TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-            SumOTCReportMain("0");
+            SumOTCReportMain();
             TradeDetailCount = TradeProfitDetailReportCollection.Count();
             TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
             EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
@@ -2130,7 +2130,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 //SumStockTakingDetailReport();
                 TradeChangeSelectItem = "全部";
                 TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-                SumOTCReportMainChanged("1");
+                SumOTCReportMainChanged();
                 TradeDetailCount = TradeProfitDetailReportCollectionChanged.Count();
                 TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
                 EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
@@ -3468,40 +3468,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSumMain.PaySelfChange = tempCollectionPaySelfChange.Sum(s => s.Meduse + (decimal)s.MedicalServicePoint + (decimal)s.MedicalPoint+(decimal)s.PaySelfPoint);
         }
         
-        private void SumOTCReportMainChanged(string ID)
+        private void SumOTCReportMainChanged( )
         {
-            var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => true);
-            tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
-            TradeDetailReportSum.TotalChange = tempCollection.Sum(s => s.Profit);
+             var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
 
-            TradeDetailReportSum.CardAmount = tempCollection.Sum(s => s.CardAmount);
-            TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
-            TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
-            TradeDetailReportSum.PrePay = tempCollection.Sum(s => s.PrePay); //0809
-            TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
-
-            TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
-            TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
+             TradeDetailReportSum.SumOTCReport(tempCollection); 
         }
 
-        private void SumOTCReportMain(string ID)
-        {
-            var tempCollection = TradeProfitDetailReportCollection.Where(p => true);
-
-            tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId == "1"));
-            TradeDetailReportSum.CardAmount = tempCollection.Sum(s => s.CardAmount);
-            TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
-            TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => s.DiscountAmt);
-            TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
-            TradeDetailReportSum.PrePay = tempCollection.Sum(s => s.PrePay); //0806
-            TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
-            TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.RealTotal);
-            TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => s.ValueDifference);
-            TradeDetailReportSum.CardFee = tempCollection.Sum(s => s.CardFee);
-            TradeDetailReportSum.Count = tempCollection.Count();
-            //TradeDetailReportSum.TotalCost = TradeDetailReportSum.Profit - TradeDetailReportSum.RealTotal;
-            TradeDetailReportSum.TotalCost = (int)tempCollection.Sum(s => s.ValueDifference);
-            TradeDetailReportSum.DiscountAmtMinus = -TradeDetailReportSum.DiscountAmt;
+        private void SumOTCReportMain()
+        { 
+            var tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId == "1"));
+            TradeDetailReportSum.SumOTCReport(tempCollection); 
         }
 
         private void SumOTCReportChangeMain(string ID)
@@ -3530,20 +3507,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 {
                     tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId == TradeChangeSelectItem));
                 }
-            }
-            TradeDetailReportSum.CardAmount = tempCollection.Sum(s => s.CardAmount);
-            TradeDetailReportSum.CashAmount = tempCollection.Sum(s => s.CashAmount);
-            TradeDetailReportSum.DiscountAmt = tempCollection.Sum(s => s.DiscountAmt);
-            TradeDetailReportSum.CashCoupon = tempCollection.Sum(s => s.CashCoupon);
-            TradeDetailReportSum.PrePay = tempCollection.Sum(s => s.PrePay); //0809
-            TradeDetailReportSum.Profit = tempCollection.Sum(s => s.Profit);
-            //TradeDetailReportSum.RealTotal = tempCollection.Sum(s => (int)s.RealTotal);
-            TradeDetailReportSum.RealTotal = tempCollection.Sum(s => s.CardAmount) + tempCollection.Sum(s => s.CashAmount) + tempCollection.Sum(s => s.DiscountAmt) + tempCollection.Sum(s => s.CashCoupon) + tempCollection.Sum(s => s.PrePay);
-            TradeDetailReportSum.ValueDifference = tempCollection.Sum(s => (int)s.ValueDifference);
-            TradeDetailReportSum.CardFee = tempCollection.Sum(s => (int)s.CardFee);
-            TradeDetailReportSum.Count = tempCollection.Count();
-            //TradeDetailReportSum.ValueDifference = TradeDetailReportSum.Profit - TradeDetailReportSum.RealTotal;
-            TradeDetailReportSum.DiscountAmtMinus = -TradeDetailReportSum.DiscountAmt;
+            } 
+            TradeDetailReportSum.SumOTCReport(tempCollection);
+          
         }
 
         private void SumOTCProfit()

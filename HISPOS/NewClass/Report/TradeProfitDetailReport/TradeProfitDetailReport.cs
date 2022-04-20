@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace His_Pos.NewClass.Report.TradeProfitDetailReport
 {
@@ -194,5 +196,29 @@ namespace His_Pos.NewClass.Report.TradeProfitDetailReport
                 Set(() => TotalProfit, ref totalProfit, value);
             }
         }
+
+        public void SumOTCReport(IEnumerable<TradeProfitDetailReport> tradeProfitDetails)
+        {
+            CardAmount = tradeProfitDetails.Sum(s => s.CardAmount);
+            CashAmount = tradeProfitDetails.Sum(s => s.CashAmount);
+            DiscountAmt = tradeProfitDetails.Sum(s => s.DiscountAmt);
+            CashCoupon = tradeProfitDetails.Sum(s => s.CashCoupon);
+            PrePay = tradeProfitDetails.Sum(s => s.PrePay); //0806
+            Profit = tradeProfitDetails.Sum(s => s.Profit); 
+            ValueDifference = tradeProfitDetails.Sum(s => s.ValueDifference);
+            CardFee = tradeProfitDetails.Sum(s => s.CardFee);
+            Count = tradeProfitDetails.Count();
+            TotalCost = (int)tradeProfitDetails.Sum(s => s.ValueDifference);
+            DiscountAmtMinus = DiscountAmt * -1;
+             
+            RealTotal = tradeProfitDetails.Sum(s => s.CardAmount) +
+                        tradeProfitDetails.Sum(s => s.CashAmount) +
+                        tradeProfitDetails.Sum(s => s.DiscountAmt) +
+                        tradeProfitDetails.Sum(s => s.CashCoupon) +
+                        tradeProfitDetails.Sum(s => s.PrePay); 
+             
+        }
+
+       
     }
 }
