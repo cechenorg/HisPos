@@ -1,11 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using His_Pos.Database;
-using His_Pos.NewClass.Report.PrescriptionDetailReport.PrescriptionDetailMedicineRepot;
-using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
-using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.TodayEntryDetailControl;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
+﻿using System.Data; 
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -46,105 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 SearchButton.Focus();
             }
         }
-
-        private void DataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (!e.Handled)
-            {
-                e.Handled = true;
-                var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
-                eventArg.RoutedEvent = MouseWheelEvent;
-                eventArg.Source = sender;
-                var parent = ((Control)sender).Parent as UIElement;
-                parent?.RaiseEvent(eventArg);
-            }
-        }
-        private void ShowProductDetail(object sender, MouseButtonEventArgs e)
-        {
-            DataGridRow row = sender as DataGridRow;
-
-            if (row?.Item is null) return;
-
-            ProductDetailWindow.ShowProductDetailWindow();
-
-            Messenger.Default.Send(new NotificationMessage<string>(this, ((PrescriptionDetailMedicineRepot)row.Item).Id, "ShowProductDetail"));
-        }
-        private void btnMed_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-          
-        }
-
-        private void btnTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            
-        }
-
-        private void btnAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-           
-        }
-
-        private void OTCMain_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            /*btnTrade.Background = Brushes.DarkGray;
-            btnTrade.Foreground = Brushes.White;
-            btnMed.Foreground = Brushes.DarkGray;
-            btnMed.Background = Brushes.Transparent;
-            btnAll.Background = Brushes.Transparent;
-            btnAll.Foreground = Brushes.DarkGray;
-            Med.Visibility = Visibility.Collapsed;
-            OTC.Visibility = Visibility.Visible;
-            All.Visibility = Visibility.Collapsed;
-            OTCTradeBack.Background = Brushes.DarkGray;
-            OTCCostBack.Background = Brushes.GhostWhite;
-            OTCStockBack.Background = Brushes.GhostWhite;
-            OTCRewardBack.Background = Brushes.GhostWhite;
-            MedPreBack.Background = Brushes.GhostWhite;
-            MedCashBack.Background = Brushes.GhostWhite;
-            MedCostBack.Background = Brushes.GhostWhite;
-            MedStockBack.Background = Brushes.GhostWhite;*/
-        }
-
-        private void MedMain_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            /*btnTrade.Background = Brushes.Transparent;
-            btnTrade.Foreground = Brushes.DarkGray;
-            btnMed.Foreground = Brushes.White;
-            btnMed.Background = Brushes.DarkGray;
-            btnAll.Background = Brushes.Transparent;
-            btnAll.Foreground = Brushes.DarkGray;
-            Med.Visibility = Visibility.Visible;
-            OTC.Visibility = Visibility.Collapsed;
-            All.Visibility = Visibility.Collapsed;
-            MedPreBack.Background = Brushes.DarkGray;
-            MedCashBack.Background = Brushes.GhostWhite;
-            MedCostBack.Background = Brushes.GhostWhite;
-            MedStockBack.Background = Brushes.GhostWhite;
-            OTCTradeBack.Background = Brushes.GhostWhite;
-            OTCCostBack.Background = Brushes.GhostWhite;
-            OTCStockBack.Background = Brushes.GhostWhite;
-            OTCRewardBack.Background = Brushes.GhostWhite;*/
-        }
-
-        private void MedPre_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-           
-        }
-
-        private void MedCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-         
-        }
-
-        private void MedCash_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-           
-        }
-
-        private void MedStock_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-           
-        }
+ 
 
         private void OTCTrade_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -174,990 +69,178 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
           
         }
-
-        private void MedCoopPreBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            
-        }
-
-        private void MedSelfPreBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-           
-        }
-
-        private void MedCostCoopBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            
-        }
-
-        private void MedCostSelfBack_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-          
-        }
-
-        private void MedCashNotCoop_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-          
-        }
-
-        private void MedCashCoop_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            
-        }
-
-        private void MedChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-          
-        }
-
-        private void MedCoopChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-           
-        }
-
-        private void StackPanel_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
+         
 
         private void OTCAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.DarkGray;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
-
-
-
+            SetUITransparent();
+            OTCAll.Background = Brushes.DarkGray; 
         }
 
         private void OTCIncome_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.DarkGray;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            OTCIncome.Background = Brushes.DarkGray; 
         }
 
         private void OTCCost_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.DarkGray;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            OTCCost.Background = Brushes.DarkGray; 
         }
 
         private void OTCChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.DarkGray;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            OTCChange.Background = Brushes.DarkGray; 
         }
 
-        private void OTCStock_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
-        {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.DarkGray;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
-
-        }
-
+        
         private void OTCStockChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.DarkGray;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
-
+            SetUITransparent();
+            OTCStockChange.Background = Brushes.DarkGray;  
         }
-
-        private void OTCTicket_PreviewMouseDown_1(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
+         
         private void OTCTicketDis_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.DarkGray;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
-
+            SetUITransparent();
+            OTCTicketDis.Background = Brushes.DarkGray;  
         }
 
         private void OTCRewardEmp_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.DarkGray;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
-
+            SetUITransparent();
+            OTCRewardEmp.Background = Brushes.DarkGray;  
         }
 
         private void PREAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.DarkGray;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            PREAll.Background = Brushes.DarkGray; 
         }
 
         private void PREIncome_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.DarkGray;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            PREIncome.Background = Brushes.DarkGray; 
         }
 
         private void PRECost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.DarkGray;
-            PREChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            PRECost.Background = Brushes.DarkGray; 
         }
 
         private void PREChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.DarkGray;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            PREChange.Background = Brushes.DarkGray; 
         }
 
         private void PREStockChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.DarkGray;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            PREStockChange.Background = Brushes.DarkGray; 
         }
 
         private void COOPAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.DarkGray;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            COOPAll.Background = Brushes.DarkGray; 
         }
 
         private void COOPIncome_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.DarkGray;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            COOPIncome.Background = Brushes.DarkGray; 
         }
 
         private void COOPCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.DarkGray;
-             COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            COOPCost.Background = Brushes.DarkGray; 
         }
 
         private void COOPChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.DarkGray;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            COOPChange.Background = Brushes.DarkGray; 
         }
 
         private void SlowAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.DarkGray;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            SLOWAll.Background = Brushes.DarkGray; 
         }
 
         private void SLOWIncome_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.DarkGray;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            SLOWIncome.Background = Brushes.DarkGray; 
         }
 
         private void SLOWCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.DarkGray;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            SLOWCost.Background = Brushes.DarkGray; 
         }
 
         private void SLOWChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.DarkGray;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-             COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            SLOWChange.Background = Brushes.DarkGray; 
         }
 
         private void NORMALAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent; 
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-               COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.DarkGray;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            NORMALAll.Background = Brushes.DarkGray; 
         }
 
         private void NORMALIncome_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.DarkGray;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            NORMALIncome.Background = Brushes.DarkGray; 
         }
 
         private void NORMALCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.DarkGray;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            NORMALCost.Background = Brushes.DarkGray; 
         }
 
         private void NORMALChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
+            SetUITransparent();
             NORMALChange.Background = Brushes.DarkGray;
         }
 
         private void SELFAll_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.DarkGray;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            SELFAll.Background = Brushes.DarkGray; 
         }
 
         private void SELFIncome_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.DarkGray;
-            SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            SELFIncome.Background = Brushes.DarkGray; 
         }
 
         private void SELFCost_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            OTCAll.Background = Brushes.Transparent;
-            OTCChange.Background = Brushes.Transparent;
-            OTCCost.Background = Brushes.Transparent;
-            OTCIncome.Background = Brushes.Transparent;
-            OTCRewardEmp.Background = Brushes.Transparent;
-            OTCStockChange.Background = Brushes.Transparent;
-            OTCTicket.Background = Brushes.Transparent;
-            OTCTicketDis.Background = Brushes.Transparent;
-            PREAll.Background = Brushes.Transparent;
-            PREIncome.Background = Brushes.Transparent;
-            PRECost.Background = Brushes.Transparent;
-            PREChange.Background = Brushes.Transparent;
-            PREStockChange.Background = Brushes.Transparent;
-            SLOWAll.Background = Brushes.Transparent;
-            SLOWIncome.Background = Brushes.Transparent;
-            SLOWCost.Background = Brushes.Transparent;
-            SLOWChange.Background = Brushes.Transparent;
-            SELFAll.Background = Brushes.Transparent;
-            SELFIncome.Background = Brushes.Transparent;
-            SELFCost.Background = Brushes.DarkGray;
-            SELFChange.Background = Brushes.Transparent;
-            COOPAll.Background = Brushes.Transparent;
-            COOPIncome.Background = Brushes.Transparent;
-            COOPCost.Background = Brushes.Transparent;
-            COOPChange.Background = Brushes.Transparent;
-            NORMALAll.Background = Brushes.Transparent;
-            NORMALIncome.Background = Brushes.Transparent;
-            NORMALCost.Background = Brushes.Transparent;
-            NORMALChange.Background = Brushes.Transparent;
+            SetUITransparent();
+            SELFCost.Background = Brushes.DarkGray; 
         }
 
         private void SELFChange_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            SetUITransparent();
+            SELFChange.Background = Brushes.DarkGray; 
+        }
+
+        private void SetUITransparent()
         {
             OTCAll.Background = Brushes.Transparent;
             OTCChange.Background = Brushes.Transparent;
@@ -1179,7 +262,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SELFAll.Background = Brushes.Transparent;
             SELFIncome.Background = Brushes.Transparent;
             SELFCost.Background = Brushes.Transparent;
-            SELFChange.Background = Brushes.DarkGray;
+            SELFChange.Background = Brushes.Transparent;
             COOPAll.Background = Brushes.Transparent;
             COOPIncome.Background = Brushes.Transparent;
             COOPCost.Background = Brushes.Transparent;

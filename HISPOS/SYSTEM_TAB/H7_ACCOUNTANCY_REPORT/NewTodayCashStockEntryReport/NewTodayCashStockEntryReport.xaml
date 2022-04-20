@@ -812,7 +812,7 @@
                                 FontSize="20"   Foreground="Silver"   Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
-                    <StackPanel x:Name="NORMALChange" Grid.Row="5" Grid.Column="4"
+                    <StackPanel x:Name="NORMALChange" Grid.Row="5" Grid.Column="4" 
                         Background="Transparent"  Orientation="Horizontal"  PreviewMouseDown="NORMALChange_PreviewMouseDown">
                         <StackPanel.InputBindings>
                             <MouseBinding Command="{Binding SelfNormalPrescriptionChangeSelectionChangedCommand}" Gesture="LeftClick" />
