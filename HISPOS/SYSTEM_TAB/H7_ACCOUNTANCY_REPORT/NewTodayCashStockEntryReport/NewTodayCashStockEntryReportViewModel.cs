@@ -1671,12 +1671,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SearchCommand = new RelayCommand(GetData);
             SelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionSelectionChangedAction);
 
-            AllPrescriptionSelectionChangedCommand = new RelayCommand(AllPrescriptionSelectionChangedAction);
+            AllPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
             AllIncomePrescriptionSelectionChangedCommand = new RelayCommand(AllIncomePrescriptionSelectionChangedAction);
             AllCostPrescriptionSelectionChangedCommand = new RelayCommand(AllCostPrescriptionSelectionChangedAction);
             AllAllPrescriptionSelectionChangedCommand = new RelayCommand(AllAllPrescriptionSelectionChangedAction);
 
-            SelfNormalPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalPrescriptionSelectionChangedAction);
+            SelfNormalPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
             SelfNormalIncomePrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalIncomePrescriptionSelectionChangedAction);
             SelfNormalCostPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalCostPrescriptionSelectionChangedAction);
             SelfNormalAllPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalAllPrescriptionSelectionChangedAction);
@@ -2003,21 +2003,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             StockTakingOTCDetailRecordReportCollection.GetDateByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID, StartDate, EndDate, StockTakingOTCDetailReportSelectItem.Type, StockTakingOTCDetailReportSelectItem.Time);
         }
 
-        private void TradeProfitCostCostReportSelectionChangedAction()
+        private void SetVisAllCollapsed()
         {
-            CostVis = Visibility.Visible;
+            CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
             TicketVis = Visibility.Collapsed;
+            ChangeOTCVis = Visibility.Collapsed;
+        }
+
+        private void TradeProfitCostCostReportSelectionChangedAction()
+        {
+            SetVisAllCollapsed();
+            CostVis = Visibility.Visible; 
             ChangeOTCVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
         }
 
         private void TradeProfitIncomeReportSelectionChangedAction()
         {
-            CostVis = Visibility.Collapsed;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Collapsed;
+            SetVisAllCollapsed();
+            IncomeVis = Visibility.Visible; 
             TicketVis = Visibility.Visible;
             ChangeOTCVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
@@ -2035,9 +2041,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void TradeProfitTicketReportSelectionChangedAction()
         {
-            CostVis = Visibility.Collapsed;
-            IncomeVis = Visibility.Collapsed;
-            ProfitVis = Visibility.Collapsed;
+            SetVisAllCollapsed();
             TicketVis = Visibility.Visible;
             ChangeOTCVis = Visibility.Visible;
             TradeProfitReportSelectionChangedAction();
@@ -2045,6 +2049,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         private void TradeProfitReportSelectionChangedAction()
+        {
+            ResetTradeProfitUI();
+            SumOTCReport("0");
+        }
+         
+        private void TradeProfitReportSelectionChangedActionMain()
+        {
+            ResetTradeProfitUI();
+            SumOTCReportMain(); 
+        }
+
+        private void ResetTradeProfitUI()
         {
             CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
             ChangeVis = Visibility.Collapsed;
@@ -2058,39 +2074,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             //SumStockTakingDetailReport();
             TradeChangeSelectItem = "全部";
             TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-            SumOTCReport("0");
+
             TradeDetailCount = TradeProfitDetailReportCollection.Count();
             TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
             EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
             IsBusy = false;
 
-            /*SelfPrescriptionSelectedItem = null;
-            CooperativePrescriptionSelectedItem = null;*/
-            CashflowSelectedItem = null;
-        }
-         
-
-        private void TradeProfitReportSelectionChangedActionMain()
-        {
-            CashStockEntryReportEnum = CashStockEntryReportEnum.TradeProfit;
-            ChangeVis = Visibility.Hidden;
-             
-            TradeProfitDetailReportViewSource = new CollectionViewSource { Source = TradeProfitDetailReportCollection };
-            TradeProfitDetailReportView = TradeProfitDetailReportViewSource.View;
-            TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
-
-            TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
-            //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
-            //SumStockTakingDetailReport();
-            TradeChangeSelectItem = "全部";
-            TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-            SumOTCReportMain();
-            TradeDetailCount = TradeProfitDetailReportCollection.Count();
-            TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
-            EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
-
-            /*SelfPrescriptionSelectedItem = null;
-            CooperativePrescriptionSelectedItem = null;*/
             CashflowSelectedItem = null;
         }
 
@@ -2505,7 +2494,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
-            SelfNormalPrescriptionAction();
+            AdjustCaseSelectItem = "一般箋";
+            SelfPrescriptionAction();
         }
 
         private void SelfNormalCostPrescriptionSelectionChangedAction()
@@ -2513,15 +2503,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
-            SelfNormalPrescriptionAction();
+            AdjustCaseSelectItem = "一般箋";
+            SelfPrescriptionAction();
         }
 
         private void SelfNormalIncomePrescriptionSelectionChangedAction()
         {
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Collapsed;
-            SelfNormalPrescriptionAction();
+            ProfitVis = Visibility.Collapsed; 
+            AdjustCaseSelectItem = "一般箋";
+            SelfPrescriptionAction();
         }
 
         private void SelfSelfAllPrescriptionSelectionChangedAction()
@@ -2529,7 +2521,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
-            SelfSelfPrescriptionAction();
+            AdjustCaseSelectItem = "自費調劑";
+            SelfPrescriptionAction();
         }
 
         private void SelfSelfCostPrescriptionSelectionChangedAction()
@@ -2537,7 +2530,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
-            SelfSelfPrescriptionAction();
+            AdjustCaseSelectItem = "自費調劑";
+            SelfPrescriptionAction();
         }
 
         private void SelfSelfIncomePrescriptionSelectionChangedAction()
@@ -2545,7 +2539,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
-            SelfSelfPrescriptionAction();
+            AdjustCaseSelectItem = "自費調劑";
+            SelfPrescriptionAction();
         }
 
         private void SelfSlowAllPrescriptionSelectionChangedAction()
@@ -2553,6 +2548,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
+            AdjustCaseSelectItem = "慢箋";
             SelfSlowPrescriptionSelectionChangedAction();
         }
 
@@ -2561,7 +2557,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
-            SelfSlowPrescriptionAction();
+            AdjustCaseSelectItem = "慢箋";
+            SelfPrescriptionAction();
         }
 
         private void SelfSlowIncomePrescriptionSelectionChangedAction()
@@ -2569,7 +2566,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
-            SelfSlowPrescriptionAction();
+            AdjustCaseSelectItem = "慢箋";
+            SelfPrescriptionAction();
         }
 
         private void AllAllPrescriptionSelectionChangedAction()
@@ -2577,6 +2575,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
+            AdjustCaseSelectItem = "全部";
             AllPrescriptionAction();
         }
 
@@ -2585,6 +2584,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
+            AdjustCaseSelectItem = "慢箋";
             AllPrescriptionAction();
         }
 
@@ -2593,105 +2593,32 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
+            AdjustCaseSelectItem = "慢箋";
             AllPrescriptionAction();
         }
-
-        private void AllPrescriptionSelectionChangedAction()
-        {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollectionALL };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            CoopSelectItem = "全部";
-            AdjustCaseSelectItem = "全部";
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionDetailReport();
-
-            CooperativePrescriptionSelectedItem = null;
-            CashflowSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
-
+         
         private void AllPrescriptionAction()
         {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollectionALL };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            CoopSelectItem = "全部";
-            AdjustCaseSelectItem = "全部";
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionDetailReportALL();
-
-            CooperativePrescriptionSelectedItem = null;
-            CashflowSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
-
-        private void SelfNormalPrescriptionSelectionChangedAction()
-        {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-             
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            CoopSelectItem = "全部";
-            AdjustCaseSelectItem = "一般箋";
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionDetailReport();
-
-            CooperativePrescriptionSelectedItem = null;
-            CashflowSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
-
-        private void SelfNormalPrescriptionAction()
-        {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            CoopSelectItem = "全部";
-            AdjustCaseSelectItem = "一般箋";
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionDetailReport();
-
-            CooperativePrescriptionSelectedItem = null;
-            CashflowSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
-
-        private void SelfSlowPrescriptionAction()
-        {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            CoopSelectItem = "全部";
-            AdjustCaseSelectItem = "慢箋";
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionDetailReport();
-
-            CooperativePrescriptionSelectedItem = null;
-            CashflowSelectedItem = null;
-            StockTakingSelectedItem = null;
+            ResetPrescriptionUI(); 
+            SumPrescriptionDetailReportALL(); 
         }
          
-        private void SelfSelfPrescriptionAction()
+        private void SelfPrescriptionAction()
+        { 
+            ResetPrescriptionUI(); 
+            SumPrescriptionDetailReport(); 
+        }
+
+        private void ResetPrescriptionUI()
         {
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            CoopSelectItem = "全部";
-            AdjustCaseSelectItem = "自費調劑";
+            CoopSelectItem = "全部"; 
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionDetailReport();
+
 
             CooperativePrescriptionSelectedItem = null;
             CashflowSelectedItem = null;
