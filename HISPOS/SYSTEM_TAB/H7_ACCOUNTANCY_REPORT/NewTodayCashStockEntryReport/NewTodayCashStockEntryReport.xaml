@@ -10,6 +10,7 @@
     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:newTodayCashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport"
+    xmlns:newTodayEntryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayEntryDetailControl"
     d:DesignHeight="839"
     d:DesignWidth="1365"
     d:DataContext="{d:DesignInstance Type=newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}"
@@ -37,6 +38,10 @@
         <DataTemplate x:Key="RewardDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
             <entryDetailControl:RewardDetailControl />
         </DataTemplate>
+        <DataTemplate x:Key="DepositDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+            <newTodayEntryDetailControl:DepositDetailControl  />
+        </DataTemplate>
+        
     </UserControl.Resources>
     <xctk:BusyIndicator BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <Grid Margin="10">
@@ -370,7 +375,7 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="6" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="OTCCost_PreviewMouseDown">
 
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                        <Border BorderBrush="Gray" >
                             <Label Width="130" HorizontalContentAlignment="Right" Content="-" ContentStringFormat="{}{0:N0}"  Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -382,9 +387,11 @@
                         </Border>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="2"  Grid.Column="8" Background="Transparent"
-                                Orientation="Horizontal"  PreviewMouseDown="OTCCost_PreviewMouseDown">
-                        
+                    <StackPanel Grid.Row="2"  Grid.Column="8" Background="Transparent" x:Name="DepositChange"
+                                Orientation="Horizontal"  PreviewMouseDown="DepositChange_OnPreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Command="{Binding AllDepositReportSelectionChangedCommand}" Gesture="LeftClick" />
+                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" Height="50" VerticalAlignment="Top">
                             <Label  Width="200" HorizontalContentAlignment="Right"
                                     Content="{Binding TotalCashFlow.AllDeposit}"
@@ -899,6 +906,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="Reward">
                                 <Setter Property="ContentTemplate" Value="{StaticResource RewardDetailControl}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CashStockEntryReportEnum, UpdateSourceTrigger=PropertyChanged}" Value="Deposit">
+                                <Setter Property="ContentTemplate" Value="{StaticResource DepositDetailControl}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

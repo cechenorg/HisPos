@@ -240,6 +240,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SELFChange.Background = Brushes.DarkGray; 
         }
 
+        private void DepositChange_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            SetUITransparent();
+            DepositChange.Background = Brushes.DarkGray;
+        }
+
         private void SetUITransparent()
         {
             OTCAll.Background = Brushes.Transparent;
@@ -271,6 +277,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             NORMALIncome.Background = Brushes.Transparent;
             NORMALCost.Background = Brushes.Transparent;
             NORMALChange.Background = Brushes.Transparent;
+            DepositChange.Background = Brushes.Transparent;
         }
+
+     
     }
 }

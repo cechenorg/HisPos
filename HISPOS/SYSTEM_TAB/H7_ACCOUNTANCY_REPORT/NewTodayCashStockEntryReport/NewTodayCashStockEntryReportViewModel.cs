@@ -1592,6 +1592,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand PrintCashPerDayCommand { get; set; }
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
         public RelayCommand StockTakingReportSelectionChangedCommand { get; set; }
+
+        public RelayCommand AllDepositReportSelectionChangedCommand { get; set; }
         public RelayCommand StockTakingDetailClickCommand { get; set; }
         public RelayCommand StockTakingOTCReportSelectionChangedCommand { get; set; }
         public RelayCommand StockTakingOTCDetailClickCommand { get; set; } 
@@ -1690,6 +1692,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrintCashPerDayCommand = new RelayCommand(PrintCashPerDayAction);
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
             StockTakingReportSelectionChangedCommand = new RelayCommand(StockTakingReportSelectionChangedAction);
+            AllDepositReportSelectionChangedCommand = new RelayCommand(AllDepositReportSelectionChangedAction);
             StockTakingDetailClickCommand = new RelayCommand(StockTakingDetailClickAction);
             CashDetailMouseDoubleClickCommand = new RelayCommand(CashDetailMouseDoubleClickAction);
             StockTakingOTCReportSelectionChangedCommand = new RelayCommand(StockTakingOTCReportSelectionChangedAction);
@@ -2134,6 +2137,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
             EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
             
+        }
+
+        private void AllDepositReportSelectionChangedAction()
+        {
+            CashStockEntryReportEnum = CashStockEntryReportEnum.Deposit;
         }
 
         private void StockTakingReportSelectionChangedAction()
