@@ -203,12 +203,12 @@
                     </StackPanel>
                     <StackPanel Grid.Row="0"  Grid.Column="8"  Orientation="Horizontal">
                         <Border BorderBrush="Gray">
-                            <Label  Width="200" Content="毛利" Padding="20,0,0,0"/>
+                            <Label  Width="200" Content="押金" Padding="20,0,0,0"/> 
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="0"  Grid.Column="9"  Orientation="Horizontal">
                         <Border BorderBrush="Gray">
-                            <Label  Width="200" Content="押金" Padding="20,0,0,0"/>
+                            <Label  Width="200" Content="毛利" Padding="20,0,0,0"/>
                         </Border>
                     </StackPanel>
                     <StackPanel  x:Name="OTCAll" Grid.Row="1" Grid.Column="1"
@@ -289,17 +289,19 @@
                                 ContentStringFormat="{}{0:N0}" Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
+                    
                     <StackPanel  Grid.Row="1" Grid.Column="8" Background="Transparent"  Orientation="Horizontal" PreviewMouseDown="OTCTrade_PreviewMouseDown">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label  Width="200" VerticalAlignment="Center" HorizontalContentAlignment="Right"
-                                Content="{Binding TradeDetailReportSum.TotalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
-                        </Border>
-                    </StackPanel>
-                    <StackPanel  Grid.Row="1" Grid.Column="9" Background="Transparent"  Orientation="Horizontal" PreviewMouseDown="OTCTrade_PreviewMouseDown">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Width="200" HorizontalContentAlignment="Right"
                                     Content="0" ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel  Grid.Row="1" Grid.Column="9" Background="Transparent"  Orientation="Horizontal" PreviewMouseDown="OTCTrade_PreviewMouseDown">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label  Width="200" VerticalAlignment="Center" HorizontalContentAlignment="Right"
+                                    Content="{Binding TradeDetailReportSum.TotalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
 
@@ -379,28 +381,29 @@
                                 Content="-" ContentStringFormat="{}{0:N0}"   Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
-                    <StackPanel Grid.Row="2"  Grid.Column="8" Background="Transparent"
-                        Orientation="Horizontal"  PreviewMouseDown="OTCCost_PreviewMouseDown">
-                        <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommandi}" Gesture="LeftClick" />
-                        </StackPanel.InputBindings>
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0" Height="50" VerticalAlignment="Top">
-                            <Label  Width="200" HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.MedTotalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
-                        </Border>
-                    </StackPanel>
 
-                    <StackPanel Grid.Row="2"  Grid.Column="9" Background="Transparent"
+                    <StackPanel Grid.Row="2"  Grid.Column="8" Background="Transparent"
                                 Orientation="Horizontal"  PreviewMouseDown="OTCCost_PreviewMouseDown">
-                       
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0" Height="50" VerticalAlignment="Top">
+                        
+                        <Border BorderBrush="Gray" Height="50" VerticalAlignment="Top">
                             <Label  Width="200" HorizontalContentAlignment="Right"
                                     Content="{Binding TotalCashFlow.AllDeposit}"
                                     ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
 
+                    <StackPanel Grid.Row="2"  Grid.Column="9" Background="Transparent"
+                        Orientation="Horizontal"  PreviewMouseDown="OTCCost_PreviewMouseDown">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Command="{Binding TradeProfitReportSelectionChangedCommandi}" Gesture="LeftClick" />
+                        </StackPanel.InputBindings>
+                        <Border BorderBrush="Gray" Height="50" VerticalAlignment="Top">
+                            <Label  Width="200" HorizontalContentAlignment="Right"
+                                Content="{Binding PrescriptionDetailReportSumMain.MedTotalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
+                        </Border>
+                    </StackPanel>
+ 
                     <StackPanel  x:Name="OTCFee" Grid.Row="3"  Grid.Column="0"  HorizontalAlignment="Left"  VerticalAlignment="Center"
                         Margin="70,0,0,0"  PreviewMouseDown="OTCFee_PreviewMouseDown">
 
@@ -479,17 +482,8 @@
                                 Content="-" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
-                    <StackPanel  Grid.Row="3"  Grid.Column="8"
-                        Background="Transparent" Orientation="Horizontal" PreviewMouseDown="OTCFee_PreviewMouseDown"> 
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopProfit , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                ContentStringFormat="{}{0:N0}"  FontFamily="Segoe UI Semibold"
-                                FontSize="20"   Foreground="Silver"   Padding="0,0,70,0"/>
-                        </Border>
-                    </StackPanel>
 
-                    <StackPanel  Grid.Row="3"  Grid.Column="9"
+                    <StackPanel  Grid.Row="3"  Grid.Column="8"
                                  Background="Transparent" Orientation="Horizontal" PreviewMouseDown="OTCFee_PreviewMouseDown">
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
@@ -498,7 +492,15 @@
                         </Border>
                     </StackPanel>
 
-
+                    <StackPanel  Grid.Row="3"  Grid.Column="9"
+                        Background="Transparent" Orientation="Horizontal" PreviewMouseDown="OTCFee_PreviewMouseDown"> 
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
+                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopProfit , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ContentStringFormat="{}{0:N0}" Foreground="Silver"  Padding="0,0,70,0"/>
+                        </Border>
+                    </StackPanel>
+ 
                     <StackPanel  Grid.Row="4"  Grid.Column="0" HorizontalAlignment="Left"  VerticalAlignment="Center"
                         Margin="70,0,0,0"  PreviewMouseDown="OTCStock_PreviewMouseDown">
 
@@ -574,18 +576,17 @@
                         Background="Transparent" Orientation="Horizontal" PreviewMouseDown="OTCStock_PreviewMouseDown">
 
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Width="130"  HorizontalContentAlignment="Right"
-                                Content="-" ContentStringFormat="{}{0:N0}" 
-                                Padding="0,0,30,0"/>
+                            <Label Width="130"  HorizontalContentAlignment="Right"  Content="-" ContentStringFormat="{}{0:N0}"  Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
+ 
                     <StackPanel Grid.Row="4"  Grid.Column="8"
-                        Background="Transparent" Orientation="Horizontal"  PreviewMouseDown="OTCStock_PreviewMouseDown">
+                                Background="Transparent" Orientation="Horizontal"  PreviewMouseDown="OTCStock_PreviewMouseDown">
 
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.SlowProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                ContentStringFormat="{}{0:N0}"  FontFamily="Segoe UI Semibold"  FontSize="20"    Foreground="Silver" Padding="0,0,70,0"/>
+                                    Content="{Binding DepositReportDataSumMain.ChronicDeposit}"
+                                    ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold"  FontSize="20"    Foreground="Silver" Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
 
@@ -594,10 +595,11 @@
 
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
-                                    Content="{Binding DepositReportDataSumMain.ChronicDeposit}"
-                                    ContentStringFormat="{}{0:N0}"  FontFamily="Segoe UI Semibold"  FontSize="20"    Foreground="Silver" Padding="0,0,70,0"/>
+                                    Content="{Binding PrescriptionDetailReportSumMain.SlowProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
+
                     <StackPanel  Grid.Row="5" Grid.Column="0"
                         HorizontalAlignment="Left"  VerticalAlignment="Center"
                         Margin="70,0,0,0" PreviewMouseDown="OTCReward_PreviewMouseDown">
@@ -683,18 +685,8 @@
                                 FontSize="20"   Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
-                    <StackPanel  Grid.Row="5"    Grid.Column="8"
-                        Background="Transparent"  Orientation="Horizontal" PreviewMouseDown="OTCReward_PreviewMouseDown">
-
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label  Width="200" VerticalAlignment="Center"   HorizontalContentAlignment="Right"
-                                Content="{Binding  PrescriptionDetailReportSumMain.NormalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                ContentStringFormat="{}{0:N0}" Foreground="Silver"  Padding="0,0,70,0"/>
-                        </Border>
-                    </StackPanel>
-
-                    <StackPanel  Grid.Row="5"    Grid.Column="9"
-                                 Background="Transparent"  Orientation="Horizontal" PreviewMouseDown="OTCReward_PreviewMouseDown">
+                    
+                    <StackPanel Grid.Row="5" Grid.Column="8" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="OTCReward_PreviewMouseDown">
 
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Width="200" VerticalAlignment="Center"   HorizontalContentAlignment="Right"
@@ -703,6 +695,13 @@
                         </Border>
                     </StackPanel>
 
+                    <StackPanel  Grid.Row="5" Grid.Column="9" Background="Transparent"  Orientation="Horizontal" PreviewMouseDown="OTCReward_PreviewMouseDown">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label  Width="200" VerticalAlignment="Center"   HorizontalContentAlignment="Right"
+                                    Content="{Binding  PrescriptionDetailReportSumMain.NormalProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ContentStringFormat="{}{0:N0}" Foreground="Silver"  Padding="0,0,70,0"/>
+                        </Border>
+                    </StackPanel>
 
                     <StackPanel  x:Name="OTCTicket"  Grid.Row="6"  Grid.Column="0"
                         HorizontalAlignment="Left" VerticalAlignment="Center"
@@ -783,21 +782,20 @@
                                 Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
-                    <StackPanel   Grid.Row="6"  Grid.Column="8"   Background="Transparent"
-                        Orientation="Horizontal"  PreviewMouseDown="OTCTicket_PreviewMouseDown">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionDetailReportSumMain.PaySelfProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,70,0"/>
-                        </Border>
-                    </StackPanel>
-
-                    <StackPanel   Grid.Row="6"  Grid.Column="9"   Background="Transparent"  Orientation="Horizontal"   >
+                   
+                    <StackPanel   Grid.Row="6"  Grid.Column="8"   Background="Transparent"  Orientation="Horizontal"   >
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
                                     Content="{Binding DepositReportDataSumMain.PrescribeDeposit }"
-                                    ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold"
-                                    FontSize="20"   Foreground="Silver" Padding="0,0,70,0"/>
+                                    ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,70,0"/>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="6" Grid.Column="9" Background="Transparent" Orientation="Horizontal"  PreviewMouseDown="OTCTicket_PreviewMouseDown">
+                        <Border BorderBrush="Gray">
+                            <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
+                                    Content="{Binding PrescriptionDetailReportSumMain.PaySelfProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>
 
@@ -861,20 +859,20 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="7" Grid.Column="8"  Background="Transparent" Orientation="Horizontal">
+                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
+                            <Label Width="200" VerticalAlignment="Center"  HorizontalContentAlignment="Right"
+                                   Content="{Binding TotalCashFlow.AllDeposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="7" Grid.Column="9"  Background="Transparent" Orientation="Horizontal">
                         <Border BorderBrush="Gray"  >
                             <Label Width="200" VerticalAlignment="Center"  HorizontalContentAlignment="Right"
                                 Content="{Binding TotalCashFlow.AllProfit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
                         </Border>
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="7" Grid.Column="9"  Background="Transparent" Orientation="Horizontal">
-                        <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
-                            <Label Width="200" VerticalAlignment="Center"  HorizontalContentAlignment="Right"
-                                Content="{Binding TotalCashFlow.AllDeposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                ContentStringFormat="{}{0:N0}" Padding="0,0,70,0"/>
-                        </Border>
-                    </StackPanel>
+                    </StackPanel> 
                 </Grid>
             </StackPanel>
             <ContentControl  Grid.Row="2"  Grid.Column="0"

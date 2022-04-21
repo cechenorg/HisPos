@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using System.Data;
 using System.Linq;
+using His_Pos.NewClass.Report.DepositReport;
 
 namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 {
@@ -333,20 +334,23 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public void SumMedProfit(StockTakingDetailReport.StockTakingDetailReport StockTakingDetailReportSum)
+        public void SumMedProfit(StockTakingDetailReport.StockTakingDetailReport StockTakingDetailReportSum, DepositReportDataList depositReport)
         {
-            MedTotalCount =
-                NormalCount + PaySelfCount + SlowCount + CoopCount;
+            MedTotalCount = NormalCount + PaySelfCount + SlowCount + CoopCount;
             MedTotalIncome = NormalIncome + PaySelfIncome + SlowIncome + CoopIncome;
             MedTotalMeduse = NormalMeduse + PaySelfMeduse + SlowMeduse + CoopMeduse;
             MedTotalChange = NormalChange + PaySelfChange + SlowChange + CoopChange;
 
+
+            var allDeposit = depositReport.NormalDeposit + depositReport.ChronicDeposit +
+                             depositReport.CooperativeDeposit + depositReport.PrescribeDeposit;
+
             MedTotalProfit = (decimal)(MedTotalIncome + 
-                                       MedTotalMeduse + (double)MedTotalChange + StockTakingDetailReportSum.Price);
+                                       MedTotalMeduse + (double)MedTotalChange + StockTakingDetailReportSum.Price + allDeposit);
 
         }
 
-        public void SumPrescriptionDetail(PrescriptionDetailReports prescriptionDetailReports)
+        public void SumPrescriptionDetail(PrescriptionDetailReports prescriptionDetailReports, DepositReportDataList depositReport)
         {
             var tempCollectionNormal = prescriptionDetailReports.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
             var tempCollectionSlow = prescriptionDetailReports.Where(p => p.AdjustCaseID == "2");
@@ -362,18 +366,18 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
             SlowCount = tempCollectionSlow.Count();
             SlowMeduse = (int)tempCollectionSlow.Sum(s => s.Meduse);
-            NormalProfit = (int)(NormalIncome + NormalMeduse + (double)NormalChange);
+            NormalProfit = (int)(NormalIncome + NormalMeduse + (double)NormalChange + depositReport.NormalDeposit);
 
             //profit slow 
             SlowIncome = (int)tempCollectionSlow.Sum(s => s.MedicalPoint) + (int)tempCollectionSlow.Sum(s => s.MedicalServicePoint) + (int)tempCollectionSlow.Sum(s => s.PaySelfPoint);
 
             PaySelfCount = tempCollectionPaySelf.Count();
             PaySelfMeduse = (int)tempCollectionPaySelf.Sum(s => s.Meduse);
-            SlowProfit = (int)(SlowIncome + SlowMeduse + (double)SlowChange);
+            SlowProfit = (int)(SlowIncome + SlowMeduse + (double)SlowChange + depositReport.ChronicDeposit);
             //profit payself
 
             PaySelfIncome = (int)tempCollectionPaySelf.Sum(s => s.MedicalPoint) + (int)tempCollectionPaySelf.Sum(s => s.MedicalServicePoint) + (int)tempCollectionPaySelf.Sum(s => s.PaySelfPoint);
-            PaySelfProfit = (int)(PaySelfIncome + PaySelfMeduse + (double)PaySelfChange);
+            PaySelfProfit = (int)(PaySelfIncome + PaySelfMeduse + (double)PaySelfChange + depositReport.PrescribeDeposit);
 
         }
 

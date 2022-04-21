@@ -2951,7 +2951,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
              
             PrescriptionCoopDetailReportSumMain.CoopChange = (decimal)PrescriptionDetailReportSum.MedicalPoint + (decimal)PrescriptionDetailReportSum.MedicalServicePoint + (decimal)PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
-            PrescriptionCoopDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionCoopDetailReportSumMain.CoopIncome + PrescriptionCoopDetailReportSumMain.CoopMeduse + PrescriptionCoopDetailReportSumMain.CoopChange);
+            PrescriptionCoopDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionCoopDetailReportSumMain.CoopIncome + 
+                                                                   PrescriptionCoopDetailReportSumMain.CoopMeduse + 
+                                                                   PrescriptionCoopDetailReportSumMain.CoopChange + 
+                                                                   DepositReportDataSumMain.CooperativeDeposit);
         }
 
         private IEnumerable<PrescriptionDetailReport> GetPrescriptionDetailReportsByType(PrescriptionDetailReports input)
@@ -2991,7 +2994,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void SumPrescriptionDetailMain()
         {
-            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection); 
+            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain); 
         }
 
         private void SumPrescriptionChangeDetailMain()
@@ -3046,12 +3049,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         private void SumOTCProfit()
         {
             //TradeDetailReportSum.TotalProfit = TradeDetailReportSum.Profit + TradeDetailReportSum.TotalChange + (int)TotalRewardReport.RewardAmount + (int)StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus;
-            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + (int)TradeDetailReportSum.TotalCost + TradeDetailReportSum.TotalChange + StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
+            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + 
+                                               (int)TradeDetailReportSum.TotalCost + 
+                                               TradeDetailReportSum.TotalChange + 
+                                               StockTakingOTCDetailReportSum.Price + 
+                                               TradeDetailReportSum.DiscountAmtMinus + 
+                                               (int)TotalRewardReport.RewardAmount;
         }
 
         private void SumMedProfit()
         {
-            PrescriptionDetailReportSumMain.SumMedProfit(StockTakingDetailReportSum); 
+            PrescriptionDetailReportSumMain.SumMedProfit(StockTakingDetailReportSum,DepositReportDataSumMain); 
         }
 
         private void SumAllProfit()
@@ -3064,10 +3072,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             TotalCashFlow.AllStock = StockTakingOTCDetailReportSum.Price + StockTakingDetailReportSum.Price;
 
-            TotalCashFlow.AllProfit = (int)(TradeDetailReportSum.TotalProfit + PrescriptionDetailReportSumMain.MedTotalProfit);
+           
             TotalCashFlow.AllDeposit = DepositReportDataSumMain.NormalDeposit +
                                        DepositReportDataSumMain.ChronicDeposit +
                                        DepositReportDataSumMain.CooperativeDeposit+ DepositReportDataSumMain.PrescribeDeposit;
+
+            TotalCashFlow.AllProfit = (int)(TradeDetailReportSum.TotalProfit + 
+                                            PrescriptionDetailReportSumMain.MedTotalProfit);
         }
 
         private void SumStockTakingOTCDetailReport()
