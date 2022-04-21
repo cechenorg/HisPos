@@ -1370,17 +1370,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             }
         }
 
-        private PrescriptionDetailReports prescriptionChangeDetailReportCollection;
-
-        public PrescriptionDetailReports PrescriptionChangeDetailReportCollection
-        {
-            get => prescriptionChangeDetailReportCollection;
-            set
-            {
-                Set(() => PrescriptionChangeDetailReportCollection, ref prescriptionChangeDetailReportCollection, value);
-            }
-        }
-
+        
         private PrescriptionDetailReports prescriptionCoopDetailReportCollection;
 
         public PrescriptionDetailReports PrescriptionCoopDetailReportCollection
@@ -2850,8 +2840,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             sss.Merge(Ds.Tables[2]);
             sss.Merge(Ds.Tables[4]);
             sss.Merge(Ds.Tables[6]);
-            PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports(ddd);
-            PrescriptionDetailReportCollection= new PrescriptionDetailReports(sss);
+            PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports(ddd); 
 
             DataTable ALLCHANGE = new DataTable();
             ALLCHANGE.Merge(Ds.Tables[1]);
@@ -2921,244 +2910,65 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void SumPrescriptionDetailReport()
         {
-            PrescriptionDetailReportSum = new PrescriptionDetailReport();
-            //PrescriptionDetailReportSum.InsName = "總計";
-
-            var tempCollection = PrescriptionDetailReportCollection.Where(p => true);
-
-            if (CoopSelectItem != "全部")
-            {
-                switch (AdjustCaseSelectItem)
-                {
-                    case "一般箋":
-                        tempCollection = PrescriptionDetailReportCollection.Where(p => (p.AdjustCaseID == "1" || p.AdjustCaseID == "3") && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "慢箋":
-                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "2" && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "自費調劑":
-                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "0" && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "全部":
-                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.InsName == CoopSelectItem);
-                        break;
-                }
-            }
-            else
-            {
-                switch (AdjustCaseSelectItem)
-                {
-                    case "一般箋":
-                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-                        break;
-
-                    case "慢箋":
-                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "2");
-                        break;
-
-                    case "自費調劑":
-                        tempCollection = PrescriptionDetailReportCollection.Where(p => p.AdjustCaseID == "0");
-                        break;
-
-                    case "全部":
-                        tempCollection = PrescriptionDetailReportCollection;
-                        break;
-                }
-            }
-            PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
+            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionDetailReportCollection);
             
+            PrescriptionDetailReportSum = new PrescriptionDetailReport();
+            PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
         }
 
         private void SumPrescriptionDetailReportALL()
         {
+            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionDetailReportCollectionALL);
+            
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
-            //PrescriptionDetailReportSum.InsName = "總計";
-
-            var tempCollection = PrescriptionDetailReportCollectionALL.Where(p => true);
-
-            if (CoopSelectItem != "全部")
-            {
-                switch (AdjustCaseSelectItem)
-                {
-                    case "一般箋":
-                        tempCollection = PrescriptionDetailReportCollectionALL.Where(p => (p.AdjustCaseID == "1" || p.AdjustCaseID == "3") && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "慢箋":
-                        tempCollection = PrescriptionDetailReportCollectionALL.Where(p => p.AdjustCaseID == "2" && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "自費調劑":
-                        tempCollection = PrescriptionDetailReportCollectionALL.Where(p => p.AdjustCaseID == "0" && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "全部":
-                        tempCollection = PrescriptionDetailReportCollectionALL.Where(p => p.InsName == CoopSelectItem);
-                        break;
-                }
-            }
-            else
-            {
-                switch (AdjustCaseSelectItem)
-                {
-                    case "一般箋":
-                        tempCollection = PrescriptionDetailReportCollectionALL.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-                        break;
-
-                    case "慢箋":
-                        tempCollection = PrescriptionDetailReportCollectionALL.Where(p => p.AdjustCaseID == "2");
-                        break;
-
-                    case "自費調劑":
-                        tempCollection = PrescriptionDetailReportCollectionALL.Where(p => p.AdjustCaseID == "0");
-                        break;
-
-                    case "全部":
-                        tempCollection = PrescriptionDetailReportCollectionALL;
-                        break;
-                }
-            }
-
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
              
         }
 
         private void SumPrescriptionChangedDetailReport()
-        {
+        { 
+            var tempCollection =  GetPrescriptionDetailReportsByType(PrescriptionDetailReportCollectionChanged);
+
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
-            //PrescriptionDetailReportSum.InsName = "總計";
-
-            var tempCollection = PrescriptionDetailReportCollectionChanged.Where(p => true);
-
-            if (CoopSelectItem != "全部")
-            {
-                switch (AdjustCaseSelectItem)
-                {
-                    case "一般箋":
-                        tempCollection = PrescriptionDetailReportCollectionChanged.Where(p => (p.AdjustCaseID == "1" || p.AdjustCaseID == "3") && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "慢箋":
-                        tempCollection = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "2" && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "自費調劑":
-                        tempCollection = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "0" && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "全部":
-                        tempCollection = PrescriptionDetailReportCollectionChanged.Where(p => p.InsName == CoopSelectItem);
-                        break;
-                }
-            }
-            else
-            {
-                switch (AdjustCaseSelectItem)
-                {
-                    case "一般箋":
-                        tempCollection = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-                        break;
-
-                    case "慢箋":
-                        tempCollection = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "2");
-                        break;
-
-                    case "自費調劑":
-                        tempCollection = PrescriptionDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "0");
-                        break;
-
-                    case "全部":
-                        tempCollection = PrescriptionDetailReportCollectionChanged;
-                        break;
-                }
-            }
-
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
             
         }
 
         private void SumCoopPrescriptionDetailReport()
-        {
+        {  
+            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionCoopDetailReportCollection);
+             
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
-            //PrescriptionDetailReportSum.InsName = "總計";
-
-            var tempCollection = PrescriptionCoopDetailReportCollection.Where(p => true);
-
-            if (CoopSelectItem != "全部")
-            {
-                switch (AdjustCaseSelectItem)
-                {
-                    case "一般箋":
-                        tempCollection = PrescriptionCoopDetailReportCollection.Where(p => (p.AdjustCaseID == "1" || p.AdjustCaseID == "3") && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "慢箋":
-                        tempCollection = PrescriptionCoopDetailReportCollection.Where(p => p.AdjustCaseID == "2" && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "自費調劑":
-                        tempCollection = PrescriptionCoopDetailReportCollection.Where(p => p.AdjustCaseID == "0" && p.InsName == CoopSelectItem);
-                        break;
-
-                    case "全部":
-                        tempCollection = PrescriptionCoopDetailReportCollection.Where(p => p.InsName == CoopSelectItem);
-                        break;
-                }
-            }
-            else
-            {
-                switch (AdjustCaseSelectItem)
-                {
-                    case "一般箋":
-                        tempCollection = PrescriptionCoopDetailReportCollection.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-                        break;
-
-                    case "慢箋":
-                        tempCollection = PrescriptionCoopDetailReportCollection.Where(p => p.AdjustCaseID == "2");
-                        break;
-
-                    case "自費調劑":
-                        tempCollection = PrescriptionCoopDetailReportCollection.Where(p => p.AdjustCaseID == "0");
-                        break;
-
-                    case "全部":
-                        tempCollection = PrescriptionCoopDetailReportCollection;
-                        break;
-                }
-            }
-
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection); 
         }
 
         private void SumCoopChangePrescriptionDetailReport()
         {
+            var tempCollection =
+                GetPrescriptionDetailReportsByType(PrescriptionCoopChangeDetailReportCollectionChanged);
+
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
-            //PrescriptionDetailReportSum.InsName = "總計";
+            PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
+             
+            PrescriptionCoopDetailReportSumMain.CoopChange = (decimal)PrescriptionDetailReportSum.MedicalPoint + (decimal)PrescriptionDetailReportSum.MedicalServicePoint + (decimal)PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
+            PrescriptionCoopDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionCoopDetailReportSumMain.CoopIncome + PrescriptionCoopDetailReportSumMain.CoopMeduse + PrescriptionCoopDetailReportSumMain.CoopChange);
+        }
 
-            var tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged.Where(p => true);
-
+        private IEnumerable<PrescriptionDetailReport> GetPrescriptionDetailReportsByType(PrescriptionDetailReports input)
+        {
+            IEnumerable<PrescriptionDetailReport> result = input.ToList();
             if (CoopSelectItem != "全部")
             {
                 switch (AdjustCaseSelectItem)
                 {
                     case "一般箋":
-                        tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged.Where(p => (p.AdjustCaseID == "1" || p.AdjustCaseID == "3") && p.InsName == CoopSelectItem);
-                        break;
-
+                        return input.Where(p => (p.AdjustCaseID == "1" || p.AdjustCaseID == "3") && p.InsName == CoopSelectItem); 
                     case "慢箋":
-                        tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "2" && p.InsName == CoopSelectItem);
-                        break;
-
+                        return input.Where(p => p.AdjustCaseID == "2" && p.InsName == CoopSelectItem); 
                     case "自費調劑":
-                        tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "0" && p.InsName == CoopSelectItem);
-                        break;
-
+                        return input.Where(p => p.AdjustCaseID == "0" && p.InsName == CoopSelectItem); 
                     case "全部":
-                        tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged.Where(p => p.InsName == CoopSelectItem);
-                        break;
+                        return input.Where(p => p.InsName == CoopSelectItem); 
                 }
             }
             else
@@ -3166,27 +2976,17 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 switch (AdjustCaseSelectItem)
                 {
                     case "一般箋":
-                        tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-                        break;
-
+                        return input.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3"); 
                     case "慢箋":
-                        tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "2");
-                        break;
-
+                        return input.Where(p => p.AdjustCaseID == "2"); 
                     case "自費調劑":
-                        tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged.Where(p => p.AdjustCaseID == "0");
-                        break;
-
+                        return input.Where(p => p.AdjustCaseID == "0"); 
                     case "全部":
-                        tempCollection = PrescriptionCoopChangeDetailReportCollectionChanged;
-                        break;
+                        return input; 
                 }
             }
 
-            PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
-             
-            PrescriptionCoopDetailReportSumMain.CoopChange = (decimal)PrescriptionDetailReportSum.MedicalPoint + (decimal)PrescriptionDetailReportSum.MedicalServicePoint + (decimal)PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
-            PrescriptionCoopDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionCoopDetailReportSumMain.CoopIncome + PrescriptionCoopDetailReportSumMain.CoopMeduse + PrescriptionCoopDetailReportSumMain.CoopChange);
+            return result;
         }
 
         private void SumPrescriptionDetailMain()
