@@ -1514,6 +1514,29 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             }
         }
 
+        private ObservableCollection<DepositReportData> _depositDetailReportCollection = new ObservableCollection<DepositReportData>();
+
+        public ObservableCollection<DepositReportData> DepositDetailReportCollection
+        {
+            get => _depositDetailReportCollection;
+            set
+            {
+                Set(() => DepositDetailReportCollection, ref _depositDetailReportCollection, value);
+            }
+        }
+
+        private DepositReportData _selectedDepositDetailReport;
+
+        public DepositReportData SelectedDepositDetailReport
+        {
+            get => _selectedDepositDetailReport;
+            set
+            {
+                Set(() => SelectedDepositDetailReport, ref _selectedDepositDetailReport, value);
+            }
+        }
+
+
         private bool _isBusy;
 
         public bool IsBusy
@@ -1594,6 +1617,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand StockTakingReportSelectionChangedCommand { get; set; }
 
         public RelayCommand AllDepositReportSelectionChangedCommand { get; set; }
+        public RelayCommand DepositDetailClickCommand { get; set; }
+        public RelayCommand DepositDetailDoubleClickCommand { get; set; }
         public RelayCommand StockTakingDetailClickCommand { get; set; }
         public RelayCommand StockTakingOTCReportSelectionChangedCommand { get; set; }
         public RelayCommand StockTakingOTCDetailClickCommand { get; set; } 
@@ -1686,13 +1711,19 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CashCoopSelectionChangedCommand = new RelayCommand(CashCoopSelectionChangedAction);
             CashNotCoopSelectionChangedCommand = new RelayCommand(CashNotCoopSelectionChangedAction);
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
+            
             PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
+           
             PrintCashPerDayCommand = new RelayCommand(PrintCashPerDayAction);
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
             StockTakingReportSelectionChangedCommand = new RelayCommand(StockTakingReportSelectionChangedAction);
+
             AllDepositReportSelectionChangedCommand = new RelayCommand(AllDepositReportSelectionChangedAction);
+            DepositDetailClickCommand = new RelayCommand(DepositDetailClickAction);
+            DepositDetailDoubleClickCommand = new RelayCommand(DepositDetailDoubleClickAction);
+
             StockTakingDetailClickCommand = new RelayCommand(StockTakingDetailClickAction);
             CashDetailMouseDoubleClickCommand = new RelayCommand(CashDetailMouseDoubleClickAction);
             StockTakingOTCReportSelectionChangedCommand = new RelayCommand(StockTakingOTCReportSelectionChangedAction);
@@ -1716,6 +1747,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             RewardExcelCommand = new RelayCommand(RewardExcelAction);
             PrintTradeProfitDetailCommand = new RelayCommand(PrintTradeProfitDetailAction);
             GetData(); 
+        }
+
+        private void DepositDetailDoubleClickAction()
+        {
+            if (SelectedDepositDetailReport is null)
+            {
+                PrescriptionDetailMedicineRepotCollection.Clear();
+                return;
+            }
+            PrescriptionDetailMedicineRepotCollection.Clear();
+            PrescriptionService.ShowPrescriptionEditWindow(SelectedDepositDetailReport.PremasID);
+        }
+
+        private void DepositDetailClickAction()
+        {
+            if (SelectedDepositDetailReport is null)
+            {
+                PrescriptionDetailMedicineRepotCollection.Clear();
+                return;
+            }
+            PrescriptionDetailMedicineRepotCollection.GerDataById(SelectedDepositDetailReport.PremasID);
         }
 
         private void RewardExcelAction()
@@ -2874,7 +2926,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
 
             DataTable depositTable = Ds.Tables[14];
-            DepositReportDataSumMain = new DepositReportDataList(depositTable); 
+            DepositReportDataSumMain = new DepositReportDataList(depositTable);
+
+            foreach (DataRow row in depositTable.Rows)
+            {
+                DepositDetailReportCollection.Add(new DepositReportData(row));
+            }
+            
              
             TradeProfitReportSelectionChangedActionMain();
             TradeChangeReportSelectionChangedActionMain();

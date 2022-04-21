@@ -32,8 +32,13 @@ namespace His_Pos.NewClass.Report.DepositReport
         {
             get { return DepositReportDataCollection.Where(_ => _.IsCooperative).Sum(s => s.Deposit); }
         }
-         
-        
+
+        public int TotalDeposit
+        {
+            get { return DepositReportDataCollection.Sum(s => s.Deposit); }
+        }
+
+
         public DepositReportDataList(DataTable table)
         {
             DepositReportDataCollection = new List<DepositReportData>();
@@ -55,7 +60,9 @@ namespace His_Pos.NewClass.Report.DepositReport
         {
            
             PremasID = r.Field<int>("PreMas_ID");
-             
+
+            CusName = r.Field<string>("Cus_Name");
+            InstitutionName = r.Field<string>("Ins_Name");
             AdjustCase = new AdjustCase();
             AdjustCase.ID = r.Field<string>("PreMas_AdjustCaseID");
             Deposit = (int)Convert.ToDouble(r["CashFlow_Value"].ToString());
@@ -68,6 +75,22 @@ namespace His_Pos.NewClass.Report.DepositReport
         {
             get { return _premasID; }
             set { Set(() => PremasID, ref _premasID, value); }
+        }
+
+        private string _CusName;
+
+        public string CusName
+        {
+            get { return _CusName; }
+            set { Set(() => CusName, ref _CusName, value); }
+        }
+
+        private string _InstitutionName;
+
+        public string InstitutionName
+        {
+            get { return _InstitutionName; }
+            set { Set(() => InstitutionName, ref _InstitutionName, value); }
         }
 
         private AdjustCase _adjustCase;
