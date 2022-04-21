@@ -1,5 +1,7 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Collections.Generic;
+using GalaSoft.MvvmLight;
 using System.Data;
+using System.Linq;
 
 namespace His_Pos.NewClass.Report.CashDetailReport
 {
@@ -110,6 +112,17 @@ namespace His_Pos.NewClass.Report.CashDetailReport
             {
                 Set(() => Count, ref count, value);
             }
+        }
+
+        public void SumCashDetail(IEnumerable<CashDetailReport> cashDetailReport)
+        {
+           CusName = "總計";
+           CopayMentPrice = cashDetailReport.Sum(s => s.CopayMentPrice);
+           PaySelfPrice = cashDetailReport.Sum(s => s.PaySelfPrice);
+           PaySelfPrescritionPrice = cashDetailReport.Sum(s => s.PaySelfPrescritionPrice);
+           Deposit = cashDetailReport.Sum(s => s.Deposit);
+           Other = cashDetailReport.Sum(s => s.Other);
+           Count = cashDetailReport.Count();
         }
     }
 }
