@@ -4,9 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Drawing.Printing;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Diagnostics;
+using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
+using Microsoft.Reporting.WinForms;
+using System.Text;
+using System.Drawing.Imaging;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 {
@@ -57,6 +65,28 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             MainWindow.ServerConnection.CloseConnection();
             ProductDepositDataGrid.ItemsSource = depositTable.DefaultView;
         }
+        public IEnumerable<ReportParameter> CreateContentParameter()
+        {
+            string[] sDetail = PrintDetail();
+            return new List<ReportParameter>
+            {
+                new ReportParameter("CustusName",Convert.ToString(depositTable.Rows[0]["Cus_Name"])),
+                new ReportParameter("Date", DateTime.Today.ToString("yyyy/MM/dd")),
+                new ReportParameter("Medicine", sDetail[0]),
+                new ReportParameter("Num", sDetail[1]),
+            };
+        }
+        private string[] PrintDetail()
+        {
+            string[] sDetail = new string[3];
+
+            foreach(DataRow dr in depositTable.Rows)
+            {
+                sDetail[0] += Convert.ToString(dr["Pro_ChineseName"]) + "\r\n";
+                sDetail[1] += (Convert.ToInt32(dr["TraDet_DepositAmount"]) - Convert.ToInt32(dr["Amount"]))  + "\r\n";
+            }
+            return sDetail;
+        }
 
         private void btnWithdraw_Click(object sender, RoutedEventArgs e)
         {
@@ -74,6 +104,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     return;
                 }
             }
+
+            bool isSuccess = false;
             foreach (DataRow dr in depositTable.Rows)
             {
                 if ((int)dr["Amount"] != 0)
@@ -88,9 +120,29 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                     {
                         MessageWindow.ShowMessage("提取成功！", MessageType.SUCCESS);
+                        isSuccess = true;
                         Close();
                     }
                     else { MessageWindow.ShowMessage("提取失敗！", MessageType.ERROR); }
+                }
+            }
+            if(isSuccess && depositTable != null && depositTable.Rows.Count > 0)
+            {
+                ConfirmWindow cw = new ConfirmWindow("是否列印明細", "確認");//(20220420完成提取詢問是否列印明細)
+                if ((bool)cw.DialogResult)
+                {
+                    var rptViewer = new ReportViewer();
+                    rptViewer.LocalReport.DataSources.Clear();
+                    rptViewer.LocalReport.ReportPath = @"RDLC\DepositRecord.rdlc";
+                    rptViewer.PrinterSettings.PrinterName = Properties.Settings.Default.ReceiptPrinter;
+                    rptViewer.LocalReport.Refresh();
+                    rptViewer.ProcessingMode = ProcessingMode.Local;
+                    var parameter = CreateContentParameter();
+                    rptViewer.LocalReport.SetParameters(parameter);
+                    MainWindow.Instance.Dispatcher.Invoke(() =>
+                    {
+                        ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
+                    });
                 }
             }
         }
