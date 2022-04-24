@@ -13,7 +13,6 @@ using System.Text;
 using System.Windows.Forms;
 using System;
 using System.Reflection;
-using Excel = Microsoft.Office.Interop.Excel;
 
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
