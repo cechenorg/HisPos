@@ -131,18 +131,25 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 ConfirmWindow cw = new ConfirmWindow("是否列印明細", "確認");//(20220420完成提取詢問是否列印明細)
                 if ((bool)cw.DialogResult)
                 {
-                    var rptViewer = new ReportViewer();
-                    rptViewer.LocalReport.DataSources.Clear();
-                    rptViewer.LocalReport.ReportPath = @"RDLC\DepositRecord.rdlc";
-                    rptViewer.PrinterSettings.PrinterName = Properties.Settings.Default.ReceiptPrinter;
-                    rptViewer.LocalReport.Refresh();
-                    rptViewer.ProcessingMode = ProcessingMode.Local;
-                    var parameter = CreateContentParameter();
-                    rptViewer.LocalReport.SetParameters(parameter);
-                    MainWindow.Instance.Dispatcher.Invoke(() =>
+                    try
                     {
-                        ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
-                    });
+                        var rptViewer = new ReportViewer();
+                        rptViewer.LocalReport.DataSources.Clear();
+                        rptViewer.LocalReport.ReportPath = @"RDLC\DepositRecord.rdlc";
+                        rptViewer.PrinterSettings.PrinterName = Properties.Settings.Default.ReceiptPrinter;
+                        rptViewer.LocalReport.Refresh();
+                        rptViewer.ProcessingMode = ProcessingMode.Local;
+                        var parameter = CreateContentParameter();
+                        rptViewer.LocalReport.SetParameters(parameter);
+                        MainWindow.Instance.Dispatcher.Invoke(() =>
+                        {
+                            ((VM)MainWindow.Instance.DataContext).StartPrintDeposit(rptViewer);
+                        });
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                    }
                 }
             }
         }
