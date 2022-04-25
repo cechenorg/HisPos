@@ -503,7 +503,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             dcTotal.DataType = typeof(decimal);
             leftTotal.Columns.Add(dcTotal);
             DataTable rightTotal = leftTotal.Clone();//正資產總額--DataSet4
-            DataTable archeck = new DataTable();//應收申報帳款004--DataSet6
 
             Dictionary<string, string> leftAccount = new Dictionary<string, string>();
             leftAccount.Add("001", "流動資產-現金");
@@ -538,7 +537,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     if (pair.Key == "004")
                     {
                         table.Columns["Name"].ColumnName = "Header";
-                        //archeck = table;
+                        MedPointViewModel.StrikeDatas = new StrikeDatas(table);
                     }
                     _outputDataSet.Tables.Add(table);
                 }
@@ -652,9 +651,6 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             rightTotal.Rows.Add(rightTotalRow);
             ds.Tables.Add(rightTotal);
             #endregion
-            //#region 申報應收帳款
-            //ds.Tables.Add(archeck);
-            //#endregion
             return ds;
         }
         #endregion
