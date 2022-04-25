@@ -16,9 +16,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         }
 
         #region -----Define Command-----
-
-        public RelayCommand SelectionChangedCommand { get; set; }
-        public RelayCommand DataChangeCommand { get; set; }
+         
         public RelayCommand CancelCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
