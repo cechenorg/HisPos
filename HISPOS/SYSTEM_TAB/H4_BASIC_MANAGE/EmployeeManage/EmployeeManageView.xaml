@@ -25,7 +25,126 @@
 
 
             <Grid Grid.Row="1"  Margin="10,0"  Background="{StaticResource GridBackGround}">
+                <DataGrid AutoGenerateColumns="False" Background="Transparent" CanUserAddRows="False"
+                    CellStyle="{StaticResource DataGridCellStyle}"
+                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsSynchronizedWithCurrentItem="True"
+                    ItemsSource="{Binding EmployeeCollection, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    VerticalScrollBarVisibility="Hidden">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                                </Trigger>
+                            </Style.Triggers> 
+                            <Setter Property="FontSize" Value="25" />
+                            <Setter Property="Height" Value="50" />
+                        </Style>
+                    </DataGrid.RowStyle> 
+                    <DataGrid.Columns>
+                          
+                        <DataGridTextColumn
+                            Width="160" Header="姓名"
+                            Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
+                        <DataGridTextColumn
+                            Width="160" Header="員工編號"
+                            Binding="{Binding Account  , UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="結帳編號"
+                            Binding="{Binding CashierID , UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="店鋪"
+                            Binding="{Binding CashierID , UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="職位"
+                            Binding="{Binding  WorkPosition.WorkPositionName}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="權限"
+                            Binding="{Binding AuthorityValue }"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="到職日"
+                            Binding="{Binding StartDate, StringFormat={}{0:yyyy-MM-dd}}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="離職日"
+                            Binding="{Binding LeaveDate, StringFormat={}{0:yyyy-MM-dd}}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+
+                    </DataGrid.Columns> 
+
+
+                </DataGrid>
             </Grid>
 
             <Grid   Grid.Row="2" Margin="10,0" Background="{StaticResource GridDarkerBackGround}">
