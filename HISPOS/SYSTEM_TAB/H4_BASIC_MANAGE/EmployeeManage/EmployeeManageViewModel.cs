@@ -27,39 +27,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         #region ----- Define Variables -----
 
-        private EmployeeControlEnum controlType;
-
-        public EmployeeControlEnum ControlType
-        {
-            get => controlType;
-            set
-            {
-                Set(() => ControlType, ref controlType, value);
-            }
-        }
-
-        private CollectionViewSource employeeCollectionViewSource;
-
-        private CollectionViewSource EmployeeCollectionViewSource
-        {
-            get => employeeCollectionViewSource;
-            set
-            {
-                Set(() => EmployeeCollectionViewSource, ref employeeCollectionViewSource, value);
-            }
-        }
-
-        private ICollectionView employeeCollectionView;
-
-        public ICollectionView EmployeeCollectionView
-        {
-            get => employeeCollectionView;
-            private set
-            {
-                Set(() => EmployeeCollectionView, ref employeeCollectionView, value);
-            }
-        }
-
+     
+         
         public Employee employee;
 
         public Employee Employee
@@ -67,12 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             get { return employee; }
             set
             {
-                Set(() => Employee, ref employee, value);
-                ControlType = EmployeeControlEnum.NoEditControl;
-                if (Employee.ID == ViewModelMainWindow.CurrentUser.ID)
-                    ControlType = EmployeeControlEnum.SelfEditControl;
-                if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
-                    ControlType = EmployeeControlEnum.AllEditableControl;
+                Set(() => Employee, ref employee, value); 
             }
         }
 
@@ -105,8 +69,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             get { return localCheck; }
             set
             {
-                Set(() => LocalCheck, ref localCheck, value);
-                EmployeeCollectionViewSource.Filter += Filter;
+                Set(() => LocalCheck, ref localCheck, value); 
             }
         }
 
@@ -117,8 +80,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             get { return globalCheck; }
             set
             {
-                Set(() => GlobalCheck, ref globalCheck, value);
-                EmployeeCollectionViewSource.Filter += Filter;
+                Set(() => GlobalCheck, ref globalCheck, value); 
             }
         }
 
@@ -180,38 +142,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             EmployeeCollection = new Employees();
             EmployeeCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
-
-            EmployeeCollectionViewSource = new CollectionViewSource { Source = EmployeeCollection };
-            EmployeeCollectionView = EmployeeCollectionViewSource.View;
-            EmployeeCollectionViewSource.Filter += Filter;
-
-            if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
-            {
-                ControlType = EmployeeControlEnum.AllEditableControl;
-            }
-            if (EmployeeCollection != null)
-            {
-              
-            }
-            else {
-                ControlType = EmployeeControlEnum.NoControl;
-            }
+             
         }
 
-        private void Filter(object sender, FilterEventArgs e)
-        {
-            if (e.Item is null) return;
-            if (!(e.Item is Employee))
-                e.Accepted = false;
-
-            e.Accepted = false;
-
-            if (GlobalCheck)
-                e.Accepted = true;
-            else if (LocalCheck && ((Employee)e.Item).IsLocal)
-                e.Accepted = true;
-        }
-
+         
         #endregion Function
     }
 }
