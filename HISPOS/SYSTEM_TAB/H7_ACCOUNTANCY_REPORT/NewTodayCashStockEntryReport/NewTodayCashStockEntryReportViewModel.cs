@@ -2481,10 +2481,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CoopSelectItem = "ZZZZZ";
             AdjustCaseSelectItem = "全部";
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionDetailMain();
-
-            CooperativePrescriptionSelectedItem = null;
-            StockTakingSelectedItem = null;
+            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain);
         }
          
 
@@ -2755,9 +2752,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollectionChanged };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
             CoopSelectItem = "全部";
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionChangeDetailMain();
-
+            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter; 
+            PrescriptionDetailReportSumMain.SumPrescriptionChangeDetail(PrescriptionDetailReportCollectionChanged);
             CooperativePrescriptionSelectedItem = null;
             StockTakingSelectedItem = null;
         }
@@ -2925,6 +2921,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionCoopDetailReportSumMain.CoopIncome = (int)PrescriptionCoopDetailReportCollection.Sum(s => s.MedicalPoint) + (int)PrescriptionCoopDetailReportCollection.Sum(s => s.MedicalServicePoint) + (int)PrescriptionCoopDetailReportCollection.Sum(s => s.PaySelfPoint);
 
 
+            PrescriptionDetailReportSumMain.CoopCount = PrescriptionCoopDetailReportSumMain.CoopCount;
+            PrescriptionDetailReportSumMain.CoopMeduse = PrescriptionCoopDetailReportSumMain.CoopMeduse;
+            PrescriptionDetailReportSumMain.CoopIncome = PrescriptionCoopDetailReportSumMain.CoopIncome;
+
+
             DataTable depositTable = Ds.Tables[14];
             DepositReportDataSumMain = new DepositReportDataList(depositTable);
             DepositDetailReportCollection.Clear();
@@ -2948,9 +2949,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             
             TradeProfitAllReportSelectionChangedAction();
             SelfPrescriptionSelectionChangedActionMain();
+             
+            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + TradeDetailReportSum.TotalCost +
+                                               TradeDetailReportSum.TotalChange + StockTakingOTCDetailReportSum.Price +
+                                               TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
+            PrescriptionDetailReportSumMain.SumMedProfit(StockTakingDetailReportSum, DepositReportDataSumMain);
 
-            SumOTCProfit();
-            SumMedProfit();
+
             SumAllProfit();
         }
 
@@ -3057,16 +3062,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             return result;
         }
-
-        private void SumPrescriptionDetailMain()
-        {
-            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain); 
-        }
-
-        private void SumPrescriptionChangeDetailMain()
-        {
-            PrescriptionDetailReportSumMain.SumPrescriptionChangeDetail(PrescriptionDetailReportCollectionChanged);
-        }
+         
         
         private void SumOTCReportMainChanged( )
         {
@@ -3111,22 +3107,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeDetailReportSum.SumOTCReport(tempCollection);
           
         }
-
-        private void SumOTCProfit()
-        {
-            //TradeDetailReportSum.TotalProfit = TradeDetailReportSum.Profit + TradeDetailReportSum.TotalChange + (int)TotalRewardReport.RewardAmount + (int)StockTakingOTCDetailReportSum.Price + TradeDetailReportSum.DiscountAmtMinus;
-            TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + 
-                                               (int)TradeDetailReportSum.TotalCost + 
-                                               TradeDetailReportSum.TotalChange + 
-                                               StockTakingOTCDetailReportSum.Price + 
-                                               TradeDetailReportSum.DiscountAmtMinus + 
-                                               (int)TotalRewardReport.RewardAmount;
-        }
-
-        private void SumMedProfit()
-        {
-            PrescriptionDetailReportSumMain.SumMedProfit(StockTakingDetailReportSum,DepositReportDataSumMain); 
-        }
+        
 
         private void SumAllProfit()
         {

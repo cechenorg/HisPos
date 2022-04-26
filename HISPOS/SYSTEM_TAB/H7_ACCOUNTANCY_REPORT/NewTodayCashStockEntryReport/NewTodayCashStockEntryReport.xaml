@@ -161,7 +161,7 @@
                     <StackPanel x:Name="OTCStockBack"  Grid.Row="4"  Grid.Column="0"  Grid.ColumnSpan="10"  Background="GhostWhite" />
                     <StackPanel x:Name="OTCRewardBack"  Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="10"  Background="GhostWhite" />
                     <StackPanel   x:Name="OTCTicketBack"  Grid.Row="6"  Grid.Column="0"  Grid.ColumnSpan="10" Background="GhostWhite" />
-                    <!--<StackPanel Grid.Row="7"  Grid.Column="0"  Grid.ColumnSpan="10" Background="DarkSeaGreen" />-->
+                    <StackPanel Grid.Row="7"  Grid.Column="0"  Grid.ColumnSpan="10" Background="DarkSeaGreen" />
                     <Border  Grid.Row="2"  Grid.RowSpan="6"  Grid.Column="0" Grid.ColumnSpan="10" BorderBrush="LightGray" BorderThickness="0,1,0,0" />
                     <Border  Grid.Row="3" Grid.RowSpan="5" Grid.Column="0" Grid.ColumnSpan="10" BorderBrush="LightGray" BorderThickness="0,1,0,0" />
                     <Border Grid.Row="4" Grid.RowSpan="4"  Grid.Column="0"  Grid.ColumnSpan="10" BorderBrush="LightGray"  BorderThickness="0,1,0,0" />
