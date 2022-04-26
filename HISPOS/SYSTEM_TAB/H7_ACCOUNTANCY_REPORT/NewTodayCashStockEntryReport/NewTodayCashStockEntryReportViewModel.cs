@@ -2927,7 +2927,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             DataTable depositTable = Ds.Tables[14];
             DepositReportDataSumMain = new DepositReportDataList(depositTable);
-
+            DepositDetailReportCollection.Clear();
             foreach (DataRow row in depositTable.Rows)
             {
                 DepositDetailReportCollection.Add(new DepositReportData(row));
