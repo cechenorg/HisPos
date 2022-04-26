@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:balanceControl="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
-    Title="歷史資料"  Width="1240" Height="540"
+    Title="歷史資料"  Width="1500" Height="540"
     d:DataContext="{d:DesignInstance Type=balanceControl:StrikeHistoryViewModel}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -16,16 +16,16 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal"> 
             <DatePicker x:Name="dpSDate"  Width="120"
-                Margin="15,0,0,0"  HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                Margin="5,0,0,0"  HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 FontSize="18" SelectedDate="{Binding StartDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" />
-            <Label Margin="10,0,0,0" VerticalAlignment="Center"  Content="~" FontFamily="Segoe UI Semibold" FontSize="22" />
+            <Label Margin="5,0,0,0" VerticalAlignment="Center"  Content="~" FontFamily="Segoe UI Semibold" FontSize="22" />
             <DatePicker  x:Name="dpEDate"
                 Width="120" Margin="5,0,0,0"
                 HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18"
                 SelectedDate="{Binding EndDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" />
-            <Label  Margin="50,0,0,0" VerticalAlignment="Center"
+            <Label  Margin="5,0,0,0" VerticalAlignment="Center"
                 Content="科目" FontFamily="Segoe UI Semibold" FontSize="22" />
             <ComboBox  Width="130"  Height="45" VerticalContentAlignment="Center"  DisplayMemberPath="StrikeName"
                 FontFamily="Segoe UI Semibold" FontSize="18"
@@ -39,7 +39,7 @@
                     </ItemsPanelTemplate>
                 </ComboBox.ItemsPanel>
             </ComboBox>
-            <Label  Margin="10,0,0,0"  VerticalAlignment="Center"  Content="帳戶" FontFamily="Segoe UI Semibold" FontSize="22" />
+            <Label  Margin="5,0,0,0"  VerticalAlignment="Center"  Content="帳戶" FontFamily="Segoe UI Semibold" FontSize="22" />
             <ComboBox Width="120"  Height="45"  VerticalContentAlignment="Center"
                 DisplayMemberPath="StrikeType"  FontFamily="Segoe UI Semibold"
                 FontSize="18" IsTextSearchEnabled="False"
@@ -52,8 +52,8 @@
                     </ItemsPanelTemplate>
                 </ComboBox.ItemsPanel>
             </ComboBox>
-            <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="類別"  FontFamily="Segoe UI Semibold" FontSize="22" />
-            <ComboBox Width="80"  Height="45" 
+            <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="類別"  FontFamily="Segoe UI Semibold" FontSize="22" />
+            <ComboBox Width="100"  Height="45" 
                 VerticalContentAlignment="Center"
                 DisplayMemberPath="StrikeWay"  FontFamily="Segoe UI Semibold"
                 FontSize="18" IsTextSearchEnabled="False"
@@ -65,7 +65,7 @@
                     </ItemsPanelTemplate>
                 </ComboBox.ItemsPanel>
             </ComboBox>
-            <Label  Margin="10,0,0,0"
+            <Label  Margin="5,0,0,0"
                 VerticalAlignment="Center"  Content="人員"
                 FontFamily="Segoe UI Semibold" FontSize="22" />
             <ComboBox Width="100"  Height="45"
@@ -80,7 +80,11 @@
                     </ItemsPanelTemplate>
                 </ComboBox.ItemsPanel>
             </ComboBox>
-            <Button Width="80" Margin="30,0,0,0"  VerticalAlignment="Center"
+            <Label Margin="5,0,0,0"
+                VerticalAlignment="Center"  Content="關鍵字"
+                FontFamily="Segoe UI Semibold" FontSize="22" />
+            <TextBox Margin="5,0,0,0" Width="120" VerticalAlignment="Center" FontSize="18" Text="{Binding KeyWords}"/>
+            <Button Width="80" Margin="10,0,0,0"  VerticalAlignment="Center"
                 Background="Green"  BorderThickness="0"
                 Command="{Binding SearchStrikeHistory}"
                 Content="查詢"  FontFamily="Segoe UI Semibold" FontSize="18" />
@@ -131,7 +135,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="200"
+                <DataGridTextColumn Width="300"
                     Binding="{Binding StrikeName}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semibold" Header="科目名稱" IsReadOnly="True">
@@ -142,7 +146,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="180"
+                <DataGridTextColumn Width="300"
                     Binding="{Binding StrikeTypeName}"
                     FontFamily="Segoe UI Semi" Header="帳戶"  IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>

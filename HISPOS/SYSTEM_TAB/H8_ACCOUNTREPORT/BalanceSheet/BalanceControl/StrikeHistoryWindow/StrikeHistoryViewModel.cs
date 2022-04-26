@@ -83,6 +83,17 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             }
         }
 
+        private string keywords;
+
+        public string KeyWords
+        {
+            get => keywords;
+            set
+            {
+                Set(() => KeyWords, ref keywords, value);
+            }
+        }
+
         private DataTable typeTable;
 
         public DataTable TypeTable
@@ -294,6 +305,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             parameters.Add(new SqlParameter("AccountString", AccountString));
             parameters.Add(new SqlParameter("Category", DBNull.Value));
             parameters.Add(new SqlParameter("Emp", Emp));
+            parameters.Add(new SqlParameter("KeyWord", KeyWords));
             DataSet result = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[StrikeHistoriesByCondition]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
