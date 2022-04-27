@@ -38,11 +38,17 @@ namespace His_Pos.NewClass.Person.Customer
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCustomerEditTime]", parameterList);
         }
 
-        public static void Save(Customer customer)
+        public static bool Save(Customer customer)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(customer));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[SaveCustomer]", parameterList);
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[SaveCustomer]", parameterList);
+
+            if (result.Rows.Count > 0)
+            {
+                return result.Rows[0][0].ToString() == "1"; 
+            } 
+            return false;
         }
 
         public static DataTable SetCustomer(Customer c)

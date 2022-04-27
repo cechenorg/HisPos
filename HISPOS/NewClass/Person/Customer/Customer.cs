@@ -144,7 +144,11 @@ namespace His_Pos.NewClass.Person.Customer
                     return;
                 }
             }
-            CustomerDb.Save(this);
+
+            if (CustomerDb.Save(this) == false)
+            {
+                MessageWindow.ShowMessage("顧客資料儲存失敗, 請確認身分證是否重複", MessageType.ERROR);
+            }
         }
 
         public static Customer GetCustomerByCusId(int cusId)
