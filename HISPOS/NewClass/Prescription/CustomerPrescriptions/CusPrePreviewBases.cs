@@ -5,6 +5,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Xml;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 {
@@ -60,6 +62,14 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 
         public void GetCooperativeByCusIDNumber(string idNumber) //取得合作XML格式處方
         {
+            if (string.IsNullOrEmpty(idNumber))
+            {
+                MessageWindow.ShowMessage(@"顧客資料缺少身分證
+                                             因此無法查詢合作診所處方
+                                             請於下方顧客資料欄位更新顧客身份證", MessageType.ERROR);
+                return;
+            }
+               
             Clear();
             var table = PrescriptionDb.GetXmlOfPrescriptionsByCusIDNumber(idNumber);
             foreach (DataRow r in table.Rows)
