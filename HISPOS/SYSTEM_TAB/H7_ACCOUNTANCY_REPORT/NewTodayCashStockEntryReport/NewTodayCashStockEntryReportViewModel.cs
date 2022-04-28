@@ -1565,7 +1565,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         #region Command
 
-        public RelayCommand SelfPrescriptionSelectionChangedCommand { get; set; }
+        
         public RelayCommand CooperativePrescriptionSelectionChangedCommand { get; set; } 
         public RelayCommand CooperativePrescriptionChangeSelectionChangedCommand { get; set; }
         public RelayCommand CashDetailMouseDoubleClickCommand { get; set; }
@@ -1638,7 +1638,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public NewTodayCashStockEntryReportViewModel()
         {
             SearchCommand = new RelayCommand(GetData);
-            SelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionSelectionChangedAction);
 
             AllPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
             AllIncomePrescriptionSelectionChangedCommand = new RelayCommand(AllIncomePrescriptionSelectionChangedAction);
@@ -1736,70 +1735,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         private void RewardExcelAction()
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("sDate", StartDate));
-            parameters.Add(new SqlParameter("eDate", EndDate));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[RewardDetailRecordByDateExcel]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
-
-            Process myProcess = new Process();
-            SaveFileDialog fdlg = new SaveFileDialog();
-            fdlg.Title = "績效明細";
-            fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
-            fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName = StartDate.ToString("yyyyMMdd") + "-" + EndDate.ToString("yyyyMMdd") + "績效明細";
-            fdlg.FilterIndex = 2;
-            fdlg.RestoreDirectory = true;
-            if (fdlg.ShowDialog() == DialogResult.OK)
-            {
-                XLWorkbook wb = new XLWorkbook();
-                var style = XLWorkbook.DefaultStyle;
-                style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
-
-                var ws = wb.Worksheets.Add("績效明細");
-                ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
-                var col1 = ws.Column("A");
-                col1.Width = 10;
-                var col2 = ws.Column("B");
-                col2.Width = 15;
-                var col3 = ws.Column("C");
-                col3.Width = 25;
-                var col4 = ws.Column("D");
-                col4.Width = 25;
-                var col5 = ws.Column("E");
-                col5.Width = 10;
-
-                ws.Cell(1, 1).Value = "績效明細";
-                ws.Range(1, 1, 1, 5).Merge().AddToNamed("Titles");
-                ws.Cell("A2").Value = "績效人員";
-                ws.Cell("B2").Value = "銷售時間";
-                ws.Cell("C2").Value = "商品代碼";
-                ws.Cell("D2").Value = "商品名稱";
-                ws.Cell("E2").Value = "績效";
-
-                var rangeWithData = ws.Cell(3, 1).InsertData(result.AsEnumerable());
-
-                rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.PageNumber, XLHFOccurrence.AllPages);
-                ws.PageSetup.Footer.Center.AddText(" / ", XLHFOccurrence.AllPages);
-                ws.PageSetup.Footer.Center.AddText(XLHFPredefinedText.NumberOfPages, XLHFOccurrence.AllPages);
-                wb.SaveAs(fdlg.FileName);
-            }
-            try
-            {
-                myProcess.StartInfo.UseShellExecute = true;
-                myProcess.StartInfo.FileName = (fdlg.FileName);
-                myProcess.StartInfo.CreateNoWindow = true;
-                //myProcess.StartInfo.Verb = "print";
-                myProcess.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-            }
+        { 
+            PrintService.PrintRewardDetail(StartDate,EndDate); 
         }
 
         private void PrintTradeProfitDetailAction()
@@ -2377,24 +2314,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             StockTakingSelectedItem = null;
         }
-
-        private void SelfPrescriptionSelectionChangedAction()
-        {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-            
-            BusyContent = "報表查詢中";
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View; 
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionDetailReport();
-
-            CooperativePrescriptionSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
-
+        
         private void CooperativePrescriptionSelectionChangedActionMain()
         {
             CoopVis = Visibility.Visible;
