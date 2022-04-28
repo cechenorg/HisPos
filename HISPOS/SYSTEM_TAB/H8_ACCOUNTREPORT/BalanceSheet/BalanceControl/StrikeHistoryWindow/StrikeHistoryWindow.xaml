@@ -27,12 +27,20 @@
                 SelectedDateFormat="Short" />
             <Label  Margin="5,0,0,0" VerticalAlignment="Center"
                 Content="科目" FontFamily="Segoe UI Semibold" FontSize="22" />
-            <ComboBox  Width="130"  Height="45" VerticalContentAlignment="Center"  DisplayMemberPath="StrikeName"
-                FontFamily="Segoe UI Semibold" FontSize="18"
-                IsTextSearchEnabled="False"
-                ItemsSource="{Binding TypeTable}" 
-                SelectedValue="{Binding Type, Mode=TwoWay}"
-                SelectedValuePath="StrikeName">
+            <ComboBox  
+                Name="cobStrikeName"
+                Width="130" 
+                Height="45" 
+                VerticalContentAlignment="Center"
+                DisplayMemberPath="StrikeName"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                ItemsSource="{Binding TypeTable}"
+                SelectedValue="StrikeName"
+                SelectedValuePath="StrikeName"
+                Text="{Binding Type, Mode=TwoWay}"
+                IsEditable="True"
+                KeyUp="Cob_KeyUp">
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />
@@ -40,12 +48,20 @@
                 </ComboBox.ItemsPanel>
             </ComboBox>
             <Label  Margin="5,0,0,0"  VerticalAlignment="Center"  Content="帳戶" FontFamily="Segoe UI Semibold" FontSize="22" />
-            <ComboBox Width="120"  Height="45"  VerticalContentAlignment="Center"
-                DisplayMemberPath="StrikeType"  FontFamily="Segoe UI Semibold"
-                FontSize="18" IsTextSearchEnabled="False"
+            <ComboBox 
+                x:Name="cobStrikeType"
+                Width="120"  
+                Height="45"  
+                VerticalContentAlignment="Center"
+                DisplayMemberPath="StrikeType"  
+                FontFamily="Segoe UI Semibold"
+                FontSize="18" 
                 ItemsSource="{Binding SujectTable}" 
-                SelectedValue="{Binding SujectString, Mode=TwoWay}"
-                SelectedValuePath="StrikeType">
+                SelectedValue="StrikeType"
+                SelectedValuePath="StrikeType"
+                Text="{Binding SujectString, Mode=TwoWay}"
+                IsEditable="True"
+                KeyUp="Cob_KeyUp">
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />

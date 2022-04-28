@@ -333,12 +333,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
                 result.Tables[4].Rows.InsertAt(dr4, 0);
                 EmpTable = result.Tables[4];
 
-
                 ResultTable = result.Tables[0];
-
             }
-
-            
         }
     }
 }
