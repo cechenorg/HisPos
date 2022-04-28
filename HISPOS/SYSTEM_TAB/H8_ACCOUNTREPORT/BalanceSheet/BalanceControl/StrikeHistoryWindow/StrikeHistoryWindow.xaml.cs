@@ -42,14 +42,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             foreach(DataRow dr in _StrikeName.Rows)
             {
                 AccountsName name = new AccountsName();
-                name.StrikeName = Convert.ToString(dr[0]);
+                name.StrikeName = " " + Convert.ToString(dr[0]);//預留空格，防止關鍵字搜尋帶入第一筆
                 _StrikeNameAccounts.Add(name);
             }
             _StrikeType = ((StrikeHistoryViewModel)DataContext).SujectTable;
             foreach (DataRow dr in _StrikeType.Rows)
             {
                 AccountsType name = new AccountsType();
-                name.StrikeType = Convert.ToString(dr[0]);
+                name.StrikeType = " " + Convert.ToString(dr[0]);//預留空格，防止關鍵字搜尋帶入第一筆
                 _StrikeTypeAccounts.Add(name);
             }
         }
