@@ -44,6 +44,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Forms;
+using DocumentFormat.OpenXml.Drawing;
 using His_Pos.NewClass.Report.DepositReport;
 
 namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
@@ -312,17 +313,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 Set(() => TradeChangeSelectItem, ref tradeChangeSelectItem, value);
             }
         }
-
-        private string adjustCaseSelectItem = "全部";
-
-        public string AdjustCaseSelectItem
-        {
-            get => adjustCaseSelectItem;
-            set
-            {
-                Set(() => AdjustCaseSelectItem, ref adjustCaseSelectItem, value);
-            }
-        }
+         
+        public SelectAdjustCaseType AdjustCaseSelectItem { get; set; }
+        
 
         private string stockTakingOTCSelectItem = "全部";
 
@@ -2397,9 +2390,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            
-            AdjustCaseSelectItem = "全部";
-
+             
+            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
             SumCoopPrescriptionDetailReport();
              
@@ -2457,8 +2449,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            
-            AdjustCaseSelectItem = "全部";
+
+            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
             PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain);
         }
@@ -2470,8 +2462,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Visible;
-            AdjustCaseSelectItem = "一般箋";
+            ProfitVis = Visibility.Visible; 
+            AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
             SelfPrescriptionAction();
         }
 
@@ -2480,7 +2472,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "一般箋";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
             SelfPrescriptionAction();
         }
 
@@ -2488,8 +2480,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Collapsed; 
-            AdjustCaseSelectItem = "一般箋";
+            ProfitVis = Visibility.Collapsed;
+            AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
             SelfPrescriptionAction();
         }
 
@@ -2498,7 +2490,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
-            AdjustCaseSelectItem = "自費調劑";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
             SelfPrescriptionAction();
         }
 
@@ -2507,7 +2499,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "自費調劑";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
             SelfPrescriptionAction();
         }
 
@@ -2516,7 +2508,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "自費調劑";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
             SelfPrescriptionAction();
         }
 
@@ -2525,7 +2517,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
-            AdjustCaseSelectItem = "慢箋";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
             SelfSlowPrescriptionSelectionChangedAction();
         }
 
@@ -2534,7 +2526,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "慢箋";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
             SelfPrescriptionAction();
         }
 
@@ -2543,7 +2535,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "慢箋";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
             SelfPrescriptionAction();
         }
 
@@ -2552,7 +2544,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
-            AdjustCaseSelectItem = "全部";
+            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
             AllPrescriptionAction();
         }
 
@@ -2561,7 +2553,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "慢箋";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
             AllPrescriptionAction();
         }
 
@@ -2570,7 +2562,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "慢箋";
+            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
             AllPrescriptionAction();
         }
          
@@ -2615,8 +2607,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
                 PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-               
-                AdjustCaseSelectItem = "慢箋";
+
+                AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
                 PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
                 SumPrescriptionDetailReport();
                 IsBusy = false;
@@ -2642,8 +2634,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
                 PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-                
-                AdjustCaseSelectItem = "自費調劑";
+                AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion; 
                 PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
                 SumPrescriptionDetailReport();
                 IsBusy = false;
@@ -2661,9 +2652,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
-            CoopVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "一般箋";
-
+            CoopVis = Visibility.Collapsed; 
+            AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
             RefreshPrescriptionReportView();
 
 
@@ -2675,9 +2665,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
             CoopVis = Visibility.Collapsed;
-
-            AdjustCaseSelectItem = "全部";
-
+             
+            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
             RefreshPrescriptionReportView();
         }
 
@@ -2686,8 +2675,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
-            CoopVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "慢箋";
+            CoopVis = Visibility.Collapsed; 
+            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
             RefreshPrescriptionReportView();
         }
          
@@ -2696,8 +2685,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
-            CoopVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = "自費調劑";
+            CoopVis = Visibility.Collapsed; 
+            AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
             RefreshPrescriptionReportView();
         }
 
@@ -2755,8 +2744,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopChangeDetailReportCollectionChanged };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            
-            AdjustCaseSelectItem = "全部";
+            AdjustCaseSelectItem = SelectAdjustCaseType.ALL; 
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
             SumCoopChangePrescriptionDetailReport();
              
@@ -3007,14 +2995,16 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             IEnumerable<PrescriptionDetailReport> result = input.ToList();
             switch (AdjustCaseSelectItem)
             {
-                case "一般箋":
+                case SelectAdjustCaseType.Normal:
                     return input.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-                case "慢箋":
+                case SelectAdjustCaseType.Chronic:
                     return input.Where(p => p.AdjustCaseID == "2");
-                case "自費調劑":
+                case SelectAdjustCaseType.Presribtion:
                     return input.Where(p => p.AdjustCaseID == "0");
-                case "全部":
+                case SelectAdjustCaseType.ALL:
                     return input;
+                case SelectAdjustCaseType.Cooperative:
+                    return input.Where(p => p.IsCooperative == true);
             }
 
             return result;
@@ -3133,13 +3123,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             PrescriptionDetailReport indexitem = ((PrescriptionDetailReport)e.Item);
 
-            if (AdjustCaseSelectItem == "一般箋" && (indexitem.AdjustCaseID == "1" || indexitem.AdjustCaseID == "3"))
+            if (AdjustCaseSelectItem == SelectAdjustCaseType.Normal && (indexitem.AdjustCaseID == "1" || indexitem.AdjustCaseID == "3"))
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == "慢箋" && indexitem.AdjustCaseID == "2")
+            else if (AdjustCaseSelectItem == SelectAdjustCaseType.Chronic && indexitem.AdjustCaseID == "2")
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == "自費調劑" && indexitem.AdjustCaseID == "0")
+            else if (AdjustCaseSelectItem == SelectAdjustCaseType.Presribtion && indexitem.AdjustCaseID == "0")
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == "全部")
+            else if (AdjustCaseSelectItem == SelectAdjustCaseType.Cooperative && indexitem.IsCooperative == true)
+                e.Accepted = true;
+            else if (AdjustCaseSelectItem == SelectAdjustCaseType.ALL)
                 e.Accepted = true;
         }
 
@@ -3185,5 +3177,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         #endregion Action
+
+        public enum SelectAdjustCaseType
+        {
+            ALL,
+            Normal, //一般箋
+            Chronic, //慢箋
+            Presribtion, //自費調劑
+            Cooperative //合作
+        }
     }
 }
