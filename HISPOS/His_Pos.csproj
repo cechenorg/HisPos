@@ -2774,7 +2774,9 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="RDLC\DepositRecord.rdlc" />
+    <Content Include="RDLC\DepositRecord.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Images\cloud_info.png" />
     <Resource Include="Images\down.png" />
     <Resource Include="Images\up.png" />
