@@ -1346,18 +1346,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 Set(() => PrescriptionDetailReportCollectionChanged, ref prescriptionDetailReportCollectionChanged, value);
             }
         }
-
-        
-        private PrescriptionDetailReports prescriptionCoopDetailReportCollection;
-
-        public PrescriptionDetailReports PrescriptionCoopDetailReportCollection
-        {
-            get => prescriptionCoopDetailReportCollection;
-            set
-            {
-                Set(() => PrescriptionCoopDetailReportCollection, ref prescriptionCoopDetailReportCollection, value);
-            }
-        }
+         
 
         private PrescriptionDetailReports prescriptionCoopChangeDetailReportCollection;
 
@@ -2374,26 +2363,18 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Visible;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-             
-            var CoopStringCopy = new List<string>() { };
-            foreach (var r in PrescriptionCoopDetailReportCollection)
-            {
-                CoopStringCopy.Add(r.InsName);
-            }
-            var DistinctItems = CoopStringCopy.Select(x => x).Distinct();
-            CoopString = new List<string>() { "全部" };
-            foreach (var item in DistinctItems)
-            {
-                CoopString.Add(item);
-            }
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopDetailReportCollection };
+              
+            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
              
-            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
+            AdjustCaseSelectItem = SelectAdjustCaseType.Cooperative;
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumCoopPrescriptionDetailReport();
-             
+
+            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionDetailReportCollection);
+
+            PrescriptionDetailReportSum = new PrescriptionDetailReport();
+            PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
+
             StockTakingSelectedItem = null;
         }
 
@@ -2417,25 +2398,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         private void CooperativePrescriptionSelectionChangedActionMain()
         {
             CoopVis = Visibility.Visible;
-             
-            var CoopStringCopy = new List<string>() { };
-            foreach (var r in PrescriptionCoopDetailReportCollection)
-            {
-                CoopStringCopy.Add(r.InsName);
-            }
-            var DistinctItems = CoopStringCopy.Select(x => x).Distinct();
-            CoopString = new List<string>() { "全部" };
-            foreach (var item in DistinctItems)
-            {
-                CoopString.Add(item);
-            }
-             
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopDetailReportCollection };
+               
+            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-             
-            
-            StockTakingSelectedItem = null;
+
+            AdjustCaseSelectItem = SelectAdjustCaseType.Cooperative;
+            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain); 
         }
 
         private void SelfPrescriptionSelectionChangedActionMain()
@@ -2872,10 +2841,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             StockTakingOTCDetailReportCollection = new StockTakingOTCDetailReports(Ds.Tables[9]);
             StockTakingDetailReportCollection = new StockTakingDetailReports(Ds.Tables[8]);
 
-            PrescriptionCoopDetailReportCollection = new PrescriptionDetailReports(Ds.Tables[0]);
-            PrescriptionCoopDetailReportSumMain.CoopCount = PrescriptionCoopDetailReportCollection.Count();
-            PrescriptionCoopDetailReportSumMain.CoopMeduse = (int)PrescriptionCoopDetailReportCollection.Sum(s => s.Meduse);
-            PrescriptionCoopDetailReportSumMain.CoopIncome = (int)PrescriptionCoopDetailReportCollection.Sum(s => s.MedicalPoint) + (int)PrescriptionCoopDetailReportCollection.Sum(s => s.MedicalServicePoint) + (int)PrescriptionCoopDetailReportCollection.Sum(s => s.PaySelfPoint);
+            PrescriptionDetailReports tempCooperativePres = new PrescriptionDetailReports(Ds.Tables[0]);
+            PrescriptionCoopDetailReportSumMain.CoopCount = tempCooperativePres.Count();
+            PrescriptionCoopDetailReportSumMain.CoopMeduse = (int)tempCooperativePres.Sum(s => s.Meduse);
+            PrescriptionCoopDetailReportSumMain.CoopIncome = (int)tempCooperativePres.Sum(s => s.MedicalPoint) + 
+                                                             (int)tempCooperativePres.Sum(s => s.MedicalServicePoint) + 
+                                                             (int)tempCooperativePres.Sum(s => s.PaySelfPoint);
 
 
             PrescriptionDetailReportSumMain.CoopCount = PrescriptionCoopDetailReportSumMain.CoopCount;
@@ -2961,15 +2932,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
             
         }
-
-        private void SumCoopPrescriptionDetailReport()
-        {  
-            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionCoopDetailReportCollection);
-             
-            PrescriptionDetailReportSum = new PrescriptionDetailReport();
-            PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection); 
-        }
-
+        
         private void SumCoopChangePrescriptionDetailReport()
         {
             var tempCollection =
@@ -2991,11 +2954,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             switch (AdjustCaseSelectItem)
             {
                 case SelectAdjustCaseType.Normal:
-                    return input.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
+                    return input.Where(p => p.IsCooperative == false && (p.AdjustCaseID == "1" || p.AdjustCaseID == "3") );
                 case SelectAdjustCaseType.Chronic:
-                    return input.Where(p => p.AdjustCaseID == "2");
+                    return input.Where(p => p.IsCooperative == false && p.AdjustCaseID == "2");
                 case SelectAdjustCaseType.Presribtion:
-                    return input.Where(p => p.AdjustCaseID == "0");
+                    return input.Where(p => p.IsCooperative == false && p.AdjustCaseID == "0");
                 case SelectAdjustCaseType.ALL:
                     return input;
                 case SelectAdjustCaseType.Cooperative:
@@ -3118,11 +3081,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             PrescriptionDetailReport indexitem = ((PrescriptionDetailReport)e.Item);
 
-            if (AdjustCaseSelectItem == SelectAdjustCaseType.Normal && (indexitem.AdjustCaseID == "1" || indexitem.AdjustCaseID == "3"))
+            if (AdjustCaseSelectItem == SelectAdjustCaseType.Normal && indexitem.IsCooperative == false && (indexitem.AdjustCaseID == "1" || indexitem.AdjustCaseID == "3"))
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == SelectAdjustCaseType.Chronic && indexitem.AdjustCaseID == "2")
+            else if (AdjustCaseSelectItem == SelectAdjustCaseType.Chronic && indexitem.IsCooperative == false && indexitem.AdjustCaseID == "2")
                 e.Accepted = true;
-            else if (AdjustCaseSelectItem == SelectAdjustCaseType.Presribtion && indexitem.AdjustCaseID == "0")
+            else if (AdjustCaseSelectItem == SelectAdjustCaseType.Presribtion && indexitem.IsCooperative == false && indexitem.AdjustCaseID == "0")
                 e.Accepted = true;
             else if (AdjustCaseSelectItem == SelectAdjustCaseType.Cooperative && indexitem.IsCooperative == true)
                 e.Accepted = true;
