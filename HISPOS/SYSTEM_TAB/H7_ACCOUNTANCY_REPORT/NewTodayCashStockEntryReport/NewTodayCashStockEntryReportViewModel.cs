@@ -1570,8 +1570,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         public DataSet Ds = new DataSet();
-        DataTable PrescriptionAllDataTable = new DataTable();
-        DataTable PrescriptionWithoutCooperativeDataTable = new DataTable();
+        DataTable PrescriptionAllDataTable = new DataTable(); 
 
         #endregion Variables
 
@@ -2404,7 +2403,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
             
             BusyContent = "報表查詢中";
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionWithoutCooperativeDataTable);
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View; 
@@ -2445,7 +2444,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
             
 
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionWithoutCooperativeDataTable);
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
@@ -2553,7 +2552,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Visible;
             IncomeVis = Visibility.Collapsed;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
+            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
             AllPrescriptionAction();
         }
 
@@ -2562,7 +2561,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CostVis = Visibility.Collapsed;
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
+            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
             AllPrescriptionAction();
         }
          
@@ -2601,7 +2600,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = "報表查詢中";
-                PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionWithoutCooperativeDataTable);
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -2849,15 +2848,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             Ds = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList);
             MainWindow.ServerConnection.CloseConnection();
 
-            PrescriptionAllDataTable = new DataTable();
-            PrescriptionWithoutCooperativeDataTable = new DataTable();
+            PrescriptionAllDataTable = new DataTable(); 
             PrescriptionAllDataTable.Merge(Ds.Tables[0]);
             PrescriptionAllDataTable.Merge(Ds.Tables[2]);
             PrescriptionAllDataTable.Merge(Ds.Tables[4]);
-            PrescriptionAllDataTable.Merge(Ds.Tables[6]);
-            PrescriptionWithoutCooperativeDataTable.Merge(Ds.Tables[2]);
-            PrescriptionWithoutCooperativeDataTable.Merge(Ds.Tables[4]);
-            PrescriptionWithoutCooperativeDataTable.Merge(Ds.Tables[6]);
+            PrescriptionAllDataTable.Merge(Ds.Tables[6]); 
             PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports(PrescriptionAllDataTable); 
 
             DataTable ALLCHANGE = new DataTable();

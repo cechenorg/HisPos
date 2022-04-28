@@ -355,9 +355,12 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
         public void SumPrescriptionDetail(PrescriptionDetailReports prescriptionDetailReports, DepositReportDataList depositReport)
         {
-            var tempCollectionNormal = prescriptionDetailReports.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-            var tempCollectionSlow = prescriptionDetailReports.Where(p => p.AdjustCaseID == "2");
-            var tempCollectionPaySelf = prescriptionDetailReports.Where(p => p.AdjustCaseID == "0");
+
+            var filterCooperative = prescriptionDetailReports.Where(p => p.IsCooperative == false);
+
+            var tempCollectionNormal = filterCooperative.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
+            var tempCollectionSlow = filterCooperative.Where(p => p.AdjustCaseID == "2");
+            var tempCollectionPaySelf = filterCooperative.Where(p => p.AdjustCaseID == "0");
 
 
             NormalCount = tempCollectionNormal.Count();
