@@ -1229,8 +1229,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         private PrescriptionDetailReport prescriptionDetailReportSum;
-        private PrescriptionDetailReport prescriptionDetailReportSumMain;
-        private PrescriptionDetailReport prescriptionCoopDetailReportSumMain;
+       
 
         public PrescriptionDetailReport PrescriptionDetailReportSum
         {
@@ -1240,6 +1239,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 Set(() => PrescriptionDetailReportSum, ref prescriptionDetailReportSum, value);
             }
         }
+
+        private PrescriptionDetailReport prescriptionDetailReportSumMain;
 
         public PrescriptionDetailReport PrescriptionDetailReportSumMain
         {
@@ -2306,35 +2307,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             StockTakingSelectedItem = null;
         }
         
-        private void CooperativePrescriptionSelectionChangedActionMain()
-        {
-            CoopVis = Visibility.Visible;
-               
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-
-            AdjustCaseSelectItem = SelectAdjustCaseType.Cooperative;
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain); 
-        }
-
-        private void SelfPrescriptionSelectionChangedActionMain()
-        {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-            
-
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-
-            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain);
-        }
-         
-
         /******* 各種箋明細 *******/
 
         private void SelfNormalAllPrescriptionSelectionChangedAction()
@@ -2586,20 +2558,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         /******* 各種箋調整明細 *******/
         /******* 各種箋明細 *******/
 
-        private void SelfPrescriptionChangeSelectionChangedActionMain()
-        {
-            CoopVis = Visibility.Collapsed;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-             
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollectionChanged };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-            
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter; 
-            PrescriptionDetailReportSumMain.SumPrescriptionChangeDetail(PrescriptionDetailReportCollectionChanged);
-            CooperativePrescriptionSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
-
+      
         private void CooperativePrescriptionChangeSelectionChangedAction()
         {
             CoopVis = Visibility.Visible;
@@ -2629,34 +2588,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
              
             StockTakingSelectedItem = null;
         }
-
-        private void CooperativePrescriptionChangeSelectionChangedActionMain()
-        {
-            CoopVis = Visibility.Visible;
-            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-             
-            var CoopStringCopy = new List<string>() { };
-            foreach (var r in PrescriptionCoopChangeDetailReportCollectionChanged)
-            {
-                CoopStringCopy.Add(r.InsName);
-            }
-            var DistinctItems = CoopStringCopy.Select(x => x).Distinct();
-            CoopString = new List<string>() { "全部" };
-            foreach (var item in DistinctItems)
-            {
-                CoopString.Add(item);
-            } 
-
-            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopChangeDetailReportCollectionChanged };
-            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
-           
-
-            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumCoopChangePrescriptionDetailReport();
-             
-            StockTakingSelectedItem = null;
-        }
-
+        
         private void ExtraMoneyReportSelectionChangedAction()
         {
             ExtraMoneyDetailReportViewSource = new CollectionViewSource { Source = ExtraMoneyDetailReportCollection };
@@ -2768,20 +2700,27 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             
              
             TradeProfitReportSelectionChangedActionMain();
-            TradeChangeReportSelectionChangedActionMain();
-            
-            CooperativePrescriptionSelectionChangedActionMain();
-            SelfPrescriptionChangeSelectionChangedActionMain();
-            CooperativePrescriptionChangeSelectionChangedActionMain();
+            TradeChangeReportSelectionChangedActionMain(); 
+            SumCoopChangePrescriptionDetailReport(); 
             StockTakingOTCReportSelectionChangedAction();
             StockTakingReportSelectionChangedAction();
-            RewardReportCollection = new RewardReports(StartDate, EndDate);
             CalculateTotalRewardProfit();
+            TradeProfitAllReportSelectionChangedAction(); 
 
-            
-            TradeProfitAllReportSelectionChangedAction();
-            SelfPrescriptionSelectionChangedActionMain();
-             
+
+            CoopVis = Visibility.Collapsed;
+            CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
+            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
+
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionAllDataTable);
+
+            PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
+            PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
+
+
+            PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
+            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain);
+
             TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + TradeDetailReportSum.TotalCost +
                                                TradeDetailReportSum.TotalChange + StockTakingOTCDetailReportSum.Price +
                                                TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
@@ -2971,6 +2910,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void CalculateTotalRewardProfit()
         {
+            RewardReportCollection = new RewardReports(StartDate, EndDate);
             TotalRewardReport.RewardAmountSum = -RewardReportCollection.Sum(c => c.RewardAmount);
             TotalRewardReport.RewardAmount = -RewardReportCollection.Sum(c => c.RewardAmount);
         }
