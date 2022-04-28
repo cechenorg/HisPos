@@ -1577,8 +1577,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         public DataSet Ds = new DataSet();
-        DataTable ddd = new DataTable();
-        DataTable sss = new DataTable();
+        DataTable PrescriptionAllDataTable = new DataTable();
+        DataTable PrescriptionWithoutCooperativeDataTable = new DataTable();
 
         #endregion Variables
 
@@ -2410,11 +2410,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-
-            MainWindow.ServerConnection.OpenConnection();
+            
             BusyContent = "報表查詢中";
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(sss);
-            MainWindow.ServerConnection.CloseConnection();
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionWithoutCooperativeDataTable);
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View; 
@@ -2453,11 +2451,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
+            
 
-            MainWindow.ServerConnection.OpenConnection();
-
-            PrescriptionDetailReportCollection = new PrescriptionDetailReports(sss);
-            MainWindow.ServerConnection.CloseConnection();
+            PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionWithoutCooperativeDataTable);
 
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionDetailReportCollection };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
@@ -2612,13 +2608,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
-                MainWindow.ServerConnection.OpenConnection();
-                PrescriptionDetailReportCollection = new PrescriptionDetailReports(sss);
-                MainWindow.ServerConnection.CloseConnection();
-                //PrescriptionDetailReportCollection = new PrescriptionDetailReports("1", StartDate, EndDate);
-                MainWindow.ServerConnection.CloseConnection();
+                PrescriptionDetailReportCollection = new PrescriptionDetailReports(PrescriptionWithoutCooperativeDataTable);
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -2870,16 +2861,16 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             Ds = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList);
             MainWindow.ServerConnection.CloseConnection();
 
-            ddd = new DataTable();
-            sss = new DataTable();
-            ddd.Merge(Ds.Tables[0]);
-            ddd.Merge(Ds.Tables[2]);
-            ddd.Merge(Ds.Tables[4]);
-            ddd.Merge(Ds.Tables[6]);
-            sss.Merge(Ds.Tables[2]);
-            sss.Merge(Ds.Tables[4]);
-            sss.Merge(Ds.Tables[6]);
-            PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports(ddd); 
+            PrescriptionAllDataTable = new DataTable();
+            PrescriptionWithoutCooperativeDataTable = new DataTable();
+            PrescriptionAllDataTable.Merge(Ds.Tables[0]);
+            PrescriptionAllDataTable.Merge(Ds.Tables[2]);
+            PrescriptionAllDataTable.Merge(Ds.Tables[4]);
+            PrescriptionAllDataTable.Merge(Ds.Tables[6]);
+            PrescriptionWithoutCooperativeDataTable.Merge(Ds.Tables[2]);
+            PrescriptionWithoutCooperativeDataTable.Merge(Ds.Tables[4]);
+            PrescriptionWithoutCooperativeDataTable.Merge(Ds.Tables[6]);
+            PrescriptionDetailReportCollectionALL = new PrescriptionDetailReports(PrescriptionAllDataTable); 
 
             DataTable ALLCHANGE = new DataTable();
             ALLCHANGE.Merge(Ds.Tables[1]);

@@ -23,6 +23,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Meduse = r.Field<int>("Meduse");
             Profit = r.Field<int>("Profit");
             PaySelfPoint = r.Field<int>("PaySelfPoint");
+            IsCooperative = r.Field<int>("IsCooperative") == 1; 
         }
 
         private string insName;
@@ -63,6 +64,8 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         public int Id { get; set; }
         public string AdjustCaseID { get; set; }
         public string CusName { get; set; }
+
+        public bool IsCooperative { get; set; }
 
         public string InsName
         {
