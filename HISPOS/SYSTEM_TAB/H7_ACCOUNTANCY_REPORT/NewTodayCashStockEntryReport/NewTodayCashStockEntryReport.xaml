@@ -424,7 +424,7 @@
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right"
-                                Content="{Binding  PrescriptionCoopDetailReportSumMain.CoopCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding  PrescriptionDetailReportSumMain.CoopCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -435,7 +435,7 @@
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.CoopIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" Margin="0,0,0,0"/>
                         </Border>
                     </StackPanel>
@@ -447,7 +447,7 @@
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right"
-                                Content="{Binding  PrescriptionCoopDetailReportSumMain.CoopMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding  PrescriptionDetailReportSumMain.CoopMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"
                                 Foreground="Silver" Padding="0,0,30,0"/>
                         </Border>
@@ -459,7 +459,7 @@
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Width="130"  VerticalAlignment="Center" HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.CoopChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}"  FontFamily="Segoe UI Semibold"  FontSize="20" Foreground="Silver"  Padding="0,0,30,0"/>
                         </Border>
                     </StackPanel>
@@ -503,7 +503,7 @@
                         Background="Transparent" Orientation="Horizontal" PreviewMouseDown="OTCFee_PreviewMouseDown"> 
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label  Width="200"  VerticalAlignment="Center"  HorizontalContentAlignment="Right"
-                                Content="{Binding PrescriptionCoopDetailReportSumMain.CoopProfit , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding PrescriptionDetailReportSumMain.CoopProfit , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ContentStringFormat="{}{0:N0}" Foreground="Silver"  Padding="0,0,70,0"/>
                         </Border>
                     </StackPanel>

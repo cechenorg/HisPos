@@ -1249,16 +1249,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 Set(() => PrescriptionDetailReportSumMain, ref prescriptionDetailReportSumMain, value);
             }
         }  
-
-        public PrescriptionDetailReport PrescriptionCoopDetailReportSumMain
-        {
-            get => prescriptionCoopDetailReportSumMain;
-            set
-            {
-                Set(() => PrescriptionCoopDetailReportSumMain, ref prescriptionCoopDetailReportSumMain, value);
-            }
-        }
-
+         
         private CashDetailReport cashDetailReportSum;
 
         public CashDetailReport CashDetailReportSum
@@ -2722,8 +2713,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
          
         private void GetData()
         {
-            PrescriptionDetailReportSumMain = new PrescriptionDetailReport();
-            PrescriptionCoopDetailReportSumMain = new PrescriptionDetailReport();
+            PrescriptionDetailReportSumMain = new PrescriptionDetailReport(); 
             TradeDetailReportSum = new TradeProfitDetailReport();
             StockTakingDetailReportSum = new StockTakingDetailReport();
             StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
@@ -2762,18 +2752,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             StockTakingDetailReportCollection = new StockTakingDetailReports(Ds.Tables[8]);
 
             PrescriptionDetailReports tempCooperativePres = new PrescriptionDetailReports(Ds.Tables[0]);
-            PrescriptionCoopDetailReportSumMain.CoopCount = tempCooperativePres.Count();
-            PrescriptionCoopDetailReportSumMain.CoopMeduse = (int)tempCooperativePres.Sum(s => s.Meduse);
-            PrescriptionCoopDetailReportSumMain.CoopIncome = (int)tempCooperativePres.Sum(s => s.MedicalPoint) + 
-                                                             (int)tempCooperativePres.Sum(s => s.MedicalServicePoint) + 
-                                                             (int)tempCooperativePres.Sum(s => s.PaySelfPoint);
-
-
-            PrescriptionDetailReportSumMain.CoopCount = PrescriptionCoopDetailReportSumMain.CoopCount;
-            PrescriptionDetailReportSumMain.CoopMeduse = PrescriptionCoopDetailReportSumMain.CoopMeduse;
-            PrescriptionDetailReportSumMain.CoopIncome = PrescriptionCoopDetailReportSumMain.CoopIncome;
-
-
+            PrescriptionDetailReportSumMain.CoopCount = tempCooperativePres.Count();
+            PrescriptionDetailReportSumMain.CoopMeduse = (int)tempCooperativePres.Sum(s => s.Meduse);
+            PrescriptionDetailReportSumMain.CoopIncome = (int)tempCooperativePres.Sum(s => s.MedicalPoint) + 
+                                                         (int)tempCooperativePres.Sum(s => s.MedicalServicePoint) + 
+                                                         (int)tempCooperativePres.Sum(s => s.PaySelfPoint);
+             
             DataTable depositTable = Ds.Tables[14];
             DepositReportDataSumMain = new DepositReportDataList(depositTable);
             DepositDetailReportCollection.Clear();
@@ -2860,12 +2844,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
-             
-            PrescriptionCoopDetailReportSumMain.CoopChange = (decimal)PrescriptionDetailReportSum.MedicalPoint + (decimal)PrescriptionDetailReportSum.MedicalServicePoint + (decimal)PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
-            PrescriptionCoopDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionCoopDetailReportSumMain.CoopIncome + 
-                                                                   PrescriptionCoopDetailReportSumMain.CoopMeduse + 
-                                                                   PrescriptionCoopDetailReportSumMain.CoopChange + 
-                                                                   DepositReportDataSumMain.CooperativeDeposit);
+
+            PrescriptionDetailReportSumMain.CoopChange = (decimal)PrescriptionDetailReportSum.MedicalPoint + (decimal)PrescriptionDetailReportSum.MedicalServicePoint + (decimal)PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
+            PrescriptionDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionDetailReportSumMain.CoopIncome +
+                                                               PrescriptionDetailReportSumMain.CoopMeduse +
+                                                               PrescriptionDetailReportSumMain.CoopChange + 
+                                                               DepositReportDataSumMain.CooperativeDeposit);
         }
 
         private IEnumerable<PrescriptionDetailReport> GetPrescriptionDetailReportsByType(PrescriptionDetailReports input)
