@@ -2715,6 +2715,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSumMain.SumMedProfit(StockTakingDetailReportSum);
             
             SumAllProfit();
+
+            //清空下方處方詳細
+            PrescriptionDetailReportView = null;
+            PrescriptionDetailMedicineRepotCollection.Clear();
         }
 
         private void SumCashDetailReport()
