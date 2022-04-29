@@ -2672,7 +2672,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             ALLCHANGE.Merge(Ds.Tables[5]);
             ALLCHANGE.Merge(Ds.Tables[7]);
             PrescriptionDetailReportCollectionChanged = new PrescriptionDetailReports(ALLCHANGE);
-             
+            PrescriptionDetailReportSumMain.SumPrescriptionChangeDetail(PrescriptionDetailReportCollectionChanged);
+
             TradeProfitDetailReportCollection = new TradeProfitDetailReports(Ds.Tables[10]);
             TradeProfitDetailEmpReportCollection = new TradeProfitDetailEmpReports(Ds.Tables[13]);
             TradeProfitDetailReportCollectionChanged = new TradeProfitDetailReports(Ds.Tables[11]);
@@ -2725,8 +2726,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                                                TradeDetailReportSum.TotalChange + StockTakingOTCDetailReportSum.Price +
                                                TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
             PrescriptionDetailReportSumMain.SumMedProfit(StockTakingDetailReportSum, DepositReportDataSumMain);
-
-
+            
             SumAllProfit();
         }
 
