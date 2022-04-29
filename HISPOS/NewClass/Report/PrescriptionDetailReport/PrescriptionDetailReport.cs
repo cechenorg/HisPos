@@ -387,9 +387,11 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
         public void SumPrescriptionChangeDetail(PrescriptionDetailReports prescriptionDetailReports)
         {
-            var tempCollectionNormalChange = prescriptionDetailReports.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
-            var tempCollectionSlowChange = prescriptionDetailReports.Where(p => p.AdjustCaseID == "2");
-            var tempCollectionPaySelfChange = prescriptionDetailReports.Where(p => p.AdjustCaseID == "0");
+            var filterCooperative = prescriptionDetailReports.Where(p => p.IsCooperative == false);
+
+            var tempCollectionNormalChange = filterCooperative.Where(p => p.AdjustCaseID == "1" || p.AdjustCaseID == "3");
+            var tempCollectionSlowChange = filterCooperative.Where(p => p.AdjustCaseID == "2");
+            var tempCollectionPaySelfChange = filterCooperative.Where(p => p.AdjustCaseID == "0");
 
             NormalChange = tempCollectionNormalChange.Sum(s => s.Meduse + (decimal)s.MedicalServicePoint + (decimal)s.MedicalPoint + (decimal)s.PaySelfPoint);
             SlowChange = tempCollectionSlowChange.Sum(s => s.Meduse + (decimal)s.MedicalServicePoint + (decimal)s.MedicalPoint + (decimal)s.PaySelfPoint);

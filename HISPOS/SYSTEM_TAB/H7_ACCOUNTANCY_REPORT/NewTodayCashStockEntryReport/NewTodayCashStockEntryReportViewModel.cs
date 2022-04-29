@@ -2566,20 +2566,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             IncomeVis = Visibility.Visible;
             ProfitVis = Visibility.Visible;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
-            
-            var CoopStringCopy = new List<string>() { };
-            foreach (var r in PrescriptionCoopChangeDetailReportCollectionChanged)
-            {
-                CoopStringCopy.Add(r.InsName);
-            }
-            var DistinctItems = CoopStringCopy.Select(x => x).Distinct();
-            CoopString = new List<string>() { "全部" };
-            foreach (var item in DistinctItems)
-            {
-                CoopString.Add(item);
-            }
-            
-
+             
             PrescriptionDetailReportViewSource = new CollectionViewSource { Source = PrescriptionCoopChangeDetailReportCollectionChanged };
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
             AdjustCaseSelectItem = SelectAdjustCaseType.ALL; 
@@ -2778,8 +2765,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         
         private void SumCoopChangePrescriptionDetailReport()
         {
-            var tempCollection =
-                GetPrescriptionDetailReportsByType(PrescriptionCoopChangeDetailReportCollectionChanged);
+            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionCoopChangeDetailReportCollectionChanged);
 
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
