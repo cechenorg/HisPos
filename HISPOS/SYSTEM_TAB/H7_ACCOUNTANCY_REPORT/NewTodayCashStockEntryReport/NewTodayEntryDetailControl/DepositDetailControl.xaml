@@ -30,6 +30,7 @@
         <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
         <DataGrid
             Grid.Row="1"  AutoGenerateColumns="False"
+            Grid.ColumnSpan="2"
             Background="{StaticResource GridBackGround}"
             CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
             CellStyle="{StaticResource DataGridCellStyle}"
@@ -107,8 +108,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="75" Binding="{Binding Deposit }"
-                    FontFamily="Segoe UI Semi" Header="押金" IsReadOnly="True"
-                    Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}">
+                    FontFamily="Segoe UI Semi" Header="押金" IsReadOnly="True" >
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
