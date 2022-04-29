@@ -2720,12 +2720,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
 
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection, DepositReportDataSumMain);
+            PrescriptionDetailReportSumMain.SumPrescriptionDetail(PrescriptionDetailReportCollection);
 
             TradeDetailReportSum.TotalProfit = TradeDetailReportSum.RealTotal + TradeDetailReportSum.TotalCost +
                                                TradeDetailReportSum.TotalChange + StockTakingOTCDetailReportSum.Price +
                                                TradeDetailReportSum.DiscountAmtMinus + (int)TotalRewardReport.RewardAmount;
-            PrescriptionDetailReportSumMain.SumMedProfit(StockTakingDetailReportSum, DepositReportDataSumMain);
+            PrescriptionDetailReportSumMain.SumMedProfit(StockTakingDetailReportSum);
             
             SumAllProfit();
         }
@@ -2787,8 +2787,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSumMain.CoopChange = (decimal)PrescriptionDetailReportSum.MedicalPoint + (decimal)PrescriptionDetailReportSum.MedicalServicePoint + (decimal)PrescriptionDetailReportSum.PaySelfPoint + PrescriptionDetailReportSum.Meduse;
             PrescriptionDetailReportSumMain.CoopProfit = (int)((decimal)PrescriptionDetailReportSumMain.CoopIncome +
                                                                PrescriptionDetailReportSumMain.CoopMeduse +
-                                                               PrescriptionDetailReportSumMain.CoopChange + 
-                                                               DepositReportDataSumMain.CooperativeDeposit);
+                                                               PrescriptionDetailReportSumMain.CoopChange  );
         }
 
         private IEnumerable<PrescriptionDetailReport> GetPrescriptionDetailReportsByType(PrescriptionDetailReports input)

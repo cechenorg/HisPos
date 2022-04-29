@@ -337,23 +337,20 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public void SumMedProfit(StockTakingDetailReport.StockTakingDetailReport StockTakingDetailReportSum, DepositReportDataList depositReport)
+        public void SumMedProfit(StockTakingDetailReport.StockTakingDetailReport StockTakingDetailReportSum)
         {
             MedTotalCount = NormalCount + PaySelfCount + SlowCount + CoopCount;
             MedTotalIncome = NormalIncome + PaySelfIncome + SlowIncome + CoopIncome;
             MedTotalMeduse = NormalMeduse + PaySelfMeduse + SlowMeduse + CoopMeduse;
             MedTotalChange = NormalChange + PaySelfChange + SlowChange + CoopChange;
-
-
-            var allDeposit = depositReport.NormalDeposit + depositReport.ChronicDeposit +
-                             depositReport.CooperativeDeposit + depositReport.PrescribeDeposit;
+            
 
             MedTotalProfit = (decimal)(MedTotalIncome + 
-                                       MedTotalMeduse + (double)MedTotalChange + StockTakingDetailReportSum.Price + allDeposit);
+                                       MedTotalMeduse + (double)MedTotalChange + StockTakingDetailReportSum.Price );
 
         }
 
-        public void SumPrescriptionDetail(PrescriptionDetailReports prescriptionDetailReports, DepositReportDataList depositReport)
+        public void SumPrescriptionDetail(PrescriptionDetailReports prescriptionDetailReports )
         {
 
             var filterCooperative = prescriptionDetailReports.Where(p => p.IsCooperative == false);
@@ -372,18 +369,18 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
             SlowCount = tempCollectionSlow.Count();
             SlowMeduse = (int)tempCollectionSlow.Sum(s => s.Meduse);
-            NormalProfit = (int)(NormalIncome + NormalMeduse + (double)NormalChange + depositReport.NormalDeposit);
+            NormalProfit = (int)(NormalIncome + NormalMeduse + (double)NormalChange );
 
             //profit slow 
             SlowIncome = (int)tempCollectionSlow.Sum(s => s.MedicalPoint) + (int)tempCollectionSlow.Sum(s => s.MedicalServicePoint) + (int)tempCollectionSlow.Sum(s => s.PaySelfPoint);
 
             PaySelfCount = tempCollectionPaySelf.Count();
             PaySelfMeduse = (int)tempCollectionPaySelf.Sum(s => s.Meduse);
-            SlowProfit = (int)(SlowIncome + SlowMeduse + (double)SlowChange + depositReport.ChronicDeposit);
+            SlowProfit = (int)(SlowIncome + SlowMeduse + (double)SlowChange );
             //profit payself
 
             PaySelfIncome = (int)tempCollectionPaySelf.Sum(s => s.MedicalPoint) + (int)tempCollectionPaySelf.Sum(s => s.MedicalServicePoint) + (int)tempCollectionPaySelf.Sum(s => s.PaySelfPoint);
-            PaySelfProfit = (int)(PaySelfIncome + PaySelfMeduse + (double)PaySelfChange + depositReport.PrescribeDeposit);
+            PaySelfProfit = (int)(PaySelfIncome + PaySelfMeduse + (double)PaySelfChange );
 
         }
 
