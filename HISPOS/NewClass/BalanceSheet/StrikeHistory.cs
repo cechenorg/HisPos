@@ -16,7 +16,7 @@ namespace His_Pos.NewClass.BalanceSheet
             StrikeID = r.Field<int>("StrikeID");
             StrikeType = r.Field<string>("StrikeType");
             StrikeName = r.Field<string>("StrikeName");
-            StrikeValue = r.Field<double>("StrikeValue") * -1;
+            StrikeValue = r.Field<double>("StrikeValue");
             StrikeSource = r.Field<string>("StrikeSource");
             StrikeSourceID = r.Field<string>("StrikeSourceID");
             StrikeTime = r.Field<DateTime>("StrikeTime");
