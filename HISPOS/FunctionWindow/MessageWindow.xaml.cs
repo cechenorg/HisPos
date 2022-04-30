@@ -1,6 +1,8 @@
 ﻿using His_Pos.Class;
 using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -35,6 +37,22 @@ namespace His_Pos.FunctionWindow
             Message.Text = message;
 
             OkButton.Focus();
+        }
+
+        public static void ShowMessage(IEnumerable<string> messages, MessageType type)
+        {
+            MessageWindow messageWindow = new MessageWindow("", type);
+
+
+            foreach (var msg in messages)
+            {
+                messageWindow.Message.Inlines.Add(new Run(msg));
+                messageWindow.Message.Inlines.Add(new LineBreak());
+            }
+           
+
+
+            messageWindow.ShowDialog();
         }
 
         public static void ShowMessage(string message, MessageType type)

@@ -2,6 +2,7 @@
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.Service;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Xml;
@@ -64,9 +65,10 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         {
             if (string.IsNullOrEmpty(idNumber))
             {
-                MessageWindow.ShowMessage(@"顧客資料缺少身分證
-                                             因此無法查詢合作診所處方
-                                             請於下方顧客資料欄位更新顧客身份證", MessageType.ERROR);
+
+                List<string> messagesList = new List<string>() { "顧客資料缺少身分證", "因此無法查詢合作診所處方", "請於下方顧客資料欄位更新顧客身份證" };
+
+                MessageWindow.ShowMessage(messagesList, MessageType.ERROR);
                 return;
             }
                
