@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DomainModel.Enum;
+using DataTable = System.Data.DataTable;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -11,18 +13,26 @@ namespace His_Pos.NewClass.StoreOrder
     {
         private StoreOrders(DataTable dataTable)
         {
+            List<StoreOrder> tempList = new List<StoreOrder>();
             foreach (DataRow row in dataTable.Rows)
             {
                 switch (row.Field<string>("StoOrd_Type"))
                 {
                     case "P":
-                        Add(new PurchaseOrder(row));
+                        tempList.Add(new PurchaseOrder(row));
                         break;
 
                     case "R":
-                        Add(new ReturnOrder(row));
+                        tempList.Add(new ReturnOrder(row));
                         break;
                 }
+            }
+
+            IEnumerable<StoreOrder> orderList = tempList.OrderByDescending(_ => _.ReceiveID.StartsWith("1"));
+
+            foreach (var data in orderList)
+            {
+                Add(data);
             }
         }
 
