@@ -114,9 +114,10 @@
         <DataTemplate x:Key="ErrorData" DataType="UserControl">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="32" />
-                    <RowDefinition Height="32" />
-                    <RowDefinition />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <Label
@@ -125,13 +126,13 @@
                         VerticalAlignment="Center"
                         Content="架上"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="18"
+                        FontSize="12"
                         Foreground="WhiteSmoke" />
                     <TextBlock
                         Width="90"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="17"
+                        FontSize="12"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
@@ -143,35 +144,33 @@
                         VerticalAlignment="Center"
                         Content="藥袋"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="18"
+                        FontSize="12"
                         Foreground="WhiteSmoke" />
                     <TextBlock
                         Width="90"
-                        Margin="0,0,0,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="17"
+                        FontSize="12"
                         Foreground="WhiteSmoke"
-                        Text="{Binding StockDetail.TotalInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                        Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label
-                        Margin="25,0,0,10"
+                        Margin="25,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="需求"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="18"
+                        FontSize="12"
                         Foreground="WhiteSmoke" />
                     <TextBlock
                         Width="90"
-                        Margin="0,0,0,10"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="17"
+                        FontSize="12"
                         Foreground="WhiteSmoke"
-                        Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                        Text="{Binding StockDetail.DemandInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center"
                         ToolTipService.ShowDuration="600000">
                         <TextBlock.Style>
@@ -223,6 +222,27 @@
                                 </Setter>
                             </Style>
                         </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <Label
+                        Margin="25,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="不足量"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="12"
+                        Foreground="WhiteSmoke" />
+                    <TextBlock
+                        Width="90"
+                        Margin="-12,0,0,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="12"
+                        Foreground="WhiteSmoke"
+                        Text="{Binding StockDetail.InsuffInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                        TextAlignment="Center"
+                        ToolTipService.ShowDuration="600000">
                     </TextBlock>
                 </StackPanel>
             </Grid>

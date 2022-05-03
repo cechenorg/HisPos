@@ -21,8 +21,10 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return OnTheWayAmount + MedBagOnTheWayAmount; }
         }
 
-        public double ShelfInventory { get; set; }
-        public double MedBagInventory { get; set; }
+        public double InsuffInventory { get; set; }//不足量
+        public double ShelfInventory { get; set; }//架上量
+        public double MedBagInventory { get; set; }//藥袋量
+        public double DemandInventory { get; set; }//需求量
         public double ConsumeIn90Days { get; set; }
 
         public string StockDetail
@@ -47,16 +49,19 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return medBagDetails.Where(d => d.SendAmount != 0); }
         }
 
-        public bool IsInventoryError => MedBagInventory > TotalInventory;
+        public bool IsInventoryError => InsuffInventory > 0;//是否為不足量顯示
 
         #endregion ----- Define Variables -----
 
         public MedicineStockDetail(DataRow row) : base(row)
         {
-            ShelfInventory = row.Field<double>("SHELF_INV");
-            MedBagInventory = row.Field<double>("MEDBAG_INV");
+            ShelfInventory = row.Field<double>("SHELF_INV");//架上量
+            MedBagInventory = row.Field<double>("Inv_MedBagInventory");//藥袋量
             MedBagOnTheWayAmount = row.Field<double>("Inv_MedBagOnTheWay");
             ConsumeIn90Days = row.Field<double>("CONSUME_AMOUNT");
+            DemandInventory = row.Field<double>("MEDBAG_INV");//需求量
+            InsuffInventory = row.Field<double>("InsuffInventory");//不足量  
+            //IsInventoryError = InsuffInventory > 0 ? true : false;//不足量顯示
         }
 
         #region ----- Define Functions -----
