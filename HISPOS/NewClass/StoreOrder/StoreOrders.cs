@@ -13,27 +13,19 @@ namespace His_Pos.NewClass.StoreOrder
     {
         private StoreOrders(DataTable dataTable)
         {
-            List<StoreOrder> tempList = new List<StoreOrder>();
             foreach (DataRow row in dataTable.Rows)
             {
                 switch (row.Field<string>("StoOrd_Type"))
                 {
                     case "P":
-                        tempList.Add(new PurchaseOrder(row));
+                        Add(new PurchaseOrder(row));
                         break;
 
                     case "R":
-                        tempList.Add(new ReturnOrder(row));
+                        Add(new ReturnOrder(row));
                         break;
                 }
-            }
-
-            IEnumerable<StoreOrder> orderList = tempList.OrderByDescending(_ => _.ReceiveID.StartsWith("1"));
-
-            foreach (var data in orderList)
-            {
-                Add(data);
-            }
+            } 
         }
 
         public StoreOrders(List<StoreOrder> list) : base(list)
