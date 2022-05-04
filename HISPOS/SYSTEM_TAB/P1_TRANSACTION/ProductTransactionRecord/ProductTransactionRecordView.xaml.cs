@@ -188,6 +188,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                             countDL += 1;
                         }
                         RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
+
+                        lblCount.Content = RecordDetailList.Rows.Count;
+                        lblTotal.Content = RecordDetailList.Compute("Sum(TraDet_PriceSum)", string.Empty);
                         break;
 
                     case 3: // 銷售彙總
