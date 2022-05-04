@@ -90,7 +90,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
             parameterList.Add(new SqlParameter("verifykey", data.VerifyKey));
             parameterList.Add(new SqlParameter("TargetMonth", data.Month));
             parameterList.Add(new SqlParameter("TargetValue", data.MonthlyTarget));
-            parameterList.Add(new SqlParameter("EmpName", ViewModelMainWindow.CurrentUser.Name));
+            parameterList.Add(new SqlParameter("EmpID", ViewModelMainWindow.CurrentUser.ID));
             
             MainWindow.ServerConnection.ExecuteProcBySchema(
                ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertUpdateAccountTarget]", parameterList);
