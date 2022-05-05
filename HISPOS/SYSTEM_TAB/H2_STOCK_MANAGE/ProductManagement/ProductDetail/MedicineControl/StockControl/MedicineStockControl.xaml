@@ -153,7 +153,58 @@
                         FontSize="12"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                        TextAlignment="Center" />
+                        TextAlignment="Center" 
+                        ToolTipService.ShowDuration="600000">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <EventSetter Event="MouseEnter" Handler="GetMedBagDetail" />
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <DataGrid
+                                            Width="420"
+                                            Height="Auto"
+                                            AutoGenerateColumns="False"
+                                            Background="Transparent"
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            CanUserReorderColumns="False"
+                                            CanUserResizeColumns="False"
+                                            CanUserResizeRows="False"
+                                            CanUserSortColumns="False"
+                                            FontFamily="Courier New"
+                                            FontSize="18"
+                                            Foreground="WhiteSmoke"
+                                            GridLinesVisibility="None"
+                                            HeadersVisibility="None"
+                                            ItemsSource="{Binding StockDetail.MedBagStockDetails, UpdateSourceTrigger=PropertyChanged}"
+                                            RowHeight="25">
+                                            <DataGrid.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="Padding" Value="0" />
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                </Style>
+                                            </DataGrid.CellStyle>
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Width="50" Binding="{Binding Type}" />
+                                                <DataGridTextColumn Width="100" Binding="{Binding Name}" />
+                                                <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" />
+                                                <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}" />
+                                                <DataGridTextColumn Width="70" Binding="{Binding SelfAmount, StringFormat=N1}">
+                                                    <DataGridTextColumn.ElementStyle>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                                        </Style>
+                                                    </DataGridTextColumn.ElementStyle>
+                                                </DataGridTextColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label
@@ -194,7 +245,7 @@
                                             Foreground="WhiteSmoke"
                                             GridLinesVisibility="None"
                                             HeadersVisibility="None"
-                                            ItemsSource="{Binding StockDetail.MedBagStockDetails, UpdateSourceTrigger=PropertyChanged}"
+                                            ItemsSource="{Binding StockDetail.DemandStockDetails, UpdateSourceTrigger=PropertyChanged}"
                                             RowHeight="25">
                                             <DataGrid.CellStyle>
                                                 <Style TargetType="{x:Type DataGridCell}">
