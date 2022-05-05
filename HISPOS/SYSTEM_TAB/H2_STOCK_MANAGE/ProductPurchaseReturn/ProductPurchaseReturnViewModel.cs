@@ -148,16 +148,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                             storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
                         }
                     }
-
-                    var orderedList = storeOrderCollection.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
-
-                    storeOrderCollection = new StoreOrders();
-
-                    for (int i = orderedList.Count() - 1; i >= 0; i --)
-                    {
-                        storeOrderCollection.Add(orderedList[i]);
-                    }
-                      
+                     
                     //(20220324)
                     SingdeTotalViewModel.InitData();
                     NormalViewModel.InitData(storeOrderCollection);

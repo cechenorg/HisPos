@@ -38,7 +38,19 @@ namespace His_Pos.NewClass.StoreOrder
 
         public static StoreOrders GetOrdersNotDone()
         {
-            return new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
+            StoreOrders data = new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
+
+
+            var orderedList = data.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
+
+            StoreOrders result = new StoreOrders();
+
+            for (int i = orderedList.Count() - 1; i >= 0; i--)
+            {
+                result.Add(orderedList[i]);
+            }
+
+            return result;
         }
         internal static  StoreOrders GetOrdersMinus(string ID)
         {
