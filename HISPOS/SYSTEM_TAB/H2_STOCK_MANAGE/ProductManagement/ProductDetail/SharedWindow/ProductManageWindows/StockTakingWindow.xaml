@@ -26,7 +26,7 @@
             Grid.Column="0"
             VerticalAlignment="Center"
             HorizontalContentAlignment="Right"
-            Content="盤點架上量"
+            Content="庫存總量"
             FontFamily="Segoe UI Semibold"
             FontSize="22"
             Foreground="Black" />

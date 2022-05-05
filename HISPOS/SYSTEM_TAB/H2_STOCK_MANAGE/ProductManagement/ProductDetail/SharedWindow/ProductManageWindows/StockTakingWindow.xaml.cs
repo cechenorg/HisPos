@@ -112,11 +112,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             if (!IsNewInventoryValid()) return;
 
-            double finalInv = (stockDetail.MedBagInventory > stockDetail.TotalInventory) ? stockDetail.TotalInventory + double.Parse(NewInventory) : stockDetail.MedBagInventory + double.Parse(NewInventory);
-            double tempShelfInv = stockDetail.TotalInventory - stockDetail.ShelfInventory + double.Parse(NewInventory) - stockDetail.MedBagInventory;
-            double shelfInv = (tempShelfInv < 0) ? 0 : tempShelfInv;
+            double finalInv = double.Parse(NewInventory);
+            //double finalInv = (stockDetail.MedBagInventory > stockDetail.TotalInventory) ? stockDetail.TotalInventory + double.Parse(NewInventory) : stockDetail.MedBagInventory + double.Parse(NewInventory);
+            //double tempShelfInv = stockDetail.TotalInventory - stockDetail.ShelfInventory + double.Parse(NewInventory) - stockDetail.MedBagInventory;
+            //double shelfInv = (tempShelfInv < 0) ? 0 : tempShelfInv;
 
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將總庫存調整為 {finalInv.ToString("0.##")} ?\r\n(架上量: {shelfInv.ToString("0.##")} 藥袋量: {(finalInv - shelfInv).ToString("0.##")})", "");
+           // ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將總庫存調整為 {finalInv.ToString("0.##")} ?\r\n(架上量: {shelfInv.ToString("0.##")} 藥袋量: {(finalInv - shelfInv).ToString("0.##")})", "");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將總庫存調整為 {finalInv.ToString("0.##")} ?", "");
 
             if (!(bool)confirmWindow.DialogResult) return;
 
