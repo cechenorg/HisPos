@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 
         private string stockDetail = "";
         private MedBagDetailStructs medBagDetails;
+        private MedBagDetailStructs demandDetails;
         private OnTheWayDetailStructs onTheWayDetail;
 
         public double MedBagOnTheWayAmount { get; set; }
@@ -42,6 +43,10 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         public IEnumerable<MedBagDetailStruct> MedBagStockDetails
         {
             get { return medBagDetails.Where(d => d.SelfAmount != 0); }
+        }
+        public IEnumerable<MedBagDetailStruct> DemandStockDetails
+        {
+            get { return demandDetails.Where(d => d.SelfAmount != 0); }
         }
 
         public IEnumerable<MedBagDetailStruct> MedBagSendDetails
@@ -90,9 +95,11 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 
         internal void GetMedBagDetailByID(string proID, string wareID)
         {
-            medBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID);
+            medBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID, 0);//藥袋
+            demandDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID, 1);//需求
             RaisePropertyChanged(nameof(MedBagStockDetails));
             RaisePropertyChanged(nameof(MedBagSendDetails));
+            RaisePropertyChanged(nameof(DemandStockDetails));
         }
 
         internal void GetOnTheWayDetailByID(string proID, string wareID)

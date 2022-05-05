@@ -15,9 +15,9 @@ namespace His_Pos.NewClass.Product.ProductManagement.MedBagDetail
 
         #region ----- Define Functions -----
 
-        internal static MedBagDetailStructs GetMedBagDetailByID(string proID, string wareID)
+        internal static MedBagDetailStructs GetMedBagDetailByID(string proID, string wareID,int isInsuff)
         {
-            return new MedBagDetailStructs(ProductDetailDB.GetMedBagDetailByID(proID, wareID));
+            return new MedBagDetailStructs(ProductDetailDB.GetMedBagDetailByID(proID, wareID, isInsuff));
         }
 
         internal static MedBagDetailStructs GetOTCMedBagDetailByID(string proID, string wareID)
