@@ -29,14 +29,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
      
          
-        public Employee employee;
+        public Employee _SelectedEmployee;
 
-        public Employee Employee
+        public Employee SelectedEmployee
         {
-            get { return employee; }
+            get { return _SelectedEmployee; }
             set
             {
-                Set(() => Employee, ref employee, value); 
+                Set(() => SelectedEmployee, ref _SelectedEmployee, value); 
             }
         }
 
@@ -100,12 +100,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private void CancelAction()
         {
-            Employee = Employee.GetDataByID(Employee.ID);
+            SelectedEmployee = SelectedEmployee.GetDataByID(SelectedEmployee.ID);
         }
 
         private void SubmitAction()
         {
-            Employee.Update();
+            SelectedEmployee.Update();
             MessageWindow.ShowMessage("修改成功", Class.MessageType.SUCCESS);
         }
 
@@ -114,7 +114,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除員工? 刪除後無法恢復 請慎重確認", "員工刪除");
             if ((bool)confirmWindow.DialogResult)
             {
-                Employee.Delete();
+                SelectedEmployee.Delete();
                 MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
                 Init();
             }
@@ -122,7 +122,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         public void ChangePassWordAction()
         {
-            EmployeeChangePasswordWindow.EmployeeChangePasswordWindow employeeChangePasswordWindow = new EmployeeChangePasswordWindow.EmployeeChangePasswordWindow(Employee);
+            EmployeeChangePasswordWindow.EmployeeChangePasswordWindow employeeChangePasswordWindow = new EmployeeChangePasswordWindow.EmployeeChangePasswordWindow(SelectedEmployee);
         }
 
         public void NewEmployeeAction()

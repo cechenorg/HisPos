@@ -6,6 +6,8 @@
     d:DataContext="{d:DesignInstance Type=employeeManage:EmployeeManageViewModel}"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:service="clr-namespace:His_Pos.Service"
     d:DesignHeight="840" d:DesignWidth="1365" mc:Ignorable="d" >
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="840">
@@ -29,7 +31,7 @@
                     CellStyle="{StaticResource DataGridCellStyle}"
                     ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsSynchronizedWithCurrentItem="True"
                     ItemsSource="{Binding EmployeeCollection, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                     VerticalScrollBarVisibility="Hidden">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
@@ -37,13 +39,13 @@
                                 <Trigger Property="DataGridRow.IsSelected" Value="True">
                                     <Setter Property="Background" Value="{StaticResource GridSelected}" />
                                 </Trigger>
-                            </Style.Triggers> 
+                            </Style.Triggers>
                             <Setter Property="FontSize" Value="25" />
                             <Setter Property="Height" Value="50" />
                         </Style>
-                    </DataGrid.RowStyle> 
+                    </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                          
+
                         <DataGridTextColumn
                             Width="160" Header="姓名"
                             Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
@@ -141,14 +143,185 @@
                         </DataGridTextColumn>
 
 
-                    </DataGrid.Columns> 
+                    </DataGrid.Columns>
 
 
                 </DataGrid>
             </Grid>
 
-            <Grid   Grid.Row="2" Margin="10,0" Background="{StaticResource GridDarkerBackGround}">
+            <Grid Grid.Row="2" Margin="10,0" Background="{StaticResource GridDarkerBackGround}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="30"></Setter>
+                    </Style>
+                </Grid.Resources>
+                <Grid  Margin="10">
 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontSize="30" Text="{Binding SelectedEmployee.Name}"/>
+
+                    <TextBlock Grid.Column="1">
+                        <Run>結帳人員編號:</Run>
+                        <Run Text="{Binding SelectedEmployee.CashierID}"></Run>
+                    </TextBlock>
+
+                    <Button Content="更改帳號密碼" Background="DodgerBlue" Width="120" Grid.Column="2"/>
+                </Grid>
+
+                <Grid  Grid.Row="1"> 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="身分證"/>
+                        <TextBlock Text="{Binding SelectedEmployee.IDNumber}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock Text="性別"/>
+                        <ComboBox Width="120" SelectedValue="{Binding SelectedEmployee.Gender}" SelectedValuePath="Tag">
+                            <ComboBoxItem Content="男" Tag="1"/>
+                            <ComboBoxItem Content="女" Tag="0"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <TextBlock Text="生日"/>
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="3">
+                        <TextBlock Text="家電"/>
+                        <TextBox Width="150" Text="{Binding SelectedEmployee.SecondPhone}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="4">
+                        <TextBlock Text="手機"/>
+                        <TextBox Width="150"  Text="{Binding SelectedEmployee.CellPhone}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="5">
+                        <TextBlock Text="Line"/>
+                        <TextBox Width="150"  Text="{Binding SelectedEmployee.Line}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid   Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="電子信箱" VerticalAlignment="Center"/>
+                        <TextBox Width="300"  Text="{Binding SelectedEmployee.Email}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock Text="住址" VerticalAlignment="Center"/>
+                        <TextBox Width="300"  Text="{Binding SelectedEmployee.Address}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid   Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <TextBlock   Text="職位"   />
+                        <ComboBox  Width="120" DisplayMemberPath="WorkPositionName" 
+                            ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                            ItemsSource="{Binding WorkPositions, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedEmployee.WorkPosition}"
+                            Text="{Binding SelectedEmployee.WorkPosition.WorkPositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock  Text="到職日" VerticalAlignment="Center"/>
+                        <xctk:MaskedTextBox Width="120"
+                         HorizontalContentAlignment="Center"  Foreground="{StaticResource ForeGround}"
+                            InputMethod.IsInputMethodEnabled="False" InsertKeyMode="Overwrite" Mask="000/00/00"   PromptChar="-"
+                            Style="{StaticResource MaterialDesignTextBox}"
+                            ValueDataType="xctk:DateTimeFormat">
+                            <xctk:MaskedTextBox.Text>
+                                <Binding   Mode="TwoWay" NotifyOnValidationError="True" Path="SelectedEmployee.StartDate"
+                                    UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                    <Binding.ValidationRules>
+                                        <service:DateValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </xctk:MaskedTextBox.Text>
+                        </xctk:MaskedTextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <TextBlock  Text="離職日" VerticalAlignment="Center"/>
+                        <xctk:MaskedTextBox  Foreground="{StaticResource ForeGround}" Width="120"
+                            InputMethod.IsInputMethodEnabled="False" InsertKeyMode="Overwrite" Mask="000/00/00"   PromptChar="-"
+                            Style="{StaticResource MaterialDesignTextBox}" ValueDataType="xctk:DateTimeFormat">
+                            <xctk:MaskedTextBox.Text>
+                                <Binding 
+                                    Mode="TwoWay"
+                                    NotifyOnValidationError="True"
+                                    Path="SelectedEmployee.LeaveDate"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    ValidatesOnDataErrors="True">
+                                    <Binding.ValidationRules>
+                                        <service:DateValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </xctk:MaskedTextBox.Text>
+                        </xctk:MaskedTextBox>
+                    </StackPanel>
+
+                </Grid>
+
+                <Grid Grid.Row="5">
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBox HorizontalAlignment="Center" VerticalContentAlignment="Center"
+                            Text="備註" FontFamily="Segoe UI Semibold" Foreground="Black" />
+                        <TextBox Width="840"
+                            VerticalContentAlignment="Top" AcceptsReturn="True" Background="{StaticResource LightForeGround}" 
+                            Text="{Binding SelectedEmployee.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"> 
+                        </TextBox>
+                        
+                         
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="260"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel  Orientation="Horizontal" Grid.Column="1" Margin="5"> 
+                        <Button Width="120" Background="DimGray" Content="取消"  Command="{Binding CancelCommand}" HorizontalAlignment="Right" />
+                        <Button Width="120" Background="DarkCyan" Content="確認" Margin="5,0,0,0" Command="{Binding SubmitCommand}"  HorizontalAlignment="Right"  /> 
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
     </Viewbox>
