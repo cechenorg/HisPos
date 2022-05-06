@@ -16,11 +16,16 @@
                 <RowDefinition Height="300"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="20" />
+                </Style> 
+            </Grid.Resources>
             <DockPanel  >
-                <RadioButton Content="本店" VerticalAlignment="Center"/>
-                <RadioButton Content="全部" VerticalAlignment="Center"/>
+                <RadioButton Content="本店"  VerticalContentAlignment="Center" IsChecked="{Binding LocalCheck}" FontSize="20"  />
+                <RadioButton  Margin="5,0,0,0"  Content="全部"  VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck}" FontSize="20"  />
 
-                <CheckBox Content="排除已離職"></CheckBox>
+                <CheckBox Margin="5,0,0,0" Content="排除已離職" FontSize="20" IsChecked="{Binding IsQuit}"></CheckBox>
 
                 <Button Background="DarkCyan" Width="100" Content="新增員工" Command="{Binding NewEmployeeCommand}" Margin="0,0,10,0" HorizontalAlignment="Right"/>
             </DockPanel>
@@ -30,7 +35,7 @@
                 <DataGrid AutoGenerateColumns="False" Background="Transparent" CanUserAddRows="False"
                     CellStyle="{StaticResource DataGridCellStyle}"
                     ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsSynchronizedWithCurrentItem="True"
-                    ItemsSource="{Binding EmployeeCollection, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding FilterEmployeeCollection, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                     VerticalScrollBarVisibility="Hidden">
                     <DataGrid.RowStyle>
@@ -187,59 +192,47 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="身分證"/>
-                        <TextBlock Text="{Binding SelectedEmployee.IDNumber}"/>
+                        <TextBlock VerticalAlignment="Center" Text="身分證" />
+                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{Binding SelectedEmployee.IDNumber}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
-                        <TextBlock Text="性別"/>
-                        <ComboBox Width="120" SelectedValue="{Binding SelectedEmployee.Gender}" SelectedValuePath="Tag">
-                            <ComboBoxItem Content="男" Tag="1"/>
-                            <ComboBoxItem Content="女" Tag="0"/>
+                        <TextBlock Text="性別" VerticalAlignment="Center" />
+                        <ComboBox Width="120" FontSize="20" HorizontalContentAlignment="Center"
+                                  SelectedValue="{Binding SelectedEmployee.Gender}" SelectedValuePath="Tag">
+                            <ComboBoxItem Content="男" Tag="男"/>
+                            <ComboBoxItem Content="女" Tag="女"/>
                         </ComboBox>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="2">
-                        <TextBlock Text="生日"/>
-
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Grid.Column="3">
-                        <TextBlock Text="家電"/>
-                        <TextBox Width="150" Text="{Binding SelectedEmployee.SecondPhone}"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Grid.Column="4">
-                        <TextBlock Text="手機"/>
-                        <TextBox Width="150"  Text="{Binding SelectedEmployee.CellPhone}"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Grid.Column="5">
-                        <TextBlock Text="Line"/>
-                        <TextBox Width="150"  Text="{Binding SelectedEmployee.Line}"/>
-                    </StackPanel>
+                        <TextBlock Text="生日"/> 
+                    </StackPanel> 
                 </Grid>
 
-                <Grid   Grid.Row="2">
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition /> 
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="電子信箱" VerticalAlignment="Center"/>
-                        <TextBox Width="300"  Text="{Binding SelectedEmployee.Email}"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <TextBlock Text="家電" VerticalAlignment="Center" />
+                        <TextBox Width="150" FontSize="25" Text="{Binding SelectedEmployee.SecondPhone}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
-                        <TextBlock Text="住址" VerticalAlignment="Center"/>
-                        <TextBox Width="300"  Text="{Binding SelectedEmployee.Address}"/>
+                        <TextBlock Text="手機" VerticalAlignment="Center" />
+                        <TextBox Width="150" FontSize="25" Text="{Binding SelectedEmployee.CellPhone}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <TextBlock Text="Line" VerticalAlignment="Center"/>
+                        <TextBox Width="150" FontSize="25" Text="{Binding SelectedEmployee.Line}"/>
                     </StackPanel>
                 </Grid>
 
@@ -247,12 +240,29 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="電子信箱" VerticalAlignment="Center"/>
+                        <TextBox Width="300" FontSize="25" Text="{Binding SelectedEmployee.Email}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock Text="住址" VerticalAlignment="Center" />
+                        <TextBox Width="300" FontSize="25"  Text="{Binding SelectedEmployee.Address}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid   Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
-                        <TextBlock   Text="職位"   />
-                        <ComboBox  Width="120" DisplayMemberPath="WorkPositionName" 
+                        <TextBlock   Text="職位"  VerticalAlignment="Center" />
+                        <ComboBox  Width="120" DisplayMemberPath="WorkPositionName" FontSize="20" HorizontalContentAlignment="Center"
                             ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                             ItemsSource="{Binding WorkPositions, UpdateSourceTrigger=PropertyChanged}"
                             SelectedItem="{Binding SelectedEmployee.WorkPosition}"

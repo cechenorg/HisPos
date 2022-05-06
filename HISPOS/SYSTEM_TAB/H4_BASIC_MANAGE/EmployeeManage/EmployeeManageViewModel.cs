@@ -4,6 +4,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.WorkPosition;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
@@ -51,6 +52,17 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
+        public Employees _filterEmployeeCollection;
+
+        public Employees FilterEmployeeCollection
+        {
+            get { return _filterEmployeeCollection; }
+            set
+            {
+                Set(() => FilterEmployeeCollection, ref _filterEmployeeCollection, value);
+            }
+        }
+
         public WorkPositions workPositions = new WorkPositions();
 
         public WorkPositions WorkPositions
@@ -69,7 +81,25 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             get { return localCheck; }
             set
             {
-                Set(() => LocalCheck, ref localCheck, value); 
+                Set(() => LocalCheck, ref localCheck, value);
+
+
+                FilterEmployeeCollection.Clear();
+
+                if (value == false)
+                {
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
+                    {
+                        FilterEmployeeCollection.Add(quitEmployee);
+                    }
+                }
+                else
+                {
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == true))
+                    {
+                        FilterEmployeeCollection.Add(quitEmployee);
+                    }
+                }
             }
         }
 
@@ -80,7 +110,61 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             get { return globalCheck; }
             set
             {
-                Set(() => GlobalCheck, ref globalCheck, value); 
+                Set(() => GlobalCheck, ref globalCheck, value);
+
+
+                FilterEmployeeCollection.Clear();
+
+                if (value )
+                {
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
+                    {
+                        FilterEmployeeCollection.Add(quitEmployee);
+                    }
+                }
+                else
+                {
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == true))
+                    {
+                        FilterEmployeeCollection.Add(quitEmployee);
+                    }
+                }
+            }
+        }
+
+        private bool _isQuit = true;
+
+        public bool IsQuit
+        {
+            get { return _isQuit; }
+            set
+            {
+                Set(() => IsQuit, ref _isQuit, value);
+
+                FilterEmployeeCollection.Clear();
+
+
+                if (value == false)
+                {
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.LeaveDate == null))
+                    {
+                        FilterEmployeeCollection.Add(quitEmployee);
+                    }
+                }
+                else 
+                {
+
+                    foreach (var quitEmployee in EmployeeCollection)
+                    {
+                        FilterEmployeeCollection.Add(quitEmployee);
+                    }
+
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.LeaveDate != null))
+                    {
+                        FilterEmployeeCollection.Remove(quitEmployee);
+                    }
+                }
+
             }
         }
 
@@ -142,7 +226,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             EmployeeCollection = new Employees();
             EmployeeCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
-             
+            FilterEmployeeCollection = new Employees();
+
+            foreach (var employeedata in EmployeeCollection)
+            {
+                FilterEmployeeCollection.Add(employeedata);
+            } 
+
+            SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
         }
 
          
