@@ -86,7 +86,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 case "NORMAL":
                     UiType = OrderUITypeEnum.NORMAL;
-                    NormalViewModel.InitData(StoreOrders.GetOrdersNotDone());
+                    InitVariables();
+                    //NormalViewModel.InitData(StoreOrders.GetOrdersNotDone());
                     break;
 
                 case "SINGDE":
