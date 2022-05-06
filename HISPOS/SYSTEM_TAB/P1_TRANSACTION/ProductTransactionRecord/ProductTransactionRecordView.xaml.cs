@@ -154,7 +154,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                         }
                         RecordGrid.ItemsSource = RecordList.DefaultView;
                         lblCount.Content = RecordList.Rows.Count;
-                        lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
+                        lblTotal.Content = "(含折扣):" + RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
                         if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
                         break;
 
@@ -190,7 +190,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                         RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
 
                         lblCount.Content = RecordDetailList.Rows.Count;
-                        lblTotal.Content = RecordDetailList.Compute("Sum(TraDet_PriceSum)", string.Empty);
+                        lblTotal.Content = "(不含折扣):" + RecordDetailList.Compute("Sum(TraDet_PriceSum)", string.Empty);
                         break;
 
                     case 3: // 銷售彙總
