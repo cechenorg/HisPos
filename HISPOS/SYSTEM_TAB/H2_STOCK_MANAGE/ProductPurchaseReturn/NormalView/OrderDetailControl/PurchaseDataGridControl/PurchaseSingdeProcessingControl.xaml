@@ -571,6 +571,15 @@
             Grid.Row="2"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
+            <Button
+                Margin="10,0,0,0"
+                Width="150"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding ToNextStatusCommand}"
+                Content="確認收貨"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -617,15 +626,6 @@
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
                 Content="作廢"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" />
-            <Button
-                Margin="10,0,0,0"
-                Width="150"
-                Background="RoyalBlue"
-                BorderThickness="0"
-                Command="{Binding ToNextStatusCommand}"
-                Content="確認收貨"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>
