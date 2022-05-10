@@ -592,6 +592,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
+               
                 XLWorkbook wb = new XLWorkbook();
                 var style = XLWorkbook.DefaultStyle;
                 style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
@@ -615,7 +616,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 ws.Cell("C2").Value = "數量";
                 ws.Cell("D2").Value = "總售價";
 
-                var rangeWithData = ws.Cell(3, 1).InsertData(RecordSumList.AsEnumerable());
+                var tempRecordSumList = RecordSumList.Copy();
+                tempRecordSumList.Columns.Remove("NO"); 
+                var rangeWithData = ws.Cell(3, 1).InsertData(tempRecordSumList.AsEnumerable());
 
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                 rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
