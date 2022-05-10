@@ -316,7 +316,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding ReturnStockValue, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
+                Text="{Binding ReturnStockValue, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -346,7 +346,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="{Binding ReturnDiff, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
+                Text="{Binding ReturnDiff, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
