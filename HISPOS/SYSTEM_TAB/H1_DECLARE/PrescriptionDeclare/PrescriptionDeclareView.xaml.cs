@@ -745,7 +745,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             string url = @"https://medcloud.nhi.gov.tw/imme0008/IMME0008S01.aspx";
             Process pro = new Process();
-            pro.StartInfo.FileName = "iexplore.exe";
+            pro.StartInfo.FileName = "msedge.exe";
+            //pro.StartInfo.FileName = "iexplore.exe";
             pro.StartInfo.Arguments = url;
             pro.Start();
         }
