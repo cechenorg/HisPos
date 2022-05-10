@@ -405,7 +405,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
+                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"

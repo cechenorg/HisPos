@@ -166,7 +166,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding Total, StringFormat=N2}"
+                    Binding="{Binding Total, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="金額"
                     IsReadOnly="True">
@@ -183,7 +183,7 @@
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ContentControl IsEnabled="False" Content="{Binding}">
+                            <ContentControl IsEnabled="True" Content="{Binding}">
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Setter Property="ContentTemplate" Value="{StaticResource OrderNotDone}" />
@@ -229,8 +229,8 @@
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
-                Text="{Binding CurrenTotalOrder.Total, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
-            <ContentControl IsEnabled="False" Margin="625,0,0,0" Content="{Binding}">
+                Text="{Binding CurrenTotalOrder.Total, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
+            <ContentControl IsEnabled="True" Margin="625,0,0,0" Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource OrderAllToDone}" />

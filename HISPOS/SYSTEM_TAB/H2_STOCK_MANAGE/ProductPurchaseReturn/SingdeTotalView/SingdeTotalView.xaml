@@ -94,7 +94,7 @@
                         Margin="0,10,5,10"
                         Background="DimGray"
                         BorderThickness="0"
-                        Content="杏德總檔進退貨"
+                        Content="總檔進退貨"
                         FontFamily="Segoe UI Semibold"
                         FontSize="13" />
                 </StackPanel>

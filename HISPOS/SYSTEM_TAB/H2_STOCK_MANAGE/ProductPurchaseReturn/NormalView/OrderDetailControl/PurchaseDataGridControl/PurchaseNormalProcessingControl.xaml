@@ -470,7 +470,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="{Binding CurrentStoreOrder.TotalPrice, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding CurrentStoreOrder.TotalPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"

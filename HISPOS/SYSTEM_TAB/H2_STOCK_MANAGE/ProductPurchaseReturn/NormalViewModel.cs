@@ -250,6 +250,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
                 AddOrderByMinus();
+                //(20220510)確認收貨之後清空搜尋條件
+                SearchString = string.Empty;
             }
             else
             {
