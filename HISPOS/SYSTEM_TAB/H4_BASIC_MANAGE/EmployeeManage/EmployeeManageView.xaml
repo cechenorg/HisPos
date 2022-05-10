@@ -19,13 +19,14 @@
             <Grid.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="FontSize" Value="20" />
-                </Style> 
+                </Style>
+                <service:NullableDateConverter x:Key="NullableDateConverter" />
             </Grid.Resources>
             <DockPanel  >
                 <RadioButton Content="本店"  VerticalContentAlignment="Center" IsChecked="{Binding LocalCheck}" FontSize="20"  />
                 <RadioButton  Margin="5,0,0,0"  Content="全部"  VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck}" FontSize="20"  />
 
-                <CheckBox Margin="5,0,0,0" Content="排除已離職" FontSize="20" IsChecked="{Binding IsQuit}"></CheckBox>
+                <CheckBox Margin="5,0,0,0" Content="排除已離職" FontSize="20" IsChecked="{Binding IsQuit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
 
                 <Button Background="DarkCyan" Width="100" Content="新增員工" Command="{Binding NewEmployeeCommand}" Margin="0,0,10,0" HorizontalAlignment="Right"/>
             </DockPanel>
@@ -184,17 +185,17 @@
                         <Run Text="{Binding SelectedEmployee.CashierID}"></Run>
                     </TextBlock>
 
-                    <Button Content="更改帳號密碼" Background="DodgerBlue" Width="120" Grid.Column="2"/>
+                    <Button Content="更改帳號密碼" Background="DodgerBlue" Width="120" Grid.Column="2" Command="{Binding ChangePassWordCommand}"/>
                 </Grid>
 
-                <Grid  Grid.Row="1"> 
+                <Grid  Grid.Row="1" Margin="5,0,0,0"> 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" >
                         <TextBlock VerticalAlignment="Center" Text="身分證" />
                         <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{Binding SelectedEmployee.IDNumber}"/>
                     </StackPanel>
@@ -209,11 +210,29 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="2">
-                        <TextBlock Text="生日"/> 
+                        <TextBlock Text="生日" VerticalAlignment="Center"/>
+                        <xctk:MaskedTextBox 
+                            Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20"
+                            Foreground="{StaticResource ForeGround}"
+                            InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
+                            Style="{StaticResource MaterialDesignTextBox}"
+                            ValueDataType="xctk:DateTimeFormat">
+                            <xctk:MaskedTextBox.Text>
+                                <Binding
+                                    Converter="{StaticResource NullableDateConverter}"
+                                    Mode="TwoWay" NotifyOnValidationError="True"
+                                    Path="SelectedEmployee.Birthday"
+                                    UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                    <Binding.ValidationRules>
+                                        <service:DateValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </xctk:MaskedTextBox.Text>
+                        </xctk:MaskedTextBox>
                     </StackPanel> 
                 </Grid>
 
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="2" Margin="5,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition /> 
@@ -222,21 +241,21 @@
 
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
                         <TextBlock Text="家電" VerticalAlignment="Center" />
-                        <TextBox Width="150" FontSize="25" Text="{Binding SelectedEmployee.SecondPhone}"/>
+                        <TextBox VerticalAlignment="Center" Width="150" FontSize="25" Text="{Binding SelectedEmployee.SecondPhone}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
                         <TextBlock Text="手機" VerticalAlignment="Center" />
-                        <TextBox Width="150" FontSize="25" Text="{Binding SelectedEmployee.CellPhone}"/>
+                        <TextBox VerticalAlignment="Center" Width="150" FontSize="25" Text="{Binding SelectedEmployee.CellPhone}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="2">
                         <TextBlock Text="Line" VerticalAlignment="Center"/>
-                        <TextBox Width="150" FontSize="25" Text="{Binding SelectedEmployee.Line}"/>
+                        <TextBox VerticalAlignment="Center" Width="150" FontSize="25" Text="{Binding SelectedEmployee.Line}"/>
                     </StackPanel>
                 </Grid>
 
-                <Grid   Grid.Row="3">
+                <Grid   Grid.Row="3" Margin="5,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -244,16 +263,16 @@
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="電子信箱" VerticalAlignment="Center"/>
-                        <TextBox Width="300" FontSize="25" Text="{Binding SelectedEmployee.Email}"/>
+                        <TextBox VerticalAlignment="Center" Width="300" FontSize="25" Text="{Binding SelectedEmployee.Email}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
                         <TextBlock Text="住址" VerticalAlignment="Center" />
-                        <TextBox Width="300" FontSize="25"  Text="{Binding SelectedEmployee.Address}"/>
+                        <TextBox VerticalAlignment="Center" Width="300" FontSize="25"  Text="{Binding SelectedEmployee.Address}"/>
                     </StackPanel>
                 </Grid>
 
-                <Grid   Grid.Row="4">
+                <Grid   Grid.Row="4" Margin="5,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -271,13 +290,18 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
                         <TextBlock  Text="到職日" VerticalAlignment="Center"/>
-                        <xctk:MaskedTextBox Width="120"
-                         HorizontalContentAlignment="Center"  Foreground="{StaticResource ForeGround}"
-                            InputMethod.IsInputMethodEnabled="False" InsertKeyMode="Overwrite" Mask="000/00/00"   PromptChar="-"
+                        <xctk:MaskedTextBox 
+                            Width="100" HorizontalContentAlignment="Center" FontSize="20"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource ForeGround}"
+                            InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
                             Style="{StaticResource MaterialDesignTextBox}"
                             ValueDataType="xctk:DateTimeFormat">
                             <xctk:MaskedTextBox.Text>
-                                <Binding   Mode="TwoWay" NotifyOnValidationError="True" Path="SelectedEmployee.StartDate"
+                                <Binding
+                                    Converter="{StaticResource NullableDateConverter}"
+                                    Mode="TwoWay" NotifyOnValidationError="True"
+                                    Path="SelectedEmployee.StartDate"
                                     UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
                                     <Binding.ValidationRules>
                                         <service:DateValidationRule />
@@ -288,16 +312,19 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="2">
                         <TextBlock  Text="離職日" VerticalAlignment="Center"/>
-                        <xctk:MaskedTextBox  Foreground="{StaticResource ForeGround}" Width="120"
-                            InputMethod.IsInputMethodEnabled="False" InsertKeyMode="Overwrite" Mask="000/00/00"   PromptChar="-"
-                            Style="{StaticResource MaterialDesignTextBox}" ValueDataType="xctk:DateTimeFormat">
+                        <xctk:MaskedTextBox 
+                            Width="100" HorizontalContentAlignment="Center" FontSize="20"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource ForeGround}"
+                            InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
+                            Style="{StaticResource MaterialDesignTextBox}"
+                            ValueDataType="xctk:DateTimeFormat">
                             <xctk:MaskedTextBox.Text>
-                                <Binding 
-                                    Mode="TwoWay"
-                                    NotifyOnValidationError="True"
+                                <Binding
+                                    Converter="{StaticResource NullableDateConverter}"
+                                    Mode="TwoWay" NotifyOnValidationError="True"
                                     Path="SelectedEmployee.LeaveDate"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    ValidatesOnDataErrors="True">
+                                    UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
                                     <Binding.ValidationRules>
                                         <service:DateValidationRule />
                                     </Binding.ValidationRules>
@@ -308,7 +335,7 @@
 
                 </Grid>
 
-                <Grid Grid.Row="5">
+                <Grid Grid.Row="5" Margin="5,0,0,0">
                     <StackPanel  Orientation="Horizontal">
                         <TextBox HorizontalAlignment="Center" VerticalContentAlignment="Center"
                             Text="備註" FontFamily="Segoe UI Semibold" Foreground="Black" />

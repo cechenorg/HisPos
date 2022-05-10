@@ -74,7 +74,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
-        private bool localCheck = true;
+        private bool localCheck;
 
         public bool LocalCheck
         {
@@ -83,23 +83,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             {
                 Set(() => LocalCheck, ref localCheck, value);
 
-
-                FilterEmployeeCollection.Clear();
-
-                if (value == false)
-                {
-                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
-                    {
-                        FilterEmployeeCollection.Add(quitEmployee);
-                    }
-                }
-                else
-                {
-                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == true))
-                    {
-                        FilterEmployeeCollection.Add(quitEmployee);
-                    }
-                }
+                FilterEmployee();
             }
         }
 
@@ -112,23 +96,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             {
                 Set(() => GlobalCheck, ref globalCheck, value);
 
-
-                FilterEmployeeCollection.Clear();
-
-                if (value )
-                {
-                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
-                    {
-                        FilterEmployeeCollection.Add(quitEmployee);
-                    }
-                }
-                else
-                {
-                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == true))
-                    {
-                        FilterEmployeeCollection.Add(quitEmployee);
-                    }
-                }
+                FilterEmployee();
             }
         }
 
@@ -141,30 +109,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             {
                 Set(() => IsQuit, ref _isQuit, value);
 
-                FilterEmployeeCollection.Clear();
-
-
-                if (value == false)
-                {
-                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.LeaveDate == null))
-                    {
-                        FilterEmployeeCollection.Add(quitEmployee);
-                    }
-                }
-                else 
-                {
-
-                    foreach (var quitEmployee in EmployeeCollection)
-                    {
-                        FilterEmployeeCollection.Add(quitEmployee);
-                    }
-
-                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.LeaveDate != null))
-                    {
-                        FilterEmployeeCollection.Remove(quitEmployee);
-                    }
-                }
-
+                FilterEmployee();
             }
         }
 
@@ -234,6 +179,41 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             } 
 
             SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
+            LocalCheck = true;
+            FilterEmployee();
+        }
+
+        private void FilterEmployee()
+        {
+            FilterEmployeeCollection.Clear();
+            foreach (var quitEmployee in EmployeeCollection)
+            {
+                FilterEmployeeCollection.Add(quitEmployee);
+            }
+
+            if (IsQuit == true)
+            {
+                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.LeaveDate != null))
+                {
+                    FilterEmployeeCollection.Remove(quitEmployee);
+                }
+            }
+
+            if (LocalCheck)
+            {
+                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
+                {
+                    FilterEmployeeCollection.Remove(quitEmployee);
+                }
+            }
+
+            if (GlobalCheck)
+            {
+                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal))
+                {
+                    FilterEmployeeCollection.Remove(quitEmployee);
+                }
+            }
         }
 
          
