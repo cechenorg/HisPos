@@ -650,7 +650,7 @@
                     <Label
                         Height="35" Content="銷售總額" Style="{StaticResource BoldLabelContent18}" />
                     <Label
-                        x:Name="lblTotal" Width="150" Height="35"  Style="{StaticResource BoldLabelContent18}" />
+                        x:Name="lblTotal" Width="170" Height="35"  Style="{StaticResource BoldLabelContent18}" />
                     <Button
                         x:Name="btnPrint1"
                         Width="100"
