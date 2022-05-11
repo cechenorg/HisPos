@@ -114,7 +114,7 @@
 
                         <DataGridTextColumn
                             Width="160" Header="權限"
-                            Binding="{Binding AuthorityValue }"
+                            Binding="{Binding AuthorityFullName }"
                             FontFamily="Segoe UI Semibold" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
