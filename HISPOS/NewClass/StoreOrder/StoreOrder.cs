@@ -134,7 +134,7 @@ namespace His_Pos.NewClass.StoreOrder
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
             Note = row.Field<string>("StoOrd_Note");
-            TotalPrice = (double)row.Field<decimal>("Total");
+            TotalPrice = (double)Math.Round(row.Field<decimal>("Total"),0);
             CreateDateTime = row.Field<DateTime>("StoOrd_CreateTime");
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
 

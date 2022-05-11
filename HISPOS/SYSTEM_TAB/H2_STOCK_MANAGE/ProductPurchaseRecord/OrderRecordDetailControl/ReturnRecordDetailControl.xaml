@@ -247,7 +247,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="70"
-                    Binding="{Binding SubTotal, StringFormat=N2}"
+                    Binding="{Binding SubTotal, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="小計"
                     IsReadOnly="True">
