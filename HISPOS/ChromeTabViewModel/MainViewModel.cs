@@ -193,7 +193,11 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.新增盤點):
                     ConfirmWindow confirmWindow = new ConfirmWindow("關閉視窗後盤點單不會儲存 是否關閉?", "關閉新增盤點確認");
                     if (!(bool)confirmWindow.DialogResult)
+                    {
+                        ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
+                        view.Refresh();
                         return;
+                    }
                     break;
 
                 case nameof(FeatureItem.庫存盤點紀錄):
@@ -287,6 +291,8 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.打卡記錄查詢):
                     break;
                 case nameof(FeatureItem.舊每日總帳報表):
+                    break;
+                case nameof(FeatureItem.系統教學文件):
                     break;
 
                 default:
