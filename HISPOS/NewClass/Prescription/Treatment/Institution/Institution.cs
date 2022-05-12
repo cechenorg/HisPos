@@ -19,7 +19,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             ID = r.Field<string>("Ins_ID");
             Name = r.Field<string>("Ins_Name");
             FullName = r.Field<string>("Ins_FullName");
-            LevelType = r.Field<string>("Ins_Type"); 
         }
 
         [Index(0)]
@@ -44,7 +43,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         public bool Common { get; set; }
 
         [IgnoreFormat]
-        public string LevelType { get; set; } //院所等級
+        public bool IsCooperative { get; set; }
 
         #region Function
 

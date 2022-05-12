@@ -195,11 +195,10 @@ namespace His_Pos.NewClass.Prescription
         {
             ApplyPoint = TotalPoint - CopaymentPoint;//計算申請點數
         }
-         
-        public int GetCopaymentValue(string institutionLevelType)
+
+        public int CopaymentValue
         {
-            //醫學中心or區域醫院
-            if (institutionLevelType == "1" || institutionLevelType == "2")
+            get
             {
                 switch (MedicinePoint)
                 {
@@ -233,63 +232,10 @@ namespace His_Pos.NewClass.Prescription
                     case int n when n >= 901 && n <= 1000:
                         return 180;
 
-                    case int n when n >= 1001 && n <= 1100:
-                        return 200;
-
-                    case int n when n >= 1101 && n <= 1200:
-                        return 220;
-
-                    case int n when n >= 1201 && n <= 1300:
-                        return 240;
-
-                    case int n when n >= 1301 && n <= 1400:
-                        return 260;
-
-                    case int n when n >= 1401 && n <= 1500:
-                        return 280;
-                        
                     default:
-                        return 300;
+                        return 200;
                 }
             }
-            else
-            {
-                switch (MedicinePoint)
-                {
-                    case int n when n <= 100:
-                        return 0;
-
-                    case int n when n >= 101 && n <= 200:
-                        return 20;
-
-                    case int n when n >= 201 && n <= 300:
-                        return 40;
-
-                    case int n when n >= 301 && n <= 400:
-                        return 60;
-
-                    case int n when n >= 401 && n <= 500:
-                        return 80;
-
-                    case int n when n >= 501 && n <= 600:
-                        return 100;
-
-                    case int n when n >= 601 && n <= 700:
-                        return 120;
-
-                    case int n when n >= 701 && n <= 800:
-                        return 140;
-
-                    case int n when n >= 801 && n <= 900:
-                        return 160;
-
-                    case int n when n >= 901 && n <= 1000:
-                        return 180;
-
-                    default:
-                        return 200;
-                }
-            } 
         }
 
         public void Count(List<Pdata> details)
