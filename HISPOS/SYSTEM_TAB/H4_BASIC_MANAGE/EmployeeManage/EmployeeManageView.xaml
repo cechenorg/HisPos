@@ -2,92 +2,42 @@
     x:Class="His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeManageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:employeeManageControl="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeManageControl"
-    xmlns:gif="http://wpfanimatedgif.codeplex.com"
-    xmlns:hisPos="clr-namespace:His_Pos"
-    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    d:DataContext="{d:DesignInstance Type=employeeManage:EmployeeManageViewModel}"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    d:DesignHeight="839"
-    d:DesignWidth="1365"
-    mc:Ignorable="d"
-    Loaded="UserControl_Loaded">
-    <UserControl.Resources>
-        <DataTemplate x:Key="AllEditableControl" DataType="UserControl">
-            <employeeManageControl:AllEditableControl />
-        </DataTemplate>
-        <DataTemplate x:Key="NoControl" DataType="UserControl">
-            <employeeManageControl:NoControl/>
-        </DataTemplate>
-        <DataTemplate x:Key="NoEditControl" DataType="UserControl">
-            <employeeManageControl:NoEditControl />
-        </DataTemplate>
-        <DataTemplate x:Key="SelfEditControl" DataType="UserControl">
-            <employeeManageControl:SelfEditControl />
-        </DataTemplate>
-        <DataTemplate x:Key="NoData" DataType="UserControl">
-            <Grid Background="{StaticResource GridDarkerBackGround}">
-                <Label
-                    HorizontalAlignment="Center"
-                    Content="無員工資料"
-                    Foreground="{StaticResource ForeGround}"
-                    Style="{StaticResource BoldLabelHeader30}" />
-            </Grid>
-        </DataTemplate>
-    </UserControl.Resources>
+    xmlns:service="clr-namespace:His_Pos.Service"
+    d:DesignHeight="840" d:DesignWidth="1365" mc:Ignorable="d" >
     <Viewbox Stretch="Fill">
-        <Grid Width="1365" Height="839">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="180" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid
-                Grid.Column="0"
-                Margin="10,10,0,10"
-                Background="{StaticResource GridBackGround}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40" />
-                    <RowDefinition />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
-                <StackPanel
-                    Grid.Row="0"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <RadioButton
-                        VerticalAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Content="本店"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="20"
-                        IsChecked="{Binding LocalCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <RadioButton
-                        Margin="10,0,0,0"
-                        VerticalAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Content="全部"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="20"
-                        IsChecked="{Binding GlobalCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-                <DataGrid
-                    x:Name="Main"
-                    Grid.Row="1"
-                    AutoGenerateColumns="False"
-                    Background="Transparent"
-                    CanUserAddRows="False"
+        <Grid Width="1365" Height="840">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="300"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="20" />
+                </Style>
+                <service:NullableDateConverter x:Key="NullableDateConverter" />
+            </Grid.Resources>
+            <DockPanel  >
+                <RadioButton Content="本店"  VerticalContentAlignment="Center" IsChecked="{Binding LocalCheck}" FontSize="20"  />
+                <RadioButton  Margin="5,0,0,0"  Content="全部"  VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck}" FontSize="20"  />
+
+                <CheckBox Margin="5,0,0,0" Content="排除已離職" FontSize="20" IsChecked="{Binding IsQuit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+
+                <Button Background="DarkCyan" Width="100" Content="新增員工" Command="{Binding NewEmployeeCommand}" Margin="0,0,10,0" HorizontalAlignment="Right"/>
+            </DockPanel>
+
+
+            <Grid Grid.Row="1"  Margin="10,0"  Background="{StaticResource GridBackGround}">
+                <DataGrid AutoGenerateColumns="False" Background="Transparent" CanUserAddRows="False"
                     CellStyle="{StaticResource DataGridCellStyle}"
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    HeadersVisibility="None"
-                    HorizontalScrollBarVisibility="Hidden"
-                    ItemsSource="{Binding EmployeeCollectionView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    IsSynchronizedWithCurrentItem="True"
-                    SelectedItem="{Binding Employee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                
+                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsSynchronizedWithCurrentItem="True"
+                    ItemsSource="{Binding FilterEmployeeCollection, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                     VerticalScrollBarVisibility="Hidden">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
@@ -96,18 +46,16 @@
                                     <Setter Property="Background" Value="{StaticResource GridSelected}" />
                                 </Trigger>
                             </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
                             <Setter Property="FontSize" Value="25" />
                             <Setter Property="Height" Value="50" />
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
+
                         <DataGridTextColumn
-                            Width="160"
+                            Width="160" Header="姓名"
                             Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                            FontFamily="Segoe UI Semibold"
-                            IsReadOnly="True">
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -115,61 +63,303 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="員工編號"
+                            Binding="{Binding Account  , UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="結帳編號"
+                            Binding="{Binding CashierID , UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="店鋪"
+                            Binding="{Binding CashierID , UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="職位"
+                            Binding="{Binding  WorkPosition.WorkPositionName}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="權限"
+                            Binding="{Binding AuthorityFullName }"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="到職日"
+                            Binding="{Binding StartDate, StringFormat={}{0:yyyy-MM-dd}}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="160" Header="離職日"
+                            Binding="{Binding LeaveDate, StringFormat={}{0:yyyy-MM-dd}}"
+                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+
                     </DataGrid.Columns>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+
+
                 </DataGrid>
-                <StackPanel
-                    Grid.Row="2"
-                    Background="{StaticResource GridBackGround}"
-                    Orientation="Horizontal">
-                    <Image
-                        Width="35"
-                        Margin="10,0,0,0"
-                        Source="/Images/Plus.png">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding NewEmployeeCommand}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Image>
-                    <Rectangle Width="85" />
-                    <!--<Image Source="/Images/Delete.png" IsEnabled="{Binding IsEnable,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Width="30" Name="ButtonDelete">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding DeleteCommand}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Image>-->
-                </StackPanel>
             </Grid>
-            <ContentControl
-                Grid.Column="1"
-                Margin="0,10,10,10"
-                Content="{Binding}">
-                <ContentControl.Style>
-                    <Style TargetType="{x:Type ContentControl}">
-                        <Setter Property="ContentTemplate" Value="{StaticResource NoEditControl}" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ControlType, UpdateSourceTrigger=PropertyChanged}" Value="NoEditControl">
-                                <Setter Property="ContentTemplate" Value="{StaticResource NoEditControl}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ControlType, UpdateSourceTrigger=PropertyChanged}" Value="SelfEditControl">
-                                <Setter Property="ContentTemplate" Value="{StaticResource SelfEditControl}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ControlType, UpdateSourceTrigger=PropertyChanged}" Value="AllEditableControl">
-                                <Setter Property="ContentTemplate" Value="{StaticResource AllEditableControl}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ControlType, UpdateSourceTrigger=PropertyChanged}" Value="NoControl">
-                                <Setter Property="ContentTemplate" Value="{StaticResource NoControl}" />
-                            </DataTrigger>
-                        </Style.Triggers>
+
+            <Grid Grid.Row="2" Margin="10,0" Background="{StaticResource GridDarkerBackGround}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="30"></Setter>
                     </Style>
-                </ContentControl.Style>
-            </ContentControl>
+                </Grid.Resources>
+                <Grid  Margin="10">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontSize="30" Text="{Binding SelectedEmployee.Name}"/>
+
+                    <TextBlock Grid.Column="1">
+                        <Run>結帳人員編號:</Run>
+                        <Run Text="{Binding SelectedEmployee.CashierID}"></Run>
+                    </TextBlock>
+
+                    <Button Content="更改帳號密碼" Background="DodgerBlue" Width="120" Grid.Column="2" Command="{Binding ChangePassWordCommand}"/>
+                </Grid>
+
+                <Grid  Grid.Row="1" Margin="5,0,0,0"> 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock VerticalAlignment="Center" Text="身分證" />
+                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{Binding SelectedEmployee.IDNumber}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock Text="性別" VerticalAlignment="Center" />
+                        <ComboBox Width="120" FontSize="20" HorizontalContentAlignment="Center"
+                                  SelectedValue="{Binding SelectedEmployee.Gender}" SelectedValuePath="Tag">
+                            <ComboBoxItem Content="男" Tag="男"/>
+                            <ComboBoxItem Content="女" Tag="女"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <TextBlock Text="生日" VerticalAlignment="Center"/>
+                        <xctk:MaskedTextBox 
+                            Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20"
+                            Foreground="{StaticResource ForeGround}"
+                            InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
+                            Style="{StaticResource MaterialDesignTextBox}"
+                            ValueDataType="xctk:DateTimeFormat">
+                            <xctk:MaskedTextBox.Text>
+                                <Binding
+                                    Converter="{StaticResource NullableDateConverter}"
+                                    Mode="TwoWay" NotifyOnValidationError="True"
+                                    Path="SelectedEmployee.Birthday"
+                                    UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                    <Binding.ValidationRules>
+                                        <service:DateValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </xctk:MaskedTextBox.Text>
+                        </xctk:MaskedTextBox>
+                    </StackPanel> 
+                </Grid>
+
+                <Grid Grid.Row="2" Margin="5,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition /> 
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <TextBlock Text="家電" VerticalAlignment="Center" />
+                        <TextBox VerticalAlignment="Center" Width="150" FontSize="25" Text="{Binding SelectedEmployee.SecondPhone}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock Text="手機" VerticalAlignment="Center" />
+                        <TextBox VerticalAlignment="Center" Width="150" FontSize="25" Text="{Binding SelectedEmployee.CellPhone}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <TextBlock Text="Line" VerticalAlignment="Center"/>
+                        <TextBox VerticalAlignment="Center" Width="150" FontSize="25" Text="{Binding SelectedEmployee.Line}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid   Grid.Row="3" Margin="5,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="電子信箱" VerticalAlignment="Center"/>
+                        <TextBox VerticalAlignment="Center" Width="300" FontSize="25" Text="{Binding SelectedEmployee.Email}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock Text="住址" VerticalAlignment="Center" />
+                        <TextBox VerticalAlignment="Center" Width="300" FontSize="25"  Text="{Binding SelectedEmployee.Address}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid   Grid.Row="4" Margin="5,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <TextBlock   Text="職位"  VerticalAlignment="Center" />
+                        <ComboBox  Width="120" DisplayMemberPath="WorkPositionName" FontSize="20" HorizontalContentAlignment="Center"
+                            ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                            ItemsSource="{Binding WorkPositions, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedEmployee.WorkPosition}"
+                            Text="{Binding SelectedEmployee.WorkPosition.WorkPositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <TextBlock  Text="到職日" VerticalAlignment="Center"/>
+                        <xctk:MaskedTextBox 
+                            Width="100" HorizontalContentAlignment="Center" FontSize="20"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource ForeGround}"
+                            InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
+                            Style="{StaticResource MaterialDesignTextBox}"
+                            ValueDataType="xctk:DateTimeFormat">
+                            <xctk:MaskedTextBox.Text>
+                                <Binding
+                                    Converter="{StaticResource NullableDateConverter}"
+                                    Mode="TwoWay" NotifyOnValidationError="True"
+                                    Path="SelectedEmployee.StartDate"
+                                    UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                    <Binding.ValidationRules>
+                                        <service:DateValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </xctk:MaskedTextBox.Text>
+                        </xctk:MaskedTextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <TextBlock  Text="離職日" VerticalAlignment="Center"/>
+                        <xctk:MaskedTextBox 
+                            Width="100" HorizontalContentAlignment="Center" FontSize="20"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource ForeGround}"
+                            InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
+                            Style="{StaticResource MaterialDesignTextBox}"
+                            ValueDataType="xctk:DateTimeFormat">
+                            <xctk:MaskedTextBox.Text>
+                                <Binding
+                                    Converter="{StaticResource NullableDateConverter}"
+                                    Mode="TwoWay" NotifyOnValidationError="True"
+                                    Path="SelectedEmployee.LeaveDate"
+                                    UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                    <Binding.ValidationRules>
+                                        <service:DateValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </xctk:MaskedTextBox.Text>
+                        </xctk:MaskedTextBox>
+                    </StackPanel>
+
+                </Grid>
+
+                <Grid Grid.Row="5" Margin="5,0,0,0">
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBox HorizontalAlignment="Center" VerticalContentAlignment="Center"
+                            Text="備註" FontFamily="Segoe UI Semibold" Foreground="Black" />
+                        <TextBox Width="840"
+                            VerticalContentAlignment="Top" AcceptsReturn="True" Background="{StaticResource LightForeGround}" 
+                            Text="{Binding SelectedEmployee.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"> 
+                        </TextBox>
+                        
+                         
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="260"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel  Orientation="Horizontal" Grid.Column="1" Margin="5"> 
+                        <Button Width="120" Background="DimGray" Content="取消"  Command="{Binding CancelCommand}" HorizontalAlignment="Right" />
+                        <Button Width="120" Background="DarkCyan" Content="確認" Margin="5,0,0,0" Command="{Binding SubmitCommand}"  HorizontalAlignment="Right"  /> 
+                    </StackPanel>
+                </Grid>
+            </Grid>
         </Grid>
     </Viewbox>
 </UserControl>

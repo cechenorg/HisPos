@@ -1212,9 +1212,6 @@
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\AllEditableControl.xaml.cs">
       <DependentUpon>AllEditableControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\NoControl.xaml.cs">
-      <DependentUpon>NoControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\NoEditControl.xaml.cs">
       <DependentUpon>NoEditControl.xaml</DependentUpon>
     </Compile>
@@ -2181,10 +2178,6 @@
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\AllEditableControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\NoControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageControl\NoEditControl.xaml">
       <SubType>Designer</SubType>

@@ -19,6 +19,8 @@ namespace His_Pos.NewClass.Person.Employee
             Birthday = DateTime.Today;
             IsEnable = true;
             AuthorityValue = 4;
+
+            AuthorityFullName = TransAuthorityFullName(AuthorityValue);
         }
 
         public Employee(DataRow r) : base(r)
@@ -35,9 +37,30 @@ namespace His_Pos.NewClass.Person.Employee
             IsLocal = r.Field<bool>("Emp_IsLocal");
             CashierID = r.Field<string>("Emp_CashierID");
             WorkPosition = new WorkPosition.WorkPosition(r);
+
+            AuthorityFullName = TransAuthorityFullName(AuthorityValue);
         }
 
-      
+
+        private string TransAuthorityFullName(int AuthorityValue)
+        {
+            string result = string.Empty;
+            
+            switch (AuthorityValue)
+            {
+                case 1:
+                    return "系統管理員";
+                case 2:
+                    return "店長";
+                case 3:
+                    return "店員";
+                case 4:
+                    return "藥師"; 
+            }
+
+
+            return result;
+        }
 
         private string cashierID;
 
@@ -137,6 +160,9 @@ namespace His_Pos.NewClass.Person.Employee
 
         [IgnoreFormat]
         public int AuthorityValue { get; set; }
+
+        [IgnoreFormat]
+        public string AuthorityFullName { get; set; }
 
         private string account;//帳號
 
