@@ -70,6 +70,7 @@ namespace His_Pos.NewClass.StoreOrder
         public OrderTypeEnum OrderType { get; set; }
         public string ID { get; set; }
         public string ReceiveID { get; set; }
+        public string CheckCode { get; set; }
         public Manufactory.Manufactory OrderManufactory { get; set; }
         public WareHouse.WareHouse OrderWarehouse { get; set; }
         public string OrderEmployeeName { get; set; }
@@ -399,6 +400,7 @@ namespace His_Pos.NewClass.StoreOrder
             long orderFlag = dataRow.Field<long>("FLAG");
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
             string prescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
+            string checkCode = dataRow.Field<string>("CHECK_CODE");
 
             /*if (orderFlag == 2)
             {
@@ -413,6 +415,7 @@ namespace His_Pos.NewClass.StoreOrder
             if (isShipment)
             {
                 ReceiveID = prescriptionReceiveID;
+                CheckCode = checkCode;
 
                 bool isSuccess = UpdateOrderProductsFromSingde();
 
@@ -423,7 +426,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         private bool UpdateOrderProductsFromSingde()
         {
-            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID);
+            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID, CheckCode);
 
             if (isSuccess)
                 GetOrderProducts();

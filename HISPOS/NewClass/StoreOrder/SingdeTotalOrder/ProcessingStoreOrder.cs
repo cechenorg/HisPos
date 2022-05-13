@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
         public string ID { get; set; }
         public string RecID { get; set; }
+        public string CheckCode { get; set; }
         public OrderTypeEnum Type { get; set; }
 
         public OrderStatusEnum Status
@@ -29,6 +30,7 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
         {
             ID = row.Field<string>("StoOrd_ID");
             RecID = row.Field<string>("StoOrd_ReceiveID");
+            CheckCode = row.Field<string>("StoOrd_CheckCode");
             Type = row.Field<string>("StoOrd_Type").Equals("P") ? OrderTypeEnum.PURCHASE : OrderTypeEnum.RETURN;
             Status = row.Field<string>("StoOrd_Status").Equals("D") ? OrderStatusEnum.DONE : OrderStatusEnum.SINGDE_PROCESSING;
             Total = (double)row.Field<decimal>("TOTAL");

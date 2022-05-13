@@ -594,12 +594,13 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
         }
 
-        internal static DataTable UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID, string receiveID)
+        internal static DataTable UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID, string receiveID, string checkCode)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", orederID));
             parameters.Add(new SqlParameter("RECSTOORD_ID", receiveID));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(dataTable, orederID)));
+            parameters.Add(new SqlParameter("CHECK_CODE", checkCode));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
         }
 
