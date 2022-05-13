@@ -298,10 +298,10 @@ namespace His_Pos.NewClass.StoreOrder
             OrderStatus = OrderStatusEnum.SCRAP;
             StoreOrderDB.StoreOrderToScrap(ID);
         }
-
+        public bool IsDoneOrder { get; set; }
         private void ToDoneStatus()
         {
-            OrderStatus = OrderStatusEnum.DONE;
+           
 
             DataTable result = new DataTable();
 
@@ -311,14 +311,23 @@ namespace His_Pos.NewClass.StoreOrder
                     string pay = IsPayCash ? "下貨付現" : "一般收貨";
                     ConfirmWindow confirmWindow = new ConfirmWindow("訂單金額: " + TotalPrice + "\n選擇: " + pay + "\n是否確認收貨?", "關閉新增盤點確認");
                     if (!(bool)confirmWindow.DialogResult)
+                    {
+                        IsDoneOrder = false;
                         return;
-                    result = StoreOrderDB.PurchaseStoreOrderToDone(ID, IsPayCash);
+                    }
+                    else
+                    {
+                        result = StoreOrderDB.PurchaseStoreOrderToDone(ID, IsPayCash);
+                    }
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
+                        IsDoneOrder = false;
                         MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
                     }
                     else
                     {
+                        IsDoneOrder = true;
+                        OrderStatus = OrderStatusEnum.DONE;
                         MessageWindow.ShowMessage("收貨成功!", MessageType.SUCCESS);
                     }
                     break;
@@ -327,7 +336,12 @@ namespace His_Pos.NewClass.StoreOrder
                     result = StoreOrderDB.ReturnStoreOrderToDone(ID);
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
+                        IsDoneOrder = false;
                         MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                    }
+                    else
+                    {
+                        IsDoneOrder = true;
                     }
                     break;
             }
