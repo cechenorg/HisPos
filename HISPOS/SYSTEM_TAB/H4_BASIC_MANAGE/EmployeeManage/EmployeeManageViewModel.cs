@@ -177,10 +177,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             {
                 FilterEmployeeCollection.Add(employeedata);
             } 
-
-            SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
+             
             LocalCheck = true;
             FilterEmployee();
+            SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
         }
 
         private void FilterEmployee()
