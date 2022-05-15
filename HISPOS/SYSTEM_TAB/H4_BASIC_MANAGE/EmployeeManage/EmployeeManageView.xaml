@@ -259,6 +259,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Orientation="Horizontal">
@@ -337,9 +338,9 @@
 
                 <Grid Grid.Row="5" Margin="5,0,0,0">
                     <StackPanel  Orientation="Horizontal">
-                        <TextBox HorizontalAlignment="Center" VerticalContentAlignment="Center"
-                            Text="備註" FontFamily="Segoe UI Semibold" Foreground="Black" />
-                        <TextBox Width="840"
+                        <TextBlock HorizontalAlignment="Center"  VerticalAlignment="Center"  
+                            Text="備註"   Foreground="Black" />
+                        <TextBox Width="840" Margin="5,0,0,0" FontSize="25"
                             VerticalContentAlignment="Top" AcceptsReturn="True" Background="{StaticResource LightForeGround}" 
                             Text="{Binding SelectedEmployee.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"> 
