@@ -49,13 +49,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             return new PurchaseProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID), orderStatus);
         }
 
-        internal static bool UpdateSingdeProductsByStoreOrderID(string orederID, string receiveID)
+        internal static bool UpdateSingdeProductsByStoreOrderID(string orederID, string receiveID, string checkCode)
         {
             DataTable dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(orederID);
 
             if (dataTable.Rows.Count == 0) return false;
 
-            dataTable = StoreOrderDB.UpdateSingdeProductsByStoreOrderID(dataTable, orederID, receiveID);
+            dataTable = StoreOrderDB.UpdateSingdeProductsByStoreOrderID(dataTable, orederID, receiveID, checkCode);
 
             if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                 return false;

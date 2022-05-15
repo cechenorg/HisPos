@@ -34,7 +34,7 @@
                 Width="320"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
-                Content="{Binding ID}"
+                Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="40"
                 FontWeight="Bold"

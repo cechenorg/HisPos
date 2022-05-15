@@ -74,7 +74,7 @@
         <DataTemplate x:Key="UnProcessingID" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <Label
                 Width="160"
-                Content="{Binding ID}"
+                Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="23"
                 Foreground="Black" />
@@ -286,7 +286,7 @@
                                             Grid.Column="0">
                                             <ContentControl.Style>
                                                 <Style TargetType="{x:Type ContentControl}">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource UnProcessIcon}" />
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource ProcessIcon}" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
                                                             <Setter Property="ContentTemplate" Value="{StaticResource UnProcessIcon}" />
