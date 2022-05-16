@@ -406,7 +406,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         #endregion ///// Batch Function /////
 
-        private bool AddNewStoreOrderLowerThenOrderAmount()
+        public bool AddNewStoreOrderLowerThenOrderAmount()
         {
             DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, OrderManufactory.ID, OrderWarehouse.ID, OrderProducts);
 

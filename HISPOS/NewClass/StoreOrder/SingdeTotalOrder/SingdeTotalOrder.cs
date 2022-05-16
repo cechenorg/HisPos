@@ -5,6 +5,10 @@ using System.Data;
 using System.Linq;
 using DomainModel.Class.StoreOrder;
 using DomainModel.Enum;
+using His_Pos.NewClass.Product.PurchaseReturn;
+using System;
+using System.Windows;
+using System.Collections.Generic;
 
 namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 {
@@ -74,7 +78,9 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             {
                 if (order.ID == id)
                 {
-                    order.Status = OrderStatusEnum.DONE;
+                    bool IsSusses = InsertLowerOrder(order);
+                    if (!IsSusses)
+                        break;
 
                     DataTable result = new DataTable();
 
@@ -88,7 +94,8 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                             result = StoreOrderDB.ReturnStoreOrderToDone(id);
                             break;
                     }
-
+                    if(result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        order.Status = OrderStatusEnum.DONE;
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                         MessageWindow.ShowMessage((order.Type == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
                     break;
@@ -100,14 +107,64 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
         internal void AllOrderToDone()
         {
+            List<string> listOrder = new List<string>();
+            foreach (var order in StoreOrders)//先檢查有無不足量訂單
+            {
+                OrderStatusEnum orderStatus = order.Status;
+                if(orderStatus != OrderStatusEnum.DONE)
+                {
+                    DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
+                    PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
+                    DataRow[] drs = OrderTable.Select("StoOrdDet_OrderAmount > StoOrdDet_RealAmount");//預訂量 > 實際量
+                    if (drs != null && drs.Length > 0)
+                    {
+                        listOrder.Add(order.ID);
+                    }
+                }
+            }
+            if (listOrder.Count > 0)//如果有不足量訂單
+            {
+                string lowOrder = String.Join("\r\n", listOrder.ToArray());
+                bool confirm = false;
+                string msg = string.Format("{0}\r\n是否將不足訂購量之品項\r\n轉為新的收貨單?", lowOrder);//確認使用者是否新增不足量訂單
+                Application.Current.Dispatcher.Invoke(() => {
+                    ConfirmWindow confirmWindow = new ConfirmWindow(msg, "", false);
+                    confirm = (bool)confirmWindow.DialogResult;
+                });
+                if (confirm)
+                {
+                    List<string> succesOrder = new List<string>();
+                    foreach (var order in StoreOrders)
+                    {
+                        if (listOrder.Contains(order.ID))
+                        {
+                            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
+                            OrderStatusEnum orderStatus = order.Status;
+                            PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
+                            string ReceiveID = order.RecID;//杏德出貨單
+                            string ManID = Convert.ToString(OrderTable.Rows[0]["StoOrd_ManufactoryID"]); ;//供應商
+                            string wareID = Convert.ToString(OrderTable.Rows[0]["StoOrd_WarehouseID"]);//出貨倉庫
+                            DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
+                            if (dataTable != null && dataTable.Rows.Count > 0)
+                            {
+                                succesOrder.Add(dataTable.Rows[0].Field<string>("NEW_ID"));
+                            }
+                        }
+                    }
+                    if (succesOrder.Count > 0)
+                    {
+                        Application.Current.Dispatcher.Invoke(() => {
+                            MessageWindow.ShowMessage(string.Format("已新增收貨單 {0}{1}", "\r\n",String.Join("\r\n", succesOrder.ToArray())), MessageType.SUCCESS);
+                        });
+                    }
+                }   
+            }
+
             foreach (var order in StoreOrders)
             {
                 if (order.Status == OrderStatusEnum.SINGDE_PROCESSING)
                 {
-                    order.Status = OrderStatusEnum.DONE;
-
                     DataTable result = new DataTable();
-
                     switch (order.Type)
                     {
                         case OrderTypeEnum.PURCHASE:
@@ -120,11 +177,58 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                     }
 
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
-                        MessageWindow.ShowMessage((order.Type == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+                    {
+                        Application.Current.Dispatcher.Invoke(() => {
+                            MessageWindow.ShowMessage((order.Type == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
+                        });
+                        
+                        break;
+                    }
+                     else
+                    {
+                        order.Status = OrderStatusEnum.DONE;
+                    }
                 }
             }
 
             RaisePropertyChanged(nameof(IsAllDone));
+        }
+        private bool InsertLowerOrder(ProcessingStoreOrder order)
+        {
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
+            OrderStatusEnum orderStatus = order.Status;
+            PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
+            DataRow[] drs = OrderTable.Select("StoOrdDet_OrderAmount > StoOrdDet_RealAmount");//預訂量 > 實際量 
+            if (drs != null && drs.Length > 0)
+            {
+                bool confirm = false;
+                Application.Current.Dispatcher.Invoke(() => {
+                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
+                    confirm = (bool)confirmWindow.DialogResult;
+                });
+                if (confirm)
+                {
+                    string ReceiveID = order.RecID;//杏德出貨單
+                    string ManID = Convert.ToString(drs[0]["StoOrd_ManufactoryID"]); ;//供應商
+                    string wareID = Convert.ToString(drs[0]["StoOrd_WarehouseID"]);//出貨倉庫
+                    DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        Application.Current.Dispatcher.Invoke(() => {
+                            MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+                        });
+                        return true;
+                    }
+                    else
+                    {
+                        Application.Current.Dispatcher.Invoke(() => {
+                            MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
+                        });
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         #endregion ----- Define Functions -----

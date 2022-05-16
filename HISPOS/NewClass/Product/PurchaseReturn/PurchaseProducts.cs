@@ -12,7 +12,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
         }
 
-        private PurchaseProducts(DataTable dataTable, OrderStatusEnum orderStatus)
+        public PurchaseProducts(DataTable dataTable, OrderStatusEnum orderStatus)
         {
             string lastID = "";
 
