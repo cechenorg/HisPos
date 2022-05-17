@@ -1,7 +1,10 @@
 ﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Medicine.Base;
+using His_Pos.Properties;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -131,19 +134,27 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             else
             {
                 TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
-                if (HisApiFunction.OpenCom() && HisApiBase.hisGetCardStatus(1) == 2)
+                try
                 {
-                    var iBufferLength = 13;
-                    var pBuffer = new byte[iBufferLength];
-                    var res = HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
-                    TreatmentDateTime = res == 0 ?
-                        ConvertData.ByToString(pBuffer, 0, 13) :
-                        DateTimeEx.ToStringWithSecond(DateTime.Now);
-                    HisApiFunction.CloseCom();
+                    if (HisApiFunction.OpenCom() && HisApiBase.hisGetCardStatus(1) == 2)
+                    {
+                        var iBufferLength = 13;
+                        var pBuffer = new byte[iBufferLength];
+                        var res = HisApiBase.csGetDateTime(pBuffer, ref iBufferLength);
+                        TreatmentDateTime = res == 0 ?
+                            ConvertData.ByToString(pBuffer, 0, 13) :
+                            DateTimeEx.ToStringWithSecond(DateTime.Now);
+                        HisApiFunction.CloseCom();
+                    }
+                    else
+                    {
+                        TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    TreatmentDateTime = DateTimeEx.ToStringWithSecond(DateTime.Now);
+                    //(20220513)處方調劑讀取健保卡閃退
+                    MessageWindow.ShowMessage(Resources.控制軟體異常, MessageType.ERROR);
                 }
             }
             if (e is null)
