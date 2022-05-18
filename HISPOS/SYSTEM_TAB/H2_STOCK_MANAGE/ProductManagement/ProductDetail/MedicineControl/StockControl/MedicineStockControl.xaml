@@ -20,8 +20,9 @@
         <DataTemplate x:Key="NormalData" DataType="UserControl">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition />
+                    <RowDefinition Height="33" />
+                    <RowDefinition Height="33" />
+                    <RowDefinition Height="33"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <Label
@@ -42,7 +43,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,10"
+                        Margin="20,0,0,0"
                         VerticalAlignment="Center"
                         Content="藥袋"
                         FontFamily="Segoe UI Semibold"
@@ -50,7 +51,7 @@
                         Foreground="{StaticResource ForeGround}" />
                     <TextBlock
                         Width="80"
-                        Margin="0,0,0,10"
+                        Margin="0,0,0,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
                         FontSize="20"
@@ -109,48 +110,116 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Label
+                        Margin="20,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="需求"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}" />
+                    <TextBlock
+                        Width="80"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding StockDetail.DemandInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                        TextAlignment="Center"
+                        ToolTipService.ShowDuration="600000">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <EventSetter Event="MouseEnter" Handler="GetMedBagDetail" />
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <DataGrid
+                                            Width="420"
+                                            Height="Auto"
+                                            AutoGenerateColumns="False"
+                                            Background="Transparent"
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            CanUserReorderColumns="False"
+                                            CanUserResizeColumns="False"
+                                            CanUserResizeRows="False"
+                                            CanUserSortColumns="False"
+                                            FontFamily="Courier New"
+                                            FontSize="18"
+                                            Foreground="WhiteSmoke"
+                                            GridLinesVisibility="None"
+                                            HeadersVisibility="None"
+                                            ItemsSource="{Binding StockDetail.DemandStockDetails, UpdateSourceTrigger=PropertyChanged}"
+                                            RowHeight="25">
+                                            <DataGrid.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="Padding" Value="0" />
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                </Style>
+                                            </DataGrid.CellStyle>
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Width="50" Binding="{Binding Type}" />
+                                                <DataGridTextColumn Width="100" Binding="{Binding Name}" />
+                                                <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" />
+                                                <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}" />
+                                                <DataGridTextColumn Width="70" Binding="{Binding SelfAmount, StringFormat=N1}">
+                                                    <DataGridTextColumn.ElementStyle>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                                        </Style>
+                                                    </DataGridTextColumn.ElementStyle>
+                                                </DataGridTextColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="ErrorData" DataType="UserControl">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="25" />
-                    <RowDefinition Height="25" />
-                    <RowDefinition Height="25" />
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="33" />
+                    <RowDefinition Height="33" />
+                    <RowDefinition Height="33" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <Label
-                        Margin="25,0,0,0"
+                        Margin="20,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="架上"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="12"
+                        FontSize="20"
                         Foreground="WhiteSmoke" />
                     <TextBlock
                         Width="90"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="12"
+                        FontSize="20"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Label
-                        Margin="25,0,0,0"
+                        Margin="20,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="藥袋"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="12"
+                        FontSize="20"
                         Foreground="WhiteSmoke" />
                     <TextBlock
                         Width="90"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="12"
+                        FontSize="20"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" 
@@ -208,18 +277,18 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label
-                        Margin="25,0,0,0"
+                        Margin="20,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="需求"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="12"
+                        FontSize="20"
                         Foreground="WhiteSmoke" />
                     <TextBlock
                         Width="90"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="12"
+                        FontSize="20"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.DemandInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center"
@@ -275,12 +344,13 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </StackPanel>
-                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <!--<StackPanel Grid.Row="3" Orientation="Horizontal">
                     <Label
                         Margin="25,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="不足量"
+                        Visibility="Hidden"
                         FontFamily="Segoe UI Semibold"
                         FontSize="12"
                         Foreground="WhiteSmoke" />
@@ -288,6 +358,7 @@
                         Width="90"
                         Margin="-12,0,0,0"
                         VerticalAlignment="Center"
+                        Visibility="Hidden"
                         FontFamily="Segoe UI Semi"
                         FontSize="12"
                         Foreground="WhiteSmoke"
@@ -295,7 +366,7 @@
                         TextAlignment="Center"
                         ToolTipService.ShowDuration="600000">
                     </TextBlock>
-                </StackPanel>
+                </StackPanel>-->
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
