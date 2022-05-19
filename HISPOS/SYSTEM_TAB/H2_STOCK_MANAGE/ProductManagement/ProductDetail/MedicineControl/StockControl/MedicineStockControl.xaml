@@ -26,14 +26,14 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="30,0,0,0"
                         VerticalAlignment="Center"
                         Content="架上"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
                     <TextBlock
-                        Width="95"
+                        Width="75"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
                         FontSize="18"
@@ -43,14 +43,14 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="30,0,0,0"
                         VerticalAlignment="Center"
                         Content="藥袋"
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
                     <TextBlock
-                        Width="95"
+                        Width="75"
                         Margin="0,0,0,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
@@ -190,36 +190,36 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="30,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="架上"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="WhiteSmoke" />
                     <TextBlock
-                        Width="90"
+                        Width="75"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="30,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="藥袋"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="WhiteSmoke" />
                     <TextBlock
-                        Width="90"
+                        Width="75"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" 
@@ -277,18 +277,18 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="10,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Content="需求"
+                        Content="登錄需求"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="WhiteSmoke" />
                     <TextBlock
-                        Width="90"
+                        Width="40"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.DemandInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center"
