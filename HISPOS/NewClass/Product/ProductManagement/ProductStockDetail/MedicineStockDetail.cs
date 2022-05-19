@@ -42,13 +42,13 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 
         public IEnumerable<MedBagDetailStruct> MedBagStockDetails
         {
-            //get { return medBagDetails.Where(d => d.SelfAmount != 0); }
-            get { return medBagDetails; }
+            get { return medBagDetails.Where(d => d.SelfAmount != 0); }
+            //get { return medBagDetails; }
         }
         public IEnumerable<MedBagDetailStruct> DemandStockDetails
         {
-            //get { return demandDetails.Where(d => d.SelfAmount != 0); }
-            get { return demandDetails; }
+            get { return demandDetails.Where(d => d.SelfAmount != 0); }
+            //get { return demandDetails; }
         }
 
         public IEnumerable<MedBagDetailStruct> MedBagSendDetails

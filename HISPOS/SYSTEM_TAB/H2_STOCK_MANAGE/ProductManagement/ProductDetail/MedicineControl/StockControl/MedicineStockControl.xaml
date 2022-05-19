@@ -134,7 +134,7 @@
                                 <Setter Property="ToolTip">
                                     <Setter.Value>
                                         <DataGrid
-                                            Width="420"
+                                            Width="450"
                                             Height="Auto"
                                             AutoGenerateColumns="False"
                                             Background="Transparent"
@@ -159,7 +159,7 @@
                                                 </Style>
                                             </DataGrid.CellStyle>
                                             <DataGrid.Columns>
-                                                <DataGridTextColumn Width="50" Binding="{Binding Type}" />
+                                                <DataGridTextColumn Width="85" Binding="{Binding Type}" />
                                                 <DataGridTextColumn Width="100" Binding="{Binding Name}" />
                                                 <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" />
                                                 <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}" />
