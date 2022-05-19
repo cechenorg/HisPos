@@ -30,13 +30,13 @@
                         VerticalAlignment="Center"
                         Content="架上"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
                     <TextBlock
-                        Width="80"
+                        Width="95"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
@@ -47,14 +47,14 @@
                         VerticalAlignment="Center"
                         Content="藥袋"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
                     <TextBlock
-                        Width="80"
+                        Width="95"
                         Margin="0,0,0,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center"
@@ -112,18 +112,18 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="10,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Content="需求"
+                        Content="登錄需求"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
                     <TextBlock
-                        Width="80"
+                        Width="40"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding StockDetail.DemandInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center"
@@ -134,7 +134,7 @@
                                 <Setter Property="ToolTip">
                                     <Setter.Value>
                                         <DataGrid
-                                            Width="450"
+                                            Width="420"
                                             Height="Auto"
                                             AutoGenerateColumns="False"
                                             Background="Transparent"
@@ -159,7 +159,7 @@
                                                 </Style>
                                             </DataGrid.CellStyle>
                                             <DataGrid.Columns>
-                                                <DataGridTextColumn Width="85" Binding="{Binding Type}" />
+                                                <DataGridTextColumn Width="50" Binding="{Binding Type}" />
                                                 <DataGridTextColumn Width="100" Binding="{Binding Name}" />
                                                 <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" />
                                                 <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}" />
@@ -585,11 +585,11 @@
                 ToolTipService.ShowDuration="600000">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
-                        <EventSetter Event="MouseEnter" Handler="GetMedBagDetail" />
+                        <EventSetter Event="MouseEnter" Handler="GetOnTheWayDetail" />
                         <Setter Property="ToolTip">
                             <Setter.Value>
                                 <DataGrid
-                                    Width="420"
+                                    Width="730"
                                     Height="Auto"
                                     AutoGenerateColumns="False"
                                     Background="Transparent"
@@ -604,7 +604,7 @@
                                     Foreground="WhiteSmoke"
                                     GridLinesVisibility="None"
                                     HeadersVisibility="None"
-                                    ItemsSource="{Binding StockDetail.MedBagSendDetails, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{Binding StockDetail.OnTheWayMedBag, UpdateSourceTrigger=PropertyChanged}"
                                     RowHeight="25">
                                     <DataGrid.CellStyle>
                                         <Style TargetType="{x:Type DataGridCell}">
@@ -614,11 +614,12 @@
                                         </Style>
                                     </DataGrid.CellStyle>
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Width="50" Binding="{Binding Type}" />
-                                        <DataGridTextColumn Width="100" Binding="{Binding Name}" />
-                                        <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" />
-                                        <DataGridTextColumn Width="60" Binding="{Binding SendAmountHeader}" />
-                                        <DataGridTextColumn Width="70" Binding="{Binding SendAmount, StringFormat=N1}">
+                                        <DataGridTextColumn Width="90" Binding="{Binding Status}" />
+                                        <DataGridTextColumn Width="150" Binding="{Binding ID}" />
+                                        <DataGridTextColumn Width="250" Binding="{Binding CreateDate, Converter={StaticResource DateTimeToMinuteConverter}}" />
+                                        <DataGridTextColumn Width="100" Binding="{Binding CusName}" />
+                                        <DataGridTextColumn Width="60" Binding="{Binding AmountHeader}" />
+                                        <DataGridTextColumn Width="60" Binding="{Binding Amount, StringFormat=N0}">
                                             <DataGridTextColumn.ElementStyle>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="HorizontalAlignment" Value="Right" />

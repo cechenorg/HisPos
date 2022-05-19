@@ -14,7 +14,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         private MedBagDetailStructs medBagDetails;
         private MedBagDetailStructs demandDetails;
         private OnTheWayDetailStructs onTheWayDetail;
-
+        private OnTheWayDetailStructs onTheWayMedBag;
         public double MedBagOnTheWayAmount { get; set; }
 
         public double TotalOnTheWayAmount
@@ -39,22 +39,22 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return onTheWayDetail; }
             set { Set(() => OnTheWayDetail, ref onTheWayDetail, value); }
         }
+        public OnTheWayDetailStructs OnTheWayMedBag
+        {
+            get { return onTheWayMedBag; }
+            set { Set(() => OnTheWayMedBag, ref onTheWayMedBag, value); }
+        }
 
         public IEnumerable<MedBagDetailStruct> MedBagStockDetails
         {
             get { return medBagDetails.Where(d => d.SelfAmount != 0); }
-            //get { return medBagDetails; }
         }
         public IEnumerable<MedBagDetailStruct> DemandStockDetails
         {
             get { return demandDetails.Where(d => d.SelfAmount != 0); }
-            //get { return demandDetails; }
         }
 
-        public IEnumerable<MedBagDetailStruct> MedBagSendDetails
-        {
-            get { return medBagDetails.Where(d => d.SendAmount != 0); }
-        }
+        
 
         public bool IsInventoryError => InsuffInventory > 0;//是否為不足量顯示
 
@@ -100,13 +100,13 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             medBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID, 0);//藥袋
             demandDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID, 1);//需求
             RaisePropertyChanged(nameof(MedBagStockDetails));
-            RaisePropertyChanged(nameof(MedBagSendDetails));
             RaisePropertyChanged(nameof(DemandStockDetails));
         }
 
         internal void GetOnTheWayDetailByID(string proID, string wareID)
         {
-            OnTheWayDetail = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID);
+            OnTheWayDetail = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID, 0);
+            OnTheWayMedBag = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID, 1);
         }
 
         #endregion ----- Define Functions -----
