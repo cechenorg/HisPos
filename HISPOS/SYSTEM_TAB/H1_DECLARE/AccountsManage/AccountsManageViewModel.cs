@@ -187,6 +187,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             }
         }
 
+        private string keyWords;
+
+        public string KeyWords
+        {
+            get => keyWords;
+            set
+            {
+                Set(() => KeyWords, ref keyWords, value);
+            }
+        }
+
         private int cashFlowValue;
 
         public int CashFlowValue
@@ -337,7 +348,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         private void GetCashFlowRecordsByDate()
         {
             MainWindow.ServerConnection.OpenConnection();
-            var table = AccountsDb.GetDataByDate((DateTime)startDate, (DateTime)endDate);
+            var table = AccountsDb.GetDataByDate((DateTime)startDate, (DateTime)endDate, keyWords);
             var tempDetails = new AccountsRecordDetails();
             foreach (DataRow r in table.Rows)
             {

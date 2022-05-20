@@ -204,6 +204,10 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </xctk:MaskedTextBox>
+                <Label Margin="5,0,0,0"
+                VerticalAlignment="Center"  Content="關鍵字"
+                FontFamily="Segoe UI Semibold" FontSize="22" />
+                <TextBox Margin="5,0,0,0" Width="120" VerticalAlignment="Center" FontSize="18" Text="{Binding KeyWords}"/>
                 <Button
                     Width="80"
                     Margin="10,0,0,0"

@@ -11,11 +11,12 @@ namespace His_Pos.NewClass.Report.Accounts
 {
     public class AccountsDb
     {
-        public static DataTable GetDataByDate(DateTime sDate, DateTime eDate)
+        public static DataTable GetDataByDate(DateTime sDate, DateTime eDate, string keyWord)
         {
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "keyword", keyWord);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsRecordDetailsByDate]", parameterList);
         }
 
