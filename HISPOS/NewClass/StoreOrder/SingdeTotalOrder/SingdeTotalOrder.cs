@@ -40,6 +40,24 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             }
         }
 
+        public double OTCTotal
+        {
+            get
+            {
+                return (double)StoreOrders.Where(s => s.IsType == "OTC").Sum(d => d.Total);
+            }
+        }
+
+        public double DrugTotal
+        {
+            get
+            {
+                return (double)StoreOrders.Where(s => s.IsType == "藥品").Sum(d => d.Total);
+            }
+        }
+
+
+
         #endregion ----- Define Variables -----
 
         //public SingdeTotalOrder() // for Dapper

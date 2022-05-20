@@ -178,6 +178,19 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
+                    Width="80"
+                    Binding="{Binding IsType}"
+                    FontFamily="Segoe UI Semibold"
+                    Header="類別"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
                     Width="100"
                     Binding="{Binding Total, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
@@ -237,13 +250,41 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
             <TextBlock
-                Width="200"
+                Width="80"
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Text="{Binding CurrenTotalOrder.Total, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
-            <ContentControl IsEnabled="True" Margin="625,0,0,0" Content="{Binding}">
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="OTC小計: $"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <TextBlock
+                Width="80"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Text="{Binding CurrenTotalOrder.OTCTotal, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Content="藥品小計: $"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20" />
+            <TextBlock
+                Width="80"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Text="{Binding CurrenTotalOrder.DrugTotal, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
+            <ContentControl IsEnabled="True" Margin="325,0,0,0" Content="{Binding}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Setter Property="ContentTemplate" Value="{StaticResource OrderAllToDone}" />
