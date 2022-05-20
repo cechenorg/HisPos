@@ -24,7 +24,11 @@
                     <RowDefinition Height="33" />
                     <RowDefinition Height="33"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                     <Label
                         Margin="30,0,0,0"
                         VerticalAlignment="Center"
@@ -32,6 +36,8 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
                         Width="75"
                         VerticalAlignment="Center"
@@ -41,7 +47,7 @@
                         Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
                 </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                     <Label
                         Margin="30,0,0,0"
                         VerticalAlignment="Center"
@@ -49,6 +55,8 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
                         Width="75"
                         Margin="0,0,0,0"
@@ -110,7 +118,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                     <Label
                         Margin="10,0,0,0"
                         HorizontalAlignment="Center"
@@ -119,8 +127,10 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
-                        Width="40"
+                        Width="75"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
                         FontSize="18"
@@ -188,7 +198,11 @@
                     <RowDefinition Height="33" />
                     <RowDefinition Height="33" />
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                     <Label
                         Margin="30,0,0,0"
                         HorizontalAlignment="Center"
@@ -197,6 +211,8 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="WhiteSmoke" />
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
                         Width="75"
                         VerticalAlignment="Center"
@@ -206,7 +222,7 @@
                         Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
                 </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                     <Label
                         Margin="30,0,0,0"
                         HorizontalAlignment="Center"
@@ -215,6 +231,8 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="WhiteSmoke" />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
                         Width="75"
                         VerticalAlignment="Center"
@@ -275,7 +293,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                     <Label
                         Margin="10,0,0,0"
                         HorizontalAlignment="Center"
@@ -284,8 +302,10 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="WhiteSmoke" />
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
-                        Width="40"
+                        Width="75"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
                         FontSize="18"
@@ -344,7 +364,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </StackPanel>
-                <!--<StackPanel Grid.Row="3" Orientation="Horizontal">
+                <!--<StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
                     <Label
                         Margin="25,0,0,0"
                         HorizontalAlignment="Center"
@@ -354,8 +374,10 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="12"
                         Foreground="WhiteSmoke" />
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
-                        Width="90"
+                        Width="75"
                         Margin="-12,0,0,0"
                         VerticalAlignment="Center"
                         Visibility="Hidden"
