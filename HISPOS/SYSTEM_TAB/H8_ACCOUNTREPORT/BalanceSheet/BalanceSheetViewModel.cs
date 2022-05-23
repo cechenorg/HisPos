@@ -33,6 +33,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         public NormalViewModel NormalViewModel { get; set; }
         public NormalNoEditViewModel NormalNoEditViewModel { get; set; }
         public ProductViewModel ProductViewModel { get; set; }
+
+        /// <summary>
+        /// 2022052預付款新增預付訂金
+        /// </summary>
+        public ProductViewModel ProductViewModel_104 { get; set; }
         public BankViewModel BankViewModel { get; set; }
 
         #endregion ----- Define ViewModels -----
@@ -409,6 +414,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                             BankViewModel = new BankViewModel(LeftSelectedData.ID,_endDate);
                             BalanceSheetType = BalanceSheetTypeEnum.Normal;
                             BalanceSheetType = BalanceSheetTypeEnum.Bank;
+                        }
+                        else if (LeftSelectedData.ID == "104")
+                        {
+                            ProductViewModel_104 = new ProductViewModel(LeftSelectedData.ID, _endDate);
+                            BalanceSheetType = BalanceSheetTypeEnum.NoDetail;
+                            BalanceSheetType = BalanceSheetTypeEnum.Product;
                         }
                         else if (LeftSelectedData.ID == "105")
                         {
