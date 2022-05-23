@@ -82,6 +82,7 @@ namespace His_Pos.NewClass.StoreOrder
         public DateTime Day { get; set; }
         public int IsOTC { get; set; }
 
+        public bool IsScrap { get; set; }
         public double TotalPrice
         {
             get { return totalPrice; }
@@ -129,6 +130,10 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
             }
 
+            if (OrderStatus == OrderStatusEnum.SCRAP)
+                IsScrap = false;
+            else
+                IsScrap = true;
             ID = row.Field<string>("StoOrd_ID");
             ReceiveID = string.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
             OrderWarehouse = new WareHouse.WareHouse(row);

@@ -14,6 +14,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using DomainModel.Enum;
+using System.Windows.Threading;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
@@ -180,6 +181,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             DeleteOrderWindow deleteOrderWindow = new DeleteOrderWindow(CurrentStoreOrder.ID, CurrentStoreOrder.ReceiveID);
             deleteOrderWindow.ShowDialog();
+            int index = 0;
+            try
+            {
+                index = StoreOrderCollection.IndexOf(currentStoreOrder);
+            }
+            catch{}
+            MainWindow.ServerConnection.OpenConnection();
+            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID, SearchWareName);
+            MainWindow.ServerConnection.CloseConnection();
+            CurrentStoreOrder = StoreOrderCollection[index];
         }
 
         private void ExportOrderDataAction(string type)

@@ -3,6 +3,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder;
 using System.Data;
+using System.Threading;
 using System.Windows;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
@@ -55,7 +56,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
 
                 if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                {
                     MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
+                }
                 else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("LOW"))
                 {
                     MessageWindow.ShowMessage("庫存不足 刪除失敗！", MessageType.ERROR);
