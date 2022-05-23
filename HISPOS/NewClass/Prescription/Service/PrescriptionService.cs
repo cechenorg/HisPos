@@ -885,6 +885,9 @@ namespace His_Pos.NewClass.Prescription.Service
         private static Prescription GetPrescriptionByID(int preID, PrescriptionType type)
         {
             MainWindow.ServerConnection.OpenConnection();
+            DataTable table = PrescriptionDb.GetPrescriptionByID(preID);
+            if (table == null || table.Rows.Count == 0)
+                return null;
             var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
             var selected = new Prescription(r, type);
             selected.InsertTime = r.Field<DateTime?>("InsertTime");
