@@ -639,9 +639,10 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
-
+            
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
+            
             MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
 
@@ -652,10 +653,9 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", purchaseOrder.PreOrderCustomer);
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", purchaseOrder.TargetPreOrderCustomer);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", purchaseOrder.PlanArriveDate);
-
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
-
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
+            DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.ID);
             new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
 
