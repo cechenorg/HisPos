@@ -5,6 +5,8 @@ using His_Pos.NewClass.Product.PurchaseReturn;
 using System;
 using System.Data;
 using DomainModel.Enum;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -81,8 +83,8 @@ namespace His_Pos.NewClass.StoreOrder
         public string TargetPreOrderCustomer { get; set; }
         public DateTime Day { get; set; }
         public int IsOTC { get; set; }
-
         public bool IsScrap { get; set; }
+        public bool IsCanDelete { get; set; }
         public double TotalPrice
         {
             get { return totalPrice; }
@@ -129,13 +131,18 @@ namespace His_Pos.NewClass.StoreOrder
                     OrderStatus = OrderStatusEnum.ERROR;
                     break;
             }
-
+            ID = row.Field<string>("StoOrd_ID");
+            ReceiveID = string.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
+            CheckCode = row.Field<string>("StoOrd_CheckCode");
             if (OrderStatus == OrderStatusEnum.SCRAP)
                 IsScrap = false;
             else
                 IsScrap = true;
-            ID = row.Field<string>("StoOrd_ID");
-            ReceiveID = string.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
+            
+            if (string.IsNullOrEmpty(CheckCode))
+                IsCanDelete = true;
+            else
+                IsCanDelete = false;
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
@@ -443,11 +450,17 @@ namespace His_Pos.NewClass.StoreOrder
 
         public bool DeleteOrder()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認要作廢?", "作廢", true);
-
-            if (!(bool)confirmWindow.DialogResult)
+            if(CheckCode != string.Empty)
+            {
+                MessageWindow.ShowMessage("倉庫配送中，不能作廢", MessageType.ERROR);
                 return false;
+            }
 
+            ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow();
+
+            if (!(bool)ScrapOrderWindow.DialogResult)
+                return false;
+           
             DataTable dataTable;
 
             if (OrderManufactory.ID.Equals("0") && OrderStatus == OrderStatusEnum.WAITING)

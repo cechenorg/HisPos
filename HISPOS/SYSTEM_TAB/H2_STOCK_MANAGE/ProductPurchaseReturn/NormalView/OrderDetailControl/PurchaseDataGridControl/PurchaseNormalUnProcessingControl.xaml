@@ -433,6 +433,7 @@
                 Background="DimGray"
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
+                IsEnabled="{Binding IsCanDelete}"
                 Content="作廢"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />

@@ -57,6 +57,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
         private BackgroundWorker initBackgroundWorker;
 
+        private bool isCanDelete;
+        public bool IsCanDelete
+        {
+            get => isCanDelete;
+            set { Set(() => IsCanDelete, ref isCanDelete, value); }
+        }
         public bool IsBusy
         {
             get => isBusy;
@@ -80,7 +86,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public StoreOrder CurrentStoreOrder
         {
-            get { return currentStoreOrder; }
+            get 
+            {
+                if (currentStoreOrder != null)
+                    IsCanDelete = currentStoreOrder.IsCanDelete;
+                return currentStoreOrder; 
+            }
             set
             {
                 if (CurrentStoreOrder != null && (currentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || currentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING))

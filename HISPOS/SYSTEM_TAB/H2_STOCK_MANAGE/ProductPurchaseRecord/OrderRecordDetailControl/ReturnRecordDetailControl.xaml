@@ -365,10 +365,12 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Button
+                Name="btnDelete"
                 Width="120"
                 Margin="10,0,0,0"
                 Background="IndianRed"
                 BorderThickness="0"
+                IsEnabled="{Binding IsScrap}"
                 Command="{Binding DataContext.DeleteOrderReturnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Content="刪除"
                 FontFamily="Segoe UI Semibold"

@@ -211,12 +211,16 @@
                     </TextBox>
                 </StackPanel>
                 <DataGrid
-                    Grid.Row="5" AutoGenerateColumns="False" Background="Transparent"
-                    CanUserAddRows="False" CanUserDeleteRows="False"
+                    Grid.Row="5" 
+                    AutoGenerateColumns="False" 
+                    Background="Transparent"
+                    CanUserAddRows="False" 
+                    CanUserDeleteRows="False"
                     ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    GridLinesVisibility="None" HeadersVisibility="None"
+                    GridLinesVisibility="None" 
+                    HeadersVisibility="None"
                     HorizontalScrollBarVisibility="Hidden"
-                    ItemsSource="{Binding StoreOrderCollectionView}"
+                    ItemsSource="{Binding StoreOrderCollectionView ,UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectionChanged="StoreOrders_OnSelectionChanged"
                     VerticalScrollBarVisibility="Auto">
