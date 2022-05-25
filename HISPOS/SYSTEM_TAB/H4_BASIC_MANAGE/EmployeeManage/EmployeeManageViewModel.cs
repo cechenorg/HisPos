@@ -3,6 +3,7 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.WorkPosition;
+using His_Pos.NewClass.Pharmacy;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -37,7 +38,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             get { return _SelectedEmployee; }
             set
             {
-                Set(() => SelectedEmployee, ref _SelectedEmployee, value); 
+                Set(() => SelectedEmployee, ref _SelectedEmployee, value);
+               
             }
         }
 
@@ -181,6 +183,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             LocalCheck = true;
             FilterEmployee();
             SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
+
+            ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList = PharmacyDBService.GetPharmacyListByGroupServerName();
         }
 
         private void FilterEmployee()

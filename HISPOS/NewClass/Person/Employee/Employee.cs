@@ -1,6 +1,8 @@
 ﻿using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Pharmacy;
 using His_Pos.Service;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using ZeroFormatter;
@@ -41,7 +43,11 @@ namespace His_Pos.NewClass.Person.Employee
             AuthorityFullName = TransAuthorityFullName(AuthorityValue);
         }
 
-
+        public void GetGroupPharmacyAuthority()
+        {
+            
+        }
+         
         private string TransAuthorityFullName(int AuthorityValue)
         {
             string result = string.Empty;

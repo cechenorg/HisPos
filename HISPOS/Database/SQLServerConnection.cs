@@ -1,4 +1,5 @@
-﻿using His_Pos.Class;
+﻿using Dapper;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using System;
@@ -193,6 +194,21 @@ namespace His_Pos.Database
 
             return dataSet;
         }
+
+        public static IEnumerable<T> Query<T>(string connectionString,string dbName,string procedureName,object param = null)
+        {
+
+            using (var dconn = new SqlConnection(connectionString))
+            {
+
+                dconn.Open(); 
+                var result = dconn.Query<T>($"{dbName}.{procedureName}",param,commandType : CommandType.StoredProcedure);
+                dconn.Close();
+                 
+                return result;
+            } 
+        }
+
 
         public SqlConnection GetConnection()
         {

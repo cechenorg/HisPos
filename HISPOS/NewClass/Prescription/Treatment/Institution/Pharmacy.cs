@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Pharmacy;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using ZeroFormatter;
@@ -26,7 +28,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             NewInstitution = r.Field<bool>("CurPha_NewInstitution");
             GroupServerName = r.Field<string>("GroupServerName");
             TAXNUM = r.Field<string>("PHAMAS_TAXNUM");
-            VerifyKey = r.Field<string>("PHAMAS_VerifyKey"); 
+            VerifyKey = r.Field<string>("PHAMAS_VerifyKey");
+             
         }
 
         private string id;
@@ -99,6 +102,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         [IgnoreFormat]
         public string HISPOS_ServerName { get; set; } = "HIS_POS_Server";
 
+
+        [IgnoreFormat]
+        public IEnumerable<NewClass.Pharmacy.PharmacyInfo> GroupPharmacyinfoList { get; set; }
+
         [IgnoreFormat]
         public string VerifyKey { get; set; }
         #region Function
@@ -106,7 +113,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         public static Pharmacy GetCurrentPharmacy()
         {
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
-            Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]);
+            Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]); 
             pharmacy.MedicalPersonnels = new Employees();
             pharmacy.MedicalPersonnels.InitPharmacists();
             return pharmacy;
