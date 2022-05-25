@@ -339,6 +339,15 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button
+                Width="120"
+                Margin="10,0,0,0"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding ToNextStatusCommand}"
+                Content="退貨"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" Cursor="Hand" />
+            <Button
                 Width="150"
                 Margin="15,0,0,0"
                 Background="{StaticResource Shadow}"
@@ -380,24 +389,16 @@
                 FontWeight="Bold"
                 Foreground="Black"
                 Text="{Binding CurrentStoreOrder.ReturnStockValue, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
-            <Rectangle Width="220" />
+            <Rectangle Width="200" />
             <Button
+                Margin="30,0,10,0"
                 Width="120"
                 Background="DimGray"
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
                 Content="作廢"
                 FontFamily="Segoe UI Semibold"
-                FontSize="16" />
-            <Button
-                Width="150"
-                Margin="10,0,0,0"
-                Background="IndianRed"
-                BorderThickness="0"
-                Command="{Binding ToNextStatusCommand}"
-                Content="退貨"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" />
+                FontSize="16" Cursor="Hand" />
         </StackPanel>
     </Grid>
 </UserControl>

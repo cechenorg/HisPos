@@ -357,14 +357,14 @@
                 Visibility="Hidden"/>
             <Button
                 Width="150"
-                Margin="10,0,0,0"
+                Margin="10,0,10,0"
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding ToNextStatusCommand}"
                 Content="完成退貨"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" 
-                PreviewMouseDown="Button_PreviewMouseDown"/>
+                PreviewMouseDown="Button_PreviewMouseDown" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 </UserControl>
