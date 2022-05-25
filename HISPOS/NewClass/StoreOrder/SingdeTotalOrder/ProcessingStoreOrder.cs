@@ -14,6 +14,8 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
         public string RecID { get; set; }
         public string CheckCode { get; set; }
         public string IsType { get; set; }//藥品、OTC
+        public int IsControl { get; set; }//訂單是否有管制藥
+        public int IsFrozen { get; set; }//訂單是否有冰品
         public OrderTypeEnum Type { get; set; }
 
         public OrderStatusEnum Status
@@ -37,6 +39,8 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             Status = row.Field<string>("StoOrd_Status").Equals("D") ? OrderStatusEnum.DONE : OrderStatusEnum.SINGDE_PROCESSING;
             Total = (double)row.Field<decimal>("TOTAL");
             Note = row.Field<string>("StoOrd_Note");
+            IsControl = row.Field<int>("IsControl");
+            IsFrozen = row.Field<int>("IsFrozen");
         }
     }
 }

@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.SingdeTotalView.SingdeTotalDetailControl"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
     mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate x:Key="OrderIsDone" DataType="UserControl">
@@ -48,6 +49,12 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 Foreground="Black" />
+        </DataTemplate>
+        <DataTemplate x:Key="Icon" DataType="UserControl">
+            <StackPanel Orientation="Horizontal">
+                <generalCustomControl:ProductStatusIcon IsSinControl ="{Binding IsControl}" />
+                <generalCustomControl:ProductStatusIcon IsFrozen="{Binding IsFrozen}" />
+            </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="PurchaseIcon" DataType="UserControl">
             <Label
@@ -225,6 +232,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
+                    Width="300"
                     Binding="{Binding Note}"
                     FontFamily="Segoe UI Semi"
                     Header="備註"
@@ -236,6 +244,28 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+
+                <DataGridTemplateColumn
+                    MinWidth="100"
+                    Header="藥品種類"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl IsEnabled="True" Content="{Binding}">
+                                <ContentControl.Style>
+                                    <Style TargetType="{x:Type ContentControl}">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource Icon}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource OrderIsDone}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
