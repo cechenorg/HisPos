@@ -194,7 +194,31 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
+        private Dictionary<string, WorkPosition.WorkPosition> groupPharmacyWorkPositionList;//在其他加盟藥局對應的職位
+
+        [IgnoreFormat]
+        public Dictionary<string, WorkPosition.WorkPosition> GroupPharmacyWorkPositionList
+        {
+            get => groupPharmacyWorkPositionList;
+            set
+            {
+                Set(() => GroupPharmacyWorkPositionList, ref groupPharmacyWorkPositionList, value);
+            }
+        }
+
         #region Function
+
+        public void InitGroupPharmacyWorkPositionList(List<string> groupServerList)
+        {
+            GroupPharmacyWorkPositionList = new Dictionary<string, WorkPosition.WorkPosition>();
+
+            var employeeList= EmployeeDb.GetGroupPharmacyDataByID(groupServerList, ID);
+
+            for(int i =0; i < groupServerList.Count; i++)
+            {
+                GroupPharmacyWorkPositionList.Add(groupServerList[i], employeeList[i].WorkPosition);
+            } 
+        }
 
         public Employee GetDataByID(int id)
         {
@@ -275,4 +299,6 @@ namespace His_Pos.NewClass.Person.Employee
             return StartDate <= date && (LeaveDate is null || LeaveDate >= date);
         }
     }
+
+     
 }

@@ -55,17 +55,20 @@ namespace His_Pos.Database
                 connection.Close();
         }
 
-        public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
+        public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null,string dbName = null)
         {
             while (isBusy)
                 Thread.Sleep(500);
 
             isBusy = true;
 
+            if (dbName == null)
+                dbName =  Properties.Settings.Default.SystemSerialNumber;
+
             var table = new DataTable();
             try
             {
-                SqlCommand myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." + procName, connection);
+                SqlCommand myCommand = new SqlCommand("[" + dbName + "]." + procName, connection);
 
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandTimeout = 120;
