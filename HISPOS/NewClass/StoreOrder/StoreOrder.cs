@@ -452,15 +452,37 @@ namespace His_Pos.NewClass.StoreOrder
         {
             if(CheckCode != string.Empty)
             {
-                MessageWindow.ShowMessage("倉庫配送中，不能作廢", MessageType.ERROR);
+                MessageWindow.ShowMessage("杏德倉庫配送中，不能作廢", MessageType.ERROR);
                 return false;
             }
 
+            string dateTime = DateTime.Now.ToString("yyyyMMdd");
+            dateTime = CreateDateTime.ToString("yyyyMMdd");
+            DataTable table = StoreOrderDB.GetSingdeOrderCanModify(dateTime, ID);
+            if(table != null && table.Rows.Count > 0)
+            {
+                bool isCanModify = Convert.ToBoolean(table.Rows[0]["Result"]);
+                if(!isCanModify)
+                {
+                    MessageWindow.ShowMessage("杏德訂單已連接，不能作廢", MessageType.ERROR);
+                    return false;
+                }
+            }
             ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow();
-
+            ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
             if (!(bool)ScrapOrderWindow.DialogResult)
                 return false;
-           
+
+            table = StoreOrderDB.UpdateOrderToScrap(ID, dateTime, ScrapOrder.Content + ScrapOrder.Other);//更新杏德訂單資料
+            if (table != null && table.Rows.Count > 0)
+            {
+                bool isSucces = Convert.ToBoolean(table.Rows[0]["Result"]);
+                if (!isSucces)
+                {
+                    MessageWindow.ShowMessage("杏德訂單更新失敗，取消作廢", MessageType.ERROR);
+                    return false;
+                }
+            }
             DataTable dataTable;
 
             if (OrderManufactory.ID.Equals("0") && OrderStatus == OrderStatusEnum.WAITING)

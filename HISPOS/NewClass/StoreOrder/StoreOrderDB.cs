@@ -655,7 +655,7 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", purchaseOrder.PlanArriveDate);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
-            DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.Account);
             new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
 
@@ -690,6 +690,28 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable GetSingdeOrderNewStatusByNo(string dateTime, string storeOrderID)
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatusByNo('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}', '{storeOrderID}')");
+        }
+
+        /// <summary>
+        /// 判斷該筆訂單是否可作廢
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="storeOrderID"></param>
+        /// <returns></returns>
+        internal static DataTable GetSingdeOrderCanModify(string dateTime, string storeOrderID)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderCanModify('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}', '{storeOrderID}')");
+        }
+        /// <summary>
+        /// 更新杏德訂單填寫作廢理由
+        /// </summary>
+        /// <param name="storeOrderID"></param>
+        /// <param name="dateTime"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        internal static DataTable UpdateOrderToScrap(string storeOrderID, string dateTime, string msg)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call UpdateOrderToScrap('{storeOrderID}', '{dateTime}', '{msg}')");
         }
 
         public static DataTable RemoveSingdeStoreOrderByID(string storeOrderID)

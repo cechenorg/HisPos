@@ -1,9 +1,11 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.StoreOrder;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
     public class ScrapOrderWindowViewModel: ViewModelBase
     {
+        private string content;
+        public string Content
+        {
+            get;
+            set;
+        }
         private string other;
         public string Other {
             get => other;
@@ -34,7 +42,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             Messenger.Default.Send(new NotificationMessage("YesAction"));
         }
-
         private void NoAction()
         {
             Messenger.Default.Send(new NotificationMessage("NoAction"));

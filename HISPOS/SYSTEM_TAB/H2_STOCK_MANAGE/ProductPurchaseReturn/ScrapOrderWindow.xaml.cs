@@ -8,6 +8,8 @@ using System.Data;
 using System.Threading;
 using System.Windows;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
+using System.Windows.Controls;
+using System;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
@@ -27,6 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                             MessageWindow.ShowMessage("請填寫其他", MessageType.ERROR);
                             return;
                         }
+                        ((ScrapOrderWindowViewModel)DataContext).Content = radioContent;
                         DialogResult = true;
                         Close();
                         break;
@@ -43,6 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             Messenger.Default.Unregister<NotificationMessage>(this);
         }
+        private string radioContent;
 
         private void radio_Click(object sender, RoutedEventArgs e)
         {
@@ -55,6 +59,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 other.Text = "";
                 other.Visibility = Visibility.Hidden;
             }
+            radioContent = Convert.ToString(((RadioButton)sender).Content);
         }
     }
 }
