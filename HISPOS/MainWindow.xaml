@@ -373,8 +373,8 @@
                     <StackPanel Orientation="Horizontal">
                         <Label
                             x:Name="UserName"
-                            Width="90"
-                            Margin="10,10,0,0"
+                            Width="100"
+                            Margin="5,10,0,0"
                             FontFamily="Arial"
                             FontSize="18"
                             FontWeight="Bold"
