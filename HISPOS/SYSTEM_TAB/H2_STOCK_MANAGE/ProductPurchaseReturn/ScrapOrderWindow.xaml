@@ -8,7 +8,7 @@
     xmlns:productpurchasereturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn" 
     Title="作廢進退貨單"
     Width="300"
-    Height="230"
+    Height="250"
     Closing="Window_Closing"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
@@ -16,7 +16,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="120" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Label
@@ -31,7 +31,8 @@
             <RadioButton Name="radio1" Click="radio_Click" FontSize="15" Content="1.客人取消"/>
             <RadioButton Name="radio2" Click="radio_Click" FontSize="15" Content="2.無法等待"/>
             <RadioButton Name="radio3" Click="radio_Click" FontSize="15" Content="3.比外面貴"/>
-            <RadioButton Name="radio4" Click="radio_Click" FontSize="15">
+            <RadioButton Name="radio4" Click="radio_Click" FontSize="15" Content="4.訂錯刪單"/>
+            <RadioButton Name="radio5" Click="radio_Click" FontSize="15">
                 <StackPanel>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -41,7 +42,7 @@
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="150"/>
                         </Grid.ColumnDefinitions>
-                        <AccessText Grid.Row="0" Grid.Column="0" Text="4.其他:"/> 
+                        <AccessText Grid.Row="0" Grid.Column="0" Text="5.其他:"/> 
                         <TextBox Name="other" Grid.Row="0" Grid.Column="1" Text="{Binding Other}"/>
                     </Grid>
                 </StackPanel>

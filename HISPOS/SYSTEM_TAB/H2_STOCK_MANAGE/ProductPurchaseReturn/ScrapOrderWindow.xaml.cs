@@ -24,12 +24,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 switch (notificationMessage.Notification)
                 {
                     case "YesAction":
-                        if(radio1.IsChecked != true && radio2.IsChecked != true && radio3.IsChecked != true && radio4.IsChecked != true)//必須選擇其中一項
+                        if(radio1.IsChecked != true && radio2.IsChecked != true && radio3.IsChecked != true && radio4.IsChecked != true && radio5.IsChecked != true)//必須選擇其中一項
                         {
                             MessageWindow.ShowMessage("請選擇作廢原因", MessageType.ERROR);
                             return;
                         }
-                        if (radio4.IsChecked == true && other.Text == string.Empty)//選擇其他必須填寫原因
+                        if (radio5.IsChecked == true && other.Text == string.Empty)//選擇其他必須填寫原因
                         {
                             MessageWindow.ShowMessage("請填寫其他", MessageType.ERROR);
                             return;
@@ -55,10 +55,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
         private void radio_Click(object sender, RoutedEventArgs e)
         {
-            if(radio4.IsChecked == true)
+            if(radio5.IsChecked == true)
             {
                 other.Visibility = Visibility.Visible;
-                radioContent = "4.其他:";
+                radioContent = "5.其他:";
             }
             else
             {
