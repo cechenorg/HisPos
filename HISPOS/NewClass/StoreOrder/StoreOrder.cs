@@ -478,7 +478,7 @@ namespace His_Pos.NewClass.StoreOrder
             if (!(bool)ScrapOrderWindow.DialogResult)
                 return false;
             string update = DateTime.Now.ToString("yyyy/MM/dd");
-            string uptime = DateTime.Now.ToString("HHMMSS");
+            string uptime = DateTime.Now.ToString("HHmmss");
             dt = DateTime.Parse(update);
             update = dt.ToString("yyyMMdd", culture);
             
