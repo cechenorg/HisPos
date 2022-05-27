@@ -7,6 +7,7 @@ using System.Data;
 using DomainModel.Enum;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
+using System.Globalization;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -457,7 +458,11 @@ namespace His_Pos.NewClass.StoreOrder
             }
 
             string dateTime = DateTime.Now.ToString("yyyyMMdd");
-            dateTime = CreateDateTime.ToString("yyyyMMdd");
+            dateTime = CreateDateTime.ToString("yyyy/MM/dd");
+            DateTime dt = DateTime.Parse(dateTime);
+            CultureInfo culture = new CultureInfo("zh-TW");
+            culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+            dateTime = dt.ToString("yyyMMdd", culture);
             DataTable table = StoreOrderDB.GetSingdeOrderCanModify(dateTime, ID);
             if(table != null && table.Rows.Count > 0)
             {
@@ -472,11 +477,15 @@ namespace His_Pos.NewClass.StoreOrder
             ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
             if (!(bool)ScrapOrderWindow.DialogResult)
                 return false;
-
-            table = StoreOrderDB.UpdateOrderToScrap(ID, dateTime, ScrapOrder.Content + ScrapOrder.Other);//更新杏德訂單資料
+            string update = DateTime.Now.ToString("yyyy/MM/dd");
+            string uptime = DateTime.Now.ToString("HHMMSS");
+            dt = DateTime.Parse(update);
+            update = dt.ToString("yyyMMdd", culture);
+            
+            table = StoreOrderDB.UpdateOrderToScrap(ID, update, uptime, ScrapOrder.Content + ScrapOrder.Other);//更新杏德訂單資料
             if (table != null && table.Rows.Count > 0)
             {
-                bool isSucces = Convert.ToBoolean(table.Rows[0]["Result"]);
+                bool isSucces = Convert.ToBoolean(table.Rows[0]["Result"]);//FALSE未更新 TRUE已更新
                 if (!isSucces)
                 {
                     MessageWindow.ShowMessage("杏德訂單更新失敗，取消作廢", MessageType.ERROR);
@@ -499,7 +508,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else
             {
-                dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
+                dataTable = StoreOrderDB.RemoveStoreOrderByID(ID, ScrapOrder.Content + ScrapOrder.Other);
             }
 
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");

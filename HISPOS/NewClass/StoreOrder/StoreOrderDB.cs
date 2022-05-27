@@ -522,10 +522,12 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReturnOrderRePurchase]", parameters);
         }
 
-        internal static DataTable RemoveStoreOrderByID(string storeOrderID)
+        internal static DataTable RemoveStoreOrderByID(string storeOrderID, string voidReason)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+            parameters.Add(new SqlParameter("ModifyUser", ViewModelMainWindow.CurrentUser.Account));
+            parameters.Add(new SqlParameter("VoidReason", voidReason));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
         }
 
@@ -709,9 +711,9 @@ namespace His_Pos.NewClass.StoreOrder
         /// <param name="dateTime"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        internal static DataTable UpdateOrderToScrap(string storeOrderID, string dateTime, string msg)
+        internal static DataTable UpdateOrderToScrap(string storeOrderID, string date ,string time, string msg)
         {
-            return MainWindow.SingdeConnection.ExecuteProc($"call UpdateOrderToScrap('{storeOrderID}', '{dateTime}', '{msg}')");
+            return MainWindow.SingdeConnection.ExecuteProc($"call UpdateOrderToScrap('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrderID}', '{date}','{time}', '{msg}')");
         }
 
         public static DataTable RemoveSingdeStoreOrderByID(string storeOrderID)

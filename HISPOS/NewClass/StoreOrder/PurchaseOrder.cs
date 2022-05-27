@@ -438,13 +438,13 @@ namespace His_Pos.NewClass.StoreOrder
                     StoreOrderDB.StoreOrderToWaiting(newstoordId);
                     return true;
                 }
-                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId,"");
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             }
             catch (Exception)
             {
-                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId,"");
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             }

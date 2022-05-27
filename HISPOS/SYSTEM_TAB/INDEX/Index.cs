@@ -536,7 +536,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                         }
                         else
                         {
-                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID);
+                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID,"");
                             MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
                         }
 
@@ -561,7 +561,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                         }
                         else
                         {
-                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID);
+                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID,"");
                             MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
                         }
                         CommonProductGetDataAcion();
