@@ -73,6 +73,7 @@ namespace His_Pos.NewClass.StoreOrder
         public OrderTypeEnum OrderType { get; set; }
         public string ID { get; set; }
         public string ReceiveID { get; set; }
+        public string SourceID { get; set; }//來源單
         public string CheckCode { get; set; }
         public Manufactory.Manufactory OrderManufactory { get; set; }
         public WareHouse.WareHouse OrderWarehouse { get; set; }
@@ -134,6 +135,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             ID = row.Field<string>("StoOrd_ID");
             ReceiveID = string.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
+            SourceID = row.Field<string>("StoOrd_SourceID");
             CheckCode = row.Field<string>("StoOrd_CheckCode");
             if (OrderStatus == OrderStatusEnum.SCRAP)
                 IsScrap = false;
