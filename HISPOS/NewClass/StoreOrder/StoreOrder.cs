@@ -8,6 +8,7 @@ using DomainModel.Enum;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Globalization;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -478,23 +479,37 @@ namespace His_Pos.NewClass.StoreOrder
                 }
                 ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow();
                 ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
+
                 if (!(bool)ScrapOrderWindow.DialogResult)
                     return false;
+
                 VoidReason = ScrapOrder.Content + ScrapOrder.Other;
                 string update = DateTime.Now.ToString("yyyy/MM/dd");
                 string uptime = DateTime.Now.ToString("HHmmss");
                 dt = DateTime.Parse(update);
                 update = dt.ToString("yyyMMdd", culture);
-                table = StoreOrderDB.UpdateOrderToScrap(ID, update, uptime, VoidReason);//更新杏德訂單資料
-                
-                if (table != null && table.Rows.Count > 0)
+
+                int AuthorityValue = ViewModelMainWindow.CurrentUser.AuthorityValue;
+                if(AuthorityValue == 1)
                 {
-                    bool isSucces = Convert.ToBoolean(table.Rows[0]["Result"]);//FALSE未更新 TRUE已更新
-                    if (!isSucces)
-                    {
-                        MessageWindow.ShowMessage("杏德訂單更新失敗，取消作廢", MessageType.ERROR);
+                    ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
+                    if (!(bool)confirmWindow.DialogResult)
                         return false;
-                    }
+                }
+                else
+                {
+                    MessageWindow.ShowMessage("訂單已備貨，不可刪除！", MessageType.ERROR);
+                    return false;
+                    //table = StoreOrderDB.UpdateOrderToScrap(ID, update, uptime, VoidReason);//更新杏德訂單資料
+                    //if (table != null && table.Rows.Count > 0)
+                    //{
+                    //    bool isSucces = Convert.ToBoolean(table.Rows[0]["Result"]);//FALSE未更新 TRUE已更新
+                    //    if (!isSucces)
+                    //    {
+                    //        MessageWindow.ShowMessage("訂單已備貨，不可刪除！", MessageType.ERROR);
+                    //        return false;
+                    //    }
+                    //}
                 }
             }
 
