@@ -302,23 +302,27 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     GetTxtFiles(s, pathFile, Path.GetFileName(s));
                                 }
-                
-                                var xDocument = XDocument.Load(s);
-                               
-                                var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null ) { isRePost = "2"; }
-                                else
+
+                                if (Path.GetExtension(s) == ".xml")
                                 {
-                                    isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                    var xDocument = XDocument.Load(s);
+                                    var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null ) { isRePost = "2"; }
+                                    else
+                                    {
+                                        isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                    }
+                                    if (isRePost != "0") 
+                                    {
+                                        isRe = true;
+                                    }
+                                    else
+                                    { 
+                                        isRe = false;
+                                    }
+                                    xDocs.Add(xDocument);
+                                    cusIdNumbers.Add(cusIdNumber);
                                 }
-                                if (isRePost != "0") {
-                                    isRe = true;
-                                 
-                                }
-                                else
-                                { isRe = false;}
-                                xDocs.Add(xDocument);
-                                cusIdNumbers.Add(cusIdNumber);
                                 paths.Add(s);
                             }
                             catch (Exception ex)
