@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Person.Employee
@@ -194,30 +195,44 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private Dictionary<string, WorkPosition.WorkPosition> groupPharmacyWorkPositionList;//在其他加盟藥局對應的職位
+        private Dictionary<PharmacyInfo, Employee> groupPharmacyEmployeeList;//在其他加盟藥局對應的職位
 
         [IgnoreFormat]
-        public Dictionary<string, WorkPosition.WorkPosition> GroupPharmacyWorkPositionList
+        public Dictionary<PharmacyInfo, Employee> GroupPharmacyEmployeeList
         {
-            get => groupPharmacyWorkPositionList;
+            get => groupPharmacyEmployeeList;
             set
             {
-                Set(() => GroupPharmacyWorkPositionList, ref groupPharmacyWorkPositionList, value);
+                Set(() => GroupPharmacyEmployeeList, ref groupPharmacyEmployeeList, value);
+            }
+        }
+
+        private KeyValuePair<PharmacyInfo, Employee> selectedGroupPharmacyEmployee;//在其他加盟藥局對應的職位
+
+        [IgnoreFormat]
+        public KeyValuePair<PharmacyInfo, Employee> SelectedGroupPharmacyEmployee
+        {
+            get => selectedGroupPharmacyEmployee;
+            set
+            {
+                Set(() => SelectedGroupPharmacyEmployee, ref selectedGroupPharmacyEmployee, value);
             }
         }
 
         #region Function
 
-        public void InitGroupPharmacyWorkPositionList(List<string> groupServerList)
+        public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList)
         {
-            GroupPharmacyWorkPositionList = new Dictionary<string, WorkPosition.WorkPosition>();
+            GroupPharmacyEmployeeList = new Dictionary<PharmacyInfo, Employee>();
 
-            var employeeList= EmployeeDb.GetGroupPharmacyDataByID(groupServerList, ID);
+            var employeeList= EmployeeDb.GetGroupPharmacyDataByID(groupServerList.Select(_ => _.PHAMAS_VerifyKey ).ToList(), ID);
 
             for(int i =0; i < groupServerList.Count; i++)
             {
-                GroupPharmacyWorkPositionList.Add(groupServerList[i], employeeList[i].WorkPosition);
-            } 
+                GroupPharmacyEmployeeList.Add(groupServerList[i], employeeList[i]);
+            }
+
+            SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault();
         }
 
         public Employee GetDataByID(int id)

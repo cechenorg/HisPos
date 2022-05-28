@@ -41,7 +41,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => SelectedEmployee, ref _SelectedEmployee, value);
 
                 if(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
-                    SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.Select(_ => _.PHAMAS_VerifyKey).ToList());
+                    SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList());
             }
         }
 
