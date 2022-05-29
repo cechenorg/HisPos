@@ -159,8 +159,13 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition  Width="Auto"/>
                     <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions> 
                 <Grid Width="270" Visibility="{Binding SelectedEmployee.IsLocal,Converter={StaticResource InverseBoolToVisConverter}}"  Background="{StaticResource GridDarkerBackGround}"  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+
                     <DataGrid AutoGenerateColumns="False"   Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False" 
                     CellStyle="{StaticResource DataGridCellStyle}" 
                     ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsSynchronizedWithCurrentItem="True"
@@ -206,6 +211,8 @@
                         </DataGrid.Columns>
 
                     </DataGrid>
+
+                    <Button Grid.Row="1" Content="修改權限" Background="DarkCyan" Command="{Binding UpdateGroupPharmacyAuthorityCommand}"></Button>
                 </Grid>
                 
                 <Grid  Grid.Column="1" Background="{StaticResource GridDarkerBackGround}"  TextBlock.FontFamily="Segoe UI Semibold" TextBlock.FontSize="20">

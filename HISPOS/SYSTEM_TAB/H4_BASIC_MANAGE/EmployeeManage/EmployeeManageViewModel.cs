@@ -25,20 +25,22 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public RelayCommand NewEmployeeCommand { get; set; }
         public RelayCommand ChangePassWordCommand { get; set; }
 
+        public RelayCommand UpdateGroupPharmacyAuthorityCommand { get; set; }
+
         #endregion -----Define Command-----
 
         #region ----- Define Variables -----
 
-     
-         
-        public Employee _SelectedEmployee;
+
+
+        private Employee _selectedEmployee;
 
         public Employee SelectedEmployee
         {
-            get { return _SelectedEmployee; }
+            get { return _selectedEmployee; }
             set
             {
-                Set(() => SelectedEmployee, ref _SelectedEmployee, value);
+                Set(() => SelectedEmployee, ref _selectedEmployee, value);
 
                 if(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
                     SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList());
@@ -127,9 +129,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             DeleteCommand = new RelayCommand(DeleteAction);
             NewEmployeeCommand = new RelayCommand(NewEmployeeAction);
             ChangePassWordCommand = new RelayCommand(ChangePassWordAction);
+            UpdateGroupPharmacyAuthorityCommand = new RelayCommand(UpdateGroupPharmacyAuthorityAction);
         }
 
         #region Action
+
+        private void UpdateGroupPharmacyAuthorityAction()
+        {
+            SelectedEmployee.Update();
+            MessageWindow.ShowMessage("權限修改成功!",Class.MessageType.SUCCESS);
+        }
 
         private void CancelAction()
         {
@@ -220,6 +229,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                     FilterEmployeeCollection.Remove(quitEmployee);
                 }
             }
+            SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
         }
 
          

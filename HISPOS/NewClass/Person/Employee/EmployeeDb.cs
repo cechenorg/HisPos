@@ -56,10 +56,21 @@ namespace His_Pos.NewClass.Person.Employee
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
             if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList);
+            {
+                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList); 
+            }
+                
             else
             {
                 MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateEmployee]", parameterList);
+                
+                foreach(var groupPharmactEmployee in e.GroupPharmacyEmployeeList)
+                {
+                    parameterList = new List<SqlParameter>();
+                    parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
+                    MainWindow.ServerConnection.ExecuteProcBySchema(groupPharmactEmployee.Key.PHAMAS_VerifyKey, "[Set].[UpdateEmployee]", parameterList);
+                }
+                
                 SyncData();
             }
         }
