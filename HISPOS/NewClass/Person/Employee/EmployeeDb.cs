@@ -29,7 +29,7 @@ namespace His_Pos.NewClass.Person.Employee
             {
                 List<SqlParameter> parameterList = new List<SqlParameter>();
                 parameterList.Add(new SqlParameter("@EmpID", ID));
-                var table = MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeByID]", parameterList);
+                var table = MainWindow.ServerConnection.ExecuteProcBySchema(groupserverName,"[Get].[EmployeeByID]", parameterList);
                 Employee employee = new Employee(table.Rows[0]);
                 result.Add(employee);
             }
@@ -66,6 +66,7 @@ namespace His_Pos.NewClass.Person.Employee
                 
                 foreach(var groupPharmactEmployee in e.GroupPharmacyEmployeeList)
                 {
+                    e.WorkPosition = groupPharmactEmployee.EmployeeWorkPosition;
                     parameterList = new List<SqlParameter>();
                     parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
                     MainWindow.ServerConnection.ExecuteProcBySchema(groupPharmactEmployee.PharmacyVerifyKey, "[Set].[UpdateEmployee]", parameterList);

@@ -200,7 +200,8 @@
                                     <ComboBox FontSize="20"   DataContext="{Binding }"
                                                       DisplayMemberPath="WorkPositionName"  
                                                       ItemsSource="{Binding DataContext.WorkPositions , RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                      SelectedItem="{Binding Path=EmployeeWorkPosition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  >
+                                                        
+                                                      SelectedValue="{Binding EmployeeWorkPosition,UpdateSourceTrigger=PropertyChanged}"  >
                                             
                                     </ComboBox>
                                 </DataTemplate>

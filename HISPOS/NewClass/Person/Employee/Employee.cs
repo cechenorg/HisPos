@@ -222,7 +222,7 @@ namespace His_Pos.NewClass.Person.Employee
 
         #region Function
 
-        public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList)
+        public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList,WorkPosition.WorkPositions workPositions)
         {
             GroupPharmacyEmployeeList = new ObservableCollection<GroupWorkPosition>();
 
@@ -230,12 +230,13 @@ namespace His_Pos.NewClass.Person.Employee
 
             for(int i =0; i < groupServerList.Count; i++)
             {
-                GroupPharmacyEmployeeList.Add(new GroupWorkPosition()
+                GroupWorkPosition tempData = new GroupWorkPosition()
                 {
                     PharmacyName = groupServerList[i].PHAMAS_NAME,
-                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey,
-                    EmployeeWorkPosition = employeeList[i].WorkPosition
-                });
+                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey
+                };
+                tempData.EmployeeWorkPosition = workPositions.SingleOrDefault(_ => _.WorkPositionId == employeeList[i].WorkPosition.WorkPositionId);
+                GroupPharmacyEmployeeList.Add(tempData);
             }
 
             SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault(); 
@@ -281,6 +282,7 @@ namespace His_Pos.NewClass.Person.Employee
 
         public void Update()
         {
+
             EmployeeDb.Update(this);
         }
 
@@ -327,6 +329,12 @@ namespace His_Pos.NewClass.Person.Employee
         public string PharmacyVerifyKey { get; set; }
         public string PharmacyName { get; set; }
 
-        public WorkPosition.WorkPosition EmployeeWorkPosition { get; set; }
+
+        private WorkPosition.WorkPosition _employeeWorkPosition;
+        public WorkPosition.WorkPosition EmployeeWorkPosition {
+            get { return _employeeWorkPosition; }
+            set { 
+                Set(() => EmployeeWorkPosition, ref _employeeWorkPosition, value); } 
+        }
     }
 }
