@@ -68,7 +68,7 @@ namespace His_Pos.NewClass.Person.Employee
                 {
                     parameterList = new List<SqlParameter>();
                     parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
-                    MainWindow.ServerConnection.ExecuteProcBySchema(groupPharmactEmployee.Key.PHAMAS_VerifyKey, "[Set].[UpdateEmployee]", parameterList);
+                    MainWindow.ServerConnection.ExecuteProcBySchema(groupPharmactEmployee.PharmacyVerifyKey, "[Set].[UpdateEmployee]", parameterList);
                 }
                 
                 SyncData();

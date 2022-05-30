@@ -167,10 +167,9 @@
                     </Grid.RowDefinitions>
 
                     <DataGrid AutoGenerateColumns="False"   Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False" 
-                    CellStyle="{StaticResource DataGridCellStyle}" 
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" IsSynchronizedWithCurrentItem="True"
+                    CellStyle="{StaticResource DataGridCellStyle}"  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  
                     ItemsSource="{Binding SelectedEmployee.GroupPharmacyEmployeeList, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedEmployee.SelectedGroupPharmacyEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    SelectedValue="{Binding SelectedEmployee.SelectedGroupPharmacyEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                     VerticalScrollBarVisibility="Hidden">
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
@@ -185,7 +184,7 @@
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
 
-                            <DataGridTextColumn  Width="160" Header="姓名" Binding="{Binding Key.PHAMAS_NAME, UpdateSourceTrigger=PropertyChanged}"
+                            <DataGridTextColumn  Width="160" Header="藥局" Binding="{Binding PharmacyName, UpdateSourceTrigger=PropertyChanged}"
                                 FontFamily="Segoe UI Semibold" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
@@ -201,7 +200,7 @@
                                     <ComboBox FontSize="20"   DataContext="{Binding }"
                                                       DisplayMemberPath="WorkPositionName"  
                                                       ItemsSource="{Binding DataContext.WorkPositions , RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                      SelectedItem="{Binding Path=Value.WorkPosition,UpdateSourceTrigger=PropertyChanged}"  >
+                                                      SelectedItem="{Binding Path=EmployeeWorkPosition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  >
                                             
                                     </ComboBox>
                                 </DataTemplate>

@@ -1,4 +1,5 @@
-﻿using His_Pos.FunctionWindow;
+﻿using GalaSoft.MvvmLight;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Pharmacy;
 using His_Pos.Service;
 using System;
@@ -195,10 +196,10 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private Dictionary<PharmacyInfo, Employee> groupPharmacyEmployeeList;//在其他加盟藥局對應的職位
+        private ObservableCollection<GroupWorkPosition> groupPharmacyEmployeeList;//在其他加盟藥局對應的職位
 
         [IgnoreFormat]
-        public Dictionary<PharmacyInfo, Employee> GroupPharmacyEmployeeList
+        public ObservableCollection<GroupWorkPosition> GroupPharmacyEmployeeList
         {
             get => groupPharmacyEmployeeList;
             set
@@ -207,10 +208,10 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private KeyValuePair<PharmacyInfo, Employee> selectedGroupPharmacyEmployee;//在其他加盟藥局對應的職位
+        private GroupWorkPosition selectedGroupPharmacyEmployee;//在其他加盟藥局對應的職位
 
         [IgnoreFormat]
-        public KeyValuePair<PharmacyInfo, Employee> SelectedGroupPharmacyEmployee
+        public GroupWorkPosition SelectedGroupPharmacyEmployee
         {
             get => selectedGroupPharmacyEmployee;
             set
@@ -223,16 +224,22 @@ namespace His_Pos.NewClass.Person.Employee
 
         public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList)
         {
-            GroupPharmacyEmployeeList = new Dictionary<PharmacyInfo, Employee>();
+            GroupPharmacyEmployeeList = new ObservableCollection<GroupWorkPosition>();
 
             var employeeList= EmployeeDb.GetGroupPharmacyDataByID(groupServerList.Select(_ => _.PHAMAS_VerifyKey ).ToList(), ID);
 
             for(int i =0; i < groupServerList.Count; i++)
             {
-                GroupPharmacyEmployeeList.Add(groupServerList[i], employeeList[i]);
+                GroupPharmacyEmployeeList.Add(new GroupWorkPosition()
+                {
+                    PharmacyName = groupServerList[i].PHAMAS_NAME,
+                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey,
+                    EmployeeWorkPosition = employeeList[i].WorkPosition
+                });
             }
 
-            SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault();
+            SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault(); 
+            
         }
 
         public Employee GetDataByID(int id)
@@ -315,5 +322,11 @@ namespace His_Pos.NewClass.Person.Employee
         }
     }
 
-     
+    public class GroupWorkPosition : ObservableObject
+    {
+        public string PharmacyVerifyKey { get; set; }
+        public string PharmacyName { get; set; }
+
+        public WorkPosition.WorkPosition EmployeeWorkPosition { get; set; }
+    }
 }
