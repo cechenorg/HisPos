@@ -454,67 +454,69 @@ namespace His_Pos.NewClass.StoreOrder
         {
             DataTable dataTable;
             bool isCanModify = false;
-
-            if (OrderManufactory.ID.Equals("0"))
-            {
-                //杏德訂單需先檢查是否杏德資料是否可以刪除                
-                if (CheckCode != string.Empty)
+            string VoidReason = string.Empty;
+            if (OrderStatus == OrderStatusEnum.WAITING || OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
+            { 
+                if (OrderManufactory.ID.Equals("0") && Note != "手動入庫")
                 {
-                    isCanModify = false;
-                }
-                else
-                {
-                    string dateTime = DateTime.Now.ToString("yyyyMMdd");
-                    dateTime = CreateDateTime.ToString("yyyy/MM/dd");
-                    dataTable = StoreOrderDB.GetSingdeOrderCanModify(dateTime, ID);
-                    if (dataTable != null && dataTable.Rows.Count > 0)
+                    //杏德訂單需先檢查是否杏德資料是否可以刪除                
+                    if (CheckCode != string.Empty)
                     {
-                        isCanModify = Convert.ToBoolean(dataTable.Rows[0]["Result"]);
-                    }
-                }
-                if (isCanModify == false)
-                {
-                    int AuthorityValue = ViewModelMainWindow.CurrentUser.AuthorityValue;
-                    if (AuthorityValue == 1)
-                    {
-                        ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
-                        if (!(bool)confirmWindow.DialogResult)
-                            return false;
+                        isCanModify = false;
                     }
                     else
                     {
-                        MessageWindow.ShowMessage("訂單已備貨，不可刪除！", MessageType.ERROR);
-                        return false;
+                        string dateTime = DateTime.Now.ToString("yyyyMMdd");
+                        dateTime = CreateDateTime.ToString("yyyy/MM/dd");
+                        dataTable = StoreOrderDB.GetSingdeOrderCanModify(dateTime, ID);
+                        if (dataTable != null && dataTable.Rows.Count > 0)
+                        {
+                            isCanModify = Convert.ToBoolean(dataTable.Rows[0]["Result"]);
+                        }
+                    }
+                    if (isCanModify == false)
+                    {
+                        int AuthorityValue = ViewModelMainWindow.CurrentUser.AuthorityValue;
+                        if (AuthorityValue == 1)
+                        {
+                            ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
+                            if (!(bool)confirmWindow.DialogResult)
+                                return false;
+                        }
+                        else
+                        {
+                            MessageWindow.ShowMessage("訂單已備貨，不可刪除！", MessageType.ERROR);
+                            return false;
+                        }
                     }
                 }
-            }
-            //作廢原因
-            string VoidReason = string.Empty;
-            ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow();
-            ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
+                //作廢原因                
+                ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow();
+                ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
             
-            if (!(bool)ScrapOrderWindow.DialogResult)
-                return false;
+                if (!(bool)ScrapOrderWindow.DialogResult)
+                    return false;
             
-            VoidReason = ScrapOrder.Content + ScrapOrder.Other;
-            DateTime dt;
-            string update = DateTime.Now.ToString("yyyy/MM/dd");
-            string uptime = DateTime.Now.ToString("HHmmss");
-            dt = DateTime.Parse(update);
-            CultureInfo culture = new CultureInfo("zh-TW");
-            culture.DateTimeFormat.Calendar = new TaiwanCalendar();
-            update = dt.ToString("yyyMMdd", culture);
+                VoidReason = ScrapOrder.Content + ScrapOrder.Other;
+                DateTime dt;
+                string update = DateTime.Now.ToString("yyyy/MM/dd");
+                string uptime = DateTime.Now.ToString("HHmmss");
+                dt = DateTime.Parse(update);
+                CultureInfo culture = new CultureInfo("zh-TW");
+                culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                update = dt.ToString("yyyMMdd", culture);
             
-            if (isCanModify == true)
-            {
-                dataTable = StoreOrderDB.UpdateOrderToScrap(ID, update, uptime, VoidReason);//更新杏德訂單資料
-                if (dataTable != null && dataTable.Rows.Count > 0)
+                if (isCanModify == true)
                 {
-                    bool isSucces = Convert.ToBoolean(dataTable.Rows[0]["Result"]);//FALSE未更新 TRUE已更新
-                    if (!isSucces)
+                    dataTable = StoreOrderDB.UpdateOrderToScrap(ID, update, uptime, VoidReason);//更新杏德訂單資料
+                    if (dataTable != null && dataTable.Rows.Count > 0)
                     {
-                        MessageWindow.ShowMessage("杏德訂單更新失敗，取消作廢", MessageType.ERROR);
-                        return false;
+                        bool isSucces = Convert.ToBoolean(dataTable.Rows[0]["Result"]);//FALSE未更新 TRUE已更新
+                        if (!isSucces)
+                        {
+                            MessageWindow.ShowMessage("杏德訂單更新失敗，取消作廢", MessageType.ERROR);
+                            return false;
+                        }
                     }
                 }
             }
