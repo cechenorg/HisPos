@@ -411,6 +411,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public void UpdateOrderDataFromSingde(DataRow dataRow)
         {
+            string orderID = dataRow.Field<string>("ORDER_ID");
             long orderFlag = dataRow.Field<long>("FLAG");
             bool isShipment = dataRow.Field<long>("IS_SHIPMENT").Equals(1);
             string prescriptionReceiveID = dataRow.Field<string>("PRESCRIPTION_RECEIVEID");
@@ -428,6 +429,7 @@ namespace His_Pos.NewClass.StoreOrder
             else*/
             if (isShipment)
             {
+                ID = orderID;
                 ReceiveID = prescriptionReceiveID;
                 CheckCode = checkCode;
 
