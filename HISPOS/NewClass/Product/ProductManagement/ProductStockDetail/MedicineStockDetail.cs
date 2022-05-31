@@ -56,7 +56,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 
         
 
-        public bool IsInventoryError => InsuffInventory >= 0;//是否為不足量顯示
+        public bool IsInventoryError => InsuffInventory > 0;//是否為不足量顯示
 
         #endregion ----- Define Variables -----
 
