@@ -255,11 +255,6 @@
                                 <ContentControl.Style>
                                     <Style TargetType="{x:Type ContentControl}">
                                         <Setter Property="ContentTemplate" Value="{StaticResource Icon}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Value="DONE">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource OrderIsDone}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
