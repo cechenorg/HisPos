@@ -119,7 +119,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
-        private bool _isGroupPharmacy = string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false;
+        private bool _isGroupPharmacy = 
+            string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
+             ViewModelMainWindow.CurrentUser.AuthorityValue <= 2;//Admin or 店長
 
         public bool IsGroupPharmacy
         {
