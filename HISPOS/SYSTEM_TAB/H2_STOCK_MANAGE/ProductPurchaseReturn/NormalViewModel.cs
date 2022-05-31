@@ -215,7 +215,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (isSuccess)
             {
-                MessageWindow.ShowMessage("已作廢刪除，請通知杏德！", MessageType.SUCCESS);
+                MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
                 //storeOrderCollection.Remove(CurrentStoreOrder);
                 AddOrderByMinus();
                 CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
