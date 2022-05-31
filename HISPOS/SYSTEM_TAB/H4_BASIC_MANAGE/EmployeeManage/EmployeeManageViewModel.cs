@@ -119,6 +119,20 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
+        private bool _isGroupPharmacy = string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false;
+
+        public bool IsGroupPharmacy
+        {
+            get { return _isGroupPharmacy; }
+            set
+            {
+                Set(() => IsGroupPharmacy, ref _isGroupPharmacy, value);
+
+                FilterEmployee();
+            }
+        }
+
+
         #endregion ----- Define Variables -----
 
         public EmployeeManageViewModel()
@@ -193,9 +207,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
              
             LocalCheck = true;
             FilterEmployee();
-            SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
-
             ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList = PharmacyDBService.GetPharmacyListByGroupServerName();
+            SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
+             
         }
 
         private void FilterEmployee()

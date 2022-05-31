@@ -159,8 +159,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition  Width="Auto"/>
                     <ColumnDefinition />
-                </Grid.ColumnDefinitions> 
-                <Grid Width="270" Visibility="{Binding SelectedEmployee.IsLocal,Converter={StaticResource InverseBoolToVisConverter}}"  Background="{StaticResource GridDarkerBackGround}"  >
+                </Grid.ColumnDefinitions>
+                <Grid Width="270" Visibility="{Binding IsGroupPharmacy,Converter={StaticResource BooleanToVisibilityConverter}}"  Background="{StaticResource GridDarkerBackGround}"  >
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="50"/>
