@@ -142,8 +142,9 @@ namespace His_Pos.NewClass.StoreOrder
                 IsScrap = false;
             else
                 IsScrap = true;
-            
-            if (string.IsNullOrEmpty(CheckCode))
+
+            int AuthorityValue = ViewModelMainWindow.CurrentUser.AuthorityValue;
+            if ((AuthorityValue == 1) || (string.IsNullOrEmpty(CheckCode)))
                 IsCanDelete = true;
             else
                 IsCanDelete = false;
@@ -470,7 +471,15 @@ namespace His_Pos.NewClass.StoreOrder
                     {
                         string dateTime = DateTime.Now.ToString("yyyyMMdd");
                         dateTime = CreateDateTime.ToString("yyyy/MM/dd");
-                        dataTable = StoreOrderDB.GetSingdeOrderCanModify(dateTime, ID);
+                        if (SourceID != null)
+                        {
+                            dateTime = CreateDateTime.AddMonths(-1).ToString("yyyy/MM/dd");
+                            dataTable = StoreOrderDB.GetSingdeOrderCanModify(dateTime, SourceID);
+                        }
+                        else 
+                        {
+                            dataTable = StoreOrderDB.GetSingdeOrderCanModify(dateTime, ID);
+                        }                            
                         if (dataTable != null && dataTable.Rows.Count > 0)
                         {
                             isCanModify = Convert.ToBoolean(dataTable.Rows[0]["Result"]);
