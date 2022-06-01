@@ -49,9 +49,17 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             return new PurchaseProducts(PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID), orderStatus);
         }
 
-        internal static bool UpdateSingdeProductsByStoreOrderID(string orederID, string receiveID, string checkCode)
+        internal static bool UpdateSingdeProductsByStoreOrderID(string orederID, string receiveID, string checkCode, string sourceID)
         {
-            DataTable dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(orederID);
+            DataTable dataTable;
+            if (sourceID != null)
+            {
+                dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(sourceID);
+            }
+            else 
+            {
+                dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(orederID);
+            }           
 
             if (dataTable.Rows.Count == 0) return false;
 

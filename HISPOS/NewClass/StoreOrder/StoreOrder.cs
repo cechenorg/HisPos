@@ -429,7 +429,7 @@ namespace His_Pos.NewClass.StoreOrder
             else*/
             if (isShipment)
             {
-                ID = orderID;
+                SourceID = orderID;
                 ReceiveID = prescriptionReceiveID;
                 CheckCode = checkCode;
 
@@ -442,7 +442,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         private bool UpdateOrderProductsFromSingde()
         {
-            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID, CheckCode);
+            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID, CheckCode, SourceID);
 
             if (isSuccess)
                 GetOrderProducts();
