@@ -323,8 +323,8 @@ namespace His_Pos.Service
                             {
                                 GetTxtFiles(s,path,Path.GetFileName(s));
                             }
-                            if (Path.GetExtension(s) == ".xml") 
-                            {
+                            //if (Path.GetExtension(s) == ".xml") 
+                            //{
                                 var xDocument = XDocument.Load(s);
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                                 if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo")==null) { isRePost = "2"; }
@@ -342,7 +342,7 @@ namespace His_Pos.Service
                                 }
                                 xDocs.Add(xDocument);
                                 cusIdNumbers.Add(cusIdNumber);
-                            }
+                            //}
                             paths.Add(s);
                         }
                         catch (Exception ex)
