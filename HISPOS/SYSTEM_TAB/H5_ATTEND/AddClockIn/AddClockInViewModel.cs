@@ -5,6 +5,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.ClockIn;
+using System;
 using System.Data;
 using System.Windows.Threading;
 
@@ -119,7 +120,11 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 
             ////增加一筆打卡紀錄
             MainWindow.ServerConnection.OpenConnection();
-            ClockInLogs = new ClockInLog(EmployeeDb.AddClockIn(Employee.ID.ToString(), wtype));
+            EmployeeDb.AddClockIn(Employee.ID.ToString(), wtype);
+            string year = Convert.ToString(DateTime.Now.Year);
+            string month = Convert.ToString(DateTime.Now.Month);
+            string day = Convert.ToString(DateTime.Now.Day);
+            ClockInLogs = new ClockInLog(ClockInDb.EmployeeClockInLog(year,month,day, Employee.ID.ToString(), wtype));
             MainWindow.ServerConnection.CloseConnection();
 
 
