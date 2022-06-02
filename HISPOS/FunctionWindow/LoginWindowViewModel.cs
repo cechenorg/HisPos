@@ -53,11 +53,9 @@ namespace His_Pos.FunctionWindow
         #region ----- Define Actions -----
 
         private void LoginAction(object sender)
-        {
-            MainWindow.ServerConnection.OpenConnection();
+        { 
             Employee user = Employee.Login(Account, (sender as PasswordBox)?.Password);
-            MainWindow.ServerConnection.CloseConnection();
-
+             
             if (user != null)
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();

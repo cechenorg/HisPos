@@ -13,6 +13,8 @@ namespace His_Pos.Database
 {
     public class SQLServerConnection : DatabaseConnection
     {
+        public delegate void DapperExeCallback(SqlConnection conn);
+
         private SqlConnection connection = new SqlConnection(Properties.Settings.Default.SQL_local);
         private bool isBusy = false;
 
@@ -198,8 +200,13 @@ namespace His_Pos.Database
             return dataSet;
         }
 
-        public static IEnumerable<T> Query<T>(string connectionString,string dbName,string procedureName,object param = null)
+        public static IEnumerable<T> Query<T>(string procedureName, object param = null,string connectionString = null,string dbName = null)
         {
+            if (string.IsNullOrEmpty(connectionString))
+                connectionString = Properties.Settings.Default.SystemSerialNumber;
+
+            if (string.IsNullOrEmpty(dbName))
+                dbName = Properties.Settings.Default.SQL_local;
 
             using (var dconn = new SqlConnection(connectionString))
             {
@@ -210,6 +217,20 @@ namespace His_Pos.Database
                  
                 return result;
             } 
+        }
+
+        public static void DapperQuery( DapperExeCallback cb, string connectionString = null)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+                connectionString = Properties.Settings.Default.SQL_local;
+             
+            using (var dconn = new SqlConnection(connectionString))
+            { 
+                dconn.Open(); 
+                if (cb != null)
+                    cb(dconn); 
+                dconn.Close(); 
+            }
         }
 
 

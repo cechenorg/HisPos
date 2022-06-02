@@ -298,11 +298,8 @@ namespace His_Pos.NewClass.Person.Employee
         }
 
         public static Employee Login(string Account, string Password)
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable table = EmployeeDb.EmployeeLogin(Account, Password);
-            MainWindow.ServerConnection.CloseConnection();
-            return table.Rows.Count == 0 ? null : new Employee(table.Rows[0]);
+        { 
+            return EmployeeDb.EmployeeLogin(Account, Password);
         }
 
         public Collection<string> GetTabAuth()

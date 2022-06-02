@@ -1,8 +1,10 @@
-﻿using His_Pos.Database;
+﻿using Dapper;
+using His_Pos.Database;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace His_Pos.NewClass.Person.Employee
 {
@@ -95,13 +97,21 @@ namespace His_Pos.NewClass.Person.Employee
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeNewAccount]", parameterList);
         }
 
-        public static DataTable EmployeeLogin(string account, string password)
+        public static Employee EmployeeLogin(string inputAccount, string password)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("Account", account));
-            parameterList.Add(new SqlParameter("Password", password));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeLogin]", parameterList);
-            return table;
+            Employee result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+               result = conn.Query<Employee, WorkPosition.WorkPosition, Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[Login]",
+                     (tempEmployee,tempWorkPosition   ) => { 
+                        tempEmployee.WorkPosition = tempWorkPosition; 
+                        return tempEmployee; 
+                    }, 
+                    param: new { account = inputAccount, pw = password },
+                    commandType: CommandType.StoredProcedure,
+                    splitOn: "WorkPositionId").SingleOrDefault();
+            });
+            return result;
         }
 
         public static DataTable CheckIdNumber(string idNumber)

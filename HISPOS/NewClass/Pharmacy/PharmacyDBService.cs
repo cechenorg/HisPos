@@ -17,8 +17,9 @@ namespace His_Pos.NewClass.Pharmacy
              
             if(string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false)
             {
-                result = SQLServerConnection.Query<PharmacyInfo>(Properties.Settings.Default.SQL_global, ViewModelMainWindow.CurrentPharmacy.HISPOS_ServerName,
-                    "[Get].[PharmacyListByGroupServerName]", new { groupServerName = ViewModelMainWindow.CurrentPharmacy.GroupServerName }); 
+                result = SQLServerConnection.Query<PharmacyInfo>(
+                    "[Get].[PharmacyListByGroupServerName]", new { groupServerName = ViewModelMainWindow.CurrentPharmacy.GroupServerName },
+                    Properties.Settings.Default.SQL_global, ViewModelMainWindow.CurrentPharmacy.HISPOS_ServerName ); 
             } 
             return result;
         }
