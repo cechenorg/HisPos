@@ -991,6 +991,13 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderOrderDetail]", parameters);
         }
 
+        internal static DataTable GetStoreOrderByID(string orderId)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("StoOrd_ID", orderId));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderByID]", parameters);
+        }
+
         internal static DataTable StoreOrderReserveByResIDList(DateTime sDate, DateTime eDate)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();

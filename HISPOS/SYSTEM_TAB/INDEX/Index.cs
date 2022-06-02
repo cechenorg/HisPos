@@ -516,56 +516,38 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void CommonMedStoreOrderAction()
         {
             ConfirmWindow confirmWindow = new ConfirmWindow("是否將低於安全量之藥品傳送訂單至杏德?", "常備藥傳送");
-            if ((bool)confirmWindow.DialogResult)
+            if ((bool)confirmWindow.DialogResult)//(20220602改寫)
             {
+                DataTable table = new DataTable();
                 if (ProductTypeStatusSelectedItem == "藥品")
+                    table = StoreOrderDB.StoreOrderCommonMedicine();//新增常備採購單//成功回傳採購單號，失敗回傳空白
+                else if(ProductTypeStatusSelectedItem == "OTC")
+                    table = StoreOrderDB.StoreOrderOTCMedicine();//新增OTC採購單//成功回傳採購單號，失敗回傳空白
+                if (table != null && table.Rows.Count > 0)
                 {
-                    DataTable table = StoreOrderDB.StoreOrderCommonMedicine();
-
-                    if (table.Rows.Count > 0)
+                    string orderID = Convert.ToString(table.Rows[0]["StoOrdID"]);
+                    if (!string.IsNullOrEmpty(orderID))
                     {
-                        StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
-                        storeOrder.GetOrderProducts();
-
-                        table = StoreOrderDB.SendStoreOrderToSingde(storeOrder);
-
-                        if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        table = StoreOrderDB.GetStoreOrderByID(orderID);//取得訂單資料
+                        if(table != null && table.Rows.Count > 0)
                         {
-                            StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
-                            MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
-                        }
-                        else
-                        {
-                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID,"");
-                            MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
-                        }
+                            StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
+                            storeOrder.GetOrderProducts();
+                            table = StoreOrderDB.SendOTCStoreOrderToSingde(storeOrder);//傳送杏德
 
-                        CommonProductGetDataAcion();
+                            if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                            {
+                                StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
+                                MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
+                            }
+                            else
+                            {
+                                StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID, "");
+                                MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
+                            }
+                        }
                     }
-                }
-                else if (ProductTypeStatusSelectedItem == "OTC")
-                {
-                    DataTable table = StoreOrderDB.StoreOrderOTCMedicine();
-
-                    if (table.Rows.Count > 0)
-                    {
-                        StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
-                        storeOrder.GetOrderProducts();
-
-                        table = StoreOrderDB.SendOTCStoreOrderToSingde(storeOrder);
-
-                        if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                        {
-                            StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
-                            MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
-                        }
-                        else
-                        {
-                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID,"");
-                            MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
-                        }
-                        CommonProductGetDataAcion();
-                    }
+                    CommonProductGetDataAcion();
                 }
             }
         }
