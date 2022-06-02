@@ -291,25 +291,30 @@ namespace His_Pos.NewClass.Person.Customer
 
         public bool InsertData()
         {
-            var table = CustomerDb.InsertCustomerData(this);
-            if (table.Rows.Count > 0)
+            var table = CustomerDb.InsertNewCustomerData(this, 0);//新增客戶
+            if (table != null && table.Rows.Count > 0)
             {
-                var c = new Customer(table.Rows[0]);
-                ID = c.ID;
-                Name = c.Name;
-                IDNumber = c.IDNumber;
-                Birthday = c.Birthday;
-                Tel = c.Tel;
-                ContactNote = c.ContactNote;
-                LastEdit = c.LastEdit;
-                Address = c.Address;
-                CellPhone = c.CellPhone;
-                Email = c.Email;
-                Gender = c.Gender;
-                Line = c.Line;
-                Note = c.Note;
-                SecondPhone = c.SecondPhone;
-                return true;
+                int cus_id = Convert.ToInt32(table.Rows[0]["Person_Id"]);
+                table = CustomerDb.GetCustomerByCusId(cus_id);//查詢客戶資料
+                if(table != null && table.Rows.Count > 0)
+                {
+                    Customer customer = new Customer(table.Rows[0]);
+                    ID = customer.ID;
+                    Name = customer.Name;
+                    IDNumber = customer.IDNumber;
+                    Birthday = customer.Birthday;
+                    Tel = customer.Tel;
+                    ContactNote = customer.ContactNote;
+                    LastEdit = customer.LastEdit;
+                    Address = customer.Address;
+                    CellPhone = customer.CellPhone;
+                    Email = customer.Email;
+                    Gender = customer.Gender;
+                    Line = customer.Line;
+                    Note = customer.Note;
+                    SecondPhone = customer.SecondPhone;
+                    return true;
+                }
             }
             MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
             return false;
@@ -317,37 +322,24 @@ namespace His_Pos.NewClass.Person.Customer
 
         public string InsertNewData()
         {
-            var table = CustomerDb.InsertNewCustomerData(this);
-            if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
+            var table = CustomerDb.InsertNewCustomerData(this, 1);
+            if(table != null && table.Rows.Count > 0)
             {
-                //MessageWindow.ShowMessage("身分證字號已存在！", MessageType.ERROR);
-                return "ID_SAME";
-            }
-
-            if (table.Rows[0].Field<string>("RESULT").Equals("PHONESAME"))
-            {
-                //MessageWindow.ShowMessage("電話號碼已存在！", MessageType.ERROR);
-                return "PHONE_SAME";
-            }
-
-            if (table.Rows.Count > 0)
-            {
-                var c = new Customer(table.Rows[0]);
-                ID = c.ID;
-                Name = c.Name;
-                IDNumber = c.IDNumber;
-                Birthday = c.Birthday;
-                Tel = c.Tel;
-                ContactNote = c.ContactNote;
-                LastEdit = c.LastEdit;
-                Address = c.Address;
-                CellPhone = c.CellPhone;
-                Email = c.Email;
-                Gender = c.Gender;
-                Line = c.Line;
-                Note = c.Note;
-                SecondPhone = c.SecondPhone;
-                return "SUCCESS";
+                if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
+                {
+                    //MessageWindow.ShowMessage("身分證字號已存在！", MessageType.ERROR);
+                    return "ID_SAME";
+                }
+                if (table.Rows[0].Field<string>("RESULT").Equals("PHONESAME"))
+                {
+                    //MessageWindow.ShowMessage("電話號碼已存在！", MessageType.ERROR);
+                    return "PHONE_SAME";
+                }
+                if (table.Rows[0].Field<string>("RESULT").Equals(string.Empty))
+                {
+                    ID = Convert.ToInt32(table.Rows[0]["Person_Id"]);
+                    return "SUCCESS";
+                }
             }
             MessageWindow.ShowMessage("新增顧客資料發生異常，請稍後重試。", MessageType.ERROR);
             return "FAILED";

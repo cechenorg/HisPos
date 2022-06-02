@@ -5,6 +5,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
@@ -1285,7 +1286,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (!(bool)cw.DialogResult) { return; }
                     else
                     {
-                        NewClass.Person.Customer.Customer customer = new NewClass.Person.Customer.Customer();
+                        Customer customer = new Customer();
 
                         if (TbText != null) { }
                         {
@@ -1294,6 +1295,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
                         addCustomerWindow = new AddCustomerWindow(customer);
                         addCustomerWindow.Closed += new EventHandler(SetContentHandler);
+                        AddCustomerWindowViewModel addCustomer = (AddCustomerWindowViewModel)addCustomerWindow.DataContext;
+                        if(addCustomer.NewCustomer != null)
+                        {
+                            customer = addCustomer.NewCustomer;
+                        }
                     }
                 }
                 else if (result.Rows.Count > 1)
@@ -1301,7 +1307,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     CustomerSearchWindow customerSearch;
                     if (Con == CustomerSearchCondition.Birthday)
                     {
-                        Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                        Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
                         var twCulture = new System.Globalization.CultureInfo("zh-TW", true);
                         twCulture.DateTimeFormat.Calendar = new System.Globalization.TaiwanCalendar();
 
@@ -1310,13 +1316,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         var date = DateTime.ParseExact(dateString, "yMMdd", twCulture);
 
                         customerSearch = new CustomerSearchWindow(date);
-                        Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                        Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     }
                     else
                     {
-                        Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                        Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
                         customerSearch = new CustomerSearchWindow(Con, 0, tb.Text.Trim());
-                        Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                        Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     }
 
                     if (ID != 0)
@@ -1348,9 +1354,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private void GetSelectedCustomer(NotificationMessage<NewClass.Person.Customer.Customer> receiveSelectedCustomer)
+        private void GetSelectedCustomer(NotificationMessage<Customer> receiveSelectedCustomer)
         {
-            Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+            Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
             if (receiveSelectedCustomer.Content is null)
             {
                 if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
@@ -1359,7 +1365,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 CurrentPrescription = new NewClass.Prescription.Prescription();
 
-                CurrentPrescription.Patient = new NewClass.Person.Customer.Customer();
+                CurrentPrescription.Patient = new Customer();
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
 
                 ID = CurrentPrescription.Patient.ID;
@@ -1406,7 +1412,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
-            NewClass.Person.Customer.Customer customer = new NewClass.Person.Customer.Customer();
+            Customer customer = new Customer();
 
             if (TbText != null) { }
             {
