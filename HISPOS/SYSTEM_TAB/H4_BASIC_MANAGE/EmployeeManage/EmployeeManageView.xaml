@@ -167,7 +167,7 @@
                     </Grid.RowDefinitions>
 
                     <DataGrid AutoGenerateColumns="False"   Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False" 
-                    CellStyle="{StaticResource DataGridCellStyle}"  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  
                     ItemsSource="{Binding SelectedEmployee.GroupPharmacyEmployeeList, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValue="{Binding SelectedEmployee.SelectedGroupPharmacyEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                     VerticalScrollBarVisibility="Hidden">
