@@ -176,7 +176,7 @@ namespace His_Pos.NewClass.Person.Employee
                     newRow["Emp_ID"] = e.ID;
                 DataBaseFunction.AddColumnValue(newRow, "Emp_Account", e.Account);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_Password", e.Password);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", e.AuthorityValue);
+                DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", (int)e.Authority);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_Name", e.Name);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_NickName", e.NickName);
                 DataBaseFunction.AddColumnValue(newRow, "Emp_Gender", e.Gender);
@@ -208,7 +208,7 @@ namespace His_Pos.NewClass.Person.Employee
                 newRow["Emp_ID"] = e.ID;
             DataBaseFunction.AddColumnValue(newRow, "Emp_Account", e.Account);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Password", e.Password);
-            DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", e.AuthorityValue);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", (int)e.Authority);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Name", e.Name);
             DataBaseFunction.AddColumnValue(newRow, "Emp_NickName", e.NickName);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Gender", e.Gender);

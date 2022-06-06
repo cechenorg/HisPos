@@ -143,8 +143,8 @@ namespace His_Pos.NewClass.StoreOrder
             else
                 IsScrap = true;
 
-            int AuthorityValue = ViewModelMainWindow.CurrentUser.AuthorityValue;
-            if ((AuthorityValue == 1) || (string.IsNullOrEmpty(CheckCode)))
+            var auth = ViewModelMainWindow.CurrentUser.Authority;
+            if ((auth == Authority.Admin) || (string.IsNullOrEmpty(CheckCode)))
                 IsCanDelete = true;
             else
                 IsCanDelete = false;
@@ -487,8 +487,8 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     if (isCanModify == false)
                     {
-                        int AuthorityValue = ViewModelMainWindow.CurrentUser.AuthorityValue;
-                        if (AuthorityValue == 1)
+                        var auth = ViewModelMainWindow.CurrentUser.Authority;
+                        if (auth == Authority.Admin)
                         {
                             ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
                             if (!(bool)confirmWindow.DialogResult)

@@ -23,10 +23,10 @@ namespace His_Pos.NewClass.Person.Employee
             WorkPosition.WorkPositionId = 2;
             StartDate = DateTime.Today;
             Birthday = DateTime.Today;
-            IsEnable = true;
-            AuthorityValue = 4;
+            IsEnable = true; 
 
-            AuthorityFullName = TransAuthorityFullName(AuthorityValue);
+            Authority = TranValueToAuthority(4);
+            AuthorityFullName = Authority.GetDescriptionText(); 
         }
 
         public Employee(DataRow r) : base(r)
@@ -38,40 +38,32 @@ namespace His_Pos.NewClass.Person.Employee
             StartDate = r.Field<DateTime?>("Emp_StartDate");
             LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
             PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
-            IsEnable = r.Field<bool>("Emp_IsEnable");
-            AuthorityValue = r.Field<byte>("Aut_LevelID");
+            IsEnable = r.Field<bool>("Emp_IsEnable"); 
             IsLocal = r.Field<bool>("Emp_IsLocal");
             CashierID = r.Field<string>("Emp_CashierID");
             WorkPosition = new WorkPosition.WorkPosition(r);
 
-            AuthorityFullName = TransAuthorityFullName(AuthorityValue);
+            byte tempAutID = r.Field<byte>("Aut_LevelID");
+            Authority = TranValueToAuthority(tempAutID); 
+            AuthorityFullName = Authority.GetDescriptionText();
         }
 
-        public void GetGroupPharmacyAuthority()
+        private Authority TranValueToAuthority(int autVal)
         {
-            
-        }
-         
-        private string TransAuthorityFullName(int AuthorityValue)
-        {
-            string result = string.Empty;
-            
-            switch (AuthorityValue)
+            switch (autVal)
             {
                 case 1:
-                    return Authority.Admin.GetDescriptionText();
+                    return Authority.Admin; 
                 case 2:
-                    return Authority.ShopMaster.GetDescriptionText();
+                    return Authority.ShopMaster; 
                 case 3:
-                    return Authority.ShopEmployee.GetDescriptionText();
+                    return Authority.ShopEmployee; 
                 case 4:
-                    return Authority.Pharmacist.GetDescriptionText();
+                    return Authority.Pharmacist; 
             }
-
-
-            return result;
+            return Authority.Pharmacist;
         }
-
+          
         private string cashierID;
 
         [IgnoreFormat]
@@ -169,8 +161,8 @@ namespace His_Pos.NewClass.Person.Employee
         }
 
         [IgnoreFormat]
-        public int AuthorityValue { get; set; }
-
+        public Authority Authority { get; set; }
+         
         [IgnoreFormat]
         public string AuthorityFullName { get; set; }
 
@@ -306,7 +298,7 @@ namespace His_Pos.NewClass.Person.Employee
 
         public Collection<string> GetTabAuth()
         {
-            DataTable table = EmployeeDb.GetTabAuth(AuthorityValue);
+            DataTable table = EmployeeDb.GetTabAuth((int)Authority);
             Collection<string> tabAuths = new Collection<string>();
             foreach (DataRow row in table.Rows)
             {

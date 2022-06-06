@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
@@ -18,7 +19,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         }
 
         #region -----Define Command-----
-         
+
         public RelayCommand CancelCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
@@ -42,8 +43,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             {
                 Set(() => SelectedEmployee, ref _selectedEmployee, value);
 
-                if(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
-                    SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList(),WorkPositions);
+                if (ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
+                    SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList(), WorkPositions);
             }
         }
 
@@ -119,9 +120,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
-        private bool _isGroupPharmacy = 
+        private bool _isGroupPharmacy =
             string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
-             ViewModelMainWindow.CurrentUser.AuthorityValue <= 2;//Admin or 店長
+             (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || 
+            ViewModelMainWindow.CurrentUser.Authority == Authority.ShopMaster) ;//Admin or 店長
 
         public bool IsGroupPharmacy
         {
