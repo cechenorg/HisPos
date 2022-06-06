@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel;
+using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Pharmacy;
 using His_Pos.Service;
@@ -57,13 +59,13 @@ namespace His_Pos.NewClass.Person.Employee
             switch (AuthorityValue)
             {
                 case 1:
-                    return "系統管理員";
+                    return Authority.Admin.GetDescriptionText();
                 case 2:
-                    return "店長";
+                    return Authority.ShopMaster.GetDescriptionText();
                 case 3:
-                    return "店員";
+                    return Authority.ShopEmployee.GetDescriptionText();
                 case 4:
-                    return "藥師"; 
+                    return Authority.Pharmacist.GetDescriptionText();
             }
 
 
