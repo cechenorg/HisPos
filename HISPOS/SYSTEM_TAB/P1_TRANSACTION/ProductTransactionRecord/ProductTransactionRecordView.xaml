@@ -39,14 +39,10 @@
                     Grid.Row="0"
                     Grid.ColumnSpan="2"
                     Orientation="Horizontal">
-                    <Label
-                        Margin="10,0,0,0"
-                        Content="銷售日期"
-                        Style="{StaticResource BoldLabelContent18}" />
+                    <Label Margin="10,0,0,0" Content="銷售日期" Style="{StaticResource BoldLabelContent18}" />
                     <xctk:MaskedTextBox
                         x:Name="StartDate"
-                        Width="100"
-                        Height="35"
+                        Width="100" Height="35"
                         HorizontalContentAlignment="Center"
                         FontSize="20"
                         Foreground="{StaticResource ForeGround}"
@@ -132,65 +128,33 @@
                         Foreground="{StaticResource ForeGround}"
                         IsChecked="{Binding SearchIsIrregular, Mode=TwoWay}" />
                     <CheckBox
-                        x:Name="chkIsReturn"
-                        Margin="10,0,0,0"
-                        Background="RoyalBlue"
-                        Content="顯示退貨"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="18"
+                        x:Name="chkIsReturn" Margin="10,0,0,0"
+                        Background="RoyalBlue" Content="顯示退貨"
+                        FontFamily="Segoe UI Semibold" FontSize="18"
                         Foreground="{StaticResource ForeGround}"
                         IsChecked="{Binding SearchIsReturn, Mode=TwoWay}" />
-                    <Button
-                        x:Name="btnClear"
-                        Width="100"
-                        Margin="80,0,0,0"
-                        HorizontalAlignment="Right"
-                        Background="DimGray"
-                        BorderBrush="DimGray"
-                        Click="btnClear_Click"
-                        Content="清除"
-                        FontSize="16" />
-                    <Button
-                        x:Name="btnQuery"
-                        Width="100"
-                        Margin="10,0,0,0"
-                        HorizontalAlignment="Right"
-                        Background="RoyalBlue"
-                        BorderBrush="RoyalBlue"
-                        Click="btnQuery_Click"
-                        Content="查詢"
-                        FontSize="16" />
+
+                    <Button x:Name="btnClear" Width="100"
+                        Margin="80,0,0,0" HorizontalAlignment="Right"
+                        Background="DimGray" BorderBrush="DimGray"
+                        Click="btnClear_Click" Content="清除" FontSize="16" />
+
+                    <Button x:Name="btnQuery"  Width="100" Margin="10,0,0,0"
+                        HorizontalAlignment="Right" Background="RoyalBlue"  BorderBrush="RoyalBlue"
+                        Click="btnQuery_Click" Content="查詢" FontSize="16" />
                 </StackPanel>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="1"
-                    Background="Transparent"
-                    Orientation="Horizontal">
-                    <Label
-                        Margin="10,0,0,0"
-                        Content="商品代碼"
-                        Style="{StaticResource BoldLabelContent18}" />
-                    <TextBox
-                        x:Name="ProId"
-                        Width="100"
-                        Height="35"
-                        HorizontalContentAlignment="Center"
-                        FontSize="16"
-                        InputMethod.IsInputMethodEnabled="False"
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1"
+                    Background="Transparent" Orientation="Horizontal">
+                    <Label Margin="10,0,0,0"
+                        Content="商品代碼" Style="{StaticResource BoldLabelContent18}" />
+                    <TextBox x:Name="ProId" Width="100"  Height="35" FontSize="16" InputMethod.IsInputMethodEnabled="False"
                         Style="{StaticResource MaterialDesignTextBox}" />
-                    <Label
-                        Margin="10,0,0,0"
-                        Content="商品名稱"
-                        Style="{StaticResource BoldLabelContent18}" />
-                    <TextBox
-                        x:Name="ProName"
-                        Width="100"
-                        Height="35"
-                        HorizontalContentAlignment="Center"
-                        FontSize="16"
-                        InputMethod.IsInputMethodEnabled="False"
+
+                    <Label Margin="10,0,0,0" Content="商品名稱" Style="{StaticResource BoldLabelContent18}" />
+
+                    <TextBox x:Name="ProName"  Width="100" Height="35"
+                        HorizontalContentAlignment="Center" FontSize="16" 
                         Style="{StaticResource MaterialDesignTextBox}" />
                 </StackPanel>
                 <StackPanel
@@ -677,33 +641,16 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
+                    Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Margin="0,10,0,0"
                     Background="{StaticResource GridBackGround}"
                     Orientation="Horizontal">
+                    <Label Height="35"  Margin="10,0,0,0" Content="銷售筆數:" Style="{StaticResource BoldLabelContent18}" />
+                    <Label x:Name="lblCount" Width="150"  Height="35"
+                        Content="{Binding TotalCount, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource BoldLabelContent18}" />
                     <Label
-                        Height="35"
-                        Margin="10,0,0,0"
-                        Content="銷售筆數:"
-                        Style="{StaticResource BoldLabelContent18}" />
+                        Height="35" Content="銷售總額" Style="{StaticResource BoldLabelContent18}" />
                     <Label
-                        x:Name="lblCount"
-                        Width="150"
-                        Height="35"
-                        Content="{Binding TotalCount, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource BoldLabelContent18}" />
-                    <Label
-                        Height="35"
-                        Content="銷售總額:"
-                        Style="{StaticResource BoldLabelContent18}" />
-                    <Label
-                        x:Name="lblTotal"
-                        Width="150"
-                        Height="35"
-                        Content="{Binding ChronicCount, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource BoldLabelContent18}" />
+                        x:Name="lblTotal" Width="170" Height="35"  Style="{StaticResource BoldLabelContent18}" />
                     <Button
                         x:Name="btnPrint1"
                         Width="100"

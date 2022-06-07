@@ -93,21 +93,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.InsertProductWind
                 {
                     if (dataTable.Rows[0].Field<string>("RESULT") == "SUCCESS")
                     {
-                        MessageWindow.ShowMessage("新增成功", NewClass.MessageType.SUCCESS);
+                        MessageWindow.ShowMessage("新增成功", Class.MessageType.SUCCESS);
                         Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseInsertProductWindow"));
                         ProductDetailWindow.ShowProductDetailWindow();
                         Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { proID, "0" }, "ShowProductDetail"));
                     }
                     else if (dataTable.Rows[0].Field<string>("RESULT") == "EXISTED")
-                        MessageWindow.ShowMessage($"商品條碼{ProID}已存在，新增失敗", NewClass.MessageType.ERROR);
+                        MessageWindow.ShowMessage($"商品條碼{ProID}已存在，新增失敗", Class.MessageType.ERROR);
                     else
-                        MessageWindow.ShowMessage("OUT", NewClass.MessageType.SUCCESS);
+                        MessageWindow.ShowMessage("OUT", Class.MessageType.SUCCESS);
                 }
                 else
-                    MessageWindow.ShowMessage("OUTSIDE", NewClass.MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("OUTSIDE", Class.MessageType.SUCCESS);
             }
             else
-                MessageWindow.ShowMessage("新增失敗", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("新增失敗", Class.MessageType.ERROR);
         }
 
         #endregion Action

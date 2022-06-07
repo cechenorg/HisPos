@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Report.Accounts;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
@@ -187,6 +187,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
             }
         }
 
+        private string keyWords;
+
+        public string KeyWords
+        {
+            get => keyWords;
+            set
+            {
+                Set(() => KeyWords, ref keyWords, value);
+            }
+        }
+
         private int cashFlowValue;
 
         public int CashFlowValue
@@ -320,9 +331,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
 
         private void DeleteCashFlowRecordAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
             ConfirmWindow cw = new ConfirmWindow("是否刪除選擇項目", "確認");
             if (!(bool)cw.DialogResult) { return; }
-            MainWindow.ServerConnection.OpenConnection();
+            DataTable strikeData = AccountsDb.GetStrikeDataById(SelectedCashFlowRecord.SelectedDetail);
+            if (strikeData != null && strikeData.Rows.Count > 0)
+            {
+                MessageWindow.ShowMessage("已沖帳，請先刪除沖帳紀錄", MessageType.WARNING);
+                return;
+            }
             AccountsDb.DeleteCashFlow(SelectedCashFlowRecord.SelectedDetail);
             MainWindow.ServerConnection.CloseConnection();
             SearchAction();
@@ -331,7 +348,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         private void GetCashFlowRecordsByDate()
         {
             MainWindow.ServerConnection.OpenConnection();
-            var table = AccountsDb.GetDataByDate((DateTime)startDate, (DateTime)endDate);
+            var table = AccountsDb.GetDataByDate((DateTime)startDate, (DateTime)endDate, keyWords);
             var tempDetails = new AccountsRecordDetails();
             foreach (DataRow r in table.Rows)
             {

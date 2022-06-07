@@ -1,11 +1,12 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Report.Accounts;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
@@ -23,6 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         private string transferValue;
         private string target;
         public string IDClone;
+        public DateTime EndDate;
         public double MaxValue { get; set; } = 0;
 
         public string Target
@@ -69,10 +71,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
         #endregion ----- Define Variables -----
 
-        public NormalNoEditViewModel(string ID)
+        public NormalNoEditViewModel(string ID,DateTime endDate)
         {
             AccDataNoEdit = new AccountsReport();
             IDClone = ID;
+            EndDate = endDate;
             Init();
             InsertCommand = new RelayCommand(InsertAction);
             DeleteCommand = new RelayCommand(DeleteAction);
@@ -91,6 +94,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", IDClone));
+            parameters.Add(new SqlParameter("edate", EndDate));
             DataTable Data = new DataTable();
             Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
             foreach (DataRow r in Data.Rows)

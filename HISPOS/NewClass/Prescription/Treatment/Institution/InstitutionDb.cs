@@ -12,6 +12,18 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             return MainWindow.ServerConnection.ExecuteProc("[Get].[Institution]");
         }
 
+        public static void InsertInstitution(string id,string name,string address ,string phone,string pharmacyName )
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "InsID", id);
+            DataBaseFunction.AddSqlParameter(parameterList, "InsName", name);
+            DataBaseFunction.AddSqlParameter(parameterList, "InsAddress", address ?? "");
+            DataBaseFunction.AddSqlParameter(parameterList, "InsPhone", phone ?? "");
+            DataBaseFunction.AddSqlParameter(parameterList, "Ins_InsertPharmacy", pharmacyName);
+            
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertInstitution]", parameterList); 
+        }
+
         public static DataTable GetCommonInstitution()
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CommonInstitution]");

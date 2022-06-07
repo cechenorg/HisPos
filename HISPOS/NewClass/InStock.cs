@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 
-namespace His_Pos.NewClass
+namespace His_Pos.Class
 {
     public class InStock : INotifyPropertyChanged, ICloneable
     {

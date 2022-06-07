@@ -522,10 +522,12 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertReturnOrderRePurchase]", parameters);
         }
 
-        internal static DataTable RemoveStoreOrderByID(string storeOrderID)
+        internal static DataTable RemoveStoreOrderByID(string storeOrderID, string voidReason)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
+            parameters.Add(new SqlParameter("ModifyUser", ViewModelMainWindow.CurrentUser.Account));
+            parameters.Add(new SqlParameter("VoidReason", voidReason));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrder]", parameters);
         }
 
@@ -594,12 +596,13 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderDone]", parameters);
         }
 
-        internal static DataTable UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID, string receiveID)
+        internal static DataTable UpdateSingdeProductsByStoreOrderID(DataTable dataTable, string orederID, string receiveID, string checkCode)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", orederID));
             parameters.Add(new SqlParameter("RECSTOORD_ID", receiveID));
             parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(dataTable, orederID)));
+            parameters.Add(new SqlParameter("CHECK_CODE", checkCode));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
         }
 
@@ -638,9 +641,9 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
-
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
+            DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.Account);
             MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
 
@@ -651,10 +654,9 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "CUS_NAME", purchaseOrder.PreOrderCustomer);
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", purchaseOrder.TargetPreOrderCustomer);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", purchaseOrder.PlanArriveDate);
-
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
-
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
+            DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.Account);
             new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
 
@@ -684,6 +686,33 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable GetSingdeOrderNewStatus(string dateTime)
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatus('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}')");
+        }
+
+        internal static DataTable GetSingdeOrderNewStatusByNo(string dateTime, string storeOrderID)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatusByNo('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}', '{storeOrderID}')");
+        }
+
+        /// <summary>
+        /// 判斷該筆訂單是否可作廢
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="storeOrderID"></param>
+        /// <returns></returns>
+        internal static DataTable GetSingdeOrderCanModify(string dateTime, string storeOrderID)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderCanModify('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}', '{storeOrderID}')");
+        }
+        /// <summary>
+        /// 更新杏德訂單填寫作廢理由
+        /// </summary>
+        /// <param name="storeOrderID"></param>
+        /// <param name="dateTime"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        internal static DataTable UpdateOrderToScrap(string storeOrderID, string date ,string time, string msg)
+        {
+            return MainWindow.SingdeConnection.ExecuteProc($"call UpdateOrderToScrap('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrderID}', '{date}','{time}', '{msg}')");
         }
 
         public static DataTable RemoveSingdeStoreOrderByID(string storeOrderID)
@@ -717,6 +746,7 @@ namespace His_Pos.NewClass.StoreOrder
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("ModifyUser", ViewModelMainWindow.CurrentUser.Account));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateReturnStoreOrderToDone]", parameters);
         }
 

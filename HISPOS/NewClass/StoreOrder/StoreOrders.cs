@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DomainModel.Enum;
+using DataTable = System.Data.DataTable;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -23,7 +25,7 @@ namespace His_Pos.NewClass.StoreOrder
                         Add(new ReturnOrder(row));
                         break;
                 }
-            }
+            } 
         }
 
         public StoreOrders(List<StoreOrder> list) : base(list)
@@ -36,7 +38,19 @@ namespace His_Pos.NewClass.StoreOrder
 
         public static StoreOrders GetOrdersNotDone()
         {
-            return new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
+            StoreOrders data = new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
+
+
+            var orderedList = data.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
+
+            StoreOrders result = new StoreOrders();
+
+            for (int i = orderedList.Count() - 1; i >= 0; i--)
+            {
+                result.Add(orderedList[i]);
+            }
+
+            return result;
         }
         internal static  StoreOrders GetOrdersMinus(string ID)
         {
@@ -52,8 +66,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             var tempOrder = this.SingleOrDefault(s => s.OrderStatus == OrderStatusEnum.DONE);
 
-            if (tempOrder != null)
-                Remove(tempOrder);
+            //if (tempOrder != null)
+                //Remove(tempOrder);
         }
 
         internal void UpdateSingdeOrderStatus(DataTable dataTable)

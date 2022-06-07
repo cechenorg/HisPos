@@ -1,4 +1,5 @@
-﻿using His_Pos.NewClass;
+﻿using Dapper;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using System;
@@ -54,17 +55,20 @@ namespace His_Pos.Database
                 connection.Close();
         }
 
-        public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
+        public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null,string dbName = null)
         {
             while (isBusy)
                 Thread.Sleep(500);
 
             isBusy = true;
 
+            if (dbName == null)
+                dbName =  Properties.Settings.Default.SystemSerialNumber;
+
             var table = new DataTable();
             try
             {
-                SqlCommand myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." + procName, connection);
+                SqlCommand myCommand = new SqlCommand("[" + dbName + "]." + procName, connection);
 
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandTimeout = 120;
@@ -193,6 +197,21 @@ namespace His_Pos.Database
 
             return dataSet;
         }
+
+        public static IEnumerable<T> Query<T>(string connectionString,string dbName,string procedureName,object param = null)
+        {
+
+            using (var dconn = new SqlConnection(connectionString))
+            {
+
+                dconn.Open(); 
+                var result = dconn.Query<T>($"{dbName}.{procedureName}",param,commandType : CommandType.StoredProcedure);
+                dconn.Close();
+                 
+                return result;
+            } 
+        }
+
 
         public SqlConnection GetConnection()
         {

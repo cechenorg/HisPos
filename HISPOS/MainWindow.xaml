@@ -29,7 +29,8 @@
     xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:incomeStatement="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement"
-    xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX" 
+    xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX"
+    xmlns:locationManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage"
     xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage"
@@ -88,7 +89,10 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type productTypeManage:ProductTypeManageViewModel}">
             <productTypeManage:ProductTypeManageView />
-        </DataTemplate> 
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type locationManage:LocationManage}">
+            <locationManage:LocationManageView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type manufactoryManage:ManufactoryManageViewModel}">
             <manufactoryManage:ManufactoryManageView />
         </DataTemplate>
@@ -369,8 +373,8 @@
                     <StackPanel Orientation="Horizontal">
                         <Label
                             x:Name="UserName"
-                            Width="90"
-                            Margin="10,10,0,0"
+                            Width="100"
+                            Margin="5,10,0,0"
                             FontFamily="Arial"
                             FontSize="18"
                             FontWeight="Bold"

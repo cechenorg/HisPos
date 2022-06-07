@@ -2,14 +2,11 @@
     x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl.StrikeHistoryWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:service="clr-namespace:His_Pos.Service"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    Title="歷史資料"
-    Width="1240"
-    Height="540"
+    xmlns:balanceControl="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl"
+    Title="歷史資料"  Width="1500" Height="540"
+    d:DataContext="{d:DesignInstance Type=balanceControl:StrikeHistoryViewModel}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid>
@@ -17,196 +14,108 @@
             <RowDefinition Height="70" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <!--<Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="科目名稱"
-                FontFamily="Segoe UI Semibold"
-                FontSize="22" />
-            <ComboBox
-                Grid.Row="0"
-                Margin="10,0,10,0"
-                HorizontalContentAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="22"
-                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                ItemsSource="{Binding CheckLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                DisplayMemberPath="Namepath"
-                SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
-            <!--<Label
-                Margin="5,0,0,0"
-                VerticalAlignment="Center"
-                Content="日期"
-                FontFamily="Segoe UI Semibold"
-                FontSize="22" />-->
-            <DatePicker
-                x:Name="dpSDate"
-                Width="120"
-                Margin="15,0,0,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                FontSize="18"
-                SelectedDate="{Binding StartDate, Mode=TwoWay}"
+        <StackPanel Grid.Row="0" Orientation="Horizontal"> 
+            <DatePicker x:Name="dpSDate"  Width="120"
+                Margin="5,0,0,0"  HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                FontSize="18" SelectedDate="{Binding StartDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" />
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="~"
-                FontFamily="Segoe UI Semibold"
-                FontSize="22" />
-            <DatePicker
-                x:Name="dpEDate"
-                Width="120"
-                Margin="5,0,0,0"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                FontSize="18"
+            <Label Margin="5,0,0,0" VerticalAlignment="Center"  Content="~" FontFamily="Segoe UI Semibold" FontSize="22" />
+            <DatePicker  x:Name="dpEDate"
+                Width="120" Margin="5,0,0,0"
+                HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18"
                 SelectedDate="{Binding EndDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" />
-            <Label
-                Margin="50,0,0,0"
-                VerticalAlignment="Center"
-                Content="科目"
-                FontFamily="Segoe UI Semibold"
-                FontSize="22" />
-            <ComboBox
-                Width="130"
-                Height="45"
-                Margin="0,0,0,0"
+            <Label  Margin="5,0,0,0" VerticalAlignment="Center"
+                Content="科目" FontFamily="Segoe UI Semibold" FontSize="22" />
+            <ComboBox  
+                Name="cobStrikeName"
+                Width="130" 
+                Height="45" 
                 VerticalContentAlignment="Center"
                 DisplayMemberPath="StrikeName"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
-                IsTextSearchEnabled="False"
                 ItemsSource="{Binding TypeTable}"
-                SelectedIndex="-1"
-                SelectedValue="{Binding Type, Mode=TwoWay}"
-                SelectedValuePath="StrikeName">
+                SelectedValue="StrikeName"
+                SelectedValuePath="StrikeName"
+                Text="{Binding Type, Mode=TwoWay}"
+                IsEditable="True"
+                KeyUp="Cob_KeyUp">
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />
                     </ItemsPanelTemplate>
                 </ComboBox.ItemsPanel>
             </ComboBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="帳戶"
-                FontFamily="Segoe UI Semibold"
-                FontSize="22" />
-            <ComboBox
-                Width="120"
-                Height="45"
-                Margin="0,0,0,0"
+            <Label  Margin="5,0,0,0"  VerticalAlignment="Center"  Content="帳戶" FontFamily="Segoe UI Semibold" FontSize="22" />
+            <ComboBox 
+                x:Name="cobStrikeType"
+                Width="120"  
+                Height="45"  
                 VerticalContentAlignment="Center"
-                DisplayMemberPath="StrikeType"
+                DisplayMemberPath="StrikeType"  
                 FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                IsTextSearchEnabled="False"
-                ItemsSource="{Binding SujectTable}"
-                SelectedIndex="-1"
-                SelectedValue="{Binding SujectString, Mode=TwoWay}"
-                SelectedValuePath="StrikeType">
+                FontSize="18" 
+                ItemsSource="{Binding SujectTable}" 
+                SelectedValue="StrikeType"
+                SelectedValuePath="StrikeType"
+                Text="{Binding SujectString, Mode=TwoWay}"
+                IsEditable="True"
+                KeyUp="Cob_KeyUp">
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />
                     </ItemsPanelTemplate>
                 </ComboBox.ItemsPanel>
             </ComboBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="類別"
-                FontFamily="Segoe UI Semibold"
-                FontSize="22" />
-            <ComboBox
-                Width="80"
-                Height="45"
-                Margin="0,0,0,0"
+            <Label Margin="5,0,0,0" VerticalAlignment="Center" Content="類別"  FontFamily="Segoe UI Semibold" FontSize="22" />
+            <ComboBox Width="100"  Height="45" 
                 VerticalContentAlignment="Center"
-                DisplayMemberPath="StrikeWay"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                IsTextSearchEnabled="False"
-                ItemsSource="{Binding AccountTable}"
-                SelectedIndex="-1"
-                SelectedValue="{Binding AccountString, Mode=TwoWay}"
-                SelectedValuePath="StrikeWay">
+                DisplayMemberPath="StrikeWay"  FontFamily="Segoe UI Semibold"
+                FontSize="18" IsTextSearchEnabled="False"
+                ItemsSource="{Binding AccountTable}" 
+                SelectedValue="{Binding AccountString, Mode=TwoWay}" SelectedValuePath="StrikeWay">
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />
                     </ItemsPanelTemplate>
                 </ComboBox.ItemsPanel>
             </ComboBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="人員"
-                FontFamily="Segoe UI Semibold"
-                FontSize="22" />
-            <ComboBox
-                Width="100"
-                Height="45"
-                Margin="0,0,0,0"
-                VerticalContentAlignment="Center"
-                DisplayMemberPath="Emp_Name"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
+            <Label  Margin="5,0,0,0"
+                VerticalAlignment="Center"  Content="人員"
+                FontFamily="Segoe UI Semibold" FontSize="22" />
+            <ComboBox Width="100"  Height="45"
+                Margin="0,0,0,0" VerticalContentAlignment="Center"
+                DisplayMemberPath="Emp_Name" FontFamily="Segoe UI Semibold" FontSize="18"
                 IsTextSearchEnabled="False"
                 ItemsSource="{Binding EmpTable}"
-                SelectedIndex="-1"
-                SelectedValue="{Binding Emp, Mode=TwoWay}"
-                SelectedValuePath="Emp_Name">
+                SelectedIndex="-1" SelectedValue="{Binding Emp, Mode=TwoWay}" SelectedValuePath="Emp_Name">
                 <ComboBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel />
                     </ItemsPanelTemplate>
                 </ComboBox.ItemsPanel>
             </ComboBox>
-            <Button
-                Width="80"
-                Margin="30,0,0,0"
-                VerticalAlignment="Center"
-                Background="Green"
-                BorderThickness="0"
+            <Label Margin="5,0,0,0"
+                VerticalAlignment="Center"  Content="關鍵字"
+                FontFamily="Segoe UI Semibold" FontSize="22" />
+            <TextBox Margin="5,0,0,0" Width="120" VerticalAlignment="Center" FontSize="18" Text="{Binding KeyWords}"/>
+            <Button Width="80" Margin="10,0,0,0"  VerticalAlignment="Center"
+                Background="Green"  BorderThickness="0"
                 Command="{Binding SearchStrikeHistory}"
-                Content="查詢"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18" />
-            <Button
-                Width="80"
-                Margin="5,0,0,0"
-                VerticalAlignment="Center"
-                Background="RoyalBlue"
-                BorderThickness="0"
+                Content="查詢"  FontFamily="Segoe UI Semibold" FontSize="18" />
+            <Button  Width="80"  Margin="5,0,0,0"
+                VerticalAlignment="Center" Background="RoyalBlue"  BorderThickness="0"
                 Command="{Binding PrintHistory}"
-                Content="匯出"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18" />
-            <!--<Button
-                Width="130"
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Background="RoyalBlue"
-                BorderThickness="0"
-                Command="{Binding ReloadCommand}"
-                Content="重新整理"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18" />-->
+                Content="匯出"  FontFamily="Segoe UI Semibold"  FontSize="18" /> 
         </StackPanel>
-        <DataGrid
-            Grid.Row="1"
-            AutoGenerateColumns="False"
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False"
             Background="{StaticResource GridBackGround}"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
-            CanUserReorderColumns="False"
-            CanUserSortColumns="True"
+            CanUserAddRows="False"  CanUserDeleteRows="False"
+            CanUserReorderColumns="False"  CanUserSortColumns="True"
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-            FrozenColumnCount="2"
-            GridLinesVisibility="Horizontal"
+            FrozenColumnCount="2" GridLinesVisibility="Horizontal"
             ItemsSource="{Binding StrikeHistories, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>
@@ -242,13 +151,10 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="200"
+                <DataGridTextColumn Width="300"
                     Binding="{Binding StrikeName}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
-                    FontFamily="Segoe UI Semibold"
-                    Header="科目名稱"
-                    IsReadOnly="True">
+                    FontFamily="Segoe UI Semibold" Header="科目名稱" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -256,12 +162,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="180"
+                <DataGridTextColumn Width="300"
                     Binding="{Binding StrikeTypeName}"
-                    FontFamily="Segoe UI Semi"
-                    Header="帳戶"
-                    IsReadOnly="True">
+                    FontFamily="Segoe UI Semi" Header="帳戶"  IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -269,12 +172,8 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="60"
-                    Binding="{Binding StrikeWay}"
-                    FontFamily="Segoe UI Semi"
-                    Header="類別"
-                    IsReadOnly="True">
+                <DataGridTextColumn  Width="80" FontFamily="Segoe UI Semi" Header="類別" IsReadOnly="True"
+                    Binding="{Binding StrikeWay}" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -282,12 +181,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="100"
+                <DataGridTextColumn  Width="100" FontFamily="Segoe UI Semi" Header="金額" IsReadOnly="True"
                     Binding="{Binding StrikeValue, StringFormat=N0}"
-                    FontFamily="Segoe UI Semi"
-                    Header="金額"
-                    IsReadOnly="True">
+                    >
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
                             <Setter Property="HorizontalAlignment" Value="Right" />
@@ -300,11 +196,8 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="250"
-                    Binding="{Binding StrikeTime, StringFormat={}{0:yyyy/MM/dd HH:mm:ss}, UpdateSourceTrigger=PropertyChanged}"
-                    Header="時間"
-                    IsReadOnly="True">
+                <DataGridTextColumn Width="250"  Header="時間" IsReadOnly="True"
+                    Binding="{Binding StrikeTime, StringFormat={}{0:yyyy/MM/dd HH:mm:ss}, UpdateSourceTrigger=PropertyChanged}" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -312,11 +205,8 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="160"
-                    Binding="{Binding StrikeSourceID, UpdateSourceTrigger=PropertyChanged}"
-                    Header="來源"
-                    IsReadOnly="True">
+                <DataGridTextColumn Width="160"  Header="來源" IsReadOnly="True"
+                    Binding="{Binding StrikeSourceID, UpdateSourceTrigger=PropertyChanged}" >
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -329,11 +219,8 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="100"
-                    Binding="{Binding EMP, UpdateSourceTrigger=PropertyChanged}"
-                    Header="人員"
-                    IsReadOnly="True">
+                <DataGridTextColumn  Width="100"  Header="人員" IsReadOnly="True" 
+                                     Binding="{Binding EMP, UpdateSourceTrigger=PropertyChanged}" >
                     <DataGridTextColumn.HeaderStyle>
                         <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -367,16 +254,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
-                                x:Name="DeleteCashFlowRecordButton"
-                                Width="100"
-                                Margin="10,0,0,0"
-                                HorizontalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                Background="Red"
-                                BorderBrush="Transparent"
+                                x:Name="DeleteCashFlowRecordButton" Width="100" Margin="10,0,0,0"
+                                HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                                Background="Red" BorderBrush="Transparent"
                                 Command="{Binding DataContext.DeleteStrikeHistory, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                Content="刪除"
-                                FontFamily="Segoe UI SemiBold"
+                                Content="刪除" FontFamily="Segoe UI SemiBold"
                                 IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
                                 Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </DataTemplate>

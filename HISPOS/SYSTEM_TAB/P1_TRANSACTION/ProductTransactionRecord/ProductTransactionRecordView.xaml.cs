@@ -1,5 +1,5 @@
 ﻿using ClosedXML.Excel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using System;
@@ -154,7 +154,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                         }
                         RecordGrid.ItemsSource = RecordList.DefaultView;
                         lblCount.Content = RecordList.Rows.Count;
-                        lblTotal.Content = RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
+                        lblTotal.Content = "(含折扣):" + RecordList.Compute("Sum(TraMas_RealTotal)", string.Empty);
                         if (RecordList.Rows.Count == 0) { MessageWindow.ShowMessage("查無資料", MessageType.WARNING); }
                         break;
 
@@ -188,6 +188,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                             countDL += 1;
                         }
                         RecordDetailGrid.ItemsSource = RecordDetailList.DefaultView;
+
+                        lblCount.Content = RecordDetailList.Rows.Count;
+                        lblTotal.Content = "(不含折扣):" + RecordDetailList.Compute("Sum(TraDet_PriceSum)", string.Empty);
                         break;
 
                     case 3: // 銷售彙總
@@ -589,6 +592,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
+               
                 XLWorkbook wb = new XLWorkbook();
                 var style = XLWorkbook.DefaultStyle;
                 style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
@@ -612,7 +616,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 ws.Cell("C2").Value = "數量";
                 ws.Cell("D2").Value = "總售價";
 
-                var rangeWithData = ws.Cell(3, 1).InsertData(RecordSumList.AsEnumerable());
+                var tempRecordSumList = RecordSumList.Copy();
+                tempRecordSumList.Columns.Remove("NO"); 
+                var rangeWithData = ws.Cell(3, 1).InsertData(tempRecordSumList.AsEnumerable());
 
                 rangeWithData.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                 rangeWithData.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;

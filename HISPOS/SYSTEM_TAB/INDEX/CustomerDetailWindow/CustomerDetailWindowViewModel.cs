@@ -136,7 +136,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow
         private void SaveAction()
         {
             CustomerData.Save();
-            MessageWindow.ShowMessage("存檔成功", NewClass.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("存檔成功", Class.MessageType.SUCCESS);
         }
 
         private void AdjustTypeFilter(object sender, FilterEventArgs e)

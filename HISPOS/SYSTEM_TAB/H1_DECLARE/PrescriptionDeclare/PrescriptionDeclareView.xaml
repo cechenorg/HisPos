@@ -14,9 +14,9 @@
     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:userControl="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    d:DesignHeight="870"
-    d:DesignWidth="1365"
-    FontFamily="Segoe UI Semibold"
+    d:DesignHeight="870" d:DesignWidth="1365"
+    FontFamily="Segoe UI Semibold" 
+    d:DataContext="{d:DesignInstance Type=local:PrescriptionDeclareViewModel, IsDesignTimeCreatable=False}" 
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -36,27 +36,18 @@
             <patientData:PatientReadOnlyControl />
         </DataTemplate>
         <DataTemplate x:Key="ButtonAdjust" DataType="{x:Type Button}">
-            <Button
-                Width="135"
-                Height="35"
-                Margin="10,0,0,0"
-                Background="RoyalBlue"
-                BorderThickness="0"
+            <Button  Width="135" Height="35" Margin="10,0,0,0"
+                Background="RoyalBlue" BorderThickness="0"
                 Command="{Binding DataContext.Adjust, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                Content="調劑"
-                FontSize="16"
+                Content="調劑" FontSize="16"
                 IsEnabled="{Binding DataContext.CanAdjust, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
         </DataTemplate>
         <DataTemplate x:Key="ButtonRegister" DataType="{x:Type Button}">
             <Button
-                Width="135"
-                Height="35"
-                Margin="10,0,0,0"
-                Background="RoyalBlue"
-                BorderThickness="0"
+                Width="135" Height="35" Margin="10,0,0,0"
+                Background="RoyalBlue" BorderThickness="0"
                 Command="{Binding DataContext.Register, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                Content="登錄"
-                FontSize="16" />
+                Content="登錄" FontSize="16" />
         </DataTemplate>
         <DataTemplate x:Key="ButtonPrescribe" DataType="{x:Type Button}">
             <Button
@@ -166,9 +157,9 @@
                 </TextBox>
                 <Label Content="處方數" Style="{StaticResource BoldLabelContent18}" />
                 <Label
-                    Width="32"
+                    Width="40"
                     Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    Style="{StaticResource BoldLabelContent18}" Margin="0,20" />
+                    Style="{StaticResource BoldLabelContent18}"  />
                 <Button
                     Name="btnCloud_Info"
                     Width="40"

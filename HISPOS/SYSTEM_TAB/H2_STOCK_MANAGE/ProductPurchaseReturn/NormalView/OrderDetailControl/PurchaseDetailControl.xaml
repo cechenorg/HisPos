@@ -8,6 +8,8 @@
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
     xmlns:purchaseDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl"
     xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:storeOrder="clr-namespace:His_Pos.NewClass.StoreOrder"
+    d:DataContext="{d:DesignInstance Type=storeOrder:PurchaseOrder}"
     DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -32,7 +34,7 @@
                 Width="320"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
-                Content="{Binding ID}"
+                Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="40"
                 FontWeight="Bold"
@@ -52,12 +54,11 @@
     </UserControl.Resources>
     <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="55" />
+            <RowDefinition Height="39" />
+            <RowDefinition Height="34" />
+            <RowDefinition Height="34" />
             <RowDefinition Height="700" />
-            <RowDefinition Height="40" />
-
         </Grid.RowDefinitions>
         <StackPanel
             Grid.Row="0"
@@ -152,19 +153,7 @@
                 Foreground="Black" />
             <Label
                 Margin="10,0,0,0"
-                Content="慢箋"
-                Foreground="Black"
-                Style="{StaticResource BoldLabelContent18}"
-                Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <Label
-                VerticalAlignment="Center"
-                Content="{Binding PatientData}"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="Black" />
-            <Label
-                Margin="10,0,0,0"
-                Content="預約"
+                Content="慢箋預約"
                 Foreground="Black"
                 Style="{StaticResource BoldLabelContent18}"
                 Visibility="{Binding HasCustomer, Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -177,6 +166,27 @@
         </StackPanel>
         <StackPanel
             Grid.Row="2"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <Label
+                Margin="20,0,0,0"
+                Content="慢箋"
+                Foreground="Black"
+                Style="{StaticResource BoldLabelContent18}"
+                Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBlock
+                Margin="10,0,0,0"
+                TextWrapping="Wrap"
+                Width="1000"
+                VerticalAlignment="Center"
+                Text="{Binding PatientData}"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Foreground="Black"
+                Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </StackPanel>
+        <StackPanel
+            Grid.Row="3"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
@@ -204,7 +214,7 @@
                     FontSize="18"
                     Foreground="Black" />
                 <Label
-                    Width="213"
+                    Width="100"
                     Margin="10,3,0,3"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
@@ -212,10 +222,9 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
                     Foreground="Black" />
-
             </StackPanel>
         </StackPanel>
-        <ContentControl Grid.Row="3">
+        <ContentControl Grid.Row="4">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalUnProcessingControl}" />
@@ -238,8 +247,6 @@
                     </Style.Triggers>
                 </Style>
             </ContentControl.Style>
-
         </ContentControl>
-
     </Grid>
 </UserControl>

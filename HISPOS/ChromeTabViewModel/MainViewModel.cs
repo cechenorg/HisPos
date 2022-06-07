@@ -1,7 +1,7 @@
 ﻿using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage;
@@ -11,6 +11,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch;
 using His_Pos.SYSTEM_TAB.H11_CLOSING.Closing;
 using His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
@@ -192,7 +193,11 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.新增盤點):
                     ConfirmWindow confirmWindow = new ConfirmWindow("關閉視窗後盤點單不會儲存 是否關閉?", "關閉新增盤點確認");
                     if (!(bool)confirmWindow.DialogResult)
+                    {
+                        ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
+                        view.Refresh();
                         return;
+                    }
                     break;
 
                 case nameof(FeatureItem.庫存盤點紀錄):
@@ -287,6 +292,8 @@ namespace His_Pos.ChromeTabViewModel
                     break;
                 case nameof(FeatureItem.舊每日總帳報表):
                     break;
+                case nameof(FeatureItem.系統教學文件):
+                    break;
 
                 default:
                     return;
@@ -360,9 +367,9 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ProductTypeManageViewModel() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                //case nameof(FeatureItem.櫃位管理):
-                //    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[3].Functions[5], Icon = MainWindow.HisFeatures[3].Icon };
-                //    break;
+                case nameof(FeatureItem.櫃位管理):
+                    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[3].Functions[5], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
 
                 //盤點
                 case nameof(FeatureItem.新增盤點):

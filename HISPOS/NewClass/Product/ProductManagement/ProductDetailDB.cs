@@ -29,12 +29,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductOTCMedBagDetailByID]", parameters);
         }
 
-        internal static DataTable GetOnTheWayDetailByID(string proID, string wareID)
+        internal static DataTable GetOnTheWayDetailByID(string proID, string wareID,int isMedBag)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proID));
             parameters.Add(new SqlParameter("WARE_ID", wareID));
-
+            parameters.Add(new SqlParameter("IsMedBag", isMedBag));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductManageOnTheWayDetailByID]", parameters);
         }
 
@@ -96,12 +96,12 @@ namespace His_Pos.NewClass.Product.ProductManagement
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateOTCPrice]", parameters);
         }
 
-        internal static DataTable GetMedBagDetailByID(string proID, string wareID)
+        internal static DataTable GetMedBagDetailByID(string proID, string wareID,int isInsuff)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proID));
             parameters.Add(new SqlParameter("WARE_ID", wareID));
-
+            parameters.Add(new SqlParameter("IsInsuff", isInsuff));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductMedBagDetailByID]", parameters);
         }
 

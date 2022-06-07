@@ -1,8 +1,12 @@
-﻿using His_Pos.FunctionWindow;
+﻿using GalaSoft.MvvmLight;
+using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Pharmacy;
 using His_Pos.Service;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 using ZeroFormatter;
 
 namespace His_Pos.NewClass.Person.Employee
@@ -19,6 +23,8 @@ namespace His_Pos.NewClass.Person.Employee
             Birthday = DateTime.Today;
             IsEnable = true;
             AuthorityValue = 4;
+
+            AuthorityFullName = TransAuthorityFullName(AuthorityValue);
         }
 
         public Employee(DataRow r) : base(r)
@@ -35,9 +41,34 @@ namespace His_Pos.NewClass.Person.Employee
             IsLocal = r.Field<bool>("Emp_IsLocal");
             CashierID = r.Field<string>("Emp_CashierID");
             WorkPosition = new WorkPosition.WorkPosition(r);
+
+            AuthorityFullName = TransAuthorityFullName(AuthorityValue);
         }
 
-      
+        public void GetGroupPharmacyAuthority()
+        {
+            
+        }
+         
+        private string TransAuthorityFullName(int AuthorityValue)
+        {
+            string result = string.Empty;
+            
+            switch (AuthorityValue)
+            {
+                case 1:
+                    return "系統管理員";
+                case 2:
+                    return "店長";
+                case 3:
+                    return "店員";
+                case 4:
+                    return "藥師"; 
+            }
+
+
+            return result;
+        }
 
         private string cashierID;
 
@@ -138,6 +169,9 @@ namespace His_Pos.NewClass.Person.Employee
         [IgnoreFormat]
         public int AuthorityValue { get; set; }
 
+        [IgnoreFormat]
+        public string AuthorityFullName { get; set; }
+
         private string account;//帳號
 
         [IgnoreFormat]
@@ -162,7 +196,52 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
+        private ObservableCollection<GroupWorkPosition> groupPharmacyEmployeeList;//在其他加盟藥局對應的職位
+
+        [IgnoreFormat]
+        public ObservableCollection<GroupWorkPosition> GroupPharmacyEmployeeList
+        {
+            get => groupPharmacyEmployeeList;
+            set
+            {
+                Set(() => GroupPharmacyEmployeeList, ref groupPharmacyEmployeeList, value);
+            }
+        }
+
+        private GroupWorkPosition selectedGroupPharmacyEmployee;//在其他加盟藥局對應的職位
+
+        [IgnoreFormat]
+        public GroupWorkPosition SelectedGroupPharmacyEmployee
+        {
+            get => selectedGroupPharmacyEmployee;
+            set
+            {
+                Set(() => SelectedGroupPharmacyEmployee, ref selectedGroupPharmacyEmployee, value);
+            }
+        }
+
         #region Function
+
+        public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList,WorkPosition.WorkPositions workPositions)
+        {
+            GroupPharmacyEmployeeList = new ObservableCollection<GroupWorkPosition>();
+
+            var employeeList= EmployeeDb.GetGroupPharmacyDataByID(groupServerList.Select(_ => _.PHAMAS_VerifyKey ).ToList(), ID);
+
+            for(int i =0; i < groupServerList.Count; i++)
+            {
+                GroupWorkPosition tempData = new GroupWorkPosition()
+                {
+                    PharmacyName = groupServerList[i].PHAMAS_NAME,
+                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey
+                };
+                tempData.EmployeeWorkPosition = workPositions.SingleOrDefault(_ => _.WorkPositionId == employeeList[i].WorkPosition.WorkPositionId);
+                GroupPharmacyEmployeeList.Add(tempData);
+            }
+
+            SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault(); 
+            
+        }
 
         public Employee GetDataByID(int id)
         {
@@ -176,14 +255,14 @@ namespace His_Pos.NewClass.Person.Employee
 
             if (!VerifyService.VerifyIDNumber(IDNumber))
             {
-                MessageWindow.ShowMessage("身分證格式錯誤!", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
                 return false;
             }
 
             var table = EmployeeDb.CheckIdNumber(IDNumber);
             if (table.Rows[0].Field<int>("Count") > 0)
             {
-                MessageWindow.ShowMessage("此身分證已經存在!", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("此身分證已經存在!", Class.MessageType.ERROR);
                 return false;
             }
 
@@ -203,6 +282,7 @@ namespace His_Pos.NewClass.Person.Employee
 
         public void Update()
         {
+
             EmployeeDb.Update(this);
         }
 
@@ -241,6 +321,20 @@ namespace His_Pos.NewClass.Person.Employee
         public bool CheckLeave(DateTime date)
         {
             return StartDate <= date && (LeaveDate is null || LeaveDate >= date);
+        }
+    }
+
+    public class GroupWorkPosition : ObservableObject
+    {
+        public string PharmacyVerifyKey { get; set; }
+        public string PharmacyName { get; set; }
+
+
+        private WorkPosition.WorkPosition _employeeWorkPosition;
+        public WorkPosition.WorkPosition EmployeeWorkPosition {
+            get { return _employeeWorkPosition; }
+            set { 
+                Set(() => EmployeeWorkPosition, ref _employeeWorkPosition, value); } 
         }
     }
 }

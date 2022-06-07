@@ -12,6 +12,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public MedBagMedicine(MedicineNHI m, bool isSingle)
         {
             Id = m.ID;
+            FreqRemark = m.Usage.FreqRemark;
             if (isSingle)
             {
                 if (m.ControlLevel > 0)
@@ -42,7 +43,10 @@ namespace His_Pos.NewClass.Medicine.MedBag
                 if (m.ControlLevel > 0)
                     Name += "[管]";
                 Name += Strings.StrConv(m.FullName, VbStrConv.Narrow);
-                Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
+                if(m.Ingredient != null && !string.IsNullOrEmpty(m.Ingredient))
+                {
+                    Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
+                }
                 SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 MedicineDays = "共" + m.Days + "天";
@@ -65,6 +69,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public MedBagMedicine(MedicineOTC m, bool isSingle)
         {
             Id = m.ID;
+            FreqRemark = m.Usage.FreqRemark;
             if (isSingle)
             {
                 Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
@@ -94,9 +99,12 @@ namespace His_Pos.NewClass.Medicine.MedBag
             else
             {
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
-                Ingredient = "成分:" + string.Empty;
-                SideEffect = "副作用:" + string.Empty;
-                Indication = "適應症:" + string.Empty;
+                if (m.Ingredient != null && !string.IsNullOrEmpty(m.Ingredient))
+                {
+                    Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
+                }
+                SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
+                Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 if (m.Days != null)
                     MedicineDays = "共" + m.Days + "天";
                 else
@@ -130,36 +138,41 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public MedBagMedicine(MedicineSpecialMaterial m, bool isSingle)
         {
             Id = m.ID;
+            FreqRemark = m.Usage.FreqRemark;
             if (isSingle)
             {
                 Name = Strings.StrConv(m.EnglishName, VbStrConv.Narrow);
                 ChiName = Strings.StrConv(m.ChineseName, VbStrConv.Narrow);
-                Ingredient = string.Empty;
-                SideEffect = string.Empty;
-                Indication = string.Empty;
-                if (m.Days is null)
-                    MedicineDays = m.Days + "天";
-                else
-                {
-                    MedicineDays = string.Empty;
-                }
+                Ingredient = Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
+                SideEffect = Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
+                Indication = Strings.StrConv(m.Indication, VbStrConv.Narrow);
+                MedicineDays = m.Days + "天";
                 Usage = string.Empty;
                 Form = string.Empty;
                 Total = m.Amount.ToString();
+                var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage;
+                if (m.ID.EndsWith("100") || m.ID.EndsWith("1G0"))
+                {
+                    Total += "粒";
+                    usagePrint += "粒";
+                }
+                else
+                {
+                    usagePrint += "(  )";
+                }
+                Usage = usagePrint;
                 Note = string.Empty;
             }
             else
             {
                 Name = Strings.StrConv(m.FullName, VbStrConv.Narrow);
-                Ingredient = "成分:" + string.Empty;
-                SideEffect = "副作用:" + string.Empty;
-                Indication = "適應症:" + string.Empty;
-                if (m.Days is null)
-                    MedicineDays = string.Empty;
-                else
+                if (m.Ingredient != null && !string.IsNullOrEmpty(m.Ingredient))
                 {
-                    MedicineDays = "共" + m.Days + "天";
+                    Ingredient = "成分:" + Strings.StrConv(m.Ingredient, VbStrConv.Narrow);
                 }
+                SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
+                Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
+                MedicineDays = "共" + m.Days + "天";
                 Dosage = string.Empty;
                 if (m.Days is null)
                     Total = m.Amount.ToString();
@@ -168,6 +181,16 @@ namespace His_Pos.NewClass.Medicine.MedBag
                     Total = m.Days + "天" + m.Amount;
                 }
                 Usage = string.Empty;
+                var usagePrint = GetPositionPrintName(m.PositionID) + GetUsagePrintName(m.Usage).Trim() + "每次" + m.Dosage;
+                if (m.ID.EndsWith("100") || m.ID.EndsWith("1G0"))
+                {
+                    Total += "粒";
+                    usagePrint += "粒";
+                }
+                else
+                {
+                    usagePrint += "(  )";
+                }
             }
         }
 
@@ -182,6 +205,7 @@ namespace His_Pos.NewClass.Medicine.MedBag
         public string Total { get; set; }
         public string Dosage { get; set; }
         public string Usage { get; set; }
+        public string FreqRemark { get; set; }
         public string Form { get; set; }
         public string Note { get; set; }
         public int Order { get; set; }

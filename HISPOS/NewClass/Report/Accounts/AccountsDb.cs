@@ -1,5 +1,5 @@
 ﻿using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.Database;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
 using System;
@@ -11,11 +11,12 @@ namespace His_Pos.NewClass.Report.Accounts
 {
     public class AccountsDb
     {
-        public static DataTable GetDataByDate(DateTime sDate, DateTime eDate)
+        public static DataTable GetDataByDate(DateTime sDate, DateTime eDate, string keyWord)
         {
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "keyword", keyWord);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsRecordDetailsByDate]", parameterList);
         }
 
@@ -58,6 +59,12 @@ namespace His_Pos.NewClass.Report.Accounts
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowId", selectedDetail.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "EMP", ViewModelMainWindow.CurrentUser.ID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteAccountsRecord]", parameterList);
+        }
+        public static DataTable GetStrikeDataById(AccountsRecordDetail selectedDetail)
+        {
+            var parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "ID", selectedDetail.ID);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StrikeHistoriesById]", parameterList);
         }
     }
 }

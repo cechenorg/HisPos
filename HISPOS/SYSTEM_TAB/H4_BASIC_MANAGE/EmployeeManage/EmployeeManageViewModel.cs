@@ -3,7 +3,9 @@ using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.WorkPosition;
+using His_Pos.NewClass.Pharmacy;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
@@ -16,65 +18,32 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         }
 
         #region -----Define Command-----
-
-        public RelayCommand SelectionChangedCommand { get; set; }
-        public RelayCommand DataChangeCommand { get; set; }
+         
         public RelayCommand CancelCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand NewEmployeeCommand { get; set; }
         public RelayCommand ChangePassWordCommand { get; set; }
 
+        public RelayCommand UpdateGroupPharmacyAuthorityCommand { get; set; }
+
         #endregion -----Define Command-----
 
         #region ----- Define Variables -----
 
-        private EmployeeControlEnum controlType;
 
-        public EmployeeControlEnum ControlType
+
+        private Employee _selectedEmployee;
+
+        public Employee SelectedEmployee
         {
-            get => controlType;
+            get { return _selectedEmployee; }
             set
             {
-                Set(() => ControlType, ref controlType, value);
-            }
-        }
+                Set(() => SelectedEmployee, ref _selectedEmployee, value);
 
-        private CollectionViewSource employeeCollectionViewSource;
-
-        private CollectionViewSource EmployeeCollectionViewSource
-        {
-            get => employeeCollectionViewSource;
-            set
-            {
-                Set(() => EmployeeCollectionViewSource, ref employeeCollectionViewSource, value);
-            }
-        }
-
-        private ICollectionView employeeCollectionView;
-
-        public ICollectionView EmployeeCollectionView
-        {
-            get => employeeCollectionView;
-            private set
-            {
-                Set(() => EmployeeCollectionView, ref employeeCollectionView, value);
-            }
-        }
-
-        public Employee employee;
-
-        public Employee Employee
-        {
-            get { return employee; }
-            set
-            {
-                Set(() => Employee, ref employee, value);
-                ControlType = EmployeeControlEnum.NoEditControl;
-                if (Employee.ID == ViewModelMainWindow.CurrentUser.ID)
-                    ControlType = EmployeeControlEnum.SelfEditControl;
-                if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
-                    ControlType = EmployeeControlEnum.AllEditableControl;
+                if(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
+                    SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList(),WorkPositions);
             }
         }
 
@@ -89,6 +58,17 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
+        public Employees _filterEmployeeCollection;
+
+        public Employees FilterEmployeeCollection
+        {
+            get { return _filterEmployeeCollection; }
+            set
+            {
+                Set(() => FilterEmployeeCollection, ref _filterEmployeeCollection, value);
+            }
+        }
+
         public WorkPositions workPositions = new WorkPositions();
 
         public WorkPositions WorkPositions
@@ -100,7 +80,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
-        private bool localCheck = true;
+        private bool localCheck;
 
         public bool LocalCheck
         {
@@ -108,7 +88,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => LocalCheck, ref localCheck, value);
-                EmployeeCollectionViewSource.Filter += Filter;
+
+                FilterEmployee();
             }
         }
 
@@ -120,9 +101,39 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => GlobalCheck, ref globalCheck, value);
-                EmployeeCollectionViewSource.Filter += Filter;
+
+                FilterEmployee();
             }
         }
+
+        private bool _isQuit = true;
+
+        public bool IsQuit
+        {
+            get { return _isQuit; }
+            set
+            {
+                Set(() => IsQuit, ref _isQuit, value);
+
+                FilterEmployee();
+            }
+        }
+
+        private bool _isGroupPharmacy = 
+            string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
+             ViewModelMainWindow.CurrentUser.AuthorityValue <= 2;//Admin or 店長
+
+        public bool IsGroupPharmacy
+        {
+            get { return _isGroupPharmacy; }
+            set
+            {
+                Set(() => IsGroupPharmacy, ref _isGroupPharmacy, value);
+
+                FilterEmployee();
+            }
+        }
+
 
         #endregion ----- Define Variables -----
 
@@ -134,19 +145,26 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             DeleteCommand = new RelayCommand(DeleteAction);
             NewEmployeeCommand = new RelayCommand(NewEmployeeAction);
             ChangePassWordCommand = new RelayCommand(ChangePassWordAction);
+            UpdateGroupPharmacyAuthorityCommand = new RelayCommand(UpdateGroupPharmacyAuthorityAction);
         }
 
         #region Action
 
+        private void UpdateGroupPharmacyAuthorityAction()
+        {
+            SelectedEmployee.Update();
+            MessageWindow.ShowMessage("權限修改成功!",Class.MessageType.SUCCESS);
+        }
+
         private void CancelAction()
         {
-            Employee = Employee.GetDataByID(Employee.ID);
+            SelectedEmployee = SelectedEmployee.GetDataByID(SelectedEmployee.ID);
         }
 
         private void SubmitAction()
         {
-            Employee.Update();
-            MessageWindow.ShowMessage("修改成功", NewClass.MessageType.SUCCESS);
+            SelectedEmployee.Update();
+            MessageWindow.ShowMessage("修改成功", Class.MessageType.SUCCESS);
         }
 
         private void DeleteAction()
@@ -154,15 +172,15 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除員工? 刪除後無法恢復 請慎重確認", "員工刪除");
             if ((bool)confirmWindow.DialogResult)
             {
-                Employee.Delete();
-                MessageWindow.ShowMessage("刪除成功!", NewClass.MessageType.SUCCESS);
+                SelectedEmployee.Delete();
+                MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
                 Init();
             }
         }
 
         public void ChangePassWordAction()
         {
-            EmployeeChangePasswordWindow.EmployeeChangePasswordWindow employeeChangePasswordWindow = new EmployeeChangePasswordWindow.EmployeeChangePasswordWindow(Employee);
+            EmployeeChangePasswordWindow.EmployeeChangePasswordWindow employeeChangePasswordWindow = new EmployeeChangePasswordWindow.EmployeeChangePasswordWindow(SelectedEmployee);
         }
 
         public void NewEmployeeAction()
@@ -182,38 +200,55 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             EmployeeCollection = new Employees();
             EmployeeCollection.Init();
             MainWindow.ServerConnection.CloseConnection();
+            FilterEmployeeCollection = new Employees();
 
-            EmployeeCollectionViewSource = new CollectionViewSource { Source = EmployeeCollection };
-            EmployeeCollectionView = EmployeeCollectionViewSource.View;
-            EmployeeCollectionViewSource.Filter += Filter;
-
-            if (ViewModelMainWindow.CurrentUser.ID == 1 || ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionId == 4)
+            foreach (var employeedata in EmployeeCollection)
             {
-                ControlType = EmployeeControlEnum.AllEditableControl;
-            }
-            if (EmployeeCollection != null)
-            {
-              
-            }
-            else {
-                ControlType = EmployeeControlEnum.NoControl;
-            }
+                FilterEmployeeCollection.Add(employeedata);
+            } 
+             
+            LocalCheck = true;
+            FilterEmployee();
+            ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList = PharmacyDBService.GetPharmacyListByGroupServerName();
+            SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
+             
         }
 
-        private void Filter(object sender, FilterEventArgs e)
+        private void FilterEmployee()
         {
-            if (e.Item is null) return;
-            if (!(e.Item is Employee))
-                e.Accepted = false;
+            FilterEmployeeCollection.Clear();
+            foreach (var quitEmployee in EmployeeCollection)
+            {
+                FilterEmployeeCollection.Add(quitEmployee);
+            }
 
-            e.Accepted = false;
+            if (IsQuit == true)
+            {
+                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.LeaveDate != null))
+                {
+                    FilterEmployeeCollection.Remove(quitEmployee);
+                }
+            }
+
+            if (LocalCheck)
+            {
+                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
+                {
+                    FilterEmployeeCollection.Remove(quitEmployee);
+                }
+            }
 
             if (GlobalCheck)
-                e.Accepted = true;
-            else if (LocalCheck && ((Employee)e.Item).IsLocal)
-                e.Accepted = true;
+            {
+                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal))
+                {
+                    FilterEmployeeCollection.Remove(quitEmployee);
+                }
+            }
+            SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
         }
 
+         
         #endregion Function
     }
 }

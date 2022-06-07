@@ -18,6 +18,7 @@
             <RowDefinition Height="70" />
             <RowDefinition Height="50" />
             <RowDefinition Height="40" />
+            <RowDefinition Height="40"/>
             <RowDefinition />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
@@ -125,18 +126,6 @@
                 Foreground="Black" />
             <Label
                 Margin="10,0,0,0"
-                Content="慢箋"
-                Foreground="Black"
-                Style="{StaticResource BoldLabelContent18}"
-                Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <Label
-                VerticalAlignment="Center"
-                Content="{Binding PatientData}"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Foreground="Black" />
-            <Label
-                Margin="10,0,0,0"
                 Content="預約"
                 Foreground="Black"
                 Style="{StaticResource BoldLabelContent18}"
@@ -146,10 +135,34 @@
                 Content="{Binding PreOrderCustomer}"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
-                Foreground="Black" />
+                Foreground="Black" 
+                Visibility="{Binding HasCustomer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+           
+            
         </StackPanel>
         <StackPanel
             Grid.Row="2"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <Label
+                Margin="20,0,0,0"
+                Content="慢箋"
+                Foreground="Black"
+                Style="{StaticResource BoldLabelContent18}"
+                Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <TextBlock  
+                Margin="10,0,0,0"
+                TextWrapping="Wrap"
+                Width="980"
+                VerticalAlignment="Center"
+                Text="{Binding PatientData}"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Foreground="Black"
+                Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </StackPanel>
+        <StackPanel
+            Grid.Row="3"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
@@ -167,7 +180,7 @@
                 FontSize="18" />
         </StackPanel>
         <DataGrid
-            Grid.Row="3"
+            Grid.Row="4"
             AutoGenerateColumns="False"
             Background="{StaticResource GridDarkestBackGround}"
             CanUserAddRows="False"
@@ -286,7 +299,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="70"
-                    Binding="{Binding SubTotal, StringFormat=N2}"
+                    Binding="{Binding SubTotal, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
                     Header="小計"
                     IsReadOnly="True">
@@ -352,7 +365,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
-            Grid.Row="4"
+            Grid.Row="5"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
@@ -375,7 +388,7 @@
             <Label Content="{Binding PlanArriveDate, Converter={StaticResource DateConverter}}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalContentAlignment="Center" />-->
         </StackPanel>
         <StackPanel
-            Grid.Row="5"
+            Grid.Row="6"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
@@ -392,7 +405,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
+                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
@@ -443,16 +456,18 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Button
+                Name="btnDelete"
                 Width="120"
                 Margin="10,0,0,0"
                 Background="IndianRed"
                 BorderThickness="0"
+                IsEnabled="{Binding IsScrap}"
                 Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 Content="刪除"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16"
-                Foreground="White">
-                <Button.Style>
+                Foreground="White" Cursor="Hand">
+                <!--<Button.Style>
                     <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding OrderStatus}" Value="SCRAP">
@@ -466,7 +481,7 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </Button.Style>
+                </Button.Style>-->
             </Button>
         </StackPanel>
     </Grid>

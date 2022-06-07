@@ -30,7 +30,7 @@
             Content="{StaticResource CustomerManage}" />
         <Label
             Name="PatientIDNumber"
-            Width="130"
+            Width="110"
             Height="35"
             Margin="0,0,10,0"
             Content="{Binding CurrentPrescription.Patient.IDNumber, UpdateSourceTrigger=PropertyChanged}"

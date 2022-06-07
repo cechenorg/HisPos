@@ -439,7 +439,7 @@
                             FontFamily="Segoe UI Semibold"
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
-                            Text="{Binding TotalPrice, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding TotalPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Grid>
                 <ContentControl Grid.Column="1" Margin="0,0,10,10">

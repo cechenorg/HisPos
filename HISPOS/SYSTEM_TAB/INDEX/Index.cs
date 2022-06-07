@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
@@ -536,7 +536,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                         }
                         else
                         {
-                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID);
+                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID,"");
                             MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
                         }
 
@@ -561,7 +561,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                         }
                         else
                         {
-                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID);
+                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID,"");
                             MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
                         }
                         CommonProductGetDataAcion();

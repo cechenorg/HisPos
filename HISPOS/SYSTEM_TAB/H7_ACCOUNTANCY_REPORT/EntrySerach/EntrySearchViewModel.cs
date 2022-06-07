@@ -14,7 +14,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass;
+using His_Pos.Class;
 
 
 
@@ -132,6 +132,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         private void ShowEntryDetailAction()
         {
+            if(SelectStockValue == null)
+                return;
+
             EntryDetailWindow.EntryDetailWindow entryDetailWindow = new EntryDetailWindow.EntryDetailWindow(SelectStockValue.Date);
         }
 

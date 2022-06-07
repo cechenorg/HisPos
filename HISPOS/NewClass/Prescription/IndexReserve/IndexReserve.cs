@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine.ReserveMedicine;
 using His_Pos.NewClass.Prescription.IndexReserve.IndexReserveDetail;
@@ -224,10 +224,10 @@ namespace His_Pos.NewClass.Prescription.IndexReserve
                     result = true;
                 }
                 else
-                    MessageWindow.ShowMessage(StoOrdID + "傳送失敗", NewClass.MessageType.ERROR);
+                    MessageWindow.ShowMessage(StoOrdID + "傳送失敗", Class.MessageType.ERROR);
             }
             else
-                MessageWindow.ShowMessage(CusName + "預約已傳送過 請重新查詢!", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage(CusName + "預約已傳送過 請重新查詢!", Class.MessageType.ERROR);
             MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             return result;

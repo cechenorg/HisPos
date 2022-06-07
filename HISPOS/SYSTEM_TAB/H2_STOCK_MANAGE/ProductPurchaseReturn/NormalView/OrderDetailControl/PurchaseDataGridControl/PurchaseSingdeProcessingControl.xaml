@@ -571,6 +571,15 @@
             Grid.Row="2"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
+            <Button
+                Margin="10,0,0,0"
+                Width="150"
+                Background="RoyalBlue"
+                BorderThickness="0"
+                Command="{Binding ToNextStatusCommand}"
+                Content="確認收貨"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -585,7 +594,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="{Binding Path=CurrentStoreOrder.TotalPrice, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding Path=CurrentStoreOrder.TotalPrice, StringFormat=N0, UpdateSourceTrigger=PropertyChanged}" />
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
@@ -616,16 +625,8 @@
                 Background="DimGray"
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
+                IsEnabled="{Binding IsCanDelete}"
                 Content="作廢"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" />
-            <Button
-                Margin="10,0,0,0"
-                Width="150"
-                Background="RoyalBlue"
-                BorderThickness="0"
-                Command="{Binding ToNextStatusCommand}"
-                Content="確認收貨"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>

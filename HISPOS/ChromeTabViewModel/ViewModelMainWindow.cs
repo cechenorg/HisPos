@@ -302,23 +302,27 @@ namespace His_Pos.ChromeTabViewModel
                                 {
                                     GetTxtFiles(s, pathFile, Path.GetFileName(s));
                                 }
-                
-                                var xDocument = XDocument.Load(s);
-                               
-                                var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null ) { isRePost = "2"; }
-                                else
-                                {
-                                    isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
-                                }
-                                if (isRePost != "0") {
-                                    isRe = true;
-                                 
-                                }
-                                else
-                                { isRe = false;}
-                                xDocs.Add(xDocument);
-                                cusIdNumbers.Add(cusIdNumber);
+
+                                //if (Path.GetExtension(s) == ".xml")
+                                //{
+                                    var xDocument = XDocument.Load(s);
+                                    var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null ) { isRePost = "2"; }
+                                    else
+                                    {
+                                        isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                    }
+                                    if (isRePost != "0") 
+                                    {
+                                        isRe = true;
+                                    }
+                                    else
+                                    { 
+                                        isRe = false;
+                                    }
+                                    xDocs.Add(xDocument);
+                                    cusIdNumbers.Add(cusIdNumber);
+                                //}
                                 paths.Add(s);
                             }
                             catch (Exception ex)
@@ -705,6 +709,12 @@ namespace His_Pos.ChromeTabViewModel
                 Usages.Where(u => !string.IsNullOrEmpty(u.QuickName)).SingleOrDefault(u => u.QuickName.Equals(quickName)) : null;
         }
 
+        public static Usage FindUsageByName(string name)
+        {
+            return Usages.Where(u => !string.IsNullOrEmpty(u.Name)).Count(u => u.Name.Equals(name)) == 1 ?
+                Usages.Where(u => !string.IsNullOrEmpty(u.Name)).SingleOrDefault(u => u.Name.Equals(name)) : null;
+        }
+
         public static Position GetPosition(string id)
         {
             if (string.IsNullOrEmpty(id)) return new Position();
@@ -850,7 +860,7 @@ namespace His_Pos.ChromeTabViewModel
             }
             catch (Exception ex)
             {
-                FunctionWindow.MessageWindow.ShowMessage(ex.Message, NewClass.MessageType.ERROR);
+                FunctionWindow.MessageWindow.ShowMessage(ex.Message, Class.MessageType.ERROR);
             }
     
         }

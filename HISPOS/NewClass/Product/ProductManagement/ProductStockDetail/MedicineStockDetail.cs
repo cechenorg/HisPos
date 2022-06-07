@@ -12,8 +12,9 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 
         private string stockDetail = "";
         private MedBagDetailStructs medBagDetails;
+        private MedBagDetailStructs demandDetails;
         private OnTheWayDetailStructs onTheWayDetail;
-
+        private OnTheWayDetailStructs onTheWayMedBag;
         public double MedBagOnTheWayAmount { get; set; }
 
         public double TotalOnTheWayAmount
@@ -21,8 +22,10 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return OnTheWayAmount + MedBagOnTheWayAmount; }
         }
 
-        public double ShelfInventory { get; set; }
-        public double MedBagInventory { get; set; }
+        public double InsuffInventory { get; set; }//不足量
+        public double ShelfInventory { get; set; }//架上量
+        public double MedBagInventory { get; set; }//藥袋量
+        public double DemandInventory { get; set; }//需求量
         public double ConsumeIn90Days { get; set; }
 
         public string StockDetail
@@ -36,27 +39,36 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             get { return onTheWayDetail; }
             set { Set(() => OnTheWayDetail, ref onTheWayDetail, value); }
         }
+        public OnTheWayDetailStructs OnTheWayMedBag
+        {
+            get { return onTheWayMedBag; }
+            set { Set(() => OnTheWayMedBag, ref onTheWayMedBag, value); }
+        }
 
         public IEnumerable<MedBagDetailStruct> MedBagStockDetails
         {
             get { return medBagDetails.Where(d => d.SelfAmount != 0); }
         }
-
-        public IEnumerable<MedBagDetailStruct> MedBagSendDetails
+        public IEnumerable<MedBagDetailStruct> DemandStockDetails
         {
-            get { return medBagDetails.Where(d => d.SendAmount != 0); }
+            get { return demandDetails.Where(d => d.SelfAmount != 0); }
         }
 
-        public bool IsInventoryError => MedBagInventory > TotalInventory;
+        
+
+        public bool IsInventoryError => InsuffInventory > 0;//是否為不足量顯示
 
         #endregion ----- Define Variables -----
 
         public MedicineStockDetail(DataRow row) : base(row)
         {
-            ShelfInventory = row.Field<double>("SHELF_INV");
-            MedBagInventory = row.Field<double>("MEDBAG_INV");
+            ShelfInventory = row.Field<double>("SHELF_INV");//架上量
+            MedBagInventory = row.Field<double>("Inv_MedBagInventory");//藥袋量
             MedBagOnTheWayAmount = row.Field<double>("Inv_MedBagOnTheWay");
             ConsumeIn90Days = row.Field<double>("CONSUME_AMOUNT");
+            DemandInventory = row.Field<double>("MEDBAG_INV");//需求量
+            InsuffInventory = row.Field<double>("InsuffInventory");//不足量  
+            //IsInventoryError = InsuffInventory > 0 ? true : false;//不足量顯示
         }
 
         #region ----- Define Functions -----
@@ -85,14 +97,16 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 
         internal void GetMedBagDetailByID(string proID, string wareID)
         {
-            medBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID);
+            medBagDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID, 0);//藥袋
+            demandDetails = MedBagDetailStructs.GetMedBagDetailByID(proID, wareID, 1);//需求
             RaisePropertyChanged(nameof(MedBagStockDetails));
-            RaisePropertyChanged(nameof(MedBagSendDetails));
+            RaisePropertyChanged(nameof(DemandStockDetails));
         }
 
         internal void GetOnTheWayDetailByID(string proID, string wareID)
         {
-            OnTheWayDetail = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID);
+            OnTheWayDetail = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID, 0);
+            OnTheWayMedBag = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID, 1);
         }
 
         #endregion ----- Define Functions -----

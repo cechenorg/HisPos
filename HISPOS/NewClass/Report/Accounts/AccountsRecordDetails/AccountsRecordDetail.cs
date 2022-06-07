@@ -18,6 +18,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
             Note = r.Field<string>("CashFlow_Note");
             CashFlowValue = decimal.ToInt32(r.Field<decimal>("CashFlow_Value"));
             Date = r.Field<DateTime>("CashFlow_Time");
+            InsertDate = r.Field<DateTime>("Insert_Time");
             EmpName = r.Field<string>("Emp_Name");
             CanEdit = DateTime.Compare(Date, DateTime.Today) >= 0 || ViewModelMainWindow.CurrentUser.ID == 1;
         }
@@ -74,6 +75,17 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
             set
             {
                 Set(() => Date, ref date, value);
+            }
+        }
+
+        private DateTime insertDate;
+
+        public DateTime InsertDate
+        {
+            get => insertDate;
+            set
+            {
+                Set(() => InsertDate, ref insertDate, value);
             }
         }
 

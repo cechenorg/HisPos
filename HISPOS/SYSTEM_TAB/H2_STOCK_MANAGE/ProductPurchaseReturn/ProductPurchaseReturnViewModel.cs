@@ -36,6 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private bool isBusy;
         private string busyContent;
         private BackgroundWorker initBackgroundWorker;
+        private StoreOrder currentStoreOrder;
         private StoreOrders storeOrderCollection;
         private OrderUITypeEnum uiType;
 
@@ -85,7 +86,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 case "NORMAL":
                     UiType = OrderUITypeEnum.NORMAL;
-                    NormalViewModel.InitData(StoreOrders.GetOrdersNotDone());
+                    InitVariables();
+                    //NormalViewModel.InitData(StoreOrders.GetOrdersNotDone());
                     break;
 
                 case "SINGDE":
@@ -136,24 +138,45 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
 
                     BusyContent = "取得杏德訂單最新狀態...";
-                    dataTable = StoreOrderDB.GetSingdeOrderNewStatus(dateTime);
-                    if (dataTable.Rows.Count > 0)
+                    for (int i = 0; i < storeOrders.Count; i++)
                     {
-                        storeOrderCollection.UpdateSingdeOrderStatus(dataTable);
-                        storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                        if(string.IsNullOrEmpty(storeOrders[i].SourceID))
+                            dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].ID);
+                        else
+                            dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].SourceID);
+
+                        if (dataTable.Rows.Count > 0)
+                        {
+                            currentStoreOrder = storeOrders[i];
+                            DataRow[] dataRows = dataTable.Select();
+                            currentStoreOrder.UpdateOrderDataFromSingde(dataRows[0]);
+                            storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                        }
                     }
+
+                    var orderedList = storeOrderCollection.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
+
+                    StoreOrders result = new StoreOrders();
+
+                    for (int i = orderedList.Count() - 1; i >= 0; i--)
+                    {
+                        result.Add(orderedList[i]);
+                    }
+
+                    storeOrderCollection = result;
+
+                    //(20220324)
+                    SingdeTotalViewModel.InitData();
+                    NormalViewModel.InitData(storeOrderCollection);
+                    IsBusy = false;
+                    //
                 }
 
-                MainWindow.SingdeConnection.CloseConnection();
+                MainWindow.SingdeConnection.CloseConnection(); 
                 MainWindow.ServerConnection.CloseConnection();
             };
 
-            initBackgroundWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                SingdeTotalViewModel.InitData();
-                NormalViewModel.InitData(storeOrderCollection);
-                IsBusy = false;
-            };
+           
         }
 
         private void InitVariables()

@@ -88,28 +88,30 @@
                 </i:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="0,5,0,5"
-            Orientation="Horizontal">
+        <StackPanel Grid.Row="1"  Margin="0,5,0,5" Orientation="Horizontal">
             
-            <Image
-                Width="20"
-                Height="25"
-                Margin="10,0,10,0"
-                Source="/Images/Telephone.png" />
-            <TextBox
-                Name="PatientTel"
-                Width="130"
-                Height="35"
-                Margin="5,0,20,0"
-                HorizontalContentAlignment="Center"
-                materialDesign:HintAssist.Hint="家電"
-                CaretBrush="Black"
-                FontSize="16"
+            <Image Width="20" Height="25" Margin="10,0,10,0"  Source="/Images/Telephone.png" />
+
+            <TextBox Name="PatientTel" Width="130" Height="35"
+                Margin="5,0,20,0" HorizontalContentAlignment="Center"  materialDesign:HintAssist.Hint="家電"
+                CaretBrush="Black" FontSize="16"
                 Foreground="{StaticResource ForeGround}"
                 Text="{Binding Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewKeyDown">
+                        <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+
+
+            <Image Width="20" Height="25" Margin="10,0,10,0"  Source="/Images/IDcard.png" />
+
+            <TextBox   Width="130" Height="35"
+                     Margin="5,0,20,0" HorizontalContentAlignment="Center"  materialDesign:HintAssist.Hint="身分證"
+                     CaretBrush="Black" FontSize="16"
+                     Foreground="{StaticResource ForeGround}"
+                     Text="{Binding Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
                         <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />
@@ -290,14 +292,10 @@
                     Content="取消"
                     IsEnabled="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
-                    Width="80"
-                    Height="30"
-                    Margin="10,0,0,10"
-                    Background="IndianRed"
-                    BorderBrush="IndianRed"
+                    Width="80" Height="30" Margin="10,0,0,10"
+                    Background="IndianRed" BorderBrush="IndianRed"
                     Command="{Binding SavePatientData}"
-                    Content="存檔"
-                    IsEnabled="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" />
+                    Content="存檔" IsEnabled="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </StackPanel>
     </Grid>

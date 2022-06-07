@@ -20,6 +20,23 @@ namespace His_Pos.NewClass.Person.Employee
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeByID]", parameterList);
         }
 
+        public static List<Employee> GetGroupPharmacyDataByID(List<string> groupserverNameList,int ID)
+        {
+
+            List<Employee> result = new List<Employee>();
+
+            foreach(var groupserverName in groupserverNameList)
+            {
+                List<SqlParameter> parameterList = new List<SqlParameter>();
+                parameterList.Add(new SqlParameter("@EmpID", ID));
+                var table = MainWindow.ServerConnection.ExecuteProcBySchema(groupserverName,"[Get].[EmployeeByID]", parameterList);
+                Employee employee = new Employee(table.Rows[0]);
+                result.Add(employee);
+            }
+
+            return result;
+        }
+
         public static void Insert(Employee e)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -39,10 +56,22 @@ namespace His_Pos.NewClass.Person.Employee
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
             if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
-                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList);
+            {
+                MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList); 
+            }
+                
             else
             {
                 MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateEmployee]", parameterList);
+                
+                foreach(var groupPharmactEmployee in e.GroupPharmacyEmployeeList)
+                {
+                    e.WorkPosition = groupPharmactEmployee.EmployeeWorkPosition;
+                    parameterList = new List<SqlParameter>();
+                    parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
+                    MainWindow.ServerConnection.ExecuteProcBySchema(groupPharmactEmployee.PharmacyVerifyKey, "[Set].[UpdateEmployee]", parameterList);
+                }
+                
                 SyncData();
             }
         }
@@ -121,6 +150,8 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddSqlParameter(parameterList, "Date", selectedDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EnablePharmacists]", parameterList);
         }
+
+       
 
         public static DataTable SetCustomers(Employees es)
         {

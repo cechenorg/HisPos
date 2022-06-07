@@ -8,6 +8,7 @@
         TradeProfit = 3,
         ExtraMoney = 4,
         OTCStockTaking = 5,
-        Reward = 6
+        Reward = 6,
+        Deposit = 7
     }
 }

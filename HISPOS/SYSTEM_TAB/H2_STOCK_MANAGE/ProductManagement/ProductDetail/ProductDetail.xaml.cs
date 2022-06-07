@@ -1,5 +1,5 @@
 ﻿using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using System;
 using System.Windows;
 

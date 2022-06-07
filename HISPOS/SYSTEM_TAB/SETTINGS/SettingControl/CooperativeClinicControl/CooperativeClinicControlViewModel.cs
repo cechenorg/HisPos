@@ -85,7 +85,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             if (dailyUploadConfirm.DialogResult == true)
             {
                 CooperativeClinicSettingCollection.Update();
-                MessageWindow.ShowMessage("新增成功!", NewClass.MessageType.SUCCESS);
+                MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
                 VM.CooperativeClinicSettings.Init();
             }
         }
@@ -93,7 +93,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         private void OpenFileAction()
         {
             if (SelectItem is null)
-                MessageWindow.ShowMessage("請先填寫院所代碼", NewClass.MessageType.WARNING);
+                MessageWindow.ShowMessage("請先填寫院所代碼", Class.MessageType.WARNING);
             FolderBrowserDialog fdlg = new FolderBrowserDialog();
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
@@ -145,7 +145,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         {
             if (CooperativeClinicSettingCollection.Where(c => !(c.CooperavieClinic is null)).Count(c => c.CooperavieClinic.ID == receiveSelectedInstitution.ID) > 0)
             {
-                MessageWindow.ShowMessage("合作院所重複新增", NewClass.MessageType.ERROR);
+                MessageWindow.ShowMessage("合作院所重複新增", Class.MessageType.ERROR);
                 return false;
             }
             else

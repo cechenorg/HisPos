@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Medicine;
 using His_Pos.NewClass.Prescription;
@@ -15,6 +15,7 @@ using His_Pos.NewClass.WareHouse;
 using His_Pos.Properties;
 using His_Pos.Service;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -24,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Xml;
@@ -473,9 +475,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
         private void ImportDeclareFileAction()
         {
 
-            var dict = new List<His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Ddata>();
-            var dict2 = new List<string>();
-            int i = 0;
+            var precriptionList = new List<ImportDeclareXml.Ddata>();
+            var innerXmlList = new List<string>();
+           
 
             List<ImportDeclareXml.Ddata> users;
 
@@ -500,125 +502,132 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
            
             foreach (XmlNode node in nodes)
             {
-                string da = $"{node.InnerXml}";
+                string innerXml = $"{node.InnerXml}";
+                  
+                var dictPreMas = new His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Ddata();
+                dictPreMas.D1 = node.SelectSingleNode("dhead/d1")?.InnerText ?? "";
+                dictPreMas.D2 = node.SelectSingleNode("dhead/d2")?.InnerText ?? "";
+                dictPreMas.D3 = node.SelectSingleNode("dhead/d3")?.InnerText ?? "";
+                dictPreMas.D4 = node.SelectSingleNode("dhead/d4")?.InnerText ?? "";
+                dictPreMas.D5 = node.SelectSingleNode("dhead/d5")?.InnerText ?? "";
+                dictPreMas.D6 = node.SelectSingleNode("dhead/d6")?.InnerText ?? "";
+                dictPreMas.D7 = node.SelectSingleNode("dhead/d7")?.InnerText ?? "";
+                dictPreMas.D8 = node.SelectSingleNode("dhead/d8")?.InnerText ?? "";
+                dictPreMas.D9 = node.SelectSingleNode("dhead/d9")?.InnerText ?? "";
 
 
-                //XmlSerializer serializer = new XmlSerializer(typeof(ImportDeclareXml.Ddata), node.InnerText);
-                //ImportDeclareXml.Ddata obj = serializer.Deserialize(da);
+                dictPreMas.D13 = node.SelectSingleNode("dhead/d13")?.InnerText ?? "";
+                dictPreMas.D14 = node.SelectSingleNode("dhead/d14")?.InnerText ?? "";
+                dictPreMas.D15 = node.SelectSingleNode("dhead/d15")?.InnerText ?? "";
+                dictPreMas.D16 = node.SelectSingleNode("dhead/d16")?.InnerText ?? "";
+                dictPreMas.D17 = node.SelectSingleNode("dhead/d17")?.InnerText ?? "";
+                dictPreMas.D18 = node.SelectSingleNode("dhead/d18")?.InnerText ?? "";
 
-                //XmlSerializer deserializer = new XmlSerializer(typeof(List<ImportDeclareXml.Ddata>),
-                //    new XmlRootAttribute("pharmacy//ddata"));
-                //users = (List<ImportDeclareXml.Ddata>)deserializer.Deserialize(xmlNodeReader);
+                dictPreMas.D20 = node.SelectSingleNode("dhead/d20")?.InnerText ?? "";
+                dictPreMas.D21 = node.SelectSingleNode("dhead/d21")?.InnerText ?? "";
+                dictPreMas.D22 = node.SelectSingleNode("dhead/d22").InnerText ?? "";
+                dictPreMas.D23 = node.SelectSingleNode("dhead/d23")?.InnerText ?? "";
+                dictPreMas.D24 = node.SelectSingleNode("dhead/d24")?.InnerText ?? "";
+                dictPreMas.D25 = node.SelectSingleNode("dhead/d25")?.InnerText ?? "";
+                dictPreMas.D26 = node.SelectSingleNode("dhead/d26")?.InnerText ?? "";
 
-                var dictin = new His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Ddata();
-                dictin.D1 = node.SelectSingleNode("dhead/d1")?.InnerText ?? "";
-                dictin.D2 = node.SelectSingleNode("dhead/d2")?.InnerText ?? "";
-                dictin.D3 = node.SelectSingleNode("dhead/d3")?.InnerText ?? "";
-                dictin.D4 = node.SelectSingleNode("dhead/d4")?.InnerText ?? "";
-                dictin.D5 = node.SelectSingleNode("dhead/d5")?.InnerText ?? "";
-                dictin.D6 = node.SelectSingleNode("dhead/d6")?.InnerText ?? "";
-                dictin.D7 = node.SelectSingleNode("dhead/d7")?.InnerText ?? "";
-                dictin.D8 = node.SelectSingleNode("dhead/d8")?.InnerText ?? "";
-                dictin.D9 = node.SelectSingleNode("dhead/d9")?.InnerText ?? "";
-
-
-                dictin.D13 = node.SelectSingleNode("dhead/d13")?.InnerText ?? "";
-                dictin.D14 = node.SelectSingleNode("dhead/d14")?.InnerText ?? "";
-                dictin.D15 = node.SelectSingleNode("dhead/d15")?.InnerText ?? "";
-                dictin.D16 = node.SelectSingleNode("dhead/d16")?.InnerText ?? "";
-                dictin.D17 = node.SelectSingleNode("dhead/d17")?.InnerText ?? "";
-                dictin.D18 = node.SelectSingleNode("dhead/d18")?.InnerText ?? "";
-
-                dictin.D20 = node.SelectSingleNode("dhead/d20")?.InnerText ?? "";
-                dictin.D21 = node.SelectSingleNode("dhead/d21")?.InnerText ?? "";
-                dictin.D22 = node.SelectSingleNode("dhead/d22").InnerText ?? "";
-                dictin.D23 = node.SelectSingleNode("dhead/d23")?.InnerText ?? "";
-                dictin.D24 = node.SelectSingleNode("dhead/d24")?.InnerText ?? "";
-                dictin.D25 = node.SelectSingleNode("dhead/d25")?.InnerText ?? "";
-                dictin.D26 = node.SelectSingleNode("dhead/d26")?.InnerText ?? "";
-
-                dictin.D30 = node.SelectSingleNode("dbody/d30")?.InnerText ?? "";
-                dictin.D31 = node.SelectSingleNode("dbody/d31")?.InnerText ?? "";
-                dictin.D32 = node.SelectSingleNode("dbody/d32")?.InnerText ?? "";
-                dictin.D33 = node.SelectSingleNode("dbody/d33")?.InnerText ?? "";
+                dictPreMas.D30 = node.SelectSingleNode("dbody/d30")?.InnerText ?? "";
+                dictPreMas.D31 = node.SelectSingleNode("dbody/d31")?.InnerText ?? "";
+                dictPreMas.D32 = node.SelectSingleNode("dbody/d32")?.InnerText ?? "";
+                dictPreMas.D33 = node.SelectSingleNode("dbody/d33")?.InnerText ?? "";
 
 
 
-                dictin.D35 = node.SelectSingleNode("dbody/d35")?.InnerText ?? "";
-                dictin.D36 = node.SelectSingleNode("dbody/d36")?.InnerText ?? "";
-                dictin.D37 = node.SelectSingleNode("dbody/d37")?.InnerText ?? "";
-                dictin.D38 = node.SelectSingleNode("dbody/d38")?.InnerText ?? "";
-                dictin.D43 = node.SelectSingleNode("dbody/d43")?.InnerText ?? "";
-                dictin.D44 = node.SelectSingleNode("dbody/d44")?.InnerText ?? "";
-                dictin.Pdatas = new List<ImportDeclareXml.Pdata>();
+                dictPreMas.D35 = node.SelectSingleNode("dbody/d35")?.InnerText ?? "";
+                dictPreMas.D36 = node.SelectSingleNode("dbody/d36")?.InnerText ?? "";
+                dictPreMas.D37 = node.SelectSingleNode("dbody/d37")?.InnerText ?? "";
+                dictPreMas.D38 = node.SelectSingleNode("dbody/d38")?.InnerText ?? "";
+                dictPreMas.D43 = node.SelectSingleNode("dbody/d43")?.InnerText ?? "";
+                dictPreMas.D44 = node.SelectSingleNode("dbody/d44")?.InnerText ?? "";
+                dictPreMas.Pdatas = new List<ImportDeclareXml.Pdata>();
                 var nodess = node.SelectNodes("dbody/pdata");
                 foreach (XmlNode nodesss in nodess) {
-                    var dictindd = new His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Pdata();
-                    dictindd.P1= nodesss.SelectSingleNode("p1")?.InnerText ?? "";
-                    dictindd.P2 = nodesss.SelectSingleNode("p2")?.InnerText ?? "";
-                    dictindd.P3 = nodesss.SelectSingleNode("p3")?.InnerText ?? "";
-                    dictindd.P4 = nodesss.SelectSingleNode("p4")?.InnerText ?? "";
-                    dictindd.P5 = nodesss.SelectSingleNode("p5")?.InnerText ?? "";
-                    dictindd.P6 = nodesss.SelectSingleNode("p6")?.InnerText ?? "";
-                    dictindd.P7 = nodesss.SelectSingleNode("p7")?.InnerText ?? "";
-                    dictindd.P8 = nodesss.SelectSingleNode("p8")?.InnerText ?? "";
-                    dictindd.P9 = nodesss.SelectSingleNode("p9")?.InnerText ?? "";
-                    dictindd.P10 = nodesss.SelectSingleNode("p10")?.InnerText ?? "";
-                    dictindd.P11 = nodesss.SelectSingleNode("p11")?.InnerText ?? "";
-                    dictindd.P12 = nodesss.SelectSingleNode("p12")?.InnerText ?? "";
-                    dictindd.P13 = nodesss.SelectSingleNode("p13")?.InnerText ?? "";
-                    dictindd.P15 = nodesss.SelectSingleNode("p15")?.InnerText ?? "";
+                    var dictPreDetail = new His_Pos.NewClass.Prescription.ImportDeclareXml.ImportDeclareXml.Pdata();
+                    dictPreDetail.P1= nodesss.SelectSingleNode("p1")?.InnerText ?? "";
+                    dictPreDetail.P2 = nodesss.SelectSingleNode("p2")?.InnerText ?? "";
+                    dictPreDetail.P3 = nodesss.SelectSingleNode("p3")?.InnerText ?? "";
+                    dictPreDetail.P4 = nodesss.SelectSingleNode("p4")?.InnerText ?? "";
+                    dictPreDetail.P5 = nodesss.SelectSingleNode("p5")?.InnerText ?? "";
+                    dictPreDetail.P6 = nodesss.SelectSingleNode("p6")?.InnerText ?? "";
+                    dictPreDetail.P7 = nodesss.SelectSingleNode("p7")?.InnerText ?? "";
+                    dictPreDetail.P8 = nodesss.SelectSingleNode("p8")?.InnerText ?? "";
+                    dictPreDetail.P9 = nodesss.SelectSingleNode("p9")?.InnerText ?? "";
+                    dictPreDetail.P10 = nodesss.SelectSingleNode("p10")?.InnerText ?? "";
+                    dictPreDetail.P11 = nodesss.SelectSingleNode("p11")?.InnerText ?? "";
+                    dictPreDetail.P12 = nodesss.SelectSingleNode("p12")?.InnerText ?? "";
+                    dictPreDetail.P13 = nodesss.SelectSingleNode("p13")?.InnerText ?? "";
+                    dictPreDetail.P15 = nodesss.SelectSingleNode("p15")?.InnerText ?? "";
 
-                    dictin.Pdatas.Add(dictindd);
+                    dictPreMas.Pdatas.Add(dictPreDetail);
                 }
-                dict2.Add(da.ToString());
-                dict.Add(dictin);
-                i++;
-
-
+                innerXmlList.Add(innerXml);
+                precriptionList.Add(dictPreMas); 
             }
-
-
-
-
-
-            //using (var reader = new StreamReader("C:\\DRUGT.xml"))
-            //{
-
-
-
-            //    serializer.Serialize(writer, productoServices);
-            //    XmlSerializer deserializer = new XmlSerializer(typeof(List<ImportDeclareXml.Ddata>),
-            //        new XmlRootAttribute("pharmacy"));
-            //    users = (List<ImportDeclareXml.Ddata>)deserializer.Deserialize(reader);
-            //}
-
-            //for (int i = 0; i<= users.Count; i++) {
-
-            //    dict2.Add(users.Count.ToString());
-            //}
+             
 
             MainWindow.ServerConnection.OpenConnection();
 
-            List<List<ImportDeclareXml.Ddata>> listGroup = new List<List<ImportDeclareXml.Ddata>>();
-            int j = 300;
-            for (int ii = 0; ii < dict.Count; ii += 300)
-            {
-                List<ImportDeclareXml.Ddata> cList = new List<ImportDeclareXml.Ddata>();
-                cList = dict.Take(j).Skip(ii).ToList();
-                List<string> cList2 = new List<string>();
-                cList2 = dict2.Take(j).Skip(ii).ToList();
+            //判斷申報檔重複
+            DataTable currentPreMas = PrescriptionDb.GetPrescriptionForImportXml();
 
-                j += 300;
-                listGroup.Add(cList);
-                PrescriptionDb.ImportDeclareXml(cList, cList2, "1");
+
+
+            int totalPrescriptionCount = precriptionList.Count;
+            foreach (DataRow currentPrescription in currentPreMas.Rows)
+            {
+                string cusIDnumber = currentPrescription["Cus_IDNumber"].ToString();
+                DateTime treatmentDate = currentPrescription.Field<DateTime>("PreMas_TreatmentDate");
+                string divisionID = currentPrescription["PreMas_DivisionID"].ToString();
+
+
+                for (int k = 0; k < precriptionList.Count; k++)
+                {
+                    int year = Convert.ToInt32(precriptionList[k].D14.Substring(0, 3)) + 1911;
+                    int month = Convert.ToInt32(precriptionList[k].D14.Substring(3, 2));
+                    int day = Convert.ToInt32(precriptionList[k].D14.Substring(5, 2));
+
+                    DateTime tempTreatmentDate = new DateTime(year, month, day);
+
+                    if (precriptionList[k].D3 == cusIDnumber && precriptionList[k].D13 == divisionID &&
+                        tempTreatmentDate == treatmentDate)
+                    {
+                        precriptionList.Remove(precriptionList[k--]); 
+                    }
+                } 
             }
-           
-            
+            int notRepeatPrescriptionCount = precriptionList.Count;
+
+            if (precriptionList.Count == 0)
+            {
+                MessageWindow.ShowMessage("此申報檔全部處方重複!", MessageType.ERROR);
+                MainWindow.ServerConnection.CloseConnection();
+                return;
+            }
+
+
+            PrescriptionDb.ImportDeclareXml(precriptionList, innerXmlList, "1");
+            //int j = 300;
+            //for (int ii = 0; ii < dict.Count; ii += 300)
+            //{
+            //    List<ImportDeclareXml.Ddata> cList = new List<ImportDeclareXml.Ddata>();
+            //    cList = dict.Take(j).Skip(ii).ToList();
+            //    List<string> cList2 = new List<string>();
+            //    cList2 = dict2.Take(j).Skip(ii).ToList();
+
+            //    j += 300; 
+            //    PrescriptionDb.ImportDeclareXml(dict, dict2, "1"); 
+            //}
             
             MainWindow.ServerConnection.CloseConnection();
-            
 
+            MessageWindow.ShowMessage($@"欲匯入{totalPrescriptionCount}張處方箋
+            重複處方張數:{totalPrescriptionCount - notRepeatPrescriptionCount}
+            成功匯入處方張數:{notRepeatPrescriptionCount}", MessageType.SUCCESS);
         }
 
         #endregion InitFunctions

@@ -122,11 +122,11 @@ namespace His_Pos.NewClass.Prescription
             }
         }
 
-        public static DataTable GetSearchPrescriptionsDataG000()
+        public static DataTable GetPrescriptionForImportXml()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchPrescriptionsG000]");
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionForImportXml]");
         }
-
+          
         private static void AddMedicineParameters(List<SqlParameter> parameterList, string conditionType, string medicineCondition)
         {
             switch (conditionType)
@@ -265,6 +265,8 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionMaster", SetImportDeclareXmlMaster(ddatas, declareFiles, preId, cs, fileId));
             DataBaseFunction.AddSqlParameter(parameterList, "PrescriptionDetail", SetImportDeclareXmlDetail(ddatas, preId));
             MainWindow.ServerConnection.ExecuteProc("[Set].[ImportDeclareXml]", parameterList);
+             
+          
         }
 
         public static DataTable UpdatePrescriptionByType(Prescription prescription, List<Pdata> prescriptionDetails)

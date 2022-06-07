@@ -24,7 +24,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.DeclareFileManage
         {
             string url = @"https://medvpn.nhi.gov.tw/";
             Process pro = new Process();
-            pro.StartInfo.FileName = "iexplore.exe";
+            pro.StartInfo.FileName = "msedge.exe";
+            //pro.StartInfo.FileName = "iexplore.exe";
             pro.StartInfo.Arguments = url;
             pro.Start();
         }

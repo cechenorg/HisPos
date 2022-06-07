@@ -28,13 +28,8 @@ namespace His_Pos.NewClass.Medicine.Usage
             Days = r.Field<byte?>("Usa_Days") ?? 0;
             Times = r.Field<byte?>("Usa_Times") ?? 0;
             PreDefault = r.Field<bool>("Usa_Default");
+            FreqRemark = r.Field<string>("FreqRemark");
 
-            //PrintIcons[0] = r.Field<bool>("UsaPri_Morning");
-            //PrintIcons[1] = r.Field<bool>("UsaPri_Noon");
-            //PrintIcons[2] = r.Field<bool>("UsaPri_Night");
-            //PrintIcons[3] = r.Field<bool>("UsaPri_Sleep");
-            //PrintIcons[4] = r.Field<bool>("UsaPri_BeforeMeal");
-            //PrintIcons[5] = r.Field<bool>("UsaPri_AfterMeal");
         }
 
         [Index(0)]
@@ -64,8 +59,8 @@ namespace His_Pos.NewClass.Medicine.Usage
         [Index(7)]
         public virtual bool PreDefault { get; set; }
 
-        //[Index(8)]
-        //public virtual bool[] PrintIcons { get; set; } = new bool[6];
+        [Index(8)]
+        public virtual string FreqRemark { get; set; } //藥品頻率
 
         public object Clone()
         {

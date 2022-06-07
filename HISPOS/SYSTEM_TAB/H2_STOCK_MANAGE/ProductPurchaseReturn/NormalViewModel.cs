@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Product;
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using DomainModel.Enum;
+using System.Threading;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -56,6 +57,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
         private BackgroundWorker initBackgroundWorker;
 
+        private bool isCanDelete;
+        public bool IsCanDelete
+        {
+            get => isCanDelete;
+            set { Set(() => IsCanDelete, ref isCanDelete, value); }
+        }
         public bool IsBusy
         {
             get => isBusy;
@@ -79,7 +86,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public StoreOrder CurrentStoreOrder
         {
-            get { return currentStoreOrder; }
+            get 
+            {
+                if (currentStoreOrder != null)
+                    IsCanDelete = currentStoreOrder.IsCanDelete;
+                return currentStoreOrder; 
+            }
             set
             {
                 if (CurrentStoreOrder != null && (currentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || currentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING))
@@ -130,6 +142,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
+                AddOrderByMinus();
             }
         }
 
@@ -164,8 +177,31 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (viewModel.NewStoreOrder != null)
             {
-                storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
-                CurrentStoreOrder = storeOrderCollection[0];
+                //storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
+                AddOrderByMinus();
+                storeOrderCollection = (StoreOrders)StoreOrderCollectionView.SourceCollection;
+                string tempId = Convert.ToString(viewModel.NewStoreOrder.ID);
+                int count = -1;
+                if(!string.IsNullOrEmpty(tempId))
+                {
+                    foreach (StoreOrder item in storeOrderCollection)
+                    {
+                        string orderId = Convert.ToString(item.ID);
+                        if (!string.IsNullOrEmpty(orderId) && tempId == orderId)
+                        {
+                            count = storeOrderCollection.IndexOf(item);
+                            break;
+                        }
+                    }
+                }
+                if(count >= 0 && count < storeOrderCollection.Count)
+                {
+                    CurrentStoreOrder = storeOrderCollection[count];
+                }
+                else
+                {
+                    CurrentStoreOrder = storeOrderCollection[0];
+                }
             }
         }
 
@@ -179,7 +215,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (isSuccess)
             {
-                storeOrderCollection.Remove(CurrentStoreOrder);
+                MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
+                //storeOrderCollection.Remove(CurrentStoreOrder);
+                AddOrderByMinus();
                 CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
             }
         }
@@ -194,7 +232,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
             if (isSuccess)
             {
-                storeOrderCollection.Remove(CurrentStoreOrder);
+                //storeOrderCollection.Remove(CurrentStoreOrder);
+                AddOrderByMinus();
                 CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
             }
         }
@@ -221,7 +260,24 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder.MoveToNextStatus();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
-                storeOrderCollection.ReloadCollection();
+                //storeOrderCollection.ReloadCollection();
+                //(20220510)確認收貨之後清空搜尋條件
+                //StoreOrder currentOrder = null;
+                if (currentStoreOrder.IsDoneOrder)//確認收貨
+                {
+                    SearchString = string.Empty;
+                    //currentOrder = currentStoreOrder;
+                    storeOrderCollection = StoreOrders.GetOrdersNotDone();
+                    var orderedList = storeOrderCollection.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
+                    StoreOrders result = new StoreOrders();
+                    for (int i = orderedList.Count() - 1; i >= 0; i--)
+                    {
+                        result.Add(orderedList[i]);
+                    }
+                    storeOrderCollection = result;
+                    InitData(storeOrderCollection);
+                    StoreOrderCollectionView.MoveCurrentToFirst();
+                }
             }
             else
             {
@@ -412,6 +468,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
                 storeOrderCollection.ReloadCollection();
+                AddOrderByMinus();
+                StoreOrderCollectionView.MoveCurrentToFirst();
             }
         }
 
@@ -491,6 +549,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 //Order Customer Filter
                 if (tempOrder is PurchaseOrder && !string.IsNullOrEmpty((tempOrder as PurchaseOrder).PatientData) && (tempOrder as PurchaseOrder).PatientData.Contains(SearchString))
                     returnValue = true;
+
+                //預定客戶
+                if (string.IsNullOrEmpty(tempOrder.TargetPreOrderCustomer)  == false && tempOrder.TargetPreOrderCustomer.Contains(SearchString))
+                    returnValue = true;
+
+                //慢箋預約
+                if (tempOrder is PurchaseOrder)
+                {
+                    if(string.IsNullOrEmpty((tempOrder as PurchaseOrder).PreOrderCustomer) == false && (tempOrder as PurchaseOrder).PreOrderCustomer.Contains(SearchString))
+                        returnValue = true;
+                }
+                   
+
+                //採購人
+                if (string.IsNullOrEmpty(tempOrder.OrderEmployeeName) == false && tempOrder.OrderEmployeeName.Contains(SearchString))
+                    returnValue = true;
+                
 
                 //Order Product ID Name Note Filter
                 //if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )

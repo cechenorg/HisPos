@@ -1,5 +1,6 @@
 ﻿using His_Pos.Service;
 using System.Data;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
@@ -16,7 +17,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         {
         }
 
-        public PurchaseMedicine(DataRow dataRow) : base(dataRow)
+        public PurchaseMedicine(DataRow dataRow, OrderStatusEnum orderStatus) : base(dataRow, orderStatus)
         {
             IsControl = dataRow.Field<byte?>("Med_Control");
             IsFrozen = dataRow.Field<bool>("Med_IsFrozen");

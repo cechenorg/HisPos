@@ -1,4 +1,4 @@
-﻿using His_Pos.NewClass;
+﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Prescription;
@@ -224,7 +224,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void CalculateTotalPrice()
         {
-            TotalPrice = OrderProducts.Sum(p => Math.Round(p.SubTotal));
+            TotalPrice = Math.Round(OrderProducts.Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
         }
 
         public override void SetProductToProcessingStatus()
@@ -233,17 +233,15 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         public override int GetOrderProductsIsOTC()
-        {
-            PurchaseProducts purchaseProductsOTC = new PurchaseProducts();
-            purchaseProductsOTC = PurchaseProducts.GetProductsByStoreOrderID(ID);
+        { 
+            PurchaseProducts purchaseProductsOTC = PurchaseProducts.GetProductsByStoreOrderID(ID, OrderStatus);
             int type = purchaseProductsOTC[0].Type;
             return type;
         }
 
         public override void GetOrderProducts()
         {
-            OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID);
-            TotalPrice = OrderProducts.Sum(p => Math.Round(p.SubTotal));
+            OrderProducts = PurchaseProducts.GetProductsByStoreOrderID(ID, OrderStatus );
 
             if (OrderManufactory.ID.Equals("0"))
                 // OrderProducts.SetToSingde();
@@ -271,11 +269,11 @@ namespace His_Pos.NewClass.StoreOrder
             switch (dataTable.Rows[0].Field<string>("TYPE"))
             {
                 case "O":
-                    purchaseProduct = new PurchaseOTC(dataTable.Rows[0]);
+                    purchaseProduct = new PurchaseOTC(dataTable.Rows[0], OrderStatus);
                     break;
 
                 case "M":
-                    purchaseProduct = new PurchaseMedicine(dataTable.Rows[0]);
+                    purchaseProduct = new PurchaseMedicine(dataTable.Rows[0], OrderStatus);
                     break;
 
                 default:
@@ -408,7 +406,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         #endregion ///// Batch Function /////
 
-        private bool AddNewStoreOrderLowerThenOrderAmount()
+        public bool AddNewStoreOrderLowerThenOrderAmount()
         {
             DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, OrderManufactory.ID, OrderWarehouse.ID, OrderProducts);
 
@@ -440,13 +438,13 @@ namespace His_Pos.NewClass.StoreOrder
                     StoreOrderDB.StoreOrderToWaiting(newstoordId);
                     return true;
                 }
-                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId,"");
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             }
             catch (Exception)
             {
-                StoreOrderDB.RemoveStoreOrderByID(newstoordId);
+                StoreOrderDB.RemoveStoreOrderByID(newstoordId,"");
                 MessageWindow.ShowMessage("傳送藥健康失敗 請稍後再帶出處方傳送", MessageType.ERROR);
                 return false;
             }

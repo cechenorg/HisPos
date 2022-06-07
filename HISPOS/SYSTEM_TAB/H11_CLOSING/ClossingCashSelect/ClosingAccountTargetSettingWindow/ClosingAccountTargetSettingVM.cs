@@ -61,9 +61,17 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
 
-            foreach(var data in TargetDataCollection)
+            var originData = GetTargetData();
+
+            foreach (var data in TargetDataCollection)
             {
-                repo.UpdateClosingAccountTarget(data); 
+                var currentOriginData = originData.SingleOrDefault(_ => _.VerifyKey == data.VerifyKey);
+
+                if(currentOriginData == null)
+                    continue;
+                
+                if(currentOriginData.MonthlyTarget != data.MonthlyTarget) 
+                    repo.UpdateClosingAccountTarget(data); 
             }
 
             repo.UpdateWorkingDaySetting(ClosingAccountMonth, CurrentMonthWorkingDayCount);
@@ -71,10 +79,14 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
         }
 
         private void SearchAction()
+        { 
+            TargetDataCollection = new ObservableCollection<MonthlyAccountTarget>(GetTargetData()); 
+        }
+
+        private IEnumerable<MonthlyAccountTarget> GetTargetData()
         {
-            TargetDataCollection.Clear();
-            var firstDayOfMonth = new DateTime(ClosingAccountMonth.Year, ClosingAccountMonth.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            List<MonthlyAccountTarget> result = new List<MonthlyAccountTarget>();
 
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
@@ -82,7 +94,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
             var pharmacyTargetList = repo.GetMonthTargetByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName)
                 .Where(_ => _.Month.Month == ClosingAccountMonth.Month).ToList();
 
-            foreach(var data in pharmacyTargetList)
+            foreach (var data in pharmacyTargetList)
             {
                 MonthlyAccountTarget pharmacyTaget = new MonthlyAccountTarget();
                 var info = gtroupServerInfo.First(_ => _.VerifyKey.ToLower() == data.VerifyKey.ToLower());
@@ -90,14 +102,15 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
                 pharmacyTaget.PharmacyName = info.Name;
                 pharmacyTaget.MonthlyTarget = data.MonthlyTarget;
                 pharmacyTaget.Month = ClosingAccountMonth;
-                TargetDataCollection.Add(pharmacyTaget);
+                result.Add(pharmacyTaget);
             }
 
             var thisMonthWorkingSetting = repo.GetWorkingDaySetting().FirstOrDefault(_ => _.Date.Month == ClosingAccountMonth.Month && _.Date.Year == ClosingAccountMonth.Year);
             CurrentMonthWorkingDayCount = thisMonthWorkingSetting.DayCount;
-             
+
             MainWindow.ServerConnection.CloseConnection();
 
+            return result;
         }
     }
 }

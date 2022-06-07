@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.NewClass.Report.Accounts;
 using His_Pos.NewClass.Report.Accounts.AccountsRecordDetails;
 using His_Pos.Service;
@@ -122,8 +122,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
             ExpensesCheck = selectedDetail.CashFlowValue < 0;
             IncomeCheck = !ExpensesCheck;
             var type = selectedDetail.CashFlowValue >= 0 ? "收入" : "支出";
-            OriginContent =
-                $"類別 : {type}  科目 : {selectedDetail.Name}  金額 : {Math.Abs(selectedDetail.CashFlowValue)} \n備註 : {selectedDetail.Note}  登錄時間 : {DateTimeExtensions.ConvertToTaiwanCalenderWithTime(selectedDetail.Date, true)} 登錄人 : {selectedDetail.EmpName}";
+            OriginContent = string.Format("類別 : {0}     金額 : {1}    科目 :{2} \n登錄時間 : {3}    立帳日期 : {4}  \n立帳人 : {5}  備註 : {6}", 
+                type,
+                Math.Abs(selectedDetail.CashFlowValue),
+                selectedDetail.Name,
+                DateTimeExtensions.ConvertToTaiwanCalenderWithTime(selectedDetail.InsertDate, true),
+                DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(selectedDetail.Date),
+                selectedDetail.EmpName,
+                selectedDetail.Note
+                );
             SelectedCashFlowAccount = CashFlowAccounts.SingleOrDefault(acc => acc.AccountName == selectedDetail.Name);
             if (SelectedCashFlowAccount == null)
                 SelectedCashFlowAccount = CashFlowAccounts.FirstOrDefault();

@@ -2,9 +2,11 @@
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Prescription.Search
 {
@@ -23,10 +25,23 @@ namespace His_Pos.NewClass.Prescription.Search
                     break;
 
                 default:
-                    foreach (DataRow r in table.Rows)
+                    //foreach (DataRow r in table.Rows)
+                    //{
+                    //    Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));
+                    //}
+
+                    ConcurrentBag<PrescriptionSearchPreview> threadSafeList = new ConcurrentBag<PrescriptionSearchPreview>();
+
+                    Parallel.For(0, table.Rows.Count, r =>
                     {
-                        Add(new PrescriptionSearchPreview(r, PrescriptionType.Normal));
+                          threadSafeList.Add(new PrescriptionSearchPreview(table.Rows[r], PrescriptionType.Normal));
+                    });
+
+                    foreach (var data in threadSafeList)
+                    {
+                        Add(data);
                     }
+                     
                     break;
             }
         }

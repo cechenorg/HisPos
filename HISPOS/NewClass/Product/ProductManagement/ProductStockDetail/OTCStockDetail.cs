@@ -97,7 +97,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
 
         internal void GetOnTheWayDetailByID(string proID, string wareID)
         {
-            OnTheWayDetail = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID);
+            OnTheWayDetail = OnTheWayDetailStructs.GetOnTheWayDetailByID(proID, wareID,0);
         }
 
         #endregion ----- Define Functions -----

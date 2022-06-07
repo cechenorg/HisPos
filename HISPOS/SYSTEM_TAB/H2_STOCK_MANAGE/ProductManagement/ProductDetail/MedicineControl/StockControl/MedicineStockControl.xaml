@@ -20,40 +20,49 @@
         <DataTemplate x:Key="NormalData" DataType="UserControl">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition />
+                    <RowDefinition Height="33" />
+                    <RowDefinition Height="33" />
+                    <RowDefinition Height="33"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,0"
+                        Margin="30,0,0,0"
                         VerticalAlignment="Center"
                         Content="架上"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
-                        Width="80"
+                        Width="75"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
                 </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                     <Label
-                        Margin="20,0,0,10"
+                        Margin="30,0,0,0"
                         VerticalAlignment="Center"
                         Content="藥袋"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
-                        Width="80"
-                        Margin="0,0,0,10"
+                        Width="75"
+                        Margin="0,0,0,0"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="20"
+                        FontSize="18"
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center"
@@ -109,70 +118,130 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                    <Label
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="登錄需求"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="18"
+                        Foreground="{StaticResource ForeGround}" />
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock
+                        Width="75"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="18"
+                        Foreground="{StaticResource ForeGround}"
+                        Text="{Binding StockDetail.DemandInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                        TextAlignment="Center"
+                        ToolTipService.ShowDuration="600000">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <EventSetter Event="MouseEnter" Handler="GetMedBagDetail" />
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <DataGrid
+                                            Width="420"
+                                            Height="Auto"
+                                            AutoGenerateColumns="False"
+                                            Background="Transparent"
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            CanUserReorderColumns="False"
+                                            CanUserResizeColumns="False"
+                                            CanUserResizeRows="False"
+                                            CanUserSortColumns="False"
+                                            FontFamily="Courier New"
+                                            FontSize="18"
+                                            Foreground="WhiteSmoke"
+                                            GridLinesVisibility="None"
+                                            HeadersVisibility="None"
+                                            ItemsSource="{Binding StockDetail.DemandStockDetails, UpdateSourceTrigger=PropertyChanged}"
+                                            RowHeight="25">
+                                            <DataGrid.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="Padding" Value="0" />
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                </Style>
+                                            </DataGrid.CellStyle>
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Width="50" Binding="{Binding Type}" />
+                                                <DataGridTextColumn Width="100" Binding="{Binding Name}" />
+                                                <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" />
+                                                <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}" />
+                                                <DataGridTextColumn Width="70" Binding="{Binding SelfAmount, StringFormat=N1}">
+                                                    <DataGridTextColumn.ElementStyle>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                                        </Style>
+                                                    </DataGridTextColumn.ElementStyle>
+                                                </DataGridTextColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="ErrorData" DataType="UserControl">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="32" />
-                    <RowDefinition Height="32" />
-                    <RowDefinition />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
+                    <RowDefinition Height="25" />
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                     <Label
-                        Margin="25,0,0,0"
+                        Margin="30,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="架上"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="18"
+                        FontSize="12"
                         Foreground="WhiteSmoke" />
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
-                        Width="90"
+                        Width="75"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="17"
+                        FontSize="12"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.ShelfInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                         TextAlignment="Center" />
                 </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                     <Label
-                        Margin="25,0,0,0"
+                        Margin="30,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="藥袋"
                         FontFamily="Segoe UI Semibold"
-                        FontSize="18"
+                        FontSize="12"
                         Foreground="WhiteSmoke" />
-                    <TextBlock
-                        Width="90"
-                        Margin="0,0,0,0"
-                        VerticalAlignment="Center"
-                        FontFamily="Segoe UI Semi"
-                        FontSize="17"
-                        Foreground="WhiteSmoke"
-                        Text="{Binding StockDetail.TotalInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                        TextAlignment="Center" />
                 </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <Label
-                        Margin="25,0,0,10"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="需求"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="18"
-                        Foreground="WhiteSmoke" />
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock
-                        Width="90"
-                        Margin="0,0,0,10"
+                        Width="75"
                         VerticalAlignment="Center"
                         FontFamily="Segoe UI Semi"
-                        FontSize="17"
+                        FontSize="12"
                         Foreground="WhiteSmoke"
                         Text="{Binding StockDetail.MedBagInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                        TextAlignment="Center"
+                        TextAlignment="Center" 
                         ToolTipService.ShowDuration="600000">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
@@ -223,6 +292,99 @@
                                 </Setter>
                             </Style>
                         </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                    <Label
+                        Margin="15,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="登錄需求"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="12"
+                        Foreground="WhiteSmoke" />
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock
+                        Width="75"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="12"
+                        Foreground="WhiteSmoke"
+                        Text="{Binding StockDetail.DemandInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                        TextAlignment="Center"
+                        ToolTipService.ShowDuration="600000">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <EventSetter Event="MouseEnter" Handler="GetMedBagDetail" />
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <DataGrid
+                                            Width="420"
+                                            Height="Auto"
+                                            AutoGenerateColumns="False"
+                                            Background="Transparent"
+                                            CanUserAddRows="False"
+                                            CanUserDeleteRows="False"
+                                            CanUserReorderColumns="False"
+                                            CanUserResizeColumns="False"
+                                            CanUserResizeRows="False"
+                                            CanUserSortColumns="False"
+                                            FontFamily="Courier New"
+                                            FontSize="18"
+                                            Foreground="WhiteSmoke"
+                                            GridLinesVisibility="None"
+                                            HeadersVisibility="None"
+                                            ItemsSource="{Binding StockDetail.DemandStockDetails, UpdateSourceTrigger=PropertyChanged}"
+                                            RowHeight="25">
+                                            <DataGrid.CellStyle>
+                                                <Style TargetType="{x:Type DataGridCell}">
+                                                    <Setter Property="Padding" Value="0" />
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                                </Style>
+                                            </DataGrid.CellStyle>
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Width="50" Binding="{Binding Type}" />
+                                                <DataGridTextColumn Width="100" Binding="{Binding Name}" />
+                                                <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" />
+                                                <DataGridTextColumn Width="60" Binding="{Binding SelfAmountHeader}" />
+                                                <DataGridTextColumn Width="70" Binding="{Binding SelfAmount, StringFormat=N1}">
+                                                    <DataGridTextColumn.ElementStyle>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                                        </Style>
+                                                    </DataGridTextColumn.ElementStyle>
+                                                </DataGridTextColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+                    <Label
+                        Margin="15,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="不足需求"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="12"
+                        Foreground="WhiteSmoke" />
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock
+                        Width="75"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="12"
+                        Foreground="WhiteSmoke"
+                        Text="{Binding StockDetail.InsuffInventory, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                        TextAlignment="Center"
+                        ToolTipService.ShowDuration="600000">
                     </TextBlock>
                 </StackPanel>
             </Grid>
@@ -443,11 +605,11 @@
                 ToolTipService.ShowDuration="600000">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
-                        <EventSetter Event="MouseEnter" Handler="GetMedBagDetail" />
+                        <EventSetter Event="MouseEnter" Handler="GetOnTheWayDetail" />
                         <Setter Property="ToolTip">
                             <Setter.Value>
                                 <DataGrid
-                                    Width="420"
+                                    Width="730"
                                     Height="Auto"
                                     AutoGenerateColumns="False"
                                     Background="Transparent"
@@ -462,7 +624,7 @@
                                     Foreground="WhiteSmoke"
                                     GridLinesVisibility="None"
                                     HeadersVisibility="None"
-                                    ItemsSource="{Binding StockDetail.MedBagSendDetails, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemsSource="{Binding StockDetail.OnTheWayMedBag, UpdateSourceTrigger=PropertyChanged}"
                                     RowHeight="25">
                                     <DataGrid.CellStyle>
                                         <Style TargetType="{x:Type DataGridCell}">
@@ -472,11 +634,12 @@
                                         </Style>
                                     </DataGrid.CellStyle>
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Width="50" Binding="{Binding Type}" />
-                                        <DataGridTextColumn Width="100" Binding="{Binding Name}" />
-                                        <DataGridTextColumn Width="130" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" />
-                                        <DataGridTextColumn Width="60" Binding="{Binding SendAmountHeader}" />
-                                        <DataGridTextColumn Width="70" Binding="{Binding SendAmount, StringFormat=N1}">
+                                        <DataGridTextColumn Width="90" Binding="{Binding Status}" />
+                                        <DataGridTextColumn Width="150" Binding="{Binding ID}" />
+                                        <DataGridTextColumn Width="210" Binding="{Binding CreateDate, Converter={StaticResource DateTimeToMinuteConverter}}" />
+                                        <DataGridTextColumn Width="80" Binding="{Binding CusName}" />
+                                        <DataGridTextColumn Width="50" Binding="{Binding AmountHeader}" />
+                                        <DataGridTextColumn Width="100" Binding="{Binding MergeAmount}">
                                             <DataGridTextColumn.ElementStyle>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="HorizontalAlignment" Value="Right" />

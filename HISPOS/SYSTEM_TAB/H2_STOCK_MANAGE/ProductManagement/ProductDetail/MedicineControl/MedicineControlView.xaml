@@ -53,27 +53,12 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <StackPanel
-                    Grid.Row="0"
-                    Orientation="Horizontal"
+                <StackPanel Grid.Row="0" Orientation="Horizontal"
                     Visibility="{Binding MedicineDetail.IsControl, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="26"
-                        Foreground="IndianRed"
-                        Text="管制藥" />
-                    <TextBlock
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="26"
-                        Foreground="IndianRed"
-                        Text="{Binding MedicineDetail.ControlLevel}" />
+                    <TextBlock FontFamily="Segoe UI Semibold" FontSize="26" Foreground="IndianRed" Text="管制藥" />
+                    <TextBlock FontFamily="Segoe UI Semibold" FontSize="26" Foreground="IndianRed" Text="{Binding MedicineDetail.ControlLevel}" />
                 </StackPanel>
-                <TextBlock
-                    Grid.Row="1"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="26"
-                    Foreground="RoyalBlue"
-                    Text="冷藏藥"
+                <TextBlock Grid.Row="1" FontFamily="Segoe UI Semibold" FontSize="26" Foreground="RoyalBlue"  Text="冷藏藥"
                     Visibility="{Binding MedicineDetail.IsFrozen, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </DataTemplate>
@@ -118,19 +103,10 @@
                 Foreground="DimGray"
                 IsReadOnly="True"
                 Text="{Binding Medicine.ID}" />
-            <StackPanel
-                Grid.Row="0"
-                Grid.Column="1"
-                Orientation="Horizontal">
-                <TextBox
-                    Width="1110"
-                    Margin="20,0,20,0"
-                    Padding="0"
-                    BorderBrush="Transparent"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="35"
-                    Foreground="Black"
-                    Text="{Binding Medicine.ChineseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                <TextBox Width="1030" Margin="20,0,20,0" BorderBrush="Transparent" 
+                         FontFamily="Segoe UI Semibold" FontSize="35" Foreground="Black"
+                        Text="{Binding Medicine.ChineseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataChangedCommand}" />

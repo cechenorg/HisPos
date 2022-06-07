@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.ErrorUploadWindow;
 using His_Pos.NewClass.Medicine.MedBag;
@@ -425,7 +425,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("PharmacyName_Id",$"{VM.CurrentPharmacy.Name}({VM.CurrentPharmacy.ID})"),
                         new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                         new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
-                        new ReportParameter("MedicalPerson",p.Pharmacist.Name),
+                        new ReportParameter("MedicalPerson",p.Pharmacist is null ?VM.CurrentPharmacy.GetPharmacist().Name:p.Pharmacist.Name),
                         new ReportParameter("PatientName", p.Patient.Name),
                         new ReportParameter("PatientGender_Birthday",$"{cusGender}/{DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)}"),
                         new ReportParameter("AdjustDate", adjustDate),
@@ -448,6 +448,7 @@ namespace His_Pos.NewClass.Prescription.Service
                         new ReportParameter("SideEffect", m.SideEffect),
                         new ReportParameter("Note", m.Note),
                         new ReportParameter("Usage", m.Usage),
+                        new ReportParameter("FreqRemark", m.FreqRemark),
                         new ReportParameter("MedicineDay", m.MedicineDays),
                         new ReportParameter("Amount", m.Total),
                         new ReportParameter("Form", m.Form),
@@ -488,7 +489,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 new ReportParameter("PharmacyName_Id",$"{VM.CurrentPharmacy.Name}({VM.CurrentPharmacy.ID})"),
                 new ReportParameter("PharmacyAddress", VM.CurrentPharmacy.Address),
                 new ReportParameter("PharmacyTel", VM.CurrentPharmacy.Tel),
-                new ReportParameter("MedicalPerson", p.Pharmacist.Name),
+                new ReportParameter("MedicalPerson",p.Pharmacist is null ?VM.CurrentPharmacy.GetPharmacist().Name:p.Pharmacist.Name),
                 new ReportParameter("PatientName", p.Patient.Name),
                 new ReportParameter("PatientGender_Birthday",$"{cusGender}/{DateTimeExtensions.NullableDateToTWCalender(p.Patient.Birthday, true)}"),
                 new ReportParameter("TreatmentDate", treatmentDateChi),
@@ -884,6 +885,9 @@ namespace His_Pos.NewClass.Prescription.Service
         private static Prescription GetPrescriptionByID(int preID, PrescriptionType type)
         {
             MainWindow.ServerConnection.OpenConnection();
+            DataTable table = PrescriptionDb.GetPrescriptionByID(preID);
+            if (table == null || table.Rows.Count == 0)
+                return null;
             var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
             var selected = new Prescription(r, type);
             selected.InsertTime = r.Field<DateTime?>("InsertTime");

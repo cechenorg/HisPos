@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
-using His_Pos.NewClass;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.StoreOrder.ExportOrderRecord;
@@ -14,6 +14,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using DomainModel.Enum;
+using System.Windows.Threading;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
@@ -154,7 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 double purchaseSum = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP && s.OrderType == OrderTypeEnum.PURCHASE).Sum(s => s.TotalPrice);
                 double returnSum = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP && s.OrderType == OrderTypeEnum.RETURN).Sum(s => s.TotalPrice);
 
-                TotalPrice = purchaseSum - returnSum;
+                TotalPrice = Math.Round((purchaseSum - returnSum),0, MidpointRounding.AwayFromZero);
             }
             else
             {
@@ -180,6 +181,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             DeleteOrderWindow deleteOrderWindow = new DeleteOrderWindow(CurrentStoreOrder.ID, CurrentStoreOrder.ReceiveID);
             deleteOrderWindow.ShowDialog();
+            int index = 0;
+            try
+            {
+                index = StoreOrderCollection.IndexOf(currentStoreOrder);
+            }
+            catch{}
+            MainWindow.ServerConnection.OpenConnection();
+            StoreOrderCollection = StoreOrders.GetOrdersDone(SearchStartDate, SearchEndDate, SearchOrderID, SearchManufactoryID, SearchProductID, SearchWareName);
+            MainWindow.ServerConnection.CloseConnection();
+            CurrentStoreOrder = StoreOrderCollection[index];
         }
 
         private void ExportOrderDataAction(string type)

@@ -37,40 +37,7 @@
                 Content="{Binding PrescriptionDetailReportSum.Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="25" />
-            <Label
-                Content="筆"
-                FontFamily="Segoe UI Semibold"
-                FontSize="25" />
-            <!--<Label
-                Margin="10,0,0,0"
-                Content="調劑案件"
-                FontFamily="Segoe UI Semibold"
-                FontSize="25" />
-            <ComboBox
-                Width="100"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                ItemsSource="{Binding AdjustCaseString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding AdjustCaseSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
-            <!--<Label
-                Margin="20,0,0,0"
-                Content="合作院所"
-                FontFamily="Segoe UI Semibold"
-                FontSize="25"
-                Visibility="{Binding CoopVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <ComboBox
-                Width="200"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                ItemsSource="{Binding CoopString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding CoopSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Visibility="{Binding CoopVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
+            <Label  Content="筆" FontFamily="Segoe UI Semibold" FontSize="25" /> 
         </StackPanel>
         <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
         <DataGrid
