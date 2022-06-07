@@ -15,6 +15,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
     {
         public Pharmacy()
         {
+            MedicalPersonnels = new Employees();
         }
 
         public Pharmacy(DataRow r)
@@ -29,7 +30,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             GroupServerName = r.Field<string>("GroupServerName");
             TAXNUM = r.Field<string>("PHAMAS_TAXNUM");
             VerifyKey = r.Field<string>("PHAMAS_VerifyKey");
-             
+            MedicalPersonnels = new Employees();
         }
 
         private string id;
@@ -94,7 +95,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         public Employee MedicalPersonnel { get; set; }
 
         [IgnoreFormat]
-        public Employees MedicalPersonnels { get; set; }
+        public Employees MedicalPersonnels { get; set; }  
 
         [IgnoreFormat]
         public string GroupServerName { get; set; }
@@ -116,6 +117,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]); 
             pharmacy.MedicalPersonnels = new Employees();
             pharmacy.MedicalPersonnels.InitPharmacists();
+
             return pharmacy;
         }
 

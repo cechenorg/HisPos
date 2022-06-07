@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using System;
 using System.IO;
@@ -37,6 +39,7 @@ namespace His_Pos.FunctionWindow
 
         public LoginWindowViewModel()
         {
+            
             LoginCommand = new RelayCommand<object>(LoginAction);
             LeaveCommand = new RelayCommand(LeaveAction);
             CheckCsHis();
@@ -54,14 +57,16 @@ namespace His_Pos.FunctionWindow
 
         private void LoginAction(object sender)
         { 
-            Employee user = Employee.Login(Account, (sender as PasswordBox)?.Password);
-             
-            if (user != null)
+            Employee loginEmployee = Employee.Login(Account, (sender as PasswordBox)?.Password);
+            MainWindow mainWindow = new MainWindow(loginEmployee);
+            bool isEnable = EmployeeDb.CheckEmployeeIsEnable(loginEmployee.ID);
+
+            if (loginEmployee != null )
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();
                 //loadingWindow.GetNecessaryData(user);
-                NewFunction.ExceptionLog(user.Name + " Login");
-                MainWindow mainWindow = new MainWindow(user);
+                NewFunction.ExceptionLog(loginEmployee.Name + " Login");
+               
                 mainWindow.Show();
                 Messenger.Default.Send(new NotificationMessage("CloseLogin"));
             }

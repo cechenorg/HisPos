@@ -114,6 +114,27 @@ namespace His_Pos.NewClass.Person.Employee
             return result;
         }
 
+        public static bool CheckEmployeeIsEnable(int empID)
+        {
+            bool result = false;
+
+            string queryDB = string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName)
+                ? Properties.Settings.Default.SystemSerialNumber
+                : ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName;
+             
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                var query = conn.QueryFirst<bool>($"{queryDB}.[Get].[CheckEmployeeEnable]",
+                     param: new { EmpID = empID },
+                     commandType: CommandType.StoredProcedure);
+
+
+                result = query ;
+            });
+
+            return result; 
+        }
+
         public static DataTable CheckIdNumber(string idNumber)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
