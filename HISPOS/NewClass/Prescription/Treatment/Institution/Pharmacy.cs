@@ -115,7 +115,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         {
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]); 
-            pharmacy.MedicalPersonnels = new Employees();
             pharmacy.MedicalPersonnels.InitPharmacists();
 
             return pharmacy;

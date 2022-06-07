@@ -116,22 +116,32 @@ namespace His_Pos.NewClass.Person.Employee
 
         public static bool CheckEmployeeIsEnable(int empID)
         {
-            bool result = false;
-
-            string queryDB = string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName)
-                ? Properties.Settings.Default.SystemSerialNumber
-                : ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName;
+            bool result = false; 
              
+            if(string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false)
+            {
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    result = conn.QueryFirst<bool>($"{ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName}.[Get].[CheckEmployeeEnable]",
+                         param: new { EmpID = empID },
+                         commandType: CommandType.StoredProcedure);
+                     
+                });
+
+                //若sever的權限是false 則直接回傳false
+                if (result == false)
+                    return false;
+            }
+             
+            //query各自藥局
             SQLServerConnection.DapperQuery((conn) =>
             {
-                var query = conn.QueryFirst<bool>($"{queryDB}.[Get].[CheckEmployeeEnable]",
+                result = conn.QueryFirst<bool>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[CheckEmployeeEnable]",
                      param: new { EmpID = empID },
                      commandType: CommandType.StoredProcedure);
 
-
-                result = query ;
             });
-
+             
             return result; 
         }
 

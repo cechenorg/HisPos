@@ -58,21 +58,21 @@ namespace His_Pos.FunctionWindow
         private void LoginAction(object sender)
         { 
             Employee loginEmployee = Employee.Login(Account, (sender as PasswordBox)?.Password);
-            MainWindow mainWindow = new MainWindow(loginEmployee);
+            ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             bool isEnable = EmployeeDb.CheckEmployeeIsEnable(loginEmployee.ID);
 
-            if (loginEmployee != null )
+            if (loginEmployee != null && isEnable)
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();
                 //loadingWindow.GetNecessaryData(user);
                 NewFunction.ExceptionLog(loginEmployee.Name + " Login");
-               
+                MainWindow mainWindow = new MainWindow(loginEmployee);
                 mainWindow.Show();
                 Messenger.Default.Send(new NotificationMessage("CloseLogin"));
             }
             else
             {
-                IsAccountWrong = true;
+                IsAccountWrong = true; 
             }
         }
 
