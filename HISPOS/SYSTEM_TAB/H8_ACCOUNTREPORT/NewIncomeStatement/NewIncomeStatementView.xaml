@@ -1,0 +1,330 @@
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement.NewIncomeStatementView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="450"
+    d:DesignWidth="1365"
+    d:DataContext="{d:DesignInstance Type=local:NewIncomeStatementViewModel}"
+    mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding ReloadCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <UserControl.Resources>
+        <DataTemplate x:Key="expanderHeader">
+            <TextBlock
+                FontFamily="Segoe UI Semibold"
+                FontSize="24"
+                Text="{Binding}"
+                TextWrapping="Wrap" />
+        </DataTemplate>
+        <Style
+            x:Key="columnHeader"
+            BasedOn="{StaticResource {x:Type DataGridColumnHeader}}"
+            TargetType="DataGridColumnHeader">
+            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style
+            x:Key="row"
+            BasedOn="{StaticResource {x:Type DataGridRow}}"
+            TargetType="DataGridRow">
+            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style
+            x:Key="cell"
+            BasedOn="{StaticResource {x:Type DataGridCell}}"
+            TargetType="DataGridCell">
+            <Setter Property="Padding" Value="0,8,5,8" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style
+            x:Key="totalTextBlock"
+            BasedOn="{StaticResource {x:Type TextBlock}}"
+            TargetType="TextBlock">
+            <Setter Property="Width" Value="100" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style
+            x:Key="totalCell"
+            BasedOn="{StaticResource {x:Type DataGridCell}}"
+            TargetType="DataGridCell">
+            <Setter Property="Padding" Value="0,8,5,8" />
+            <Setter Property="TextBlock.TextAlignment" Value="Right" />
+            <Setter Property="Background" Value="Khaki" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Khaki" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <xctk:BusyIndicator x:Name="bi">
+        <ScrollViewer x:Name="scrollviewer">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="20" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Label
+                        Height="60"
+                        Margin="20,0,0,0"
+                        VerticalContentAlignment="Center"
+                        Content="查詢年份"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20" />
+                    <Button
+                        x:Name="btnLeft"
+                        Width="30"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding btn_LeftCommand}">
+                        <Image Height="16" Source="/Images/left.png" />
+                    </Button>
+                    <TextBox Text="{Binding InputYear,UpdateSourceTrigger=PropertyChanged}" 
+                             Width="100"  Margin="0,0,0,0"  VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                        FontFamily="Segoe UI Semi"  FontSize="16" Foreground="Black" GotFocus="tbYear_GotFocus" >
+                        <TextBox.InputScope>
+                            <InputScope>
+                                <InputScope.Names>
+                                    <InputScopeName NameValue="AlphanumericHalfWidth" />
+                                </InputScope.Names>
+                            </InputScope>
+                        </TextBox.InputScope>
+                    </TextBox>
+                    <Button
+                        x:Name="btnRight"
+                        Width="30"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding btn_RightCommand}">
+                        <Image Height="16" Source="/Images/right.png" />
+                    </Button>
+                    <Button  Margin="10,0,0,0" Command="{Binding SearchCommand}"
+                        Background="RoyalBlue" BorderThickness="0"  Content="重新整理"
+                        FontFamily="Segoe UI Semibold" FontSize="17" />
+                    <Button Command="{Binding ExportCsvCommand}"
+                        Margin="10,0,0,0"  Background="RoyalBlue"  BorderThickness="0" 
+                        Content="匯出Excel"  FontFamily="Segoe UI Semibold" FontSize="17" />
+                </StackPanel>
+                <Expander
+                    Grid.Row="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    Background="{x:Null}"
+                    Header="總覽"
+                    HeaderTemplate="{StaticResource expanderHeader}"
+                    IsExpanded="True">
+                    <StackPanel Margin="24,0,24,0" Orientation="Vertical">
+                        <DataGrid
+                            ItemsSource="{Binding TotalDataView}"
+                            AutoGenerateColumns="False" CanUserAddRows="False"
+                            CanUserDeleteRows="False" CanUserReorderColumns="False"
+                            CanUserResizeColumns="False" CanUserSortColumns="False"
+                            CellStyle="{StaticResource cell}"
+                            ColumnHeaderStyle="{StaticResource columnHeader}"
+                            IsReadOnly="True"
+                            PreviewMouseWheel="dg_PreviewMouseWheel"
+                            RowStyle="{StaticResource row}"
+                            SelectionUnit="Cell">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="160" Binding="{Binding Path=MONTH}" Header="" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JAN, StringFormat=N0}" Header="1月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUL, StringFormat=N0}" Header="7月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}" Header="8月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=SEP, StringFormat=N0}" Header="9月" /> 
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=OCT, StringFormat=N0}" Header="10月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=NOV, StringFormat=N0}" Header="11月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=DEC, StringFormat=N0}" Header="12月" />
+                                <DataGridTextColumn  Width="*" Binding="{Binding Path=TOTAL, StringFormat=N0}"
+                                    CellStyle="{StaticResource totalCell}"
+                                    ElementStyle="{StaticResource totalTextBlock}"
+                                    Header="總計" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Expander>
+                <Expander  Grid.Row="2" Margin="0,20,0,0" FontSize="20"
+                    HorizontalAlignment="Stretch" Background="{x:Null}"   Header="營業毛利"
+                    HeaderTemplate="{StaticResource expanderHeader}">
+                    <StackPanel Margin="24,0,24,0" Orientation="Vertical">
+                        <DataGrid
+                            ItemsSource="{Binding IncomeDataView}"
+                            AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                            CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                            CellStyle="{StaticResource cell}" RowStyle="{StaticResource row}"
+                            ColumnHeaderStyle="{StaticResource columnHeader}"
+                            IsReadOnly="True" PreviewMouseWheel="dg_PreviewMouseWheel"
+                             SelectionUnit="Cell">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="160" Binding="{Binding Path=MONTH}" Header="" />
+                                <DataGridTextColumn Width="85"  Binding="{Binding Path=JAN, StringFormat=N0}"  Header="1月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUL, StringFormat=N0}" Header="7月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}"  Header="8月" />
+                                <DataGridTextColumn Width="85"  Binding="{Binding Path=SEP, StringFormat=N0}" Header="9月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=OCT, StringFormat=N0}"  Header="10月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=NOV, StringFormat=N0}" Header="11月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=DEC, StringFormat=N0}" Header="12月" />
+                                <DataGridTextColumn Width="*"
+                                    Binding="{Binding Path=TOTAL, StringFormat=N0}"
+                                    CellStyle="{StaticResource totalCell}"
+                                    ElementStyle="{StaticResource totalTextBlock}"
+                                    Header="總計" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Expander>
+                <Expander Grid.Row="3" Margin="0,20,0,0"
+                    HorizontalAlignment="Stretch" Background="{x:Null}" Header="費用"
+                    HeaderTemplate="{StaticResource expanderHeader}">
+                    <StackPanel Margin="24,0,24,0" Orientation="Vertical">
+                        <DataGrid
+                            ItemsSource="{Binding ExpanseDataView}"
+                            AutoGenerateColumns="False"  CanUserAddRows="False"
+                            CanUserDeleteRows="False" CanUserReorderColumns="False"
+                            CanUserResizeColumns="False" CanUserSortColumns="False"
+                            CellStyle="{StaticResource cell}"
+                            ColumnHeaderStyle="{StaticResource columnHeader}"
+                            IsReadOnly="True"
+                            PreviewMouseWheel="dg_PreviewMouseWheel"
+                            RowStyle="{StaticResource row}"
+                            SelectionUnit="Cell">
+                            <DataGrid.Columns> <DataGridTextColumn Width="160"  Binding="{Binding Path=MONTH}" Header="" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding Path=JAN, StringFormat=N0}" Header="1月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUL, StringFormat=N0}" Header="7月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}" Header="8月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=SEP, StringFormat=N0}" Header="9月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=OCT, StringFormat=N0}" Header="10月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=NOV, StringFormat=N0}" Header="11月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=DEC, StringFormat=N0}" Header="12月" />
+                                <DataGridTextColumn  Width="*"
+                                    Binding="{Binding Path=TOTAL, StringFormat=N0}"
+                                    CellStyle="{StaticResource totalCell}"
+                                    ElementStyle="{StaticResource totalTextBlock}"
+                                    Header="總計" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Expander>
+                <Expander
+                    Grid.Row="4"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Stretch"
+                    Background="{x:Null}"
+                    Header="結案差額"
+                    HeaderTemplate="{StaticResource expanderHeader}">
+                    <StackPanel Margin="24,0,24,0" Orientation="Vertical">
+                        <DataGrid
+                            ItemsSource="{Binding ClosedDataView}"
+                            AutoGenerateColumns="False" CanUserAddRows="False"
+                            CanUserDeleteRows="False"  CanUserReorderColumns="False"
+                            CanUserResizeColumns="False" CanUserSortColumns="False"
+                            CellStyle="{StaticResource cell}"
+                            ColumnHeaderStyle="{StaticResource columnHeader}"
+                            IsReadOnly="True"
+                            PreviewMouseWheel="dg_PreviewMouseWheel"
+                            RowStyle="{StaticResource row}"
+                            SelectionUnit="Cell">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="160" Binding="{Binding Path=MONTH}" Header="" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JAN, StringFormat=N0}" Header="1月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=JUL, StringFormat=N0}" Header="7月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}" Header="8月" />
+                                <DataGridTextColumn Width="85"  Header="9月"  Binding="{Binding Path=SEP, StringFormat=N0}"/>
+                                <DataGridTextColumn Width="85"  Header="10月" Binding="{Binding Path=OCT, StringFormat=N0}"/>
+                                <DataGridTextColumn Width="85"  Header="11月" Binding="{Binding Path=NOV, StringFormat=N0}"/>
+                                <DataGridTextColumn Width="85"  Header="12月" Binding="{Binding Path=DEC, StringFormat=N0}"/>
+                                <DataGridTextColumn Width="*"
+                                    Binding="{Binding Path=TOTAL, StringFormat=N0}"
+                                    CellStyle="{StaticResource totalCell}"
+                                    ElementStyle="{StaticResource totalTextBlock}"
+                                    Header="總計" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Expander>
+                <Expander
+                    Grid.Row="5"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Stretch"
+                    Background="{x:Null}"
+                    Header="處方張數"
+                    HeaderTemplate="{StaticResource expanderHeader}">
+                    <StackPanel Margin="24,0,24,0" Orientation="Vertical">
+                        <DataGrid
+                            ItemsSource="{Binding CountDataView}"
+                            AutoGenerateColumns="False" CanUserAddRows="False"
+                            CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False"
+                            CellStyle="{StaticResource cell}"
+                            ColumnHeaderStyle="{StaticResource columnHeader}"
+                            IsReadOnly="True" PreviewMouseWheel="dg_PreviewMouseWheel"
+                            RowStyle="{StaticResource row}" SelectionUnit="Cell">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="160" Binding="{Binding  MONTH}" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding JAN, StringFormat=N0}" Header="1月" />
+                                <DataGridTextColumn  Width="85"  Binding="{Binding Path=FEB, StringFormat=N0}" Header="2月" />
+                                <DataGridTextColumn  Width="85"  Binding="{Binding Path=MAR, StringFormat=N0}" Header="3月" />
+                                <DataGridTextColumn  Width="85"  Binding="{Binding Path=APR, StringFormat=N0}" Header="4月" />
+                                <DataGridTextColumn  Width="85"  Binding="{Binding Path=MAY, StringFormat=N0}" Header="5月" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding Path=JUN, StringFormat=N0}" Header="6月" />
+                                <DataGridTextColumn Width="85"  Binding="{Binding  JUL, StringFormat=N0}" Header="7月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=AUG, StringFormat=N0}" Header="8月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=SEP, StringFormat=N0}"  Header="9月" />
+                                <DataGridTextColumn Width="85" Binding="{Binding Path=OCT, StringFormat=N0}" Header="10月" />
+                                <DataGridTextColumn Width="85"  Binding="{Binding Path=NOV, StringFormat=N0}" Header="11月" />
+                                <DataGridTextColumn  Width="85" Binding="{Binding Path=DEC, StringFormat=N0}" Header="12月" />
+                                <DataGridTextColumn Width="*" Header="總計" 
+                                    Binding="{Binding TOTAL, StringFormat=N0}"
+                                    CellStyle="{StaticResource totalCell}" ElementStyle="{StaticResource totalTextBlock}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Expander>
+            </Grid>
+        </ScrollViewer>
+    </xctk:BusyIndicator>
+</UserControl>

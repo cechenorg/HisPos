@@ -1,0 +1,445 @@
+﻿<UserControl
+    x:Class="His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.StrikeManageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="StrikeManageViewControl"
+    FontFamily="Segoe UI Semibold"
+    mc:Ignorable="d">
+
+    <Grid Width="1365" Height="870">
+        <Grid Grid.Column="0" Margin="10,0,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70" />
+                <RowDefinition Height="60" />
+                <RowDefinition />
+                <RowDefinition Height="60" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Label
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="沖帳作業"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="35" />
+                <ListBox
+                    x:Name="listDC"
+                    Margin="30,0,30,0"
+                    VerticalAlignment="Center"
+                    SelectedIndex="0"
+                    SelectionChanged="listDC_SelectionChanged"
+                    Style="{StaticResource MaterialDesignToolToggleListBox}">
+                    <ListBoxItem>
+                        <Label Content="借" FontSize="22" />
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <Label Content="貸" FontSize="22" />
+                    </ListBoxItem>
+                </ListBox>
+                <Label
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="沖帳科目"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="24" />
+                <ComboBox
+                    x:Name="cbTargetAccount"
+                    Width="310"
+                    Height="45"
+                    Margin="10,0,0,0"
+                    VerticalContentAlignment="Center"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    IsEditable="True"
+                    KeyUp="cbTargetAccount_KeyUp"
+                    SelectedIndex="-1"
+                    SelectionChanged="cbTargetAccount_SelectionChanged">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
+                <Label
+                    x:Name="lbDirection"
+                    Margin="50,0,40,0"
+                    VerticalAlignment="Center"
+                    Content="&lt;"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="36" />
+                <Label
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="沖帳帳戶"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="24" />
+                <ComboBox
+                    x:Name="cbSourceAccount"
+                    Width="310"
+                    Height="45"
+                    Margin="10,0,0,0"
+                    IsEditable="True"
+                    KeyUp="cbTargetAccount_KeyUp"
+                    VerticalContentAlignment="Center"
+                    FontSize="18"
+                    SelectedIndex="-1">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Button
+                    x:Name="btnHistory"
+                    Width="140"
+                    Height="40"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Background="RoyalBlue"
+                    BorderThickness="0"
+                    Click="btnHistory_Click"
+                    Content="歷程紀錄"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20" />
+                <Button
+                    x:Name="btnDateFilter"
+                    Width="120"
+                    Height="40"
+                    Margin="40,0,0,0"
+                    VerticalAlignment="Center"
+                    Background="Green"
+                    BorderThickness="0"
+                    Content="區間查詢"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Click="btnDateFilter_Click" />
+                <Button
+                    x:Name="btnDateClear"
+                    Width="80"
+                    Height="40"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Background="IndianRed"
+                    BorderThickness="0"
+                    Content="清除"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Click="btnDateClear_Click" />
+                <Label
+                    Margin="30,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="日期"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="22" />
+                <DatePicker
+                    x:Name="dpSDate"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Width="160"
+                    SelectedDateFormat="Short" />
+                <Label
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="~"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="22" />
+                <DatePicker
+                    x:Name="dpEDate"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Width="160"
+                    SelectedDateFormat="Short" />
+                <!--<Label
+                    Margin="190,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="沖帳金額"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="24" />
+                <TextBox
+                    x:Name="tbAmount"
+                    Width="140"
+                    Height="40"
+                    Margin="10,0,0,0"
+                    FontSize="24"
+                    PreviewTextInput="NumberValidationTextBox" />
+                <Label
+                    Margin="20,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="沖帳備註"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="24" />
+                <TextBox
+                    x:Name="tbNote"
+                    Width="470"
+                    Height="40"
+                    Margin="10,0,0,0"
+                    FontSize="24" />
+                <Button
+                    x:Name="btnTransfer"
+                    Width="100"
+                    Height="40"
+                    Margin="20,0,0,0"
+                    VerticalAlignment="Center"
+                    Background="IndianRed"
+                    BorderThickness="0"
+                    Content="轉帳"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20" />-->
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <DataGrid
+                    x:Name="dgStrikeDataGrid"
+                    Width="1325"
+                    Margin="10,0,0,0"
+                    AutoGenerateColumns="False"
+                    Background="{StaticResource GridBackGround}"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    CanUserReorderColumns="False"
+                    CanUserResizeColumns="False"
+                    CanUserSortColumns="False"
+                    CellStyle="{StaticResource DataGridCellStyle}">
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollBar">
+                            <Setter Property="Background" Value="#FFA8A8A8" />
+                            <Setter Property="Foreground" Value="#FF535353" />
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="FontSize" Value="20" />
+                            <Setter Property="Height" Value="50" />
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="FontSize" Value="22" />
+                            <Setter Property="Height" Value="40" />
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="60">
+                            <DataGridTemplateColumn.Header>
+                                <Border
+                                    Padding="6,0,6,0"
+                                    HorizontalAlignment="Center"
+                                    Background="Transparent">
+                                    <CheckBox
+                                        HorizontalAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=IsSelectAll, Mode=TwoWay}" />
+                                </Border>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        x:Name="cbSelect"
+                                        Margin="20,0,0,0"
+                                        Checked="cbSelect_Checked"
+                                        IsChecked="{Binding Path=IsSelected}"
+                                        Unchecked="cbSelect_Unchecked" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn
+                            Width="60"
+                            Binding="{Binding Path=NO}"
+                            Header="序"
+                            IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="0,0,0,0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="120"
+                            Binding="{Binding Path=Date}"
+                            Header="日期"
+                            IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="0,0,0,0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding Path=ID}"
+                            Header="單號"
+                            IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="0,0,0,0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="150"
+                            Binding="{Binding Path=Value, StringFormat=N0}"
+                            Header="金額"
+                            IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="0,0,0,0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <EventSetter Event="MouseDoubleClick" Handler="DataGridCell_MouseDoubleClick" />
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn
+                            MinWidth="120"
+                            Header="沖帳金額"
+                            IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox
+                                        x:Name="tbAmount"
+                                        Width="100"
+                                        Margin="0,0,0,2"
+                                        HorizontalContentAlignment="Center"
+                                        FontFamily="Segoe UI Semi"
+                                        FontSize="20"
+                                        GotFocus="tbAmount_GotFocus"
+                                        GotMouseCapture="tbAmount_GotMouseCapture"
+                                        InputMethod.IsInputMethodEnabled="False"
+                                        IsMouseCaptureWithinChanged="tbAmount_IsMouseCaptureWithinChanged"
+                                        Text="{Binding Path=StrikeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        TextChanged="tbAmount_TextChanged" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            MinWidth="350"
+                            Header="沖帳備註"
+                            IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox
+                                        Width="330"
+                                        Margin="0,0,0,2"
+                                        HorizontalContentAlignment="Center"
+                                        FontFamily="Segoe UI Semi"
+                                        FontSize="20"
+                                        Text="{Binding Path=StrikeNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="105" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="btnStrike"
+                                        Height="35"
+                                        Margin="10,0,0,0"
+                                        Background="RoyalBlue"
+                                        BorderThickness="0"
+                                        Click="btnStrike_Click"
+                                        Content="沖帳"
+                                        FontSize="18" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="105" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        x:Name="btnClose"
+                                        Height="35"
+                                        Margin="10,0,0,0"
+                                        Background="IndianRed"
+                                        BorderThickness="0"
+                                        Click="btnClose_Click"
+                                        Content="結案"
+                                        FontSize="18"
+                                        IsEnabled="{Binding Path=CanClose}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <Label
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="已選筆數:"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="24" />
+                <Label
+                    x:Name="lbSelectedCount"
+                    Width="65"
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="0"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="24" />
+                <Label
+                    Margin="30,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="沖帳金額:"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="24" />
+                <Label
+                    x:Name="lbSelectedSum"
+                    Width="200"
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="0"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="24" />
+                <Button
+                    x:Name="btnBatchStrike"
+                    Width="140"
+                    Height="40"
+                    Margin="510,0,0,0"
+                    VerticalAlignment="Center"
+                    Background="RoyalBlue"
+                    BorderThickness="0"
+                    Click="btnBatchStrike_Click"
+                    Content="批次沖帳"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20" />
+                <Button
+                    x:Name="btnBatchClose"
+                    Width="140"
+                    Height="40"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Background="IndianRed"
+                    BorderThickness="0"
+                    Click="btnBatchClose_Click"
+                    Content="批次結案"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
