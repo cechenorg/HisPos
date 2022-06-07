@@ -471,7 +471,7 @@ namespace His_Pos.NewClass.StoreOrder
                     {
                         string dateTime = DateTime.Now.ToString("yyyyMMdd");
                         dateTime = CreateDateTime.ToString("yyyy/MM/dd");
-                        if (SourceID != null)
+                        if (SourceID != null && SourceID != "")
                         {
                             dateTime = CreateDateTime.AddMonths(-1).ToString("yyyy/MM/dd");
                             dataTable = StoreOrderDB.GetSingdeOrderCanModify(dateTime, SourceID);
@@ -487,18 +487,18 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     if (isCanModify == false)
                     {
-                        var auth = ViewModelMainWindow.CurrentUser.Authority;
-                        if (auth == Authority.Admin)
-                        {
+                        //var auth = ViewModelMainWindow.CurrentUser.Authority;
+                        //if (auth == Authority.Admin)
+                        //{
                             ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
                             if (!(bool)confirmWindow.DialogResult)
                                 return false;
-                        }
-                        else
-                        {
-                            MessageWindow.ShowMessage("訂單已備貨，不可刪除！", MessageType.ERROR);
-                            return false;
-                        }
+                        //}
+                        //else
+                        //{
+                        //    MessageWindow.ShowMessage("訂單已備貨，不可刪除！", MessageType.ERROR);
+                        //    return false;
+                        //}
                     }
                 }
                 //作廢原因                
