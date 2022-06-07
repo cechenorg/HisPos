@@ -23,6 +23,8 @@ namespace His_Pos.NewClass.Medicine.Base
             AveragePrice = r.Field<double?>("AveragePrice") is null ? 0 : r.Field<double>("AveragePrice");
             Price = r.Field<double>("Pro_SelfPayPrice");
             InventoryID = r.Field<int>("Inv_ID");
+            Ingredient = r.Field<string>("Med_Ingredient");
+            Indication = r.Field<string>("Med_Indication");
             if (NewFunction.CheckDataRowContainsColumn(r, "MedbagAmountLack"))
                 InventoryError = r.Field<int>("MedbagAmountLack") == 1;
             if (NewFunction.CheckDataRowContainsColumn(r, "AdjustNoBuckle") && r.Field<bool?>("AdjustNoBuckle") != null)
