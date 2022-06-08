@@ -297,7 +297,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private bool CheckAdjustDatePast()
         {
-            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName=="負責藥師") return true;
+            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.Authority == DomainModel.Enum.Authority.負責藥師) return true;
             MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
             return false;
         }
@@ -862,7 +862,7 @@ namespace His_Pos.NewClass.Prescription.Service
         private static void CheckAdminLogin(Prescription selected)
         {
             if (selected is null) return;
-            if (VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師")|| VM.CurrentUser.WorkPosition.WorkPositionId==5)
+            if (VM.CurrentUser.ID == 1 || VM.CurrentUser.IsPharmist() )
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
                 var edit = new PrescriptionEditWindow(selected, title);

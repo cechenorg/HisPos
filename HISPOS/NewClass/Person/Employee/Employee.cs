@@ -224,6 +224,10 @@ namespace His_Pos.NewClass.Person.Employee
 
         #region Function
 
+        public bool IsPharmist()
+        {
+            return Authority == Authority.負責藥師 || Authority == Authority.支援藥師 || Authority == Authority.執業藥師;
+        }
         public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList,WorkPosition.WorkPositions workPositions)
         {
             GroupPharmacyEmployeeList = new ObservableCollection<GroupWorkPosition>();

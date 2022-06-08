@@ -61,11 +61,11 @@ namespace His_Pos.NewClass.Person.Employee
             }
             foreach (var emp in tempEmpList)
             {
-                if (emp.CheckLeave(selectedDate) && emp.WorkPosition.WorkPositionName.Contains("藥師") && emp.IsLocal)
+                if (emp.CheckLeave(selectedDate) && emp.IsPharmist() && emp.IsLocal)
                     Add(emp);
                 else
                 {
-                    if (emp.ID.Equals(ViewModelMainWindow.CurrentUser.ID) && emp.WorkPosition.WorkPositionName.Contains("藥師"))
+                    if (emp.ID.Equals(ViewModelMainWindow.CurrentUser.ID) && emp.IsPharmist() )
                         Add(emp);
                 }
             }
@@ -83,7 +83,7 @@ namespace His_Pos.NewClass.Person.Employee
             foreach (DataRow row in table.Rows)
             {
                 var emp = new Employee(row);
-                if (emp.WorkPosition.WorkPositionName.Contains("藥師"))
+                if (emp.IsPharmist())
                     Add(emp);
             }
         }
