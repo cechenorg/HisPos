@@ -53,17 +53,25 @@ namespace His_Pos.NewClass.Person.Employee
             switch (autVal)
             {
                 case 1:
-                    return Authority.Admin; 
+                    return Authority.系統管理員; 
                 case 2:
-                    return Authority.ShopMaster; 
+                    return Authority.藥局經理; 
                 case 3:
-                    return Authority.ShopEmployee; 
+                    return Authority.會計人員; 
                 case 4:
-                    return Authority.Pharmacist; 
+                    return Authority.店長;
+                case 5:
+                    return Authority.店員;
+                case 6:
+                    return Authority.負責藥師;
+                case 7:
+                    return Authority.執業藥師;
+                case 8:
+                    return Authority.支援藥師;
             }
-            return Authority.Pharmacist;
+            return Authority.店員;
         }
-          
+        
         private string cashierID;
 
         [IgnoreFormat]

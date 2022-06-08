@@ -54,7 +54,8 @@ namespace His_Pos
             WindowState = WindowState.Maximized;
             ViewModelMainWindow.CurrentUser = user;
             ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.InitPharmacists();
-            if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師") && ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Count(e => e.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber)) == 0)
+            if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師") && 
+                ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Count(e => e.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber)) == 0)
             {
                 ViewModelMainWindow.CurrentPharmacy.MedicalPersonnel = ViewModelMainWindow.CurrentUser;
                 ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Add(ViewModelMainWindow.CurrentUser);
