@@ -144,10 +144,10 @@ namespace His_Pos.NewClass.StoreOrder
                 IsScrap = true;
 
             var auth = ViewModelMainWindow.CurrentUser.Authority;
-            if ((auth == Authority.Admin) || (string.IsNullOrEmpty(CheckCode)))
+            //if ((auth == Authority.Admin) || (string.IsNullOrEmpty(CheckCode)))
                 IsCanDelete = true;
-            else
-                IsCanDelete = false;
+            //else
+            //    IsCanDelete = false;
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
