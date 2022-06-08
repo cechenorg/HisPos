@@ -56,12 +56,15 @@ namespace His_Pos.FunctionWindow
         #region ----- Define Actions -----
 
         private void LoginAction(object sender)
-        { 
+        {
+            bool isEnable = false;
             Employee loginEmployee = Employee.Login(Account, (sender as PasswordBox)?.Password);
-            ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
-            bool isEnable = EmployeeDb.CheckEmployeeIsEnable(loginEmployee.ID);
-
-            if (loginEmployee != null && isEnable)
+            if (loginEmployee != null) 
+            {
+                ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
+                isEnable = EmployeeDb.CheckEmployeeIsEnable(loginEmployee.ID);
+            }
+            if (isEnable)
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();
                 //loadingWindow.GetNecessaryData(user);
