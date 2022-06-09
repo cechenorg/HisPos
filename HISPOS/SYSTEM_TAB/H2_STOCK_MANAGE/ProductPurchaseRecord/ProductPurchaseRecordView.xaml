@@ -142,6 +142,7 @@
                     KeyDown="StartDate_OnKeyDown"
                     Mask="000/00/00"
                     PromptChar="-"
+                    MouseDoubleClick="StartDate_MouseDoubleClick"
                     Style="{StaticResource MaterialDesignTextBox}"
                     ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
@@ -174,6 +175,7 @@
                     Mask="000/00/00"
                     PromptChar="-"
                     Style="{StaticResource MaterialDesignTextBox}"
+                    MouseDoubleClick="EndDate_MouseDoubleClick"
                     ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
                         <Binding
