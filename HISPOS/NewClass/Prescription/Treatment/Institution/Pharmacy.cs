@@ -122,7 +122,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
         public Employee GetPharmacist()
         {
-            if (ViewModelMainWindow.CurrentUser.IsPharmist())
+            if (ViewModelMainWindow.CurrentUser.IsLocalPharmist())
                 return MedicalPersonnels.Single(m => m.ID.Equals(ViewModelMainWindow.CurrentUser.ID));
             var medicalPersonnels = MedicalPersonnels.GetLocalPharmacist();
             return medicalPersonnels[0];

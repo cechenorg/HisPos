@@ -228,6 +228,11 @@ namespace His_Pos.NewClass.Person.Employee
         {
             return Authority == Authority.MasterPharmacist || Authority == Authority.NormalPharmacist || Authority == Authority.SupportPharmacist;
         }
+
+        public bool IsLocalPharmist()
+        {
+            return Authority == Authority.MasterPharmacist || Authority == Authority.NormalPharmacist;
+        }
         public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList,WorkPosition.WorkPositions workPositions)
         {
             GroupPharmacyEmployeeList = new ObservableCollection<GroupWorkPosition>();
