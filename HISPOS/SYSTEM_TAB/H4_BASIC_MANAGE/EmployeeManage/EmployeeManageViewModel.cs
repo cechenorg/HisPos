@@ -122,9 +122,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private bool _isGroupPharmacy =
             string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
-             (ViewModelMainWindow.CurrentUser.Authority == Authority.系統管理員 || 
-            ViewModelMainWindow.CurrentUser.Authority == Authority.店長 ||
-            ViewModelMainWindow.CurrentUser.Authority == Authority.執業藥師) ;
+             (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || 
+            ViewModelMainWindow.CurrentUser.Authority == Authority.StoreManager ||
+            ViewModelMainWindow.CurrentUser.Authority == Authority.MasterPharmacist) ;
 
         public bool IsGroupPharmacy
         {

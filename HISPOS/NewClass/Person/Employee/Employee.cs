@@ -53,23 +53,23 @@ namespace His_Pos.NewClass.Person.Employee
             switch (autVal)
             {
                 case 1:
-                    return Authority.系統管理員; 
+                    return Authority.Admin; 
                 case 2:
-                    return Authority.藥局經理; 
+                    return Authority.PharmacyManager; 
                 case 3:
-                    return Authority.會計人員; 
+                    return Authority.AccountingStaff; 
                 case 4:
-                    return Authority.店長;
+                    return Authority.StoreManager;
                 case 5:
-                    return Authority.店員;
+                    return Authority.StoreEmployee;
                 case 6:
-                    return Authority.負責藥師;
+                    return Authority.MasterPharmacist;
                 case 7:
-                    return Authority.執業藥師;
+                    return Authority.NormalPharmacist;
                 case 8:
-                    return Authority.支援藥師;
+                    return Authority.SupportPharmacist;
             }
-            return Authority.店員;
+            return Authority.StoreEmployee;
         }
         
         private string cashierID;
@@ -226,7 +226,7 @@ namespace His_Pos.NewClass.Person.Employee
 
         public bool IsPharmist()
         {
-            return Authority == Authority.負責藥師 || Authority == Authority.支援藥師 || Authority == Authority.執業藥師;
+            return Authority == Authority.MasterPharmacist || Authority == Authority.NormalPharmacist || Authority == Authority.SupportPharmacist;
         }
         public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList,WorkPosition.WorkPositions workPositions)
         {
