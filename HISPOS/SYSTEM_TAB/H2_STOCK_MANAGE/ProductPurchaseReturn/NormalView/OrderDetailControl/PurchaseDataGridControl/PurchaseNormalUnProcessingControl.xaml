@@ -6,6 +6,7 @@
     xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
     xmlns:service="clr-namespace:His_Pos.Service"
     DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
@@ -89,7 +90,8 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="630"/>
+            <RowDefinition Height="625"/>
+            <RowDefinition Height="40" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
@@ -374,8 +376,69 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StackPanel Grid.Row="1"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <Label
+                HorizontalAlignment="center"
+                VerticalAlignment="Center"
+                Content="預定客戶"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black"/>
+            <TextBox
+                IsReadOnly="True"
+                Width="80"
+                TextAlignment="Center"
+                HorizontalAlignment="center"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Text="{Binding CurrentStoreOrder.TargetPreOrderCustomer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                HorizontalAlignment="center"
+                VerticalAlignment="Center"
+                Content="需求日期"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black"/>
+            <xctk:MaskedTextBox
+                IsReadOnly="True"
+                x:Name="DemandDate"
+                Width="100"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                InputScope="Number"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="{StaticResource ForeGround}"
+                InsertKeyMode="Overwrite"
+                Style="{StaticResource MaterialDesignTextBox}">
+                <Binding
+                        Mode="TwoWay"
+                        Path="CurrentStoreOrder.DemandDate"
+                        UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <service:DateValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </xctk:MaskedTextBox>
+            <Label
+                HorizontalAlignment="center"
+                VerticalAlignment="Center"
+                Content="備註"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black" />
+            <TextBox
+                Width="650"
+                VerticalAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                Text="{Binding CurrentStoreOrder.Note}" />
+        </StackPanel>
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="2"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button
