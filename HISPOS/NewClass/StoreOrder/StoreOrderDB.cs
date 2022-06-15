@@ -11,6 +11,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using DomainModel.Enum;
+using System.Globalization;
+using His_Pos.FunctionWindow;
+using His_Pos.Class;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -657,6 +660,21 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
             DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.Account);
+            if (purchaseOrder.DemandDate != null && purchaseOrder.DemandDate != "---/--/--")
+            {
+                try
+                {
+                    CultureInfo culture = new CultureInfo("zh-TW");
+                    culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                    DateTime dt = DateTime.Parse(purchaseOrder.DemandDate, culture);
+                    DataBaseFunction.AddSqlParameter(parameters, "DemandDate", dt);
+                }
+                catch(Exception e)
+                {
+                    MessageWindow.ShowMessage("需求日期格式錯誤!", MessageType.ERROR);
+                    DataBaseFunction.AddSqlParameter(parameters, "DemandDate", null);
+                }
+            }
             new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
 

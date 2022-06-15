@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using DomainModel.Enum;
+using System.Globalization;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -22,7 +23,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public string PreOrderCustomer { get; set; }
         public string TargetPreOrderCustomer { get; set; }
-
+        public string DemandDate { get; set; }
         public DateTime? PlanArriveDate { get; set; }
         public string PatientData { get; set; }
         public bool HasPatient => !string.IsNullOrEmpty(PatientData);
@@ -57,6 +58,27 @@ namespace His_Pos.NewClass.StoreOrder
             PreOrderCustomer = row.Field<string>("StoOrd_CustomerName");
             TargetPreOrderCustomer = row.Field<string>("StoOrd_TargetCustomerName");
             PlanArriveDate = row.Field<DateTime?>("StoOrd_PlanArrivalDate");
+            if (row.Table.Columns.Contains("StoOrd_DemandDate"))
+            {
+                if (row["StoOrd_DemandDate"] != DBNull.Value)
+                {
+                    DateTime dt = (DateTime)row["StoOrd_DemandDate"];
+                    TaiwanCalendar tc = new TaiwanCalendar();
+                    string year = tc.GetYear(dt).ToString().PadLeft(3, '0');
+                    string month = tc.GetMonth(dt).ToString().PadLeft(2, '0');
+                    string day = tc.GetDayOfMonth(dt).ToString().PadLeft(2, '0');
+                    string today = string.Format("{0}/{1}/{2}", year, month, day);
+                    DemandDate = today;
+                }
+                else
+                {
+                    DemandDate = "---/--/--";
+                }
+            }
+            else
+            {
+                DemandDate = "---/--/--";
+            }
         }
 
         #region ----- Override Function -----
@@ -83,6 +105,12 @@ namespace His_Pos.NewClass.StoreOrder
             if (String.IsNullOrEmpty(TargetPreOrderCustomer) && OrderManufactory.ID.Equals("0"))
             {
                 MessageWindow.ShowMessage("進貨單必須指定顧客!", MessageType.ERROR);
+                return false;
+            }
+
+            if ((String.IsNullOrEmpty(DemandDate) || DemandDate.Equals("---/--/--")) && OrderManufactory.ID.Equals("0"))
+            {
+                MessageWindow.ShowMessage("杏德供應商必須填寫需求日期!", MessageType.ERROR);
                 return false;
             }
 

@@ -57,8 +57,7 @@
             <RowDefinition Height="55" />
             <RowDefinition Height="39" />
             <RowDefinition Height="34" />
-            <RowDefinition Height="34" />
-            <RowDefinition Height="700" />
+            <RowDefinition Height="734" />
         </Grid.RowDefinitions>
         <StackPanel
             Grid.Row="0"
@@ -116,8 +115,7 @@
                 FontSize="28"
                 Foreground="{StaticResource ForeGround}" />
         </StackPanel>
-        <StackPanel
-            Grid.Row="1"
+        <StackPanel Grid.Row="1"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <TextBlock
@@ -164,8 +162,7 @@
                 FontSize="18"
                 Foreground="Black" />
         </StackPanel>
-        <StackPanel
-            Grid.Row="2"
+        <StackPanel Grid.Row="2"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Label
@@ -185,46 +182,7 @@
                 Foreground="Black"
                 Visibility="{Binding HasPatient, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </StackPanel>
-        <StackPanel
-            Grid.Row="3"
-            Background="{StaticResource GridDarkerBackGround}"
-            Orientation="Horizontal">
-            <Label
-                Margin="20,0,0,0"
-                VerticalAlignment="Center"
-                Content="備註"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Foreground="Black" />
-            <TextBox
-                Width="689"
-                Margin="10,0,0,5"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Text="{Binding Note}" />
-            <StackPanel
-                Grid.Row="2"
-                Background="Transparent"
-                Orientation="Horizontal">
-                <Label
-                    Margin="10,0,0,0"
-                    VerticalAlignment="Center"
-                    Content="預定客戶"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="18"
-                    Foreground="Black" />
-                <Label
-                    Width="100"
-                    Margin="10,3,0,3"
-                    VerticalAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                    Content="{Binding TargetPreOrderCustomer}"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="18"
-                    Foreground="Black" />
-            </StackPanel>
-        </StackPanel>
-        <ContentControl Grid.Row="4">
+        <ContentControl Grid.Row="3">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalUnProcessingControl}" />
