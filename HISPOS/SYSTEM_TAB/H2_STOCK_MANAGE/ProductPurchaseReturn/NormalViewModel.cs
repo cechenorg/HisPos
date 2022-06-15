@@ -539,7 +539,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 //Order ID Filter
                 if (tempOrder.ReceiveID is null && tempOrder.ID.Contains(SearchString))
                     returnValue = true;
-                else if (tempOrder.ReceiveID != null && tempOrder.ReceiveID.Contains(SearchString))
+                if(tempOrder.ReceiveID != null && (tempOrder.ID.Contains(SearchString) || tempOrder.ReceiveID.Contains(SearchString)))
                     returnValue = true;
 
                 //Order Note Filter

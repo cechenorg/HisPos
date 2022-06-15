@@ -44,6 +44,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
+using System.Collections.Generic;
+using System;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -180,11 +183,9 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.進退貨管理):
-                    //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
-                    //{
-                    //    MessageWindow message = new MessageWindow("正在儲存", MessageType.ERROR);
-                    //    return;
-                    //}
+                    List<TabBase> tab = ItemCollection.Where(s => s.TabName == "進退貨管理").ToList();//找進退貨管理的tab
+                    ProductPurchaseReturnViewModel PurchaseViewModel = (ProductPurchaseReturnViewModel)tab[0];//每個功能只會同時開啟一個tab，所以tab[0]
+                    PurchaseViewModel.NormalViewModel.SearchString = string.Empty;//關閉進退貨管理清空搜尋條件
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):
