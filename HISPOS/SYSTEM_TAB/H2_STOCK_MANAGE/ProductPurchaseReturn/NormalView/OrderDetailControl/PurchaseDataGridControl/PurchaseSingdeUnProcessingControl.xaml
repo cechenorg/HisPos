@@ -146,14 +146,16 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                
+
                 <DataGridTemplateColumn
+                    Visibility="Hidden"
                     MinWidth="100"
                     Header="下訂單價"
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
+                                Visibility="Hidden"
                                 x:Name="ProductPriceTextbox"
                                 Width="60"
                                 Margin="0,0,0,2"
@@ -162,7 +164,7 @@
                                 FontSize="18"
                                 InputMethod.IsInputMethodEnabled="False"
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"           
-                                Style="{DynamicResource CantEditPrice}"
+                                
                                 Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:0.00;;#}'}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
@@ -269,20 +271,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                    Width="70"
-                    Binding="{Binding SingdePackageAmount}"
-                    CellStyle="{StaticResource DataGridSpecialCellStyle}"
-                    FontFamily="Segoe UI Semi"
-                    Header="包裝量"
-                    IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                
                 <DataGridTextColumn
                     Width="70"
                     Binding="{Binding SingdePrice, StringFormat=N2}"
@@ -303,6 +292,20 @@
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="包裝價"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="70"
+                    Binding="{Binding SingdePackageAmount}"
+                    CellStyle="{StaticResource DataGridSpecialCellStyle}"
+                    FontFamily="Segoe UI Semi"
+                    Header="包裝量"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
