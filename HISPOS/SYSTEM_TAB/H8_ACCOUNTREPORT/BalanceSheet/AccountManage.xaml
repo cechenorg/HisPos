@@ -119,6 +119,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridCheckBoxColumn
+                        Visibility="Hidden"
                         Width="130"
                         Binding="{Binding Path=IsHidden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         Header="隱藏科目"
