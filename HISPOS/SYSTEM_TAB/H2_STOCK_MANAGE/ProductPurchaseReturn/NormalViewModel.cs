@@ -560,7 +560,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     if(string.IsNullOrEmpty((tempOrder as PurchaseOrder).PreOrderCustomer) == false && (tempOrder as PurchaseOrder).PreOrderCustomer.Contains(SearchString))
                         returnValue = true;
                 }
-                   
 
                 //採購人
                 if (string.IsNullOrEmpty(tempOrder.OrderEmployeeName) == false && tempOrder.OrderEmployeeName.Contains(SearchString))
@@ -602,10 +601,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             switch (filterStatus)
             {
                 case OrderFilterStatusEnum.ALL:
+                    if (tempOrder.IsEnable == false)
+                        returnValue = false;
                     break;
 
                 case OrderFilterStatusEnum.UNPROCESSING:
-                    if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING))
+                    if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING) || tempOrder.IsEnable == false)
                         returnValue = false;
                     break;
 
@@ -615,17 +616,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     break;
 
                 case OrderFilterStatusEnum.PROCESSING:
-                    if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                    if (!(tempOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || tempOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING) || tempOrder.IsEnable == false)
                         returnValue = false;
                     break;
 
                 case OrderFilterStatusEnum.OTC:
-                    if (!(tempOrder.OrderTypeIsOTC == "OTC"))
+                    if (!(tempOrder.OrderTypeIsOTC == "OTC") || tempOrder.IsEnable == false)
                         returnValue = false;
                     break;
 
                 case OrderFilterStatusEnum.MED:
-                    if (!(tempOrder.OrderTypeIsOTC == "藥品"))
+                    if (!(tempOrder.OrderTypeIsOTC == "藥品") || tempOrder.IsEnable == false)
+                        returnValue = false;
+                    break;
+                case OrderFilterStatusEnum.SCRAP://作廢訂單
+                    if(tempOrder.IsEnable == true)
                         returnValue = false;
                     break;
             }

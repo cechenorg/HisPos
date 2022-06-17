@@ -134,6 +134,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             Grid.Row="1"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">

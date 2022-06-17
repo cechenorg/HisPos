@@ -131,7 +131,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
                 {
-                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
+                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).OrderBy(s => s.CreateDateTime).ToList();
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
 
                     if (storeOrders.Count > 0)
@@ -150,7 +150,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                             currentStoreOrder = storeOrders[i];
                             DataRow[] dataRows = dataTable.Select();
                             currentStoreOrder.UpdateOrderDataFromSingde(dataRows[0]);
-                            storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                            //storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
                         }
                     }
 

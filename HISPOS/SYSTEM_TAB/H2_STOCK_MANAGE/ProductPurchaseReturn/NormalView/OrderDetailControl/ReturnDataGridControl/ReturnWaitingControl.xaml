@@ -14,6 +14,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <DataGrid
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             Grid.Row="0"
             AutoGenerateColumns="False"
             Background="{StaticResource GridDarkestBackGround}"

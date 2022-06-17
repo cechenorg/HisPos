@@ -65,6 +65,12 @@
                 Margin="10,0,5,0"
                 Source="/Images/BlueDot.png" />
         </DataTemplate>
+        <DataTemplate x:Key="ScrapProcessIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <Image
+                Width="20"
+                Margin="10,0,5,0"
+                Source="/Images/RedDot.png" />
+        </DataTemplate>
         <DataTemplate x:Key="WaitingIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <Image
                 Width="20"
@@ -119,7 +125,7 @@
                 <ColumnDefinition Width="280" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Grid  Margin="10,10,0,10" Background="{StaticResource GridBackGround}">
+            <Grid Margin="10,10,0,10" Background="{StaticResource GridBackGround}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                     <RowDefinition Height="35" />
@@ -137,8 +143,8 @@
                         <Setter Property="FontSize" Value="18"/>
                     </Style>
                 </Grid.Resources>
-                <Border Grid.Row="0" Width="260"  Margin="5,5,5,0" Background="DimGray" CornerRadius="5" />
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
+                <Border Grid.Row="0" Grid.Column="0" Width="260"  Margin="5,5,5,0" Background="DimGray" CornerRadius="5" />
+                <StackPanel Grid.Row="0"  Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
 
                     <Button Width="120" Height="25" Margin="10,10,5,5"
                             Background="DimGray" BorderThickness="0"
@@ -152,42 +158,57 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1"  Orientation="Horizontal"
                     Background="{StaticResource GridBackGround}" >
-
-                    <RadioButton
-                        Margin="15,0,5,0" 
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Grid.Column="0"
+                        Margin="15,0,0,0" 
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="4" Content="全部" 
                         GroupName="OrderType" IsChecked="True" Tag="3" />
-                    
+                        <RadioButton Grid.Column="1"
+                        Command="{Binding FilterOrderCommand}"
+                        CommandParameter="7" Content="作廢訂單" 
+                        GroupName="OrderType" Tag="7" />
+                        <Image Margin="65,0,0,0" Grid.Column="1" Width="15" Source="/Images/RedDot.png" />
+                    </Grid>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                    <RadioButton Margin="15,0,5,0" 
-                        Command="{Binding FilterOrderCommand}" CommandParameter="1" Content="暫存訂單" 
-                        GroupName="OrderType" Tag="0" />
-                    <Image Width="15" Source="/Images/OrangeDot.png" />
-
-                    <RadioButton
-                        Margin="7,0,5,0" 
-                        Command="{Binding FilterOrderCommand}"
-                        CommandParameter="3" Content="成立訂單" 
-                        GroupName="OrderType" Tag="1" />
-                    <Image Width="15" Source="/Images/BlueDot.png" />
-
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Grid.Column="0"
+                        Margin="15,0,0,0" 
+                        Command="{Binding FilterOrderCommand}" CommandParameter="1" Content="暫存訂單" GroupName="OrderType" Tag="0" />
+                        <Image Margin="95,0,0,0" Grid.Column="0" Width="15" Source="/Images/OrangeDot.png" />
+                        <RadioButton Grid.Column="1"
+                        Command="{Binding FilterOrderCommand}" CommandParameter="3" Content="成立訂單" GroupName="OrderType" Tag="1"/>
+                        <Image Margin="65,0,0,0" Grid.Column="1" Width="15" Source="/Images/BlueDot.png" Grid.ColumnSpan="2" />
+                    </Grid>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="3"
                     Background="{StaticResource GridBackGround}"
-                    Orientation="Horizontal"> 
-                    <RadioButton
-                        Margin="15,0,5,0"  
+                    Orientation="Horizontal">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="135"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton Grid.Column="0"
+                        Margin="15,0,0,0"  
                         Command="{Binding FilterOrderCommand}"
-                        CommandParameter="5"  Content="OTC"  GroupName="OrderType" Tag="1" />
-
-                    <RadioButton
-                        Margin="60,0,5,0" 
+                        CommandParameter="5"  Content="OTC"
+                        GroupName="OrderType" Tag="1" />
+                        <RadioButton Grid.Column="1"
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="6" Content="藥品"
-                        GroupName="OrderType" Tag="1" />
+                        GroupName="OrderType" Tag="1" Grid.ColumnSpan="2" />
+                    </Grid>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="4"
@@ -304,6 +325,9 @@
                                                         <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="WAITING">
                                                             <Setter Property="ContentTemplate" Value="{StaticResource WaitingIcon}" />
                                                         </DataTrigger>
+                                                        <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SCRAP">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource ScrapProcessIcon}" />
+                                                        </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </ContentControl.Style>
@@ -329,6 +353,9 @@
                                                     <Style TargetType="{x:Type ContentControl}">
                                                         <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                                                         <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SCRAP">
+                                                                <Setter Property="ContentTemplate" Value="{StaticResource ProcessingID}" />
+                                                            </DataTrigger>
                                                             <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
                                                                 <Setter Property="ContentTemplate" Value="{StaticResource UnProcessingID}" />
                                                             </DataTrigger>

@@ -22,6 +22,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <DataGrid
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             EnableRowVirtualization="False"
             Name="ProductDataGrid"
             Grid.Row="0"
@@ -203,6 +204,7 @@
         </DataGrid>
         <Rectangle Grid.Row="1" Fill="{StaticResource GridDarkestBackGround}" />
         <DataGrid
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             Grid.Row="1"
             Margin="10,0,10,10"
             AutoGenerateColumns="False"
@@ -339,6 +341,7 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="120"
                 Margin="10,0,0,0"
                 Background="IndianRed"
@@ -348,6 +351,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" Cursor="Hand" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="150"
                 Margin="15,0,0,0"
                 Background="{StaticResource Shadow}"
@@ -391,6 +395,7 @@
                 Text="{Binding CurrentStoreOrder.ReturnStockValue, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
             <Rectangle Width="200" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Margin="30,0,10,0"
                 Width="120"
                 Background="DimGray"

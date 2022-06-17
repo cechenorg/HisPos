@@ -63,6 +63,7 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             EnableRowVirtualization="False"
             Grid.Row="0"
             Name="ProductDataGrid"
@@ -635,6 +636,7 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Margin="10,0,0,0"
                 Width="150"
                 Background="RoyalBlue"
@@ -684,6 +686,7 @@
                 Foreground="Black" />
             <Rectangle Width="400" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="150"
                 Background="DimGray"
                 BorderThickness="0"

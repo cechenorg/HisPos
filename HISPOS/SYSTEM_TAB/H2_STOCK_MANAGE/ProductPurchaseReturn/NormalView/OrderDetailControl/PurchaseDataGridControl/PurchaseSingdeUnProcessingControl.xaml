@@ -22,6 +22,7 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             EnableRowVirtualization="False"
             Name="ProductDataGrid"
             Grid.Row="0"
@@ -401,6 +402,7 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Margin="10,0,0,0"
                 Width="120"
                 Background="IndianRed"
@@ -411,6 +413,7 @@
                 FontSize="16"
                 Foreground="White" Cursor="Hand" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="120"
                 Margin="15,0,0,0"
                 Background="{StaticResource Shadow}"
@@ -463,6 +466,7 @@
                 Foreground="Black" />
             <Rectangle Width="190" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Margin="0,0,0,0"
                 Width="120"
                 Background="RoyalBlue"
@@ -473,6 +477,7 @@
                 FontSize="16"
                 Foreground="White" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="120"
                 Margin="10,0,0,0"
                 Background="DimGray"

@@ -157,6 +157,7 @@
                 FontSize="18"
                 Foreground="Black" />
             <TextBox
+                IsEnabled="{Binding IsEnable}"
                 Width="980"
                 Margin="10,0,0,5"
                 FontFamily="Segoe UI Semi"

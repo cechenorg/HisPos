@@ -95,6 +95,7 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             EnableRowVirtualization="False"
             Name="ProductDataGrid"
             Grid.Row="0"
@@ -107,7 +108,7 @@
             FrozenColumnCount="3"
             GridLinesVisibility="Horizontal"
             ItemsSource="{Binding CurrentStoreOrder.OrderProducts}"
-             SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SelectedItemConverter}}">
+            SelectedItem="{Binding CurrentStoreOrder.SelectedItem, Mode=TwoWay, Converter={StaticResource SelectedItemConverter}}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -224,7 +225,8 @@
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 Style="{DynamicResource CantEditPrice}"
-                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+                                Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}">
+                            </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -387,6 +389,7 @@
                 FontSize="18"
                 Foreground="Black"/>
             <TextBox
+                IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
                 IsReadOnly="True"
                 Width="80"
                 TextAlignment="Center"
@@ -403,6 +406,7 @@
                 FontSize="18"
                 Foreground="Black"/>
             <xctk:MaskedTextBox
+                IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
                 IsReadOnly="True"
                 x:Name="DemandDate"
                 Width="100"
@@ -431,6 +435,7 @@
                 FontSize="18"
                 Foreground="Black" />
             <TextBox
+                IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
                 Width="650"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semi"
@@ -442,6 +447,7 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="120"
                 Margin="15,0,0,0"
                 Background="{StaticResource Shadow}"
@@ -491,6 +497,7 @@
                 Foreground="Black" />
             <Rectangle Width="295" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="120"
                 Margin="0,0,10,0"
                 Background="DimGray"
@@ -501,6 +508,7 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="150"
                 Background="IndianRed"
                 BorderThickness="0"

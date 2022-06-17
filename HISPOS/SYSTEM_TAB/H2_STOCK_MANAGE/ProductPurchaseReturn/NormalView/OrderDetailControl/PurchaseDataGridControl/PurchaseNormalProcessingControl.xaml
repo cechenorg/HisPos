@@ -94,6 +94,7 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             EnableRowVirtualization="False"
             Name="ProductDataGrid"
             Grid.Row="0"
@@ -107,6 +108,7 @@
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             FrozenColumnCount="2"
             GridLinesVisibility="Horizontal"
+            HorizontalScrollBarVisibility="Auto"
             ItemsSource="{Binding CurrentStoreOrder.OrderProducts}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -515,6 +517,7 @@
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Margin="10,0,0,0"
                 Width="150"
                 Background="RoyalBlue"
@@ -564,6 +567,7 @@
                 Foreground="Black" />
             <Rectangle Width="200" />
             <Label
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 x:Name="lbNormalPay"
                 VerticalAlignment="Center"
                 Content="一般收貨"
@@ -571,11 +575,13 @@
                 FontSize="18"
                 Foreground="Black" />
             <ToggleButton
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 x:Name="tgPay"
                 Click="tgPay_Click"
                 Style="{StaticResource MaterialDesignSwitchToggleButton}"
                 IsChecked="{Binding CurrentStoreOrder.IsPayCash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Label
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 x:Name="lbCashPay"
                 VerticalAlignment="Center"
                 Content="下貨付現"
@@ -583,6 +589,7 @@
                 FontSize="18"
                 Foreground="DimGray" />
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="120"
                 Margin="30,0,10,0"
                 Background="DimGray"

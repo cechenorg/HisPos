@@ -2760,6 +2760,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Images\RedDot.png" />
     <Content Include="RDLC\MedBagReportSingleByCE.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

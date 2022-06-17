@@ -86,8 +86,10 @@ namespace His_Pos.NewClass.StoreOrder
         public string TargetPreOrderCustomer { get; set; }
         public DateTime Day { get; set; }
         public int IsOTC { get; set; }
+        public bool IsEnable { get; set; }
         public bool IsScrap { get; set; }
         public bool IsCanDelete { get; set; }
+        public string Visibility { get; set; }
         public double TotalPrice
         {
             get { return totalPrice; }
@@ -134,6 +136,7 @@ namespace His_Pos.NewClass.StoreOrder
                     OrderStatus = OrderStatusEnum.ERROR;
                     break;
             }
+
             ID = row.Field<string>("StoOrd_ID");
             ReceiveID = string.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
             SourceID = row.Field<string>("StoOrd_SourceID");
@@ -155,10 +158,19 @@ namespace His_Pos.NewClass.StoreOrder
             TotalPrice = (double)Math.Round(row.Field<decimal>("Total"),0);
             CreateDateTime = row.Field<DateTime>("StoOrd_CreateTime");
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
-
             initProductCount = row.Field<int>("ProductCount");
             OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
             OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
+            if(row.Table.Columns.Contains("StoOrd_IsEnable"))
+            {
+                IsEnable = row.Field<bool>("StoOrd_IsEnable");
+                if (!IsEnable)
+                {
+                    OrderStatus = OrderStatusEnum.SCRAP;
+                    IsCanDelete = false;
+                    Visibility = "Hidden";
+                }
+            }
         }
 
         #region ----- Define Functions -----
