@@ -17,8 +17,9 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="625"/>
+            <RowDefinition Height="595"/>
             <RowDefinition Height="40" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <DataGrid
@@ -399,6 +400,59 @@
         </StackPanel>
         <StackPanel
             Grid.Row="2"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="最後修改人:"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentStoreOrder.ModifyUser}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="時間:"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentStoreOrder.ModifyTime}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="作廢原因:"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentStoreOrder.VoidReason}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="3"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button

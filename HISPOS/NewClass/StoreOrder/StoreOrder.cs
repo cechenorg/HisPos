@@ -83,10 +83,14 @@ namespace His_Pos.NewClass.StoreOrder
         public DateTime CreateDateTime { get; set; }
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
+        public string ModifyUser { get; set; }
+        public string ModifyTime { get; set; }
+        public string VoidReason { get; set; }
         public string TargetPreOrderCustomer { get; set; }
         public DateTime Day { get; set; }
         public int IsOTC { get; set; }
         public bool IsEnable { get; set; }
+        public string IsEnableVoid { get; set; }
         public bool IsScrap { get; set; }
         public bool IsCanDelete { get; set; }
         public string Visibility { get; set; }
@@ -161,15 +165,23 @@ namespace His_Pos.NewClass.StoreOrder
             initProductCount = row.Field<int>("ProductCount");
             OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
             OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
-            if(row.Table.Columns.Contains("StoOrd_IsEnable"))
+            ModifyUser = row.Field<string>("StoOrd_ModifyUser");
+            ModifyTime = (row.Field<DateTime>("StoOrd_ModifyTime")).ToString("yyyy/MM/dd");
+            VoidReason = row.Field<string>("StoOrd_VoidReason");
+            if (row.Table.Columns.Contains("StoOrd_IsEnable"))
             {
                 IsEnable = row.Field<bool>("StoOrd_IsEnable");
                 if (!IsEnable)
                 {
                     OrderStatus = OrderStatusEnum.SCRAP;
                     IsCanDelete = false;
-                    Visibility = "Hidden";
+                    Visibility = "Hidden"; 
                 }
+                else
+                {
+                    IsEnableVoid = "Hidden";
+                }
+
             }
         }
 
