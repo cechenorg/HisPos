@@ -19,7 +19,11 @@ namespace His_Pos.NewClass.StoreOrder.Report
         public DateTime DoneTime { get; set; }
         private double InitialPrice { get; set; }
         public double ReturnStockValue { get; set; }
-
+        public string CheckCode { get; set; }
+        public string OTCType { get; set; }
+        public string Note { get; set; }
+        public int IsControl { get; set; }
+        public int IsFrozen { get; set; }
         public double UnTaxPrice
         {
             get { return unTaxPrice; }
@@ -56,6 +60,11 @@ namespace His_Pos.NewClass.StoreOrder.Report
             InitialPrice = (double)dataRow.Field<decimal>("PRICE");
             ReturnStockValue = (double)dataRow.Field<decimal>("RETURN_PRICE");
             Name = dataRow.Field<string>("Man_Name");
+            CheckCode = dataRow.Field<string>("StoOrd_CheckCode");
+            OTCType = dataRow.Field<string>("StoOrd_IsOTCType");
+            Note = dataRow.Field<string>("StoOrd_Note");
+            IsFrozen = dataRow.Field<int>("IsFrozen");
+            IsControl = dataRow.Field<int>("IsControl");
             CalculateTax();
         }
 
