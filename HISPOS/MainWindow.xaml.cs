@@ -114,23 +114,24 @@ namespace His_Pos
 
         private void InitializeMenu()
         {
+            MainWindow.ServerConnection.OpenConnection();
+            List<string> tabAuth = ViewModelMainWindow.CurrentUser.GetTabAuth();
+            MainWindow.ServerConnection.CloseConnection();
             for (int i = 0; i < HisFeatures.Count; i++)
             {
                 (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelText(HisFeatures[i].Title);
                 (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelImage(HisFeatures[i].Icon);
-                SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem), HisFeatures[i].Functions);
+                SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem), HisFeatures[i].Functions, tabAuth);
                 if ((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem)._count != 0)
                     (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).Visibility = Visibility.Visible;
             }
         }
 
-        private void SetFeaturesItem(MenuListItem features, string[] itemsName)
+        private void SetFeaturesItem(MenuListItem features, string[] itemsName, List<string> tabAuth)
         {
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
-            MainWindow.ServerConnection.OpenConnection();
-            Collection<string> tabAuth = ViewModelMainWindow.CurrentUser.GetTabAuth();
-            MainWindow.ServerConnection.CloseConnection();
+          
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)

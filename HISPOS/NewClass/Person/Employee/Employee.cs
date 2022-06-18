@@ -311,10 +311,10 @@ namespace His_Pos.NewClass.Person.Employee
             return EmployeeDb.EmployeeLogin(Account, Password);
         }
 
-        public Collection<string> GetTabAuth()
+        public List<string> GetTabAuth()
         {
             DataTable table = EmployeeDb.GetTabAuth((int)Authority);
-            Collection<string> tabAuths = new Collection<string>();
+            List<string> tabAuths = new List<string>();
             foreach (DataRow row in table.Rows)
             {
                 tabAuths.Add(row["Aut_TabName"].ToString());

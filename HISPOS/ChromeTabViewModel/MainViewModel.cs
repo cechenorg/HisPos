@@ -176,7 +176,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.額外收支):
                     break;
 
-                case nameof(FeatureItem.會計科目):
+                case nameof(FeatureItem.立帳作業):
                     break;
 
                 case nameof(FeatureItem.商品查詢):
@@ -453,7 +453,7 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new StrikeManageViewModel() { TabName = MainWindow.HisFeatures[8].Functions[3], Icon = MainWindow.HisFeatures[8].Icon };
                     break;
 
-                case nameof(FeatureItem.會計科目):
+                case nameof(FeatureItem.立帳作業):
                     newTab = new AccountsManageViewModel() { TabName = MainWindow.HisFeatures[8].Functions[4], Icon = MainWindow.HisFeatures[8].Icon };
                     break;
 
