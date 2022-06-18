@@ -23,10 +23,9 @@ namespace His_Pos.NewClass.Person.Employee
             WorkPosition.WorkPositionId = 2;
             StartDate = DateTime.Today;
             Birthday = DateTime.Today;
-            IsEnable = true; 
+            IsEnable = true;
 
             Authority = TranValueToAuthority(4);
-            AuthorityFullName = Authority.GetDescriptionText(); 
         }
 
         public Employee(DataRow r) : base(r)
@@ -45,7 +44,6 @@ namespace His_Pos.NewClass.Person.Employee
 
             byte tempAutID = r.Field<byte>("Aut_LevelID");
             Authority = TranValueToAuthority(tempAutID); 
-            AuthorityFullName = Authority.GetDescriptionText();
         }
 
         private Authority TranValueToAuthority(int autVal)
@@ -108,7 +106,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private WorkPosition.WorkPosition workPosition;
+        private WorkPosition.WorkPosition workPosition = new WorkPosition.WorkPosition();
 
         [IgnoreFormat]
         public virtual WorkPosition.WorkPosition WorkPosition
@@ -172,7 +170,7 @@ namespace His_Pos.NewClass.Person.Employee
         public Authority Authority { get; set; }
          
         [IgnoreFormat]
-        public string AuthorityFullName { get; set; }
+        public string AuthorityFullName { get { return Authority.GetDescriptionText(); } }
 
         private string account;//帳號
 
