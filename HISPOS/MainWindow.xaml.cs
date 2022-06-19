@@ -76,40 +76,65 @@ namespace His_Pos
 
         private void FeatureFactory()
         {
-            HisFeatures.Add(new Feature(@"..\Images\PrescriptionIcon.png", StringRes.hisPrescription,
-                            new[] { StringRes.hisPrescriptionDeclare, StringRes.hisPrescriptionInquire, StringRes.DeclareFileExport }));
+            //, StringRes.Activity
+            HisFeatures.Add(new Feature(@"..\Images\PrescriptionIcon.png", nameof(FeatureTab.處方作業) ,
+                            new[] {
+                                nameof(FeatureItem.處方登錄), 
+                                nameof(FeatureItem.處方查詢) ,
+                                nameof(FeatureItem.匯出申報檔),
+                                nameof(FeatureItem.藥袋查詢) }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.Transaction,
-                            new[] { StringRes.ProductTransaction, StringRes.ProductTransactionRecord, StringRes.Activity }));
+            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", nameof(FeatureTab.銷售作業),
+                            new[] {
+                                nameof(FeatureItem.結帳作業) ,
+                                nameof(FeatureItem.銷售紀錄) }));
+             
+            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", nameof(FeatureTab.藥局管理),
+                         new[] {  
+                             nameof(FeatureItem.顧客管理),
+                             nameof(FeatureItem.供應商管理),
+                             nameof(FeatureItem.員工管理),
+                             nameof(FeatureItem.額外收支),
+                             nameof(FeatureItem.關班作業),
+                             nameof(FeatureItem.關班帳務查詢) }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Transaction.png", StringRes.AdditionalCashFlowManage,
-                         new[] { StringRes.AdditionalCashFlowManage }));
+            HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", nameof(FeatureTab.庫存管理),
+                            new[] { nameof(FeatureItem.商品查詢),
+                                nameof(FeatureItem.進退貨管理),
+                                nameof(FeatureItem.進退貨紀錄),
+                                nameof(FeatureItem.櫃位管理),
+                                nameof(FeatureItem.新增盤點),
+                                nameof(FeatureItem.庫存盤點紀錄),
+                                nameof(FeatureItem.盤點計畫) }));
+               
+            HisFeatures.Add(new Feature(@"..\Images\Report.png", nameof(FeatureTab.庫存報表),
+                            new[] { 
+                                nameof(FeatureItem.庫存現值報表), 
+                                nameof(FeatureItem.進退貨報表), 
+                                nameof(FeatureItem.管制藥品簿冊申報) }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", StringRes.StockManage,
-                            new[] { StringRes.StockSearch, StringRes.MedBagManage, StringRes.ProductPurchase, StringRes.ProductPurchaseRecord, StringRes.ProductTypeManage, StringRes.LocationManage }));
+            HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", nameof(FeatureTab.會計作業),
+                            new[] { 
+                                nameof(FeatureItem.沖帳作業), 
+                                nameof(FeatureItem.立帳作業) }));
 
-            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", StringRes.StockTaking,
-                            new[] { StringRes.NewStockTaking, StringRes.StockTakingRecord, StringRes.StockTakingPlan }));
+            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", nameof(FeatureTab.會計報表) ,
+                            new[] { 
+                                nameof(FeatureItem.每日總帳報表), 
+                                nameof(FeatureItem.會計總帳報表),
+                                nameof(FeatureItem.申報院所點數總表), 
+                                nameof(FeatureItem.損益報表),
+                                nameof(FeatureItem.資產負債表) }));
 
-            HisFeatures.Add(new Feature(@"..\Images\Management.png", StringRes.DataManagement,
-                            new[] { StringRes.ManufactoryManage, StringRes.PharmacyManage, StringRes.EmployeeManage, StringRes.AuthenticationManage, StringRes.CustomerManage }));
+            HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", nameof(FeatureTab.出勤管理),
+                          new[] {
+                              nameof(FeatureItem.上下班打卡) , 
+                              nameof(FeatureItem.打卡記錄查詢) }));
 
-            HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", StringRes.Attend,
-                            new[] { StringRes.ClockIn, StringRes.WorkScheduleManage, StringRes.ClockInSearch })); // add by SHANI
-
-            HisFeatures.Add(new Feature(@"..\Images\Report.png", StringRes.ReportSystem,
-                            new[] { StringRes.EntrySearch, StringRes.PurchaseReturnReport, StringRes.ControlMedicineDeclare, StringRes.CashStockEntryReport , StringRes.TodayCashStockEntryReport, StringRes.NewTodayCashStockEntryReport }));
-
-            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.AccountReportSystem,
-                            new[] { StringRes.InstitutionDeclarePointReport, StringRes.IncomeStatement, StringRes.BalanceSheet, StringRes.StrikeManage, StringRes.AccountsManage }));
             HisFeatures.Add(new Feature(@"..\Images\SystemManage.png", StringRes.AdminManage,
-                            new[] { StringRes.AdminManage }));
-            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.SystemTutorial,
-                            new[] { StringRes.SystemTutorial }));
-            /*HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.Web,
-                            new[] { StringRes.CompanyWeb }));*/
-            HisFeatures.Add(new Feature(@"..\Images\AccountingReport.png", StringRes.ClosingWork,
-                          new[] { StringRes.ClosingWork,StringRes.ClosingCashSelect }));
+                            new[] {StringRes.AdminManage }));
+             
+           
         }
 
         private void InitializeMenu()

@@ -11,7 +11,18 @@ namespace His_Pos.Class
         StockTaking = 3
     }
      
-
+    public enum FeatureTab
+    {
+        處方作業,
+        銷售作業,
+        藥局管理,
+        庫存管理,
+        庫存報表,
+        會計作業,
+        會計報表,
+        出勤管理
+    }
+     
     public enum FeatureItem
     {
         處方登錄 = 0,
