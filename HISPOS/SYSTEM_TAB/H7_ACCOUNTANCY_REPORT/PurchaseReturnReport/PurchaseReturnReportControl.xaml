@@ -458,7 +458,7 @@
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
-                Text="{Binding CurrentManufactoryOrder.PurchasePrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                Text="{Binding CurrentManufactoryOrder.ReturnPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                 TextAlignment="Left" />
             <TextBlock
                 Margin="10,0,0,0"
