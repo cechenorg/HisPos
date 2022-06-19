@@ -132,8 +132,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
         public ProductPurchaseRecordViewModel()
         {
-            TabName = MainWindow.HisFeatures[3].Functions[3];
-            Icon = MainWindow.HisFeatures[3].Icon;
             RegisterCommands();
             RegisterMessengers();
         }

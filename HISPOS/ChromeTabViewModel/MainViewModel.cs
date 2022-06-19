@@ -349,6 +349,7 @@ namespace His_Pos.ChromeTabViewModel
                 //藥局管理
                 case nameof(FeatureItem.顧客管理):
                     newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).CustomerManageView;
+                    newTab.Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.藥局管理)).Icon; 
                     break;
                 case nameof(FeatureItem.供應商管理):
                     newTab = new ManufactoryManageViewModel() { 
@@ -383,10 +384,12 @@ namespace His_Pos.ChromeTabViewModel
 
                 case nameof(FeatureItem.進退貨管理):
                     newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).ProductPurchaseReturn;
+                    newTab.Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.庫存管理)).Icon;
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):
                     newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).ProductPurchaseRecord;
+                    newTab.Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.庫存管理)).Icon;
                     break;
 
                 case nameof(FeatureItem.櫃位管理):
