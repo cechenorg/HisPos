@@ -108,11 +108,11 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
-            if ((String.IsNullOrEmpty(DemandDate) || DemandDate.Equals("---/--/--")) && OrderManufactory.ID.Equals("0"))
-            {
-                MessageWindow.ShowMessage("杏德供應商必須填寫需求日期!", MessageType.ERROR);
-                return false;
-            }
+            //if ((String.IsNullOrEmpty(DemandDate) || DemandDate.Equals("---/--/--")) && OrderManufactory.ID.Equals("0"))
+            //{
+            //    MessageWindow.ShowMessage("杏德供應商必須填寫需求日期!", MessageType.ERROR);
+            //    return false;
+            //}
 
             foreach (var product in OrderProducts)
             {
