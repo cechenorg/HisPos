@@ -280,15 +280,11 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.關班作業):
                     break;
                 case nameof(FeatureItem.關班帳務查詢):
-                    break;
-
-                // add by shani
+                    break; 
                 case nameof(FeatureItem.上下班打卡):
-                    break;
-                // add by shani
+                    break; 
                 case nameof(FeatureItem.排班管理):
-                    break;
-                // add by shani
+                    break; 
                 case nameof(FeatureItem.打卡記錄查詢):
                     break;
                 case nameof(FeatureItem.舊每日總帳報表):
