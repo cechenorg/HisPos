@@ -385,9 +385,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void SetPharmacist()
         {
-            if (MedicalPersonnels.SingleOrDefault(e => e.ID.Equals(VM.CurrentUser.ID)) != null)
+            var currentMedicalPerson = MedicalPersonnels.SingleOrDefault(e => e.ID.Equals(VM.CurrentUser.ID));
+            if (currentMedicalPerson != null)
             {
-                SelectedPharmacist = MedicalPersonnels.SingleOrDefault(e => e.ID.Equals(VM.CurrentUser.ID));
+                SelectedPharmacist = currentMedicalPerson;
                 PrescriptionCount = UpdatePrescriptionCount();
             }
         }
