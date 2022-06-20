@@ -263,7 +263,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         #endregion ----- Define Variables -----
 
         public CustomerManageViewModel()
-        { 
+        {
+            //TabName = MainWindow.HisFeatures[2].Functions[0];
+            //Icon = MainWindow.HisFeatures[2].Icon;
             Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedCustomer);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             CancelCommand = new RelayCommand(CancelAction);
@@ -312,6 +314,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         {
             if (notificationMessage.Target == this)
             {
+                TabName = "顧客管理";
                 MainWindow.Instance.AddNewTab(TabName);
                 SearchOrderID = notificationMessage.Content;
                 SearchIDAction();
@@ -523,6 +526,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         {
             if (notificationMessage.Target == this)
             {
+                TabName = "顧客管理";
                 MainWindow.Instance.AddNewTab(TabName);
 
                 SearchOrderID = notificationMessage.Content;
