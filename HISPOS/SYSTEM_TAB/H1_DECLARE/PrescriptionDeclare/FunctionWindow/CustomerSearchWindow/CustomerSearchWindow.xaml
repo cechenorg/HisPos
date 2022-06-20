@@ -12,7 +12,7 @@
     xmlns:service="clr-namespace:His_Pos.Service"
     Title="顧客查詢"
     Width="800"
-    Height="450"
+    Height="400"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
@@ -142,7 +142,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="270" />
+                <RowDefinition Height="220" />
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
