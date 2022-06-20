@@ -313,26 +313,33 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             {
                 StrikeHistories.GetSelectData(result.Tables[0]);
 
+                string TypeText = type;
+                string SubjectText = sujectString;
+                string AccountText = accountString;
+                string EmpText = emp;
+
                 DataRow dr1 = result.Tables[1].NewRow();
                 dr1[0] = "";
                 result.Tables[1].Rows.InsertAt(dr1, 0);
                 TypeTable = result.Tables[1];
+                Type = TypeText;
 
                 DataRow dr2 = result.Tables[2].NewRow();
                 dr2[0] = "";
                 result.Tables[2].Rows.InsertAt(dr2, 0);
                 SujectTable = result.Tables[2];
+                SujectString = SubjectText;
 
                 DataRow dr3 = result.Tables[3].NewRow();
                 dr3[0] = "";
                 result.Tables[3].Rows.InsertAt(dr3, 0);
                 AccountTable = result.Tables[3];
-
+                AccountString = AccountText;
                 DataRow dr4 = result.Tables[4].NewRow();
                 dr4[0] = "";
                 result.Tables[4].Rows.InsertAt(dr4, 0);
                 EmpTable = result.Tables[4];
-
+                Emp = EmpText;
                 ResultTable = result.Tables[0];
             }
         }
