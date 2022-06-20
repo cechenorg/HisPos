@@ -284,6 +284,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             if (notificationMessage.Target == this)
             {
+                TabName = "進退貨紀錄";
                 MainWindow.Instance.AddNewTab(TabName);
                 ClearSearchConditionAction();
                 SearchOrderID = notificationMessage.Content;

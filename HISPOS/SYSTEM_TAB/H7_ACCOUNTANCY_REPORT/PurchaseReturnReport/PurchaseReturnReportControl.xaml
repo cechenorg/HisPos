@@ -460,35 +460,6 @@
                 FontSize="18"
                 Text="{Binding CurrentManufactoryOrder.ReturnPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
                 TextAlignment="Left" />
-            <TextBlock
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Text="進貨含稅 $"
-                TextAlignment="Center" />
-            <TextBlock
-                Width="100"
-                Margin="5,0,0,0"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                Text="{Binding CurrentManufactoryOrder.PurchasePrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                TextAlignment="Left" />
-            <TextBlock
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Text="退貨含稅 $"
-                TextAlignment="Center" />
-            <TextBlock
-                Width="100"
-                Margin="5,0,0,0"
-                VerticalAlignment="Center"
-                FontFamily="Segoe UI Semi"
-                FontSize="20"
-                Text="{Binding CurrentManufactoryOrder.ReturnPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
-                TextAlignment="Left" />
         </StackPanel>
     </Grid>
 </UserControl>
