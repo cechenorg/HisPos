@@ -165,17 +165,20 @@ namespace His_Pos.NewClass.StoreOrder
             initProductCount = row.Field<int>("ProductCount");
             OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
             OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
-            if(!DBNull.Value.Equals(row["StoOrd_ModifyUser"]) && row.Table.Columns.Contains("StoOrd_ModifyUser"))
+            if(row.Table.Columns.Contains("StoOrd_ModifyUser"))
             {
-                ModifyUser = row.Field<string>("StoOrd_ModifyUser");
+                if(!DBNull.Value.Equals(row["StoOrd_ModifyUser"]))
+                    ModifyUser = row.Field<string>("StoOrd_ModifyUser");
             }
-            if (!DBNull.Value.Equals(row["StoOrd_ModifyTime"]))
+            if (row.Table.Columns.Contains("StoOrd_ModifyTime"))
             {
-                ModifyTime = (row.Field<DateTime>("StoOrd_ModifyTime")).ToString("yyyy/MM/dd");
+                if (!DBNull.Value.Equals(row["StoOrd_ModifyTime"]))
+                    ModifyTime = (row.Field<DateTime>("StoOrd_ModifyTime")).ToString("yyyy/MM/dd");
             }
-            if (!DBNull.Value.Equals(row["StoOrd_VoidReason"]) && row.Table.Columns.Contains("StoOrd_VoidReason"))
+            if (row.Table.Columns.Contains("StoOrd_VoidReason"))
             {
-                VoidReason = row.Field<string>("StoOrd_VoidReason");
+                if(!DBNull.Value.Equals(row["StoOrd_VoidReason"]))
+                    VoidReason = row.Field<string>("StoOrd_VoidReason");
             }
             
             if (row.Table.Columns.Contains("StoOrd_IsEnable"))
