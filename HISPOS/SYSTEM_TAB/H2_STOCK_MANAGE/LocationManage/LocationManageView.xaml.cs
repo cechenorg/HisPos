@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -387,7 +388,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         {
             if (master.DefaultView is null) return;
             if (detail.DefaultView is null) return;
-
+            var invalidFileNameChars = Path.GetInvalidFileNameChars();
             DataRowView row = (DataRowView)ProductLocationDataGrid.SelectedItem;
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             Process myProcess = new Process();
@@ -395,7 +396,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             fdlg.Title = "儲位管理";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? path : Properties.Settings.Default.DeclareXmlPath;
             fdlg.Filter = "XLSX檔案|*.xlsx";
-            fdlg.FileName = DateTime.Now.ToString("yyyy-MM-dd") + "_" + row["ProLoc_Name"].ToString() + "_" + "櫃位管理";
+            string ProLocName = row["ProLoc_Name"].ToString();
+            foreach (var nameChar in invalidFileNameChars)
+            {
+                ProLocName = ProLocName.Replace(nameChar, ' ');
+            }
+            ProLocName = ProLocName.TrimStart().TrimEnd();
+            fdlg.FileName = DateTime.Now.ToString("yyyy-MM-dd") + "_" + ProLocName + "_" + "櫃位管理"; ;
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
@@ -403,8 +410,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 XLWorkbook wb = new XLWorkbook();
                 var style = XLWorkbook.DefaultStyle;
                 style.Border.DiagonalBorder = XLBorderStyleValues.Thick;
-
-                var ws = wb.Worksheets.Add(row["ProLoc_Name"].ToString() + "儲位管理");
+                var ws = wb.Worksheets.Add(ProLocName + "儲位管理");
                 ws.Style.Font.SetFontName("Arial").Font.SetFontSize(14);
 
                 var col1 = ws.Column("A");
