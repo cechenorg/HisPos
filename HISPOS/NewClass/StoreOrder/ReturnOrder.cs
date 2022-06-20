@@ -279,8 +279,9 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if ((tempProduct as ReturnMedicine).IsControl != null)
                 {
-                    MessageWindow.ShowMessage("管藥無法退貨", MessageType.ERROR);
-                    return;
+                    ConfirmWindow confirmWindow = new ConfirmWindow("管藥正常不可退貨，確認繼續退貨作業?", "確認");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
                 }
             }
 
