@@ -68,13 +68,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => isBusy;
             set { Set(() => IsBusy, ref isBusy, value); }
         }
-
         public string BusyContent
         {
             get => busyContent;
             set { Set(() => BusyContent, ref busyContent, value); }
         }
-
+        private bool allBtnCheck = true;
+        public bool AllBtnCheck
+        {
+            get => allBtnCheck;
+            set { Set(() => AllBtnCheck, ref allBtnCheck, value); }
+        }
         public ICollectionView StoreOrderCollectionView
         {
             get => storeOrderCollectionView;
@@ -172,14 +176,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             AddNewOrderWindow.AddNewOrderWindow addNewOrderWindow = new AddNewOrderWindow.AddNewOrderWindow();
             addNewOrderWindow.ShowDialog();
-
             AddNewOrderWindowViewModel viewModel = addNewOrderWindow.DataContext as AddNewOrderWindowViewModel;
-
+            
             if (viewModel.NewStoreOrder != null)
             {
+                SearchString = string.Empty;
+                AllBtnCheck = true;
                 //storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
                 AddOrderByMinus();
                 storeOrderCollection = (StoreOrders)StoreOrderCollectionView.SourceCollection;
+                if (filterStatus != OrderFilterStatusEnum.ALL)
+                    filterStatus = OrderFilterStatusEnum.ALL;
+                StoreOrderCollectionView.Filter += OrderFilter;
                 string tempId = Convert.ToString(viewModel.NewStoreOrder.ID);
                 int count = -1;
                 if(!string.IsNullOrEmpty(tempId))
@@ -218,6 +226,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
                 //storeOrderCollection.Remove(CurrentStoreOrder);
                 AddOrderByMinus();
+                StoreOrderCollectionView.Filter += OrderFilter;
                 CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
             }
         }
@@ -564,39 +573,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 //採購人
                 if (string.IsNullOrEmpty(tempOrder.OrderEmployeeName) == false && tempOrder.OrderEmployeeName.Contains(SearchString))
                     returnValue = true;
-                
-
-                //Order Product ID Name Note Filter
-                //if (tempOrder is PurchaseOrder && (tempOrder as PurchaseOrder).OrderProducts != null )
-                //{
-                //    foreach (var product in (tempOrder as PurchaseOrder).OrderProducts)
-                //        if (product.Note != null && product.Note.Contains(SearchString))
-                //        {
-                //            returnValue = true;
-                //            break;
-                //        }
-                //        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
-                //        {
-                //            returnValue = true;
-                //            break;
-                //        }
-                //}
-                //else if (tempOrder is ReturnOrder && (tempOrder as ReturnOrder).ReturnProducts != null)
-                //{
-                //    foreach (var product in (tempOrder as ReturnOrder).ReturnProducts)
-                //        if (product.Note != null && product.Note.Contains(SearchString))
-                //        {
-                //            returnValue = true;
-                //            break;
-                //        }
-                //        else if (product.ID.ToUpper().Contains(SearchString.ToUpper()) || product.ChineseName.ToUpper().Contains(SearchString.ToUpper()) || product.EnglishName.ToUpper().Contains(SearchString.ToUpper()))
-                //        {
-                //            returnValue = true;
-                //            break;
-                //        }
-                //}
+               
             }
-
+            
             //Order Status Filter
             switch (filterStatus)
             {
