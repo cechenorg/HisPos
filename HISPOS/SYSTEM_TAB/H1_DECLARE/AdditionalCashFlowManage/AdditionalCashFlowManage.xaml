@@ -16,9 +16,7 @@
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:AdditionalCashFlowManageViewModel />
-    </UserControl.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -73,7 +71,7 @@
                 Content="來源"
                 FontSize="20" />
             <ComboBox
-                Width="210"
+                Width="180"
                 Margin="10,0,0,0"
                 DisplayMemberPath="Name"
                 FontSize="16"
@@ -91,6 +89,44 @@
                 FontSize="16"
                 Text="{Binding CashFlowNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextAlignment="Center" />
+            <Label
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="日期"
+                FontSize="18" />
+            <xctk:MaskedTextBox
+                x:Name="RecordDate"
+                Width="100"
+                Height="35"
+                Margin="0,0,10,0"
+                HorizontalContentAlignment="Center"
+                FontSize="16"
+                Foreground="{StaticResource ForeGround}"
+                InputMethod.IsInputMethodEnabled="True"
+                InputScope="Number"
+                InsertKeyMode="Overwrite"
+                Mask="000/00/00"
+                PreviewKeyDown="StartDate_OnPreviewKeyDown"
+                PromptChar="-"
+                Style="{StaticResource MaterialDesignTextBox}"
+                ValueDataType="{x:Type xctk:DateTimeFormat}">
+                <Binding
+                    Converter="{StaticResource NullableDateConverter}"
+                    Mode="TwoWay"
+                    NotifyOnValidationError="True"
+                    Path="RecordDate"
+                    UpdateSourceTrigger="PropertyChanged"
+                    ValidatesOnDataErrors="True">
+                    <Binding.ValidationRules>
+                        <service:DateValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=RecordDate}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </xctk:MaskedTextBox>
             <Button
                 Width="80"
                 Margin="10,0,0,0"

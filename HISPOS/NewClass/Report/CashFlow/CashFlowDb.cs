@@ -19,7 +19,7 @@ namespace His_Pos.NewClass.Report.CashFlow
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CashFlowRecordDetailsByDate]", parameterList);
         }
 
-        public static void InsertCashFlowRecordDetail(CashFlowAccount account, string note, double value, string ID)
+        public static void InsertCashFlowRecordDetail(CashFlowAccount account, string note, double value, string ID,DateTime date)
         {
             double cashFlowValue;
             if (account.Type == CashFlowType.Expenses)
@@ -33,6 +33,7 @@ namespace His_Pos.NewClass.Report.CashFlow
             DataBaseFunction.AddSqlParameter(parameterList, "CurrentUserId", ViewModelMainWindow.CurrentUser.ID);
             DataBaseFunction.AddSqlParameter(parameterList, "Note", note);
             DataBaseFunction.AddSqlParameter(parameterList, "Bank", ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "Date", date);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCashFlowRecordDetail]", parameterList);
         }
 

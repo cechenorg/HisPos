@@ -114,7 +114,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
                 Set(() => EndDate, ref endDate, value);
             }
         }
+        private DateTime recordDate;
 
+        public DateTime RecordDate
+        {
+            get => recordDate;
+            set
+            {
+                Set(() => RecordDate, ref recordDate, value);
+            }
+        }
         private bool payCheck;
 
         public bool PayCheck
@@ -282,7 +291,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             ConfirmWindow cw = new ConfirmWindow("是否進行輸入額外收支", "確認");
             if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
-            CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue, SelectedBank.ID);
+            CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue, SelectedBank.ID, RecordDate);
             MainWindow.ServerConnection.CloseConnection();
             CashFlowValue = 0;
             CashFlowNote = "";
@@ -300,6 +309,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
 
                 case "EndDate":
                     EndDate = DateTime.Today;
+                    break;
+                case "RecordDate":
+                    RecordDate = DateTime.Today;
                     break;
             }
         }
