@@ -8,6 +8,7 @@
     xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:enum="clr-namespace:DomainModel.Enum;assembly=DomainModel"
     d:DesignHeight="840" d:DesignWidth="1365" mc:Ignorable="d" >
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="840" Margin="20"> 
@@ -194,16 +195,21 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTemplateColumn Header="職位" >
+                            <DataGridTemplateColumn Header="權限" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox FontSize="20"   DataContext="{Binding }"
-                                                      DisplayMemberPath="WorkPositionName"  
-                                                      ItemsSource="{Binding DataContext.WorkPositions , RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        
-                                                      SelectedValue="{Binding EmployeeWorkPosition,UpdateSourceTrigger=PropertyChanged}"  >
-                                            
-                                    </ComboBox>
+                                    <ComboBox FontSize="20"   DataContext="{Binding }" 
+                                              SelectedValuePath="Tag"
+                                              SelectedValue="{Binding EmployeeAuthority,UpdateSourceTrigger=PropertyChanged}"  >
+                                            <ComboBoxItem Content="系統管理員" Tag="{x:Static enum:Authority.Admin}"/>
+                                            <ComboBoxItem Content="藥局經理" Tag="{x:Static enum:Authority.PharmacyManager}" />
+                                            <ComboBoxItem Content="會計人員" Tag="{x:Static enum:Authority.AccountingStaff}" />
+                                            <ComboBoxItem Content="店長" Tag="{x:Static enum:Authority.StoreManager}" />
+                                            <ComboBoxItem Content="店員" Tag="{x:Static enum:Authority.StoreEmployee}" />
+                                            <ComboBoxItem Content="負責藥師" Tag="{x:Static enum:Authority.MasterPharmacist}" />
+                                            <ComboBoxItem Content="執業藥師" Tag="{x:Static enum:Authority.NormalPharmacist}" />
+                                            <ComboBoxItem Content="支援藥師" Tag="{x:Static enum:Authority.SupportPharmacist}" />
+                                        </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

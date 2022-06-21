@@ -5,6 +5,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.WorkPosition;
 using His_Pos.NewClass.Pharmacy;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -44,7 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => SelectedEmployee, ref _selectedEmployee, value);
 
                 if (ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
-                    SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList(), WorkPositions);
+                    SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList());
             }
         }
 
@@ -80,6 +81,28 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => WorkPositions, ref workPositions, value);
             }
         }
+
+        public List<Authority> authoritys = new List<Authority>() {
+            Authority.Admin, 
+            Authority.PharmacyManager, 
+            Authority.AccountingStaff, 
+            Authority.StoreManager, 
+            Authority.StoreEmployee, 
+            Authority.MasterPharmacist, 
+            Authority.NormalPharmacist,
+            Authority.SupportPharmacist 
+        };
+
+        public List<Authority> Authoritys
+        {
+            get { return authoritys; }
+            set
+            {
+                Set(() => authoritys, ref authoritys, value);
+            }
+        }
+
+        
 
         private bool localCheck;
 
