@@ -533,7 +533,10 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                         {
                             StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
                             storeOrder.GetOrderProducts();
-                            table = StoreOrderDB.SendOTCStoreOrderToSingde(storeOrder);//傳送杏德
+                            if(ProductTypeStatusSelectedItem == "藥品")
+                                table = StoreOrderDB.SendStoreOrderToSingde(storeOrder);//傳送藥品
+                            else if (ProductTypeStatusSelectedItem == "OTC")
+                                table = StoreOrderDB.SendOTCStoreOrderToSingde(storeOrder);//傳送OTC
 
                             if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
                             {
