@@ -38,9 +38,9 @@
     <Grid Background="{StaticResource GridDarkerBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="300" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <DataGrid
             Grid.Row="0"
@@ -233,7 +233,8 @@
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            Background="{StaticResource GridBackGround}">
             <TextBlock
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
@@ -414,7 +415,8 @@
         <StackPanel
             Grid.Row="3"
             Grid.Column="0"
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            Background="{StaticResource GridBackGround}">
             <TextBlock
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
