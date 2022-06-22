@@ -1,8 +1,12 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using His_Pos.NewClass.Report.CashFlow;
 using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordEditWindow
 {
@@ -18,10 +22,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
             InitializeComponent();
         }
 
-        public CashFlowRecordEditWindow(CashFlowRecordDetail selectedDetail)
+        public CashFlowRecordEditWindow(CashFlowRecordDetail selectedDetail, List<CashFlowAccount> CashFlowAccountsSource)
         {
             InitializeComponent();
-            DataContext = new CashFlowRecordDetailEditViewModel(selectedDetail);
+            DataContext = new CashFlowRecordDetailEditViewModel(selectedDetail, CashFlowAccountsSource);
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 switch (notificationMessage.Notification)

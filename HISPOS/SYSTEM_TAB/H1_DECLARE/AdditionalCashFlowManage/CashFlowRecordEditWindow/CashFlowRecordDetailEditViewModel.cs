@@ -15,8 +15,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
     {
         #region Properties
 
-        private List<CashFlowAccount> CashFlowAccountsSource => new List<CashFlowAccount> { new CashFlowAccount(CashFlowType.Expenses, "雜支", 0), new CashFlowAccount(CashFlowType.Income, "額外收入", 1) };
-
+        //private List<CashFlowAccount> CashFlowAccountsSource => new List<CashFlowAccount> { new CashFlowAccount(CashFlowType.Expenses, "雜支", 0), new CashFlowAccount(CashFlowType.Income, "額外收入", 1) };
+        private List<CashFlowAccount> CashFlowAccountsSource { get; set; }
         private List<CashFlowAccount> cashFlowAccounts;
 
         public List<CashFlowAccount> CashFlowAccounts
@@ -45,6 +45,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
         {
             get => originContent;
             set { Set(() => OriginContent, ref originContent, value); }
+        }
+        private DateTime? recordDate;// = DateTime.Today;
+
+        public DateTime? RecordDate
+        {
+            get => recordDate;
+            set { Set(() => RecordDate, ref recordDate, value); }
         }
 
         private bool expensesCheck;
@@ -110,10 +117,23 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
 
         #endregion Commands
 
-        public CashFlowRecordDetailEditViewModel(CashFlowRecordDetail selectedDetail)
+        public CashFlowRecordDetailEditViewModel(CashFlowRecordDetail selectedDetail, List<CashFlowAccount> accountsSource)
         {
+            AccountsSource(accountsSource);
             InitVariables(selectedDetail);
             InitCommands();
+        }
+        public void AccountsSource(List<CashFlowAccount> accountsSource)
+        {
+            if(accountsSource.Count > 0)
+            {
+                CashFlowAccountsSource = new List<CashFlowAccount>();
+
+                foreach (CashFlowAccount account in accountsSource)
+                {
+                    CashFlowAccountsSource.Add(account);
+                }
+            }
         }
 
         private void InitVariables(CashFlowRecordDetail selectedDetail)
@@ -124,8 +144,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
             var type = selectedDetail.CashFlowValue >= 0 ? "收入" : "支出";
             OriginContent =
                 $"類別 : {type}  科目 : {selectedDetail.Name}  金額 : {Math.Abs(selectedDetail.CashFlowValue)} \n備註 : {selectedDetail.Note}  登錄時間 : {DateTimeExtensions.ConvertToTaiwanCalenderWithTime(selectedDetail.Date, true)} 登錄人 : {selectedDetail.EmpName}";
-            SelectedCashFlowAccount = CashFlowAccounts.Single(acc => acc.AccountName.Equals(selectedDetail.Name));
+            SelectedCashFlowAccount = CashFlowAccountsSource.Single(acc => acc.AccountName.Equals(selectedDetail.Name));
             CashFlowValue = Math.Abs(EditedCashFlowRecord.CashFlowValue);
+            RecordDate = EditedCashFlowRecord.Date;
         }
 
         private void InitCommands()
@@ -144,7 +165,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
             EditedCashFlowRecord.Name = SelectedCashFlowAccount.AccountName;
             EditedCashFlowRecord.CashFlowValue = CashFlowValue;
             MainWindow.ServerConnection.OpenConnection();
-            CashFlowDb.UpdateCashFlowRecordDetail(SelectedCashFlowAccount, EditedCashFlowRecord);
+            CashFlowDb.UpdateCashFlowRecordDetail(SelectedCashFlowAccount, EditedCashFlowRecord, (DateTime)RecordDate);
             MainWindow.ServerConnection.CloseConnection();
             Messenger.Default.Send(new NotificationMessage("CashFlowRecordDetailEditSubmit"));
         }

@@ -417,7 +417,7 @@
                                             BorderBrush="Transparent"
                                             Command="{Binding DataContext.DeleteCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Content="刪除"
-                                            IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
+                                            IsEnabled="{Binding CanDelete, UpdateSourceTrigger=PropertyChanged}"
                                             Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

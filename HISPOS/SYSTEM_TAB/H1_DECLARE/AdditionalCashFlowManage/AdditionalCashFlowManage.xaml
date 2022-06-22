@@ -89,47 +89,9 @@
                 FontSize="16"
                 Text="{Binding CashFlowNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextAlignment="Center" />
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="日期"
-                FontSize="18" />
-            <xctk:MaskedTextBox
-                x:Name="RecordDate"
-                Width="100"
-                Height="35"
-                Margin="0,0,10,0"
-                HorizontalContentAlignment="Center"
-                FontSize="16"
-                Foreground="{StaticResource ForeGround}"
-                InputMethod.IsInputMethodEnabled="True"
-                InputScope="Number"
-                InsertKeyMode="Overwrite"
-                Mask="000/00/00"
-                PreviewKeyDown="StartDate_OnPreviewKeyDown"
-                PromptChar="-"
-                Style="{StaticResource MaterialDesignTextBox}"
-                ValueDataType="{x:Type xctk:DateTimeFormat}">
-                <Binding
-                    Converter="{StaticResource NullableDateConverter}"
-                    Mode="TwoWay"
-                    NotifyOnValidationError="True"
-                    Path="RecordDate"
-                    UpdateSourceTrigger="PropertyChanged"
-                    ValidatesOnDataErrors="True">
-                    <Binding.ValidationRules>
-                        <service:DateValidationRule />
-                    </Binding.ValidationRules>
-                </Binding>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=RecordDate}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </xctk:MaskedTextBox>
             <Button
                 Width="80"
-                Margin="10,0,0,0"
+                Margin="200,0,0,0"
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding SubmitCommand}"
@@ -405,13 +367,13 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <!--<DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button x:Name="EditCashFlowRecordButton" Content="編輯" Background="RoyalBlue" BorderBrush="Transparent" Command="{Binding DataContext.EditCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>-->
+                            <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="EditCashFlowRecordButton" Content="編輯" Background="RoyalBlue" BorderBrush="Transparent" Command="{Binding DataContext.EditCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -423,7 +385,7 @@
                                         BorderBrush="Transparent"
                                         Command="{Binding DataContext.DeleteCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         Content="刪除"
-                                        IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding CanDelete, UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

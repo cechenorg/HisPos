@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using His_Pos.ChromeTabViewModel;
 using System;
 using System.Data;
@@ -20,7 +21,8 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
             Date = r.Field<DateTime>("CashFlow_Time");
             InsertDate = r.Field<DateTime>("Insert_Time");
             EmpName = r.Field<string>("Emp_Name");
-            CanEdit = DateTime.Compare(Date, DateTime.Today) >= 0 || ViewModelMainWindow.CurrentUser.ID == 1;
+            CanEdit = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff;
+            CanDelete = ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff; ;
         }
 
         private int id;
@@ -119,6 +121,15 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
             set
             {
                 Set(() => CanEdit, ref canEdit, value);
+            }
+        }
+        private bool canDelete;
+        public bool CanDelete
+        {
+            get => canDelete;
+            set
+            {
+                Set(() => CanDelete, ref canDelete, value);
             }
         }
     }

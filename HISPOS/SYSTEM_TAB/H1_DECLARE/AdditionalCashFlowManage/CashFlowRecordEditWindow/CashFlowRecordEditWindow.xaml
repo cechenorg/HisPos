@@ -4,13 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordEditWindow"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:local1="clr-namespace:His_Pos.Service"
     Title="額外收支編輯"
     Width="670"
-    Height="305"
+    Height="320"
     FontFamily="Segoe UI Semibold"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <Window.Resources>
+        <local1:NullableDateConverter x:Key="NullableDateConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120" />
@@ -97,9 +101,30 @@
         </StackPanel>
         <StackPanel
             Grid.Row="3"
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Left"
             Orientation="Horizontal">
+            <Label
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Content="日期"
+                FontSize="20" />
+            <xctk:MaskedTextBox
+                Width="100"
+                Height="35"
+                Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"
+                FontSize="16"
+                InputMethod.IsInputMethodEnabled="False"
+                InputScope="Number"
+                InsertKeyMode="Overwrite"
+                Mask="000/00/00"
+                PromptChar="-"
+                Style="{StaticResource MaterialDesignTextBox}"
+                Text="{Binding RecordDate,Converter={StaticResource NullableDateConverter}, StringFormat= yyy/MM/dd ,NotifyOnValidationError=True,ValidatesOnDataErrors =True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </xctk:MaskedTextBox>
             <Button
+                Margin="330,0,0,0"
                 Background="Gray"
                 BorderBrush="Transparent"
                 Command="{Binding Cancel}"
