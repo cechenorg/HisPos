@@ -191,12 +191,15 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 return false;
             }
 
-            foreach (var principal in CurrentManufactory.Principals)
+            if (CurrentManufactory.Principals != null)
             {
-                if (principal.Name.Equals(""))
+                foreach (var principal in CurrentManufactory.Principals)
                 {
-                    MessageWindow.ShowMessage("聯絡人名稱不可為空!", MessageType.ERROR);
-                    return false;
+                    if (principal.Name.Equals(""))
+                    {
+                        MessageWindow.ShowMessage("聯絡人名稱不可為空!", MessageType.ERROR);
+                        return false;
+                    }
                 }
             }
 
@@ -226,17 +229,18 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 bool isSuccess = UpdateManufactoryDetail();
                 MainWindow.ServerConnection.CloseConnection();
                 if (isSuccess)
+                { 
                     MessageWindow.ShowMessage("更新成功!", MessageType.SUCCESS);
+                    CurrentManufactory.IsDataChanged = false;
+                    CancelChangeCommand.RaiseCanExecuteChanged();
+                    ConfirmChangeCommand.RaiseCanExecuteChanged();
+                }
                 else
                 {
                     MessageWindow.ShowMessage("更新失敗 請稍後重試!", MessageType.ERROR);
                     return;
                 }
             }
-
-            CurrentManufactory.IsDataChanged = false;
-            CancelChangeCommand.RaiseCanExecuteChanged();
-            ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
 
         private void CancelChangeAction()

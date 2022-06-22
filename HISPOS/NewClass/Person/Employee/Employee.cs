@@ -117,6 +117,7 @@ namespace His_Pos.NewClass.Person.Employee
                 Set(() => WorkPosition, ref workPosition, value);
             }
         }
+         
 
         private DateTime? startDate;//到職日
 
@@ -196,10 +197,10 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private ObservableCollection<GroupWorkPosition> groupPharmacyEmployeeList;//在其他加盟藥局對應的職位
+        private ObservableCollection<GroupAuthority> groupPharmacyEmployeeList;//在其他加盟藥局對應的職位
 
         [IgnoreFormat]
-        public ObservableCollection<GroupWorkPosition> GroupPharmacyEmployeeList
+        public ObservableCollection<GroupAuthority> GroupPharmacyEmployeeList
         {
             get => groupPharmacyEmployeeList;
             set
@@ -208,10 +209,10 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private GroupWorkPosition selectedGroupPharmacyEmployee;//在其他加盟藥局對應的職位
+        private GroupAuthority selectedGroupPharmacyEmployee;//在其他加盟藥局對應的職位
 
         [IgnoreFormat]
-        public GroupWorkPosition SelectedGroupPharmacyEmployee
+        public GroupAuthority SelectedGroupPharmacyEmployee
         {
             get => selectedGroupPharmacyEmployee;
             set
@@ -231,20 +232,21 @@ namespace His_Pos.NewClass.Person.Employee
         {
             return Authority == Authority.MasterPharmacist || Authority == Authority.NormalPharmacist;
         }
-        public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList,WorkPosition.WorkPositions workPositions)
+
+        public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList)
         {
-            GroupPharmacyEmployeeList = new ObservableCollection<GroupWorkPosition>();
+            GroupPharmacyEmployeeList = new ObservableCollection<GroupAuthority>();
 
             var employeeList= EmployeeDb.GetGroupPharmacyDataByID(groupServerList.Select(_ => _.PHAMAS_VerifyKey ).ToList(), ID);
 
             for(int i =0; i < groupServerList.Count; i++)
             {
-                GroupWorkPosition tempData = new GroupWorkPosition()
+                GroupAuthority tempData = new GroupAuthority()
                 {
                     PharmacyName = groupServerList[i].PHAMAS_NAME,
                     PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey
                 };
-                tempData.EmployeeWorkPosition = workPositions.SingleOrDefault(_ => _.WorkPositionId == employeeList[i].WorkPosition.WorkPositionId);
+                tempData.EmployeeAuthority = employeeList[i].Authority;
                 GroupPharmacyEmployeeList.Add(tempData);
             }
 
@@ -330,17 +332,17 @@ namespace His_Pos.NewClass.Person.Employee
         }
     }
 
-    public class GroupWorkPosition : ObservableObject
+    public class GroupAuthority : ObservableObject
     {
         public string PharmacyVerifyKey { get; set; }
         public string PharmacyName { get; set; }
 
 
-        private WorkPosition.WorkPosition _employeeWorkPosition;
-        public WorkPosition.WorkPosition EmployeeWorkPosition {
-            get { return _employeeWorkPosition; }
+        private Authority _employeeAuthority;
+        public Authority EmployeeAuthority {
+            get { return _employeeAuthority; }
             set { 
-                Set(() => EmployeeWorkPosition, ref _employeeWorkPosition, value); } 
+                Set(() => EmployeeAuthority, ref _employeeAuthority, value); } 
         }
     }
 }
