@@ -112,6 +112,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <ComboBox
+                Name="comPharmacy"
                 Grid.Row="0"
                 Margin="10,0,10,0"
                 HorizontalContentAlignment="Center"
@@ -119,9 +120,8 @@
                 FontSize="18"
                 ItemContainerStyle="{StaticResource ComboItemContainerStyle}"            
                 ItemsSource="{Binding CheckLines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-             DisplayMemberPath="Namepath"
-                SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                />   
+                DisplayMemberPath="Namepath"
+                SelectedItem="{Binding CheckLine, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>   
             <DataGrid
             Grid.Row="1"
                 Margin="10,10,10,10"
@@ -289,8 +289,30 @@
             Background="#bfbfbf"
             Orientation="Horizontal" >
             <ComboBox
-                Width="60"
+                Name="Year"
+                Width="80"
                 Margin="10,0,0,0"
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"
+                FontFamily="Segoe UI Semi"
+                FontSize="18"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                SelectedValuePath="content"
+                Text="{Binding SearchYear , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                ItemsSource="{Binding ComYears, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SearchYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+            <Label
+                VerticalAlignment="Center"
+                Content="  年    "
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="Black"/>
+            <ComboBox
+                Name="Month"
+                Width="60"
+                Margin="0,0,0,0"
+                VerticalContentAlignment="Center"
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
