@@ -269,23 +269,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder.MoveToNextStatus();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
-                //storeOrderCollection.ReloadCollection();
                 //(20220510)確認收貨之後清空搜尋條件
-                //StoreOrder currentOrder = null;
                 if (currentStoreOrder.IsDoneOrder)//確認收貨
                 {
                     SearchString = string.Empty;
-                    //currentOrder = currentStoreOrder;
-                    storeOrderCollection = StoreOrders.GetOrdersNotDone();
-                    var orderedList = storeOrderCollection.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
-                    StoreOrders result = new StoreOrders();
-                    for (int i = orderedList.Count() - 1; i >= 0; i--)
-                    {
-                        result.Add(orderedList[i]);
-                    }
-                    storeOrderCollection = result;
-                    InitData(storeOrderCollection);
-                    StoreOrderCollectionView.MoveCurrentToFirst();
+                    StoreOrderCollectionView.Filter += OrderFilter;
+                    CurrentStoreOrder = storeOrderCollection[0];
                 }
             }
             else
