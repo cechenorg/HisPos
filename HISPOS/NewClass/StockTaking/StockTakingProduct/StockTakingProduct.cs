@@ -129,7 +129,14 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             TotalPrice = row.Field<double>("TotalPrice");
             MedBagAmount = row.Field<double>("MedBagAmount");
             PriceValueDiff = row.Field<double>("ValueDiff");
-            AveragePrice = TotalPrice / Inventory;
+            if (Inventory == 0)
+            {
+                AveragePrice = 0;
+            }
+            else
+            {
+                AveragePrice = TotalPrice / Inventory;
+            }
             TakingPrice = Math.Round(AveragePrice, 2, MidpointRounding.AwayFromZero);
             IsUpdate = false;
             NewInventoryTotalPrice = (OnTheFrame + MedBagAmount - Inventory) * AveragePrice;
