@@ -9,17 +9,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 {
     public class EmployeeInsertWindowViewModel : ViewModelBase
     {
-        public WorkPositions workPositions = new WorkPositions();
-
-        public WorkPositions WorkPositions
-        {
-            get { return workPositions; }
-            set
-            {
-                Set(() => WorkPositions, ref workPositions, value);
-            }
-        }
-
+         
         public Employee employee;
 
         public Employee Employee

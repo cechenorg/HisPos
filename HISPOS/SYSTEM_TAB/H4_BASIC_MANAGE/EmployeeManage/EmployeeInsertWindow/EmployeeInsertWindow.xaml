@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:enum="clr-namespace:DomainModel.Enum;assembly=DomainModel"
     Title="新增員工"
     Width="320"
     Height="400"
@@ -39,8 +40,7 @@
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
-                FontSize="18"
-                IsEnabled="{Binding IsIdNumEnable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="18" 
                 Text="{Binding Employee.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -54,8 +54,7 @@
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontFamily="Segoe UI Semi"
-                FontSize="18"
-                IsEnabled="{Binding IsIdNumEnable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="18" 
                 Text="{Binding Employee.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button
                 Grid.Row="0"
@@ -100,20 +99,20 @@
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <Label
                 VerticalAlignment="Center"
-                Content="職位"
+                Content="權限"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20" />
-            <ComboBox
-                Width="145"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                DisplayMemberPath="WorkPositionName"
-                FontFamily="Segoe UI Semi"
-                FontSize="18"
-                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                ItemsSource="{Binding WorkPositions, UpdateSourceTrigger=PropertyChanged}"
-                SelectedItem="{Binding Employee.WorkPosition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Text="{Binding Employee.WorkPosition.WorkPositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox FontSize="20"   
+                      SelectedValuePath="Tag"
+                      SelectedValue="{Binding Employee.Authority,UpdateSourceTrigger=PropertyChanged}"  > 
+                <ComboBoxItem Content="藥局經理" Tag="{x:Static enum:Authority.PharmacyManager}" />
+                <ComboBoxItem Content="會計人員" Tag="{x:Static enum:Authority.AccountingStaff}" />
+                <ComboBoxItem Content="店長" Tag="{x:Static enum:Authority.StoreManager}" />
+                <ComboBoxItem Content="店員" Tag="{x:Static enum:Authority.StoreEmployee}" />
+                <ComboBoxItem Content="負責藥師" Tag="{x:Static enum:Authority.MasterPharmacist}" />
+                <ComboBoxItem Content="執業藥師" Tag="{x:Static enum:Authority.NormalPharmacist}" />
+                <ComboBoxItem Content="支援藥師" Tag="{x:Static enum:Authority.SupportPharmacist}" />
+            </ComboBox>
         </StackPanel>
         <StackPanel Grid.Row="5" Orientation="Horizontal">
             <Label
