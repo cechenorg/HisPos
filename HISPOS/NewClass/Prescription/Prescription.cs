@@ -526,6 +526,11 @@ namespace His_Pos.NewClass.Prescription
                     case "C1"://論病計酬
                         Copayment = VM.GetCopayment("I22");
                         break;
+                    case "C5"://法定傳染隔離案件
+                        Copayment = VM.GetCopayment("914");
+                        PaymentCategory = VM.GetPaymentCategory("W");
+                        SpecialTreat = VM.GetSpecialTreat("EE");
+                        break;
                 }
             }
         }
@@ -821,6 +826,7 @@ namespace His_Pos.NewClass.Prescription
                 case "007"://山地離島就醫/戒菸免收
                 case "008"://經離島醫院診所轉至台灣本門及急救者
                 case "009"://其他免負擔
+                case "914"://法定傳染病
                 case "I22"://免收
                     return true;
             }
@@ -1181,6 +1187,7 @@ namespace His_Pos.NewClass.Prescription
 
         private void SetNormalVariables()
         {
+            if (PrescriptionCase.ID.Equals("C5")) return;
             if (Division != null && !string.IsNullOrEmpty(Division.ID))
                 PrescriptionCase = Division.ID.Equals("40") ? VM.GetPrescriptionCases("19") : VM.GetPrescriptionCases("09");
             else
