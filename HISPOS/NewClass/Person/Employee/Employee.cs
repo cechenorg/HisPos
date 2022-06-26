@@ -244,9 +244,10 @@ namespace His_Pos.NewClass.Person.Employee
                 GroupAuthority tempData = new GroupAuthority()
                 {
                     PharmacyName = groupServerList[i].PHAMAS_NAME,
-                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey
+                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey,
+                    EmployeeAuthority = employeeList[i].Authority
                 };
-                tempData.EmployeeAuthority = employeeList[i].Authority;
+                tempData.IsDirty = false;
                 GroupPharmacyEmployeeList.Add(tempData);
             }
 
@@ -341,8 +342,19 @@ namespace His_Pos.NewClass.Person.Employee
         private Authority _employeeAuthority;
         public Authority EmployeeAuthority {
             get { return _employeeAuthority; }
-            set { 
-                Set(() => EmployeeAuthority, ref _employeeAuthority, value); } 
+            set
+            {
+                Set(() => EmployeeAuthority, ref _employeeAuthority, value);
+                IsDirty = true;
+            } 
+        }
+
+        private bool _isDirty;
+
+        public bool IsDirty
+        {
+            get { return _isDirty; }
+            set { Set(() => IsDirty, ref _isDirty, value); }
         }
     }
 }
