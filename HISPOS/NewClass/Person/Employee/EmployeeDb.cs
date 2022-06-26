@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using DomainModel;
+using DomainModel.Enum;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Person.Employee
 {
@@ -48,7 +52,22 @@ namespace His_Pos.NewClass.Person.Employee
             else
             {
                 MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertEmployee]", parameterList);
-                SyncData();
+
+                foreach (var pharmacyInfo in ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList)
+                {
+                    var tempEmployee = e.DeepCloneViaJson();
+
+                    //其他藥局都須為支援藥師
+                    if ( (tempEmployee.Authority == Authority.MasterPharmacist || tempEmployee.Authority == Authority.NormalPharmacist) && 
+                         pharmacyInfo.PHAMAS_VerifyKey != ViewModelMainWindow.CurrentPharmacy.VerifyKey) {
+                        tempEmployee.Authority = Authority.SupportPharmacist;
+                    }
+
+                    parameterList = new List<SqlParameter>();
+                    parameterList.Add(new SqlParameter("Employee", SetCustomer(tempEmployee)));
+                    MainWindow.ServerConnection.ExecuteProcBySchema(pharmacyInfo.PHAMAS_VerifyKey, "[Set].[InsertEmployee]", parameterList);
+                }
+                 
                 UpdateIsLocal(e.IDNumber, true);
             }
         }
@@ -57,7 +76,7 @@ namespace His_Pos.NewClass.Person.Employee
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
-            if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+            if (string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName))
             {
                 MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList); 
             }
