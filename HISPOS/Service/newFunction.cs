@@ -628,6 +628,7 @@ namespace His_Pos.Service
                 case "G000":
                 case "D010":
                 case "H000":
+                case "HVIT":
                 case "D011":
                 case "E000":
                 case "Z000":
