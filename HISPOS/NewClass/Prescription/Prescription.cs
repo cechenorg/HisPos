@@ -82,7 +82,7 @@ namespace His_Pos.NewClass.Prescription
             Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
-            Pharmacist = VM.CurrentPharmacy.MedicalPersonnels.SingleOrDefault(p => p.IDNumber.Equals(r.Field<string>("Emp_IDNumber")));
+            Pharmacist = VM.CurrentPharmacy.AllPharmacists.SingleOrDefault(p => p.IDNumber.Equals(r.Field<string>("Emp_IDNumber")));
             AdjustDate = r.Field<DateTime>("AdjustDate");
             AdjustDay = Convert.ToDateTime(AdjustDate).ToString("dd");
             AdjustMonth = Convert.ToDateTime(AdjustDate).ToString("MM");

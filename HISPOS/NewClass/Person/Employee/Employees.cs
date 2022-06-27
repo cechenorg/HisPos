@@ -88,6 +88,18 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
+        public void InitAllPharmacists()
+        {
+            Clear();
+            var table = EmployeeDb.GetData();
+            foreach (DataRow row in table.Rows)
+            {
+                var emp = new Employee(row);
+                if (emp.IsPharmist())
+                    Add(emp);
+            }
+        }
+
         public Employees GetLocalPharmacist()
         {
             var localPharmacists = new Employees();

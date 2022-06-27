@@ -31,6 +31,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             TAXNUM = r.Field<string>("PHAMAS_TAXNUM");
             VerifyKey = r.Field<string>("PHAMAS_VerifyKey");
             MedicalPersonnels = new Employees();
+            AllPharmacists = new Employees();
         }
 
         private string id;
@@ -95,7 +96,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         public Employee MedicalPersonnel { get; set; }
 
         [IgnoreFormat]
-        public Employees MedicalPersonnels { get; set; }  
+        public Employees MedicalPersonnels { get; set; }
+
+        [IgnoreFormat]
+        public Employees AllPharmacists { get; set; }
 
         [IgnoreFormat]
         public string GroupServerName { get; set; }
@@ -116,6 +120,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]); 
             pharmacy.MedicalPersonnels.InitPharmacists();
+
+            pharmacy.AllPharmacists.InitAllPharmacists();
 
             return pharmacy;
         }
