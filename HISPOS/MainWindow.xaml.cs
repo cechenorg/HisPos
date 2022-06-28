@@ -54,7 +54,7 @@ namespace His_Pos
             WindowState = WindowState.Maximized;
             ViewModelMainWindow.CurrentUser = user;
             ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.InitPharmacists();
-            ViewModelMainWindow.CurrentPharmacy.AllEmployees.InitAllEmployee();
+            ViewModelMainWindow.CurrentPharmacy.AllEmployees.Init();
             if (ViewModelMainWindow.CurrentUser.IsLocalPharmist() &&
                 ViewModelMainWindow.CurrentPharmacy.MedicalPersonnels.Count(e => e.IDNumber.Equals(ViewModelMainWindow.CurrentUser.IDNumber)) == 0)
             {

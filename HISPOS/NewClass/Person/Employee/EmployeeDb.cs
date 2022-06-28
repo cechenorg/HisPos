@@ -14,9 +14,16 @@ namespace His_Pos.NewClass.Person.Employee
 {
     public static class EmployeeDb
     {
-        public static DataTable GetData()
+        public static IEnumerable<Employee> GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[Employee]");
+            List<Employee> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[Employee]", 
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
+
+            return result; 
         }
 
         public static Employee GetDataByID(int ID)
@@ -24,9 +31,9 @@ namespace His_Pos.NewClass.Person.Employee
             Employee result = null;
             SQLServerConnection.DapperQuery((conn) =>
             {
-                result = conn.Query<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[EmployeeByID]",
+                result = conn.QuerySingleOrDefault<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[EmployeeByID]",
                     param: new { EmpID = ID },
-                    commandType: CommandType.StoredProcedure).SingleOrDefault();
+                    commandType: CommandType.StoredProcedure);
             });
              
             return result;

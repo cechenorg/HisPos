@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 
 namespace His_Pos.NewClass.Person.Employee
 {
@@ -14,13 +15,13 @@ namespace His_Pos.NewClass.Person.Employee
         public void Init()
         {
             Clear();
-            var table = EmployeeDb.GetData();
-            
-            foreach (DataRow row in table.Rows)
+
+            var employees = EmployeeDb.GetData();
+
+            foreach (var emp in employees)
             {
-                Add(new Employee(row));
-            }
-            
+                Add(emp);
+            } 
         }
 
         public void ClockIn(string WYear, string WMonth,int? EmpID)
@@ -52,14 +53,9 @@ namespace His_Pos.NewClass.Person.Employee
 
 
         public void GetEnablePharmacist(DateTime selectedDate)
-        {
-            var table = EmployeeDb.GetData();
-            var tempEmpList = new Employees();
-            foreach (DataRow r in table.Rows)
-            {
-                tempEmpList.Add(new Employee(r));
-            }
-            foreach (var emp in tempEmpList)
+        { 
+           
+            foreach (var emp in EmployeeDb.GetData())
             {
                 if (emp.CheckLeave(selectedDate) && emp.IsLocalPharmist() && emp.IsLocal)
                     Add(emp);
@@ -68,36 +64,21 @@ namespace His_Pos.NewClass.Person.Employee
                     if (emp.ID.Equals(ViewModelMainWindow.CurrentUser.ID) && emp.IsLocalPharmist() )
                         Add(emp);
                 }
-            }
-            //var table = EmployeeDb.GetEnableMedicalPersonnels(selectedDate);
-            //foreach (DataRow r in table.Rows)
-            //{
-            //    Add(new Employee(r));
-            //}
+            } 
         }
 
         public void InitPharmacists()
         {
             Clear();
-            var table = EmployeeDb.GetData();
-            foreach (DataRow row in table.Rows)
+            var employees = EmployeeDb.GetData();
+             
+            foreach (var emp in employees.Where(_ => _.IsLocalPharmist()))
             {
-                var emp = new Employee(row);
-                if (emp.IsLocalPharmist())
-                    Add(emp);
-            }
-        }
-
-        public void InitAllEmployee()
-        {
-            Clear();
-            var table = EmployeeDb.GetData();
-            foreach (DataRow row in table.Rows)
-            {
-                var emp = new Employee(row); 
                 Add(emp);
             }
         }
+
+     
 
         public Employees GetLocalPharmacist()
         {

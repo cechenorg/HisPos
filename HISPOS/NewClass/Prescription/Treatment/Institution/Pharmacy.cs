@@ -121,7 +121,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]); 
             pharmacy.MedicalPersonnels.InitPharmacists();
 
-            pharmacy.AllEmployees.InitAllEmployee();
+            pharmacy.AllEmployees.Init();
 
             return pharmacy;
         }
