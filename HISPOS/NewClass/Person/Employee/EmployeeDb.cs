@@ -298,18 +298,19 @@ namespace His_Pos.NewClass.Person.Employee
             }
             return table;
         }
-        public static DataTable EmployeeClockInListTest(string WYear, string WMonth,string StoreNo, string EmpId, int Permit)
+        public static IEnumerable<Employee> EmployeeClockInListTest(string WYear, string WMonth,string StoreNo, string EmpId, int Permit)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("WYear", WYear));
-            parameterList.Add(new SqlParameter("WMonth", WMonth));
-            parameterList.Add(new SqlParameter("StoreNo", StoreNo));
-            parameterList.Add(new SqlParameter("Permit", Permit));
-            parameterList.Add(new SqlParameter("Emp_ID", EmpId));
-            var table = new DataTable();
-            table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInLogEmployees]", parameterList);
-       
-            return table;
+            List<Employee> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Employee>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ClockInLogEmployees]",
+                    param: new { WYear, WMonth, StoreNo, Permit, Emp_ID = EmpId },
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
+
+            return result;
+             
         }
 
 

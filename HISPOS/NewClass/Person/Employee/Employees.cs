@@ -37,18 +37,12 @@ namespace His_Pos.NewClass.Person.Employee
         public void ClockInEmp(string WYear, string WMonth, string StoreNo, string EmpId, int Permit)
         {
             Clear();
-            var table = EmployeeDb.EmployeeClockInListTest(WYear, WMonth, StoreNo, EmpId, Permit);
-            if (table.Rows.Count > 0)
+            var employees = EmployeeDb.EmployeeClockInListTest(WYear, WMonth, StoreNo, EmpId, Permit);
+
+            foreach (var emp in employees)
             {
-                foreach (DataRow row in table.Rows)
-                {
-                    Add(new Employee(row));
-                }
-            }
-            else
-            { 
-            
-            }
+                Add(emp);
+            } 
         }
 
 
