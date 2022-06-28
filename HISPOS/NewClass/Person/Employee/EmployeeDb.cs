@@ -204,50 +204,7 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddSqlParameter(parameterList, "isLocal", isLocal);
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateIsLocal]", parameterList);
         }
-
-        public static DataTable GetEnableMedicalPersonnels(DateTime selectedDate)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Date", selectedDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[EnablePharmacists]", parameterList);
-        }
-
-       
-
-        public static DataTable SetCustomers(Employees es)
-        {
-            DataTable employeeTable = EmployeeTable();
-
-            foreach (Employee e in es)
-            {
-                DataRow newRow = employeeTable.NewRow();
-                if (e.ID == 0)
-                    newRow["Emp_ID"] = DBNull.Value;
-                else
-                    newRow["Emp_ID"] = e.ID;
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Account", e.Account);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Password", e.Password);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", (int)e.Authority);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Name", e.Name);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_NickName", e.NickName);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Gender", e.Gender);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_IDNumber", e.IDNumber);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_BirthDay", e.Birthday);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Address", e.Address);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Telephone", e.Tel);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Cellphone", e.CellPhone);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Email", e.Email);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_LINE", e.Line);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", e.WorkPosition.WorkPositionId);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_StartDate", e.StartDate);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_LeaveDate", e.LeaveDate);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_PurchaseLimit", e.PurchaseLimit);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Note", e.Note);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_IsEnable", e.IsEnable);
-                employeeTable.Rows.Add(newRow);
-            }
-            return employeeTable;
-        }
+         
 
         public static DataTable SetCustomer(Employee e)
         {
