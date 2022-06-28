@@ -285,22 +285,33 @@ namespace His_Pos.NewClass.Person.Employee
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertClockInLog]", parameters);
         }
 
-        public static DataTable EmployeeClockInList(string WYear, string WMonth, int? EmpId)
+        public static IEnumerable<Employee> EmployeeClockInList(string WYear, string WMonth, int? EmpId)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("WYear", WYear));
-            parameterList.Add(new SqlParameter("WMonth", WMonth));
-            var table = new DataTable();
+            
+            List<Employee> result = null;
             if (EmpId is null)
-            {
-                table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInLogEmp]", parameterList);
+            { 
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    result = conn.Query<Employee>(
+                        $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ClockInLogEmp]",
+                        param: new { WYear, WMonth  },
+                        commandType: CommandType.StoredProcedure).ToList();
+                });
+
             }
             else
             {
-                parameterList.Add(new SqlParameter("EmpId", EmpId));
-                table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInEmployee]", parameterList);
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    result = conn.Query<Employee>(
+                        $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ClockInEmployee]",
+                        param: new { WYear, WMonth, EmpId },
+                        commandType: CommandType.StoredProcedure).ToList();
+                }); 
             }
-            return table;
+
+            return result;
         }
         public static IEnumerable<Employee> EmployeeClockInListTest(string WYear, string WMonth,string StoreNo, string EmpId, int Permit)
         {

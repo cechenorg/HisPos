@@ -27,10 +27,10 @@ namespace His_Pos.NewClass.Person.Employee
         public void ClockIn(string WYear, string WMonth,int? EmpID)
         {
             Clear();
-            var table = EmployeeDb.EmployeeClockInList(WYear, WMonth, EmpID);
-            foreach (DataRow row in table.Rows)
+            var employees = EmployeeDb.EmployeeClockInList(WYear, WMonth, EmpID);
+            foreach (var emp in employees)
             {
-                Add(new Employee(row));
+                Add(emp);
             }
         }
 
