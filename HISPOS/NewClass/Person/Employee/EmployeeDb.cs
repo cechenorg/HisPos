@@ -121,14 +121,9 @@ namespace His_Pos.NewClass.Person.Employee
             Employee result = null;
             SQLServerConnection.DapperQuery((conn) =>
             {
-               result = conn.Query<Employee, WorkPosition.WorkPosition, Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[Login]",
-                     (tempEmployee,tempWorkPosition   ) => { 
-                        tempEmployee.WorkPosition = tempWorkPosition; 
-                        return tempEmployee; 
-                    }, 
+               result = conn.Query<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[Login]",
                     param: new { account = inputAccount, pw = password },
-                    commandType: CommandType.StoredProcedure,
-                    splitOn: "WorkPositionId").SingleOrDefault();
+                    commandType: CommandType.StoredProcedure).SingleOrDefault();
             });
             return result;
         }
