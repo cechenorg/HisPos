@@ -88,15 +88,14 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        public void InitAllPharmacists()
+        public void InitAllEmployee()
         {
             Clear();
             var table = EmployeeDb.GetData();
             foreach (DataRow row in table.Rows)
             {
-                var emp = new Employee(row);
-                if (emp.IsPharmist())
-                    Add(emp);
+                var emp = new Employee(row); 
+                Add(emp);
             }
         }
 
