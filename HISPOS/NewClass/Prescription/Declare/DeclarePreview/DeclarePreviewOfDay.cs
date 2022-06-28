@@ -200,7 +200,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePreview
             var tempList = new DeclareMedicalPersonnels();
             foreach (var g in PresOfDay.GroupBy(p => p.Pharmacist.ID))
             {
-                var m = ViewModelMainWindow.GetMedicalPersonByID(g.Key);
+                var m = ViewModelMainWindow.GetEmployeeByID(g.Key);
                 var pharmacist = new DeclareMedicalPersonnel(m) { PrescriptionCount = g.Count() };
                 tempList.Add(pharmacist);
             }
