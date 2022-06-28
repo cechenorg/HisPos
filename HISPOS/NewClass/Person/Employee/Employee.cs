@@ -28,23 +28,23 @@ namespace His_Pos.NewClass.Person.Employee
             Authority = TranValueToAuthority(4);
         }
 
-        public Employee(DataRow r) : base(r)
-        {
-           // EmpID = r.Field<string>("ID");
-            Account = r.Field<string>("Emp_Account");
-            Password = r.Field<string>("Aut_Password");
-            NickName = r.Field<string>("Emp_NickName");
-            StartDate = r.Field<DateTime?>("Emp_StartDate");
-            LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
-            PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
-            IsEnable = r.Field<bool>("Emp_IsEnable"); 
-            IsLocal = r.Field<bool>("Emp_IsLocal");
-            CashierID = r.Field<string>("Emp_CashierID");
-            WorkPosition = new WorkPosition.WorkPosition(r);
+        //public Employee(DataRow r) : base(r)
+        //{
+        //   // EmpID = r.Field<string>("ID");
+        //    Account = r.Field<string>("Emp_Account");
+        //    Password = r.Field<string>("Aut_Password");
+        //    NickName = r.Field<string>("Emp_NickName");
+        //    StartDate = r.Field<DateTime?>("Emp_StartDate");
+        //    LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
+        //    PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
+        //    IsEnable = r.Field<bool>("Emp_IsEnable"); 
+        //    IsLocal = r.Field<bool>("Emp_IsLocal");
+        //    CashierID = r.Field<string>("Emp_CashierID");
+        //    WorkPosition = new WorkPosition.WorkPosition(r);
 
-            byte tempAutID = r.Field<byte>("Aut_LevelID");
-            Authority = TranValueToAuthority(tempAutID); 
-        }
+        //    byte tempAutID = r.Field<byte>("Aut_LevelID");
+        //    Authority = TranValueToAuthority(tempAutID); 
+        //}
 
         private Authority TranValueToAuthority(int autVal)
         {
