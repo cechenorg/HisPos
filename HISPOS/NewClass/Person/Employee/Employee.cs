@@ -257,8 +257,8 @@ namespace His_Pos.NewClass.Person.Employee
 
         public Employee GetDataByID(int id)
         {
-            DataTable table = EmployeeDb.GetDataByID(id);
-            return new Employee(table.Rows[0]);
+            
+            return EmployeeDb.GetDataByID(id);
         }
 
         public bool CheckIdNumber()

@@ -19,11 +19,17 @@ namespace His_Pos.NewClass.Person.Employee
             return MainWindow.ServerConnection.ExecuteProc("[Get].[Employee]");
         }
 
-        public static DataTable GetDataByID(int ID)
+        public static Employee GetDataByID(int ID)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("@EmpID", ID));
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeByID]", parameterList);
+            Employee result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[EmployeeByID]",
+                    param: new { EmpID = ID },
+                    commandType: CommandType.StoredProcedure).SingleOrDefault();
+            });
+             
+            return result;
         }
 
         public static List<Employee> GetGroupPharmacyDataByID(List<string> groupserverNameList,int ID)
