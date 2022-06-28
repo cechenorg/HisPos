@@ -45,11 +45,15 @@ namespace His_Pos.NewClass.Person.Employee
             List<Employee> result = new List<Employee>();
 
             foreach(var groupserverName in groupserverNameList)
-            {
-                List<SqlParameter> parameterList = new List<SqlParameter>();
-                parameterList.Add(new SqlParameter("@EmpID", ID));
-                var table = MainWindow.ServerConnection.ExecuteProcBySchema(groupserverName,"[Get].[EmployeeByID]", parameterList);
-                Employee employee = new Employee(table.Rows[0]);
+            { 
+                Employee employee = null;
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    employee = conn.QuerySingleOrDefault<Employee>($"{groupserverName}.[Get].[EmployeeByID]",
+                        param: new { EmpID = ID },
+                        commandType: CommandType.StoredProcedure);
+                });
+
                 result.Add(employee);
             }
 
