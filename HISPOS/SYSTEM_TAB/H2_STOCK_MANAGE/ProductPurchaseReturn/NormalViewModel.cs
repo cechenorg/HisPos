@@ -19,6 +19,8 @@ using System.Windows;
 using System.Windows.Data;
 using DomainModel.Enum;
 using System.Threading;
+using System.Collections.Generic;
+using System.Data;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -57,6 +59,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
         private BackgroundWorker initBackgroundWorker;
 
+        private string btnScrapContent;
+        public string BtnScrapContent
+        {
+            get => btnScrapContent;
+            set { Set(() => BtnScrapContent, ref btnScrapContent, value); }
+        }
         private bool isCanDelete;
         public bool IsCanDelete
         {
@@ -93,7 +101,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get 
             {
                 if (currentStoreOrder != null)
+                {
                     IsCanDelete = currentStoreOrder.IsCanDelete;
+                    BtnScrapContent = (IsCanDelete == true) ? "作廢" : "取消作廢";
+                }
                 return currentStoreOrder; 
             }
             set
@@ -217,20 +228,66 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
-            bool isSuccess = CurrentStoreOrder.DeleteOrder();
+            bool isSuccess;
+            if (CurrentStoreOrder.IsCanDelete)
+            {
+                isSuccess = CurrentStoreOrder.DeleteOrder();//執行作廢
+                if (isSuccess)
+                {
+                    MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
+                    ReloadData();
+                }
+            }
+            else
+            {
+                isSuccess = CurrentStoreOrder.ReductOrder();//執行取消作廢
+                if (isSuccess)
+                {
+                    MessageWindow.ShowMessage("已取消作廢！", MessageType.SUCCESS);
+                    ReloadData();
+                }
+            }
             MainWindow.SingdeConnection.CloseConnection();
             MainWindow.ServerConnection.CloseConnection();
-
-            if (isSuccess)
-            {
-                MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
-                //storeOrderCollection.Remove(CurrentStoreOrder);
-                AddOrderByMinus();
-                StoreOrderCollectionView.Filter += OrderFilter;
-                CurrentStoreOrder = storeOrderCollection.FirstOrDefault();
-            }
         }
+        public void ReloadData()
+        {
+            DataTable dataTable;
+            storeOrderCollection = StoreOrders.GetOrdersNotDone();
+            List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).OrderBy(s => s.CreateDateTime).ToList();
+            string dateTime = DateTime.Now.ToString("yyyyMMdd");
 
+            if (storeOrders.Count > 0)
+                dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
+
+            for (int i = 0; i < storeOrders.Count; i++)
+            {
+                if (storeOrders[i].OrderStatus != OrderStatusEnum.SCRAP)
+                {
+                    if (string.IsNullOrEmpty(storeOrders[i].SourceID))
+                        dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].ID);
+                    else
+                        dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].SourceID);
+
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        currentStoreOrder = storeOrders[i];
+                        DataRow[] dataRows = dataTable.Select();
+                        currentStoreOrder.UpdateOrderDataFromSingde(dataRows[0]);
+                    }
+                }
+            }
+            var orderedList = storeOrderCollection.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
+
+            StoreOrders result = new StoreOrders();
+
+            for (int i = orderedList.Count() - 1; i >= 0; i--)
+            {
+                result.Add(orderedList[i]);
+            }
+            storeOrderCollection = result;
+            InitData(storeOrderCollection);
+        }
         private void DeleteWaitingOrderAction()
         {
             MainWindow.ServerConnection.OpenConnection();
@@ -274,7 +331,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     SearchString = string.Empty;
                     StoreOrderCollectionView.Filter += OrderFilter;
-                    CurrentStoreOrder = storeOrderCollection[0];
+                    CurrentStoreOrder = (StoreOrder)StoreOrderCollectionView.CurrentItem;
                 }
             }
             else

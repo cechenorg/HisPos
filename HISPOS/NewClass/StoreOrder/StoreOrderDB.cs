@@ -774,6 +774,13 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
         }
+        internal static DataTable UpdateStoreOrderToOriginal(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("OrderID", storeOrderID));
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToOriginal]", parameters);
+            return table;
+        }
 
         internal static DataTable GetNewSingdePrescriptionOrders()
         {

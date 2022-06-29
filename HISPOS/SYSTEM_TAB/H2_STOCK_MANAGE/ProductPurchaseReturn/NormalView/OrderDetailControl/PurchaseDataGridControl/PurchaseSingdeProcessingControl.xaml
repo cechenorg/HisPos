@@ -740,13 +740,11 @@
                 Foreground="Black" />
             <Rectangle Width="400" />
             <Button
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="150"
                 Background="DimGray"
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
-                IsEnabled="{Binding IsCanDelete}"
-                Content="作廢"
+                Content="{Binding BtnScrapContent}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" />
         </StackPanel>

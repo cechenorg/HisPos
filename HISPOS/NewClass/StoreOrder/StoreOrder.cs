@@ -194,7 +194,6 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     IsEnableVoid = "Hidden";
                 }
-
             }
         }
 
@@ -572,6 +571,19 @@ namespace His_Pos.NewClass.StoreOrder
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
+        public bool ReductOrder()
+        {
+            bool isSuccess = false;
+            if (!IsEnable)
+            {
+                DataTable table = StoreOrderDB.UpdateStoreOrderToOriginal(ID);
+                if(table != null && table.Rows.Count > 0)
+                {
+                    isSuccess = Convert.ToBoolean(table.Rows[0]["RESULT"]);
+                }
+            }
+            return isSuccess;
+        }
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID, string type)
         {
             DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID, type);

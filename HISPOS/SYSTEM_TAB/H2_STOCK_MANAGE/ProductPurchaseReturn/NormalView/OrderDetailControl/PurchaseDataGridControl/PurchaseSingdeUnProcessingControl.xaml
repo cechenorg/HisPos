@@ -531,13 +531,12 @@
                 FontSize="16"
                 Foreground="White" />
             <Button
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="120"
                 Margin="10,0,0,0"
                 Background="DimGray"
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
-                Content="作廢"
+                Content="{Binding BtnScrapContent}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" Cursor="Hand" />
         </StackPanel>

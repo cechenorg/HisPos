@@ -395,13 +395,12 @@
                 Text="{Binding CurrentStoreOrder.ReturnStockValue, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
             <Rectangle Width="200" />
             <Button
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Margin="30,0,10,0"
                 Width="120"
                 Background="DimGray"
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
-                Content="作廢"
+                Content="{Binding BtnScrapContent}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" Cursor="Hand" />
         </StackPanel>
