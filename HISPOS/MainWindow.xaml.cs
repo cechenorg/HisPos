@@ -141,7 +141,7 @@ namespace His_Pos
         private void InitializeMenu()
         {
             MainWindow.ServerConnection.OpenConnection();
-            List<string> tabAuth = ViewModelMainWindow.CurrentUser.GetTabAuth();
+            List<string> tabAuth = EmployeeService.GetTabAuth(ViewModelMainWindow.CurrentUser);
             MainWindow.ServerConnection.CloseConnection();
             for (int i = 0; i < HisFeatures.Count; i++)
             {

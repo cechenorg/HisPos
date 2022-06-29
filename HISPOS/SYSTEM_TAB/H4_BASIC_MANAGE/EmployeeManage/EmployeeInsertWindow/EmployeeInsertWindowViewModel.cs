@@ -37,8 +37,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 
         public EmployeeInsertWindowViewModel()
         {
-            Employee = new Employee();
-            string acc = Employee.GetEmployeeNewAccount();
+           
+            string acc = EmployeeService.GetEmployeeNewAccount();
             Employee.Account = acc;
             Employee.Password = acc;
             SubbmitCommand = new RelayCommand(SubbmitAction);

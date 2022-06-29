@@ -22,4 +22,33 @@ namespace DomainModel.Enum
         SupportPharmacist = 8
     }
 
+
+    public class EnumFactory
+    {
+        public static Authority TranValueToAuthority(int autVal)
+        {
+            switch (autVal)
+            {
+                case 1:
+                    return Authority.Admin;
+                case 2:
+                    return Authority.PharmacyManager;
+                case 3:
+                    return Authority.AccountingStaff;
+                case 4:
+                    return Authority.StoreManager;
+                case 5:
+                    return Authority.StoreEmployee;
+                case 6:
+                    return Authority.MasterPharmacist;
+                case 7:
+                    return Authority.NormalPharmacist;
+                case 8:
+                    return Authority.SupportPharmacist;
+            }
+            return Authority.StoreEmployee;
+        }
+    }
+    
+
 }

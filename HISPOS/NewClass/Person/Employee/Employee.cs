@@ -25,7 +25,7 @@ namespace His_Pos.NewClass.Person.Employee
             Birthday = DateTime.Today;
             IsEnable = true;
 
-            Authority = TranValueToAuthority(4);
+            Authority = EnumFactory.TranValueToAuthority(4);
         }
 
         //public Employee(DataRow r) : base(r)
@@ -45,31 +45,7 @@ namespace His_Pos.NewClass.Person.Employee
         //    byte tempAutID = r.Field<byte>("Aut_LevelID");
         //    Authority = TranValueToAuthority(tempAutID); 
         //}
-
-        private Authority TranValueToAuthority(int autVal)
-        {
-            switch (autVal)
-            {
-                case 1:
-                    return Authority.Admin; 
-                case 2:
-                    return Authority.PharmacyManager; 
-                case 3:
-                    return Authority.AccountingStaff; 
-                case 4:
-                    return Authority.StoreManager;
-                case 5:
-                    return Authority.StoreEmployee;
-                case 6:
-                    return Authority.MasterPharmacist;
-                case 7:
-                    return Authority.NormalPharmacist;
-                case 8:
-                    return Authority.SupportPharmacist;
-            }
-            return Authority.StoreEmployee;
-        }
-        
+         
         private string cashierID;
 
         [IgnoreFormat]
@@ -278,31 +254,14 @@ namespace His_Pos.NewClass.Person.Employee
         public bool CheckEmployeeAccountSame()
         {
             var table = EmployeeDb.CheckEmployeeAccountSame(Account);
-            return table.Rows[0].Field<int>("Count") == 0 ? true : false;
+            return table.Rows[0].Field<int>("Count") == 0;
         }
-          
-        public string GetEmployeeNewAccount()
-        {
-            DataTable table = EmployeeDb.GetEmployeeNewAccount();
-            return table.Rows[0].Field<string>("Account");
-        }
-
+           
         public static Employee Login(string Account, string Password)
         { 
             return EmployeeDb.EmployeeLogin(Account, Password);
         }
-
-        public List<string> GetTabAuth()
-        {
-            DataTable table = EmployeeDb.GetTabAuth((int)Authority);
-            List<string> tabAuths = new List<string>();
-            foreach (DataRow row in table.Rows)
-            {
-                tabAuths.Add(row["Aut_TabName"].ToString());
-            }
-            return tabAuths;
-        }
-
+         
         #endregion Function
 
         public bool CheckLeave(DateTime date)

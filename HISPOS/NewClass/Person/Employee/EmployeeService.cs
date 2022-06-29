@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,24 @@ namespace His_Pos.NewClass.Person.Employee
         public static void Delete(Employee emp)
         {
             EmployeeDb.Delete(emp.ID);
+        }
+
+        public static string GetEmployeeNewAccount()
+        {
+            DataTable table = EmployeeDb.GetEmployeeNewAccount();
+            return table.Rows[0].Field<string>("Account");
+        }
+
+
+        public static List<string> GetTabAuth(Employee employee)
+        {
+            DataTable table = EmployeeDb.GetTabAuth((int)employee.Authority);
+            List<string> tabAuths = new List<string>();
+            foreach (DataRow row in table.Rows)
+            {
+                tabAuths.Add(row["Aut_TabName"].ToString());
+            }
+            return tabAuths;
         }
     }
 }
