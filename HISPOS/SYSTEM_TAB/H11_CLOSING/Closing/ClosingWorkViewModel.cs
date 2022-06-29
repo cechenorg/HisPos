@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Media;
+using His_Pos.NewClass.Person.Employee;
 
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
 {
@@ -424,15 +425,15 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 return;
             }
 
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> EMP = new List<SqlParameter>();
-            EMP.Add(new SqlParameter("EmpID", ViewModelMainWindow.CurrentUser.ID));
-            DataTable EMPresult = MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeByID]", EMP);
-            MainWindow.ServerConnection.CloseConnection();
 
-            ConfirmWindow cw = new ConfirmWindow("關班人員：" + EMPresult.Rows[0]["Person_Name"].ToString()
-                + "\r\n" + "關班金額：" + CheckTotal.ToString() + "\r\n\r\n資料送出後無法修改，\r\n是否進行關班作業？", "關班確認");
-            if (!(bool)cw.DialogResult) { return; }
+            Employee temp = new Employee();
+            var emp = temp.GetDataByID(ViewModelMainWindow.CurrentUser.ID);
+             
+
+            ConfirmWindow cw = new ConfirmWindow("關班人員：" + emp.Name
+                + "\r\n" + "關班金額：" + CheckTotal + "\r\n\r\n資料送出後無法修改，\r\n是否進行關班作業？", "關班確認");
+            if (!(bool)cw.DialogResult)  
+                return; 
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();

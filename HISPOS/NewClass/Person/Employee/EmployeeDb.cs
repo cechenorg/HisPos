@@ -25,20 +25,7 @@ namespace His_Pos.NewClass.Person.Employee
 
             return result; 
         }
-
-        public static Employee GetDataByID(int ID)
-        {
-            Employee result = null;
-            SQLServerConnection.DapperQuery((conn) =>
-            {
-                result = conn.QuerySingleOrDefault<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[EmployeeByID]",
-                    param: new { EmpID = ID },
-                    commandType: CommandType.StoredProcedure);
-            });
-             
-            return result;
-        }
-
+         
         public static List<Employee> GetGroupPharmacyDataByID(List<string> groupserverNameList,int ID)
         {
 
@@ -47,11 +34,11 @@ namespace His_Pos.NewClass.Person.Employee
             foreach(var groupserverName in groupserverNameList)
             { 
                 Employee employee = null;
+                 
                 SQLServerConnection.DapperQuery((conn) =>
                 {
-                    employee = conn.QuerySingleOrDefault<Employee>($"{groupserverName}.[Get].[EmployeeByID]",
-                        param: new { EmpID = ID },
-                        commandType: CommandType.StoredProcedure);
+                    employee = conn.Query<Employee>($"{groupserverName}.[Get].[Employee]", 
+                        commandType: CommandType.StoredProcedure).SingleOrDefault(_ => _.ID == ID);
                 });
 
                 result.Add(employee);

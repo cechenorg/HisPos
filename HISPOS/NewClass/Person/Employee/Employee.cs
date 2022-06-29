@@ -258,7 +258,7 @@ namespace His_Pos.NewClass.Person.Employee
         public Employee GetDataByID(int id)
         {
             
-            return EmployeeDb.GetDataByID(id);
+            return EmployeeDb.GetData().SingleOrDefault(_ => _.ID == id);
         }
 
         public bool CheckIdNumber()
