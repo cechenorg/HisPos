@@ -86,7 +86,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
             Employee.Account = EmployeeID;
 
             MainWindow.ServerConnection.OpenConnection();
-            Employee user = Employee.Login(EmployeeID, EmployeePassWord);
+            Employee user = EmployeeService.Login(EmployeeID, EmployeePassWord);
             MainWindow.ServerConnection.CloseConnection();
 
             //1.如果全部都沒有,查無帳號,請確認帳號
@@ -103,7 +103,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
             }
             else
             {
-                Employee = Employee.Login(EmployeeID, EmployeePassWord);
+                Employee = EmployeeService.Login(EmployeeID, EmployeePassWord);
             }
 
             return true;

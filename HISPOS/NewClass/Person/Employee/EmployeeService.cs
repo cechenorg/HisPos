@@ -70,5 +70,10 @@ namespace His_Pos.NewClass.Person.Employee
 
             return ErrorMessage.OK;
         }
+
+        public static Employee Login(string Account, string Password)
+        {
+            return EmployeeDb.EmployeeLogin(Account, Password);
+        }
     }
 }

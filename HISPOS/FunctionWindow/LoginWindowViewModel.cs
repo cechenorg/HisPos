@@ -58,7 +58,7 @@ namespace His_Pos.FunctionWindow
         private void LoginAction(object sender)
         {
             bool isEnable = false;
-            Employee loginEmployee = Employee.Login(Account, (sender as PasswordBox)?.Password);
+            Employee loginEmployee = EmployeeService.Login(Account, (sender as PasswordBox)?.Password);
             if (loginEmployee != null) 
             {
                 ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();

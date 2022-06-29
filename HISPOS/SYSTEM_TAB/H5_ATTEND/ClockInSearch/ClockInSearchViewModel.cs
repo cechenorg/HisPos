@@ -254,7 +254,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             }
 
             MainWindow.ServerConnection.OpenConnection();
-            SingInEmployee = Employee.Login(SingInEmployee.Account, SingInEmployee.Password);
+            SingInEmployee = EmployeeService.Login(SingInEmployee.Account, SingInEmployee.Password);
             MainWindow.ServerConnection.CloseConnection();
 
             //檢查帳密 密碼錯誤

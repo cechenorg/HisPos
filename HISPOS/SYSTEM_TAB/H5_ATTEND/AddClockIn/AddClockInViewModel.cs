@@ -152,7 +152,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
             }
 
             MainWindow.ServerConnection.OpenConnection();
-            Employee = Employee.Login(Employee.Account, Employee.Password);
+            Employee = EmployeeService.Login(Employee.Account, Employee.Password);
             MainWindow.ServerConnection.CloseConnection();
 
             //檢查帳密 密碼錯誤

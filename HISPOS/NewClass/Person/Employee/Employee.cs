@@ -237,10 +237,7 @@ namespace His_Pos.NewClass.Person.Employee
             return table.Rows[0].Field<int>("Count") == 0;
         }
            
-        public static Employee Login(string Account, string Password)
-        { 
-            return EmployeeDb.EmployeeLogin(Account, Password);
-        }
+        
          
         #endregion Function
 
