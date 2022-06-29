@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel;
+using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
@@ -47,13 +49,19 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 
         private void CheckIdNumberAction()
         {
-            if (Employee.CheckIdNumber())
+            var errorMsg = EmployeeService.CheckIdNumber(Employee);
+
+            if (errorMsg == ErrorMessage.OK)
                 MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
+            else 
+                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
+           
         }
 
         private void SubbmitAction()
         {
-            if (!Employee.CheckIdNumber())
+            var errorMsg = EmployeeService.CheckIdNumber(Employee);
+            if (errorMsg != ErrorMessage.OK)
             {
                 return;
             }

@@ -77,6 +77,7 @@
     <Compile Include="Class\WareHouse\WareHouseSetting.cs" />
     <Compile Include="Class\WareHouse\WareHouseSettings.cs" />
     <Compile Include="Enum\Authority.cs" />
+    <Compile Include="Enum\ErrorMessage.cs" />
     <Compile Include="Enum\StoreOrder.cs" />
     <Compile Include="Extention.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

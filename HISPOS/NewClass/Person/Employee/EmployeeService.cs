@@ -4,6 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DomainModel.Enum;
+using His_Pos.FunctionWindow;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Person.Employee
 {
@@ -47,6 +50,25 @@ namespace His_Pos.NewClass.Person.Employee
                 tabAuths.Add(row["Aut_TabName"].ToString());
             }
             return tabAuths;
+        }
+
+        public static ErrorMessage CheckIdNumber(Employee emp)
+        {
+            if (string.IsNullOrEmpty(emp.IDNumber)) 
+                return ErrorMessage.DataEmpty;
+
+            if (!VerifyService.VerifyIDNumber(emp.IDNumber))
+            {
+               
+                return ErrorMessage.EmployeeIDNumberFormatError;
+            } 
+            var table = EmployeeDb.CheckIdNumber(emp.IDNumber);
+            if (table.Rows[0].Field<int>("Count") > 0)
+            { 
+                return ErrorMessage.EmployeeIDNumberExist;
+            }
+
+            return ErrorMessage.OK;
         }
     }
 }

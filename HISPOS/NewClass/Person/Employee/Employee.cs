@@ -230,27 +230,7 @@ namespace His_Pos.NewClass.Person.Employee
             SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault(); 
             
         }
-         
-        public bool CheckIdNumber()
-        {
-            if (string.IsNullOrEmpty(IDNumber)) return false;
-
-            if (!VerifyService.VerifyIDNumber(IDNumber))
-            {
-                MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
-                return false;
-            }
-
-            var table = EmployeeDb.CheckIdNumber(IDNumber);
-            if (table.Rows[0].Field<int>("Count") > 0)
-            {
-                MessageWindow.ShowMessage("此身分證已經存在!", Class.MessageType.ERROR);
-                return false;
-            }
-
-            return true;
-        }
-
+          
         public bool CheckEmployeeAccountSame()
         {
             var table = EmployeeDb.CheckEmployeeAccountSame(Account);
