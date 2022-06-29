@@ -254,13 +254,7 @@ namespace His_Pos.NewClass.Person.Employee
             SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault(); 
             
         }
-
-        public Employee GetDataByID(int id)
-        {
-            
-            return EmployeeDb.GetData().SingleOrDefault(_ => _.ID == id);
-        }
-
+         
         public bool CheckIdNumber()
         {
             if (string.IsNullOrEmpty(IDNumber)) return false;
@@ -286,23 +280,7 @@ namespace His_Pos.NewClass.Person.Employee
             var table = EmployeeDb.CheckEmployeeAccountSame(Account);
             return table.Rows[0].Field<int>("Count") == 0 ? true : false;
         }
-
-        public void Insert()
-        {
-            EmployeeDb.Insert(this);
-        }
-
-        public void Update()
-        {
-
-            EmployeeDb.Update(this);
-        }
-
-        public void Delete()
-        {
-            EmployeeDb.Delete(ID);
-        }
-
+          
         public string GetEmployeeNewAccount()
         {
             DataTable table = EmployeeDb.GetEmployeeNewAccount();

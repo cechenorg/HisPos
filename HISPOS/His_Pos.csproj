@@ -350,6 +350,7 @@
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockIn.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInDb.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />
+    <Compile Include="NewClass\Person\Employee\EmployeeService.cs" />
     <Compile Include="NewClass\Pharmacy\PharmacyDBService.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositReportData.cs" />

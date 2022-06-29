@@ -62,8 +62,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
                 MessageWindow.ShowMessage("此帳號已經存在!", Class.MessageType.ERROR);
                 return;
             }
-            Employee.Insert();
 
+            EmployeeService.Insert(Employee);
+             
             MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeInsertWindow"));
         }

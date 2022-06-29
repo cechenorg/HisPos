@@ -177,19 +177,19 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         #region Action
 
         private void UpdateGroupPharmacyAuthorityAction()
-        {
-            SelectedEmployee.Update();
+        { 
+            EmployeeService.Update(SelectedEmployee);
             MessageWindow.ShowMessage("權限修改成功!",Class.MessageType.SUCCESS);
         }
 
         private void CancelAction()
         {
-            SelectedEmployee = SelectedEmployee.GetDataByID(SelectedEmployee.ID);
+            SelectedEmployee = EmployeeService.GetDataByID(SelectedEmployee.ID);
         }
 
         private void SubmitAction()
         {
-            SelectedEmployee.Update();
+            EmployeeService.Update(SelectedEmployee); 
             MessageWindow.ShowMessage("修改成功", Class.MessageType.SUCCESS);
         }
 
@@ -198,7 +198,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除員工? 刪除後無法恢復 請慎重確認", "員工刪除");
             if ((bool)confirmWindow.DialogResult)
             {
-                SelectedEmployee.Delete();
+                EmployeeService.Delete(SelectedEmployee); 
                 MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
                 Init();
             }
