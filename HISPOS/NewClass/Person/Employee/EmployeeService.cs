@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DomainModel.Enum;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Pharmacy;
 using His_Pos.Service;
 
 namespace His_Pos.NewClass.Person.Employee
@@ -14,7 +15,7 @@ namespace His_Pos.NewClass.Person.Employee
     {
 
         public static Employee GetDataByID(int id)
-        { 
+        {
             return EmployeeDb.GetData().SingleOrDefault(_ => _.ID == id);
         }
 
@@ -54,23 +55,23 @@ namespace His_Pos.NewClass.Person.Employee
 
         public static ErrorMessage CheckIdNumber(Employee emp)
         {
-            if (string.IsNullOrEmpty(emp.IDNumber)) 
+            if (string.IsNullOrEmpty(emp.IDNumber))
                 return ErrorMessage.DataEmpty;
 
             if (!VerifyService.VerifyIDNumber(emp.IDNumber))
             {
-               
+
                 return ErrorMessage.EmployeeIDNumberFormatError;
-            } 
+            }
             var table = EmployeeDb.CheckIdNumber(emp.IDNumber);
             if (table.Rows[0].Field<int>("Count") > 0)
-            { 
+            {
                 return ErrorMessage.EmployeeIDNumberExist;
             }
-             
-            table = EmployeeDb.CheckEmployeeAccountSame(emp.Account); 
+
+            table = EmployeeDb.CheckEmployeeAccountSame(emp.Account);
             if (table.Rows[0].Field<int>("Count") > 0)
-            { 
+            {
                 return ErrorMessage.EmployeeAccountExist;
             }
 
@@ -81,6 +82,27 @@ namespace His_Pos.NewClass.Person.Employee
         public static Employee Login(string Account, string Password)
         {
             return EmployeeDb.EmployeeLogin(Account, Password);
+        }
+
+        public static IEnumerable<GroupAuthority> GetGroupPharmacy(Employee emp, List<PharmacyInfo> groupServerList)
+        {
+            List<GroupAuthority> result = new List<GroupAuthority>();
+
+            var employeeList = EmployeeDb.GetGroupPharmacyDataByID(groupServerList.Select(_ => _.PHAMAS_VerifyKey).ToList(), emp.ID);
+             
+            for (int i = 0; i < groupServerList.Count; i++)
+            {
+                GroupAuthority tempData = new GroupAuthority()
+                {
+                    PharmacyName = groupServerList[i].PHAMAS_NAME,
+                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey,
+                    EmployeeAuthority = employeeList[i].Authority
+                };
+                tempData.IsDirty = false;
+                result.Add(tempData);
+            }
+             
+            return result;
         }
     }
 }

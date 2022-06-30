@@ -173,7 +173,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private ObservableCollection<GroupAuthority> groupPharmacyEmployeeList;//在其他加盟藥局對應的職位
+        private ObservableCollection<GroupAuthority> groupPharmacyEmployeeList = new ObservableCollection<GroupAuthority>();//在其他加盟藥局對應的職位
 
         [IgnoreFormat]
         public ObservableCollection<GroupAuthority> GroupPharmacyEmployeeList
@@ -196,9 +196,7 @@ namespace His_Pos.NewClass.Person.Employee
                 Set(() => SelectedGroupPharmacyEmployee, ref selectedGroupPharmacyEmployee, value);
             }
         }
-
-        #region Function
-
+         
         public bool IsPharmist()
         {
             return Authority == Authority.MasterPharmacist || Authority == Authority.NormalPharmacist || Authority == Authority.SupportPharmacist;
@@ -208,31 +206,7 @@ namespace His_Pos.NewClass.Person.Employee
         {
             return Authority == Authority.MasterPharmacist || Authority == Authority.NormalPharmacist;
         }
-
-        public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList)
-        {
-            GroupPharmacyEmployeeList = new ObservableCollection<GroupAuthority>();
-
-            var employeeList= EmployeeDb.GetGroupPharmacyDataByID(groupServerList.Select(_ => _.PHAMAS_VerifyKey ).ToList(), ID);
-
-            for(int i =0; i < groupServerList.Count; i++)
-            {
-                GroupAuthority tempData = new GroupAuthority()
-                {
-                    PharmacyName = groupServerList[i].PHAMAS_NAME,
-                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey,
-                    EmployeeAuthority = employeeList[i].Authority
-                };
-                tempData.IsDirty = false;
-                GroupPharmacyEmployeeList.Add(tempData);
-            }
-
-            SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault(); 
-            
-        }
-           
-        #endregion Function
-
+          
         public bool CheckLeave(DateTime date)
         {
             return StartDate <= date && (LeaveDate is null || LeaveDate >= date);
