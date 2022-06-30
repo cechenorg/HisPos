@@ -225,7 +225,7 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddColumnValue(newRow, "Emp_Cellphone", e.CellPhone);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Email", e.Email);
             DataBaseFunction.AddColumnValue(newRow, "Emp_LINE", e.Line);
-            DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", e.WorkPosition.WorkPositionId);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", 0);
             DataBaseFunction.AddColumnValue(newRow, "Emp_StartDate", e.StartDate);
             DataBaseFunction.AddColumnValue(newRow, "Emp_LeaveDate", e.LeaveDate);
             DataBaseFunction.AddColumnValue(newRow, "Emp_PurchaseLimit", e.PurchaseLimit);

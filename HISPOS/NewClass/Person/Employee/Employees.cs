@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.Person.Employee
 {
@@ -17,10 +18,11 @@ namespace His_Pos.NewClass.Person.Employee
             Clear();
 
             var employees = EmployeeDb.GetData();
-
+          
             foreach (var emp in employees)
             {
-                Add(emp);
+                if(emp.Authority != Authority.Admin)
+                    Add(emp);
             } 
         }
 

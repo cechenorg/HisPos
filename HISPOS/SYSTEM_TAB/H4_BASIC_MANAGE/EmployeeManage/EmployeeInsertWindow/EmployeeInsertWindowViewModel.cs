@@ -4,8 +4,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Person.Employee.WorkPosition;
+using His_Pos.NewClass.Person.Employee; 
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 {

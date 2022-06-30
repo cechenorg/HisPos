@@ -2,8 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Person.Employee.WorkPosition;
+using His_Pos.NewClass.Person.Employee; 
 using His_Pos.NewClass.Pharmacy;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -79,40 +78,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => FilterEmployeeCollection, ref _filterEmployeeCollection, value);
             }
         }
-
-        public WorkPositions workPositions = new WorkPositions();
-
-        public WorkPositions WorkPositions
-        {
-            get { return workPositions; }
-            set
-            {
-                Set(() => WorkPositions, ref workPositions, value);
-            }
-        }
-
-        public List<Authority> authoritys = new List<Authority>() {
-            Authority.Admin, 
-            Authority.PharmacyManager, 
-            Authority.AccountingStaff, 
-            Authority.StoreManager, 
-            Authority.StoreEmployee, 
-            Authority.MasterPharmacist, 
-            Authority.NormalPharmacist,
-            Authority.SupportPharmacist 
-        };
-
-        public List<Authority> Authoritys
-        {
-            get { return authoritys; }
-            set
-            {
-                Set(() => authoritys, ref authoritys, value);
-            }
-        }
-
-        
-
+         
         private bool localCheck;
 
         public bool LocalCheck
@@ -230,11 +196,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private void Init()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            WorkPositions = new WorkPositions();
             EmployeeCollection = new Employees();
             EmployeeCollection.Init();
-            MainWindow.ServerConnection.CloseConnection();
+          
             FilterEmployeeCollection = new Employees();
 
             foreach (var employeedata in EmployeeCollection)

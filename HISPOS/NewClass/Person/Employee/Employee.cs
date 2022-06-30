@@ -19,12 +19,9 @@ namespace His_Pos.NewClass.Person.Employee
         public Employee()
         {
             Gender = "男";
-            WorkPosition = new WorkPosition.WorkPosition();
-            WorkPosition.WorkPositionId = 2;
             StartDate = DateTime.Today;
             Birthday = DateTime.Today;
-            IsEnable = true;
-
+            IsEnable = true; 
             Authority = EnumFactory.TranValueToAuthority(4);
         }
 
@@ -81,20 +78,7 @@ namespace His_Pos.NewClass.Person.Employee
                 Set(() => NickName, ref nickName, value);
             }
         }
-
-        private WorkPosition.WorkPosition workPosition = new WorkPosition.WorkPosition();
-
-        [IgnoreFormat]
-        public virtual WorkPosition.WorkPosition WorkPosition
-        {
-            get => workPosition;
-            set
-            {
-                Set(() => WorkPosition, ref workPosition, value);
-            }
-        }
          
-
         private DateTime? startDate;//到職日
 
         [IgnoreFormat]

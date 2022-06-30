@@ -453,9 +453,6 @@
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
     <Compile Include="NewClass\Person\Employee\Employees.cs" />
     <Compile Include="NewClass\Person\Employee\ProductTransaction\TradeEmployee.cs" />
-    <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPosition.cs" />
-    <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositionDb.cs" />
-    <Compile Include="NewClass\Person\Employee\WorkPosition\WorkPositions.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\DeclareMedicalPersonnel.cs" />
     <Compile Include="NewClass\Person\MedicalPerson\PharmacistSchedule\DeclareMedicalPersonnels.cs" />
     <Compile Include="NewClass\Person\Gender.cs" />

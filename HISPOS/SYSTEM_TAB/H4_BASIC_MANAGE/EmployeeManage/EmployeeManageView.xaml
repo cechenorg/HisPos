@@ -200,8 +200,7 @@
                                 <DataTemplate>
                                     <ComboBox FontSize="20"   DataContext="{Binding }" 
                                               SelectedValuePath="Tag"
-                                              SelectedValue="{Binding EmployeeAuthority,UpdateSourceTrigger=PropertyChanged}"  >
-                                            <ComboBoxItem Content="系統管理員" Tag="{x:Static enum:Authority.Admin}"/>
+                                              SelectedValue="{Binding EmployeeAuthority,UpdateSourceTrigger=PropertyChanged}"  > 
                                             <ComboBoxItem Content="藥局經理" Tag="{x:Static enum:Authority.PharmacyManager}" />
                                             <ComboBoxItem Content="會計人員" Tag="{x:Static enum:Authority.AccountingStaff}" />
                                             <ComboBoxItem Content="店長" Tag="{x:Static enum:Authority.StoreManager}" />
@@ -341,12 +340,17 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="0">
-                            <TextBlock   Text="職　位　"  VerticalAlignment="Center" />
-                            <ComboBox  Width="150" DisplayMemberPath="WorkPositionName" FontSize="20" HorizontalContentAlignment="Center"
-                                                                 ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                                                                 ItemsSource="{Binding WorkPositions, UpdateSourceTrigger=PropertyChanged}"
-                                                                 SelectedItem="{Binding SelectedEmployee.WorkPosition}"
-                                                                 Text="{Binding SelectedEmployee.WorkPosition.WorkPositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBlock   Text="權限"  VerticalAlignment="Center" /> 
+                            <ComboBox  Width="150"   FontSize="20" HorizontalContentAlignment="Center"
+                                       SelectedValuePath="Tag"
+                                       SelectedValue="{Binding SelectedEmployee.Authority,UpdateSourceTrigger=PropertyChanged}"  > 
+                                <ComboBoxItem Content="藥局經理" Tag="{x:Static enum:Authority.PharmacyManager}" />
+                                <ComboBoxItem Content="會計人員" Tag="{x:Static enum:Authority.AccountingStaff}" />
+                                <ComboBoxItem Content="店長" Tag="{x:Static enum:Authority.StoreManager}" />
+                                <ComboBoxItem Content="店員" Tag="{x:Static enum:Authority.StoreEmployee}" />
+                                <ComboBoxItem Content="負責藥師" Tag="{x:Static enum:Authority.MasterPharmacist}" />
+                                <ComboBoxItem Content="執業藥師" Tag="{x:Static enum:Authority.NormalPharmacist}" />
+                                <ComboBoxItem Content="支援藥師" Tag="{x:Static enum:Authority.SupportPharmacist}" />
                             </ComboBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
