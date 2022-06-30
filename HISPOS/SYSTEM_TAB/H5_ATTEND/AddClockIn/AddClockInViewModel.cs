@@ -8,6 +8,8 @@ using His_Pos.NewClass.Person.Employee.ClockIn;
 using System;
 using System.Data;
 using System.Windows.Threading;
+using DomainModel;
+using DomainModel.Enum;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 {
@@ -143,18 +145,17 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         }
         private bool CheckPassWord()
         {
+            var errorMsg = EmployeeService.CheckIdNumber(Employee);
 
             //1.如果全部都沒有,查無帳號,請確認帳號
-            if (Employee.CheckEmployeeAccountSame())
+            if (errorMsg != ErrorMessage.OK)
             {
-                MessageWindow.ShowMessage("此帳號不存在!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
                 return false;
             }
-
-            MainWindow.ServerConnection.OpenConnection();
+            
             Employee = EmployeeService.Login(Employee.Account, Employee.Password);
-            MainWindow.ServerConnection.CloseConnection();
-
+           
             //檢查帳密 密碼錯誤
             if (Employee == null)
             {

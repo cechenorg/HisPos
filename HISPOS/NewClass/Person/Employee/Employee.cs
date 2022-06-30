@@ -230,15 +230,7 @@ namespace His_Pos.NewClass.Person.Employee
             SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault(); 
             
         }
-          
-        public bool CheckEmployeeAccountSame()
-        {
-            var table = EmployeeDb.CheckEmployeeAccountSame(Account);
-            return table.Rows[0].Field<int>("Count") == 0;
-        }
            
-        
-         
         #endregion Function
 
         public bool CheckLeave(DateTime date)

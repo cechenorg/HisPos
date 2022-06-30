@@ -67,6 +67,13 @@ namespace His_Pos.NewClass.Person.Employee
             { 
                 return ErrorMessage.EmployeeIDNumberExist;
             }
+             
+            table = EmployeeDb.CheckEmployeeAccountSame(emp.Account); 
+            if (table.Rows[0].Field<int>("Count") > 0)
+            { 
+                return ErrorMessage.EmployeeAccountExist;
+            }
+
 
             return ErrorMessage.OK;
         }

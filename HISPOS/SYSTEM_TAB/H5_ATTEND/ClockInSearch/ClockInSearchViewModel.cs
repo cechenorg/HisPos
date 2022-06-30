@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
+using DomainModel;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 {
@@ -247,9 +248,10 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         private bool CheckPassWord()
         {
             //1.如果全部都沒有,查無帳號,請確認帳號
-            if (SingInEmployee.CheckEmployeeAccountSame())
+            var errorMsg = EmployeeService.CheckIdNumber(SingInEmployee);
+            if (errorMsg != ErrorMessage.OK)
             {
-                MessageWindow.ShowMessage("此帳號不存在!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
                 return false;
             }
 

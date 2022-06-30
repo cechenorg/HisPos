@@ -12,7 +12,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
     public class EmployeeInsertWindowViewModel : ViewModelBase
     {
          
-        public Employee employee;
+        public Employee employee = new Employee();
 
         public Employee Employee
         {
@@ -63,14 +63,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
             var errorMsg = EmployeeService.CheckIdNumber(Employee);
             if (errorMsg != ErrorMessage.OK)
             {
+                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
                 return;
             }
-            if (!Employee.CheckEmployeeAccountSame())
-            {
-                MessageWindow.ShowMessage("此帳號已經存在!", Class.MessageType.ERROR);
-                return;
-            }
-
+           
             EmployeeService.Insert(Employee);
              
             MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);

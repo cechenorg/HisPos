@@ -16,5 +16,7 @@ namespace DomainModel.Enum
         EmployeeIDNumberFormatError,
         [Description("此身分證已經存在!")]
         EmployeeIDNumberExist,
+        [Description("此帳號已經存在!")]
+        EmployeeAccountExist
     }
 }
