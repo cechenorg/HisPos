@@ -37,8 +37,7 @@ namespace His_Pos.NewClass.Person.Employee
         //    IsEnable = r.Field<bool>("Emp_IsEnable"); 
         //    IsLocal = r.Field<bool>("Emp_IsLocal");
         //    CashierID = r.Field<string>("Emp_CashierID");
-        //    WorkPosition = new WorkPosition.WorkPosition(r);
-
+         
         //    byte tempAutID = r.Field<byte>("Aut_LevelID");
         //    Authority = TranValueToAuthority(tempAutID); 
         //}
