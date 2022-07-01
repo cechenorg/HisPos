@@ -229,21 +229,26 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 }
             }
 
-            if (LocalCheck)
-            {
-                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
-                {
-                    FilterEmployeeCollection.Remove(quitEmployee);
-                }
-            }
 
-            if (GlobalCheck)
+            if (_isGroupPharmacy)
             {
-                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal))
+                if (LocalCheck)
                 {
-                    FilterEmployeeCollection.Remove(quitEmployee);
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
+                    {
+                        FilterEmployeeCollection.Remove(quitEmployee);
+                    }
+                }
+
+                if (GlobalCheck)
+                {
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal))
+                    {
+                        FilterEmployeeCollection.Remove(quitEmployee);
+                    }
                 }
             }
+           
             SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
         }
 

@@ -24,9 +24,13 @@
                 <service:NullableDateConverter x:Key="NullableDateConverter" />
  
             </Grid.Resources>
-            <DockPanel  Margin="10,0">
-                <RadioButton Content="本店"  VerticalContentAlignment="Center" IsChecked="{Binding LocalCheck}" FontSize="20"  />
-                <RadioButton  Margin="5,0,0,0"  Content="全部"  VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck}" FontSize="20"  />
+            <DockPanel  Margin="10,0"   >
+                <RadioButton
+                    Visibility="{Binding IsGroupPharmacy,Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Content="本店"  VerticalContentAlignment="Center" IsChecked="{Binding LocalCheck}" FontSize="20"  />
+                <RadioButton  
+                    Visibility="{Binding IsGroupPharmacy,Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Margin="5,0,0,0"  Content="全部"  VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck}" FontSize="20"  />
 
                 <CheckBox Margin="5,0,0,0" Content="排除已離職" FontSize="20" IsChecked="{Binding IsQuit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
 
