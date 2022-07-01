@@ -11,7 +11,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
     public class EmployeeInsertWindowViewModel : ViewModelBase
     {
          
-        public Employee employee = new Employee();
+        public Employee employee = new Employee(){IsLocal = true};
 
         public Employee Employee
         {

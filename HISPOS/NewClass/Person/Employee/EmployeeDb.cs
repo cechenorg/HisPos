@@ -61,12 +61,17 @@ namespace His_Pos.NewClass.Person.Employee
                 {
                     var tempEmployee = e.DeepCloneViaJson();
 
-                    //其他藥局都須為支援藥師
-                    if ( (tempEmployee.Authority == Authority.MasterPharmacist || tempEmployee.Authority == Authority.NormalPharmacist) && 
-                         pharmacyInfo.PHAMAS_VerifyKey != ViewModelMainWindow.CurrentPharmacy.VerifyKey) {
-                        tempEmployee.Authority = Authority.SupportPharmacist;
-                    }
+                    if (pharmacyInfo.PHAMAS_VerifyKey != ViewModelMainWindow.CurrentPharmacy.VerifyKey)
+                    {
+                        //其他藥局都須為支援藥師
+                        if (tempEmployee.Authority == Authority.MasterPharmacist || tempEmployee.Authority == Authority.NormalPharmacist )
+                        {
+                            tempEmployee.Authority = Authority.SupportPharmacist;
+                        }
 
+                        tempEmployee.IsLocal = false;
+                    }
+                     
                     parameterList = new List<SqlParameter>();
                     parameterList.Add(new SqlParameter("Employee", SetCustomer(tempEmployee)));
                     MainWindow.ServerConnection.ExecuteProcBySchema(pharmacyInfo.PHAMAS_VerifyKey, "[Set].[InsertEmployee]", parameterList);
@@ -231,6 +236,8 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddColumnValue(newRow, "Emp_PurchaseLimit", e.PurchaseLimit);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Note", e.Note);
             DataBaseFunction.AddColumnValue(newRow, "Emp_IsEnable", e.IsEnable);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_IsLocal", e.IsLocal);
+            
             employeeTable.Rows.Add(newRow);
             return employeeTable;
         }
@@ -258,6 +265,8 @@ namespace His_Pos.NewClass.Person.Employee
             employeeTable.Columns.Add("Emp_PurchaseLimit", typeof(int));
             employeeTable.Columns.Add("Emp_Note", typeof(String));
             employeeTable.Columns.Add("Emp_IsEnable", typeof(bool));
+            employeeTable.Columns.Add("Emp_IsLocal", typeof(bool));
+             
             return employeeTable;
         }
 
