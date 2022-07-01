@@ -21,6 +21,7 @@ using DomainModel.Enum;
 using System.Threading;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -87,6 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => allBtnCheck;
             set { Set(() => AllBtnCheck, ref allBtnCheck, value); }
         }
+        
         public ICollectionView StoreOrderCollectionView
         {
             get => storeOrderCollectionView;
@@ -252,40 +254,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         public void ReloadData()
         {
-            DataTable dataTable;
             storeOrderCollection = StoreOrders.GetOrdersNotDone();
-            List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).OrderBy(s => s.CreateDateTime).ToList();
-            string dateTime = DateTime.Now.ToString("yyyyMMdd");
-
-            if (storeOrders.Count > 0)
-                dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
-
-            for (int i = 0; i < storeOrders.Count; i++)
-            {
-                if (storeOrders[i].OrderStatus != OrderStatusEnum.SCRAP)
-                {
-                    if (string.IsNullOrEmpty(storeOrders[i].SourceID))
-                        dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].ID);
-                    else
-                        dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].SourceID);
-
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        currentStoreOrder = storeOrders[i];
-                        DataRow[] dataRows = dataTable.Select();
-                        currentStoreOrder.UpdateOrderDataFromSingde(dataRows[0]);
-                    }
-                }
-            }
-            var orderedList = storeOrderCollection.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
-
-            StoreOrders result = new StoreOrders();
-
-            for (int i = orderedList.Count() - 1; i >= 0; i--)
-            {
-                result.Add(orderedList[i]);
-            }
-            storeOrderCollection = result;
             InitData(storeOrderCollection);
         }
         private void DeleteWaitingOrderAction()
@@ -474,7 +443,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             storeOrderCollection = storeOrders;
             StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrders);
             StoreOrderCollectionView.Filter += OrderFilter;
-
             if (!StoreOrderCollectionView.IsEmpty)
             {
                 StoreOrderCollectionView.MoveCurrentToFirst();

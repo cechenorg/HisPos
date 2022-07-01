@@ -16,6 +16,7 @@ using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow;
@@ -143,6 +144,7 @@ namespace His_Pos.ChromeTabViewModel
         public static SpecialTreats SpecialTreats { get; set; }
         public static Usages Usages { get; set; }
         public static Positions Positions { get; set; }
+        public static int StoreOrderDays { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
         public static Employee CurrentUser { get; set; }
         public static Employees EmployeeCollection { get; set; }
@@ -156,6 +158,7 @@ namespace His_Pos.ChromeTabViewModel
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
             MainWindow.ServerConnection.OpenConnection();
+            StoreOrderDays = StoreOrderDB.GetStoreOrderDays();
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnels = new Employees();
             CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);

@@ -7,6 +7,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using DomainModel.Enum;
+using System.Text.RegularExpressions;
+using System.Globalization;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -146,25 +149,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         
                             if (dataTable.Rows.Count > 0)
                             {
+                                bool IsShip = Convert.ToBoolean(dataTable.Rows[0]["IS_SHIPMENT"]);
+                                if(IsShip)
+                                {
+                                    storeOrders[i].OrderType = OrderTypeEnum.PREPARE;
+                                    storeOrders[i].IsWaitOrder = 0;
+                                }
                                 currentStoreOrder = storeOrders[i];
                                 DataRow[] dataRows = dataTable.Select();
                                 currentStoreOrder.UpdateOrderDataFromSingde(dataRows[0]);
-                                //storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
                             }
                         }
                     }
 
-                    var orderedList = storeOrderCollection.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
+                    var orderedList = storeOrderCollection.OrderBy(_=>_.IsWaitOrder).ThenBy(_ => _.CreateDateTime).ToList();
 
                     StoreOrders result = new StoreOrders();
-
-                    for (int i = orderedList.Count() - 1; i >= 0; i--)
+                    List<StoreOrder> tempOrder = new List<StoreOrder>();
+                    for (int i = 0; i < orderedList.Count(); i++)
                     {
                         result.Add(orderedList[i]);
                     }
 
                     storeOrderCollection = result;
-
                     //(20220324)
                     SingdeTotalViewModel.InitData();
                     NormalViewModel.InitData(storeOrderCollection);

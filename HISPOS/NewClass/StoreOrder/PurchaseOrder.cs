@@ -12,6 +12,8 @@ using System.Linq;
 using System.Windows;
 using DomainModel.Enum;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -58,6 +60,10 @@ namespace His_Pos.NewClass.StoreOrder
             PreOrderCustomer = row.Field<string>("StoOrd_CustomerName");
             TargetPreOrderCustomer = row.Field<string>("StoOrd_TargetCustomerName");
             PlanArriveDate = row.Field<DateTime?>("StoOrd_PlanArrivalDate");
+            if((ReceiveID != "" && ReceiveID != null) && ID != ReceiveID && IsEnable)
+            {
+                OrderType = OrderTypeEnum.PREPARE;
+            }
             if (row.Table.Columns.Contains("StoOrd_DemandDate"))
             {
                 if (row["StoOrd_DemandDate"] != DBNull.Value)
@@ -78,6 +84,33 @@ namespace His_Pos.NewClass.StoreOrder
             else
             {
                 DemandDate = "---/--/--";
+            }
+            if (!string.IsNullOrEmpty(PatientData))
+            {
+                string[] noteArray = PatientData.Split(new char[] { ' ' });
+                foreach (string text in noteArray)
+                {
+                    if (!Regex.IsMatch(text, @"[\u4e00-\u9fa5]") && !string.IsNullOrEmpty(text) && text.Length > 7)
+                    {
+                        try
+                        {
+                            CultureInfo culture = new CultureInfo("zh-TW");
+                            culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                            DateTime date = DateTime.Parse(text, culture);
+                            TimeSpan diffDate = new TimeSpan(date.Ticks - DateTime.Today.Ticks);
+                            int StoreOrderDays = ViewModelMainWindow.StoreOrderDays;
+                            if (diffDate.Days > StoreOrderDays && StoreOrderDays != 0)
+                            {
+                                IsWaitOrder = 1;
+                                OrderType = OrderTypeEnum.WAIT;
+                            }
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                }
             }
         }
 

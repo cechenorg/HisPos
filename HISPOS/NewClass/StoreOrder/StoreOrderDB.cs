@@ -14,6 +14,7 @@ using DomainModel.Enum;
 using System.Globalization;
 using His_Pos.FunctionWindow;
 using His_Pos.Class;
+using Dapper;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -635,6 +636,19 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable GetNotDoneStoreOrders()
         {
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
+        }
+
+        internal static int GetStoreOrderDays()
+        {
+            string sql = $@"Select SysPar_Value From [SystemInfo].[SystemParameters] Where SysPar_Name = 'StoreOrderDays'";
+            int result = 0;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.QueryFirst<int>(string.Format("Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'StoreOrderDays'", Properties.Settings.Default.SystemSerialNumber),
+                     commandType: CommandType.Text);
+            });
+                // = Convert.ToInt32(conn.QueryFirst<string>(sql));
+            return result;
         }
 
         internal static void SaveReturnOrder(ReturnOrder returnOrder)
