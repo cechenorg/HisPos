@@ -34,7 +34,7 @@ namespace His_Pos.NewClass.Product
                     break;
 
                 default:
-                    dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString.Trim());
+                    dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString.Trim(), wareID);
                     break;
             }
             return dataTable.Rows[0].Field<int>("COUNT");
