@@ -293,7 +293,7 @@
 
                         <StackPanel Orientation="Horizontal" Grid.Column="0">
                             <TextBlock Text="家　電　" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.SecondPhone}"/>
+                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.Tel}"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
