@@ -551,13 +551,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[XmlOfPrescriptionByDate]", parameterList);
         }
-        public static DataTable GetXmlOfPrescriptionsByDateAuto(DateTime sDate, DateTime eDate)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[XmlOfPrescriptionByDate]", parameterList);
-        }
+       
         public static void UpdateDeclareContent(int id, XDocument declareContent)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
