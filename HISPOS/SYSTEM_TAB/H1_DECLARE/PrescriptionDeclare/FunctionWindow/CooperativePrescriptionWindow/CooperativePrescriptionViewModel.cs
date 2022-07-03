@@ -177,7 +177,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             cooperativePres = new CusPrePreviewBases();
            
                 MainWindow.ServerConnection.OpenConnection();
-                cooperativePres.GetAutoCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
+                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
                 MainWindow.ServerConnection.CloseConnection();
           
                 CooPreCollectionViewSource = new CollectionViewSource { Source = cooperativePres };
