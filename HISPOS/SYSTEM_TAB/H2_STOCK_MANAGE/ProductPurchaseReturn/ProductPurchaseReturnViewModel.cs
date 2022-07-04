@@ -150,17 +150,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                             if (dataTable.Rows.Count > 0)
                             {
                                 bool IsShip = Convert.ToBoolean(dataTable.Rows[0]["IS_SHIPMENT"]);
-                                string sindgeID = Convert.ToString(dataTable.Rows[0]["PRESCRIPTION_RECEIVEID"]);
                                 if (IsShip)
                                 {
-                                    if(storeOrders[i].ReceiveID == sindgeID)
-                                    {
-                                        storeOrders[i].OrderType = OrderTypeEnum.PURCHASE;
-                                    }
-                                    else
-                                    {
-                                        storeOrders[i].OrderType = OrderTypeEnum.PREPARE;
-                                    }
+                                    storeOrders[i].OrderType = OrderTypeEnum.PREPARE;
                                     storeOrders[i].IsWaitOrder = 0;
                                 }
                                 currentStoreOrder = storeOrders[i];
