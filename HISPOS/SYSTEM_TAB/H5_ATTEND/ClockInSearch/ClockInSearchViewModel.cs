@@ -247,6 +247,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         }
         private bool CheckPassWord()
         {
+            SingInEmployee = EmployeeService.Login(SingInEmployee.Account, SingInEmployee.Password);
             //1.如果全部都沒有,查無帳號,請確認帳號
             var errorMsg = EmployeeService.CheckIdNumber(SingInEmployee);
             if (errorMsg != ErrorMessage.OK)
