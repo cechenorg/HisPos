@@ -230,7 +230,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 }
 
-               // cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
+                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
                 CooperativeClinicSettings.Init();
                 CooperativeClinicSettings.FilePurge();
                 BusyContent = StringRes.GetAdjustCases;
