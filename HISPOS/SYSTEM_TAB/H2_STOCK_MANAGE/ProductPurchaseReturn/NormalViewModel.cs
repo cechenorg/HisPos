@@ -298,6 +298,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 //(20220510)確認收貨之後清空搜尋條件
                 if (currentStoreOrder.IsDoneOrder)//確認收貨
                 {
+                    ReloadData();
                     SearchString = string.Empty;
                     StoreOrderCollectionView.Filter += OrderFilter;
                     CurrentStoreOrder = (StoreOrder)StoreOrderCollectionView.CurrentItem;
