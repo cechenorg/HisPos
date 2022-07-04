@@ -360,6 +360,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             switch (OrderType)
             {
+                case OrderTypeEnum.PREPARE:
                 case OrderTypeEnum.PURCHASE:
                     string pay = IsPayCash ? "下貨付現" : "一般收貨";
                     ConfirmWindow confirmWindow = new ConfirmWindow("訂單金額: " + TotalPrice + "\n選擇: " + pay + "\n是否確認收貨?", "關閉新增盤點確認");
@@ -375,7 +376,7 @@ namespace His_Pos.NewClass.StoreOrder
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
                         IsDoneOrder = false;
-                        MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        MessageWindow.ShowMessage(((OrderType == OrderTypeEnum.PURCHASE || OrderType == OrderTypeEnum.PREPARE) ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
                     }
                     else
                     {
@@ -390,7 +391,7 @@ namespace His_Pos.NewClass.StoreOrder
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
                         IsDoneOrder = false;
-                        MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        MessageWindow.ShowMessage((OrderType == OrderTypeEnum.RETURN ? "退" : "進") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
                     }
                     else
                     {
