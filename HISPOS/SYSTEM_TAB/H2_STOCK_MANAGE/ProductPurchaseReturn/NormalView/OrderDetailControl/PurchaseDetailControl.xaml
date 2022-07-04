@@ -34,7 +34,7 @@
                 Width="320"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
-                Content="{Binding ReceiveID}"
+                Content="{Binding ID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="40"
                 FontWeight="Bold"
@@ -45,7 +45,7 @@
                 Width="320"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
-                Content="{Binding ReceiveID}"
+                Content="{Binding ID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="40"
                 FontWeight="Bold"
@@ -129,11 +129,12 @@
                 Margin="20,0,0,0"
                 Content="原"
                 Foreground="Black"
+                Visibility="Hidden"
                 Style="{StaticResource BoldLabelHeader25}" />
             <Label
                 Width="200"
                 VerticalAlignment="Center"
-                Content="{Binding ID}"
+                Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semi"
                 FontSize="24"
                 Foreground="Black" />

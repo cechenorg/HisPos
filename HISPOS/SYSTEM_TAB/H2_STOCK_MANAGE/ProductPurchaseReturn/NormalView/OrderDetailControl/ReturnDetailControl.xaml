@@ -122,6 +122,7 @@
                 Margin="20,0,0,0"
                 Content="原"
                 Foreground="Black"
+                Visibility="Hidden"
                 Style="{StaticResource BoldLabelHeader25}" />
             <Label
                 Width="200"
