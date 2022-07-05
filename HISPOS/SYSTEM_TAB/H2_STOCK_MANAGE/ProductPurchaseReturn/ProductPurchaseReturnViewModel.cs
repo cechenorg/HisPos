@@ -150,7 +150,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                             if (dataTable.Rows.Count > 0)
                             {
                                 bool IsShip = Convert.ToBoolean(dataTable.Rows[0]["IS_SHIPMENT"]);
-                                if(IsShip)
+                                if (IsShip)
                                 {
                                     storeOrders[i].OrderType = OrderTypeEnum.PREPARE;
                                     storeOrders[i].IsWaitOrder = 0;

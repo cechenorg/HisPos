@@ -515,7 +515,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
 
         private void CommonMedStoreOrderAction()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否將低於安全量之藥品傳送訂單至杏德?", "常備藥傳送");
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認傳送", "常備藥傳送");
             if ((bool)confirmWindow.DialogResult)//(20220602改寫)
             {
                 DataTable table = new DataTable();

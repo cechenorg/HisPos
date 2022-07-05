@@ -182,13 +182,22 @@ namespace His_Pos.NewClass.Prescription.Service
             //Current.SetPrescribeAdjustCase();
             if (!Current.Patient.CheckData() && !Current.Patient.IsAnonymous())
             {
-                var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
-                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
-                if ((bool)confirm.DialogResult)
+                if (Current.AdjustCase.ID == "0")
                 {
                     Current.Patient = Customer.GetCustomerByCusId(0);
                     return true;
                 }
+                else
+                {
+                    var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
+                    Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                    if ((bool)confirm.DialogResult)
+                    {
+                        Current.Patient = Customer.GetCustomerByCusId(0);
+                        return true;
+                    }
+                }
+
                 return false;
             }
             return true;
