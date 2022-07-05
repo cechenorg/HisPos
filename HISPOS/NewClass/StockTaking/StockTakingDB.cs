@@ -1,4 +1,5 @@
-﻿using His_Pos.Database;
+﻿using His_Pos.ChromeTabViewModel;
+using His_Pos.Database;
 using His_Pos.NewClass.StockTaking.StockTakingPlanProduct;
 using His_Pos.NewClass.StockTaking.StockTakingProduct;
 using System;
@@ -108,6 +109,19 @@ namespace His_Pos.NewClass.StockTaking
             DataBaseFunction.AddSqlParameter(parameterList, "ProductIDs", SetStockTakingPlanProducts(stockTaking.StockTakingProductCollection));
             DataBaseFunction.AddSqlParameter(parameterList, "Number", Number);
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStockChange]", parameterList);
+        }
+        internal static void InsertTransfer(int type, int manID ,string proID, string batchNum, decimal qty, decimal price, int warID)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Type", type);
+            DataBaseFunction.AddSqlParameter(parameterList, "ManID", manID);
+            DataBaseFunction.AddSqlParameter(parameterList, "ProID", proID);
+            DataBaseFunction.AddSqlParameter(parameterList, "BatchNum", batchNum);
+            DataBaseFunction.AddSqlParameter(parameterList, "Qty", qty);
+            DataBaseFunction.AddSqlParameter(parameterList, "Price", price);
+            DataBaseFunction.AddSqlParameter(parameterList, "UserID", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "warID", warID);
+            MainWindow.ServerConnection.ExecuteProc("[Set].[InsertTransfer]", parameterList);
         }
 
         internal static DataTable GetStockTakingTotalPrice(StockTakingProduct.StockTakingProduct stockTakingProduct, string warID)

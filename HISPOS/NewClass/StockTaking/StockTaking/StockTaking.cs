@@ -56,6 +56,10 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
         {
             StockTakingDB.InsertStockChange(this, typeName, Number);
         }
+        public void InsertTransfer(int type, int manID, string proID, string batchNum, decimal qty, decimal price, int warID)
+        {
+            StockTakingDB.InsertTransfer(type, manID, proID, batchNum, qty, price, warID);
+        }
 
         public void SingleStockChange(string id, double inventory, double newInventory, double takingPrice, WareHouse.WareHouse wareHouse, string Number)
         {
