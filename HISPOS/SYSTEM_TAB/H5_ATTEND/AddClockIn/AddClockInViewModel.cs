@@ -146,16 +146,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         private bool CheckPassWord()
         {
             Employee = EmployeeService.Login(Employee.Account, Employee.Password);
-            var errorMsg = EmployeeService.CheckIdNumber(Employee);
-
-            //1.如果全部都沒有,查無帳號,請確認帳號
-            if (errorMsg != ErrorMessage.OK)
-            {
-                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
-                return false;
-            }
-            
-            //Employee = EmployeeService.Login(Employee.Account, Employee.Password);
            
             //檢查帳密 密碼錯誤
             if (Employee == null)
@@ -164,7 +154,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
                 return false;
             }
             
-
             return true;
         }
         public void GetDate()

@@ -63,17 +63,17 @@ namespace His_Pos.NewClass.Person.Employee
 
                 return ErrorMessage.EmployeeIDNumberFormatError;
             }
-            //var table = EmployeeDb.CheckIdNumber(emp.IDNumber);
-            //if (table.Rows[0].Field<int>("Count") > 0)
-            //{
-            //    return ErrorMessage.EmployeeIDNumberExist;
-            //}
+            var table = EmployeeDb.CheckIdNumber(emp.IDNumber);
+            if (table.Rows[0].Field<int>("Count") > 0)
+            {
+                return ErrorMessage.EmployeeIDNumberExist;
+            }
 
-            //table = EmployeeDb.CheckEmployeeAccountSame(emp.Account);
-            //if (table.Rows[0].Field<int>("Count") > 0)
-            //{
-            //    return ErrorMessage.EmployeeAccountExist;
-            //}
+            table = EmployeeDb.CheckEmployeeAccountSame(emp.Account);
+            if (table.Rows[0].Field<int>("Count") > 0)
+            {
+                return ErrorMessage.EmployeeAccountExist;
+            }
 
 
             return ErrorMessage.OK;

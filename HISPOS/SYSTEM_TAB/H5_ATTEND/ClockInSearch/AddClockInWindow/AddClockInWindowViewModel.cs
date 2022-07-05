@@ -86,27 +86,17 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
             //Employee user = Employee.Login(EmployeeID, (sender as PasswordBox)?.Password);
             //EmployeePassWord
             Employee.Account = EmployeeID;
-
-           
+             
             Employee user = EmployeeService.Login(EmployeeID, EmployeePassWord);
 
-            var errorMsg = EmployeeService.CheckIdNumber(Employee);
-            //1.如果全部都沒有,查無帳號,請確認帳號
-            if (errorMsg != ErrorMessage.OK)
-            {
-                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
-                return false;
-            }
+            
             //檢查帳密 密碼錯誤
-            else if (user == null)
+            if (user == null)
             {
                 MessageWindow.ShowMessage("密碼錯誤!", Class.MessageType.ERROR);
                 return false;
             }
-            else
-            {
-                Employee = EmployeeService.Login(EmployeeID, EmployeePassWord);
-            }
+            Employee = user;
 
             return true;
         }

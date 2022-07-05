@@ -248,18 +248,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         private bool CheckPassWord()
         {
             SingInEmployee = EmployeeService.Login(SingInEmployee.Account, SingInEmployee.Password);
-            //1.如果全部都沒有,查無帳號,請確認帳號
-            var errorMsg = EmployeeService.CheckIdNumber(SingInEmployee);
-            if (errorMsg != ErrorMessage.OK)
-            {
-                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
-                return false;
-            }
-
-            MainWindow.ServerConnection.OpenConnection();
-            SingInEmployee = EmployeeService.Login(SingInEmployee.Account, SingInEmployee.Password);
-            MainWindow.ServerConnection.CloseConnection();
-
+            
             //檢查帳密 密碼錯誤
             if (SingInEmployee == null)
             {
