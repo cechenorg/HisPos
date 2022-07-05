@@ -118,18 +118,29 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
-        private bool _isGroupPharmacy =
-            string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
-             (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || 
-            ViewModelMainWindow.CurrentUser.Authority == Authority.StoreManager ||
-            ViewModelMainWindow.CurrentUser.Authority == Authority.MasterPharmacist) ;
+        private bool _isGroupPharmacy = string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false;
 
         public bool IsGroupPharmacy
         {
             get { return _isGroupPharmacy; }
             set
             {
-                Set(() => IsGroupPharmacy, ref _isGroupPharmacy, value);
+                Set(() => IsGroupPharmacy, ref _isGroupPharmacy, value); 
+            }
+        }
+
+        private bool _isEnableEditAuthority =
+            string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
+            (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin ||
+             ViewModelMainWindow.CurrentUser.Authority == Authority.StoreManager ||
+             ViewModelMainWindow.CurrentUser.Authority == Authority.MasterPharmacist);
+
+        public bool IsEnableEditAuthority
+        {
+            get { return _isEnableEditAuthority; }
+            set
+            {
+                Set(() => IsEnableEditAuthority, ref _isEnableEditAuthority, value);
 
                 FilterEmployee();
             }

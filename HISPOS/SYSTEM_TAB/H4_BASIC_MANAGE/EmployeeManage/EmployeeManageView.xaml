@@ -153,7 +153,7 @@
                     <ColumnDefinition  Width="Auto"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Grid Width="280" Visibility="{Binding IsGroupPharmacy,Converter={StaticResource BooleanToVisibilityConverter}}"  Background="{StaticResource GridDarkerBackGround}"  >
+                <Grid Width="280" Visibility="{Binding IsEnableEditAuthority,Converter={StaticResource BooleanToVisibilityConverter}}"  Background="{StaticResource GridDarkerBackGround}"  >
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="50"/>
