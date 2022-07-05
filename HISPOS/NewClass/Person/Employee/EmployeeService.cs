@@ -53,7 +53,7 @@ namespace His_Pos.NewClass.Person.Employee
             return tabAuths;
         }
 
-        public static ErrorMessage CheckIdNumber(Employee emp)
+        public static ErrorMessage VerifyIDNumber(Employee emp)
         {
             if (string.IsNullOrEmpty(emp.IDNumber))
                 return ErrorMessage.DataEmpty;
@@ -63,6 +63,12 @@ namespace His_Pos.NewClass.Person.Employee
 
                 return ErrorMessage.EmployeeIDNumberFormatError;
             }
+           
+            return ErrorMessage.OK;
+        }
+
+        public static ErrorMessage CheckEmpIsExist(Employee emp)
+        {
             var table = EmployeeDb.CheckIdNumber(emp.IDNumber);
             if (table.Rows[0].Field<int>("Count") > 0)
             {
@@ -74,7 +80,6 @@ namespace His_Pos.NewClass.Person.Employee
             {
                 return ErrorMessage.EmployeeAccountExist;
             }
-
 
             return ErrorMessage.OK;
         }

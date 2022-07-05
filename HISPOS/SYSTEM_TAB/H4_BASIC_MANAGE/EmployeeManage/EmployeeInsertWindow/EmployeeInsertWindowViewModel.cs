@@ -48,28 +48,39 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 
         private void CheckIdNumberAction()
         {
-            var errorMsg = EmployeeService.CheckIdNumber(Employee);
-
-            if (errorMsg == ErrorMessage.OK)
-                MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
-            else 
-                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
-           
+            CheckIdNumber();
         }
 
         private void SubbmitAction()
         {
-            var errorMsg = EmployeeService.CheckIdNumber(Employee);
-            if (errorMsg != ErrorMessage.OK)
-            {
-                MessageWindow.ShowMessage(errorMsg.GetDescriptionText(), Class.MessageType.ERROR);
+            if(CheckIdNumber() == false)
                 return;
-            }
            
             EmployeeService.Insert(Employee);
              
             MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeInsertWindow"));
+        }
+
+        private bool CheckIdNumber()
+        {
+            var idcheck_ErrorMsg = EmployeeService.VerifyIDNumber(Employee);
+            var empExist_ErrorMsg = EmployeeService.CheckEmpIsExist(Employee);
+
+            if (idcheck_ErrorMsg == ErrorMessage.OK && empExist_ErrorMsg == ErrorMessage.OK)
+            {
+                MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
+                return true;
+            } 
+            else
+            {
+                if(idcheck_ErrorMsg != ErrorMessage.OK)
+                    MessageWindow.ShowMessage(idcheck_ErrorMsg.GetDescriptionText(), Class.MessageType.ERROR);
+
+                if (empExist_ErrorMsg != ErrorMessage.OK)
+                    MessageWindow.ShowMessage(empExist_ErrorMsg.GetDescriptionText(), Class.MessageType.ERROR);
+                return false;
+            }
         }
     }
 }
