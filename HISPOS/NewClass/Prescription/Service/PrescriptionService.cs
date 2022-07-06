@@ -189,7 +189,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 }
                 else
                 {
-                    var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
+                    var confirm = new ConfirmWindow("尚未選擇客戶，是否以匿名取代?", "資料格式錯誤或資料不完整");
                     Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                     if ((bool)confirm.DialogResult)
                     {
