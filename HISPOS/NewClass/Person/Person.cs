@@ -58,8 +58,10 @@ namespace His_Pos.NewClass.Person
             set
             {
                 Set(() => IDNumber, ref idNumber, value);
-                if(string.IsNullOrEmpty(value) == false)
-                Gender = value.Substring(1, 1) == "1" ? "男" : "女";
+                if (string.IsNullOrEmpty(value) == false && value.Length==10)
+                    Gender = value.Substring(1, 1) == "1" ? "男" : "女";
+                if (string.IsNullOrEmpty(Gender) == true)
+                    Gender = "";
             }
         }//身分證字號
 
