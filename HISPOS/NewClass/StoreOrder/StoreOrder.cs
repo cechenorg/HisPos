@@ -9,6 +9,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Globalization;
 using His_Pos.ChromeTabViewModel;
+using System.Collections.Generic;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -146,16 +147,16 @@ namespace His_Pos.NewClass.StoreOrder
             ReceiveID = string.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
             SourceID = row.Field<string>("StoOrd_SourceID");
             CheckCode = row.Field<string>("StoOrd_CheckCode");
-            if (OrderStatus == OrderStatusEnum.SCRAP)
-                IsScrap = false;
-            else
-                IsScrap = true;
-
             var auth = ViewModelMainWindow.CurrentUser.Authority;
             //if ((auth == Authority.Admin) || (string.IsNullOrEmpty(CheckCode)))
                 IsCanDelete = true;
             //else
             //    IsCanDelete = false;
+            List<Authority> IsScrapAuthority = new List<Authority>() {Authority.Admin,Authority.PharmacyManager,Authority.AccountingStaff,Authority.StoreManager,Authority.MasterPharmacist };
+            if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth))
+                IsScrap = true;
+            else
+                IsScrap = false;
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
