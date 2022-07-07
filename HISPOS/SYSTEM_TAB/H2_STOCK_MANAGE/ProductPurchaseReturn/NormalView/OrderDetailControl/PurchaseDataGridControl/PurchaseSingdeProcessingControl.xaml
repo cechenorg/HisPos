@@ -57,7 +57,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition  Height="385"/>
+            <RowDefinition Height="385"/>
             <RowDefinition Height="210" />
             <RowDefinition Height="40" />
             <RowDefinition Height="30" />
@@ -99,15 +99,19 @@
             </DataGrid.Resources>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
-                    <Style.Triggers>
-                        <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource Shadow}" />
-                        </Trigger>
-                    </Style.Triggers>
+                    <Setter Property="IsEnabled" Value="True"/>
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="FontSize" Value="16" />
                     <Setter Property="Height" Value="41" />
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource Shadow}" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Path=IsDone}" Value="1">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>

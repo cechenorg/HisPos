@@ -233,7 +233,6 @@ namespace His_Pos.NewClass.StoreOrder
         public void MoveToNextStatus()
         {
             SaveOrder();
-
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
@@ -249,12 +248,14 @@ namespace His_Pos.NewClass.StoreOrder
                     {
                         //SaveOrder();
                         ToDoneStatus();
+                        CheckStoreOrderLower();
                     }
                     break;
 
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
                     ToDoneStatus();
+                    CheckStoreOrderLower();
                     break;
 
                 default:
@@ -427,6 +428,7 @@ namespace His_Pos.NewClass.StoreOrder
         protected abstract bool CheckUnProcessingOrder();
 
         protected abstract bool CheckNormalProcessingOrder();
+        protected abstract bool CheckStoreOrderLower();
 
         protected abstract bool CheckSingdeProcessingOrder();
 

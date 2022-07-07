@@ -195,10 +195,10 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckNormalProcessingOrder()
         {
-            bool isLowerThenOrderAmount = false;
+            //bool isLowerThenOrderAmount = false;
             bool hasControlMed = false;
             bool hasNoBatch = false;
-            var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            //var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
 
             foreach (var product in OrderProducts)
             {
@@ -248,6 +248,35 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
+            //foreach (var product in products)
+            //{
+            //    if (product.RealAmount < product.OrderAmount)
+            //    {
+            //        isLowerThenOrderAmount = true;
+            //        break;
+            //    }
+            //}
+
+            //if (isLowerThenOrderAmount)
+            //{
+            //    ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
+
+            //    if ((bool)confirmWindow.DialogResult)
+            //    {
+            //        bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
+
+            //        if (!isSuccess) return false;
+            //    }
+            //}
+            //ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
+
+            //return (bool)confirmWindow1.DialogResult;
+            return true;
+        }
+        protected override bool CheckStoreOrderLower()
+        {
+            var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            bool isLowerThenOrderAmount = false;
             foreach (var product in products)
             {
                 if (product.RealAmount < product.OrderAmount)
@@ -264,13 +293,8 @@ namespace His_Pos.NewClass.StoreOrder
                 if ((bool)confirmWindow.DialogResult)
                 {
                     bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
-
-                    if (!isSuccess) return false;
                 }
             }
-            //ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
-
-            //return (bool)confirmWindow1.DialogResult;
             return true;
         }
 

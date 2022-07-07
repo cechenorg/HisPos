@@ -71,6 +71,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double OnTheWayAmount { get; private set; }
         public double MedBagOnTheWayAmount { get; private set; }
         public double LastPrice { get; private set; }
+        public int IsDone { get; set; }
 
         public string OnTheWayDetail
         {
@@ -206,6 +207,10 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             SingdePackagePrice = (double)dataRow.Field<decimal>("SinData_PackagePrice");
             SingdePrice = (double)dataRow.Field<decimal>("SinData_SinglePrice");
             SingdeStock = dataRow.Field<int>("SinData_Stock");
+            if(dataRow.Table.Columns.Contains("IsDone"))
+            {
+                IsDone = dataRow.Field<int>("IsDone");
+            }
         }
 
         #region ----- Define Functions -----

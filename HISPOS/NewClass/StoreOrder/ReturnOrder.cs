@@ -356,6 +356,10 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return true;
         }
+        protected override bool CheckStoreOrderLower()
+        {
+            return true;
+        }
 
         #endregion ----- Override Function -----
     }
