@@ -31,7 +31,7 @@
                 Width="320"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
-                Content="{Binding ReceiveID}"
+                Content="{Binding ID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="40"
                 FontWeight="Bold"
@@ -85,14 +85,15 @@
                 Foreground="Green"
                 Text="進貨" />
             <Label
+                Visibility="Hidden"
                 Margin="20,0,0,0"
                 Content="原"
                 Foreground="Black"
                 Style="{StaticResource BoldLabelHeader25}" />
             <Label
-                Width="200"
+                Width="205"
                 VerticalAlignment="Center"
-                Content="{Binding ID}"
+                Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semi"
                 FontSize="24"
                 Foreground="Black" />
@@ -458,7 +459,7 @@
             <Button
                 Name="btnDelete"
                 Width="120"
-                Margin="10,0,0,0"
+                Margin="10,10,0,8"
                 Background="IndianRed"
                 BorderThickness="0"
                 IsEnabled="{Binding IsScrap}"

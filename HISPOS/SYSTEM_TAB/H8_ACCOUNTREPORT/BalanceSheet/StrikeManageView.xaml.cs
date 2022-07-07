@@ -220,8 +220,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 DataColumn cc = new DataColumn("CanClose", typeof(bool));
                 sn.DefaultValue = true;
                 dgDetails.Columns.Add(cc);
-
+                
                 dgStrikeDataGrid.ItemsSource = dgDetails.DefaultView;
+                if(!results.Columns.Contains("OrderID"))
+                {
+                    dgStrikeDataGrid.Columns[3].Visibility = Visibility.Visible;
+                    dgStrikeDataGrid.Columns[4].Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    dgStrikeDataGrid.Columns[3].Visibility = Visibility.Collapsed;
+                    dgStrikeDataGrid.Columns[4].Visibility = Visibility.Visible;
+                }
             }
             catch
             {

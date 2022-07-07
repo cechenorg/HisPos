@@ -97,7 +97,29 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         }
 
         public WareHouses WareHouseCollection { get; set; }
-        public bool HasManufactory { get { return CurrentManufactoryOrder != null; } }
+        public int HasManufactory 
+        { get 
+            { return IsSingdeManufactory(); } 
+        }
+        private int IsSingdeManufactory()
+        {
+            if(CurrentManufactoryOrder == null)
+            {
+                return 0;
+            }
+            else if(CurrentManufactoryOrder != null && CurrentManufactoryOrder.ManufactoryID != 0)
+            {
+                return 1;
+            }
+            else if (CurrentManufactoryOrder != null && CurrentManufactoryOrder.ManufactoryID == 0)
+            {
+                return 2;
+            }
+            else
+            {
+                return 0;
+            }
+        }
         public double ManufactoryOrdersPurchaseCount { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.PurchaseCount); } }
         public double ManufactoryOrdersPurchaseTotal { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.PurchasePrice); } }
         public double ManufactoryOrdersReturnCount { get { return (ManufactoryOrderCollection is null) ? 0 : ManufactoryOrderCollection.Sum(m => m.ReturnCount); } }

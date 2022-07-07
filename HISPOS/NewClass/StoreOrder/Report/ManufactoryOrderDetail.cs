@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using DomainModel.Enum;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder.Report
 {
@@ -16,6 +17,7 @@ namespace His_Pos.NewClass.StoreOrder.Report
 
         public OrderTypeEnum Type { get; set; }
         public string ID { get; set; }
+        public string ReceiveID { get; set; }
         public DateTime DoneTime { get; set; }
         private double InitialPrice { get; set; }
         public double ReturnStockValue { get; set; }
@@ -56,6 +58,10 @@ namespace His_Pos.NewClass.StoreOrder.Report
         {
             Type = dataRow.Field<string>("StoOrd_Type").Equals("P") ? OrderTypeEnum.PURCHASE : OrderTypeEnum.RETURN;
             ID = dataRow.Field<string>("StoOrd_ID");
+            if(dataRow.Table.Columns.Contains("StoOrd_ReceiveID"))
+            {
+                ReceiveID = dataRow.Field<string>("StoOrd_ReceiveID");
+            }
             DoneTime = dataRow.Field<DateTime>("StoOrd_ReceiveTime");
             InitialPrice = (double)dataRow.Field<decimal>("PRICE");
             ReturnStockValue = (double)dataRow.Field<decimal>("RETURN_PRICE");

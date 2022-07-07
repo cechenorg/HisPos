@@ -296,6 +296,20 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
+                            x:Name="OrderID"
+                            Width="200"
+                            Binding="{Binding Path=OrderID}"
+                            Header="單號"
+                            IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="0,0,0,0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
                             Width="150"
                             Binding="{Binding Path=Value, StringFormat=N0}"
                             Header="金額"

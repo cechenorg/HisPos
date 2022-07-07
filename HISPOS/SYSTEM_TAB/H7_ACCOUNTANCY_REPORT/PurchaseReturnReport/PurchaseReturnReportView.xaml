@@ -25,6 +25,9 @@
         <DataTemplate x:Key="ManufactoryControl" DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
             <purchaseReturnReport:PurchaseReturnReportControl />
         </DataTemplate>
+        <DataTemplate x:Key="SingdeManufactoryControl" DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
+            <purchaseReturnReport:PurchaseReturnSingdeReportControl />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid Margin="10,0,10,10">
         <Grid.RowDefinitions>
@@ -362,8 +365,11 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource NoManufactoryControl}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasManufactory, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <DataTrigger Binding="{Binding HasManufactory, UpdateSourceTrigger=PropertyChanged}" Value="1">
                             <Setter Property="ContentTemplate" Value="{StaticResource ManufactoryControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding HasManufactory, UpdateSourceTrigger=PropertyChanged}" Value="2">
+                            <Setter Property="ContentTemplate" Value="{StaticResource SingdeManufactoryControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

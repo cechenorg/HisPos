@@ -1328,6 +1328,9 @@
       <DependentUpon>TradeProfitDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\PrintService.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnSingdeReportControl.xaml.cs">
+      <DependentUpon>PurchaseReturnSingdeReportControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayCashStockEntryReport.xaml.cs">
       <DependentUpon>TodayCashStockEntryReport.xaml</DependentUpon>
     </Compile>
@@ -2310,6 +2313,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TradeProfitDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnSingdeReportControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
