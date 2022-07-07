@@ -118,22 +118,27 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
-        private bool _isGroupPharmacy = string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false;
+        private bool _isVisibleGlobalEmployee = string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
+                                 (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin ||
+                                  ViewModelMainWindow.CurrentUser.Authority == Authority.PharmacyManager ||
+                                  ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff ||
+                                  ViewModelMainWindow.CurrentUser.Authority == Authority.StoreManager ||
+                                  ViewModelMainWindow.CurrentUser.Authority == Authority.MasterPharmacist);
 
-        public bool IsGroupPharmacy
+        public bool IsVisibleGlobalEmployee
         {
-            get { return _isGroupPharmacy; }
+            get { return _isVisibleGlobalEmployee; }
             set
             {
-                Set(() => IsGroupPharmacy, ref _isGroupPharmacy, value); 
+                Set(() => IsVisibleGlobalEmployee, ref _isVisibleGlobalEmployee, value); 
             }
         }
 
         private bool _isEnableEditAuthority =
             string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
-            (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin ||
-             ViewModelMainWindow.CurrentUser.Authority == Authority.StoreManager ||
-             ViewModelMainWindow.CurrentUser.Authority == Authority.MasterPharmacist);
+            (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || 
+             ViewModelMainWindow.CurrentUser.Authority == Authority.PharmacyManager ||
+             ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff);
 
         public bool IsEnableEditAuthority
         {
