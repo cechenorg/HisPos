@@ -242,23 +242,26 @@ namespace His_Pos.NewClass.StoreOrder
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
             foreach (var pro in p.OrderProducts)
             {
-                DataRow newRow = storeOrderDetailTable.NewRow();
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", p.ID);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.OrderAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", pro.UnitName);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", pro.ValidDate);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", pro.BatchNumber);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", pro.FreeAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", pro.Invoice);
-                storeOrderDetailTable.Rows.Add(newRow);
-                detailId++;
+                if(pro.IsDone != 1)
+                {
+                    DataRow newRow = storeOrderDetailTable.NewRow();
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", p.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.OrderAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", pro.UnitName);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", pro.ValidDate);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", pro.BatchNumber);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", pro.FreeAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", pro.Invoice);
+                    storeOrderDetailTable.Rows.Add(newRow);
+                    detailId++;
+                }
             }
             return storeOrderDetailTable;
         }
