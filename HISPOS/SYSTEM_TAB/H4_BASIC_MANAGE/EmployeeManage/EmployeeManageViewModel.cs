@@ -246,7 +246,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
 
 
-            if (_isGroupPharmacy)
+            if (_isVisibleGlobalEmployee)
             {
                 if (LocalCheck)
                 {
