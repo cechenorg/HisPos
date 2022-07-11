@@ -152,7 +152,7 @@ namespace His_Pos.NewClass.StoreOrder
                 IsCanDelete = true;
             //else
             //    IsCanDelete = false;
-            List<Authority> IsScrapAuthority = new List<Authority>() {Authority.Admin,Authority.PharmacyManager,Authority.AccountingStaff,Authority.StoreManager,Authority.MasterPharmacist };
+            List<Authority> IsScrapAuthority = new List<Authority>() {Authority.Admin, Authority.AccountingStaff};
             if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth))
                 IsScrap = true;
             else
