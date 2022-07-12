@@ -81,7 +81,7 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 DemandDate = "---/--/--";
             }
-            if (!string.IsNullOrEmpty(PatientData))
+            if (!string.IsNullOrEmpty(PatientData) && OrderStatus != OrderStatusEnum.DONE && OrderStatus != OrderStatusEnum.SCRAP && OrderStatus != OrderStatusEnum.WAITING)
             {
                 string[] noteArray = PatientData.Split(new char[] { ' ' });
                 foreach (string text in noteArray)
