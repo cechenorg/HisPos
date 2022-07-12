@@ -444,6 +444,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             _ = double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
             string note = dgDetails.Rows[index]["StrikeNote"].ToString();
             string sourceID = dgDetails.Rows[index]["ID"].ToString();
+
+            string TransferID = string.Empty;
+            if(dgDetails.Columns.Contains("TransferID"))
+            {
+                TransferID = dgDetails.Rows[index]["TransferID"].ToString();
+            }
             BalanceSheetTypeEnum enu = GetStrikeTypeEnum();
 
             var left = cbTargetAccount.SelectedValue;
@@ -465,6 +471,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 sourceID = left.ToString();
             }
 
+            if(!string.IsNullOrEmpty(TransferID))
+            {
+                sourceID = TransferID;
+            }
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));

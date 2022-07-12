@@ -3,7 +3,10 @@ using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.BalanceSheet;
 using His_Pos.NewClass.Report.Accounts;
+using His_Pos.NewClass.Report.CashReport;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -114,14 +117,15 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             ConfirmWindow cw = new ConfirmWindow("是否進行沖帳", "確認");
             if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("VALUE", TransferValue));
-            parameters.Add(new SqlParameter("TYPE", "0"));
-            parameters.Add(new SqlParameter("NOTE", SelectBank.Name));
-            parameters.Add(new SqlParameter("TARGET", SelectBank.ID));
-            parameters.Add(new SqlParameter("SOURCE_ID", "001001"));
-            DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByBank]", parameters);
+            //List<SqlParameter> parameters = new List<SqlParameter>();
+            //parameters.Add(new SqlParameter("TARGET", SelectBank.ID));
+            //parameters.Add(new SqlParameter("TYPE", "0"));
+            //parameters.Add(new SqlParameter("VALUE", TransferValue));
+            //parameters.Add(new SqlParameter("SOURCE_ID", "001001"));
+            //parameters.Add(new SqlParameter("NOTE", SelectBank.Name));
+            //parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            //DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByBank]", parameters);
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectBank.ID, "0", Double.Parse(TransferValue), "001001", SelectBank.Name);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
