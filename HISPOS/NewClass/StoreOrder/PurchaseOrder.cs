@@ -43,7 +43,7 @@ namespace His_Pos.NewClass.StoreOrder
             get
             {
                 if (OrderProducts is null) return initProductCount;
-                else return OrderProducts.Count;
+                else return OrderProducts.Where(_=>_.IsDone == 0).Count();
             }
         }
 
@@ -60,10 +60,6 @@ namespace His_Pos.NewClass.StoreOrder
             PreOrderCustomer = row.Field<string>("StoOrd_CustomerName");
             TargetPreOrderCustomer = row.Field<string>("StoOrd_TargetCustomerName");
             PlanArriveDate = row.Field<DateTime?>("StoOrd_PlanArrivalDate");
-            if((ReceiveID != "" && ReceiveID != null) && ID != ReceiveID && IsEnable)
-            {
-                OrderType = OrderTypeEnum.PREPARE;
-            }
             if (row.Table.Columns.Contains("StoOrd_DemandDate"))
             {
                 if (row["StoOrd_DemandDate"] != DBNull.Value)
@@ -111,6 +107,10 @@ namespace His_Pos.NewClass.StoreOrder
                         }
                     }
                 }
+            }
+            if ((ReceiveID != "" && ReceiveID != null) && ID != ReceiveID && IsEnable)
+            {
+                OrderType = OrderTypeEnum.WAITPREPARE;
             }
         }
 
@@ -202,6 +202,10 @@ namespace His_Pos.NewClass.StoreOrder
 
             foreach (var product in OrderProducts)
             {
+                if(product.IsDone == 1)
+                {
+                    break;
+                }
                 if (product.OrderAmount < 0 || product.FreeAmount < 0)
                 {
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
@@ -213,10 +217,10 @@ namespace His_Pos.NewClass.StoreOrder
                     hasControlMed = true;
                 }
 
-                if (OrderProducts.Where(s => s.ID == product.ID).Count() > 1 && product.RealAmount != 0 && (product.BatchNumber == "" || product.BatchNumber == null))
-                {
-                    hasNoBatch = true;
-                }
+                //if (OrderProducts.Where(s => s.ID == product.ID).Count() > 1 && product.RealAmount != 0 && (product.BatchNumber == "" || product.BatchNumber == null))
+                //{
+                //    hasNoBatch = true;
+                //}
 
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null) && product.RealAmount > 0)
                 {
@@ -225,11 +229,11 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            if (hasNoBatch == true)
-            {
-                MessageWindow.ShowMessage("拆批不可沒有批號!", MessageType.ERROR);
-                return false;
-            }
+            //if (hasNoBatch == true)
+            //{
+            //    MessageWindow.ShowMessage("拆批不可沒有批號!", MessageType.ERROR);
+            //    return false;
+            //}
 
             if (hasControlMed)
             {

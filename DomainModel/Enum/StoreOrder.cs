@@ -25,6 +25,7 @@ namespace DomainModel.Enum
         PURCHASE = 1,
         RETURN = 2,
         PREPARE = 3,
-        WAIT = 4
+        WAIT = 4,
+        WAITPREPARE = 5
     }
 }

@@ -22,6 +22,21 @@
         <DataTemplate x:Key="NoDataDetailControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <orderDetailControl:NoDataDetailControl />
         </DataTemplate>
+        <DataTemplate x:Key="WaitPrepareOrderIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <Border
+                Margin="12,8,1,5"
+                BorderBrush="DarkOrange"
+                BorderThickness="1"
+                CornerRadius="6">
+                <TextBlock
+                    Margin="5,0,5,0"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="15"
+                    Foreground="DarkOrange"
+                    Text="待入庫" />
+            </Border>
+        </DataTemplate>
         <DataTemplate x:Key="PrepareOrderIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <Border
                 Margin="12,8,1,5"
@@ -184,12 +199,18 @@
                             <ColumnDefinition Width="135"/>
                             <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
-                        <RadioButton Grid.Column="0"
+                        <!--<RadioButton Grid.Column="0"
                         IsChecked="{Binding AllBtnCheck}"
                         Margin="15,0,0,0" 
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="4" Content="全部" 
-                        GroupName="OrderType" Tag="3" />
+                        GroupName="OrderType" Tag="3" />-->
+                        <RadioButton Grid.Column="0"
+                        Margin="15,0,0,0" 
+                        Command="{Binding FilterOrderCommand}" 
+                        CommandParameter="3" Content="成立訂單" 
+                        GroupName="OrderType" Tag="1" IsChecked="True"/>
+                        <Image Margin="95,0,0,0" Grid.Column="0" Width="15" Source="/Images/BlueDot.png"/>
                         <RadioButton Grid.Column="1"
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="7" Content="作廢訂單" 
@@ -207,9 +228,9 @@
                         Margin="15,0,0,0" 
                         Command="{Binding FilterOrderCommand}" CommandParameter="1" Content="暫存訂單" GroupName="OrderType" Tag="0" />
                         <Image Margin="95,0,0,0" Grid.Column="0" Width="15" Source="/Images/OrangeDot.png" />
-                        <RadioButton Grid.Column="1"
+                        <!--<RadioButton Grid.Column="1"
                         Command="{Binding FilterOrderCommand}" CommandParameter="3" Content="成立訂單" GroupName="OrderType" Tag="1"/>
-                        <Image Margin="65,0,0,0" Grid.Column="1" Width="15" Source="/Images/BlueDot.png" Grid.ColumnSpan="2" />
+                        <Image Margin="65,0,0,0" Grid.Column="1" Width="15" Source="/Images/BlueDot.png" Grid.ColumnSpan="2" />-->
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
@@ -386,6 +407,9 @@
                                                         <Style TargetType="{x:Type ContentControl}">
                                                             <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderIcon}" />
                                                             <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding OrderType}" Value="WAITPREPARE">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource WaitPrepareOrderIcon}" />
+                                                                </DataTrigger>
                                                                 <DataTrigger Binding="{Binding OrderType}" Value="PREPARE">
                                                                     <Setter Property="ContentTemplate" Value="{StaticResource PrepareOrderIcon}" />
                                                                 </DataTrigger>
@@ -461,6 +485,9 @@
                                 <Setter Property="ContentTemplate" Value="{StaticResource ReturnOrderDetail}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="PURCHASE">
+                                <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderDetail}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="WAITPREPARE">
                                 <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderDetail}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="PREPARE">
