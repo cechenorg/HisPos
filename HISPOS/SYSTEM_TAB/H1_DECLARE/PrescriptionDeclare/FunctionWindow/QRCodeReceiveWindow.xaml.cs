@@ -74,6 +74,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
                     return;
                 }
                 string[] result = QRCodeReceiver.Text.Split(';');
+                lbQRCode.Text = QRCodeReceiver.Text;
+                //MessageWindow.ShowMessage(QRCodeReceiver.Text, MessageType.SUCCESS);
                 QRCode.Add(ScanCountNum, result);
                 ScanCountNum += 1;
                 ScanCount.Content = string.Format("目前已掃描 {0} 個條碼", ScanCountNum);
