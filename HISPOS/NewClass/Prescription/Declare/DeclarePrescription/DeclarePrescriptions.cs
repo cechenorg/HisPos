@@ -124,8 +124,10 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclarePrescription
             {
                 foreach (var pres in g.GroupBy(pres => pres.Pharmacist.IDNumber))
                 {
-                    var pharmacist = ViewModelMainWindow.GetMedicalPersonByIDNumber(pres.Key);
+
+                    var pharmacist = ViewModelMainWindow.CurrentPharmacy.AllEmployees.SingleOrDefault(_ => _.IDNumber == pres.Key);
                     var pList = pres.OrderByDescending(pre => (int)Math.Round(Convert.ToDouble((pre.MedicalServicePoint * double.Parse(pre.FileContent.Dbody.Pdata.SingleOrDefault(p => p.P1.Equals("9")) is null ? "0" : pre.FileContent.Dbody.Pdata.SingleOrDefault(p => p.P1.Equals("9")).P6) / 100).ToString()), MidpointRounding.AwayFromZero)).ThenBy(p => p.InsertTime).ToList();
+                   
                     for (var j = 1; j <= pList.Count; j++)
                     {
                         var k = j - 1;

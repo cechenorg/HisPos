@@ -739,13 +739,7 @@ namespace His_Pos.ChromeTabViewModel
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
-
-        public static Employee GetMedicalPersonByIDNumber(string idNum)
-        {
-            var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.IDNumber.Equals(idNum));
-            return result;
-        }
-
+        
         public static Employee GetEmployeeByID(int ID)
         {
             var result = EmployeeCollection.SingleOrDefault(i => i.ID.Equals(ID));
