@@ -80,8 +80,7 @@
                             <Image
                                 Name="DeleteDot"
                                 Width="18"
-                                Source="/Images/DeleteDot.png"
-                                Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                Source="/Images/DeleteDot.png">
                                 <Image.InputBindings>
                                     <MouseBinding Command="{Binding Path=DataContext.DeleteProductCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick" />
                                 </Image.InputBindings>
