@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="掃描處方條碼"
-    Width="1500"
-    Height="250"
+    Width="250"
+    Height="150"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid PreviewKeyDown="Grid_PreviewKeyDown">
@@ -18,7 +18,6 @@
             Content="等待掃描處方條碼中..."
             FontFamily="Segoe UI Semibold"
             FontSize="18" />
-        <TextBlock Name="lbQRCode" Margin="20,60,0,0" FontSize="18"/>
         <TextBox
             Grid.Row="0"
             Name="QRCodeReceiver"
