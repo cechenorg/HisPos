@@ -371,6 +371,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             switch (OrderType)
             {
+                case OrderTypeEnum.WAITPREPARE:
                 case OrderTypeEnum.PREPARE:
                 case OrderTypeEnum.PURCHASE:
                     string pay = IsPayCash ? "下貨付現" : "";
