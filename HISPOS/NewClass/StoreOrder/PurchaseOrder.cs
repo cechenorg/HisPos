@@ -515,7 +515,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (dataTable.Rows.Count > 0)
             {
-                MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+                MessageWindow.ShowMessage($"已新增收貨單 \n {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
 
                 Properties.Settings.Default.MinusID = (StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0]);
                 NormalViewModel nn = new NormalViewModel();
