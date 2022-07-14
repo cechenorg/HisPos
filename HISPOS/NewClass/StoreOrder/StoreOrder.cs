@@ -234,6 +234,7 @@ namespace His_Pos.NewClass.StoreOrder
         public void MoveToNextStatus()
         {
             SaveOrder();
+            bool succes = false;
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
@@ -248,15 +249,21 @@ namespace His_Pos.NewClass.StoreOrder
                     if (OrderType == OrderTypeEnum.RETURN)
                     {
                         //SaveOrder();
-                        ToDoneStatus();
-                        CheckStoreOrderLower();
+                        succes = ToDoneStatus();
+                        if(succes)
+                        {
+                            CheckStoreOrderLower();
+                        } 
                     }
                     break;
 
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
-                    ToDoneStatus();
-                    CheckStoreOrderLower();
+                    succes = ToDoneStatus();
+                    if (succes)
+                    {
+                        CheckStoreOrderLower();
+                    }
                     break;
 
                 default:
@@ -320,6 +327,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             if (OrderType == OrderTypeEnum.RETURN && !OrderManufactory.ID.Equals("0"))
             {
+                if(OrderType == OrderTypeEnum.PURCHASE)
+                { }
                 DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
                 if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                 {
@@ -356,7 +365,7 @@ namespace His_Pos.NewClass.StoreOrder
             StoreOrderDB.StoreOrderToScrap(ID);
         }
         public bool IsDoneOrder { get; set; }
-        private void ToDoneStatus()
+        private bool ToDoneStatus()
         {
             DataTable result = new DataTable();
 
@@ -369,7 +378,7 @@ namespace His_Pos.NewClass.StoreOrder
                     if (!(bool)confirmWindow.DialogResult)
                     {
                         IsDoneOrder = false;
-                        return;
+                        return false;
                     }
                     else
                     {
@@ -379,12 +388,14 @@ namespace His_Pos.NewClass.StoreOrder
                     {
                         IsDoneOrder = false;
                         MessageWindow.ShowMessage(((OrderType == OrderTypeEnum.PURCHASE || OrderType == OrderTypeEnum.PREPARE) ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        return false;
                     }
                     else
                     {
                         IsDoneOrder = true;
                         OrderStatus = OrderStatusEnum.DONE;
                         MessageWindow.ShowMessage("收貨成功!", MessageType.SUCCESS);
+                        return true;
                     }
                     break;
 
@@ -394,13 +405,16 @@ namespace His_Pos.NewClass.StoreOrder
                     {
                         IsDoneOrder = false;
                         MessageWindow.ShowMessage((OrderType == OrderTypeEnum.RETURN ? "退" : "進") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        return false;
                     }
                     else
                     {
                         IsDoneOrder = true;
+                        return true;
                     }
                     break;
             }
+            return false;
         }
 
         #endregion ///// Status Function /////
@@ -446,7 +460,28 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else
             {
-                DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
+
+                //ReturnOrder order = new ReturnOrder
+                //{
+                //    ReturnProducts = new ReturnProducts()
+                //};
+                ReturnOrder order = new ReturnOrder();
+                if (this is ReturnOrder)
+                {
+                    order = new ReturnOrder();
+                    order = (ReturnOrder)this;
+                    ReturnProducts products = new ReturnProducts();
+                    foreach (ReturnProduct product in ((ReturnOrder)this).ReturnProducts)
+                    {
+                        if(product.IsChecked)
+                        {
+                            products.Add(product);
+                        }
+                    }
+                    order.ReturnProducts = products;
+                }
+
+                DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(order);
                 return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
             }
         }
