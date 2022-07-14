@@ -57,7 +57,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public StoreOrders storeOrderCollection;
         private ICollectionView storeOrderCollectionView;
         private string searchString;
-        private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.ALL;
+        private OrderFilterStatusEnum filterStatus = OrderFilterStatusEnum.PROCESSING;
         private BackgroundWorker initBackgroundWorker;
 
         private string btnScrapContent;
@@ -89,6 +89,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             set { Set(() => AllBtnCheck, ref allBtnCheck, value); }
         }
         
+        private bool isAllSelected = false;
+        public RelayCommand CheckAllCommand { get; private set; }
+        public bool IsAllSelected
+        {
+            get { return isAllSelected; }
+            set { Set(() => IsAllSelected, ref isAllSelected, value); }
+        }
         public ICollectionView StoreOrderCollectionView
         {
             get => storeOrderCollectionView;
@@ -129,6 +136,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     CurrentStoreOrder.StoreOrderHistory = new StoreOrderHistorys();
                     CurrentStoreOrder.StoreOrderHistory.getData(CurrentStoreOrder.ID);
+                }
+                if (currentStoreOrder is ReturnOrder)
+                {
+                    IsAllSelected = false;
                 }
             }
         }
@@ -377,7 +388,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             if (filterCondition != null)
                 filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
-            StoreOrderCollectionView.Filter += OrderFilter;
+            if(StoreOrderCollectionView.CanFilter)
+                StoreOrderCollectionView.Filter += OrderFilter;
         }
 
         private void SplitBatchAction(string productID)
@@ -479,6 +491,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             ReturnOrderRePurchaseCommand = new RelayCommand(ReturnOrderRePurchaseAction);
             ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
             RealAmountMouseDoubleClickCommand = new RelayCommand<string>(DoubleClickRealAmount);
+            CheckAllCommand = new RelayCommand(OnCheckAll);
+        }
+        private void OnCheckAll()
+        {
+            foreach (ReturnMedicine item in ((ReturnOrder)storeOrderCollectionView.CurrentItem).ReturnProducts)
+            {
+                item.IsChecked = IsAllSelected;
+            }
         }
 
         private void NoSingdeAction()

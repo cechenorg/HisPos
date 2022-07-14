@@ -48,7 +48,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         #endregion ----- Define Variables -----
 
-        private ReturnOrder()
+        public ReturnOrder()
         {
         }
 
@@ -74,6 +74,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             foreach (var product in ReturnProducts)
             {
+                if (!product.IsChecked)
+                    continue;
                 if (product.ReturnAmount == 0)
                 {
                     MessageWindow.ShowMessage(product.ID + " 退貨量為0!", MessageType.ERROR);
@@ -109,7 +111,31 @@ namespace His_Pos.NewClass.StoreOrder
             if (!(bool)confirmWindow.DialogResult)
                 return false;
 
-            DataTable dataTable = StoreOrderDB.CheckReturnProductValid(this);
+            DataTable dataTable;
+            if (this is ReturnOrder)
+            {
+                ReturnOrder returnOrder = new ReturnOrder
+                {
+                    returnProducts = new ReturnProducts()
+                };
+                foreach (var item in this.returnProducts)
+                {
+                    if (item.IsChecked == true)
+                    {
+                        returnOrder.returnProducts.Add(item);
+                    }
+                }
+                if (returnOrder.returnProducts.Count == 0)
+                {
+                    MessageWindow.ShowMessage("未選擇退貨項目 請重新設定後再傳送", MessageType.ERROR);
+                    return false;
+                }
+                dataTable = StoreOrderDB.CheckReturnProductValid(returnOrder);
+            }
+            else
+            {
+                dataTable = StoreOrderDB.CheckReturnProductValid(this);
+            }
 
             if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
             {

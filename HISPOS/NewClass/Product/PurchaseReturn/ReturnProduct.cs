@@ -1,4 +1,5 @@
-﻿using His_Pos.Class;
+﻿using GalaSoft.MvvmLight.Command;
+using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using System;
 using System.Data;
@@ -18,6 +19,20 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private double returnStockValue;
         private bool isProcessing = false;
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
+
+        private bool isChecked;
+        public bool IsChecked
+        {
+            get { return isChecked; }
+            set 
+            { 
+                Set(() => IsChecked, ref isChecked, value);
+                if (IsChecked)
+                    ReturnAmount = Inventory;
+                else
+                    ReturnAmount = 0;
+            }
+        }
 
         public bool IsSelected
         {
