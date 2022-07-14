@@ -208,10 +208,10 @@
                         <RadioButton Grid.Column="0"
                         Margin="15,0,0,0" 
                         Command="{Binding FilterOrderCommand}" 
-                        CommandParameter="3" Content="成立訂單" 
-                        GroupName="OrderType" Tag="1" IsChecked="True"/>
+                        CommandParameter="3" Content="成立訂單"
+                        GroupName="OrderType" Tag="1" IsChecked="{Binding IsPROCESSING}"/>
                         <Image Margin="95,0,0,0" Grid.Column="0" Width="15" Source="/Images/BlueDot.png"/>
-                        <RadioButton Grid.Column="1"
+                        <RadioButton Grid.Column="1" IsChecked="{Binding IsSCRAPING}"
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="7" Content="作廢訂單" 
                         GroupName="OrderType" Tag="7" />
@@ -225,7 +225,7 @@
                             <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
                         <RadioButton Grid.Column="0"
-                        Margin="15,0,0,0" 
+                        Margin="15,0,0,0" IsChecked="{Binding IsUNPROCESSING}"
                         Command="{Binding FilterOrderCommand}" CommandParameter="1" Content="暫存訂單" GroupName="OrderType" Tag="0" />
                         <Image Margin="95,0,0,0" Grid.Column="0" Width="15" Source="/Images/OrangeDot.png" />
                         <!--<RadioButton Grid.Column="1"

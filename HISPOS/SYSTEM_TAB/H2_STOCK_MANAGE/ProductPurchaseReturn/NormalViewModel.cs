@@ -143,7 +143,26 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 }
             }
         }
-
+        #region 進退貨管理左側(成立訂單、暫存訂單、作廢訂單)IsCheck
+        private bool isPROCESSING;
+        private bool isUNPROCESSING;
+        private bool isSCRAPING;
+        public bool IsPROCESSING 
+        {
+            get { return isPROCESSING; }
+            set { Set(() => IsPROCESSING, ref isPROCESSING, value); }
+        }
+        public bool IsUNPROCESSING
+        {
+            get { return isUNPROCESSING; }
+            set { Set(() => IsUNPROCESSING, ref isUNPROCESSING, value); }
+        }
+        public bool IsSCRAPING
+        {
+            get { return isSCRAPING; }
+            set { Set(() => IsSCRAPING, ref isSCRAPING, value); }
+        }
+        #endregion
         public string SearchString
         {
             get => searchString;
@@ -154,6 +173,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public NormalViewModel()
         {
+            IsPROCESSING = true;
             RegisterCommand();
             RegisterMessengers();
         }
@@ -206,11 +226,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 SearchString = string.Empty;
                 AllBtnCheck = true;
+                IsUNPROCESSING = true;
                 //storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
                 AddOrderByMinus();
                 storeOrderCollection = (StoreOrders)StoreOrderCollectionView.SourceCollection;
-                if (filterStatus != OrderFilterStatusEnum.ALL)
-                    filterStatus = OrderFilterStatusEnum.ALL;
+                if (filterStatus != OrderFilterStatusEnum.UNPROCESSING)
+                    filterStatus = OrderFilterStatusEnum.UNPROCESSING;
                 StoreOrderCollectionView.Filter += OrderFilter;
                 string tempId = Convert.ToString(viewModel.NewStoreOrder.ID);
                 int count = -1;
