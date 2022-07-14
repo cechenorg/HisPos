@@ -90,7 +90,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         
         private bool isAllSelected = false;
-        public RelayCommand CheckAllCommand { get; private set; }
+        public RelayCommand CheckAllCommand { get; set; }
+        public RelayCommand CheckCommand { get; set; }
         public bool IsAllSelected
         {
             get { return isAllSelected; }
@@ -192,8 +193,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 storeOrderCollection.ReloadCollection();
                 AddOrderByMinus();
             }
-        }
-
+        } 
         private void ReturnOrderCalculateReturnAmountAction()
         {
             (CurrentStoreOrder as ReturnOrder).CalculateReturnAmount();
@@ -334,6 +334,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     SearchString = string.Empty;
                     StoreOrderCollectionView.Filter += OrderFilter;
                     CurrentStoreOrder = (StoreOrder)StoreOrderCollectionView.CurrentItem;
+                }
+                else
+                {
+                    ReloadData();
                 }
             }
             else
@@ -516,9 +520,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         }
         private void OnCheckAll()
         {
-            foreach (ReturnMedicine item in ((ReturnOrder)storeOrderCollectionView.CurrentItem).ReturnProducts)
+            if(storeOrderCollectionView.CurrentItem != null)
             {
-                item.IsChecked = IsAllSelected;
+                if(storeOrderCollectionView.CurrentItem is ReturnOrder)
+                {
+                    foreach (ReturnMedicine item in ((ReturnOrder)storeOrderCollectionView.CurrentItem).ReturnProducts)
+                    {
+                        item.IsChecked = IsAllSelected;
+                    }
+                }
             }
         }
 

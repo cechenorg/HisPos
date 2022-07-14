@@ -94,7 +94,6 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                      Command="{Binding DataContext.CheckStudentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                       Padding="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

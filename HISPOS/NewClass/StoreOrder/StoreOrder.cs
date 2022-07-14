@@ -255,6 +255,7 @@ namespace His_Pos.NewClass.StoreOrder
                             CheckStoreOrderLower();
                         } 
                     }
+                    
                     break;
 
                 case OrderStatusEnum.NORMAL_PROCESSING:
@@ -461,11 +462,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else
             {
-
-                //ReturnOrder order = new ReturnOrder
-                //{
-                //    ReturnProducts = new ReturnProducts()
-                //};
+                DataTable dataTable;
                 ReturnOrder order = new ReturnOrder();
                 if (this is ReturnOrder)
                 {
@@ -480,9 +477,11 @@ namespace His_Pos.NewClass.StoreOrder
                         }
                     }
                     order.ReturnProducts = products;
+                    dataTable = StoreOrderDB.SendStoreOrderToSingde(order);
+                    return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
                 }
 
-                DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(order);
+                dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
                 return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
             }
         }
