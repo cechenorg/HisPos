@@ -373,8 +373,8 @@ namespace His_Pos.NewClass.StoreOrder
             {
                 case OrderTypeEnum.PREPARE:
                 case OrderTypeEnum.PURCHASE:
-                    string pay = IsPayCash ? "下貨付現" : "一般收貨";
-                    ConfirmWindow confirmWindow = new ConfirmWindow("訂單金額: " + TotalPrice + "\n選擇: " + pay + "\n是否確認收貨?", "關閉新增盤點確認");
+                    string pay = IsPayCash ? "下貨付現" : "";
+                    ConfirmWindow confirmWindow = new ConfirmWindow("訂單金額: " + TotalPrice + "\n" + pay + "\n是否確認收貨?", "確認收貨");
                     if (!(bool)confirmWindow.DialogResult)
                     {
                         IsDoneOrder = false;
