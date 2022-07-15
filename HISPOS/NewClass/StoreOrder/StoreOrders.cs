@@ -39,7 +39,7 @@ namespace His_Pos.NewClass.StoreOrder
         public static StoreOrders GetOrdersNotDone()
         {
             StoreOrders data = new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
-            var orderedList = data.OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1)).ToList();
+            var orderedList = data.OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1,11)).ToList();
             StoreOrders result = new StoreOrders();
             for (int i = 0; i < orderedList.Count(); i++)
             {
