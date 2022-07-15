@@ -352,6 +352,9 @@
                                                                 <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="SINGDE_UNPROCESSING">
                                                                     <Setter Property="ContentTemplate" Value="{StaticResource UnProcessIcon}" />
                                                                 </DataTrigger>
+                                                                <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_UNPROCESSING">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource UnProcessIcon}" />
+                                                                </DataTrigger>
                                                                 <DataTrigger Binding="{Binding OrderStatus, UpdateSourceTrigger=PropertyChanged}" Value="NORMAL_PROCESSING">
                                                                     <Setter Property="ContentTemplate" Value="{StaticResource ProcessIcon}" />
                                                                 </DataTrigger>

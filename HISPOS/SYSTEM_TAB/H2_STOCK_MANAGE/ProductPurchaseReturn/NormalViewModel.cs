@@ -227,26 +227,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 SearchString = string.Empty;
                 AllBtnCheck = true;
                 IsUNPROCESSING = true;
-                //storeOrderCollection.Insert(0, viewModel.NewStoreOrder);
                 AddOrderByMinus();
                 storeOrderCollection = (StoreOrders)StoreOrderCollectionView.SourceCollection;
                 if (filterStatus != OrderFilterStatusEnum.UNPROCESSING)
                     filterStatus = OrderFilterStatusEnum.UNPROCESSING;
                 StoreOrderCollectionView.Filter += OrderFilter;
                 string tempId = Convert.ToString(viewModel.NewStoreOrder.ID);
-                int count = -1;
-                if(!string.IsNullOrEmpty(tempId))
-                {
-                    foreach (StoreOrder item in storeOrderCollection)
-                    {
-                        string orderId = Convert.ToString(item.ID);
-                        if (!string.IsNullOrEmpty(orderId) && tempId == orderId)
-                        {
-                            count = storeOrderCollection.IndexOf(item);
-                            break;
-                        }
-                    }
-                }
+                int count = GetOrderIndex(tempId);
                 if(count >= 0 && count < storeOrderCollection.Count)
                 {
                     CurrentStoreOrder = storeOrderCollection[count];
@@ -332,12 +319,28 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     ReloadData();
                     SearchString = string.Empty;
+                    IsPROCESSING = true;
+                    filterStatus = OrderFilterStatusEnum.PROCESSING;
                     StoreOrderCollectionView.Filter += OrderFilter;
                     CurrentStoreOrder = (StoreOrder)StoreOrderCollectionView.CurrentItem;
                 }
                 else
                 {
+                    string id = currentStoreOrder.ID;
                     ReloadData();
+                    SearchString = string.Empty;
+                    IsPROCESSING = true;
+                    filterStatus = OrderFilterStatusEnum.PROCESSING;
+                    StoreOrderCollectionView.Filter += OrderFilter;
+                    int count = GetOrderIndex(id);
+                    if (count >= 0 && count < storeOrderCollection.Count)
+                    {
+                        CurrentStoreOrder = storeOrderCollection[count];
+                    }
+                    else
+                    {
+                        CurrentStoreOrder = storeOrderCollection[0];
+                    }
                 }
             }
             else
@@ -346,6 +349,24 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             }
         }
 
+        private int GetOrderIndex(string id)
+        {
+            int count = -1;
+            if (!string.IsNullOrEmpty(id))
+            {
+                foreach (StoreOrder item in storeOrderCollection)
+                {
+                    string orderId = Convert.ToString(item.ID);
+                    if (!string.IsNullOrEmpty(orderId) && id == orderId)
+                    {
+                        count = storeOrderCollection.IndexOf(item);
+                        break;
+                    }
+                }
+            }
+            return count;
+        }
+        
         private void ReloadAction()
         {
             InitVariables();
@@ -480,7 +501,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             storeOrderCollection = storeOrders;
             StoreOrderCollectionView = CollectionViewSource.GetDefaultView(storeOrders);
-            StoreOrderCollectionView.Filter += OrderFilter;
+            if(StoreOrderCollectionView.CanFilter)
+                StoreOrderCollectionView.Filter += OrderFilter;
+
             if (!StoreOrderCollectionView.IsEmpty)
             {
                 StoreOrderCollectionView.MoveCurrentToFirst();
@@ -517,7 +540,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             ExportOrderDataCommand = new RelayCommand(ExportOrderDataAction);
             RealAmountMouseDoubleClickCommand = new RelayCommand<string>(DoubleClickRealAmount);
             CheckAllCommand = new RelayCommand(OnCheckAll);
+            CheckCommand = new RelayCommand(OnCheck);
         }
+        /// <summary>
+        /// 全選
+        /// </summary>
         private void OnCheckAll()
         {
             if(storeOrderCollectionView.CurrentItem != null)
@@ -531,6 +558,30 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 }
             }
         }
+        /// <summary>
+        /// 明細判斷全選
+        /// </summary>
+        private void OnCheck()
+        {
+            if (storeOrderCollectionView.CurrentItem != null)
+            {
+                if (storeOrderCollectionView.CurrentItem is ReturnOrder)
+                {
+                    bool undo = true;
+                    foreach (ReturnMedicine item in ((ReturnOrder)storeOrderCollectionView.CurrentItem).ReturnProducts)
+                    {
+                        if(item.IsChecked == false)
+                        {
+                            IsAllSelected = false;
+                            undo = false;
+                            break;
+                        }
+                    }
+                    IsAllSelected = undo ? true : false;
+                }
+            }
+        }
+
 
         private void NoSingdeAction()
         {
