@@ -327,7 +327,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void CalculateTotalPrice()
         {
-            TotalPrice = Math.Round(OrderProducts.Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
+            TotalPrice = Math.Round(OrderProducts.Where(w=>w.IsDone == 0).Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
         }
 
         public override void SetProductToProcessingStatus()
