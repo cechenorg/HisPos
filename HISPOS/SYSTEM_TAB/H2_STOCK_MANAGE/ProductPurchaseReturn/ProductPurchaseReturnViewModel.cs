@@ -131,7 +131,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
                 if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
                 {
-                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).OrderBy(s => s.CreateDateTime).ToList();
+                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1, 11)).ToList();
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
 
                     if (storeOrders.Count > 0)
@@ -168,7 +168,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         }
                     }
 
-                    var orderedList = storeOrderCollection.OrderBy(_=>_.IsWaitOrder).ThenBy(_ => _.CreateDateTime).ToList();
+                    var orderedList = storeOrderCollection.OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1, 11)).ToList();
 
                     StoreOrders result = new StoreOrders();
                     List<StoreOrder> tempOrder = new List<StoreOrder>();
