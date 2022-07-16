@@ -547,13 +547,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         /// </summary>
         private void OnCheckAll()
         {
-            if(storeOrderCollectionView.CurrentItem != null)
+            if(currentStoreOrder != null)
             {
-                if(storeOrderCollectionView.CurrentItem is ReturnOrder)
+                if(currentStoreOrder is ReturnOrder)
                 {
-                    foreach (ReturnMedicine item in ((ReturnOrder)storeOrderCollectionView.CurrentItem).ReturnProducts)
+                    ReturnOrder returnOrder = (ReturnOrder)currentStoreOrder;
+                    if (returnOrder.ReturnProducts != null && returnOrder.ReturnProducts.Count > 0)
                     {
-                        item.IsChecked = IsAllSelected;
+                        foreach (ReturnMedicine item in ((ReturnOrder)currentStoreOrder).ReturnProducts)
+                        {
+                            item.IsChecked = IsAllSelected;
+                        }
                     }
                 }
             }
@@ -563,18 +567,22 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         /// </summary>
         private void OnCheck()
         {
-            if (storeOrderCollectionView.CurrentItem != null)
+            if (currentStoreOrder != null)
             {
-                if (storeOrderCollectionView.CurrentItem is ReturnOrder)
+                if (currentStoreOrder is ReturnOrder)
                 {
                     bool undo = true;
-                    foreach (ReturnMedicine item in ((ReturnOrder)storeOrderCollectionView.CurrentItem).ReturnProducts)
+                    ReturnOrder returnOrder = (ReturnOrder)currentStoreOrder;
+                    if (returnOrder.ReturnProducts != null && returnOrder.ReturnProducts.Count > 0)
                     {
-                        if(item.IsChecked == false)
+                        foreach (ReturnMedicine item in ((ReturnOrder)currentStoreOrder).ReturnProducts)
                         {
-                            IsAllSelected = false;
-                            undo = false;
-                            break;
+                            if (item.IsChecked == false)
+                            {
+                                IsAllSelected = false;
+                                undo = false;
+                                break;
+                            }
                         }
                     }
                     IsAllSelected = undo ? true : false;
