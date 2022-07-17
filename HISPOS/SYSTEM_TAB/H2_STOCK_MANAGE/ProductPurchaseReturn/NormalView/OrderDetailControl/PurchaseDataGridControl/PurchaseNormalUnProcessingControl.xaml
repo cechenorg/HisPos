@@ -394,7 +394,6 @@
                 Foreground="Black"/>
             <TextBox
                 IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
-                IsReadOnly="True"
                 Width="80"
                 TextAlignment="Center"
                 HorizontalAlignment="center"
@@ -411,7 +410,6 @@
                 Foreground="Black"/>
             <xctk:MaskedTextBox
                 IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
-                IsReadOnly="True"
                 x:Name="DemandDate"
                 Width="100"
                 VerticalAlignment="Center"
@@ -419,13 +417,18 @@
                 InputScope="Number"
                 FontFamily="Segoe UI Semibold"
                 FontSize="18"
+                MouseDoubleClick="MaskedTextBox_MouseDoubleClick"
                 Foreground="{StaticResource ForeGround}"
                 InsertKeyMode="Overwrite"
+                Mask="000/00/00"
+                PromptChar="-"
                 Style="{StaticResource MaterialDesignTextBox}">
                 <Binding
                         Mode="TwoWay"
+                        NotifyOnValidationError="True"
                         Path="CurrentStoreOrder.DemandDate"
-                        UpdateSourceTrigger="PropertyChanged">
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
                     <Binding.ValidationRules>
                         <service:DateValidationRule />
                     </Binding.ValidationRules>

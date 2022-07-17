@@ -595,6 +595,7 @@ namespace His_Pos.NewClass.StoreOrder
                 if (OrderProducts[x].ID.Equals(id))
                 {
                     OrderProducts[x].RealAmount = OrderProducts[x].OrderAmount;
+                    CalculateTotalPrice();
                     return;
                 }
             }

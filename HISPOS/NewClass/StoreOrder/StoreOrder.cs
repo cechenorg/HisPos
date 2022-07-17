@@ -238,7 +238,7 @@ namespace His_Pos.NewClass.StoreOrder
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
-                    SaveOrderCus();
+                    //SaveOrderCus();
                     ToNormalProcessingStatus();
                     break;
 
@@ -280,7 +280,7 @@ namespace His_Pos.NewClass.StoreOrder
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
-                    SaveOrderCus();
+                    //SaveOrderCus();
                     ToNormalProcessingStatus();
                     break;
 

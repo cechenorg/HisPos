@@ -5,11 +5,14 @@ using His_Pos.NewClass.Product;
 using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Xceed.Wpf.Toolkit;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.OrderDetailControl.PurchaseDataGridControl
 {
@@ -192,7 +195,21 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             ((PurchaseProduct)cell.DataContext).GetOnTheWayDetail();
             MainWindow.ServerConnection.CloseConnection();*/
         }
-
+        private void MaskedTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MaskedTextBox maskedTextBox = sender as MaskedTextBox;
+            if (maskedTextBox is null) return;
+            if (maskedTextBox.Text == "---/--/--")
+            {
+                DateTime dt = DateTime.Today;
+                TaiwanCalendar tc = new TaiwanCalendar();
+                string year = tc.GetYear(dt).ToString().PadLeft(3, '0');
+                string month = tc.GetMonth(dt).ToString().PadLeft(2, '0');
+                string day = tc.GetDayOfMonth(dt).ToString().PadLeft(2, '0');
+                string today = string.Format("{0}/{1}/{2}", year, month, day);
+                maskedTextBox.Text = today;
+            }
+        }
         #endregion ----- Define Functions -----
     }
 }
