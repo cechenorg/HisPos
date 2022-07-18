@@ -148,16 +148,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                             DataRow[] drs = dataTable.Select(string.Format("ORDER_ID = '{0}'", string.IsNullOrEmpty(storeOrders[i].SourceID) ? storeOrders[i].ID : storeOrders[i].SourceID));
                             if (drs != null && drs.Length > 0)
                             {
-                                bool IsShip = Convert.ToBoolean(drs[0]["IS_SHIPMENT"]);
-                                
-                                if (IsShip && storeOrders[i].ID == storeOrders[i].ReceiveID)
+                                if (storeOrders[i].ID == storeOrders[i].ReceiveID)//尚未更新為杏德單號
                                 {
-                                    storeOrders[i].OrderType = OrderTypeEnum.WAITPREPARE;
+                                    storeOrders[i].OrderType = OrderTypeEnum.PREPARE;//已出貨
                                     storeOrders[i].IsWaitOrder = 0;
                                 }
-                                else if(IsShip && storeOrders[i].ID != storeOrders[i].ReceiveID)
+                                else if(storeOrders[i].ID != storeOrders[i].ReceiveID)//已更新為杏德單號
                                 {
-                                    storeOrders[i].OrderType = OrderTypeEnum.PREPARE;
+                                    storeOrders[i].OrderType = OrderTypeEnum.WAITPREPARE;//待入庫
                                     storeOrders[i].IsWaitOrder = 0;
                                 }
                                 currentStoreOrder = storeOrders[i];

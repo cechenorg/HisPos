@@ -355,10 +355,10 @@ namespace His_Pos.NewClass.StoreOrder
             StoreOrderDB.StoreOrderToNormalProcessing(ID);
         }
 
-        private void ToSingdeProcessingStatus()
-        {
-            OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
-        }
+        //private void ToSingdeProcessingStatus()
+        //{
+        //    OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
+        //}
 
         private void ToScrapStatus()
         {
@@ -513,7 +513,7 @@ namespace His_Pos.NewClass.StoreOrder
                 bool isSuccess = UpdateOrderProductsFromSingde();
 
                 if (isSuccess)
-                    ToSingdeProcessingStatus();
+                    OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
             }
         }
 

@@ -65,19 +65,19 @@ namespace His_Pos.NewClass.StoreOrder
                 //Remove(tempOrder);
         }
 
-        internal void UpdateSingdeOrderStatus(DataTable dataTable)
-        {
-            foreach (var storeOrder in Items)
-            {
-                if (storeOrder.OrderStatus == OrderStatusEnum.WAITING || storeOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
-                {
-                    DataRow[] dataRows = dataTable.Select("ORDER_ID = '" + storeOrder.ID + "'");
+        //internal void UpdateSingdeOrderStatus(DataTable dataTable)
+        //{
+        //    foreach (var storeOrder in Items)
+        //    {
+        //        if (storeOrder.OrderStatus == OrderStatusEnum.WAITING || storeOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
+        //        {
+        //            DataRow[] dataRows = dataTable.Select("ORDER_ID = '" + storeOrder.ID + "'");
 
-                    if (dataRows.Length > 0)
-                        storeOrder.UpdateOrderDataFromSingde(dataRows[0]);
-                }
-            }
-        }
+        //            if (dataRows.Length > 0)
+        //                storeOrder.UpdateOrderDataFromSingde(dataRows[0]);
+        //        }
+        //    }
+        //}
 
         internal static void AddNewOrdersFromSingde(DataTable dataTable)
         {
