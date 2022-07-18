@@ -111,21 +111,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
 
-                DataTable dataTable;
-
-                // 關閉杏德代訂 2021.08.23
-                /*if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
-                {
-                    BusyContent = "取得杏德新訂單...";
-                    dataTable = StoreOrderDB.GetNewSingdeOrders();
-                    if (dataTable.Rows.Count > 0)
-                        StoreOrders.AddNewOrdersFromSingde(dataTable);
-
-                    dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
-                    if (dataTable.Rows.Count > 0)
-                        StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
-                }*/
-
                 BusyContent = "取得訂單資料...";
                 storeOrderCollection = StoreOrders.GetOrdersNotDone();
 
@@ -133,23 +118,37 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1, 11)).ToList();
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
-
                     if (storeOrders.Count > 0)
-                        dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
+                        dateTime = storeOrders.Min(w=>w.CreateDateTime).ToString("yyyyMMdd");
 
                     BusyContent = "取得杏德訂單最新狀態...";
+                    #region 組合字串，取得杏德最新狀態
+                    string orderIDs = string.Empty;
                     for (int i = 0; i < storeOrders.Count; i++)
                     {
                         if (storeOrders[i].OrderStatus != OrderStatusEnum.SCRAP)
                         {
-                            if (string.IsNullOrEmpty(storeOrders[i].SourceID))
-                                dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].ID);
-                            else
-                                dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].SourceID);
-                        
-                            if (dataTable.Rows.Count > 0)
+                            string orderID = string.IsNullOrEmpty(storeOrders[i].SourceID) ? storeOrders[i].ID : storeOrders[i].SourceID;
+                            if (i == storeOrders.Count - 1)
                             {
-                                bool IsShip = Convert.ToBoolean(dataTable.Rows[0]["IS_SHIPMENT"]);
+                                orderIDs += string.Format("'{0}'", orderID);
+                            }
+                            else
+                            {
+                                orderIDs += string.Format("'{0}',", orderID);
+                            }
+                        }
+                    }
+                    DataTable dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, orderIDs);
+                    #endregion
+                    for (int i = 0; i < storeOrders.Count; i++)
+                    {
+                        if (storeOrders[i].OrderStatus != OrderStatusEnum.SCRAP)
+                        {
+                            DataRow[] drs = dataTable.Select(string.Format("ORDER_ID = '{0}'", string.IsNullOrEmpty(storeOrders[i].SourceID) ? storeOrders[i].ID : storeOrders[i].SourceID));
+                            if (drs != null && drs.Length > 0)
+                            {
+                                bool IsShip = Convert.ToBoolean(drs[0]["IS_SHIPMENT"]);
                                 
                                 if (IsShip && storeOrders[i].ID == storeOrders[i].ReceiveID)
                                 {
@@ -162,8 +161,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                                     storeOrders[i].IsWaitOrder = 0;
                                 }
                                 currentStoreOrder = storeOrders[i];
-                                DataRow[] dataRows = dataTable.Select();
-                                currentStoreOrder.UpdateOrderDataFromSingde(dataRows[0]);
+                                currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
                             }
                         }
                     }
