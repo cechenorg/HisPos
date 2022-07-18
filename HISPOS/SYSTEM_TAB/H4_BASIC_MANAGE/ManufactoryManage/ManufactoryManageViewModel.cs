@@ -49,6 +49,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             get { return currentManufactory; }
             set
             {
+                currentManufactoryBackUp = value?.Clone() as ManufactoryManageDetail;
+                Set(() => CurrentManufactory, ref currentManufactory, value);
+
                 MainWindow.ServerConnection.OpenConnection();
              
                 if (value != null && CurrentManufactory != null)
@@ -60,9 +63,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                         CurrentManufactory.CurrentPrincipal = CurrentManufactory.Principals[0];
                 }
 
-                MainWindow.ServerConnection.CloseConnection();
-                currentManufactoryBackUp = value?.Clone() as ManufactoryManageDetail;
-                Set(() => CurrentManufactory, ref currentManufactory, value);
+                MainWindow.ServerConnection.CloseConnection();               
 
                 if (CurrentManufactory is null)
                     CurrentManufactoryType = CurrentManufactoryTypeEnum.NONE;
