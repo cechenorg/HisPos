@@ -476,7 +476,7 @@ namespace His_Pos.NewClass.StoreOrder
             int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
 
-            var productsAmount = orderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            var productsAmount = orderProducts.Where(w=>w.IsDone == 0).GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
 
             foreach (var pro in productsAmount)
             {
@@ -760,6 +760,11 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
+        public static DataTable GetOrderByNo(string storeOrderID,string date)
+        {
+            string sql = string.Format(@"call GetOrderByNo('{0}','{1}','{2}')", ViewModelMainWindow.CurrentPharmacy.ID, date, storeOrderID);
+            return MainWindow.SingdeConnection.ExecuteProc(sql);
+        }
 
         internal static DataTable PurchaseStoreOrderToDone(string storeOrderID, bool isPayCash)
         {
@@ -942,9 +947,8 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            DataTable tableMedicines;
-
-            tableMedicines = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
+            string sql = string.Format(@"Call InsertNewOrderOrPreOrder('{0}','{1}','{2}','{3}','{4}','{5}')", ViewModelMainWindow.CurrentPharmacy.ID, storeOrder.ID, cusName, planDate, storeOrder.Note, orderMedicines);
+            DataTable tableMedicines = MainWindow.SingdeConnection.ExecuteProc(sql);
             return tableMedicines;
         }
 

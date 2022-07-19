@@ -31,7 +31,6 @@ namespace His_Pos.NewClass.StoreOrder
         public bool HasPatient => !string.IsNullOrEmpty(PatientData);
         public bool HasCustomer => !string.IsNullOrEmpty(PreOrderCustomer);
         public DateTime Day { get; set; }
-
         public PurchaseProducts OrderProducts
         {
             get { return orderProducts; }
@@ -155,12 +154,6 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
-            //if ((String.IsNullOrEmpty(DemandDate) || DemandDate.Equals("---/--/--")) && OrderManufactory.ID.Equals("0"))
-            //{
-            //    MessageWindow.ShowMessage("杏德供應商必須填寫需求日期!", MessageType.ERROR);
-            //    return false;
-            //}
-
             foreach (var product in OrderProducts)
             {
                 if (product.OrderAmount + product.FreeAmount == 0)
@@ -203,7 +196,6 @@ namespace His_Pos.NewClass.StoreOrder
                     return false;
                 }
             }
-
             return true;
         }
 
@@ -293,7 +285,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         protected override bool CheckStoreOrderLower()
         {
-            var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            var products = OrderProducts.Where(w => w.IsDone == 0).GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
             bool isLowerThenOrderAmount = false;
             foreach (var product in products)
             {
@@ -306,12 +298,7 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (isLowerThenOrderAmount)
             {
-                ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
-
-                if ((bool)confirmWindow.DialogResult)
-                {
-                    bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
-                }
+                bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
             }
             return true;
         }
@@ -515,18 +502,35 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (dataTable.Rows.Count > 0)
             {
-                MessageWindow.ShowMessage($"已新增收貨單 \n {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
-
-                Properties.Settings.Default.MinusID = (StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0]);
-                NormalViewModel nn = new NormalViewModel();
-                nn.storeOrderCollection = StoreOrders.GetOrdersNotDone();
-                nn.AddOrderByMinus();
-
+                StoreOrder order = StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0];
+                PurchaseProducts products = PurchaseProducts.GetProductsByStoreOrderID(order.ID, order.OrderStatus);
+                if (products != null && products.Count > 0)
+                {
+                    ((PurchaseOrder)order).OrderProducts = new PurchaseProducts();
+                    foreach (PurchaseProduct item in products)
+                    {
+                        if (item.IsDone == 0)
+                            ((PurchaseOrder)order).OrderProducts.Add(item);
+                    }
+                }
+                    
+                Properties.Settings.Default.MinusID = order;
+                LowOrderID = order.ID;
+                if(!string.IsNullOrEmpty(LowOrderID) && OrderManufactory.ID == "0")
+                {
+                    DataTable ReturnTable = StoreOrderDB.GetOrderByNo(LowOrderID, order.CreateDateTime.ToString("yyyy-MM-dd"));
+                    if(ReturnTable == null || ReturnTable.Rows.Count == 0)
+                    {
+                        if(order.OrderTypeIsOTC != "OTC")
+                            ReturnTable = StoreOrderDB.SendStoreOrderToSingde(order);
+                        else
+                            ReturnTable = StoreOrderDB.SendOTCStoreOrderToSingde(order);
+                    }
+                }
                 return true;
             }
             else
             {
-                MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
                 return false;
             }
         }

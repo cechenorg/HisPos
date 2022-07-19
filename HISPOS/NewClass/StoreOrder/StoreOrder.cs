@@ -231,48 +231,38 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ///// Status Function /////
 
+        /// <summary>
+        /// 傳送採購 & 確認收貨
+        /// </summary>
         public void MoveToNextStatus()
         {
             SaveOrder();
-            bool succes = false;
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
-                    //SaveOrderCus();
                     ToNormalProcessingStatus();
                     break;
-
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
-                    ToWaitingStatus();
+                    ToWaitingStatus();//傳送訂單至杏德
                     ToNormalProcessingStatus();
                     // 直接結案
                     if (OrderType == OrderTypeEnum.RETURN)
                     {
-                        //SaveOrder();
-                        succes = ToDoneStatus();
-                        if(succes)
-                        {
-                            CheckStoreOrderLower();
-                        } 
+                        ToDoneStatus(0);
                     }
-                    
                     break;
-
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
-                    succes = ToDoneStatus();
-                    if (succes)
-                    {
-                        CheckStoreOrderLower();
-                    }
+                    ToDoneStatus(1);
                     break;
-
                 default:
                     MessageWindow.ShowMessage("轉單錯誤!", MessageType.ERROR);
                     break;
             }
         }
-
+        /// <summary>
+        /// 手動入庫,不傳送杏德
+        /// </summary>
         public void MoveToNextStatusNoSingde()
         {
             SaveOrder();
@@ -280,7 +270,6 @@ namespace His_Pos.NewClass.StoreOrder
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
-                    //SaveOrderCus();
                     ToNormalProcessingStatus();
                     break;
 
@@ -290,7 +279,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
-                    ToDoneStatus();
+                    ToDoneStatus(0);
                     break;
 
                 default:
@@ -366,7 +355,13 @@ namespace His_Pos.NewClass.StoreOrder
             StoreOrderDB.StoreOrderToScrap(ID);
         }
         public bool IsDoneOrder { get; set; }
-        private bool ToDoneStatus()
+        public string LowOrderID { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type">0:手動入庫 1:一般入庫</param>
+        /// <returns></returns>
+        private bool ToDoneStatus(int type)
         {
             DataTable result = new DataTable();
 
@@ -385,6 +380,8 @@ namespace His_Pos.NewClass.StoreOrder
                     else
                     {
                         result = StoreOrderDB.PurchaseStoreOrderToDone(ID, IsPayCash);
+                        if(type == 1)
+                            CheckStoreOrderLower();
                     }
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
@@ -394,9 +391,15 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     else
                     {
+                        string id = LowOrderID;
                         IsDoneOrder = true;
                         OrderStatus = OrderStatusEnum.DONE;
-                        MessageWindow.ShowMessage("收貨成功!", MessageType.SUCCESS);
+                        string msg = string.Empty;
+                        if (!string.IsNullOrEmpty(id))
+                            msg = string.Format("收貨成功! \n 不足訂購單之品項已轉新進貨單({0})", id);
+                        else
+                            msg = "收貨成功!";
+                        MessageWindow.ShowMessage(msg, MessageType.SUCCESS);
                         return true;
                     }
                     break;
@@ -535,7 +538,7 @@ namespace His_Pos.NewClass.StoreOrder
             bool isCanModify = false;
             string VoidReason = string.Empty;
             if (OrderStatus == OrderStatusEnum.WAITING || OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
-            { 
+            {
                 if (OrderManufactory.ID.Equals("0") && Note != "手動入庫")
                 {
                     //杏德訂單需先檢查是否杏德資料是否可以刪除                

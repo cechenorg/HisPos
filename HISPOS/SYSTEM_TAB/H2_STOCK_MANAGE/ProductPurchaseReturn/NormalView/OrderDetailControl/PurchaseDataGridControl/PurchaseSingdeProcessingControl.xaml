@@ -181,6 +181,7 @@
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
+                    Visibility="Hidden"
                     Width="85"
                     Binding="{Binding OriginPrice, StringFormat=N2}"
                     FontFamily="Segoe UI Semi"
@@ -195,7 +196,7 @@
                 </DataGridTextColumn>
                 <DataGridTemplateColumn
                     Width="85"
-                    Header="杏德單價"
+                    Header="單價"
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

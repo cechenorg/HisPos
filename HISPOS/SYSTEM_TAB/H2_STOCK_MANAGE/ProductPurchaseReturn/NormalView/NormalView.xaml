@@ -165,9 +165,10 @@
             <Grid Margin="10,10,0,10" Background="{StaticResource GridBackGround}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="6" />
+                    <RowDefinition Height="28" />
                     <RowDefinition Height="40" />
                     <RowDefinition />
                     <RowDefinition Height="35" />
@@ -182,7 +183,6 @@
                 </Grid.Resources>
                 <Border Grid.Row="0" Grid.Column="0" Width="260"  Margin="5,5,5,0" Background="DimGray" CornerRadius="5" />
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
-
                     <Button Width="120" Height="25" Margin="10,10,5,5"
                             Background="DimGray" BorderThickness="0"
                             Content="單張進退貨"  FontFamily="Segoe UI Semibold" FontSize="13" />
@@ -199,12 +199,6 @@
                             <ColumnDefinition Width="135"/>
                             <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
-                        <!--<RadioButton Grid.Column="0"
-                        IsChecked="{Binding AllBtnCheck}"
-                        Margin="15,0,0,0" 
-                        Command="{Binding FilterOrderCommand}"
-                        CommandParameter="4" Content="全部" 
-                        GroupName="OrderType" Tag="3" />-->
                         <RadioButton Grid.Column="0"
                         Margin="15,0,0,0" 
                         Command="{Binding FilterOrderCommand}" 
@@ -228,29 +222,31 @@
                         Margin="15,0,0,0" IsChecked="{Binding IsUNPROCESSING}"
                         Command="{Binding FilterOrderCommand}" CommandParameter="1" Content="暫存訂單" GroupName="OrderType" Tag="0" />
                         <Image Margin="95,0,0,0" Grid.Column="0" Width="15" Source="/Images/OrangeDot.png" />
-                        <!--<RadioButton Grid.Column="1"
-                        Command="{Binding FilterOrderCommand}" CommandParameter="3" Content="成立訂單" GroupName="OrderType" Tag="1"/>
-                        <Image Margin="65,0,0,0" Grid.Column="1" Width="15" Source="/Images/BlueDot.png" Grid.ColumnSpan="2" />-->
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                    <Grid>
+                        <Line X1="5" Y1="0" X2="265" Y2="0" Stroke="Gray" StrokeThickness="1"></Line>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="135"/>
                             <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
                         <RadioButton Grid.Column="0"
-                        Margin="15,0,0,0"  
+                        Margin="15,0,0,0" IsChecked="{Binding IsOTC}"
                         Command="{Binding FilterOrderCommand}"
-                        CommandParameter="5"  Content="OTC"
-                        GroupName="OrderType" Tag="1" />
+                        CommandParameter="5" Content="OTC"
+                        GroupName="MedType" Tag="1" />
                         <RadioButton Grid.Column="1"
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="6" Content="藥品"
-                        GroupName="OrderType" Tag="1" Grid.ColumnSpan="2" />
+                        GroupName="MedType" Tag="1" Grid.ColumnSpan="2" IsChecked="{Binding IsMed}" />
                     </Grid>
                 </StackPanel>
-                <StackPanel Grid.Row="4" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                <StackPanel Grid.Row="5" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                     <TextBox
                         Width="260"
                         Margin="5"
@@ -270,7 +266,7 @@
                 <!--<StackPanel Grid.Row="5" Orientation="Horizontal" Background="{StaticResource GridBackGround}">-->
                     <DataGrid 
                         Name="OrderGrid"
-                        Grid.Row="5"
+                        Grid.Row="6"
                         AutoGenerateColumns="False" 
                         Background="Transparent"
                         CanUserAddRows="False" 
@@ -465,7 +461,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 <!--</StackPanel>-->
-                <StackPanel Grid.Row="6" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
+                <StackPanel Grid.Row="7" Orientation="Horizontal" Background="{StaticResource GridBackGround}" >
                     <Image Width="35" Margin="10,0,0,0" Source="/Images/Plus.png">
                         <Image.InputBindings>
                             <MouseBinding Command="{Binding AddOrderCommand}" MouseAction="LeftClick" />
