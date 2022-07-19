@@ -27,6 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         public int Min { get; set; } = 1;
         public string CHANGE { get; set; } = "轉讓";
         public string NewPrice { get; set; }
+        public double CurrentShelf { get; set; }
 
         public string NewInventory
         {
@@ -72,6 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             productID = proID;
             wareHouse = ware;
             stockDetail = stock;
+            CurrentShelf = stock.ShelfInventory;
             NewPrice = stock.LastPrice.ToString("0.##");
             Manufacturers = new Manufactories(ManufactoryDB.GetAllManufactories());
         }
@@ -120,6 +122,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 }
             }
 
+            if (CurrentShelf < Convert.ToDouble(NewInventory) && !isOverage)
+            {
+                MessageWindow.ShowMessage("轉受讓數量不得超過庫存!", MessageType.ERROR);
+                return false;
+            }
             return true;
         }
 
