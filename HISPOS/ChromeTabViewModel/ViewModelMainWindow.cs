@@ -211,7 +211,7 @@ namespace His_Pos.ChromeTabViewModel
                         if (c.AutoPrint == true)
                         {
                             pathFile = c.FilePath;
-                            if (c.FilePath == null)
+                            if (c.FilePath == null || Directory.Exists(c.FilePath) == false)
                             {
                                 continue;
                             }
