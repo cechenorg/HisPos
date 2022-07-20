@@ -163,7 +163,7 @@ namespace His_Pos.NewClass.Person.Customer
             }
             if (!string.IsNullOrEmpty(customer.SecondPhone) && customer.SecondPhone.Length == 10)
             {
-                string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
+                string FormatCell = customer.SecondPhone.Insert(4, "-").Insert(8, "-");
                 customer.SecondPhone = FormatCell;
             }
             /* 格式化電話 */
