@@ -15,6 +15,10 @@ namespace His_Pos.NewClass.Report.Accounts
             {
                 TransferID = r.Field<string>("TransferID");
             }
+            if (r.Table.Columns.Contains("OrderID"))
+            {
+                OrderID = r.Field<string>("OrderID");
+            }
         }
 
         public AccountsDetailReports(string name, decimal value, string id)
@@ -80,6 +84,16 @@ namespace His_Pos.NewClass.Report.Accounts
             set
             {
                 Set(() => TransferID, ref transferID, value);
+            }
+        }
+        private string orderID;
+
+        public string OrderID
+        {
+            get => orderID;
+            set
+            {
+                Set(() => OrderID, ref orderID, value);
             }
         }
     }
