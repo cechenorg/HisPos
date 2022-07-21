@@ -725,7 +725,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         internal static DataTable GetSingdeOrderNewStatusByNo(string dateTime, string storeOrderID)
         {
-            string query = string.Format(@"call GetOrderStatusByNo('{0}','{1}',""{2}"")", ViewModelMainWindow.CurrentPharmacy.ID, dateTime, storeOrderID);
+            string query = string.Format(@"call GetOrderStatusByList('{0}','{1}',""{2}"")", ViewModelMainWindow.CurrentPharmacy.ID, dateTime, storeOrderID);
             return MainWindow.SingdeConnection.ExecuteProc(query);
         }
 

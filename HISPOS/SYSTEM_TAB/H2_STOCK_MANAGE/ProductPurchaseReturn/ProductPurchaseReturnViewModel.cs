@@ -148,18 +148,29 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                             DataRow[] drs = dataTable.Select(string.Format("ORDER_ID = '{0}'", string.IsNullOrEmpty(storeOrders[i].SourceID) ? storeOrders[i].ID : storeOrders[i].SourceID));
                             if (drs != null && drs.Length > 0)
                             {
-                                if (storeOrders[i].ID == storeOrders[i].ReceiveID)//尚未更新為杏德單號
+                                int flag = Convert.ToInt32(drs[0]["FLAG"]);
+                                if(flag == 2)
                                 {
-                                    storeOrders[i].OrderType = OrderTypeEnum.PREPARE;//已出貨
-                                    storeOrders[i].IsWaitOrder = 0;
+                                    string VoidReason = "5.其他:杏德訂單已作廢";
+                                    StoreOrderDB.RemoveStoreOrderByID(storeOrders[i].ID, VoidReason);
+                                    storeOrders[i].OrderStatus = OrderStatusEnum.SCRAP;
+                                    storeOrders[i].IsEnable = false;
                                 }
-                                else if(storeOrders[i].ID != storeOrders[i].ReceiveID)//已更新為杏德單號
+                                else
                                 {
-                                    storeOrders[i].OrderType = OrderTypeEnum.WAITPREPARE;//待入庫
-                                    storeOrders[i].IsWaitOrder = 0;
+                                    if (storeOrders[i].ID == storeOrders[i].ReceiveID)//尚未更新為杏德單號
+                                    {
+                                        storeOrders[i].OrderType = OrderTypeEnum.PREPARE;//已出貨
+                                        storeOrders[i].IsWaitOrder = 0;
+                                    }
+                                    else if (storeOrders[i].ID != storeOrders[i].ReceiveID)//已更新為杏德單號
+                                    {
+                                        storeOrders[i].OrderType = OrderTypeEnum.WAITPREPARE;//待入庫
+                                        storeOrders[i].IsWaitOrder = 0;
+                                    }
+                                    currentStoreOrder = storeOrders[i];
+                                    currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
                                 }
-                                currentStoreOrder = storeOrders[i];
-                                currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
                             }
                         }
                     }
