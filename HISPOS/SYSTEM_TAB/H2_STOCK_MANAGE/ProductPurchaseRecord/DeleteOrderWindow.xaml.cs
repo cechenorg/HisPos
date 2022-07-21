@@ -23,7 +23,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
         private string OrderID { get; }
         private string ReceiveID { get; }
-        public string CheckStringHint { get { return $"輸入刪除單號 {ReceiveID}"; } }
+        public string CheckStringHint { get { return $"輸入刪除單號 {OrderID}"; } }
         public string CheckString { get; set; } = "";
 
         #endregion ----- Define Variables -----
@@ -80,7 +80,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
         private bool CanDelete()
         {
-            if (!CheckString.Equals(ReceiveID))
+            if (!CheckString.Equals(OrderID))
                 return false;
 
             return true;
