@@ -476,7 +476,7 @@ namespace His_Pos.NewClass.StoreOrder
             int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
 
-            var productsAmount = orderProducts.Where(w=>w.IsDone == 0).GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            var productsAmount = orderProducts.Where(w=>w.IsDone == 0).GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.Sum(p => p.OrderAmount), RealAmount = g.Sum(p => p.RealAmount) }).ToList();
 
             foreach (var pro in productsAmount)
             {

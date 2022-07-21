@@ -285,7 +285,7 @@ namespace His_Pos.NewClass.StoreOrder
         }
         protected override bool CheckStoreOrderLower()
         {
-            var products = OrderProducts.Where(w => w.IsDone == 0).GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            var products = OrderProducts.Where(w => w.IsDone == 0).GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.Sum(p => p.OrderAmount), RealAmount = g.Sum(p => p.RealAmount) }).ToList();
             bool isLowerThenOrderAmount = false;
             foreach (var product in products)
             {
