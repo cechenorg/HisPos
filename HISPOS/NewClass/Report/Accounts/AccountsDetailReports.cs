@@ -19,6 +19,10 @@ namespace His_Pos.NewClass.Report.Accounts
             {
                 OrderID = r.Field<string>("OrderID");
             }
+            else
+            {
+                OrderID = r.Field<string>("ID");
+            }
         }
 
         public AccountsDetailReports(string name, decimal value, string id)
