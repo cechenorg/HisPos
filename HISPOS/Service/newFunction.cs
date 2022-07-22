@@ -231,10 +231,10 @@ namespace His_Pos.Service
 
         public static void ExceptionLog(string log)
         {
-            //string logpath = @"C:\Program Files\HISPOS\ExceptionLog.txt";
-            //StreamWriter str = new StreamWriter(logpath, true);
-            //str.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  Event:" + log);
-            //str.Close();
+            string logpath = @"C:\Program Files\HISPOS\ExceptionLog.txt";
+            StreamWriter str = new StreamWriter(logpath, true);
+            str.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture) + "  Event:" + log);
+            str.Close();
         }
 
         public static List<bool?> CheckPrint(Prescription p, bool? focus = null, bool isSend = false )
