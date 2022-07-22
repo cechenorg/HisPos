@@ -237,12 +237,12 @@ namespace His_Pos.Service
             str.Close();
         }
 
-        public static List<bool?> CheckPrint(Prescription p, bool? focus = null)
+        public static List<bool?> CheckPrint(Prescription p, bool? focus = null, bool isSend = false )
         {
             bool? receiptPrint = null;
             var result = new List<bool?>();
 
-            if (p.PrescriptionStatus.IsPrint == true)
+            if (p.PrescriptionStatus.IsPrint == true || ((p.AdjustDate > DateTime.Today) && isSend))
             {
                 if (p.PrescriptionPoint.AmountsPay > 0)
                 {

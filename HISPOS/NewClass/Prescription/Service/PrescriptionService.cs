@@ -306,6 +306,12 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private bool CheckAdjustDatePast()
         {
+            if (Current.AdjustDate < Current.TreatDate)
+            {
+                MessageWindow.ShowMessage("調劑日不可小於就醫日", MessageType.WARNING);
+                return false;
+            }
+
             if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.Authority == DomainModel.Enum.Authority.MasterPharmacist) return true;
             MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
             return false;
@@ -356,17 +362,20 @@ namespace His_Pos.NewClass.Prescription.Service
         public bool PrintConfirm()
         {
             bool? focus = null;
+            bool isSend = false;
             if (vm?.PrescriptionSendData != null)
             {
                 var printSendData = vm.PrescriptionSendData;
                 var allSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
                 var allPrepareCount = printSendData.Count(p => p.SendAmount == 0);
+                if (printSendData.Count > allPrepareCount)
+                    isSend=true;
                 if (printSendData.Count == allSendCount)
                     focus = false;
                 else if (printSendData.Count == allPrepareCount)
                     focus = true;
             }
-            PrintResult = NewFunction.CheckPrint(Current, focus);
+            PrintResult = NewFunction.CheckPrint(Current, focus, isSend);
             var printMedBag = PrintResult[0];
             var printSingle = PrintResult[1];
             var printReceipt = PrintResult[2];
