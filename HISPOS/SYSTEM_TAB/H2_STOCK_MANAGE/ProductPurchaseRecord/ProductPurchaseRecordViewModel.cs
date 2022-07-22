@@ -119,6 +119,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 value?.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
+                if(value is PurchaseOrder)
+                {
+                    CurrentStoreOrder.TotalPrice = Convert.ToInt32(((PurchaseOrder)value).OrderProducts.Sum(T => T.SubTotal));
+                }
+                else if(value is ReturnOrder)
+                {
+                    CurrentStoreOrder.TotalPrice = Convert.ToInt32(((ReturnOrder)value).ReturnProducts.Sum(T => T.SubTotal));
+                }
             }
         }
 
