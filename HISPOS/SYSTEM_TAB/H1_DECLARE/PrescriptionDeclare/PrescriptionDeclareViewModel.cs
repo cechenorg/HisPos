@@ -1079,7 +1079,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
             isAdjusting = true;
 
-            if (!CheckMedicinesNegativeStock()) 
+            if (!CheckPrescriptionBeforeOrder(false, false))
+                return;
+
+            if (!CheckMedicinesNegativeStock())
                 return;
 
             CheckChronicCopayment();
@@ -1604,6 +1607,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return checkPrescription;
         }
 
+        private bool CheckPrescriptionBeforeOrder(bool noCard, bool errorAdjust)
+        {
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            var setPharmacist = currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount);
+            if (!setPharmacist)
+            {
+                isAdjusting = false;
+                return false;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var checkPrescriptionBeforeOrder = currentService.CheckPrescriptionBeforeOrder(noCard, errorAdjust);
+            MainWindow.ServerConnection.CloseConnection();
+            if (!checkPrescriptionBeforeOrder)
+                isAdjusting = false;
+            return checkPrescriptionBeforeOrder;
+        }
         private bool CheckRegisterPrescription(bool noCard, bool errorAdjust)
         {
             currentService = PrescriptionService.CreateService(CurrentPrescription);

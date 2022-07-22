@@ -35,6 +35,8 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public abstract bool CheckPrescription(bool noCard, bool errorAdjust);
 
+        public abstract bool CheckPrescriptionBeforeOrder(bool noCard, bool errorAdjust);
+
         public abstract bool CheckEditPrescription(bool hasCard);
 
         public abstract bool NormalAdjust();
