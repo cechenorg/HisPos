@@ -700,7 +700,6 @@ namespace His_Pos.NewClass.Medicine.Base
                 else
                 {
                     SetBuckleAmountToUsableAmount(notEnoughMedicines);
-                    MessageWindow.ShowMessage("欠藥已採購並更改扣庫量為可用量，收貨後請記得修改扣庫量。", MessageType.WARNING);
                     return string.Empty;
                 }
             }
