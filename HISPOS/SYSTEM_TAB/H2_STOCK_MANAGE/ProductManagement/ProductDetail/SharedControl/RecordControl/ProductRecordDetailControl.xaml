@@ -276,7 +276,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
-                    Width="90"
+                    Width="100"
                     Binding="{Binding Time, Converter={StaticResource DateConverter}}"
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
@@ -290,7 +290,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="130"
+                    Width="170"
                     Binding="{Binding Name}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -298,13 +298,13 @@
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="150"
+                    Width="130"
                     Binding="{Binding Note}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -318,7 +318,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="70"
+                    Width="60"
                     Binding="{Binding Amount, StringFormat=0.##}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -332,7 +332,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="100"
+                    Width="90"
                     Binding="{Binding Stock, StringFormat=0.##}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
