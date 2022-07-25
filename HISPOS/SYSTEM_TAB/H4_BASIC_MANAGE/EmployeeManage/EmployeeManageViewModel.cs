@@ -171,6 +171,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         { 
             EmployeeService.Update(SelectedEmployee);
             MessageWindow.ShowMessage("權限修改成功!",Class.MessageType.SUCCESS);
+            var tempID = SelectedEmployee.ID;
+            ReloadData();
+            SelectedEmployee = EmployeeCollection.SingleOrDefault(_ => _.ID == tempID);
         }
 
         private void CancelAction()
@@ -212,21 +215,25 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private void Init()
         {
-            EmployeeCollection = new Employees();
-            EmployeeCollection.Init();
-          
-            FilterEmployeeCollection = new Employees();
-
-            foreach (var employeedata in EmployeeCollection)
-            {
-                FilterEmployeeCollection.Add(employeedata);
-            } 
-             
+            ReloadData();
             LocalCheck = true;
             FilterEmployee();
             ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList = PharmacyDBService.GetPharmacyListByGroupServerName();
             SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
              
+        }
+
+        private void ReloadData()
+        {
+            EmployeeCollection = new Employees();
+            EmployeeCollection.Init();
+
+            FilterEmployeeCollection = new Employees();
+
+            foreach (var employeedata in EmployeeCollection)
+            {
+                FilterEmployeeCollection.Add(employeedata);
+            }
         }
 
         private void FilterEmployee()
