@@ -92,9 +92,12 @@ namespace His_Pos.NewClass.Person.Employee
                 
             else
             {
-                MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateEmployee]", parameterList);
-                
-                foreach(var groupPharmactEmployee in e.GroupPharmacyEmployeeList.Where(_ => _.IsDirty))
+                 MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateEmployee]", parameterList);
+                 parameterList = new List<SqlParameter>();
+                 parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
+                 MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList);
+
+                foreach (var groupPharmactEmployee in e.GroupPharmacyEmployeeList.Where(_ => _.IsDirty))
                 {
                     e.Authority = groupPharmactEmployee.EmployeeAuthority;
                     parameterList = new List<SqlParameter>();

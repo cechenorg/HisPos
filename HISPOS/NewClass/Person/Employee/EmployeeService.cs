@@ -29,7 +29,7 @@ namespace His_Pos.NewClass.Person.Employee
 
             EmployeeDb.Update(emp);
         }
-
+   
         public static void Delete(Employee emp)
         {
             EmployeeDb.Delete(emp.ID);

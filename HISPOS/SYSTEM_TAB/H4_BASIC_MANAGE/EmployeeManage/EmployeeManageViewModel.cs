@@ -185,6 +185,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         {
             EmployeeService.Update(SelectedEmployee); 
             MessageWindow.ShowMessage("修改成功", Class.MessageType.SUCCESS);
+            var tempID = SelectedEmployee.ID;
+            ReloadData();
+            SelectedEmployee = EmployeeCollection.SingleOrDefault(_ => _.ID == tempID);
         }
 
         private void DeleteAction()
