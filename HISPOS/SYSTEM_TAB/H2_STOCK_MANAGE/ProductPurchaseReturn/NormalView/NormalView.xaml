@@ -236,14 +236,15 @@
                             <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
                         <RadioButton Grid.Column="0"
-                        Margin="15,0,0,0" IsChecked="{Binding IsOTC}"
-                        Command="{Binding FilterOrderCommand}"
-                        CommandParameter="5" Content="OTC"
-                        GroupName="MedType" Tag="1" />
-                        <RadioButton Grid.Column="1"
+                        IsChecked="{Binding IsMed}" Margin="15,0,0,0"
                         Command="{Binding FilterOrderCommand}"
                         CommandParameter="6" Content="藥品"
-                        GroupName="MedType" Tag="1" Grid.ColumnSpan="2" IsChecked="{Binding IsMed}" />
+                        GroupName="MedType" Tag="1"/>
+                        <RadioButton Grid.Column="1"
+                        IsChecked="{Binding IsOTC}"
+                        Command="{Binding FilterOrderCommand}"
+                        CommandParameter="5" Content="OTC"
+                        GroupName="MedType" Tag="1"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Row="5" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
