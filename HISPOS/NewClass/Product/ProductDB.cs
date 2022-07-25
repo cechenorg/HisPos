@@ -25,6 +25,15 @@ namespace His_Pos.NewClass.Product
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PurchaseProductStructCountBySearchString]", parameters);
         }
 
+        internal static DataTable GetProductStructCountBySearchString(string searchString, string wareID, int type)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
+            parameters.Add(new SqlParameter("WAREID", wareID));
+            parameters.Add(new SqlParameter("TYPE", type));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductStructCountBySearchString]", parameters);
+        }
+
         internal static DataTable GetProductUsageRecordByIDForExport(string proID, DateTime startDate, DateTime endDate, string wareID)
         {
             var parameters = new List<SqlParameter>();

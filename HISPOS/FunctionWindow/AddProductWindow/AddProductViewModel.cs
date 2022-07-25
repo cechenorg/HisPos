@@ -260,6 +260,11 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             switch (addProEnum)
             {
                 case AddProductEnum.ProductReturn:
+                    if (SelectedProductStruct.Inventory == 0)
+                    {
+                        MessageWindow.ShowMessage(string.Format("{0} \n 庫存為零，不能退貨!", SelectedProductStruct.ID), MessageType.ERROR);
+                        return;
+                    }
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
                     break;
 

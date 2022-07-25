@@ -26,15 +26,15 @@ namespace His_Pos.NewClass.Product
             switch (addProductEnum)
             {
                 case AddProductEnum.ProductReturn:
-                    dataTable = ProductDB.GetReturnProductStructCountBySearchString(searchString.Trim(), wareID);
+                    dataTable = ProductDB.GetProductStructCountBySearchString(searchString.Trim(), wareID, 1);
                     break;
 
                 case AddProductEnum.Trade:
-                    dataTable = ProductDB.GetTradeProductStructCountBySearchString(searchString.Trim());
+                    dataTable = ProductDB.GetProductStructCountBySearchString(searchString.Trim(), wareID, 2);
                     break;
 
                 default:
-                    dataTable = ProductDB.GetPurchaseProductStructCountBySearchString(searchString.Trim(), wareID);
+                    dataTable = ProductDB.GetProductStructCountBySearchString(searchString.Trim(), wareID, 0);
                     break;
             }
             return dataTable.Rows[0].Field<int>("COUNT");
