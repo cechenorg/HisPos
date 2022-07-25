@@ -338,6 +338,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 if (currentStoreOrder.IsDoneOrder)//確認收貨
                 {
                     string id = CurrentStoreOrder.LowOrderID;
+                    string type = CurrentStoreOrder.OrderTypeIsOTC;
                     ReloadData();
                     SearchString = string.Empty;
                     IsPROCESSING = true;
@@ -346,7 +347,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     //StoreOrderCollectionView.Filter += OrderFilter;
                     int count = !string.IsNullOrEmpty(id) ? GetOrderIndex(id) : -1;
                     CurrentStoreOrder = count >= 0 && count < storeOrderCollection.Count ? storeOrderCollection[count] : storeOrderCollection[0];
-                    if (CurrentStoreOrder.OrderTypeIsOTC != "OTC")
+                    if (type != "OTC")
                     {
                         IsMed = true;
                     }
