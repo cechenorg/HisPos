@@ -46,7 +46,7 @@ namespace His_Pos.NewClass.Report.Accounts
                 cashFlowValue = editedDetail.CashFlowValue;
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowId", editedDetail.ID);
-            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowName", account.AccountName);
+            DataBaseFunction.AddSqlParameter(parameterList, "SubjectID", account.ID.Trim());
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowValue", cashFlowValue);
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowNote", editedDetail.Note);
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowEmpId", ViewModelMainWindow.CurrentUser.ID);

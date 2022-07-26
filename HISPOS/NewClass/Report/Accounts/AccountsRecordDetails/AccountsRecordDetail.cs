@@ -15,6 +15,7 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
         public AccountsRecordDetail(DataRow r)
         {
             ID = r.Field<int>("CashFlow_ID");
+            SubjectID = r.Field<string>("SubjectID");
             Name = r.Field<string>("CashFlow_Name");
             Note = r.Field<string>("CashFlow_Note");
             CashFlowValue = decimal.ToInt32(r.Field<decimal>("CashFlow_Value"));
@@ -33,6 +34,17 @@ namespace His_Pos.NewClass.Report.Accounts.AccountsRecordDetails
             set
             {
                 Set(() => ID, ref id, value);
+            }
+        }
+
+        private string subjectID;
+
+        public string SubjectID
+        {
+            get => subjectID;
+            set
+            {
+                Set(() => SubjectID, ref subjectID, value);
             }
         }
 

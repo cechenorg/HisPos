@@ -20,26 +20,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         {
             return this;
         }
+        
+        private DataTable accounts;
 
-        private DataTable left;
-
-        public DataTable Left
+        public DataTable Accounts
         {
-            get => left;
+            get => accounts;
             set
             {
-                Set(() => Left, ref left, value);
-            }
-        }
-
-        private DataTable right;
-
-        public DataTable Right
-        {
-            get => right;
-            set
-            {
-                Set(() => Right, ref right, value);
+                Set(() => Accounts, ref accounts, value);
             }
         }
 
@@ -237,19 +226,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
         private void InitAccounts()
         {
             MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            Right = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsRight]");
-            Left = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsLeft]");
+            Accounts = MainWindow.ServerConnection.ExecuteProc("[Get].[Account]");
             MainWindow.ServerConnection.CloseConnection();
             CashFlowAccountsSource = new List<AccountsAccount>();
-            foreach (DataRow R in Right.Rows)
+            foreach (DataRow dr in Accounts.Rows)
             {
-                CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Expenses, R["Accounts_Name"].ToString(), R["Accounts_ID"].ToString()));
-            }
-
-            foreach (DataRow L in Left.Rows)
-            {
-                CashFlowAccountsSource.Add(new AccountsAccount(CashFlowType.Income, L["Accounts_Name"].ToString(), L["Accounts_ID"].ToString()));
+                string id = Convert.ToString(dr["Accounts_ID"]);
+                string name = Convert.ToString(dr["Accounts_Name"]);
+                CashFlowType cashFlowType = Convert.ToInt32(dr["CashFlowType"]) == 0 ? CashFlowType.Income : CashFlowType.Expenses;
+                AccountsAccount account = new AccountsAccount(cashFlowType, name, id);
+                CashFlowAccountsSource.Add(account);
             }
         }
 
