@@ -10,6 +10,7 @@ using System.Data;
 using System.Windows.Threading;
 using DomainModel;
 using DomainModel.Enum;
+using System.Windows.Controls;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 {
@@ -101,7 +102,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 
             Employee = new Employee();
             Employee.Account = Account;
-            Employee.Password = (sender as System.Windows.Controls.PasswordBox)?.Password;
+            Employee.Password = (sender as PasswordBox)?.Password;
 
             if (string.IsNullOrEmpty(Employee.Password) && !string.IsNullOrEmpty(Employee.Account))
             {

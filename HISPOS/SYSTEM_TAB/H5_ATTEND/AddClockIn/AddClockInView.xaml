@@ -53,6 +53,7 @@
                         IsChecked="{Binding OutCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
         </StackPanel>
         <StackPanel
+            FocusManager.FocusedElement="{Binding ElementName=Account}"
             Grid.Row="1"
             VerticalAlignment="Center"
             Margin="10,0,0,0"

@@ -327,8 +327,13 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             }
             else //(5.店員 6.負責藥師 7.執業藥師 8.支援藥師)只能看自己的打卡紀錄
             {
-                CheckLines.Add(new CommonBox() { Namepath = "無選項", Value = "" });
-                CheckLine = CheckLines[0];
+                if(dt != null && dt.Rows.Count > 0)
+                {
+                    string namepath = Convert.ToString(dt.Rows[0]["Namepath"]);
+                    string value = Convert.ToString(dt.Rows[0]["Value"]);
+                    CheckLines.Add(new CommonBox() { Namepath = namepath, Value = value });
+                    CheckLine = CheckLines[0];
+                }
             }
             SetEmployeeCollection();
         }
@@ -393,14 +398,14 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                 {
                     StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
                     var c = 0;int? cMin=0;
-                    sw.WriteLine("日期" + "\t" + "店別" + "\t" + "姓名" + "\t" + "上班" + "\t" + "下班" + "\t" + "時數" + "\t" + "小計");
+                    sw.WriteLine("日期" + "\t" + "店別" + "\t" + "員工編號" + "\t" + "姓名" + "\t" + "上班" + "\t" + "下班" + "\t" + "時數" + "\t" + "小計");
                     
                     foreach (var row in ClockInLogsRpt)
                     {
                         string _str = row.Date.Substring(row.Date.Length - 3, 3);
                         string days = "/" + DateTime.DaysInMonth(DateTime.Now.Year, int.Parse(SearchMonth)).ToString();
 
-                        sw.WriteLine(row.Date + "\t" + row.EmpAccount + "\t" + row.EmpName + "\t" + row.Time + "\t" + row.Time2 + "\t" + row.WMin/60 + "\t"+ row.Type);
+                        sw.WriteLine(row.Date + "\t" + row.CurPha_Name + "\t" + row.EmpAccount + "\t" + row.EmpName + "\t" + row.Time + "\t" + row.Time2 + "\t" + row.WMin/60 + "\t"+ row.Type);
                         cMin += row.WMin/60;
 
                         if (_str == days)
@@ -411,6 +416,18 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                         c++;
                     }
                     sw.Close();
+                    try
+                    {
+                        ConfirmWindow cw = new ConfirmWindow("是否開啟檔案", "確認");
+                        if ((bool)cw.DialogResult)
+                        {
+                            System.Diagnostics.Process.Start(saveFileDialog1.FileName);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageWindow.ShowMessage(e.Message, MessageType.WARNING);
+                    }
                 }
             }
         }
