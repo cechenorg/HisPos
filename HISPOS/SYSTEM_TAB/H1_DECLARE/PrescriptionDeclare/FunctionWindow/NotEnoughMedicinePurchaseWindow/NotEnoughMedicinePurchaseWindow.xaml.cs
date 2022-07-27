@@ -26,11 +26,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
                 {
                     case "CloseNotEnoughMedicinePurchaseWindowPurchase":
                         DialogResult = true;
-                        Close();
+                        //Close();
                         break;
 
                     case "CloseNotEnoughMedicinePurchaseWindowCancel":
-                        DialogResult = false;
+                        //DialogResult = false;
                         Close();
                         break;
                 }

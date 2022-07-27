@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="傳送藥健康"
-    Width="900"
+    Width="950"
     Height="450"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
@@ -60,7 +60,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="175"
+                    Width="150"
                     Binding="{Binding MedId}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="14"
@@ -106,7 +106,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    MinWidth="80"
+                    MinWidth="70"
                     Binding="{Binding TreatAmount}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="14"
@@ -128,7 +128,7 @@
                     FontSize="18"
                     FontWeight="Bold"
                     Foreground="IndianRed"
-                    Header="傳送量"
+                    Header="採購量"
                     IsReadOnly="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -145,6 +145,22 @@
                     FontWeight="Bold"
                     Foreground="IndianRed"
                     Header="自備量"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    MinWidth="80"
+                    Binding="{Binding SingdeCanUseAmount}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="Gray"
+                    Header="杏德庫存"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">

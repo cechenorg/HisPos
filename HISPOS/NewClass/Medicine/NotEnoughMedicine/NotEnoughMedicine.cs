@@ -36,21 +36,60 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             }
         }
 
+        private double canUseAmount;
+
+        public double CanUseAmount
+        {
+            get => canUseAmount;
+            set
+            {
+                Set(() => CanUseAmount, ref canUseAmount, value);
+            }
+        }
+
+        private double treatAmount;
+
+        public double TreatAmount
+        {
+            get => treatAmount;
+            set
+            {
+                Set(() => TreatAmount, ref treatAmount, value);
+            }
+        }
+
+        private double singdeInv;
+
+        public double SingdeInv
+        {
+            get => singdeInv;
+            set
+            {
+                Set(() => SingdeInv, ref singdeInv, value);
+            }
+        }
+
+        public double PrepareAmount { get; }
+
         public bool IsCommon { get; }
         public bool Frozen { get; }
         public int? ControlLevel { get; }
         public double AveragePrice { get; }
 
-        public NotEnoughMedicine(string id, string name, double amount, bool isCommon, bool isFrozen, int? controlLevel, double price, double notEnough)
+        public NotEnoughMedicine(string id, string name, double amount, bool isCommon, bool isFrozen, int? controlLevel, double price, double notEnough, double canUseAmount=0, double treatAmount=0, int singdeInv=0)
         {
             ID = id;
             Name = name;
+            CanUseAmount = canUseAmount;
+            NotEnoughAmount = notEnough;
+            TreatAmount = treatAmount;
             Amount = amount;
+            PrepareAmount = treatAmount - amount;
+            SingdeInv = singdeInv;
+            AveragePrice = price;
             IsCommon = isCommon;
             Frozen = isFrozen;
-            ControlLevel = controlLevel;
-            AveragePrice = price;
-            NotEnoughAmount = notEnough;
+            ControlLevel = controlLevel;            
         }
     }
 }
