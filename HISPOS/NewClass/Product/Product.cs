@@ -18,6 +18,8 @@ namespace His_Pos.NewClass.Product
             ChineseName = row.Field<string>("Pro_ChineseName");
             EnglishName = row.Field<string>("Pro_EnglishName");
             IsCommon = row.Field<bool>("Pro_IsCommon");
+            if(row.Table.Columns.Contains("MainFlag"))
+                IsMainFlag = row.Field<bool>("MainFlag");
         }
 
         public Product(ProductStruct p)
@@ -106,6 +108,17 @@ namespace His_Pos.NewClass.Product
                 {
                     Set(() => IsCommon, ref isCommon, value);
                 }
+            }
+        }
+        private bool isMainFlag;
+
+        public bool IsMainFlag
+        {
+            get { return isMainFlag; }
+            set
+            {
+                Set(() => IsMainFlag, ref isMainFlag, value);
+                RaisePropertyChanged(nameof(FullName));
             }
         }
 

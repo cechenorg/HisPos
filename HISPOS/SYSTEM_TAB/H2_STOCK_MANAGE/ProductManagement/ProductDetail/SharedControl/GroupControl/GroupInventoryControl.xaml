@@ -42,6 +42,7 @@
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             HorizontalScrollBarVisibility="Disabled"
+            CanUserSortColumns="False"
             ItemsSource="{Binding ProductGroupSettingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             VirtualizingPanel.IsVirtualizing="True">
             <DataGrid.Resources>
