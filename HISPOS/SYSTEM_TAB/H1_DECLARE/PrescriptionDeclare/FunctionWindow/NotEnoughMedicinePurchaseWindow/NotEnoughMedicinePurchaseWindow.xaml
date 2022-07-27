@@ -10,7 +10,7 @@
     xmlns:newClass="clr-namespace:His_Pos.NewClass"
     xmlns:service="clr-namespace:His_Pos.Service"
     Title="缺藥採購確認"
-    Width="800"
+    Width="1000"
     Height="450"
     FontFamily="Segoe UI Semibold"
     WindowStartupLocation="CenterScreen"
@@ -77,7 +77,7 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn
                     Width="150"
-                    Header="代碼"
+                    Header="藥品代碼"
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -100,10 +100,10 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    MinWidth="400"
+                    MinWidth="280"
                     MaxWidth="400"
                     CanUserResize="False"
-                    Header="名稱"
+                    Header="藥品名稱"
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -131,11 +131,11 @@
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
-                    MinWidth="60"
-                    Binding="{Binding NotEnoughAmount, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
+                    MinWidth="100"
+                    Binding="{Binding CanUseAmount, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
                     FontSize="16"
                     FontWeight="Bold"
-                    Header="欠量"
+                    Header="總可用量(含載途)"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -146,10 +146,67 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     MinWidth="60"
+                    Binding="{Binding NotEnoughAmount, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Header="欠量"
+                    Visibility="Hidden"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    MinWidth="70"
+                    Binding="{Binding TreatAmount, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Header="調劑量"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    MinWidth="80"
                     Binding="{Binding Amount, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
                     FontSize="16"
                     FontWeight="Bold"
                     Header="採購量"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    MinWidth="80"
+                    Binding="{Binding PrepareAmount, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Header="自備量"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    MinWidth="90"
+                    Binding="{Binding SingdeInv, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Header="杏德庫存"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">

@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             OnTheFrameAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
+            SingdeInv = r.Field<int>("Singde_Inv");
             CostPrice = (double)(r.Field<decimal?>("Inv_LastPrice") is null ? 0 : r.Field<decimal>("Inv_LastPrice"));
             AveragePrice = r.Field<double?>("AveragePrice") is null ? 0 : r.Field<double>("AveragePrice");
             Price = r.Field<double>("Pro_SelfPayPrice");
@@ -31,6 +32,10 @@ namespace His_Pos.NewClass.Medicine.Base
                 AdjustNoBuckle = r.Field<bool>("AdjustNoBuckle");
             else
                 AdjustNoBuckle = false;
+            if (NewFunction.CheckDataRowContainsColumn(r, "IsClosed") && r.Field<bool?>("IsClosed") != null)
+                IsClosed = r.Field<bool>("IsClosed");
+            else
+                IsClosed = false;
             SendAmount = -1;
         }
 
@@ -62,6 +67,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     break;
             }
             AdjustNoBuckle = false;
+            IsClosed = false;
         }
 
         public Medicine(OrthopedicsMedicine m)
@@ -97,6 +103,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     break;
             }
             AdjustNoBuckle = false;
+            IsClosed = false;
         }
 
         #region Properties
@@ -234,6 +241,16 @@ namespace His_Pos.NewClass.Medicine.Base
             set
             {
                 Set(() => OnTheFrameAmount, ref onTheFrameAmount, value);
+            }
+        }
+
+        private int singdeInv; //杏德庫存
+        public int SingdeInv
+        {
+            get => singdeInv;
+            set
+            {
+                Set(() => SingdeInv, ref singdeInv, value);
             }
         }
 
@@ -471,6 +488,21 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (adjustNoBuckle != value)
                 {
                     Set(() => AdjustNoBuckle, ref adjustNoBuckle, value);
+                }
+            }
+        }
+
+        private bool isClosed; //結案
+
+        public bool IsClosed
+        {
+            get => isClosed;
+            set
+            {
+                if (IsClosed != value)
+                {
+                    Set(() => IsClosed, ref isClosed, value);
+                    if (BuckleAmount == 0) AdjustNoBuckle = IsClosed;
                 }
             }
         }

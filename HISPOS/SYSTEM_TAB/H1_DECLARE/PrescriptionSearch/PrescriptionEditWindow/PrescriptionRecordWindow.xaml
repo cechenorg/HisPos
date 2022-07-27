@@ -1631,7 +1631,39 @@
                                         </TextBox>
                                     </DataTemplate>
                                     <DataTemplate x:Key="AdjustNoBuckle">
-                                        <Image Width="20" Source="../../../../Images/ban.png" />
+                                        <!--<Image Width="20" Source="../../../../Images/ban.png" />-->
+                                        <TextBox
+                                            x:Name="BuckleAmount"
+                                            MinWidth="60"
+                                            HorizontalContentAlignment="Center"
+                                            BorderBrush="DimGray"
+                                            BorderThickness="0,0,0,1"
+                                            CaretBrush="Black"
+                                            FontSize="16"
+                                            FontWeight="Bold"
+                                            GotFocus="InputTextBox_OnGotFocus"
+                                            InputScope="AlphanumericHalfWidth"
+                                            IsEnabled="False"
+                                            IsReadOnlyCaretVisible="False"
+                                            KeyDown="DoubleTextBox_OnKeyDown"
+                                            PreviewMouseLeftButtonDown="BuckleAmount_PreviewMouseLeftButtonDown"
+                                            Text="{Binding BuckleAmount, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.Style>
+                                                <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="TextBox">
+                                                    <Setter Property="Foreground" Value="Black" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding NotEnough, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                            <Setter Property="Foreground" Value="IndianRed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="TextChanged">
+                                                    <command:EventToCommand Command="{Binding DataContext.DataChanged, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
                                     </DataTemplate>
                                 </DataTemplate.Resources>
                                 <ContentControl Content="{Binding}">
@@ -1639,10 +1671,10 @@
                                         <Style TargetType="{x:Type ContentControl}">
                                             <Setter Property="ContentTemplate" Value="{StaticResource AdjustBuckle}" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding DataContext.AdjustNoBuckle, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="false">
+                                                <DataTrigger Binding="{Binding DataContext.IsClosed, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="false">
                                                     <Setter Property="ContentTemplate" Value="{StaticResource AdjustBuckle}" />
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding DataContext.AdjustNoBuckle, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="true">
+                                                <DataTrigger Binding="{Binding DataContext.IsClosed, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="true">
                                                     <Setter Property="ContentTemplate" Value="{StaticResource AdjustNoBuckle}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -1652,7 +1684,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                    <DataGridTemplateColumn MinWidth="40" IsReadOnly="True" Visibility="Hidden">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox
@@ -1664,6 +1696,21 @@
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Click">
                                             <i:InvokeCommandAction Command="{Binding DataContext.AdjustNoBuckle, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MinWidth="40" Header="結案" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox x:Name="IsClosed" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                                    IsChecked="{Binding IsClosed, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged, FallbackValue=false}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.IsClosed, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </CheckBox>

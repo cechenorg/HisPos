@@ -366,6 +366,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 Order = m.Order;
                 SendAmount = m.SendAmount;
                 AdjustNoBuckle = m.AdjustNoBuckle;
+                IsClosed = m.IsClosed;
             }
             else if (m is MedicineSpecialMaterial && !m.PaySelf)
             {
@@ -388,6 +389,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 Order = m.Order;
                 SendAmount = m.SendAmount;
                 AdjustNoBuckle = m.AdjustNoBuckle;
+                IsClosed = m.IsClosed;
             }
             else if (m is MedicineVirtual)
             {
@@ -405,6 +407,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 Order = m.Order;
                 SendAmount = m.SendAmount;
                 AdjustNoBuckle = true;
+                IsClosed = true;
             }
             else
             {
@@ -428,6 +431,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                 Order = m.Order;
                 SendAmount = m.SendAmount;
                 AdjustNoBuckle = m.AdjustNoBuckle;
+                IsClosed = m.IsClosed;
             }
             PaySelfValue = m.Price;
             BuckleAmount = m.BuckleAmount;
@@ -469,6 +473,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                     PaySelf = false;
                     IsBuckle = true;
                     AdjustNoBuckle = true;
+                    IsClosed = true;
                     break;
 
                 case PDataType.SimpleForm:
@@ -505,6 +510,7 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
                     PaySelf = false;
                     IsBuckle = true;
                     AdjustNoBuckle = true;
+                    IsClosed = true;
                     break;
             }
         }
@@ -531,5 +537,6 @@ namespace His_Pos.NewClass.Prescription.Declare.DeclareFile
         [XmlIgnore] public int Order { get; set; }
         [XmlIgnore] public double SendAmount { get; set; }
         [XmlIgnore] public bool AdjustNoBuckle { get; set; }
+        [XmlIgnore] public bool IsClosed { get; set; }
     }
 }

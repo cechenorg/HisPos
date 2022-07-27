@@ -128,7 +128,7 @@
                     <KeyBinding Command="{Binding FocusUpDownCommand}" Key="Down" CommandParameter="DOWN" />
                 </ContentControl.InputBindings>
             </ContentControl>
-            <Button Content="確認" Command="{Binding ProductSelected}" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" />
+            <Button Content="確認" Command="{Binding ProductSelected}" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Cursor="Hand" />
         </Grid>
     </Viewbox>
 </Window>

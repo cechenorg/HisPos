@@ -247,6 +247,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
+        public RelayCommand IsClosed { get; set; }
         public RelayCommand ResetBuckleAmount { get; set; }
         public RelayCommand CustomerDetailEdited { get; set; }
         public RelayCommand CustomerRedoEdited { get; set; }
@@ -365,6 +366,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
+            IsClosed = new RelayCommand(IsClosedAction);
             ResetBuckleAmount = new RelayCommand(ResetBuckleAmountAction);
             CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
             CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
@@ -689,6 +691,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DataChangedAction();
         }
 
+        private void IsClosedAction()
+        {
+            switch (EditedPrescription.SelectedMedicine.IsClosed)
+            {
+                case true:
+                    EditedPrescription.SelectedMedicine.IsClosed = false;
+                    break;
+
+                case false:
+                    EditedPrescription.SelectedMedicine.IsClosed = true;
+                    break;
+            }
+            DataChangedAction();
+        }
         private void ResetBuckleAmountAction()
         {
             EditedPrescription.SelectedMedicine?.ResetBuckleAmount();
