@@ -307,8 +307,10 @@ namespace His_Pos.Service
             var xDocs = new List<XDocument>();
             var cusIdNumbers = new List<string>();
             var paths = new List<string>();
+            bool isSaveXml = true;
             foreach (var c in cooperativeClinicSettings)
             {
+                isSaveXml = true;
                 var path = c.FilePath;
                 if (string.IsNullOrEmpty(path)) continue;
                 try
@@ -322,7 +324,9 @@ namespace His_Pos.Service
                             if (c.TypeName == "杏翔"&& Path.GetExtension(filePath) ==".txt")
                             {
                                 GetTxtFiles(filePath);
-                                xDocument = XDocument.Load(filePath + ".xml");
+                                //xDocument = XDocument.Load(filePath + ".xml");
+                                isSaveXml = false;
+                                break;
                             }
                             else
                             {
@@ -349,15 +353,19 @@ namespace His_Pos.Service
                         }
                         catch (Exception ex)
                         {
-                            ExceptionLog(ex.Message); 
+                            ExceptionLog(ex.Message);
                         }
                     }
-                    if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216" || ViewModelMainWindow.CurrentPharmacy.ID == "7777777777")
+                    if (isSaveXml)
                     {
-                        XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
-                    }
-                    else {
-                        XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, false);
+                        if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216" || ViewModelMainWindow.CurrentPharmacy.ID == "7777777777")
+                        {
+                            XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
+                        }
+                        else
+                        {
+                            XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, false);
+                        }
                     }
                 }
                 catch (Exception ex)
