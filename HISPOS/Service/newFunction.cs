@@ -314,42 +314,42 @@ namespace His_Pos.Service
                 try
                 {
                     var fileEntries = Directory.GetFiles(path);
-                    foreach (var s in fileEntries)
+                    foreach (string filePath in fileEntries)
                     {
-                        
                         try
                         {
-                            if (c.TypeName == "杏翔"&& Path.GetExtension(s)==".txt")
+                            var xDocument = new XDocument();
+                            if (c.TypeName == "杏翔"&& Path.GetExtension(filePath) ==".txt")
                             {
-                                GetTxtFiles(s,path,Path.GetFileName(s));
+                                GetTxtFiles(filePath);
+                                xDocument = XDocument.Load(filePath + ".xml");
                             }
-                            //if (Path.GetExtension(s) == ".xml") 
-                            //{
-                                var xDocument = XDocument.Load(s);
-                                var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo")==null) { isRePost = "2"; }
-                                else
-                                {
-                                    isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
-                                }
-                                if (isRePost != "0")
-                                {
-                                    isRe = true;
-                                }
-                                else
-                                { 
-                                    isRe = false; 
-                                }
-                                xDocs.Add(xDocument);
-                                cusIdNumbers.Add(cusIdNumber);
-                            //}
-                            paths.Add(s);
+                            else
+                            {
+                                xDocument = XDocument.Load(filePath);
+                            }
+
+                            var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                            if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo")==null) { isRePost = "2"; }
+                            else
+                            {
+                                isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                            }
+                            if (isRePost != "0")
+                            {
+                                isRe = true;
+                            }
+                            else
+                            {
+                                isRe = false;
+                            }
+                            xDocs.Add(xDocument);
+                            cusIdNumbers.Add(cusIdNumber);
+                            paths.Add(filePath);
                         }
                         catch (Exception ex)
                         {
-                            ExceptionLog(ex.Message);
-
-                           
+                            ExceptionLog(ex.Message); 
                         }
                     }
                     if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216" || ViewModelMainWindow.CurrentPharmacy.ID == "7777777777")
@@ -366,7 +366,8 @@ namespace His_Pos.Service
                 }
             }
         }
-        public static void GetTxtFiles(string path, string path1, string v) {
+        public static void GetTxtFiles(string path) 
+        {
             int counter = 0;
             string line;
 
@@ -380,116 +381,104 @@ namespace His_Pos.Service
             XmlDeclaration declaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
             doc.AppendChild(declaration);
           
-                XmlElement orders = doc.CreateElement("orders");
-                orders.SetAttribute("days", ss[8]);
-                orders.SetAttribute("mill", "");
-                orders.SetAttribute("dosage_method", "5");
+            XmlElement orders = doc.CreateElement("orders");
+            orders.SetAttribute("days", ss[8]);
+            orders.SetAttribute("mill", "");
+            orders.SetAttribute("dosage_method", "5");
 
+            if (counter == 0)
+            {
+                //建立子節點
+                XmlElement case1 = doc.CreateElement("case");
+                case1.SetAttribute("from", ss[1]);//設定屬性
+                case1.SetAttribute("to", "");//設定屬性
+                case1.SetAttribute("local_id", ss[13]);//設定屬性
+                case1.SetAttribute("date", ss[6]);//設定屬性
+                case1.SetAttribute("time", "");//設定屬性
+                case1.SetAttribute("lroom", "");//設定屬性
+                case1.SetAttribute("app", "VISW");//設定屬性
+                case1.SetAttribute("request_method", "UF");//設定屬性
+                doc.AppendChild(case1);
 
+                XmlElement profile = doc.CreateElement("profile");//建立節點
+                case1.AppendChild(profile);
 
+                XmlElement person = doc.CreateElement("person");
+                person.SetAttribute("name", ss[2]);
+                person.SetAttribute("type", ss[0]);
+                person.SetAttribute("id", ss[34]);
+                person.SetAttribute("foreigner", "no");
+                person.SetAttribute("sex", "1");
+                person.SetAttribute("birth", ss[4]);
+                person.SetAttribute("birth_order", "");
+                person.SetAttribute("phone", "");
+                person.SetAttribute("family", "");
+                person.SetAttribute("mobile", "");
+                person.SetAttribute("email", "");
+                person.SetAttribute("blood", "");
+                person.SetAttribute("blood_rh", "");
+                profile.AppendChild(person);
 
-                if (counter == 0)
-                {
+                XmlElement addr = doc.CreateElement("addr");
+                person.AppendChild(addr);
 
+                XmlElement remark = doc.CreateElement("remark");
+                person.AppendChild(remark);
 
-                    //建立子節點
-                    XmlElement case1 = doc.CreateElement("case");
-                    case1.SetAttribute("from", ss[1]);//設定屬性
-                    case1.SetAttribute("to", "");//設定屬性
-                    case1.SetAttribute("local_id", ss[13]);//設定屬性
-                    case1.SetAttribute("date", ss[6]);//設定屬性
-                    case1.SetAttribute("time", "");//設定屬性
-                    case1.SetAttribute("lroom", "");//設定屬性
-                    case1.SetAttribute("app", "VISW");//設定屬性
-                    case1.SetAttribute("request_method", "UF");//設定屬性
-                    doc.AppendChild(case1);
+                XmlElement allergy = doc.CreateElement("allergy");
+                person.AppendChild(allergy);
 
+                XmlElement weight = doc.CreateElement("weight");
+                person.AppendChild(weight);
 
-                    XmlElement profile = doc.CreateElement("profile");//建立節點
-                    case1.AppendChild(profile);
+                XmlElement temperature = doc.CreateElement("temperature");
+                person.AppendChild(temperature);
 
-                    XmlElement person = doc.CreateElement("person");
-                    person.SetAttribute("name", ss[2]);
-                    person.SetAttribute("type", ss[0]);
-                    person.SetAttribute("id", ss[34]);
-                    person.SetAttribute("foreigner", "no");
-                    person.SetAttribute("sex", "1");
-                    person.SetAttribute("birth", ss[4]);
-                    person.SetAttribute("birth_order", "");
-                    person.SetAttribute("phone", "");
-                    person.SetAttribute("family", "");
-                    person.SetAttribute("mobile", "");
-                    person.SetAttribute("email", "");
-                    person.SetAttribute("blood", "");
-                    person.SetAttribute("blood_rh", "");
-                    profile.AppendChild(person);
+                XmlElement blood_pressure = doc.CreateElement("blood_pressure");
+                person.AppendChild(blood_pressure);
 
+                XmlElement insurance = doc.CreateElement("insurance");
+                insurance.SetAttribute("insurance_type", "A");
+                insurance.SetAttribute("serial_code", ss[7].PadLeft(4, '0'));
+                insurance.SetAttribute("except_code", "");
+                insurance.SetAttribute("copayment_code", ss[10]);
+                insurance.SetAttribute("case_type", ss[25]);
+                insurance.SetAttribute("pay_type", "1");
+                insurance.SetAttribute("ldistp_type", "4");
+                insurance.SetAttribute("release_type", "1");
+                insurance.SetAttribute("ldsc", " ");
+                insurance.SetAttribute("labeno_type", "");
+                case1.AppendChild(insurance);
 
-                    XmlElement addr = doc.CreateElement("addr");
-                    person.AppendChild(addr);
+                XmlElement study = doc.CreateElement("study");
+                study.SetAttribute("doctor_id", ss[12]);
+                study.SetAttribute("subject", ss[5].Substring(0, 2));
+                case1.AppendChild(study);
+                XmlElement diseases = doc.CreateElement("diseases");
+                study.AppendChild(diseases);
 
-                    XmlElement remark = doc.CreateElement("remark");
-                    person.AppendChild(remark);
+                XmlElement itema = doc.CreateElement("item");
+                itema.SetAttribute("code", ss[14]);
+                itema.SetAttribute("type", "ICD10");
+                itema.SetAttribute("desc", "");
+                diseases.AppendChild(itema);
+                XmlElement itemb = doc.CreateElement("item");
+                itemb.SetAttribute("code", ss[15]);
+                itemb.SetAttribute("type", "ICD10");
+                itemb.SetAttribute("desc", "");
+                diseases.AppendChild(itemb);
 
-                    XmlElement allergy = doc.CreateElement("allergy");
-                    person.AppendChild(allergy);
+                XmlElement treatments = doc.CreateElement("treatments");
+                study.AppendChild(treatments);
 
-                    XmlElement weight = doc.CreateElement("weight");
-                    person.AppendChild(weight);
+                XmlElement chief_complain = doc.CreateElement("chief_complain");
+                study.AppendChild(chief_complain);
 
-                    XmlElement temperature = doc.CreateElement("temperature");
-                    person.AppendChild(temperature);
+                XmlElement physical_examination = doc.CreateElement("physical_examination");
+                study.AppendChild(physical_examination);
 
-                    XmlElement blood_pressure = doc.CreateElement("blood_pressure");
-                    person.AppendChild(blood_pressure);
-
-
-               
-
-                    XmlElement insurance = doc.CreateElement("insurance");
-                    insurance.SetAttribute("insurance_type", "A");
-                    insurance.SetAttribute("serial_code", ss[7].PadLeft(4, '0'));
-                    insurance.SetAttribute("except_code", "");
-                    insurance.SetAttribute("copayment_code", ss[10]);
-                    insurance.SetAttribute("case_type", ss[25]);
-                    insurance.SetAttribute("pay_type", "1");
-                    insurance.SetAttribute("ldistp_type", "4");
-                    insurance.SetAttribute("release_type", "1");
-                    insurance.SetAttribute("ldsc", " ");
-                    insurance.SetAttribute("labeno_type", "");
-                    case1.AppendChild(insurance);
-
-                    XmlElement study = doc.CreateElement("study");
-                    study.SetAttribute("doctor_id", ss[12]);
-                    study.SetAttribute("subject", ss[5].Substring(0, 2));
-                    case1.AppendChild(study);
-                    XmlElement diseases = doc.CreateElement("diseases");
-                    study.AppendChild(diseases);
-
-                    XmlElement itema = doc.CreateElement("item");
-                    itema.SetAttribute("code", ss[14]);
-                    itema.SetAttribute("type", "ICD10");
-                    itema.SetAttribute("desc", "");
-                    diseases.AppendChild(itema);
-                    XmlElement itemb = doc.CreateElement("item");
-                    itemb.SetAttribute("code", ss[15]);
-                    itemb.SetAttribute("type", "ICD10");
-                    itemb.SetAttribute("desc", "");
-                    diseases.AppendChild(itemb);
-
-
-                    XmlElement treatments = doc.CreateElement("treatments");
-                    study.AppendChild(treatments);
-
-                    XmlElement chief_complain = doc.CreateElement("chief_complain");
-                    study.AppendChild(chief_complain);
-
-                    XmlElement physical_examination = doc.CreateElement("physical_examination");
-                    study.AppendChild(physical_examination);
-
-
-                    XmlElement continous_prescription = doc.CreateElement("continous_prescription");
-                    continous_prescription.SetAttribute("start_at", ss[6]);
+                XmlElement continous_prescription = doc.CreateElement("continous_prescription");
+                continous_prescription.SetAttribute("start_at", ss[6]);
 
                 if (ss[24] == "")
                 {
@@ -510,7 +499,6 @@ namespace His_Pos.Service
                             continous_prescription.SetAttribute("count", "1");
                             continous_prescription.SetAttribute("total", "3");
                         }
-
                     }
                     else
                     {
@@ -519,82 +507,69 @@ namespace His_Pos.Service
                     }
                 }
                 continous_prescription.SetAttribute("other_mo", ss[45]);
-                    continous_prescription.SetAttribute("eat_at", "");
-                    case1.AppendChild(continous_prescription);
+                continous_prescription.SetAttribute("eat_at", "");
+                case1.AppendChild(continous_prescription);
+                case1.AppendChild(orders);
 
-
-
-
-                    case1.AppendChild(orders);
-
-
-                    XmlElement item0 = doc.CreateElement("item");
-                    item0.SetAttribute("remark", "0");
-                    item0.SetAttribute("local_code", ss[35]);
-                    item0.SetAttribute("id", ss[35]);
-                    item0.SetAttribute("nowid", ss[35]);
-                    item0.SetAttribute("type", ss[43]);
-                    item0.SetAttribute("divided_dose", ss[37]);
-                    item0.SetAttribute("daily_dose", ss[37]);
-                    item0.SetAttribute("total_dose", ss[42]);
-                    item0.SetAttribute("freq", ss[39]);
-                    item0.SetAttribute("days", ss[40]);
-                    item0.SetAttribute("way", ss[38]);
-                    item0.SetAttribute("price", "1");
-                    item0.SetAttribute("multiplier", "1.00");
-                    item0.SetAttribute("memo", "");
-                    item0.SetAttribute("desc", ss[36]);
-                    item0.SetAttribute("dum", "");
-                    item0.SetAttribute("dnop", "");
-                    item0.SetAttribute("dtp1", "");
-                    orders.AppendChild(item0);
-                }
+                XmlElement item0 = doc.CreateElement("item");
+                item0.SetAttribute("remark", "0");
+                item0.SetAttribute("local_code", ss[35]);
+                item0.SetAttribute("id", ss[35]);
+                item0.SetAttribute("nowid", ss[35]);
+                item0.SetAttribute("type", ss[43]);
+                item0.SetAttribute("divided_dose", ss[37]);
+                item0.SetAttribute("daily_dose", ss[37]);
+                item0.SetAttribute("total_dose", ss[42]);
+                item0.SetAttribute("freq", ss[39]);
+                item0.SetAttribute("days", ss[40]);
+                item0.SetAttribute("way", ss[38]);
+                item0.SetAttribute("price", "1");
+                item0.SetAttribute("multiplier", "1.00");
+                item0.SetAttribute("memo", "");
+                item0.SetAttribute("desc", ss[36]);
+                item0.SetAttribute("dum", "");
+                item0.SetAttribute("dnop", "");
+                item0.SetAttribute("dtp1", "");
+                orders.AppendChild(item0);
+            }
 
             while ((line = file.ReadLine()) != null)
             {
-                 ss = new string[] { };
-
+                ss = new string[] { };
                 ss = line.Split(',');
 
-
-
                 XmlElement item = doc.CreateElement("item");
-                    item.SetAttribute("remark", "0");
-                    item.SetAttribute("local_code", ss[35]);
-                    item.SetAttribute("id", ss[35]);
-                    item.SetAttribute("nowid", ss[35]);
-                    item.SetAttribute("type", ss[43]);
-                    item.SetAttribute("divided_dose", ss[37]);
-                    item.SetAttribute("daily_dose", ss[37]);
-                    item.SetAttribute("total_dose", ss[42]);
-                    item.SetAttribute("freq", ss[39]);
-                    item.SetAttribute("days", ss[40]);
-                    item.SetAttribute("way", ss[38]);
-                    item.SetAttribute("price", "1");
-                    item.SetAttribute("multiplier", "1.00");
-                    item.SetAttribute("memo", "");
-                    item.SetAttribute("desc", ss[36]);
-                    item.SetAttribute("dum", "");
-                    item.SetAttribute("dnop", "");
-                    item.SetAttribute("dtp1", "");
-                    orders.AppendChild(item);
+                item.SetAttribute("remark", "0");
+                item.SetAttribute("local_code", ss[35]);
+                item.SetAttribute("id", ss[35]);
+                item.SetAttribute("nowid", ss[35]);
+                item.SetAttribute("type", ss[43]);
+                item.SetAttribute("divided_dose", ss[37]);
+                item.SetAttribute("daily_dose", ss[37]);
+                item.SetAttribute("total_dose", ss[42]);
+                item.SetAttribute("freq", ss[39]);
+                item.SetAttribute("days", ss[40]);
+                item.SetAttribute("way", ss[38]);
+                item.SetAttribute("price", "1");
+                item.SetAttribute("multiplier", "1.00");
+                item.SetAttribute("memo", "");
+                item.SetAttribute("desc", ss[36]);
+                item.SetAttribute("dum", "");
+                item.SetAttribute("dnop", "");
+                item.SetAttribute("dtp1", "");
+                orders.AppendChild(item);
 
-                
                 counter++;
             }
-
-   
             try
             {
                 string path11 = path + ".xml";
                 doc.Save(path11);
-                
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.ToString()) ;
             }
-
         }
         public static bool CheckDataRowContainsColumn(DataRow row, string column)
         {
