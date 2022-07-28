@@ -287,7 +287,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public void CopyOldProductData(PurchaseProduct purchaseProduct)
         {
-            OrderAmount = purchaseProduct.OrderAmount;
+            OrderAmount = 0;
             RealAmount = purchaseProduct.RealAmount;
             FreeAmount = purchaseProduct.FreeAmount;
             SubTotal = purchaseProduct.SubTotal;

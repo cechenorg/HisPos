@@ -507,7 +507,7 @@ namespace His_Pos.NewClass.StoreOrder
                 ToScrapStatus();
             }
             else*/
-            if (isShipment)
+            if (orderFlag != 2)
             {
                 SourceID = orderID;
                 ReceiveID = prescriptionReceiveID;
