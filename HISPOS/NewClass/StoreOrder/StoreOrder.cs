@@ -85,7 +85,7 @@ namespace His_Pos.NewClass.StoreOrder
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
         public string ModifyUser { get; set; }
-        public string ModifyTime { get; set; }
+        public DateTime ModifyTime { get; set; }
         public string VoidReason { get; set; }
         public string TargetPreOrderCustomer { get; set; }
         public DateTime Day { get; set; }
@@ -175,7 +175,7 @@ namespace His_Pos.NewClass.StoreOrder
             if (row.Table.Columns.Contains("StoOrd_ModifyTime"))
             {
                 if (!DBNull.Value.Equals(row["StoOrd_ModifyTime"]))
-                    ModifyTime = (row.Field<DateTime>("StoOrd_ModifyTime")).ToString("yyyy/MM/dd");
+                    ModifyTime = Convert.ToDateTime(row.Field<DateTime>("StoOrd_ModifyTime"));
             }
             if (row.Table.Columns.Contains("StoOrd_VoidReason"))
             {

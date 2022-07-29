@@ -13,6 +13,7 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=ProductPurchaseReturn.NormalViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <service:DateTimeConverter x:Key="DateTimeConverter" />
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <Style
             x:Key="CantEditPrice"
@@ -546,7 +547,7 @@
             <Label
                 Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
                 VerticalAlignment="Center"
-                Content="{Binding CurrentStoreOrder.ModifyTime}"
+                Content="{Binding CurrentStoreOrder.ModifyTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="16"
                 FontWeight="Bold"
@@ -590,7 +591,7 @@
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Width="100"
+                Width="65"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -606,7 +607,7 @@
                 FontWeight="Bold"
                 Foreground="Black" />
             <Label
-                Width="80"
+                Width="50"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Content="{Binding CurrentStoreOrder.OrderProducts.Count}"
@@ -621,14 +622,29 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black" />
-            <Rectangle Width="200" />
+            <Label
+                Width="95"
+                VerticalAlignment="Center"
+                Content="建立時間:"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Width="195"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentStoreOrder.CreateDateTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                FontWeight="Bold"
+                Foreground="Black" />
             <Label
                 Visibility="{Binding CurrentStoreOrder.Visibility}"
                 x:Name="lbNormalPay"
                 VerticalAlignment="Center"
                 Content="一般收貨"
                 FontFamily="Segoe UI Semibold"
-                FontSize="18"
+                FontSize="16"
                 Foreground="Black" />
             <ToggleButton
                 Visibility="{Binding CurrentStoreOrder.Visibility}"
@@ -642,11 +658,11 @@
                 VerticalAlignment="Center"
                 Content="下貨付現"
                 FontFamily="Segoe UI Semibold"
-                FontSize="18"
+                FontSize="16"
                 Foreground="DimGray" />
             <Button 
                 Width="120"
-                Margin="30,0,10,0"
+                Margin="25,0,0,0"
                 Background="DimGray"
                 BorderThickness="0"
                 Command="{Binding DeleteOrderCommand}"
