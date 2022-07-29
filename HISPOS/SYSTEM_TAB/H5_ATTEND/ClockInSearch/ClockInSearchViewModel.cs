@@ -391,7 +391,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 MainWindow.ServerConnection.OpenConnection();
-                ClockInLogsRpt = new ClockInLog(ClockInDb.ClockInLogFotReport(DateTime.Now.Year.ToString(), SearchMonth, CheckLine.Value));
+                ClockInLogsRpt = new ClockInLog(ClockInDb.ClockInLogFotReport(SearchYear, SearchMonth, CheckLine.Value));
                 MainWindow.ServerConnection.CloseConnection();
 
                 using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.CreateNew))
