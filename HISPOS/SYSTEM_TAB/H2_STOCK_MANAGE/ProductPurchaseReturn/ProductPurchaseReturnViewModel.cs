@@ -162,8 +162,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                                     if(!string.IsNullOrEmpty(ReceiveID) && ReceiveID != null)
                                     {
                                         currentStoreOrder = storeOrders[i];
-                                        currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
-                                        if (storeOrders[i].ID == storeOrders[i].ReceiveID)//尚未更新為杏德單號
+                                        bool isUptSuccess = currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
+                                        if (!isUptSuccess && storeOrders[i].ID != storeOrders[i].ReceiveID)//尚未更新為杏德單號
                                         {
                                             storeOrders[i].OrderType = OrderTypeEnum.PREPARE;//已出貨
                                             storeOrders[i].IsWaitOrder = 0;

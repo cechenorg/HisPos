@@ -489,7 +489,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
 
-        public void UpdateOrderDataFromSingde(DataRow dataRow)
+        public bool UpdateOrderDataFromSingde(DataRow dataRow)
         {
             string orderID = dataRow.Field<string>("ORDER_ID");
             long orderFlag = dataRow.Field<long>("FLAG");
@@ -507,17 +507,19 @@ namespace His_Pos.NewClass.StoreOrder
                 ToScrapStatus();
             }
             else*/
+            bool isSuccess = false;
             if (orderFlag != 2)
             {
                 SourceID = orderID;
                 ReceiveID = prescriptionReceiveID;
                 CheckCode = checkCode;
 
-                bool isSuccess = UpdateOrderProductsFromSingde();
+                isSuccess = UpdateOrderProductsFromSingde();
 
                 if (isSuccess)
                     OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
             }
+            return isSuccess;
         }
 
         private bool UpdateOrderProductsFromSingde()
