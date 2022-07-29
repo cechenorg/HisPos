@@ -29,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                             MessageWindow.ShowMessage("請選擇作廢原因", MessageType.ERROR);
                             return;
                         }
-                        if (radio5.IsChecked == true && other.Text == string.Empty)//選擇其他必須填寫原因
+                        if (radio5.IsChecked == true && string.IsNullOrEmpty(other.Text.Trim()))//選擇其他必須填寫原因
                         {
                             MessageWindow.ShowMessage("請填寫其他", MessageType.ERROR);
                             return;
