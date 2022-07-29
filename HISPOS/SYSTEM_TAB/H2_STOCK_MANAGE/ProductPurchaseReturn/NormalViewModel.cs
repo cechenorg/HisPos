@@ -322,59 +322,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     MessageWindow.ShowMessage("品項入庫量且小計大於0!", MessageType.WARNING);
                     return;
                 }
-                //(20220718取消檢核)
-                //if (!CurrentStoreOrder.ChkPrice() && (CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING ))
-                //{
-                //    ConfirmWindow confirmWindow = new ConfirmWindow($"本次進價與上次進價不同\n是否確認送出進貨單?", "", true);
-                //    if (!(bool)confirmWindow.DialogResult)
-                //        return;
-                //}
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
                 CurrentStoreOrder.MoveToNextStatus();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
-                #region 排序
-                if (currentStoreOrder.IsDoneOrder)//確認收貨
-                {
-                    string id = CurrentStoreOrder.LowOrderID;
-                    string type = CurrentStoreOrder.OrderTypeIsOTC;
-                    ReloadData();
-                    SearchString = string.Empty;
-                    IsPROCESSING = true;
-                    filterStatus = OrderFilterStatusEnum.PROCESSING;
-                    DispatcherFilter();
-                    //StoreOrderCollectionView.Filter += OrderFilter;
-                    int count = !string.IsNullOrEmpty(id) ? GetOrderIndex(id) : -1;
-                    CurrentStoreOrder = count >= 0 && count < storeOrderCollection.Count ? storeOrderCollection[count] : storeOrderCollection[0];
-                    if (type != "OTC")
-                    {
-                        IsMed = true;
-                    }
-                    else
-                    {
-                        IsOTC = true;
-                    }
-                }
-                else
-                {
-                    string id = currentStoreOrder.ID;
-                    string type = currentStoreOrder.OrderTypeIsOTC;
-                    ReloadData();
-                    SearchString = string.Empty;
-                    IsPROCESSING = true;
-                    if (!type.Equals("OTC"))
-                        IsMed = true;
-                    else
-                        IsOTC = true;
-
-                    filterStatus = OrderFilterStatusEnum.PROCESSING;
-                    DispatcherFilter();
-                    //StoreOrderCollectionView.Filter += OrderFilter;
-                    int count = GetOrderIndex(id);
-                    CurrentStoreOrder = count >= 0 && count < storeOrderCollection.Count ? storeOrderCollection[count] : storeOrderCollection[0];
-                }
-                #endregion
+                if(CurrentStoreOrder.IsDoneOrder)
+                    ReloadState();
             }
             else
             {
@@ -469,17 +423,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 filterStatus = (OrderFilterStatusEnum)int.Parse(filterCondition);
             if (StoreOrderCollectionView.CanFilter)
                 DispatcherFilter();
-                //StoreOrderCollectionView.Filter += OrderFilter;
         }
 
         private void SplitBatchAction(string productID)
         {
             (CurrentStoreOrder as PurchaseOrder).SplitBatch(productID);
+            CalculateTotalPriceAction();
         }
 
         private void MergeBatchAction(PurchaseProduct product)
         {
             (CurrentStoreOrder as PurchaseOrder).MergeBatch(product);
+            CalculateTotalPriceAction();
         }
 
         private void CloseTabAction()
@@ -574,7 +529,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             DeleteWaitingOrderCommand = new RelayCommand(DeleteWaitingOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
-            NoSingdeCommand = new RelayCommand(NoSingdeAction);
+            NoSingdeCommand = new RelayCommand(NoSingdeAction);//手動入庫
             AddProductByInputCommand = new RelayCommand<string>(AddProductByInputAction);
             DeleteProductCommand = new RelayCommand(DeleteProductAction);
             AddProductCommand = new RelayCommand(AddProductAction);
@@ -649,7 +604,48 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder.MoveToNextStatusNoSingde();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
+                ReloadState();
+            }
+        }
+
+        private void ReloadState()
+        {
+            if (currentStoreOrder.IsDoneOrder)
+            {
+                string id = CurrentStoreOrder.LowOrderID;
+                string type = CurrentStoreOrder.OrderTypeIsOTC;
                 ReloadData();
+                SearchString = string.Empty;
+                IsPROCESSING = true;
+                filterStatus = OrderFilterStatusEnum.PROCESSING;
+                DispatcherFilter();
+                int count = !string.IsNullOrEmpty(id) ? GetOrderIndex(id) : -1;
+                CurrentStoreOrder = count >= 0 && count < storeOrderCollection.Count ? storeOrderCollection[count] : storeOrderCollection[0];
+                if (type != "OTC")
+                {
+                    IsMed = true;
+                }
+                else
+                {
+                    IsOTC = true;
+                }
+            }
+            else
+            {
+                string id = currentStoreOrder.ID;
+                string type = currentStoreOrder.OrderTypeIsOTC;
+                ReloadData();
+                SearchString = string.Empty;
+                IsPROCESSING = true;
+                if (!type.Equals("OTC"))
+                    IsMed = true;
+                else
+                    IsOTC = true;
+
+                filterStatus = OrderFilterStatusEnum.PROCESSING;
+                DispatcherFilter();
+                int count = GetOrderIndex(id);
+                CurrentStoreOrder = count >= 0 && count < storeOrderCollection.Count ? storeOrderCollection[count] : storeOrderCollection[0];
             }
         }
 
