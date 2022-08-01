@@ -76,6 +76,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             btnSubmit.IsEnabled = false;
             lblChanged.Content = "未修改";
             lblChanged.Foreground = Brushes.Black;
+            Authority userAuthority = ViewModelMainWindow.CurrentUser.Authority;
+            if(userAuthority == Authority.Admin)
+                btnDelete.IsEnabled = true;
+            else
+                btnDelete.IsEnabled = false;
         }
 
         private void GetEmployeeList()
@@ -173,35 +178,26 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            Authority userAuthority = ViewModelMainWindow.CurrentUser.Authority;
-            if(userAuthority == Authority.Admin)
-            {
-                ConfirmWindow cw = new ConfirmWindow("是否刪除交易紀錄?", "刪除紀錄確認");
-                if (!(bool)cw.DialogResult) { return; }
-                else
-                {
-                    MainWindow.ServerConnection.OpenConnection();
-                    List<SqlParameter> parameters = new List<SqlParameter>();
-                    parameters.Add(new SqlParameter("MasterID", masID));
-                    DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDelete]", parameters);
-                    MainWindow.ServerConnection.CloseConnection();
-
-                    if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                    {
-                        MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
-                        Close();
-                    }
-                    else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN"))
-                    {
-                        MessageWindow.ShowMessage("訂金餘額不足！", MessageType.ERROR);
-                    }
-                    else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
-                }
-            }
+            ConfirmWindow cw = new ConfirmWindow("是否刪除交易紀錄?", "刪除紀錄確認");
+            if (!(bool)cw.DialogResult) { return; }
             else
             {
-                MessageWindow.ShowMessage("刪除失敗！" + "\n" + "僅系統管理員允許刪除", MessageType.WARNING);
-                return;
+                MainWindow.ServerConnection.OpenConnection();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("MasterID", masID));
+                DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDelete]", parameters);
+                MainWindow.ServerConnection.CloseConnection();
+
+                if (result.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                {
+                    MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
+                    Close();
+                }
+                else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN"))
+                {
+                    MessageWindow.ShowMessage("訂金餘額不足！", MessageType.ERROR);
+                }
+                else { MessageWindow.ShowMessage("刪除失敗！", MessageType.ERROR); }
             }
         }
 
