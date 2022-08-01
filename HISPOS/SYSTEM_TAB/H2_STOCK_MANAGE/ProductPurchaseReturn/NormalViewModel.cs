@@ -327,7 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 CurrentStoreOrder.MoveToNextStatus();
                 MainWindow.SingdeConnection.CloseConnection();
                 MainWindow.ServerConnection.CloseConnection();
-                if(CurrentStoreOrder.IsDoneOrder)
+                if(!CurrentStoreOrder.IsCancel)
                     ReloadState();
             }
             else

@@ -241,17 +241,18 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     break; 
                 case ProductStartInputVariableEnum.SUBTOTAL:
                     if (RealAmount <= 0)
+                    {
                         price = 0;
+                    }
                     else
-                        price = SubTotal / RealAmount;
+                    {
+                        if (RealAmount == 0)
+                        {
+                            price = 0;
+                        }
+                    }
                     break;
             }
-            //}
-
-            /*if (SubTotal == 0)
-            {
-                price = 0;
-            }*/
 
             RaisePropertyChanged(nameof(Price));
             RaisePropertyChanged(nameof(SubTotal));

@@ -94,6 +94,7 @@ namespace His_Pos.NewClass.StoreOrder
         public string IsEnableVoid { get; set; }
         public bool IsScrap { get; set; }
         public bool IsCanDelete { get; set; }
+        public bool IsCancel { get; set; }
         public string Visibility { get; set; }
         public int IsWaitOrder = 0;
         public double TotalPrice
@@ -375,6 +376,7 @@ namespace His_Pos.NewClass.StoreOrder
                     if (!(bool)confirmWindow.DialogResult)
                     {
                         IsDoneOrder = false;
+                        IsCancel = true;
                         return false;
                     }
                     else
