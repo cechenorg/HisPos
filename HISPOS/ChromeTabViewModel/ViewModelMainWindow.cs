@@ -221,9 +221,6 @@ namespace His_Pos.ChromeTabViewModel
                             //是否連子資料夾都要偵測
                             watch.IncludeSubdirectories = true;
                             //新增時觸發事件
-
-
-
                             watch.Created += watch_Created;
                         }
                     }
@@ -278,8 +275,8 @@ namespace His_Pos.ChromeTabViewModel
 
         void watch_Created(object sender, FileSystemEventArgs e)
         {
-            bool isRe=false;
-            string isRePost="0";
+            bool isRe = false;
+            string isRePost = "0";
             
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
@@ -290,74 +287,72 @@ namespace His_Pos.ChromeTabViewModel
                 var xDocs = new List<XDocument>();
                 var cusIdNumbers = new List<string>();
                 var paths = new List<string>();
-                foreach (var c in cooperativeClinicSettings)
+                #region 先把全部的.txt轉成.xml
+                foreach (var setting in cooperativeClinicSettings)
+                {
+                    if(!string.IsNullOrEmpty(setting.FilePath))
+                    {
+                        var fileEntries = Directory.GetFiles(setting.FilePath);
+                        foreach (var filePath in fileEntries)
+                        {
+                            if (!string.IsNullOrEmpty(filePath))
+                            {
+                                if (Path.GetExtension(filePath) == ".txt")
+                                {
+                                    GetTxtFiles(filePath);
+                                }
+                            }
+                        }
+                    }
+                }
+                #endregion
+                foreach (var setting in cooperativeClinicSettings)
                 {
                     try
                     {
-                        
-                        var fileEntries = Directory.GetFiles(pathFile);
-                        foreach (var s in fileEntries)
+                        if (!string.IsNullOrEmpty(setting.FilePath))
                         {
-
-                            try
+                            var fileEntries = Directory.GetFiles(setting.FilePath);
+                            foreach (var s in fileEntries)
                             {
-                                if (c.TypeName == "杏翔" && Path.GetExtension(s) == ".txt")
+                                if (Path.GetExtension(s) == ".xml")
                                 {
-                                    GetTxtFiles(s, pathFile, Path.GetFileName(s));
-                                }
-
-                                //if (Path.GetExtension(s) == ".xml")
-                                //{
                                     var xDocument = XDocument.Load(s);
                                     var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null ) { isRePost = "2"; }
+                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) { isRePost = "2"; }
                                     else
                                     {
                                         isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
                                     }
-                                    if (isRePost != "0") 
+                                    if (isRePost != "0")
                                     {
                                         isRe = true;
                                     }
                                     else
-                                    { 
+                                    {
                                         isRe = false;
                                     }
                                     xDocs.Add(xDocument);
                                     cusIdNumbers.Add(cusIdNumber);
-                                //}
-                                paths.Add(s);
+                                    paths.Add(s);
+                                    if (cusIdNumbers.Count > 0)
+                                    {
+                                        XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, setting.TypeName, isRe);
+                                    }
+                                }
                             }
-                            catch (Exception ex)
-                            {
-                                
-                            }
-                        }
-                        if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216"|| ViewModelMainWindow.CurrentPharmacy.ID == "7777777777")
-                        {
-                            XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
-                        }
-                        else
-                        {
-                            XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, false);
                         }
                     }
                     catch (Exception ex)
                     {
-                       
                     }
                 }
 
                 CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
-                if (gg.CooPreCollectionView == null)
-                {
-
-                }
-                else
+                if (gg.CooPreCollectionView != null)
                 {
                     foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
                     {
-                  
                         MainWindow.Instance.Dispatcher.Invoke(() =>
                         {
                             if (Properties.Settings.Default.PrePrint == "True")
@@ -368,7 +363,6 @@ namespace His_Pos.ChromeTabViewModel
                                     {
                                         if (ff.IsPrint == false)
                                         {
-
                                             gg.PrintAction(ff);
                                         }
                                     }
@@ -377,12 +371,9 @@ namespace His_Pos.ChromeTabViewModel
                         });
                     }
                 }
-                
-               
             }
-
         }
-        public static void GetTxtFiles(string path, string path1, string v)
+        public static void GetTxtFiles(string path)
         {
             int counter = 0;
             string line;
@@ -402,13 +393,8 @@ namespace His_Pos.ChromeTabViewModel
             orders.SetAttribute("mill", "");
             orders.SetAttribute("dosage_method", "5");
 
-
-
-
             if (counter == 0)
             {
-
-
                 //建立子節點
                 XmlElement case1 = doc.CreateElement("case");
                 case1.SetAttribute("from", ss[1]);//設定屬性
@@ -420,7 +406,6 @@ namespace His_Pos.ChromeTabViewModel
                 case1.SetAttribute("app", "VISW");//設定屬性
                 case1.SetAttribute("request_method", "UF");//設定屬性
                 doc.AppendChild(case1);
-
 
                 XmlElement profile = doc.CreateElement("profile");//建立節點
                 case1.AppendChild(profile);
@@ -441,7 +426,6 @@ namespace His_Pos.ChromeTabViewModel
                 person.SetAttribute("blood_rh", "");
                 profile.AppendChild(person);
 
-
                 XmlElement addr = doc.CreateElement("addr");
                 person.AppendChild(addr);
 
@@ -459,9 +443,6 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement blood_pressure = doc.CreateElement("blood_pressure");
                 person.AppendChild(blood_pressure);
-
-
-
 
                 XmlElement insurance = doc.CreateElement("insurance");
                 insurance.SetAttribute("insurance_type", "A");
@@ -494,7 +475,6 @@ namespace His_Pos.ChromeTabViewModel
                 itemb.SetAttribute("desc", "");
                 diseases.AppendChild(itemb);
 
-
                 XmlElement treatments = doc.CreateElement("treatments");
                 study.AppendChild(treatments);
 
@@ -503,7 +483,6 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement physical_examination = doc.CreateElement("physical_examination");
                 study.AppendChild(physical_examination);
-
 
                 XmlElement continous_prescription = doc.CreateElement("continous_prescription");
                 continous_prescription.SetAttribute("start_at", ss[6]);
@@ -538,11 +517,7 @@ namespace His_Pos.ChromeTabViewModel
                 continous_prescription.SetAttribute("eat_at", "");
                 case1.AppendChild(continous_prescription);
 
-
-
-
                 case1.AppendChild(orders);
-
 
                 XmlElement item0 = doc.CreateElement("item");
                 item0.SetAttribute("remark", "0");
@@ -569,10 +544,7 @@ namespace His_Pos.ChromeTabViewModel
             while ((line = file.ReadLine()) != null)
             {
                 ss = new string[] { };
-
                 ss = line.Split(',');
-
-
 
                 XmlElement item = doc.CreateElement("item");
                 item.SetAttribute("remark", "0");
@@ -595,10 +567,8 @@ namespace His_Pos.ChromeTabViewModel
                 item.SetAttribute("dtp1", "");
                 orders.AppendChild(item);
 
-
                 counter++;
             }
-
 
             try
             {
@@ -610,7 +580,6 @@ namespace His_Pos.ChromeTabViewModel
             {
                 MessageBox.Show(e.ToString());
             }
-
         }
         public static WareHouse GetWareHouse(string id)
         {
@@ -630,8 +599,6 @@ namespace His_Pos.ChromeTabViewModel
             {
                 MessageBox.Show(id);
             }
-
-
             return AdjustCases.SingleOrDefault(a => a.ID.Equals(id));
         }
 

@@ -46,11 +46,10 @@
                 VerticalAlignment="Center"
                 Content="藥袋印表機"
                 FontFamily="Segoe UI Semibold"
-                FontSize="30"
+                FontSize="20"
                 Foreground="DimGray" />
-            
             <ComboBox
-                Width="300"
+                Width="250"
                 Margin="20,0,0,0"
                 FontFamily="Segoe UI Semi"
                 FontSize="20"
@@ -64,11 +63,32 @@
                 </i:Interaction.Triggers>
             </ComboBox>
             <Label
-                Margin="20,0,0,0"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Content="藥袋格式"
+                FontFamily="Segoe UI Semibold"
+                FontSize="20"
+                Foreground="DimGray" />
+            <ComboBox
+                Width="100"
+                Margin="10,0,0,0"
+                FontFamily="Segoe UI Semi"
+                FontSize="20"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemsSource="{Binding PrintFormat}"
+                SelectedItem="{Binding ReportFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="自動列印"
                 FontFamily="Segoe UI Semibold"
-                FontSize="30"
+                FontSize="20"
                 Foreground="DimGray" />
             <CheckBox  IsChecked="{Binding PrePrint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
@@ -80,6 +100,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </CheckBox>
+            
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label
@@ -87,10 +108,10 @@
                 VerticalAlignment="Center"
                 Content="收據印表機"
                 FontFamily="Segoe UI Semibold"
-                FontSize="30"
+                FontSize="20"
                 Foreground="DimGray" />
             <ComboBox
-                Width="300"
+                Width="250"
                 Margin="20,0,0,0"
                 FontFamily="Segoe UI Semi"
                 FontSize="20"
@@ -108,7 +129,7 @@
                 VerticalAlignment="Center"
                 Content="格式"
                 FontFamily="Segoe UI Semibold"
-                FontSize="30"
+                FontSize="20"
                 Foreground="DimGray" />
             <ComboBox
                 Width="110"
@@ -132,10 +153,10 @@
                 VerticalAlignment="Center"
                 Content="報表印表機"
                 FontFamily="Segoe UI Semibold"
-                FontSize="30"
+                FontSize="20"
                 Foreground="DimGray" />
             <ComboBox
-                Width="300"
+                Width="250"
                 Margin="20,0,0,0"
                 FontFamily="Segoe UI Semi"
                 FontSize="20"
@@ -148,6 +169,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
+            
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <ContentControl Margin="415,0,0,0">

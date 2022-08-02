@@ -25,10 +25,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
         private string receiptPrinter;
         private string reportPrinter;
         private string receiptForm;
+        private string reportFormat;
         private bool prePrint;
         public Collection<string> Printers { get; set; }
         public Collection<string> PrintForms { get; set; }
-
+        public Collection<string> PrintFormat { get; set; }
         public bool IsDataChanged
         {
             get { return isDataChanged; }
@@ -69,7 +70,11 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             set { Set(() => PrePrint, ref prePrint, value); }
 
         }
-
+        public string ReportFormat
+        {
+            get => reportFormat;
+            set { Set(() => ReportFormat, ref reportFormat, value); }
+        }
 
         #endregion ----- Define Variables -----
 
@@ -89,6 +94,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             Properties.Settings.Default.ReportPrinter = ReportPrinter;
             Properties.Settings.Default.ReceiptForm = ReceiptForm;
             Properties.Settings.Default.PrePrint = PrePrint.ToString();
+            Properties.Settings.Default.ReportFormat = ReportFormat;
             Properties.Settings.Default.Save();
 
             string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
@@ -115,6 +121,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
                 fileWriter.WriteLine("INumC " + Properties.Settings.Default.InvoiceNumberCount);
                 fileWriter.WriteLine("INumE " + Properties.Settings.Default.InvoiceNumberEng);
                 fileWriter.WriteLine("PP " + Properties.Settings.Default.PrePrint);
+                fileWriter.WriteLine("RPF " + Properties.Settings.Default.ReportFormat);
             }
 
             IsDataChanged = false;
@@ -145,8 +152,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             }
 
             PrintForms = new BindingList<string> { "點陣", "一般" };
-
-
+            PrintFormat = new BindingList<string> { "公版", "藥健康版" };
         }
 
         private void RegisterCommands()
@@ -167,7 +173,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl
             ReceiptPrinter = Properties.Settings.Default.ReceiptPrinter;
             ReportPrinter = Properties.Settings.Default.ReportPrinter;
             ReceiptForm = Properties.Settings.Default.ReceiptForm;
-          
+            ReportFormat = Properties.Settings.Default.ReportFormat;
             if (Properties.Settings.Default.PrePrint == "True") { PrePrint = true; }
             else { PrePrint = false; }
             

@@ -98,6 +98,7 @@ namespace His_Pos.FunctionWindow
                 var recReg = new Regex(@"Rc (.*)");
                 var recRegWithForm = new Regex(@"Rc (.*)[$](.*)");
                 var repReg = new Regex(@"Rp (.*)");
+                var repFmt = new Regex(@"RPF (.*)");
                 var verifyKey = fileReader.ReadLine();
                 verifyKey = verifyKey.Substring(2, verifyKey.Length - 2);
                 var xml = WebApi.GetPharmacyInfoByVerify(verifyKey);
@@ -125,6 +126,7 @@ namespace His_Pos.FunctionWindow
                 var inumC = fileReader.ReadLine();
                 var inumE = fileReader.ReadLine();
                 var pP = fileReader.ReadLine();
+                var rpf = fileReader.ReadLine();
                 var match = medReg.Match(medBagPrinter);
                 Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
                 if (receiptPrinter.Contains("$"))
@@ -149,6 +151,8 @@ namespace His_Pos.FunctionWindow
                 Properties.Settings.Default.InvoiceNumberCount = string.IsNullOrEmpty(inumC) ? "" : inumC.Substring(6, inumC.Length - 6);
                 Properties.Settings.Default.InvoiceNumberEng = string.IsNullOrEmpty(inumE) ? "" : inumE.Substring(6, inumE.Length - 6);
                 Properties.Settings.Default.PrePrint = string.IsNullOrEmpty(pP) ? "" : pP.Substring(3, pP.Length - 3);
+                match = repFmt.Match(rpf);
+                Properties.Settings.Default.ReportFormat = match.Groups[1].Value;
                 Properties.Settings.Default.Save();
             }
         }

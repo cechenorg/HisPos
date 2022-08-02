@@ -670,6 +670,7 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
+            var reportFormat = Properties.Settings.Default.ReportFormat;
             if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
             {
                 TempPrint.Division.Name = "";
@@ -679,8 +680,8 @@ namespace His_Pos.NewClass.Prescription.Service
                 else
                     TempPrint.PrintMedBagMultiMode();
             }
-            else if (VM.CurrentPharmacy.ID == "5931017216") {
-
+            else if (reportFormat == "公版") 
+            {
                 TempPre.PrintMedBagSingleModeByCE();
             }
             else

@@ -431,6 +431,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var printMedBag = printConfirmResult[0];
             var printSingle = printConfirmResult[1];
             var printReceipt = printConfirmResult[2];
+            var reportFormat = Properties.Settings.Default.ReportFormat;
             if (printMedBag is null || printReceipt is null)
                 return;
             if ((bool)printMedBag && printSingle is null)
@@ -446,12 +447,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                         switch (printSingle != null && (bool)printSingle)
                         {
                             case false:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                if (reportFormat == "公版")
                                 {
-
                                     EditedPrescription.PrintMedBagSingleModeByCE();
-
-
                                 }
                                 else
                                 {
@@ -460,56 +458,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                                 break;
 
                             case true:
-                                 if (VM.CurrentPharmacy.ID == "5931017216")
+                                if (reportFormat == "公版")
                                 {
-
                                     EditedPrescription.PrintMedBagSingleModeByCE();
-
-
                                 }
-                                else {
+                                else
+                                {
                                     PrintEditedPrescription.PrintMedBagSingleMode();
-                                } break;
+                                }
+                                break;
                         }
-                          
                     }
                 }
-              
                 else
                 {
                     if ((bool)printMedBag)
                     {
-
                         BusyContent = Resources.藥袋列印;
                         switch (printSingle != null && (bool)printSingle)
                         {
                             case false:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                if (reportFormat == "公版")
                                 {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else
-                                {
-                                    EditedPrescription.PrintMedBagMultiMode();
-                                }
-                                break;
-
+                                EditedPrescription.PrintMedBagSingleModeByCE();
+                            }
+                            else
+                            {
+                                EditedPrescription.PrintMedBagMultiMode();
+                            }
+                            break;
                             case true:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
+                                if (reportFormat == "公版")
                                 {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else
-                                {
-                                    EditedPrescription.PrintMedBagSingleMode();
-                                }
-                                break;
+                                EditedPrescription.PrintMedBagSingleModeByCE();
+                            }
+                            else
+                            {
+                                EditedPrescription.PrintMedBagSingleMode();
+                            }
+                            break;
                         }
                     }
                 }
