@@ -462,7 +462,7 @@
             <Button
                 Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Margin="10,0,0,0"
-                Width="120"
+                Width="115"
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding ToNextStatusCommand}"
@@ -472,8 +472,8 @@
                 Foreground="White" Cursor="Hand" />
             <Button
                 Visibility="{Binding CurrentStoreOrder.Visibility}"
-                Width="120"
-                Margin="15,0,0,0"
+                Width="100"
+                Margin="10,0,0,0"
                 Background="{StaticResource Shadow}"
                 BorderBrush="Transparent"
                 Command="{Binding AddProductCommand}"
@@ -488,8 +488,7 @@
                 FontSize="20"
                 Foreground="Black" />
             <TextBlock
-                Margin="0,0,0,0"
-                Width="100"
+                Width="50"
                 VerticalAlignment="Center"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
@@ -497,7 +496,7 @@
                 Foreground="Black"
                 Text="{Binding CurrentStoreOrder.TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" />
             <Label
-                Margin="20,0,0,0"
+                Margin="10,0,0,0"
                 VerticalAlignment="Center"
                 Content="共"
                 FontFamily="Segoe UI Semibold"
@@ -506,7 +505,7 @@
                 Foreground="Black" />
             <Label
                 Margin="0,0,0,0"
-                Width="80"
+                Width="50"
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Content="{Binding CurrentStoreOrder.ProductCount}"
@@ -533,18 +532,17 @@
                 Foreground="Black" />
             <Label
                 Margin="5,0,0,0"
-                Width="290"
+                Width="240"
                 VerticalAlignment="Center"
                 Content="{Binding CurrentStoreOrder.CreateDateTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="Black" />
-            <Rectangle Width="190" />
             <Button
                 Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Margin="0,0,0,0"
-                Width="120"
+                Width="100"
                 Background="RoyalBlue"
                 BorderThickness="0"
                 Command="{Binding NoSingdeCommand}"
@@ -553,7 +551,7 @@
                 FontSize="16"
                 Foreground="White" />
             <Button
-                Width="120"
+                Width="100"
                 Margin="10,0,0,0"
                 Background="DimGray"
                 BorderThickness="0"
