@@ -557,7 +557,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     ReturnOrder returnOrder = (ReturnOrder)currentStoreOrder;
                     if (returnOrder.ReturnProducts != null && returnOrder.ReturnProducts.Count > 0)
                     {
-                        foreach (ReturnMedicine item in ((ReturnOrder)currentStoreOrder).ReturnProducts)
+                        foreach (var item in ((ReturnOrder)currentStoreOrder).ReturnProducts)
                         {
                             item.IsChecked = IsAllSelected;
                         }
@@ -578,7 +578,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     ReturnOrder returnOrder = (ReturnOrder)currentStoreOrder;
                     if (returnOrder.ReturnProducts != null && returnOrder.ReturnProducts.Count > 0)
                     {
-                        foreach (ReturnMedicine item in ((ReturnOrder)currentStoreOrder).ReturnProducts)
+                        foreach (var item in ((ReturnOrder)currentStoreOrder).ReturnProducts)
                         {
                             if (item.IsChecked == false)
                             {
