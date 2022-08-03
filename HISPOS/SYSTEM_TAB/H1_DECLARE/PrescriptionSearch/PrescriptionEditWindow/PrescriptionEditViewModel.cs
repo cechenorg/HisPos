@@ -439,47 +439,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                if (EditedPrescription.Institution.ID == "3532082753")
+                if ((bool)printMedBag)
                 {
-                    if ((bool)printMedBag)
+                    BusyContent = Resources.藥袋列印;
+                    switch (printSingle != null && (bool)printSingle)
                     {
-                        BusyContent = Resources.藥袋列印;
-                        switch (printSingle != null && (bool)printSingle)
-                        {
-                            case false:
-                                if (reportFormat == "公版")
-                                {
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-                                }
-                                else
-                                {
-                                    PrintEditedPrescription.PrintMedBagMultiMode();
-                                }
-                                break;
-
-                            case true:
-                                if (reportFormat == "公版")
-                                {
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-                                }
-                                else
-                                {
-                                    PrintEditedPrescription.PrintMedBagSingleMode();
-                                }
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    if ((bool)printMedBag)
-                    {
-                        BusyContent = Resources.藥袋列印;
-                        switch (printSingle != null && (bool)printSingle)
-                        {
-                            case false:
-                                if (reportFormat == "公版")
-                                {
+                        case false:
+                            if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+                            {
                                 EditedPrescription.PrintMedBagSingleModeByCE();
                             }
                             else
@@ -487,9 +454,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                                 EditedPrescription.PrintMedBagMultiMode();
                             }
                             break;
-                            case true:
-                                if (reportFormat == "公版")
-                                {
+                        case true:
+                            if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+                            {
                                 EditedPrescription.PrintMedBagSingleModeByCE();
                             }
                             else
@@ -497,7 +464,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                                 EditedPrescription.PrintMedBagSingleMode();
                             }
                             break;
-                        }
                     }
                 }
                 if ((bool)printReceipt)

@@ -856,4 +856,12 @@ namespace His_Pos.Class
         CODE_05223B = 54,
         CODE_05210B = 75
     }
+
+    public enum PrintFormat
+    {
+        [Description("公版")]
+        PublicReport = 0,
+        [Description("藥健康版")]
+        PrivateReport = 1
+    }
 }

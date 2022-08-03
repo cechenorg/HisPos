@@ -680,7 +680,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 else
                     TempPrint.PrintMedBagMultiMode();
             }
-            else if (reportFormat == "公版") 
+            else if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0)) 
             {
                 TempPre.PrintMedBagSingleModeByCE();
             }
