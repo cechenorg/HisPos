@@ -140,9 +140,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage.AccountsRecordEditWindow
                 CashFlowAccountsSource.Add(account);
             }
             EditedCashFlowRecord = selectedDetail.DeepCloneViaJson();
-            ExpensesCheck = selectedDetail.CashFlowValue < 0;
+            DataRow[] currentRow = Accounts.Select(string.Format("Accounts_ID = '{0}'", selectedDetail.SubjectID));
+            ExpensesCheck = Convert.ToBoolean(currentRow[0]["CashFlowType"]);
             IncomeCheck = !ExpensesCheck;
-            var type = selectedDetail.CashFlowValue >= 0 ? "借方" : "貸方";
+            var type = IncomeCheck ? "借方" : "貸方";
             OriginContent = string.Format("類別 : {0}     金額 : {1}    科目 :{2} \n登錄時間 : {3}    立帳日期 : {4}  \n立帳人 : {5}  備註 : {6}",
                 type,
                 Math.Abs(selectedDetail.CashFlowValue),
