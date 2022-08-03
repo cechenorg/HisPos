@@ -90,8 +90,16 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                 {
                     if (tempMeds[j].ID == this[i].InvID)
                     {
-                        this[i].PrepareAmount = isAllSend ? 0 : tempMeds[j].Amount - this[i].TreatAmount >= 0 ? this[i].TreatAmount : tempMeds[j].Amount;
-                        this[i].SendAmount = isAllSend ? this[i].TreatAmount : this[i].TreatAmount - this[i].PrepareAmount;
+                        if (this[i].IsCommon == true)
+                        {
+                            this[i].PrepareAmount = this[i].TreatAmount;
+                            this[i].SendAmount = 0;
+                        }
+                        else
+                        {
+                            this[i].PrepareAmount = isAllSend ? 0 : tempMeds[j].Amount - this[i].TreatAmount >= 0 ? this[i].TreatAmount : tempMeds[j].Amount;
+                            this[i].SendAmount = isAllSend ? this[i].TreatAmount : this[i].TreatAmount - this[i].PrepareAmount;                            
+                        }
                         tempMeds[j].Amount = tempMeds[j].Amount - this[i].PrepareAmount >= 0 ? tempMeds[j].Amount - this[i].PrepareAmount : 0;
                     }
                 }

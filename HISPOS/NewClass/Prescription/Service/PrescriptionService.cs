@@ -703,6 +703,14 @@ namespace His_Pos.NewClass.Prescription.Service
         public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
             var printSendData = vm.PrescriptionSendData.DeepCloneViaJson();
+            var tempPrintSendData = new PrescriptionSendDatas();
+            tempPrintSendData.Clear();
+            foreach (var printData in printSendData)
+            {
+                if (printData.IsCommon == false)
+                    tempPrintSendData.Add(printData);
+            }
+
             var sendData = vm.PrescriptionSendData;
             if (sendData.Count(s => s.SendAmount == 0) != sendData.Count)
             {
@@ -736,7 +744,7 @@ namespace His_Pos.NewClass.Prescription.Service
             if (selfcoSendCount > 0 || (selfallSendCount < printSendData.Count && selfallSendCount > 0))
             {
                 var rptViewer = new ReportViewer();
-                SetReserveMedicinesSheetReportViewer(rptViewer, printSendData);
+                SetReserveMedicinesSheetReportViewer(rptViewer, tempPrintSendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
