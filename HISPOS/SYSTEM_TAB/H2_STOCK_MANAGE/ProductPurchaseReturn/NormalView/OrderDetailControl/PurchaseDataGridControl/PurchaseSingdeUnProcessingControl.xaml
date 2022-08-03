@@ -235,7 +235,7 @@
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
-                                
+                                PreviewKeyDown="OrderAmountTextbox_PreviewKeyDown"
                                 InputMethod.IsInputMethodEnabled="False"
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                 KeyDown="OrderAmountTextbox_OnKeyDown"
@@ -277,7 +277,6 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                
                 <DataGridTextColumn
                     Width="70"
                     Binding="{Binding SingdePrice, StringFormat=N2}"
@@ -333,6 +332,7 @@
                                 Margin="0,0,0,2"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
+                                PreviewKeyDown="OrderAmountTextbox_PreviewKeyDown"
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                 Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>

@@ -269,6 +269,7 @@
                                 FontSize="18"
                                 GotFocus="UIElement_OnGotFocus"
                                 InputMethod.IsInputMethodEnabled="False"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -348,6 +349,7 @@
                                     FontFamily="Segoe UI Semi"
                                     FontSize="18"
                                     GotFocus="UIElement_OnGotFocus"
+                                    PreviewKeyDown="Amount_PreviewKeyDown"
                                     KeyDown="UIElement_OnKeyDown"
                                     PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                     Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -392,6 +394,7 @@
                                 FontSize="18"
                                 Foreground="{StaticResource ForeGround}"
                                 InsertKeyMode="Overwrite"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="MaskedTextBox_OnKeyDown"
                                 Mask="000/00/00"
                                 PromptChar="-"
@@ -428,6 +431,7 @@
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
                                 GotFocus="UIElement_OnGotFocus"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 Text="{Binding Invoice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -445,6 +449,7 @@
                                 Margin="0,0,0,2"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="UIElement_OnKeyDown"
                                 Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>

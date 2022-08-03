@@ -263,6 +263,7 @@
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:0;;#}'}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="PreviewKeyUp">
@@ -283,7 +284,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <DataGridTemplateColumn
                     Width="85"
                     Header="小計"
@@ -297,6 +297,7 @@
                                 FontSize="18"
                                 HorizontalContentAlignment="Center"
                                 Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0 }"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 GotFocus="TextBox_GotFocus"
                                 LostFocus="TextBox_LostFocus">
                                 <i:Interaction.Triggers>
@@ -315,21 +316,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
-                <!--<DataGridTextColumn
-                    Width="85"
-                    Binding="{Binding SubTotal, StringFormat=N2}"
-                    FontFamily="Segoe UI Semi"
-                    Header="小計"
-                    IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>-->
-                
                 <DataGridTemplateColumn
                     MinWidth="170"
                     Header="批號"
@@ -347,6 +333,8 @@
                                     HorizontalContentAlignment="Center"
                                     FontFamily="Segoe UI Semi"
                                     FontSize="18"
+                                    Focusable="True"
+                                    PreviewKeyDown="Amount_PreviewKeyDown"
                                     Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
                                     x:Name="Split"
@@ -391,6 +379,7 @@
                                 InsertKeyMode="Overwrite"
                                 Mask="000/00/00"
                                 PromptChar="-"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 Style="{StaticResource MaterialDesignTextBox}"
                                 ValueDataType="xctk:DateTimeFormat">
                                 <xctk:MaskedTextBox.Text>
@@ -430,6 +419,7 @@
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 Text="{Binding Invoice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -443,6 +433,7 @@
                                 Margin="0,0,0,2"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 GotFocus="InputTextbox_OnGotFocus"
                                 Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>

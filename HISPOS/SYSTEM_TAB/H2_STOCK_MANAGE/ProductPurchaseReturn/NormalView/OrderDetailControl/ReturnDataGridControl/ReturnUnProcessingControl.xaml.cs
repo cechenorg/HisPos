@@ -132,5 +132,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         }
 
         #endregion ----- Define Functions -----
+
+        private void Amount_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                var uie = e.OriginalSource as UIElement;
+                uie.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+                var focusedCell = ProductDataGrid.CurrentCell.Column?.GetCellContent(ProductDataGrid.CurrentCell.Item);
+                var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                if ((firstChild is TextBox || firstChild is TextBlock) && firstChild.Focusable)
+                {
+                    firstChild.Focus();
+                    if (firstChild is TextBox t)
+                        t.SelectAll();
+                }
+            }
+        }
     }
 }

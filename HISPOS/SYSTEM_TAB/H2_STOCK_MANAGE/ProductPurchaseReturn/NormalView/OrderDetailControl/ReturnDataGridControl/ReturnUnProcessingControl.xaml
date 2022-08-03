@@ -177,6 +177,7 @@
                                 GotFocus="InputTextbox_OnGotFocus"
                                 InputMethod.IsInputMethodEnabled="False"
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="OrderAmountTextbox_OnKeyDown"
                                 PreviewMouseLeftButtonDown="InputTextbox_OnPreviewMouseLeftButtonDown"
                                 Text="{Binding ReturnAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -211,6 +212,7 @@
                                 Margin="0,0,0,2"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                 Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>

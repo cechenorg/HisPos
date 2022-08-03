@@ -222,6 +222,7 @@
                                 FontSize="18"
                                 GotFocus="UIElement_OnGotFocus"
                                 InputMethod.IsInputMethodEnabled="False"
+                                PreviewKeyDown="RealAmount_PreviewKeyDown"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
