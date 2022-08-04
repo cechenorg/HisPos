@@ -24,6 +24,7 @@ using System.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.Threading;
+using His_Pos.NewClass.Product.ProductGroupSetting;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -368,12 +369,25 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
             }
-
+            DataTable table = new DataTable();
+            string mainFlagProduct = string.Empty;
             AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
-
             MainWindow.ServerConnection.OpenConnection();
             var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, addProductEnum, CurrentStoreOrder.OrderWarehouse.ID);
+            if (productCount == 0)
+            {
+                table = ProductGroupSettingDB.GetProductGroupSettingsByID(searchString, CurrentStoreOrder.OrderWarehouse.ID);
+            }
             MainWindow.ServerConnection.CloseConnection();
+            if(table != null && table.Rows.Count > 0)
+            {
+                DataRow[] drs = table.Select("MainFlag = 1");
+                if(drs != null && drs.Length > 0)
+                {
+                    mainFlagProduct = Convert.ToString(drs[0]["Pro_ID"]);
+                }
+            }
+            
             if (productCount > 1)
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
@@ -385,6 +399,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
                 ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, addProductEnum, CurrentStoreOrder.OrderStatus, CurrentStoreOrder.OrderWarehouse.ID, CurrentStoreOrder.OrderTypeIsOTC);
+                Messenger.Default.Unregister(this);
+            }
+            else if(productCount == 0 && !string.IsNullOrEmpty(mainFlagProduct))
+            {
+                Messenger.Default.Register<NotificationMessage<ProductStruct>>(this, GetSelectedProduct);
+                ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(mainFlagProduct, addProductEnum, CurrentStoreOrder.OrderStatus, CurrentStoreOrder.OrderWarehouse.ID, CurrentStoreOrder.OrderTypeIsOTC);
                 Messenger.Default.Unregister(this);
             }
             else if (addProductEnum == AddProductEnum.ProductPurchase && productCount < 1)
