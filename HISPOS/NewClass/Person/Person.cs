@@ -150,12 +150,14 @@ namespace His_Pos.NewClass.Person
             switch (IDNumber[1])
             {
                 case '2':
+                case '9':
                 case 'B':
                 case 'D':
                     Gender = Properties.Resources.Female;
                     break;
 
                 case '1':
+                case '8':
                 case 'A':
                 case 'C':
                     Gender = Properties.Resources.Male;
