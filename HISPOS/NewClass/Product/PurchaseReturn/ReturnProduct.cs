@@ -27,10 +27,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             set 
             { 
                 Set(() => IsChecked, ref isChecked, value);
-                if (IsChecked)
-                    ReturnAmount = Inventory;
-                else
-                    ReturnAmount = 0;
+                if(ReturnAmount == 0)
+                {
+                    if (IsChecked)
+                        ReturnAmount = Inventory;
+                    else
+                        ReturnAmount = 0;
+                }
             }
         }
 
