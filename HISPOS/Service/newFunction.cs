@@ -313,12 +313,15 @@ namespace His_Pos.Service
                 var path = c.FilePath;
                 if (!string.IsNullOrEmpty(path))
                 {
-                    var fileEntries = Directory.GetFiles(c.FilePath);
-                    foreach (var filePath in fileEntries)
+                    if(File.Exists(path))
                     {
-                        if (Path.GetExtension(filePath) == ".txt")
+                        var fileEntries = Directory.GetFiles(c.FilePath);
+                        foreach (var filePath in fileEntries)
                         {
-                            GetTxtFiles(filePath);
+                            if (Path.GetExtension(filePath) == ".txt")
+                            {
+                                GetTxtFiles(filePath);
+                            }
                         }
                     }
                 }
@@ -326,54 +329,54 @@ namespace His_Pos.Service
             #endregion
             foreach (var c in cooperativeClinicSettings)
             {
-                bool isSaveXml = true;
                 var path = c.FilePath;
                 if (string.IsNullOrEmpty(path)) continue;
                 try
                 {
-                    var fileEntries = Directory.GetFiles(path);
-                    foreach (string filePath in fileEntries)
+                    if (File.Exists(path))
                     {
-                        try
+                        var fileEntries = Directory.GetFiles(path);
+                        foreach (string filePath in fileEntries)
                         {
-                            var xDocument = new XDocument();
-                            if (c.TypeName == "杏翔"&& Path.GetExtension(filePath) ==".txt")
+                            try
                             {
-                                GetTxtFiles(filePath);
-                                isSaveXml = false;
-                                break;
-                            }
-                            else
-                            {
-                                xDocument = XDocument.Load(filePath);
-                            }
+                                var xDocument = new XDocument();
+                                if (Path.GetExtension(filePath) == ".xml")
+                                {
+                                    xDocument = XDocument.Load(filePath);
+                                }
+                                else
+                                {
+                                    break;
+                                }
 
-                            var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                            if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo")==null) { isRePost = "2"; }
-                            else
-                            {
-                                isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
+                                if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) { isRePost = "2"; }
+                                else
+                                {
+                                    isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                }
+                                if (isRePost != "0")
+                                {
+                                    isRe = true;
+                                }
+                                else
+                                {
+                                    isRe = false;
+                                }
+                                xDocs.Add(xDocument);
+                                cusIdNumbers.Add(cusIdNumber);
+                                paths.Add(filePath);
                             }
-                            if (isRePost != "0")
+                            catch (Exception ex)
                             {
-                                isRe = true;
+                                ExceptionLog(ex.Message);
                             }
-                            else
-                            {
-                                isRe = false;
-                            }
-                            xDocs.Add(xDocument);
-                            cusIdNumbers.Add(cusIdNumber);
-                            paths.Add(filePath);
                         }
-                        catch (Exception ex)
+                        if (cusIdNumbers.Count > 0)
                         {
-                            ExceptionLog(ex.Message);
+                            XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
                         }
-                    }
-                    if (isSaveXml && cusIdNumbers.Count > 0)
-                    {
-                        XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
                     }
                 }
                 catch (Exception ex)
@@ -382,7 +385,7 @@ namespace His_Pos.Service
                 }
             }
         }
-        public static void GetTxtFiles(string path) 
+        public static void GetTxtFiles(string path)
         {
             int counter = 0;
             string line;
