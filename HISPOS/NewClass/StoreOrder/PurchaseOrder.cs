@@ -209,20 +209,24 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     break;
                 }
+
                 if (product.OrderAmount < 0 || product.FreeAmount < 0)
                 {
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
                     return false;
                 }
 
+                if(!string.IsNullOrEmpty(product.BatchNumber))
+                {
+                    if (OrderProducts.Count(s => !string.IsNullOrEmpty(s.BatchNumber) && s.BatchNumber.ToString().Trim() == product.BatchNumber.ToString().Trim()) > 1)
+                    {
+                        IsRepBatch = true;
+                    }
+                }
+
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null)
                 {
                     hasControlMed = true;
-                }
-
-                if (OrderProducts.Count(s => !string.IsNullOrEmpty(s.BatchNumber) && s.BatchNumber.Trim() == product.BatchNumber.Trim()) > 1)
-                {
-                    IsRepBatch = true;
                 }
 
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null) && product.RealAmount > 0)
@@ -232,7 +236,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            if(IsRepBatch)
+            if (IsRepBatch)
             {
                 MessageWindow.ShowMessage("批號重覆!", MessageType.ERROR);
                 return false;
