@@ -394,7 +394,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             }
             DataTable table = new DataTable();
             string mainFlagProduct = string.Empty;
-            AddProductEnum addProductEnum = CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
+            AddProductEnum addProductEnum = (CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE || CurrentStoreOrder.OrderType == OrderTypeEnum.PREPARE || CurrentStoreOrder.OrderType == OrderTypeEnum.WAITPREPARE) ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
             MainWindow.ServerConnection.OpenConnection();
             var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, addProductEnum, CurrentStoreOrder.OrderWarehouse.ID);
             if (productCount == 0)
