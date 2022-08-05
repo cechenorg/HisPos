@@ -274,20 +274,43 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             bool isSuccess;
             if (CurrentStoreOrder.IsCanDelete)
             {
-                isSuccess = CurrentStoreOrder.DeleteOrder();//執行作廢
-                if (isSuccess)
+                if(CurrentStoreOrder.OrderType == OrderTypeEnum.RETURN && (CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING))
                 {
-                    MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
-                    ReloadData();
+                    DataTable dataTable = StoreOrderDB.DeleteDoneOrder(CurrentStoreOrder.ID);
+                    if(dataTable != null && dataTable.Rows.Count > 0)
+                    {
+                        isSuccess = Convert.ToString(dataTable.Rows[0]["RESULT"]) == "SUCCESS";
+                        if (isSuccess)
+                        {
+                            MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
+                            ReloadData();
+                        }
+                    }
+                }
+                else
+                {
+                    isSuccess = CurrentStoreOrder.DeleteOrder();//執行作廢
+                    if (isSuccess)
+                    {
+                        MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
+                        ReloadData();
+                    }
                 }
             }
             else
             {
-                isSuccess = CurrentStoreOrder.ReductOrder();//執行取消作廢
-                if (isSuccess)
+                if (CurrentStoreOrder.OrderType == OrderTypeEnum.RETURN)
                 {
-                    MessageWindow.ShowMessage("已取消作廢！", MessageType.SUCCESS);
-                    ReloadData();
+                    MessageWindow.ShowMessage("退貨單不能取消作廢！", MessageType.WARNING);
+                }
+                else
+                {
+                    isSuccess = CurrentStoreOrder.ReductOrder();//執行取消作廢
+                    if (isSuccess)
+                    {
+                        MessageWindow.ShowMessage("已取消作廢！", MessageType.SUCCESS);
+                        ReloadData();
+                    }
                 }
             }
             MainWindow.SingdeConnection.CloseConnection();

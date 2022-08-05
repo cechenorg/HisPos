@@ -417,6 +417,7 @@
                 Width="120"
                 Background="DimGray"
                 BorderThickness="0"
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Command="{Binding DeleteOrderCommand}"
                 Content="{Binding BtnScrapContent}"
                 FontFamily="Segoe UI Semibold"

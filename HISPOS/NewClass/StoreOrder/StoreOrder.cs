@@ -197,6 +197,11 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     IsEnableVoid = "Hidden";
                 }
+                if (ID.Substring(0, 1) == "R" && (OrderStatus== OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                {
+                    IsCanDelete = true;
+                    Visibility = "Hidden";
+                }
             }
         }
 

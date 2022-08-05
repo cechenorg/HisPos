@@ -277,6 +277,17 @@
             Grid.Row="1"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
+            <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
+                Width="150"
+                Margin="10,0,10,0"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding ToNextStatusCommand}"
+                Content="完成退貨"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" 
+                PreviewMouseDown="Button_PreviewMouseDown" Cursor="Hand"/>
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
@@ -348,6 +359,15 @@
                 Foreground="Black"
                 Text="{Binding CurrentStoreOrder.ReturnDiff, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
             <Button
+                Margin="30,0,10,0"
+                Width="120"
+                Background="DimGray"
+                BorderThickness="0"
+                Command="{Binding DeleteOrderCommand}"
+                Content="{Binding BtnScrapContent}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" Cursor="Hand" />
+            <Button
                 Width="150"
                 Margin="10,0,0,0"
                 Background="RoyalBlue"
@@ -357,17 +377,6 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" 
                 Visibility="Hidden"/>
-            <Button
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
-                Width="150"
-                Margin="10,0,10,0"
-                Background="IndianRed"
-                BorderThickness="0"
-                Command="{Binding ToNextStatusCommand}"
-                Content="完成退貨"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" 
-                PreviewMouseDown="Button_PreviewMouseDown" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 </UserControl>

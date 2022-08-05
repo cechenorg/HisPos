@@ -567,7 +567,7 @@
                 Foreground="Black" />
             <Label
                 Margin="5,0,0,0"
-                Width="220"
+                Width="230"
                 VerticalAlignment="Center"
                 Content="{Binding CurrentStoreOrder.CreateDateTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
                 FontFamily="Segoe UI Semibold"
