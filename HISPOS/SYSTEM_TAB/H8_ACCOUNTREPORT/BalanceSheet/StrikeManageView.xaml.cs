@@ -504,6 +504,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
         private void btnBatchStrike_Click(object sender, RoutedEventArgs e)
         {
+            DataRow[] drs = dgDetails.Select("IsSelected = 1");
+            if(drs == null || drs.Length == 0)
+            {
+                MessageWindow.ShowMessage("未選取需沖帳的項目!", MessageType.ERROR);
+                return;
+            }
             ConfirmWindow confirmWindow = new ConfirmWindow("是否進行批次沖帳?", "批次沖帳", true);
             if ((bool)confirmWindow.DialogResult)
             {
@@ -571,6 +577,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmWindow confirmWindow = new ConfirmWindow("確定是否結案?", "確認");
+            if (!(bool)confirmWindow.DialogResult)
+            {
+                return;
+            }
             int index = GetRowIndexRouted(e);
             _ = double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
             string sourceID = dgDetails.Rows[index]["ID"].ToString();
