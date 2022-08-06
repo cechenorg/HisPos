@@ -233,6 +233,14 @@
                                                         VerticalAlignment="Center"
                                                         Content="{Binding IsPrintString}"
                                                         FontSize="15" />
+                                                        
+                                                    <Label
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center"
+                                                        Foreground="Crimson"
+                                                        Content="員眷"
+                                                        Visibility="{Binding IsVIP,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        FontSize="15" />
                                                 </StackPanel>
                                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                                                     <Label

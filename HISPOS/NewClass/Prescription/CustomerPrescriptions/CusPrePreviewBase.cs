@@ -124,5 +124,6 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         public abstract Prescription CreatePrescription();
 
         public abstract void GetMedicines();
+        public bool IsVIP { get; set; }
     }
 }

@@ -36,7 +36,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         public ICollectionView CooPreCollectionView
         {
             get => cooPreCollectionView;
-             set
+            set
             {
                 Set(() => CooPreCollectionView, ref cooPreCollectionView, value);
             }
@@ -175,15 +175,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         public void InitPrescriptions1()
         {
             cooperativePres = new CusPrePreviewBases();
-           
-                MainWindow.ServerConnection.OpenConnection();
-                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
-                MainWindow.ServerConnection.CloseConnection();
-          
-                CooPreCollectionViewSource = new CollectionViewSource { Source = cooperativePres };
-                CooPreCollectionView = CooPreCollectionViewSource.View;
-                cooPreCollectionViewSource.Filter += Filter;
-         
+
+            MainWindow.ServerConnection.OpenConnection();
+            cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
+            MainWindow.ServerConnection.CloseConnection();
+
+            CooPreCollectionViewSource = new CollectionViewSource { Source = cooperativePres };
+            CooPreCollectionView = CooPreCollectionViewSource.View;
+            cooPreCollectionViewSource.Filter += Filter;
+
         }
 
 
@@ -272,7 +272,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 e.Accepted = false;
         }
 
-       public  void PrintAction(CusPrePreviewBase ff)
+        public void PrintAction(CusPrePreviewBase ff)
         {
             MainWindow.ServerConnection.OpenConnection();
 
