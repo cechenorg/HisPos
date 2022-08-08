@@ -191,7 +191,7 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     OrderStatus = OrderStatusEnum.SCRAP;
                     IsCanDelete = false;
-                    Visibility = "Hidden"; 
+                    Visibility = "Hidden";
                 }
                 else
                 {
@@ -200,7 +200,7 @@ namespace His_Pos.NewClass.StoreOrder
                 if (ID.Substring(0, 1) == "R" && (OrderStatus== OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
                 {
                     IsCanDelete = true;
-                    Visibility = "Hidden";
+                    Visibility = "Visibility";
                 }
             }
         }
