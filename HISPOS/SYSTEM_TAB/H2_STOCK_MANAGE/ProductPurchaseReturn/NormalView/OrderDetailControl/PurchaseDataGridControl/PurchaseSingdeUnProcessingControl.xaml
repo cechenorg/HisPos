@@ -32,6 +32,7 @@
             Background="{StaticResource GridDarkestBackGround}"
             CanUserDeleteRows="False"
             CanUserSortColumns="False"
+            CanUserResizeColumns="False"
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             FrozenColumnCount="3"
@@ -104,7 +105,7 @@
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
                                 KeyDown="ProductIDTextbox_OnKeyDown"
-                                
+                                PreviewKeyDown="OrderAmountTextbox_PreviewKeyDown"
                                 Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

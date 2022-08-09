@@ -160,6 +160,7 @@
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"
+                    CanUserResize="False"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -171,6 +172,7 @@
                 <DataGridTemplateColumn
                     MaxWidth="290"
                     Header="商品名稱"
+                    CanUserResize="False"
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -203,7 +205,8 @@
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="上次進價"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserResize="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -214,7 +217,8 @@
                 <DataGridTemplateColumn
                     MinWidth="70"
                     Header="單價"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Label
@@ -246,7 +250,8 @@
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="預定量"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserResize="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -297,6 +302,7 @@
                                 FontSize="18"
                                 GotFocus="UIElement_OnGotFocus"
                                 InputMethod.IsInputMethodEnabled="False"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 Text="{Binding FreeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -318,6 +324,7 @@
                                 FontSize="18"
                                 GotFocus="UIElement_OnGotFocus"
                                 InputMethod.IsInputMethodEnabled="False"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="ProductSubTotalTextbox_OnKeyDown"
                                 LostFocus="ProductSubTotalTextbox_LostFocus"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"

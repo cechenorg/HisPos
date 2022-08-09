@@ -29,6 +29,7 @@
             AutoGenerateColumns="False"
             Background="{StaticResource GridDarkestBackGround}"
             CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             FrozenColumnCount="3"
@@ -102,7 +103,8 @@
                 <DataGridTemplateColumn
                     MinWidth="175"
                     Header="商品代碼"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
@@ -114,6 +116,7 @@
                                 FontSize="18"
                                 InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="ProductIDTextbox_OnKeyDown"
+                                PreviewKeyDown="Amount_PreviewKeyDown"
                                 Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -121,10 +124,10 @@
                 <DataGridTemplateColumn
                     MinWidth="200"
                     MaxWidth="580"
-                    CanUserSort="True"
                     Header="商品名稱"
                     IsReadOnly="True"
-                    SortMemberPath="EnglishName">
+                    SortMemberPath="EnglishName"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -156,7 +159,8 @@
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="架上量"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserResize="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -164,7 +168,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="70" Header="退貨量">
+                <DataGridTemplateColumn 
+                    MinWidth="70" 
+                    Header="退貨量" 
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
@@ -195,7 +202,8 @@
                     Binding="{Binding ReturnStockValue, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"
                     FontFamily="Segoe UI Semi"
                     Header="退貨淨值"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserResize="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -203,7 +211,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="120" Header="備註">
+                <DataGridTemplateColumn 
+                    MinWidth="120" 
+                    Header="備註"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
