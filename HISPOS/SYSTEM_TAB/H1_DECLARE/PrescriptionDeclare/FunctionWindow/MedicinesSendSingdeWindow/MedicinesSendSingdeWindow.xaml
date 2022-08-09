@@ -155,7 +155,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     MinWidth="80"
-                    Binding="{Binding SingdeCanUseAmount}"
+                    Binding="{Binding SingdeInv}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="14"
                     FontWeight="Bold"

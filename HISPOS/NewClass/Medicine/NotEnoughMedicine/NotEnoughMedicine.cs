@@ -58,9 +58,9 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             }
         }
 
-        private double singdeInv;
+        private int singdeInv;
 
-        public double SingdeInv
+        public int SingdeInv
         {
             get => singdeInv;
             set
