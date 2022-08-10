@@ -164,12 +164,6 @@ namespace His_Pos.NewClass.Person.Customer
             }
             return customers;
         }
-
-        public void UpdateEditTime()
-        {
-            CustomerDb.UpdateEditTime(ID);
-        }
-
         #endregion Function
 
         public int CountAge()
@@ -182,15 +176,11 @@ namespace His_Pos.NewClass.Person.Customer
             return age;
         }
 
-        private DateTimeExtensions.Age CountAgeToMonth()
-        {
-            return DateTimeExtensions.CalculateAgeToMonth((DateTime)Birthday);
-        }
-
+        
         public int CheckAgePercentage()
         {
             if (Birthday is null) return 100;
-            var cusAge = CountAgeToMonth();
+            var cusAge = DateTimeExtensions.CalculateAgeToMonth((DateTime)Birthday);
             if (cusAge.Years == 0 && cusAge.Months < 6)
             {
                 return 160;
@@ -277,31 +267,8 @@ namespace His_Pos.NewClass.Person.Customer
             CheckGender();
         }
 
-        public bool CheckIDNumberEmpty()
-        {
-            return string.IsNullOrEmpty(IDNumber != null ? IDNumber.Trim() : IDNumber);
-        }
-
-        public bool CheckNameEmpty()
-        {
-            return string.IsNullOrEmpty(Name != null ? Name.Trim() : Name);
-        }
-
-        public bool CheckBirthdayNull()
-        {
-            return Birthday is null;
-        }
-
-        public bool CheckTelEmpty()
-        {
-            return string.IsNullOrEmpty(Tel != null ? Tel.Trim() : Tel);
-        }
-
-        public bool CheckCellPhoneEmpty()
-        {
-            return string.IsNullOrEmpty(CellPhone != null ? CellPhone.Trim() : CellPhone);
-        }
-
+            
+      
         public bool IsAnonymous()
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(IDNumber) || Birthday is null)
@@ -309,15 +276,6 @@ namespace His_Pos.NewClass.Person.Customer
             return Name.Equals("匿名") && IDNumber.Equals("A111111111");
         }
 
-        public bool CheckCellFormat()
-        {
-            var cleared = Regex.Replace(CellPhone, "[^0-9]", "");
-            return cleared.Length == 10;
-        }
-
-        /*public bool CheckTelFormat() {
-            var cleared = Regex.Replace(Tel, "[^0-9]", "");
-            return cleared.Length == 7 || cleared.Length == 9;
-        }*/
+           
     }
 }

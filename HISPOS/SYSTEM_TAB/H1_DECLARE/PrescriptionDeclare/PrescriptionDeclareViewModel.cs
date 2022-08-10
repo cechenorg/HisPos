@@ -1198,7 +1198,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
             RaisePropertyChanged("CanSearchPatient");
-            CurrentPrescription.Patient.UpdateEditTime();
+            CustomerService.UpdateEditTime(CurrentPrescription.Patient);
             CurrentPrescription.Patient.GetHistories();
             CurrentPrescription.Patient.GetRecord();
             MainWindow.ServerConnection.CloseConnection();

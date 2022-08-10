@@ -92,5 +92,10 @@ namespace His_Pos.InfraStructure
             MessageWindow.ShowMessage("新增顧客資料發生異常，請稍後重試。", MessageType.ERROR);
             return "FAILED";
         }
-    }
+
+        public static void UpdateEditTime(Customer cus)
+        {
+            CustomerDb.UpdateEditTime(cus.ID);
+        }
+}
 }

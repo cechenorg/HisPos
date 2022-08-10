@@ -1797,20 +1797,17 @@ namespace His_Pos.NewClass.Prescription
             switch (data)
             {
                 case "IDNumber":
-                    return Patient.CheckIDNumberEmpty();
+                    return string.IsNullOrEmpty(Patient.IDNumber != null ? Patient.IDNumber.Trim() : Patient.IDNumber); 
 
                 case "Name":
-                    return Patient.CheckNameEmpty();
-
+                    return string.IsNullOrEmpty(Patient.Name != null ? Patient.Name.Trim() : Patient.Name);
                 case "Birthday":
-                    return Patient.CheckBirthdayNull();
-
+                    return Patient.Birthday is null; 
                 case "Tel":
-                    return Patient.CheckTelEmpty();
+                    return string.IsNullOrEmpty(Patient.Tel != null ? Patient.Tel.Trim() : Patient.Tel);
 
                 case "CellPhone":
-                    return Patient.CheckCellPhoneEmpty();
-
+                    return string.IsNullOrEmpty(Patient.CellPhone != null ? Patient.CellPhone.Trim() : Patient.CellPhone);
                 default:
                     return false;
             }
