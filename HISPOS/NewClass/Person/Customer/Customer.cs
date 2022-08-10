@@ -252,33 +252,6 @@ namespace His_Pos.NewClass.Person.Customer
             return c;
         }
 
-       
-
-        public string InsertNewData()
-        {
-            var table = CustomerDb.InsertNewCustomerData(this, 1);
-            if(table != null && table.Rows.Count > 0)
-            {
-                if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
-                {
-                    //MessageWindow.ShowMessage("身分證字號已存在！", MessageType.ERROR);
-                    return "ID_SAME";
-                }
-                if (table.Rows[0].Field<string>("RESULT").Equals("PHONESAME"))
-                {
-                    //MessageWindow.ShowMessage("電話號碼已存在！", MessageType.ERROR);
-                    return "PHONE_SAME";
-                }
-                if (table.Rows[0].Field<string>("RESULT").Equals(string.Empty))
-                {
-                    ID = Convert.ToInt32(table.Rows[0]["Person_Id"]);
-                    return "SUCCESS";
-                }
-            }
-            MessageWindow.ShowMessage("新增顧客資料發生異常，請稍後重試。", MessageType.ERROR);
-            return "FAILED";
-        }
-
         public void GetHistories()
         {
             Histories = new CustomerHistories(ID);

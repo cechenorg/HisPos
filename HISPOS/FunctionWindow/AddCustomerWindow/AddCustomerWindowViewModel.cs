@@ -128,7 +128,8 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             {
                 NewCustomer.Gender = Properties.Resources.Female;
             }
-            var insertResult = NewCustomer.InsertNewData();
+
+            var insertResult = CustomerService.InsertNewData(NewCustomer);
 
             if (insertResult == "SUCCESS")
             {

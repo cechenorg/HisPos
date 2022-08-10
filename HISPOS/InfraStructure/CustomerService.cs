@@ -71,5 +71,26 @@ namespace His_Pos.InfraStructure
             MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
             return false;
         }
+
+        public static string InsertNewData(Customer cus)
+        {
+            var table = CustomerDb.InsertNewCustomerData(cus, 1);
+            if (table != null && table.Rows.Count > 0)
+            {
+                string result = table.Rows[0].Field<string>("RESULT");
+                switch (result)
+                {
+                    case "IDSAME":
+                        return "ID_SAME";
+                    case "PHONESAME":
+                        return "PHONE_SAME";
+                    case "":
+                        cus.ID = Convert.ToInt32(table.Rows[0]["Person_Id"]);
+                        return "SUCCESS";
+                }
+            }
+            MessageWindow.ShowMessage("新增顧客資料發生異常，請稍後重試。", MessageType.ERROR);
+            return "FAILED";
+        }
     }
 }
