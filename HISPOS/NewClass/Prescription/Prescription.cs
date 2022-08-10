@@ -29,6 +29,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Xml.Linq;
+using His_Pos.InfraStructure;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
@@ -79,7 +80,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 ID = r.Field<int>("ID");
             }
-            Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
+            Patient = CustomerService.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
             Pharmacist = VM.CurrentPharmacy.AllEmployees.SingleOrDefault(p => p.IDNumber.Equals(r.Field<string>("Emp_IDNumber")));

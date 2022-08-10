@@ -23,6 +23,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using His_Pos.InfraStructure;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
@@ -186,7 +187,7 @@ namespace His_Pos.NewClass.Prescription.Service
             {
                 if (Current.AdjustCase.ID == "0")
                 {
-                    Current.Patient = Customer.GetCustomerByCusId(0);
+                    Current.Patient = CustomerService.GetCustomerByCusId(0);
                     return true;
                 }
                 else
@@ -195,7 +196,7 @@ namespace His_Pos.NewClass.Prescription.Service
                     Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
                     if ((bool)confirm.DialogResult)
                     {
-                        Current.Patient = Customer.GetCustomerByCusId(0);
+                        Current.Patient = CustomerService.GetCustomerByCusId(0);
                         return true;
                     }
                 }

@@ -46,6 +46,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using His_Pos.InfraStructure;
 using Application = System.Windows.Application;
 using Label = System.Windows.Controls.Label;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
@@ -703,7 +704,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CurrentPrescription.Patient.ID <= 0) return;
             var customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            CurrentPrescription.Patient = CustomerService.GetCustomerByCusId(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
 
@@ -1007,7 +1008,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CustomerRedoEditedAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            CurrentPrescription.Patient = CustomerService.GetCustomerByCusId(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
             CustomerEdited = false;
         }

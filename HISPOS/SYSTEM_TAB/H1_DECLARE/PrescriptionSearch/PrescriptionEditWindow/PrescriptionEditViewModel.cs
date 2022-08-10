@@ -32,6 +32,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
+using His_Pos.InfraStructure;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
@@ -656,7 +657,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         private void CustomerRedoEditedAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            EditedPrescription.Patient = Customer.GetCustomerByCusId(EditedPrescription.Patient.ID);
+            EditedPrescription.Patient = CustomerService.GetCustomerByCusId(EditedPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
             CustomerEdited = false;
         }
