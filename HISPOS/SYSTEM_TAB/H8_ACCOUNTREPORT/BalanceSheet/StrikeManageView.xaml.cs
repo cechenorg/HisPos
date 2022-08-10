@@ -61,6 +61,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             string month = dt.Month.ToString();
             dpSDate.SelectedDate = Convert.ToDateTime(year + "-" + month + "-" + "1");
             dpEDate.SelectedDate = dt;
+            dpStrikeDate.SelectedDate = dt;
         }
 
         private void ReloadDetail()
@@ -483,6 +484,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             parameters.Add(new SqlParameter("NOTE", note));
             parameters.Add(new SqlParameter("TARGET", right.ToString()));
             parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
+            parameters.Add(new SqlParameter("StrikeDate", (DateTime)dpStrikeDate.SelectedDate));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
@@ -549,6 +551,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         parameters.Add(new SqlParameter("NOTE", note));
                         parameters.Add(new SqlParameter("TARGET", right.ToString()));
                         parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
+                        parameters.Add(new SqlParameter("StrikeDate", (DateTime)dpStrikeDate.SelectedDate));
                         DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
                         if (result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS")) { }
                         else
@@ -585,6 +588,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             int index = GetRowIndexRouted(e);
             _ = double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
             string sourceID = dgDetails.Rows[index]["ID"].ToString();
+            if(dgDetails.Columns.Contains("TransferID"))
+            {
+                string TransferID = Convert.ToString(dgDetails.Rows[index]["TransferID"]);
+                if(TransferID.Substring(0,2) == "TR")
+                {
+                    sourceID = Convert.ToString(dgDetails.Rows[index]["TransferID"]);
+                }
+            }
             var left = cbTargetAccount.SelectedValue;
 
             if (amount != 0)
