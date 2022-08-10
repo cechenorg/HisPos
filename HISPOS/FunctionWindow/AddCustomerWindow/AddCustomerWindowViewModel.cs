@@ -10,6 +10,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
+using His_Pos.InfraStructure;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
 {
@@ -145,7 +146,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                     if (!(bool)confirmWindow.DialogResult)
                     {
                         //不判斷電話
-                        var res = NewCustomer.InsertData(); 
+                        bool res = CustomerService.InsertData(NewCustomer); 
                         if (res)
                         {
                             NewCustomerInsertSuccess();

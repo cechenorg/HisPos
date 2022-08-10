@@ -252,36 +252,7 @@ namespace His_Pos.NewClass.Person.Customer
             return c;
         }
 
-        public bool InsertData()
-        {
-            var table = CustomerDb.InsertNewCustomerData(this, 0);//新增客戶
-            if (table != null && table.Rows.Count > 0)
-            {
-                int cus_id = Convert.ToInt32(table.Rows[0]["Person_Id"]);
-                table = CustomerDb.GetCustomerByCusId(cus_id);//查詢客戶資料
-                if(table != null && table.Rows.Count > 0)
-                {
-                    Customer customer = new Customer(table.Rows[0]);
-                    ID = customer.ID;
-                    Name = customer.Name;
-                    IDNumber = customer.IDNumber;
-                    Birthday = customer.Birthday;
-                    Tel = customer.Tel;
-                    ContactNote = customer.ContactNote;
-                    LastEdit = customer.LastEdit;
-                    Address = customer.Address;
-                    CellPhone = customer.CellPhone;
-                    Email = customer.Email;
-                    Gender = customer.Gender;
-                    Line = customer.Line;
-                    Note = customer.Note;
-                    SecondPhone = customer.SecondPhone;
-                    return true;
-                }
-            }
-            MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
-            return false;
-        }
+       
 
         public string InsertNewData()
         {

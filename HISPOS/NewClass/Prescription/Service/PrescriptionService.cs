@@ -211,7 +211,7 @@ namespace His_Pos.NewClass.Prescription.Service
             if (Current.Patient.CheckData())
             {
                 if (Current.Patient.ID > 0) return true;
-                var insertResult = Current.Patient.InsertData();
+                var insertResult = CustomerService.InsertData(Current.Patient);
                 return insertResult;
             }
             if (!string.IsNullOrEmpty(Current.Patient.Name) && Current.Patient.Name.Equals("匿名") || Current.Patient.ID > 0) return true;

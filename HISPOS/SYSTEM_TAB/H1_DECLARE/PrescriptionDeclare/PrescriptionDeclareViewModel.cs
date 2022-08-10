@@ -1176,7 +1176,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                var insertResult = patientFromCard.InsertData();
+                var insertResult = CustomerService.InsertData(patientFromCard);
                 if (!insertResult)
                 {
                     MessageWindow.ShowMessage("請重新讀取卡片。", MessageType.WARNING);
@@ -1809,7 +1809,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckInsertCustomerData()
         {
-            return CurrentPrescription.Patient.CheckData() && CurrentPrescription.Patient.InsertData();
+            return CurrentPrescription.Patient.CheckData() && CustomerService.InsertData(CurrentPrescription.Patient);
         }
 
         private bool CheckFocusDivision(string insID)

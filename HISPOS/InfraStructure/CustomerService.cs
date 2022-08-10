@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 
 namespace His_Pos.InfraStructure
@@ -50,6 +52,24 @@ namespace His_Pos.InfraStructure
             }
 
             return customer;
+        }
+
+        public static bool InsertData(Customer cus)
+        {
+            var table = CustomerDb.InsertNewCustomerData(cus, 0);//新增客戶
+            if (table != null && table.Rows.Count > 0)
+            {
+                int cus_id = Convert.ToInt32(table.Rows[0]["Person_Id"]);
+                table = CustomerDb.GetCustomerByCusId(cus_id);//查詢客戶資料
+                if (table != null && table.Rows.Count > 0)
+                {
+                    cus = new Customer(table.Rows[0]);
+                    
+                    return true;
+                }
+            }
+            MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
+            return false;
         }
     }
 }

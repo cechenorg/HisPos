@@ -1060,7 +1060,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
             else
             {
-                var insertResult = patientFromCard.InsertData();
+                var insertResult = CustomerService.InsertData(patientFromCard);
                 if (!insertResult)
                 {
                     MessageWindow.ShowMessage("顧客新增失敗。", MessageType.WARNING);
