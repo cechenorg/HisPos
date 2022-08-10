@@ -151,44 +151,7 @@ namespace His_Pos.NewClass.Person.Customer
             }
         }
 
-        public static Customer GetCustomerByCusId(int cusId)
-        {
-            DataTable table = CustomerDb.GetCustomerByCusId(cusId);
-            var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
-            /* 格式化手機 */
-            if (!string.IsNullOrEmpty(customer.CellPhone) && customer.CellPhone.Length == 10)
-            {
-                string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
-                customer.CellPhone = FormatCell;
-            }
-            if (!string.IsNullOrEmpty(customer.SecondPhone) && customer.SecondPhone.Length == 10)
-            {
-                string FormatCell = customer.SecondPhone.Insert(4, "-").Insert(8, "-");
-                customer.SecondPhone = FormatCell;
-            }
-            /* 格式化電話 */
-            if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 7)
-            {
-                string FormatTel = customer.Tel.Insert(3, "-");
-                customer.Tel = FormatTel;
-            }
-            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 8)
-            {
-                string FormatTel = customer.Tel.Insert(4, "-");
-                customer.Tel = FormatTel;
-            }
-            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 9)
-            {
-                string FormatTel = customer.Tel.Insert(2, "-").Insert(6, "-");
-                customer.Tel = FormatTel;
-            }
-            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 10)
-            {
-                string FormatTel = customer.Tel.Insert(2, "-").Insert(7, "-");
-                customer.Tel = FormatTel;
-            }
-            return customer;
-        }
+     
 
         public Customers Check()
         {
@@ -201,12 +164,6 @@ namespace His_Pos.NewClass.Person.Customer
             }
             return customers;
         }
-
-        public void UpdateEditTime()
-        {
-            CustomerDb.UpdateEditTime(ID);
-        }
-
         #endregion Function
 
         public int CountAge()
@@ -219,15 +176,11 @@ namespace His_Pos.NewClass.Person.Customer
             return age;
         }
 
-        private DateTimeExtensions.Age CountAgeToMonth()
-        {
-            return DateTimeExtensions.CalculateAgeToMonth((DateTime)Birthday);
-        }
-
+        
         public int CheckAgePercentage()
         {
             if (Birthday is null) return 100;
-            var cusAge = CountAgeToMonth();
+            var cusAge = DateTimeExtensions.CalculateAgeToMonth((DateTime)Birthday);
             if (cusAge.Years == 0 && cusAge.Months < 6)
             {
                 return 160;
@@ -289,62 +242,6 @@ namespace His_Pos.NewClass.Person.Customer
             return c;
         }
 
-        public bool InsertData()
-        {
-            var table = CustomerDb.InsertNewCustomerData(this, 0);//新增客戶
-            if (table != null && table.Rows.Count > 0)
-            {
-                int cus_id = Convert.ToInt32(table.Rows[0]["Person_Id"]);
-                table = CustomerDb.GetCustomerByCusId(cus_id);//查詢客戶資料
-                if(table != null && table.Rows.Count > 0)
-                {
-                    Customer customer = new Customer(table.Rows[0]);
-                    ID = customer.ID;
-                    Name = customer.Name;
-                    IDNumber = customer.IDNumber;
-                    Birthday = customer.Birthday;
-                    Tel = customer.Tel;
-                    ContactNote = customer.ContactNote;
-                    LastEdit = customer.LastEdit;
-                    Address = customer.Address;
-                    CellPhone = customer.CellPhone;
-                    Email = customer.Email;
-                    Gender = customer.Gender;
-                    Line = customer.Line;
-                    Note = customer.Note;
-                    SecondPhone = customer.SecondPhone;
-                    return true;
-                }
-            }
-            MessageWindow.ShowMessage("新增病患資料發生異常，請稍後重試。", MessageType.ERROR);
-            return false;
-        }
-
-        public string InsertNewData()
-        {
-            var table = CustomerDb.InsertNewCustomerData(this, 1);
-            if(table != null && table.Rows.Count > 0)
-            {
-                if (table.Rows[0].Field<string>("RESULT").Equals("IDSAME"))
-                {
-                    //MessageWindow.ShowMessage("身分證字號已存在！", MessageType.ERROR);
-                    return "ID_SAME";
-                }
-                if (table.Rows[0].Field<string>("RESULT").Equals("PHONESAME"))
-                {
-                    //MessageWindow.ShowMessage("電話號碼已存在！", MessageType.ERROR);
-                    return "PHONE_SAME";
-                }
-                if (table.Rows[0].Field<string>("RESULT").Equals(string.Empty))
-                {
-                    ID = Convert.ToInt32(table.Rows[0]["Person_Id"]);
-                    return "SUCCESS";
-                }
-            }
-            MessageWindow.ShowMessage("新增顧客資料發生異常，請稍後重試。", MessageType.ERROR);
-            return "FAILED";
-        }
-
         public void GetHistories()
         {
             Histories = new CustomerHistories(ID);
@@ -370,31 +267,8 @@ namespace His_Pos.NewClass.Person.Customer
             CheckGender();
         }
 
-        public bool CheckIDNumberEmpty()
-        {
-            return string.IsNullOrEmpty(IDNumber != null ? IDNumber.Trim() : IDNumber);
-        }
-
-        public bool CheckNameEmpty()
-        {
-            return string.IsNullOrEmpty(Name != null ? Name.Trim() : Name);
-        }
-
-        public bool CheckBirthdayNull()
-        {
-            return Birthday is null;
-        }
-
-        public bool CheckTelEmpty()
-        {
-            return string.IsNullOrEmpty(Tel != null ? Tel.Trim() : Tel);
-        }
-
-        public bool CheckCellPhoneEmpty()
-        {
-            return string.IsNullOrEmpty(CellPhone != null ? CellPhone.Trim() : CellPhone);
-        }
-
+            
+      
         public bool IsAnonymous()
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(IDNumber) || Birthday is null)
@@ -402,15 +276,6 @@ namespace His_Pos.NewClass.Person.Customer
             return Name.Equals("匿名") && IDNumber.Equals("A111111111");
         }
 
-        public bool CheckCellFormat()
-        {
-            var cleared = Regex.Replace(CellPhone, "[^0-9]", "");
-            return cleared.Length == 10;
-        }
-
-        /*public bool CheckTelFormat() {
-            var cleared = Regex.Replace(Tel, "[^0-9]", "");
-            return cleared.Length == 7 || cleared.Length == 9;
-        }*/
+           
     }
 }

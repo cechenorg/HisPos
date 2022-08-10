@@ -46,6 +46,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using His_Pos.InfraStructure;
 using Application = System.Windows.Application;
 using Label = System.Windows.Controls.Label;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
@@ -703,7 +704,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             if (CurrentPrescription.Patient.ID <= 0) return;
             var customerDetailWindow = new CustomerDetailWindow(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            CurrentPrescription.Patient = CustomerService.GetCustomerByCusId(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
         }
 
@@ -1007,7 +1008,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         private void CustomerRedoEditedAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            CurrentPrescription.Patient = Customer.GetCustomerByCusId(CurrentPrescription.Patient.ID);
+            CurrentPrescription.Patient = CustomerService.GetCustomerByCusId(CurrentPrescription.Patient.ID);
             MainWindow.ServerConnection.CloseConnection();
             CustomerEdited = false;
         }
@@ -1175,7 +1176,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
             else
             {
-                var insertResult = patientFromCard.InsertData();
+                var insertResult = CustomerService.InsertData(patientFromCard);
                 if (!insertResult)
                 {
                     MessageWindow.ShowMessage("請重新讀取卡片。", MessageType.WARNING);
@@ -1197,7 +1198,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             else
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
             RaisePropertyChanged("CanSearchPatient");
-            CurrentPrescription.Patient.UpdateEditTime();
+            CustomerService.UpdateEditTime(CurrentPrescription.Patient);
             CurrentPrescription.Patient.GetHistories();
             CurrentPrescription.Patient.GetRecord();
             MainWindow.ServerConnection.CloseConnection();
@@ -1808,7 +1809,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private bool CheckInsertCustomerData()
         {
-            return CurrentPrescription.Patient.CheckData() && CurrentPrescription.Patient.InsertData();
+            return CurrentPrescription.Patient.CheckData() && CustomerService.InsertData(CurrentPrescription.Patient);
         }
 
         private bool CheckFocusDivision(string insID)

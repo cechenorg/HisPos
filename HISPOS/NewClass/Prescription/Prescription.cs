@@ -29,6 +29,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Xml.Linq;
+using His_Pos.InfraStructure;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using Medicines = His_Pos.NewClass.Medicine.Base.Medicines;
@@ -79,7 +80,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 ID = r.Field<int>("ID");
             }
-            Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
+            Patient = CustomerService.GetCustomerByCusId(r.Field<int>("CustomerID"));
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
             Pharmacist = VM.CurrentPharmacy.AllEmployees.SingleOrDefault(p => p.IDNumber.Equals(r.Field<string>("Emp_IDNumber")));
@@ -1796,20 +1797,17 @@ namespace His_Pos.NewClass.Prescription
             switch (data)
             {
                 case "IDNumber":
-                    return Patient.CheckIDNumberEmpty();
+                    return string.IsNullOrEmpty(Patient.IDNumber != null ? Patient.IDNumber.Trim() : Patient.IDNumber); 
 
                 case "Name":
-                    return Patient.CheckNameEmpty();
-
+                    return string.IsNullOrEmpty(Patient.Name != null ? Patient.Name.Trim() : Patient.Name);
                 case "Birthday":
-                    return Patient.CheckBirthdayNull();
-
+                    return Patient.Birthday is null; 
                 case "Tel":
-                    return Patient.CheckTelEmpty();
+                    return string.IsNullOrEmpty(Patient.Tel != null ? Patient.Tel.Trim() : Patient.Tel);
 
                 case "CellPhone":
-                    return Patient.CheckCellPhoneEmpty();
-
+                    return string.IsNullOrEmpty(Patient.CellPhone != null ? Patient.CellPhone.Trim() : Patient.CellPhone);
                 default:
                     return false;
             }

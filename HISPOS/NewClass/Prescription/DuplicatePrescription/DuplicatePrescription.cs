@@ -4,6 +4,7 @@ using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System;
 using System.Data;
+using His_Pos.InfraStructure;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 // ReSharper disable All
@@ -101,7 +102,7 @@ namespace His_Pos.NewClass.Prescription.DuplicatePrescription
         public DuplicatePrescription(DataRow r)
         {
             ID = r.Field<int>("PreMas_ID");
-            Patient = Customer.GetCustomerByCusId(r.Field<int>("CustomerID"));
+            Patient = CustomerService.GetCustomerByCusId(r.Field<int>("CustomerID"));
             PatientData = "姓名:" + r.Field<string>("CustomerName") + " 身分證:" + r.Field<string>("CustomerIdNumber");
             Institution = VM.GetInstitution(r.Field<string>("InstitutionID"));
             Division = VM.GetDivision(r.Field<string>("DivisionID"));
