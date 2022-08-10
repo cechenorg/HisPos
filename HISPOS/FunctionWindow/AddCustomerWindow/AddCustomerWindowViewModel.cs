@@ -10,7 +10,6 @@ using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
-using His_Pos.InfraStructure;
 
 namespace His_Pos.FunctionWindow.AddCustomerWindow
 {
@@ -128,8 +127,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             {
                 NewCustomer.Gender = Properties.Resources.Female;
             }
-
-            var insertResult = CustomerService.InsertNewData(NewCustomer);
+            var insertResult = NewCustomer.InsertNewData();
 
             if (insertResult == "SUCCESS")
             {
@@ -147,7 +145,7 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
                     if (!(bool)confirmWindow.DialogResult)
                     {
                         //不判斷電話
-                        bool res = CustomerService.InsertData(NewCustomer); 
+                        var res = NewCustomer.InsertData(); 
                         if (res)
                         {
                             NewCustomerInsertSuccess();

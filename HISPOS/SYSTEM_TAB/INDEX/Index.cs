@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Data;
-using His_Pos.InfraStructure;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.SYSTEM_TAB.INDEX
@@ -251,7 +250,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
                 Set(() => IndexReserveSelectedItem, ref indexReserveSelectedItem, value);
                 if (IndexReserveSelectedItem is null) return;
                 IndexReserveDetailCollection.GetDataById(IndexReserveSelectedItem.Id);
-                CustomerData = CustomerService.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
+                CustomerData = Customer.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
             }
         }
 
@@ -505,7 +504,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         {
             if (IndexReserveSelectedItem is null) return;
             IndexReserveSelectedItem.SaveStatus();
-            CustomerData = CustomerService.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
+            CustomerData = Customer.GetCustomerByCusId(IndexReserveSelectedItem.CusId);
         }
 
         private void MedPrepareChangedAction()

@@ -341,7 +341,6 @@
     <Compile Include="FunctionWindow\AddProductWindow\TradeAddProductWindow.xaml.cs">
       <DependentUpon>TradeAddProductWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InfraStructure\CustomerService.cs" />
     <Compile Include="NewClass\Accounts\Accounts.cs" />
     <Compile Include="NewClass\Enum.cs" />
     <Compile Include="NewClass\Feature.cs" />
@@ -351,7 +350,7 @@
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockIn.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInDb.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />
-    <Compile Include="InfraStructure\EmployeeService.cs" />
+    <Compile Include="NewClass\Person\Employee\EmployeeService.cs" />
     <Compile Include="NewClass\Pharmacy\PharmacyDBService.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositDetailRecordReport.cs" />
     <Compile Include="NewClass\Report\DepositReport\DepositReportData.cs" />

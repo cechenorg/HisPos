@@ -7,7 +7,6 @@ using His_Pos.NewClass.Prescription.CustomerDetailPrescription.CustomerDetailPre
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
-using His_Pos.InfraStructure;
 
 namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow
 {
@@ -111,7 +110,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX.CustomerDetailWindow
 
         public CustomerDetailWindowViewModel(int cusID)
         {
-            CustomerData = CustomerService.GetCustomerByCusId(cusID);
+            CustomerData = Customer.GetCustomerByCusId(cusID);
             CustomerDetailPrescriptionCollection.GetDataByID(cusID);
             if (CustomerDetailPrescriptionCollection.Count > 0)
             {
