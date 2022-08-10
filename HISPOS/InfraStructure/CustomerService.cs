@@ -16,37 +16,39 @@ namespace His_Pos.InfraStructure
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
             var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
             /* 格式化手機 */
-            if (!string.IsNullOrEmpty(customer.CellPhone) && customer.CellPhone.Length == 10)
+
+            if (!string.IsNullOrEmpty(customer.CellPhone))
             {
-                string FormatCell = customer.CellPhone.Insert(4, "-").Insert(8, "-");
-                customer.CellPhone = FormatCell;
-            }
-            if (!string.IsNullOrEmpty(customer.SecondPhone) && customer.SecondPhone.Length == 10)
-            {
-                string FormatCell = customer.SecondPhone.Insert(4, "-").Insert(8, "-");
-                customer.SecondPhone = FormatCell;
+                if(customer.CellPhone.Length == 10)
+                    customer.CellPhone = customer.CellPhone.Insert(4, "-").Insert(8, "-");
+
+                if(customer.SecondPhone.Length == 10)
+                    customer.SecondPhone = customer.SecondPhone.Insert(4, "-").Insert(8, "-");
             }
             /* 格式化電話 */
-            if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 7)
+            if (!string.IsNullOrEmpty(customer.Tel))
             {
-                string FormatTel = customer.Tel.Insert(3, "-");
+                var telLen = customer.Tel.Length;
+                string FormatTel = default;
+                switch (telLen)
+                {
+                    case 7:
+                        FormatTel = customer.Tel.Insert(3, "-");
+                        break;
+                    case 8:
+                        FormatTel = customer.Tel.Insert(4, "-");
+                        break;
+                    case 9:
+                        FormatTel = customer.Tel.Insert(2, "-").Insert(6, "-");
+                        break;
+                    case 10:
+                        FormatTel = customer.Tel.Insert(2, "-").Insert(7, "-");
+                        break;
+
+                }
                 customer.Tel = FormatTel;
             }
-            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 8)
-            {
-                string FormatTel = customer.Tel.Insert(4, "-");
-                customer.Tel = FormatTel;
-            }
-            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 9)
-            {
-                string FormatTel = customer.Tel.Insert(2, "-").Insert(6, "-");
-                customer.Tel = FormatTel;
-            }
-            else if (!string.IsNullOrEmpty(customer.Tel) && customer.Tel.Length == 10)
-            {
-                string FormatTel = customer.Tel.Insert(2, "-").Insert(7, "-");
-                customer.Tel = FormatTel;
-            }
+
             return customer;
         }
     }
