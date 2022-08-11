@@ -14,13 +14,13 @@
             <RowDefinition Height="70" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal"> 
-            <DatePicker x:Name="dpSDate"  Width="120"
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <DatePicker x:Name="dpSDate" Width="120" Language="zh-cn"
                 Margin="5,0,0,0"  HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 FontSize="18" SelectedDate="{Binding StartDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" />
             <Label Margin="5,0,0,0" VerticalAlignment="Center"  Content="~" FontFamily="Segoe UI Semibold" FontSize="22" />
-            <DatePicker  x:Name="dpEDate"
+            <DatePicker  x:Name="dpEDate" Language="zh-cn"
                 Width="120" Margin="5,0,0,0"
                 HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18"
                 SelectedDate="{Binding EndDate, Mode=TwoWay}"
