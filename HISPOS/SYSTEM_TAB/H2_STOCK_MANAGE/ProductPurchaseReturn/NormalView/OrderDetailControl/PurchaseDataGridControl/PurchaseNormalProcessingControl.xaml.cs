@@ -314,9 +314,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                                 focusedPanelCell = ProductDataGrid.Columns[i + 1].GetCellContent(ProductDataGrid.CurrentCell.Item);
                                 break;
                             case FocusNavigationDirection.Left:
+                                focusedPanelCell = ProductDataGrid.Columns[i - 1].GetCellContent(ProductDataGrid.CurrentCell.Item);
+                                break;
                             case FocusNavigationDirection.Up:
                             case FocusNavigationDirection.Down:
-                                focusedPanelCell = ProductDataGrid.Columns[i-1].GetCellContent(ProductDataGrid.CurrentCell.Item);
+                                focusedPanelCell = ProductDataGrid.Columns[i].GetCellContent(ProductDataGrid.CurrentCell.Item);
                                 break;
                         }
 
