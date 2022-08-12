@@ -313,7 +313,7 @@ namespace His_Pos.Service
                 var path = c.FilePath;
                 if (!string.IsNullOrEmpty(path))
                 {
-                    if(File.Exists(path))
+                    if(Directory.Exists(path))
                     {
                         var fileEntries = Directory.GetFiles(c.FilePath);
                         foreach (var filePath in fileEntries)
@@ -333,7 +333,7 @@ namespace His_Pos.Service
                 if (string.IsNullOrEmpty(path)) continue;
                 try
                 {
-                    if (File.Exists(path))
+                    if (Directory.Exists(path))
                     {
                         var fileEntries = Directory.GetFiles(path);
                         foreach (string filePath in fileEntries)
@@ -347,11 +347,14 @@ namespace His_Pos.Service
                                 }
                                 else
                                 {
-                                    break;
+                                    continue;
                                 }
 
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) { isRePost = "2"; }
+                                if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null)
+                                {
+                                    isRePost = "2";
+                                }
                                 else
                                 {
                                     isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
