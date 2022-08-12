@@ -80,7 +80,8 @@
                 <DataGridTemplateColumn Width="30">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="../../../../../../Images/Checked.png"/>
+                            <Image Source="../../../../../../Images/Checked.png" 
+                                   Visibility="{Binding IsMainFlag,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>                                                              
                 </DataGridTemplateColumn>
