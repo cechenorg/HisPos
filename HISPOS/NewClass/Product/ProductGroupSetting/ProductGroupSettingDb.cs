@@ -1,4 +1,5 @@
-﻿using His_Pos.Database;
+﻿using Dapper;
+using His_Pos.Database;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -7,12 +8,19 @@ namespace His_Pos.NewClass.Product.ProductGroupSetting
 {
     public static class ProductGroupSettingDB
     {
-        internal static DataTable GetProductGroupSettingsByID(string proID, string wareID)
+        public static IEnumerable<ProductGroupSetting> GetProductGroupSettingListByID(string proID, string wareID)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "PRO_ID", proID);
-            DataBaseFunction.AddSqlParameter(parameterList, "WARE_ID", wareID);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductGroupSettingsByProID]", parameterList);
+            IEnumerable<ProductGroupSetting> result = default;
+
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<ProductGroupSetting>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ProductGroupSettingsByProID]",
+                    param: new { PRO_ID = proID, WARE_ID = wareID },
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result;
         }
 
         internal static DataTable SplitProduct(string proID, double splitAmount, string wareHouseID)

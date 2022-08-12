@@ -392,22 +392,23 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MessageWindow.ShowMessage("搜尋字長度不得小於5", MessageType.WARNING);
                 return;
             }
-            DataTable table = new DataTable();
+
+            IEnumerable<Product> productGroupSettingList = default;
             string mainFlagProduct = string.Empty;
             AddProductEnum addProductEnum = (CurrentStoreOrder.OrderType == OrderTypeEnum.PURCHASE || CurrentStoreOrder.OrderType == OrderTypeEnum.PREPARE || CurrentStoreOrder.OrderType == OrderTypeEnum.WAITPREPARE) ? AddProductEnum.ProductPurchase : AddProductEnum.ProductReturn;
             MainWindow.ServerConnection.OpenConnection();
             var productCount = ProductStructs.GetProductStructCountBySearchString(searchString, addProductEnum, CurrentStoreOrder.OrderWarehouse.ID);
             if (productCount == 0)
             {
-                table = ProductGroupSettingDB.GetProductGroupSettingsByID(searchString, CurrentStoreOrder.OrderWarehouse.ID);
+                productGroupSettingList = ProductGroupSettingDB.GetProductGroupSettingListByID(searchString, CurrentStoreOrder.OrderWarehouse.ID);
             }
             MainWindow.ServerConnection.CloseConnection();
-            if(table != null && table.Rows.Count > 0)
+            if(productGroupSettingList != null && productGroupSettingList.Any())
             {
-                DataRow[] drs = table.Select("MainFlag = 1");
-                if(drs != null && drs.Length > 0)
+                var mainProduct = productGroupSettingList.FirstOrDefault(_ => _.IsMainFlag);
+                if(mainProduct != null )
                 {
-                    mainFlagProduct = Convert.ToString(drs[0]["Pro_ID"]);
+                    mainFlagProduct = mainProduct.ID;
                 }
             }
             
