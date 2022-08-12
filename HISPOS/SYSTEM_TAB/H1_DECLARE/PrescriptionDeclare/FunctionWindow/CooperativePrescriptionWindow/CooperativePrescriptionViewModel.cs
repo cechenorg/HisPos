@@ -183,7 +183,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
             CooPreCollectionViewSource = new CollectionViewSource { Source = cooperativePres };
             CooPreCollectionView = CooPreCollectionViewSource.View;
             cooPreCollectionViewSource.Filter += Filter;
-
         }
 
 
@@ -198,6 +197,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
                 MainWindow.ServerConnection.OpenConnection();
                 cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
                 MainWindow.ServerConnection.CloseConnection();
+                if (Properties.Settings.Default.PrePrint == "True")
+                {
+                    foreach (CusPrePreviewBase cooView in cooperativePres)
+                    {
+                        MainWindow.Instance.Dispatcher.Invoke(() =>
+                        {
+                            if (!cooView.IsPrint)
+                            {
+                                PrintAction(cooView);
+                            }
+                        });
+                    }
+                }
             };
             getCooperativePresWorker.RunWorkerCompleted += (o, ea) =>
             {
