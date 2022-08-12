@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Dapper;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {
@@ -31,9 +32,14 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 
         public static void UpdateUsedTime(string insId)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "InsId", insId);
-            MainWindow.ServerConnection.ExecuteProc("[Set].[InstitutionUsedTime]", parameterList);
+
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                 conn.Execute($"{Properties.Settings.Default.SystemSerialNumber}.[Set].[InstitutionUsedTime]",
+                    param: new { InsId = insId },
+                    commandType: CommandType.StoredProcedure);
+            });
+
         }
 
         public static DataTable CheckDivisionValid(string institutionID, string divisionId)

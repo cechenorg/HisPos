@@ -717,7 +717,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             currentService = PrescriptionService.CreateService(EditedPrescription);
             if (!currentService.CheckEditPrescription(EditedPrescription.PrescriptionStatus.IsGetCard)) return;
             EditedPrescription.SetDetail();
-            MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
             var result = EditedPrescription.Update();
             if (result && EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
@@ -740,7 +739,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 var paySelfDiff = editedPaySelf - originPaySelf;
                 PrescriptionDb.InsertPrescriptionPointEditRecord(EditedPrescription.ID, medicalServiceDiff, medicineDiff, paySelfDiff);
             }
-            MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             if (result)
                 MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);
