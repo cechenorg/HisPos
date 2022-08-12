@@ -196,8 +196,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             OrderAmount = dataRow.Field<double>("StoOrdDet_OrderAmount");
             RealAmount = dataRow.Field<double>("StoOrdDet_RealAmount");
             FreeAmount = dataRow.Field<double>("StoOrdDet_FreeAmount");
-            SubTotal = (double)dataRow.Field<decimal>("StoOrdDet_SubTotal");
             Price = (double)dataRow.Field<decimal>("StoOrdDet_Price");
+            SubTotal = (double)dataRow.Field<decimal>("StoOrdDet_SubTotal");
             Invoice = dataRow.Field<string>("StoOrdDet_Invoice");
             ValidDate = dataRow.Field<DateTime?>("StoOrdDet_ValidDate");
             BatchNumber = dataRow.Field<string>("StoOrdDet_BatchNumber");
@@ -281,8 +281,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             OrderAmount = 0;
             RealAmount = purchaseProduct.RealAmount;
             FreeAmount = purchaseProduct.FreeAmount;
-            SubTotal = purchaseProduct.SubTotal;
             Price = purchaseProduct.Price;
+            SubTotal = purchaseProduct.SubTotal;
             Invoice = purchaseProduct.Invoice;
             ValidDate = purchaseProduct.ValidDate;
             BatchNumber = purchaseProduct.BatchNumber;

@@ -607,6 +607,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                         }
                     }
                 }
+                CurrentStoreOrder.CalculateTotalPrice();
             }
         }
         /// <summary>
@@ -634,6 +635,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                     }
                     IsAllSelected = undo ? true : false;
                 }
+                CurrentStoreOrder.CalculateTotalPrice();
             }
         }
 

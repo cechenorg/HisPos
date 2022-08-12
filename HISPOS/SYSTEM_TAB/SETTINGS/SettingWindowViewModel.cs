@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Setting;
 using System.IO;
 using System.Reflection;
@@ -44,6 +46,10 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
             SettingTabCollection.Add(new SettingTabData(SettingTabs.Printer, "印表機設定", "/Images/Printer.png"));
             SettingTabCollection.Add(new SettingTabData(SettingTabs.CooperativeClinic, "合作診所設定", "/Images/Cooperate.png"));
             SettingTabCollection.Add(new SettingTabData(SettingTabs.WareHouse, "庫別設定", "/Images/StockTaking.png"));
+            if (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin)
+            {
+                SettingTabCollection.Add(new SettingTabData(SettingTabs.System, "其他設定", "/Images/Management.png"));
+            }
 
             SelectedSettingTab = SettingTabCollection[0];
         }

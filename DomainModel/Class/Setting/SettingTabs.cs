@@ -6,6 +6,7 @@
         Printer = 2,
         CooperativeClinic = 3,
         WareHouse = 4,
-        Invoice = 5
+        Invoice = 5,
+        System = 6
     }
 }
