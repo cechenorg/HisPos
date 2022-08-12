@@ -89,10 +89,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
 
                 var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
-                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                //UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
 
-                if (firstChild is TextBox)
-                    firstChild.Focus();
+                //if (firstChild is TextBox)
+                //    firstChild.Focus();
             }
         }
 
