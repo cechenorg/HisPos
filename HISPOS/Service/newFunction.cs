@@ -5,6 +5,7 @@ using His_Pos.NewClass.Cooperative.CooperativeClinicSetting;
 using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow;
 using Microsoft.International.Formatters;
 using Newtonsoft.Json;
 using System;
@@ -241,8 +242,11 @@ namespace His_Pos.Service
         {
             bool? receiptPrint = null;
             var result = new List<bool?>();
-
-            if (p.PrescriptionStatus.IsPrint == true || ((p.AdjustDate > DateTime.Today) && isSend))
+            var print = focus ?? true;
+            var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, print);
+            var printMedBag = medBagPrint.DialogResult;
+            bool? printSingle = null;
+            if (printMedBag != null)
             {
                 if (p.PrescriptionPoint.AmountsPay > 0)
                 {
@@ -251,36 +255,17 @@ namespace His_Pos.Service
                 }
                 else
                     receiptPrint = false;
-                result.Add(false);
-                result.Add(false);
-                result.Add(receiptPrint);
-            }
-            else
-            {
-                var print = focus ?? true;
-                var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, print);
-                var printMedBag = medBagPrint.DialogResult;
-                bool? printSingle = null;
-                if (printMedBag != null)
+                if ((bool)printMedBag)
                 {
-                    if (p.PrescriptionPoint.AmountsPay > 0)
-                    {
-                        var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
-                        receiptPrint = receiptResult.DialogResult;
-                    }
-                    else
-                        receiptPrint = false;
-                    if ((bool)printMedBag)
-                    {
-                        var printBySingleMode = new SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.MedBagSelectionWindow();
-                        printBySingleMode.ShowDialog();
-                        printSingle = printBySingleMode.result;
-                    }
+                    var printBySingleMode = new MedBagSelectionWindow();
+                    printBySingleMode.ShowDialog();
+                    printSingle = printBySingleMode.result;
                 }
-                result.Add(printMedBag);
-                result.Add(printSingle);
-                result.Add(receiptPrint);
             }
+            result.Add(printMedBag);
+            result.Add(printSingle);
+            result.Add(receiptPrint);
+
             return result;
         }
         public static List<bool?> CheckPrintDir(Prescription p, bool? focus = null)

@@ -1263,10 +1263,6 @@ namespace His_Pos.NewClass.Prescription
                 TempMedicalNumber = TempMedicalNumber,
                 TreatDate = TreatDate,
                 AdjustDate = AdjustDate,
-                
-                AdjustDay = AdjustDay,
-                AdjustYear = AdjustYear,
-                AdjustMonth = AdjustMonth,
                 MainDisease = MainDisease.DeepCloneViaJson(),
                 SubDisease = SubDisease?.DeepCloneViaJson(),
                 ChronicSeq = ChronicSeq,
@@ -1282,6 +1278,9 @@ namespace His_Pos.NewClass.Prescription
                 Type = Type,
                 OrderContent = OrderContent,
                 OrderID = OrderID,
+                AdjustDay = AdjustDay,
+                AdjustYear = AdjustYear,
+                AdjustMonth = AdjustMonth,
                 Medicines = new Medicines()
             };
             foreach (var m in Medicines)

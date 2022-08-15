@@ -224,12 +224,11 @@ namespace His_Pos.ChromeTabViewModel
                             watch.Created += watch_Created;
                         }
                     }
-
                 }
 
-                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
-                CooperativeClinicSettings.Init();
-                CooperativeClinicSettings.FilePurge();
+                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);//取得10天內的合作處方
+                CooperativeClinicSettings.Init();//取得合作診所設定
+                CooperativeClinicSettings.FilePurge();//打包檔案
                 BusyContent = StringRes.GetAdjustCases;
                 AdjustCases = new AdjustCases(true);
                 BusyContent = StringRes.取得給付類別;
@@ -256,6 +255,8 @@ namespace His_Pos.ChromeTabViewModel
                 {
                     BusyContent = "回傳合作診所處方中...";
                 }
+                
+                PrintCooPre();//列印還未列印藥袋
                 //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
@@ -272,7 +273,29 @@ namespace His_Pos.ChromeTabViewModel
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-
+        private void PrintCooPre()
+        {
+            CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
+            if (gg.CooPreCollectionView != null)
+            {
+                foreach (CusPrePreviewBase ff in cooperativePres)
+                {
+                    if (Properties.Settings.Default.PrePrint == "True")
+                    {
+                        foreach (var c in CooperativeClinicSettings)
+                        {
+                            if (c.AutoPrint == true)
+                            {
+                                if (ff.IsPrint == false)
+                                {
+                                    gg.PrintAction(ff);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         void watch_Created(object sender, FileSystemEventArgs e)
         {
             bool isRe = false;

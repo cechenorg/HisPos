@@ -287,8 +287,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         public void PrintAction(CusPrePreviewBase ff)
         {
             MainWindow.ServerConnection.OpenConnection();
-
-
             ff.PrintDir();
             MainWindow.ServerConnection.CloseConnection();
         }

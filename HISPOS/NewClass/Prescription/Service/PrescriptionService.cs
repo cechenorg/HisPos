@@ -378,9 +378,9 @@ namespace His_Pos.NewClass.Prescription.Service
                     focus = true;
             }
             PrintResult = NewFunction.CheckPrint(Current, focus, isSend);
-            var printMedBag = PrintResult[0];
-            var printSingle = PrintResult[1];
-            var printReceipt = PrintResult[2];
+            var printMedBag = PrintResult[0];//是否印藥袋
+            var printSingle = PrintResult[1];//是否多藥一袋
+            var printReceipt = PrintResult[2];//是否印收據
             if (printMedBag is null || printReceipt is null)
                 return false;
             if ((bool)printMedBag && printSingle is null)
@@ -633,13 +633,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void Print(bool noCard)
         {
-            if (this.TempPre.PrescriptionStatus.IsPrint == true)
-            { 
-            }
-            else {
-                PrintMedBag();
-            }
-            
+            PrintMedBag();
             PrintReceipt(noCard);
         }
         public void PrintDir(bool noCard)
@@ -680,7 +674,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 else
                     TempPrint.PrintMedBagMultiMode();
             }
-            else if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0)) 
+            else if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
             {
                 TempPre.PrintMedBagSingleModeByCE();
             }
@@ -855,10 +849,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
-            if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
-            {
-                TempPrint = (Prescription)Current.PrintClone();
-            }
+            //if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
+            //{
+            //    TempPrint = (Prescription)Current.PrintClone();
+            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
