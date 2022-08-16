@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Linq;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
@@ -42,6 +43,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         private string CusName { get; set; }
         private int PreId { get; set; }
 
+        private bool _isVisibleSingdeNoEnoughMedMessage;
+
+        public bool IsVisibleSingdeNoEnoughMedMessage
+        {
+            get => _isVisibleSingdeNoEnoughMedMessage;
+            set
+            {
+                Set(() => IsVisibleSingdeNoEnoughMedMessage, ref _isVisibleSingdeNoEnoughMedMessage, value);
+            }
+        }
+
         #endregion Variables
 
         #region Commands
@@ -58,9 +70,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             Note = note;
             CusName = cusName;
 
+            SetIsVisibleSingdeNoEnoughMedMessage(purchaseList);
+
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
             CreateStoreOrder = new RelayCommand(CreateStoreOrderAction);
             Cancel = new RelayCommand(CancelAction);
+        }
+
+        private void SetIsVisibleSingdeNoEnoughMedMessage(NotEnoughMedicines meds)
+        {
+            IsVisibleSingdeNoEnoughMedMessage = meds.Count(_ => _.SingdeInv < _.Amount) > 0;
+
+
         }
 
         private void ShowMedicineDetailAction(string medicineID)
