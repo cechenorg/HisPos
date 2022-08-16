@@ -72,6 +72,9 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding IsSingdeMedEnough}" Value="False">
+                            <Setter Property="Background" Value="IndianRed"></Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
