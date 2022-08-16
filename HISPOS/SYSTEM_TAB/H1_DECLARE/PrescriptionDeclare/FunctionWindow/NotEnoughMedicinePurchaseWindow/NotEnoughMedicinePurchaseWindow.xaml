@@ -15,6 +15,7 @@
     FontFamily="Segoe UI Semibold"
     WindowStartupLocation="CenterScreen"
     d:DataContext="{d:DesignInstance Type=local:NotEnoughMedicinePurchaseViewModel}"
+    x:Name="NotEnoughMedicinePurchaseWindow_MainWindow"
     mc:Ignorable="d">
     <Window.Resources>
         <service:NullableIntConverter x:Key="NullableIntConverter" />
@@ -247,12 +248,12 @@
                     Foreground="IndianRed" Text="因杏德庫存量無法滿足採購量, 建議更換同成份同劑量同錠型的其他藥品" VerticalAlignment="Center" FontSize="18"/>
             <Button Grid.Column="1"
                 Background="DimGray" BorderThickness="0"
-                Command="{Binding Cancel}"
+                Command="{Binding Cancel}" CommandParameter="{Binding ElementName=NotEnoughMedicinePurchaseWindow_MainWindow}"
                 Content="取消" FontSize="18" />
             <Button Grid.Column="2"
                 Margin="10,0,10,0"
                 Background="IndianRed" BorderThickness="0"
-                Command="{Binding CreateStoreOrder}"
+                Command="{Binding CreateStoreOrder}"  CommandParameter="{Binding ElementName=NotEnoughMedicinePurchaseWindow_MainWindow}"
                 Content="確認採購" FontSize="18" />
         </Grid>
     </Grid>

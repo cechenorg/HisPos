@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -59,8 +60,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         #region Commands
 
         public RelayCommand<string> ShowMedicineDetail { get; set; }
-        public RelayCommand CreateStoreOrder { get; set; }
-        public RelayCommand Cancel { get; set; }
+        public RelayCommand<Window> CreateStoreOrder { get; set; }
+        public RelayCommand<Window> Cancel { get; set; }
 
         #endregion Commands
 
@@ -73,8 +74,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             SetIsVisibleSingdeNoEnoughMedMessage(purchaseList);
 
             ShowMedicineDetail = new RelayCommand<string>(ShowMedicineDetailAction);
-            CreateStoreOrder = new RelayCommand(CreateStoreOrderAction);
-            Cancel = new RelayCommand(CancelAction);
+            CreateStoreOrder = new RelayCommand<Window>(CreateStoreOrderAction);
+            Cancel = new RelayCommand<Window>(CancelAction);
         }
 
         private void SetIsVisibleSingdeNoEnoughMedMessage(NotEnoughMedicines meds)
@@ -90,19 +91,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
             Messenger.Default.Send(new NotificationMessage<string[]>(this, new[] { medicineID, "0" }, "ShowProductDetail"));
         }
 
-        private void CreateStoreOrderAction()
+        private void CreateStoreOrderAction(Window window)
         {
-            MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
             PurchaseList.CreateOrder(Note, CusName);
             MainWindow.ServerConnection.CloseConnection();
-            MainWindow.SingdeConnection.CloseConnection();
-            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowPurchase"));
+
+            window.DialogResult = true;
+            window.Close();
         }
 
-        private void CancelAction()
+        private void CancelAction(Window window)
         {
-            Messenger.Default.Send(new NotificationMessage("CloseNotEnoughMedicinePurchaseWindowCancel"));
+            window.DialogResult = false;
+            window.Close();
         }
     }
 }
