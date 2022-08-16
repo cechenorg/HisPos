@@ -98,9 +98,10 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                         else
                         {
                             this[i].PrepareAmount = isAllSend ? 0 : tempMeds[j].Amount - this[i].TreatAmount >= 0 ? this[i].TreatAmount : tempMeds[j].Amount;
-                            this[i].SendAmount = isAllSend ? this[i].TreatAmount : this[i].TreatAmount - this[i].PrepareAmount;                            
+                            this[i].SendAmount = isAllSend ? this[i].TreatAmount : this[i].TreatAmount - this[i].PrepareAmount;
                         }
                         tempMeds[j].Amount = tempMeds[j].Amount - this[i].PrepareAmount >= 0 ? tempMeds[j].Amount - this[i].PrepareAmount : 0;
+                        if (this[i].SingdeInv < this[i].SendAmount) { this[i].SingdeInvNotEnough = true; }
                     }
                 }
             }

@@ -76,6 +76,8 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
         public int? ControlLevel { get; }
         public double AveragePrice { get; }
 
+        public bool SingdeInvNotEnough { get; }
+
         public NotEnoughMedicine(string id, string name, double amount, bool isCommon, bool isFrozen, int? controlLevel, double price, double notEnough, double canUseAmount=0, double treatAmount=0, int singdeInv=0)
         {
             ID = id;
@@ -86,10 +88,13 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             Amount = amount;
             PrepareAmount = treatAmount - amount;
             SingdeInv = singdeInv;
+            SingdeInvNotEnough = false;
+            if (singdeInv < amount)
+                SingdeInvNotEnough = true;
             AveragePrice = price;
             IsCommon = isCommon;
             Frozen = isFrozen;
-            ControlLevel = controlLevel;            
+            ControlLevel = controlLevel;
         }
     }
 }

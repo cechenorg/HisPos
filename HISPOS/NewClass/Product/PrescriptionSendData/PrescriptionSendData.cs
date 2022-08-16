@@ -17,6 +17,7 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
             SendAmount = 0;
             InvID = m.InventoryID;
             SingdeInv = m.SingdeInv;
+            SingdeInvNotEnough = false;
             CanUseAmount = 0;
             if (m is MedicineNHI nhiMed)
             {
@@ -67,5 +68,6 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
         public bool IsFrozen { get; set; }
         public bool IsControl { get; set; }
         public bool IsCommon { get; set; }
+        public bool SingdeInvNotEnough { get; set; }
     }
 }
