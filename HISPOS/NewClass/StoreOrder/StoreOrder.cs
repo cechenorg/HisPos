@@ -251,11 +251,6 @@ namespace His_Pos.NewClass.StoreOrder
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
                     ToWaitingStatus();//傳送訂單至杏德
                     ToNormalProcessingStatus();
-                    // 直接結案
-                    if (OrderType == OrderTypeEnum.RETURN)
-                    {
-                        ToDoneStatus(0);
-                    }
                     break;
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
