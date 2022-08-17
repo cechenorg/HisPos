@@ -69,6 +69,13 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
             }
         }
 
+
+        public bool IsSingdeMedEnough
+        {
+            get => SingdeInv >= Amount;
+            
+        }
+
         public double PrepareAmount { get; }
 
         public bool IsCommon { get; }
