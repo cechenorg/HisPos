@@ -91,6 +91,9 @@
                     HorizontalContentAlignment="Left"
                     FontFamily="Segoe UI Semibold"
                     FontSize="22"
+                    PreviewTextInput="TextBox_PreviewTextInput"
+                    PreviewKeyDown="TextBox_PreviewKeyDown"
+                    InputMethod.IsInputMethodEnabled="False"
                     Foreground="{StaticResource ForeGround}"
                     Text="{Binding CellPhone}" />
                 <Image
@@ -105,6 +108,9 @@
                     HorizontalContentAlignment="Left"
                     FontFamily="Segoe UI Semibold"
                     FontSize="22"
+                    PreviewTextInput="TextBox_PreviewTextInput"
+                    PreviewKeyDown="TextBox_PreviewKeyDown"
+                    InputMethod.IsInputMethodEnabled="False"
                     Foreground="{StaticResource ForeGround}"
                     Text="{Binding SecondPhone}" />
             </StackPanel>
@@ -125,6 +131,9 @@
                     HorizontalContentAlignment="Left"
                     FontFamily="Segoe UI Semibold"
                     FontSize="22"
+                    PreviewTextInput="TextBox_PreviewTextInput"
+                    PreviewKeyDown="TextBox_PreviewKeyDown"
+                    InputMethod.IsInputMethodEnabled="False"
                     Foreground="{StaticResource ForeGround}"
                     Text="{Binding Tel}" />
             </StackPanel>

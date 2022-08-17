@@ -58,6 +58,9 @@
                 CaretBrush="Black"
                 FontSize="16"
                 Foreground="{StaticResource ForeGround}"
+                InputMethod.IsInputMethodEnabled="False"
+                PreviewTextInput="PatientCellPhone_PreviewTextInput"
+                PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
                 Text="{Binding Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, StringFormat={}{0:####-######}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
@@ -80,6 +83,9 @@
                 CaretBrush="Black"
                 FontSize="16"
                 Foreground="{StaticResource ForeGround}"
+                InputMethod.IsInputMethodEnabled="False"
+                PreviewTextInput="PatientCellPhone_PreviewTextInput"
+                PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
                 Text="{Binding Patient.SecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
@@ -89,13 +95,20 @@
             </TextBox>
         </StackPanel>
         <StackPanel Grid.Row="1"  Margin="0,5,0,5" Orientation="Horizontal">
-            
             <Image Width="20" Height="25" Margin="10,0,10,0"  Source="/Images/Telephone.png" />
-
-            <TextBox Name="PatientTel" Width="130" Height="35"
-                Margin="5,0,20,0" HorizontalContentAlignment="Center"  materialDesign:HintAssist.Hint="家電"
-                CaretBrush="Black" FontSize="16"
+            <TextBox 
+                Name="PatientTel" 
+                Width="130" 
+                Height="35"
+                Margin="5,0,20,0" 
+                HorizontalContentAlignment="Center"  
+                materialDesign:HintAssist.Hint="家電"
+                CaretBrush="Black" 
+                FontSize="16"
                 Foreground="{StaticResource ForeGround}"
+                InputMethod.IsInputMethodEnabled="False"
+                PreviewTextInput="PatientCellPhone_PreviewTextInput"
+                PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
                 Text="{Binding Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
@@ -103,10 +116,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-
-
             <Image Width="20" Height="25" Margin="10,0,10,0"  Source="/Images/IDcard.png" />
-
             <TextBox   Width="130" Height="35"
                      Margin="5,0,20,0" HorizontalContentAlignment="Center"  materialDesign:HintAssist.Hint="身分證"
                      CaretBrush="Black" FontSize="16"
