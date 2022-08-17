@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
@@ -76,6 +77,10 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
 
         private void CusCellPhone_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl || e.Key == Key.V)
+            {
+                e.Handled = true;
+            }
             if (e.Key != Key.Enter) return;
             CusTel.Focus();
             CusTel.SelectionStart = 0;
@@ -83,6 +88,10 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
 
         private void CusTel_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl || e.Key == Key.V)
+            {
+                e.Handled = true;
+            }
             if (e.Key != Key.Enter) return;
             CusAddress.Focus();
             CusAddress.SelectionStart = 0;
@@ -108,6 +117,12 @@ namespace His_Pos.FunctionWindow.AddCustomerWindow
             e.Handled = true;
             CusContactNote.Focus();
             CusContactNote.SelectionStart = 0;
+        }
+
+        private void CusCellPhone_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

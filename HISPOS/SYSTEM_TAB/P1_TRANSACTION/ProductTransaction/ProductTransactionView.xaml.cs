@@ -1223,20 +1223,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 bool isCell = tb.Text.StartsWith("09");
                 if (isCell)
                 {
-                    parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
-                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+                    parameters.Add(new SqlParameter("@Cus_Cellphone", tb.Text));
+                    parameters.Add(new SqlParameter("@Cus_Telephone", DBNull.Value));
                     Con = CustomerSearchCondition.CellPhone;
                 }
                 else if (tb.Text.Length >= 7 && tb.Text.Length <= 10 && !tb.Text.StartsWith("1"))
                 {
-                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
-                    parameters.Add(new SqlParameter("Cus_Telephone", tb.Text));
+                    parameters.Add(new SqlParameter("@Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("@Cus_Telephone", tb.Text));
                     Con = CustomerSearchCondition.Tel;
                 }
                 else
                 {
-                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
-                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+                    parameters.Add(new SqlParameter("@Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("@Cus_Telephone", DBNull.Value));
                 }
 
                 // 姓名查詢
@@ -1256,21 +1256,44 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     int.TryParse(tb.Text.Substring(0, 2), out int year);
                     int.TryParse(tb.Text.Substring(2, 2), out int month);
                     int.TryParse(tb.Text.Substring(4, 2), out int day);
-                    string yearStr = (year + 1911).ToString();
-                    string dateStr = yearStr + month.ToString("00") + day.ToString("00");
-
-                    parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
-                    Con = CustomerSearchCondition.Birthday;
+                    if(year != 0 && month != 0 && day != 0)
+                    {
+                        string yearStr = (year + 1911).ToString();
+                        string dateStr = yearStr +"-"+ month.ToString("00") + "-" +day.ToString("00");
+                        bool isQualifyDate = DateTime.TryParse(dateStr,out DateTime date);
+                        if(isQualifyDate)
+                        {
+                            DateTime searchDate = new DateTime(Convert.ToInt32(yearStr), month, day);
+                            TimeSpan ts = DateTime.Now - searchDate;
+                            if (ts.TotalDays > 0)
+                            {
+                                parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+                                Con = CustomerSearchCondition.Birthday;
+                            }
+                        }
+                    }
                 }
                 else if (tb.Text.Length == 7 && tb.Text.StartsWith("1"))
                 {
                     int.TryParse(tb.Text.Substring(0, 3), out int year);
                     int.TryParse(tb.Text.Substring(3, 2), out int month);
                     int.TryParse(tb.Text.Substring(5, 2), out int day);
-                    string yearStr = (year + 1911).ToString();
-                    string dateStr = yearStr + month.ToString("00") + day.ToString("00");
-                    parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
-                    Con = CustomerSearchCondition.Birthday;
+                    if (year != 0 && month != 0 && day != 0)
+                    {
+                        string yearStr = (year + 1911).ToString();
+                        string dateStr = yearStr + "-" + month.ToString("00") + "-" + day.ToString("00");
+                        bool isQualifyDate = DateTime.TryParse(dateStr, out DateTime date);
+                        if(isQualifyDate)
+                        {
+                            DateTime searchDate = new DateTime(Convert.ToInt32(yearStr), month, day);
+                            TimeSpan ts = DateTime.Now - searchDate;
+                            if (ts.TotalDays > 0)
+                            {
+                                parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+                                Con = CustomerSearchCondition.Birthday;
+                            }
+                        }
+                    }
                 }
                 else
                 {
