@@ -358,11 +358,11 @@ namespace His_Pos.ChromeTabViewModel
                                     xDocs.Add(xDocument);
                                     cusIdNumbers.Add(cusIdNumber);
                                     paths.Add(s);
-                                    if (cusIdNumbers.Count > 0)
-                                    {
-                                        XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, setting.TypeName, isRe);
-                                    }
                                 }
+                            }
+                            if (cusIdNumbers.Count > 0)
+                            {
+                                XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, setting.TypeName, isRe);
                             }
                         }
                     }
