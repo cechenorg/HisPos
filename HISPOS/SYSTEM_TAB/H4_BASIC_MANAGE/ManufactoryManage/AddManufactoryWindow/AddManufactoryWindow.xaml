@@ -68,7 +68,7 @@
                 Width="180"
                 FontFamily="Segoe UI Semi"
                 FontSize="18"
-                Text="{Binding ManufactoryTelephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding ManufactoryTelephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown"/>
         </StackPanel>
         <StackPanel
             Grid.Row="2"
