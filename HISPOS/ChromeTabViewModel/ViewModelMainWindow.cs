@@ -7,6 +7,7 @@ using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine.Position;
 using His_Pos.NewClass.Medicine.Usage;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -24,6 +25,7 @@ using Microsoft.Reporting.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
@@ -299,6 +301,8 @@ namespace His_Pos.ChromeTabViewModel
         }
         void watch_Created(object sender, FileSystemEventArgs e)
         {
+            //NewFunction.GetXmlFiles();
+            var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
             TaiwanCalendar tc = new TaiwanCalendar();
             DateTime now = DateTime.Now;
             string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now));
@@ -317,6 +321,7 @@ namespace His_Pos.ChromeTabViewModel
                 #region 先把全部的.txt轉成.xml
                 foreach (var setting in cooperativeClinicSettings)
                 {
+                    if (!setting.AutoPrint) continue;
                     if(!string.IsNullOrEmpty(setting.FilePath))
                     {
                         var fileEntries = Directory.GetFiles(setting.FilePath);
@@ -329,10 +334,12 @@ namespace His_Pos.ChromeTabViewModel
                                     string[] file = filePath.Split('_');
                                     if (file != null && file.Length > 2)
                                     {
-                                        if (date == file[1])//如果是今日的處方，再轉成xml
+                                        DataRow[] drs = table.Select(string.Format("Cooli_FilePath= '{0}'", filePath + ".xml"));
+                                        if ((drs != null && drs.Length > 0) || Directory.Exists(filePath + ".xml"))
                                         {
-                                            GetTxtFiles(filePath);
+                                            continue;
                                         }
+                                        GetTxtFiles(filePath);
                                     }
                                 }
                             }

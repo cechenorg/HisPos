@@ -285,6 +285,7 @@ namespace His_Pos.Service
 
         public static void GetXmlFiles()
         {
+            var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
             TaiwanCalendar tc = new TaiwanCalendar();
             DateTime now = DateTime.Now;
             string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now));
@@ -298,6 +299,7 @@ namespace His_Pos.Service
             #region 先把全部的.txt轉成.xml
             foreach (var c in cooperativeClinicSettings)
             {
+                if (!c.AutoPrint) continue;
                 var path = c.FilePath;
                 if (!string.IsNullOrEmpty(path))
                 {
@@ -313,6 +315,11 @@ namespace His_Pos.Service
                                 {
                                     if (date == file[1])//如果是今日的處方，再轉成xml
                                     {
+                                        DataRow[] drs = table.Select(string.Format("Cooli_FilePath= '{0}'", filePath + ".xml"));
+                                        if((drs!=null && drs.Length > 0) || Directory.Exists(path + ".xml"))
+                                        {
+                                            continue;
+                                        }
                                         GetTxtFiles(filePath);
                                     }
                                 }
@@ -324,6 +331,7 @@ namespace His_Pos.Service
             #endregion
             foreach (var c in cooperativeClinicSettings)
             {
+                if(!c.AutoPrint) continue;
                 var path = c.FilePath;
                 if (string.IsNullOrEmpty(path)) continue;
                 try
