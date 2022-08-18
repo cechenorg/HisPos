@@ -285,6 +285,9 @@ namespace His_Pos.Service
 
         public static void GetXmlFiles()
         {
+            TaiwanCalendar tc = new TaiwanCalendar();
+            DateTime now = DateTime.Now;
+            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now));
             bool isRe = false;
             string isRePost = "";
             var cooperativeClinicSettings = new CooperativeClinicSettings();
@@ -305,7 +308,14 @@ namespace His_Pos.Service
                         {
                             if (Path.GetExtension(filePath) == ".txt")
                             {
-                                GetTxtFiles(filePath);
+                                string[] file = filePath.Split('_');
+                                if (file != null && file.Length > 2)
+                                {
+                                    if (date == file[1])//如果是今日的處方，再轉成xml
+                                    {
+                                        GetTxtFiles(filePath);
+                                    }
+                                }
                             }
                         }
                     }
@@ -334,7 +344,14 @@ namespace His_Pos.Service
                                 {
                                     continue;
                                 }
-
+                                string[] file = filePath.Split('_');
+                                if (file != null && file.Length > 2)
+                                {
+                                    if (date != file[1])//非今日的處方，不新增處方紀錄
+                                    {
+                                        continue;
+                                    }
+                                }
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                                 if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null)
                                 {

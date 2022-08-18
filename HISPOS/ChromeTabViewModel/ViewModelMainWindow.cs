@@ -27,6 +27,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -298,6 +299,9 @@ namespace His_Pos.ChromeTabViewModel
         }
         void watch_Created(object sender, FileSystemEventArgs e)
         {
+            TaiwanCalendar tc = new TaiwanCalendar();
+            DateTime now = DateTime.Now;
+            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now));
             bool isRe = false;
             string isRePost = "0";
             
@@ -322,7 +326,14 @@ namespace His_Pos.ChromeTabViewModel
                             {
                                 if (Path.GetExtension(filePath) == ".txt")
                                 {
-                                    GetTxtFiles(filePath);
+                                    string[] file = filePath.Split('_');
+                                    if (file != null && file.Length > 2)
+                                    {
+                                        if (date == file[1])//如果是今日的處方，再轉成xml
+                                        {
+                                            GetTxtFiles(filePath);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -336,11 +347,19 @@ namespace His_Pos.ChromeTabViewModel
                         if (!string.IsNullOrEmpty(setting.FilePath))
                         {
                             var fileEntries = Directory.GetFiles(setting.FilePath);
-                            foreach (var s in fileEntries)
+                            foreach (var filePath in fileEntries)
                             {
-                                if (Path.GetExtension(s) == ".xml")
+                                string[] file = filePath.Split('_');
+                                if (file != null && file.Length > 2)
                                 {
-                                    var xDocument = XDocument.Load(s);
+                                    if (date != file[1])//非今日的處方，不新增處方紀錄
+                                    {
+                                        continue;
+                                    }
+                                }
+                                if (Path.GetExtension(filePath) == ".xml")
+                                {
+                                    var xDocument = XDocument.Load(filePath);
                                     var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                                     if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) { isRePost = "2"; }
                                     else
@@ -357,7 +376,7 @@ namespace His_Pos.ChromeTabViewModel
                                     }
                                     xDocs.Add(xDocument);
                                     cusIdNumbers.Add(cusIdNumber);
-                                    paths.Add(s);
+                                    paths.Add(filePath);
                                 }
                             }
                             if (cusIdNumbers.Count > 0)
@@ -395,6 +414,7 @@ namespace His_Pos.ChromeTabViewModel
                     }
                 }
             }
+            CooperativeClinicSettings.FilePurge();//打包檔案
         }
         public static void GetTxtFiles(string path)
         {
