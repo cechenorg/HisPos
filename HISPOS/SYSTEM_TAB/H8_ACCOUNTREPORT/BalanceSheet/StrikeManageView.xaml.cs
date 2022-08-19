@@ -393,7 +393,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void btnHistory_Click(object sender, RoutedEventArgs e)
         {
             var historyWindow = new StrikeHistoryWindow();
-            _ = historyWindow.ShowDialog();
+            //_ = historyWindow.Show();
+            historyWindow.Show();
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
