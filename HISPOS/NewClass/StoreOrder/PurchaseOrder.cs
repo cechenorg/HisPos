@@ -218,7 +218,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if(!string.IsNullOrEmpty(product.BatchNumber))
                 {
-                    if (OrderProducts.Count(s => !string.IsNullOrEmpty(s.BatchNumber) && s.BatchNumber.ToString().Trim() == product.BatchNumber.ToString().Trim()) > 1)
+                    if (OrderProducts.Count(s => !string.IsNullOrEmpty(s.BatchNumber) && s.BatchNumber.ToString().Trim() == product.BatchNumber.ToString().Trim() && s.ID == product.ID && s.IsDone == 0) > 1)
                     {
                         IsRepBatch = true;
                     }
