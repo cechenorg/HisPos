@@ -474,6 +474,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void CustomerDataSaveAction()
         {
             CustomerData.Save();
+            IsDataChanged = false;
         }
 
         private void SetPhoneCount()

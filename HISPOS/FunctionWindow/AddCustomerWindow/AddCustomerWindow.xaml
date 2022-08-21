@@ -45,12 +45,14 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="手機1 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox  Name="CusCellPhone" Width="120" Height="35" Text="{Binding NewCustomer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown" />
+            <TextBox  Name="CusCellPhone" Width="120" Height="35" Text="{Binding NewCustomer.CellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown"
+              InputMethod.IsInputMethodEnabled="False" PreviewTextInput="CusCellPhone_PreviewTextInput" />
             <Label Content="手機2 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox  Name="CusSecondPhone" Width="120" Height="35" Text="{Binding NewCustomer.SecondPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown" />
+            <TextBox  Name="CusSecondPhone" Width="120" Height="35" Text="{Binding NewCustomer.SecondPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusCellPhone_OnPreviewKeyDown" 
+               InputMethod.IsInputMethodEnabled="False" PreviewTextInput="CusCellPhone_PreviewTextInput" />
             <Label Content="家電 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox Name="CusTel" Width="120" Height="35" Text="{Binding NewCustomer.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusTel_OnPreviewKeyDown" />
-            
+            <TextBox Name="CusTel" Width="120" Height="35" Text="{Binding NewCustomer.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="18" HorizontalContentAlignment="Center" CaretBrush="Black" PreviewKeyDown="CusTel_OnPreviewKeyDown" 
+              InputMethod.IsInputMethodEnabled="False" PreviewTextInput="CusCellPhone_PreviewTextInput" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label Content="地址 : " FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />

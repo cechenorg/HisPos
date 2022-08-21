@@ -282,6 +282,20 @@ namespace His_Pos.Properties {
                 this["SQL_localWithDB"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ReportFormat
+        {
+            get
+            {
+                return ((string)(this["ReportFormat"]));
+            }
+            set
+            {
+                this["ReportFormat"] = value;
+            }
+        }
     }
 }

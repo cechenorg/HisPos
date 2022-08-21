@@ -161,5 +161,160 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             }
         }
         #endregion ----- Define Functions -----
+
+        private void OrderAmountTextbox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Down && e.Key != Key.Up && e.Key != Key.Left && e.Key != Key.Right) return;
+            e.Handled = true;
+            if (sender is null) return;
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    MoveFocusNext(sender, FocusNavigationDirection.Next);
+                    break;
+
+                case Key.Up:
+                    MoveFocusNext(sender, FocusNavigationDirection.Up);
+                    break;
+
+                case Key.Down:
+                    MoveFocusNext(sender, FocusNavigationDirection.Down);
+                    break;
+
+                case Key.Left:
+                    MoveFocusNext(sender, FocusNavigationDirection.Left);
+                    break;
+
+                case Key.Right:
+                    MoveFocusNext(sender, FocusNavigationDirection.Next);
+                    break;
+            }
+        }
+        private void MoveFocusNext(object sender, FocusNavigationDirection direction)
+        {
+            switch (sender)
+            {
+                case null:
+                    return;
+
+                case TextBox box:
+                    if (direction.Equals(FocusNavigationDirection.Next))
+                        box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    else if (direction.Equals(FocusNavigationDirection.Up))
+                        box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Up));
+                    else if (direction.Equals(FocusNavigationDirection.Left))
+                        box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Left));
+                    else
+                        box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+                    break;
+            }
+
+            if (sender != null)
+            {
+                if (sender is TextBox)
+                {
+                    TextBox box = (TextBox)sender;
+                    int i = ProductDataGrid.Columns.IndexOf(ProductDataGrid.CurrentColumn);
+                    if (i == 0)
+                    {
+                        if (direction == FocusNavigationDirection.Left)
+                        {
+                            var type = ProductDataGrid.CurrentCell.Item.ToString();
+                            if (type.Contains("PurchaseMedicine"))
+                            {
+                                List<PurchaseMedicine> detail = new List<PurchaseMedicine>();
+                                foreach (PurchaseMedicine item in ProductDataGrid.ItemsSource)
+                                {
+                                    detail.Add(item);
+                                }
+                                if (ProductDataGrid.CurrentCell.Item is PurchaseMedicine medicine)
+                                {
+                                    int currentIndex = detail.IndexOf(medicine);
+                                    if (currentIndex > 0)
+                                    {
+                                        var focusedPanelCell = ProductDataGrid.Columns[ProductDataGrid.Columns.Count - 1].GetCellContent(detail[currentIndex - 1]);
+                                        UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedPanelCell, 0);
+                                        child.Focus();
+                                        if (child is TextBox t)
+                                        {
+                                            t.SelectAll();
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var focusedPanelCell = ProductDataGrid.Columns[1].GetCellContent(detail[0]);
+                                        UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedPanelCell, 0);
+                                        child.Focus();
+                                        if (child is TextBox t)
+                                        {
+                                            t.SelectAll();
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            if (type.Contains("PurchaseOTC"))
+                            {
+                                var detail = new List<PurchaseOTC>();
+                                foreach (PurchaseOTC item in ProductDataGrid.ItemsSource)
+                                {
+                                    detail.Add(item);
+                                }
+                                if (ProductDataGrid.CurrentCell.Item is PurchaseOTC medicine)
+                                {
+                                    int currentIndex = detail.IndexOf(medicine);
+                                    if (currentIndex > 0)
+                                    {
+                                        var focusedPanelCell = ProductDataGrid.Columns[ProductDataGrid.Columns.Count - 1].GetCellContent(detail[currentIndex - 1]);
+                                        UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedPanelCell, 0);
+                                        child.Focus();
+                                        if (child is TextBox t)
+                                        {
+                                            t.SelectAll();
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            var focusedCell = ProductDataGrid.CurrentCell.Column?.GetCellContent(ProductDataGrid.CurrentCell.Item);
+            int runCount = 0;
+            if (focusedCell is null) return;
+            while (true)
+            {
+                if (focusedCell is ContentPresenter)
+                {
+                    UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                    while (child is ContentPresenter)
+                    {
+                        child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                    }
+
+                    if (child is TextBox || child is TextBlock)
+                        break;
+                }
+
+                focusedCell?.MoveFocus(new TraversalRequest(direction));
+                focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
+                runCount++;
+                if (runCount > 10)
+                    break;
+            }
+
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+            if ((firstChild is TextBox || firstChild is TextBlock) && firstChild.Focusable)
+            {
+                firstChild.Focus();
+                if (firstChild is TextBox t)
+                    t.SelectAll();
+            }
+        }
     }
 }

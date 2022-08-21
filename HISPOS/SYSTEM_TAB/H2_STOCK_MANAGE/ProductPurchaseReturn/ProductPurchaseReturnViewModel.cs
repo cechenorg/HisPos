@@ -161,7 +161,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                                 {
                                     if(!string.IsNullOrEmpty(ReceiveID) && ReceiveID != null)
                                     {
-                                        if (storeOrders[i].ID == storeOrders[i].ReceiveID)//尚未更新為杏德單號
+                                        currentStoreOrder = storeOrders[i];
+                                        bool isUptSuccess = currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
+                                        if (!isUptSuccess && storeOrders[i].ID != storeOrders[i].ReceiveID)//尚未更新為杏德單號
                                         {
                                             storeOrders[i].OrderType = OrderTypeEnum.PREPARE;//已出貨
                                             storeOrders[i].IsWaitOrder = 0;
@@ -171,8 +173,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                                             storeOrders[i].OrderType = OrderTypeEnum.WAITPREPARE;//待入庫
                                             storeOrders[i].IsWaitOrder = 0;
                                         }
-                                        currentStoreOrder = storeOrders[i];
-                                        currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
                                     }
                                 }
                             }

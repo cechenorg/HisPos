@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.InfraStructure;
 using His_Pos.NewClass.Product.ProductGroupSetting;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow;
 
@@ -62,7 +63,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             medicineID = medID;
             wareHouseID = wareID;
 
-            ProductGroupSettingCollection = ProductGroupSettings.GetProductGroupSettingsByID(medicineID, wareHouseID);
+            ProductGroupSettingCollection = ProductService.GetProductGroupSettingsByID(medicineID, wareID);
+
         }
 
         #endregion ----- Define Functions -----

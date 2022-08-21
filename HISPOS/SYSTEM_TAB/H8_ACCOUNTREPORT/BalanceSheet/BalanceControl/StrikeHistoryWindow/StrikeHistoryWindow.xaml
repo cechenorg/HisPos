@@ -14,13 +14,13 @@
             <RowDefinition Height="70" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal"> 
-            <DatePicker x:Name="dpSDate"  Width="120"
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <DatePicker x:Name="dpSDate" Width="120" Language="zh-cn"
                 Margin="5,0,0,0"  HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 FontSize="18" SelectedDate="{Binding StartDate, Mode=TwoWay}"
                 SelectedDateFormat="Short" />
             <Label Margin="5,0,0,0" VerticalAlignment="Center"  Content="~" FontFamily="Segoe UI Semibold" FontSize="22" />
-            <DatePicker  x:Name="dpEDate"
+            <DatePicker  x:Name="dpEDate" Language="zh-cn"
                 Width="120" Margin="5,0,0,0"
                 HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="18"
                 SelectedDate="{Binding EndDate, Mode=TwoWay}"
@@ -196,8 +196,17 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="250"  Header="時間" IsReadOnly="True"
-                    Binding="{Binding StrikeTime, StringFormat={}{0:yyyy/MM/dd HH:mm:ss}, UpdateSourceTrigger=PropertyChanged}" >
+                <DataGridTextColumn Width="150"  Header="沖帳日期" IsReadOnly="True"
+                    Binding="{Binding StrikeTime, StringFormat={}{0:yyyy/MM/dd}, UpdateSourceTrigger=PropertyChanged}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="200"  Header="新增時間" IsReadOnly="True"
+                    Binding="{Binding InsertTime, StringFormat={}{0:yyyy/MM/dd HH:mm}, UpdateSourceTrigger=PropertyChanged}" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />

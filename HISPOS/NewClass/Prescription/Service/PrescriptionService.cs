@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
@@ -378,9 +379,9 @@ namespace His_Pos.NewClass.Prescription.Service
                     focus = true;
             }
             PrintResult = NewFunction.CheckPrint(Current, focus, isSend);
-            var printMedBag = PrintResult[0];
-            var printSingle = PrintResult[1];
-            var printReceipt = PrintResult[2];
+            var printMedBag = PrintResult[0];//是否印藥袋
+            var printSingle = PrintResult[1];//是否多藥一袋
+            var printReceipt = PrintResult[2];//是否印收據
             if (printMedBag is null || printReceipt is null)
                 return false;
             if ((bool)printMedBag && printSingle is null)
@@ -430,12 +431,20 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             var cusGender = p.Patient.CheckGender();
             string patientTel;
+            string[] splitStr = { "\r\n" };
+            string[] note = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
+            {
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? Regex.Replace(p.Patient.CellPhone, "[^0-9]", "") : Regex.Replace(p.Patient.CellPhone, "[^0-9]", "") + "(" + note[0] + ")";
+                if (!string.IsNullOrEmpty(p.Patient.Line))
+                {
+                    patientTel = "@" + patientTel;
+                }
+            }
             else
             {
                 if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
+                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(" + note[0] + ")";
                 else
                     patientTel = p.Patient.ContactNote;
             }
@@ -495,12 +504,20 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             var cusGender = p.Patient.CheckGender();
             string patientTel;
+            string[] splitStr = { "\r\n" };
+            string[] note = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
+            {
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + note[0] + ")";
+                if(!string.IsNullOrEmpty(p.Patient.Line))
+                {
+                    patientTel = "@" + patientTel;
+                }
+            }
             else
             {
                 if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
+                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(" + note[0] + ")";
                 else
                     patientTel = p.Patient.ContactNote;
             }
@@ -633,13 +650,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void Print(bool noCard)
         {
-            if (this.TempPre.PrescriptionStatus.IsPrint == true)
-            { 
-            }
-            else {
-                PrintMedBag();
-            }
-            
+            PrintMedBag();
             PrintReceipt(noCard);
         }
         public void PrintDir(bool noCard)
@@ -670,6 +681,7 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
+            var reportFormat = Properties.Settings.Default.ReportFormat;
             if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
             {
                 TempPrint.Division.Name = "";
@@ -679,8 +691,8 @@ namespace His_Pos.NewClass.Prescription.Service
                 else
                     TempPrint.PrintMedBagMultiMode();
             }
-            else if (VM.CurrentPharmacy.ID == "5931017216") {
-
+            else if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+            {
                 TempPre.PrintMedBagSingleModeByCE();
             }
             else
@@ -862,10 +874,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
-            if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
-            {
-                TempPrint = (Prescription)Current.PrintClone();
-            }
+            //if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
+            //{
+            //    TempPrint = (Prescription)Current.PrintClone();
+            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]

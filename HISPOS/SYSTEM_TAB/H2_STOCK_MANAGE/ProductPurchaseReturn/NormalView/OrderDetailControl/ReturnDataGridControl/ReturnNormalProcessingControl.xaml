@@ -99,6 +99,7 @@
             Background="{StaticResource GridDarkestBackGround}"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             FrozenColumnCount="3"
@@ -142,7 +143,8 @@
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserResize="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -154,7 +156,8 @@
                     Width="200"
                     MaxWidth="300"
                     Header="商品名稱"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -187,7 +190,7 @@
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="退貨量"
-                    
+                    CanUserResize="False"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -196,7 +199,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Width="70" Header="退貨價">
+                <DataGridTemplateColumn 
+                    Width="70" 
+                    Header="退貨價"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Label
@@ -210,7 +216,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="110" Header="廠商回收量">
+                <DataGridTemplateColumn 
+                    Width="110" 
+                    Header="廠商回收量"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
@@ -224,11 +233,15 @@
                                 InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
+                                PreviewKeyDown="RealAmount_PreviewKeyDown"
                                 Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="70" Header="小計">
+                <DataGridTemplateColumn 
+                    MinWidth="70" 
+                    Header="小計"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
@@ -242,7 +255,7 @@
                                 InputMethod.IsInputMethodEnabled="False"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
-                                
+                                PreviewKeyDown="RealAmount_PreviewKeyDown"
                                 Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">
@@ -253,7 +266,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn MinWidth="120" Header="備註">
+                <DataGridTemplateColumn 
+                    MinWidth="120" 
+                    Header="備註"
+                    CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
@@ -266,6 +282,7 @@
                                 IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
+                                PreviewKeyDown="RealAmount_PreviewKeyDown"
                                 Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -276,6 +293,17 @@
             Grid.Row="1"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
+            <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
+                Width="150"
+                Margin="10,0,10,0"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding ToNextStatusCommand}"
+                Content="完成退貨"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" 
+                PreviewMouseDown="Button_PreviewMouseDown" Cursor="Hand"/>
             <Label
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
@@ -347,6 +375,15 @@
                 Foreground="Black"
                 Text="{Binding CurrentStoreOrder.ReturnDiff, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
             <Button
+                Margin="30,0,10,0"
+                Width="120"
+                Background="DimGray"
+                BorderThickness="0"
+                Command="{Binding DeleteOrderCommand}"
+                Content="{Binding BtnScrapContent}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16" Cursor="Hand" />
+            <Button
                 Width="150"
                 Margin="10,0,0,0"
                 Background="RoyalBlue"
@@ -356,17 +393,6 @@
                 FontFamily="Segoe UI Semibold"
                 FontSize="16" 
                 Visibility="Hidden"/>
-            <Button
-                Visibility="{Binding CurrentStoreOrder.Visibility}"
-                Width="150"
-                Margin="10,0,10,0"
-                Background="IndianRed"
-                BorderThickness="0"
-                Command="{Binding ToNextStatusCommand}"
-                Content="完成退貨"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" 
-                PreviewMouseDown="Button_PreviewMouseDown" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 </UserControl>

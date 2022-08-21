@@ -152,5 +152,46 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
         {
             
         }
+
+        private void RealAmount_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up && e.Key != Key.Left && e.Key != Key.Right) 
+                return;
+            int i = ProductDataGrid.Columns.IndexOf(ProductDataGrid.CurrentColumn);
+            if(i == 4 && e.Key == Key.Left)
+            {
+                return;
+            }
+            FocusNavigationDirection key = FocusNavigationDirection.Next;
+            switch(e.Key)
+            {
+                case Key.Enter:
+                    key = FocusNavigationDirection.Next;
+                    break;
+                case Key.Left:
+                    key = FocusNavigationDirection.Left;
+                    break;
+                case Key.Right:
+                    key = FocusNavigationDirection.Right;
+                    break;
+                case Key.Up:
+                    key = FocusNavigationDirection.Up;
+                    break;
+                case Key.Down:
+                    key = FocusNavigationDirection.Down;
+                    break;
+            }
+            e.Handled = true;
+            var uie = e.OriginalSource as UIElement;
+            uie.MoveFocus(new TraversalRequest(key));
+            var focusedCell = ProductDataGrid.CurrentCell.Column?.GetCellContent(ProductDataGrid.CurrentCell.Item);
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            if ((firstChild is TextBox || firstChild is TextBlock) && firstChild.Focusable)
+            {
+                firstChild.Focus();
+                if (firstChild is TextBox t)
+                    t.SelectAll();
+            }
+        }
     }
 }

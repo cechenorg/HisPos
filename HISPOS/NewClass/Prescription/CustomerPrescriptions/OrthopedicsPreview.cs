@@ -15,7 +15,10 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         {
             Content = c;
             DoctorName = "醫師 " + c.DeclareXmlDocument.Prescription.Study.Doctor_Name;
+            IsVIP = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Remark.EndsWith("Y");
         }
+
+       
 
         public OrthopedicsPrescription Content { get; }
         public string DoctorName { get; }

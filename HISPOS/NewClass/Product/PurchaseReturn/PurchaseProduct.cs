@@ -196,8 +196,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             OrderAmount = dataRow.Field<double>("StoOrdDet_OrderAmount");
             RealAmount = dataRow.Field<double>("StoOrdDet_RealAmount");
             FreeAmount = dataRow.Field<double>("StoOrdDet_FreeAmount");
-            SubTotal = (double)dataRow.Field<decimal>("StoOrdDet_SubTotal");
             Price = (double)dataRow.Field<decimal>("StoOrdDet_Price");
+            SubTotal = (double)dataRow.Field<decimal>("StoOrdDet_SubTotal");
             Invoice = dataRow.Field<string>("StoOrdDet_Invoice");
             ValidDate = dataRow.Field<DateTime?>("StoOrdDet_ValidDate");
             BatchNumber = dataRow.Field<string>("StoOrdDet_BatchNumber");
@@ -220,38 +220,29 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             switch (StartInputVariable)
             {
                 case ProductStartInputVariableEnum.INIT:
+                    price = 0;
                     break;
 
                 case ProductStartInputVariableEnum.PRICE:
                     subTotal = 0;
 
                     //key單時 => 小計 = 單價*預定數量
-                    if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING ||
-                        OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+                    if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
                     {
-                        decimal amt = Math.Round((Convert.ToDecimal(Price) * Convert.ToDecimal(OrderAmount)), 0, MidpointRounding.AwayFromZero);
+                        decimal amt = Math.Round(Convert.ToDecimal(Price) * Convert.ToDecimal(OrderAmount), 0, MidpointRounding.AwayFromZero);
                         subTotal = Convert.ToDouble(amt);
                     } 
                     else//收貨時 => 小計 = 單價*實際進貨數量
                     {
-                        decimal amt = Math.Round((Convert.ToDecimal(Price) * Convert.ToDecimal(RealAmount)),0, MidpointRounding.AwayFromZero);
+                        decimal amt = Math.Round(Convert.ToDecimal(Price) * Convert.ToDecimal(RealAmount), 0, MidpointRounding.AwayFromZero);
                         subTotal = Convert.ToDouble(amt);
                     }
                    
-                    break; 
+                    break;
                 case ProductStartInputVariableEnum.SUBTOTAL:
-                    if (RealAmount <= 0)
-                        price = 0;
-                    else
-                        price = SubTotal / RealAmount;
+                    price = RealAmount == 0 ? 0 : Math.Round(subTotal / RealAmount, 8);
                     break;
             }
-            //}
-
-            /*if (SubTotal == 0)
-            {
-                price = 0;
-            }*/
 
             RaisePropertyChanged(nameof(Price));
             RaisePropertyChanged(nameof(SubTotal));
@@ -287,11 +278,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         public void CopyOldProductData(PurchaseProduct purchaseProduct)
         {
-            OrderAmount = purchaseProduct.OrderAmount;
+            OrderAmount = 0;
             RealAmount = purchaseProduct.RealAmount;
             FreeAmount = purchaseProduct.FreeAmount;
-            SubTotal = purchaseProduct.SubTotal;
             Price = purchaseProduct.Price;
+            SubTotal = purchaseProduct.SubTotal;
             Invoice = purchaseProduct.Invoice;
             ValidDate = purchaseProduct.ValidDate;
             BatchNumber = purchaseProduct.BatchNumber;
