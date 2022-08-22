@@ -209,7 +209,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.藥健康網頁):
                 case nameof(FeatureItem.促銷管理):
                 case nameof(FeatureItem.銷售紀錄):
-                case nameof(FeatureItem.杏德官網):
+                case nameof(FeatureItem.OTC訂購網頁):
                 case nameof(FeatureItem.結帳作業):
                 case nameof(FeatureItem.損益報表):
                 case nameof(FeatureItem.資產負債表):
@@ -274,7 +274,7 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ProductTransactionRecordViewModel() { 
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.銷售作業)).Icon };
                     break;
-                case nameof(FeatureItem.杏德官網):
+                case nameof(FeatureItem.OTC訂購網頁):
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = ViewModelMainWindow.SingdeWebURI,
