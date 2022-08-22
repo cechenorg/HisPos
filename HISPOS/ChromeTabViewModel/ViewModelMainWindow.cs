@@ -156,6 +156,8 @@ namespace His_Pos.ChromeTabViewModel
         private IList<Stream> mStreams;
         public string pathFile;
 
+        public static string SingdeWebURI { get; private set; }
+
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
@@ -168,6 +170,8 @@ namespace His_Pos.ChromeTabViewModel
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
             ShowAddButton = false;
+
+            SingdeWebURI = $@"http://kaokaodepon.singde.com.tw:5566/id/{CurrentPharmacy.ID}/pass/{CurrentPharmacy.ID}";
 
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
