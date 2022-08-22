@@ -221,6 +221,7 @@ namespace His_Pos.ChromeTabViewModel
                 case nameof(FeatureItem.打卡記錄查詢):
                 case nameof(FeatureItem.舊每日總帳報表):
                 case nameof(FeatureItem.系統教學文件):
+                    break;
                 default:
                     return;
             }

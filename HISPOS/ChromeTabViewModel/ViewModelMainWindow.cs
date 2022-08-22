@@ -35,14 +35,13 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
 {
-    public class ViewModelMainWindow : MainViewModel, IViewModelMainWindow, IChromeTabViewModel
+    public class ViewModelMainWindow : MainViewModel
     {
         //this property is to show you can lock the tabs with a binding
         private bool canMoveTabs;
