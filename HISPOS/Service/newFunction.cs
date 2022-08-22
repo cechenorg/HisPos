@@ -299,7 +299,6 @@ namespace His_Pos.Service
             #region 先把全部的.txt轉成.xml
             foreach (var c in cooperativeClinicSettings)
             {
-                if (!c.AutoPrint) continue;
                 var path = c.FilePath;
                 if (!string.IsNullOrEmpty(path))
                 {
@@ -308,7 +307,7 @@ namespace His_Pos.Service
                         var fileEntries = Directory.GetFiles(c.FilePath);
                         foreach (var filePath in fileEntries)
                         {
-                            if (Path.GetExtension(filePath) == ".txt")
+                            if (c.TypeName == "杏翔" && Path.GetExtension(filePath).ToLower() == ".txt")
                             {
                                 string[] file = filePath.Split('_');
                                 if (file != null && file.Length > 2)
@@ -331,7 +330,6 @@ namespace His_Pos.Service
             #endregion
             foreach (var c in cooperativeClinicSettings)
             {
-                if(!c.AutoPrint) continue;
                 var path = c.FilePath;
                 if (string.IsNullOrEmpty(path)) continue;
                 try
@@ -344,7 +342,7 @@ namespace His_Pos.Service
                             try
                             {
                                 var xDocument = new XDocument();
-                                if (Path.GetExtension(filePath) == ".xml")
+                                if (Path.GetExtension(filePath).ToLower() == ".xml")
                                 {
                                     xDocument = XDocument.Load(filePath);
                                 }
@@ -353,7 +351,7 @@ namespace His_Pos.Service
                                     continue;
                                 }
                                 string[] file = filePath.Split('_');
-                                if (file != null && file.Length > 2)
+                                if (file != null && file.Length > 2 && (string.IsNullOrEmpty(c.TypeName) ? string.Empty : c.TypeName) == "杏翔")
                                 {
                                     if (date != file[1])//非今日的處方，不新增處方紀錄
                                     {

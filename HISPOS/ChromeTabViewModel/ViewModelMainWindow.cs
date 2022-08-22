@@ -325,25 +325,27 @@ namespace His_Pos.ChromeTabViewModel
                 #region 先把全部的.txt轉成.xml
                 foreach (var setting in cooperativeClinicSettings)
                 {
-                    if (!setting.AutoPrint) continue;
-                    if(!string.IsNullOrEmpty(setting.FilePath))
+                    if((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
                     {
-                        var fileEntries = Directory.GetFiles(setting.FilePath);
-                        foreach (var filePath in fileEntries)
+                        if (!string.IsNullOrEmpty(setting.FilePath))
                         {
-                            if (!string.IsNullOrEmpty(filePath))
+                            var fileEntries = Directory.GetFiles(setting.FilePath);
+                            foreach (var filePath in fileEntries)
                             {
-                                if (Path.GetExtension(filePath) == ".txt")
+                                if (!string.IsNullOrEmpty(filePath))
                                 {
-                                    string[] file = filePath.Split('_');
-                                    if (file != null && file.Length > 2)
+                                    if (Path.GetExtension(filePath).ToLower() == ".txt")
                                     {
-                                        DataRow[] drs = table.Select(string.Format("Cooli_FilePath= '{0}'", filePath + ".xml"));
-                                        if ((drs != null && drs.Length > 0) || Directory.Exists(filePath + ".xml"))
+                                        string[] file = filePath.Split('_');
+                                        if (file != null && file.Length > 2)
                                         {
-                                            continue;
+                                            DataRow[] drs = table.Select(string.Format("Cooli_FilePath= '{0}'", filePath + ".xml"));
+                                            if ((drs != null && drs.Length > 0) || Directory.Exists(filePath + ".xml"))
+                                            {
+                                                continue;
+                                            }
+                                            GetTxtFiles(filePath);
                                         }
-                                        GetTxtFiles(filePath);
                                     }
                                 }
                             }
@@ -361,14 +363,14 @@ namespace His_Pos.ChromeTabViewModel
                             foreach (var filePath in fileEntries)
                             {
                                 string[] file = filePath.Split('_');
-                                if (file != null && file.Length > 2)
+                                if (file != null && file.Length > 2 && (string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
                                 {
                                     if (date != file[1])//非今日的處方，不新增處方紀錄
                                     {
                                         continue;
                                     }
                                 }
-                                if (Path.GetExtension(filePath) == ".xml")
+                                if (Path.GetExtension(filePath).ToLower() == ".xml")
                                 {
                                     var xDocument = XDocument.Load(filePath);
                                     var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
