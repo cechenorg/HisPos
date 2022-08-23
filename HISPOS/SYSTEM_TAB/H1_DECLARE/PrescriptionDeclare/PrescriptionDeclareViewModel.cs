@@ -296,6 +296,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        public string DisplayPatientCellPhone
+        {
+            get {
+                var cellphone = currentPrescription.Patient.CellPhone;
+
+                if(cellphone.Length == 10)
+                {
+                    return $"{cellphone.Substring(0,4)}-{cellphone.Substring(4, 3)}-{cellphone.Substring(4, 3)}";
+                }
+
+                return cellphone;
+            }
+            set
+            {
+                string cellphone = value.Replace("-","");
+                currentPrescription.Patient.CellPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                var cellphone = currentPrescription.Patient.SecondPhone;
+
+                if (cellphone.Length == 10)
+                {
+                    return $"{cellphone.Substring(0, 4)}-{cellphone.Substring(4, 3)}-{cellphone.Substring(4, 3)}";
+                }
+
+                return cellphone;
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                currentPrescription.Patient.SecondPhone = cellphone;
+            }
+        }
+
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;

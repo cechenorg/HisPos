@@ -47,7 +47,7 @@
                 InputMethod.IsInputMethodEnabled="False"
                 PreviewTextInput="PatientCellPhone_PreviewTextInput"
                 PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
-                Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:####-######}}">
+                Text="{Binding DisplayPatientCellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
                         <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />
@@ -72,7 +72,7 @@
                 InputMethod.IsInputMethodEnabled="False"
                 PreviewTextInput="PatientCellPhone_PreviewTextInput"
                 PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
-                Text="{Binding CurrentPrescription.Patient.SecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding DisplayPatientSecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
                         <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />
