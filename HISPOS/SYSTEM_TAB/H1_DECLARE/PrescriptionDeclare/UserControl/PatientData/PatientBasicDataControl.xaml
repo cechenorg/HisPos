@@ -95,7 +95,7 @@
                 InputMethod.IsInputMethodEnabled="False"
                 PreviewTextInput="PatientCellPhone_PreviewTextInput"
                 PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
-                Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding DisplayPatientTel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
                         <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />

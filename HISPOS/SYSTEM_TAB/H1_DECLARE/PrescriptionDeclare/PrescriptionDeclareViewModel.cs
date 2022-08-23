@@ -335,6 +335,33 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        public string DisplayPatientTel
+        {
+            get
+            {
+                var tel = currentPrescription.Patient.Tel;
+
+                switch (tel.Length)
+                {
+                    
+                    case 7:
+                        return $"{tel.Substring(0, 3)}-{tel.Substring(3, 4)}";
+                    case 9:
+                        return $"{tel.Substring(0, 2)}-{tel.Substring(2, 3)}-{tel.Substring(5, 4)}";
+                    case 10:
+                        return $"{tel.Substring(0, 2)}-{tel.Substring(2, 4)}-{tel.Substring(6, 4)}";
+                }
+
+
+                return tel;
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                currentPrescription.Patient.Tel = tel;
+            }
+        }
+
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;
