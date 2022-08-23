@@ -11,28 +11,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientD
     public partial class PatientBasicDataControl : System.Windows.Controls.UserControl
     {
 
-      
-
-        #region Edited
-
-        public static readonly DependencyProperty EditedProperty =
-            DependencyProperty.Register(
-                "Edited",
-                typeof(bool),
-                typeof(PatientBasicDataControl),
-                new PropertyMetadata(null));
-
-        public bool Edited
-        {
-            get { return (bool)GetValue(EditedProperty); }
-            set
-            {
-                SetValue(EditedProperty, value);
-            }
-        }
-
-        #endregion Edited
-
         public PatientBasicDataControl()
         {
             InitializeComponent();
