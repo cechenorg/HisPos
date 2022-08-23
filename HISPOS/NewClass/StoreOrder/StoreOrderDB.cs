@@ -816,147 +816,191 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToWaiting]", parameters);
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，預約採購
+        /// </summary>
+        /// <param name="indexReserve"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
         internal static DataTable SendStoreOrderToSingde(IndexReserve indexReserve, string note)
         {
             string orderMedicines = "";
-            string cusName = "";
-            string planDate = "";
-            foreach (var product in indexReserve.IndexReserveDetailCollection)
+            string cusName = indexReserve.CusName;
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(indexReserve.StoOrdID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();
+            foreach(DataRow dr in SortTable.Rows)
             {
-                if (product.SendAmount == 0) continue;
-                if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(0, 12);
+                string proID = Convert.ToString(dr["Pro_ID"]);
+                int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                int isDone = Convert.ToInt32(dr["IsDone"]);
+                if(isDone == 1) continue;
+                if (orderAmount == 0) continue;
+                if (proID.Length > 12)
+                    orderMedicines += proID.Substring(0, 12);
                 else
-                    orderMedicines += product.ID.PadRight(12, ' ');
+                    orderMedicines += proID.PadRight(12, ' ');
 
-                orderMedicines += product.SendAmount.ToString().PadLeft(10, ' ');
+                orderMedicines += orderAmount.ToString().PadLeft(10, ' ');
 
-                if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(13);
+                if (proID.Length > 12)
+                    orderMedicines += proID.Substring(13);
 
                 orderMedicines += "\r\n";
             }
-            cusName = indexReserve.CusName;
-            //planDate = (indexReserve.AdjustDate.Year - 1911) + indexReserve.AdjustDate.ToString("MMdd");
             return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','','{note}', '{orderMedicines}')");
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，(OTC)常備採&一般採
+        /// </summary>
+        /// <param name="storeOrder"></param>
+        /// <returns></returns>
         internal static DataTable SendOTCStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderOTC = "";
-            //string cusName = "";
-            //string planDate = "";
-
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrder.ID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();
             if (storeOrder is PurchaseOrder)
             {
-                foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
+                foreach (DataRow product in SortTable.Rows)
                 {
-                    if (product.Type == 2)
+                    int type = Convert.ToInt32(product["Pro_TypeID"]);
+                    string proID = Convert.ToString(product["Pro_ID"]);
+                    int orderAmount = Convert.ToInt32(product["StoOrdDet_OrderAmount"]);
+                    string note = Convert.ToString(product["StoOrdDet_Note"]);
+                    int isDone = Convert.ToInt32(product["IsDone"]);
+                    if (type == 2 && isDone == 0)
                     {
-                        if (product.ID.Length > 12)
-                            orderOTC += product.ID.Substring(0, 13);
+                        if (proID.Length > 12)
+                            orderOTC += proID.Substring(0, 13);
                         else
-                            orderOTC += product.ID.PadRight(12, ' ');
+                            orderOTC += proID.PadRight(12, ' ');
 
-                        orderOTC += product.OrderAmount.ToString("0.00").PadLeft(9, ' ');
+                        orderOTC += orderAmount.ToString("0.00").PadLeft(9, ' ');
 
-                        if (product.ID.Length > 12)
-                            orderOTC += product.ID.Substring(13);
+                        if (proID.Length > 12)
+                            orderOTC += proID.Substring(13);
 
-                        orderOTC += product.Note;
+                        orderOTC += note;
                         orderOTC += "\r\n";
                     }
                 }
-
-                //cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
-
-                //if (((PurchaseOrder)storeOrder).PlanArriveDate != null)
-                // planDate = (((PurchaseOrder)storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
             }
             else
             {
-                foreach (var product in ((ReturnOrder)storeOrder).ReturnProducts)
+                foreach (DataRow product in SortTable.Rows)
                 {
-                    if (product.ID.Length > 12)
-                        orderOTC += product.ID.Substring(0, 13);
-                    else
-                        orderOTC += product.ID.PadRight(12, ' ');
+                    string proID = Convert.ToString(product["Pro_ID"]);
+                    int orderAmount = Convert.ToInt32(product["StoOrdDet_OrderAmount"]);
+                    string note = Convert.ToString(product["StoOrdDet_Note"]);
+                    int isDone = Convert.ToInt32(product["IsDone"]);
+                    if(isDone == 0)
+                    {
+                        if (proID.Length > 12)
+                            orderOTC += proID.Substring(0, 13);
+                        else
+                            orderOTC += proID.PadRight(12, ' ');
 
-                    orderOTC += (-product.ReturnAmount).ToString().PadLeft(9, ' ');
+                        orderOTC += (-orderAmount).ToString().PadLeft(9, ' ');
 
-                    if (product.ID.Length > 12)
-                        orderOTC += product.ID.Substring(13);
+                        if (proID.Length > 12)
+                            orderOTC += proID.Substring(13);
 
-                    orderOTC += product.Note;
-                    orderOTC += "\r\n";
+                        orderOTC += note;
+                        orderOTC += "\r\n";
+                    }
                 }
             }
-            DataTable tableOTC;
 
-            tableOTC = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOTCOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{storeOrder.Note}', '{orderOTC}')");
+            DataTable tableOTC = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOTCOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{storeOrder.Note}', '{orderOTC}')");
 
             return tableOTC;
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，(藥品)常備採&一般採
+        /// </summary>
+        /// <param name="storeOrder"></param>
+        /// <returns></returns>
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderMedicines = "";
-            string cusName = "";
-            string planDate = "";
+            string cusName = string.Empty;
+            string planDate = string.Empty;
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrder.ID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();
 
-            if (storeOrder is PurchaseOrder)
+            if(storeOrder is PurchaseOrder)
             {
-                foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
+                foreach (DataRow dr in SortTable.Rows)
                 {
-                    if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(0, 12);
-                    else
-                        orderMedicines += product.ID.PadRight(12, ' ');
+                    string proID = Convert.ToString(dr["Pro_ID"]);
+                    int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                    string note = Convert.ToString(dr["StoOrdDet_Note"]);
+                    int isDone = Convert.ToInt32(dr["IsDone"]);
+                    if(isDone == 0)
+                    {
+                        if (proID.Length > 12)
+                            orderMedicines += proID.Substring(0, 12);
+                        else
+                            orderMedicines += proID.PadRight(12, ' ');
 
-                    orderMedicines += product.OrderAmount.ToString("0.00").ToString().PadLeft(10, ' ');
+                        orderMedicines += orderAmount.ToString("0.00").ToString().PadLeft(10, ' ');
 
-                    if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(13);
+                        if (proID.Length > 12)
+                            orderMedicines += proID.Substring(13);
 
-                    orderMedicines += product.Note;
-                    orderMedicines += "\r\n";
+                        orderMedicines += note;
+                        orderMedicines += "\r\n";
+                    }
                 }
-
                 cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
 
                 if (((PurchaseOrder)storeOrder).PlanArriveDate != null)
-                    planDate = (((PurchaseOrder)storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
+                    planDate = ((PurchaseOrder)storeOrder).PlanArriveDate?.Year - 1911 + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
             }
             else
             {
-                foreach (var product in ((ReturnOrder)storeOrder).ReturnProducts)
+                foreach (DataRow dr in SortTable.Rows)
                 {
-                    if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(0, 12);
-                    else
-                        orderMedicines += product.ID.PadRight(12, ' ');
+                    string proID = Convert.ToString(dr["Pro_ID"]);
+                    int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                    string note = Convert.ToString(dr["StoOrdDet_Note"]);
+                    int isDone = Convert.ToInt32(dr["IsDone"]);
+                    if (isDone == 0)
+                    {
+                        if (proID.Length > 12)
+                            orderMedicines += proID.Substring(0, 12);
+                        else
+                            orderMedicines += proID.PadRight(12, ' ');
 
-                    orderMedicines += (-product.ReturnAmount).ToString().PadLeft(10, ' ');
+                        orderMedicines += (-orderAmount).ToString().PadLeft(10, ' ');
 
-                    if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(13);
+                        if (proID.Length > 12)
+                            orderMedicines += proID.Substring(13);
 
-                    orderMedicines += product.Note;
-                    orderMedicines += "\r\n";
+                        orderMedicines += note;
+                        orderMedicines += "\r\n";
+                    }
                 }
             }
-
             string sql = string.Format(@"Call InsertNewOrderOrPreOrder('{0}','{1}','{2}','{3}','{4}','{5}')", ViewModelMainWindow.CurrentPharmacy.ID, storeOrder.ID, cusName, planDate, storeOrder.Note, orderMedicines);
             DataTable tableMedicines = MainWindow.SingdeConnection.ExecuteProc(sql);
             return tableMedicines;
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，OTC代採
+        /// </summary>
+        /// <param name="purchaseList"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
         internal static DataTable SendOTCStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
         {
             string orderOTCs = "";
-            string cusName = "";
-            string planDate = "";
 
             foreach (var product in purchaseList)
             {
@@ -979,24 +1023,33 @@ namespace His_Pos.NewClass.StoreOrder
 
             return tableOTC;
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，欠藥採購
+        /// </summary>
+        /// <param name="purchaseList"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
         internal static DataTable SendStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
         {
             string orderMedicines = "";
-            string cusName = "";
-            string planDate = "";
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(purchaseList.StoreOrderID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();//重新排序
 
-            foreach (var product in purchaseList)
+            foreach(DataRow dr in SortTable.Rows)
             {
-                if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(0, 12);
+                string proID = Convert.ToString(dr["Pro_ID"]);
+                int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                if (proID.Length > 12)
+                    orderMedicines += proID.Substring(0, 12);
                 else
-                    orderMedicines += product.ID.PadRight(12, ' ');
+                    orderMedicines += proID.PadRight(12, ' ');
 
-                orderMedicines += product.Amount.ToString().PadLeft(10, ' ');
+                orderMedicines += orderAmount.ToString().PadLeft(10, ' ');
 
-                if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(13);
+                if (proID.Length > 12)
+                    orderMedicines += proID.Substring(13);
 
                 orderMedicines += "\r\n";
             }
