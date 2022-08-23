@@ -94,7 +94,7 @@
             <patientData:PatientHistoriesControl Patient="{Binding CurrentPrescription.Patient, UpdateSourceTrigger=PropertyChanged}" SelectedHistory="{Binding SelectedHistory, UpdateSourceTrigger=PropertyChanged}" />
         </DataTemplate>
         <DataTemplate x:Key="CustomerDetail" DataType="{x:Type local:PrescriptionDeclareView}">
-            <patientData:PatientBasicDataControl Patient="{Binding CurrentPrescription.Patient, UpdateSourceTrigger=PropertyChanged}" />
+            <patientData:PatientBasicDataControl DataContext="{Binding}" />
         </DataTemplate>
         <DataTemplate x:Key="CustomerRecord" DataType="{x:Type local:PrescriptionDeclareView}">
             <patientData:PatientRecordControl Patient="{Binding CurrentPrescription.Patient, UpdateSourceTrigger=PropertyChanged}" />
