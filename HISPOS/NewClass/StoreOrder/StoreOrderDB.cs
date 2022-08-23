@@ -828,7 +828,7 @@ namespace His_Pos.NewClass.StoreOrder
             string cusName = indexReserve.CusName;
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(indexReserve.StoOrdID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "StoOrdDet_ID";
+            dv.Sort = "Pro_ID";
             DataTable SortTable = dv.ToTable();
             foreach(DataRow dr in SortTable.Rows)
             {
@@ -861,7 +861,7 @@ namespace His_Pos.NewClass.StoreOrder
             string orderOTC = "";
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrder.ID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "StoOrdDet_ID";
+            dv.Sort = "Pro_ID";
             DataTable SortTable = dv.ToTable();
             if (storeOrder is PurchaseOrder)
             {
@@ -931,7 +931,7 @@ namespace His_Pos.NewClass.StoreOrder
             string planDate = string.Empty;
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrder.ID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "StoOrdDet_ID";
+            dv.Sort = "Pro_ID";
             DataTable SortTable = dv.ToTable();
 
             if(storeOrder is PurchaseOrder)
@@ -1001,18 +1001,24 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable SendOTCStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
         {
             string orderOTCs = "";
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(purchaseList.StoreOrderID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "Pro_ID";
+            DataTable SortTable = dv.ToTable();//重新排序
 
-            foreach (var product in purchaseList)
+            foreach (DataRow dr in SortTable.Rows)
             {
-                if (product.ID.Length > 12)
-                    orderOTCs += product.ID.Substring(0, 13);
+                string proID = Convert.ToString(dr["Pro_ID"]);
+                int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                if (proID.Length > 12)
+                    orderOTCs += proID.Substring(0, 13);
                 else
-                    orderOTCs += product.ID.PadRight(12, ' ');
+                    orderOTCs += proID.PadRight(12, ' ');
 
-                orderOTCs += product.Amount.ToString("0.00").PadLeft(9, ' ');
+                orderOTCs += orderAmount.ToString("0.00").PadLeft(9, ' ');
 
-                if (product.ID.Length > 12)
-                    orderOTCs += product.ID.Substring(13);
+                if (proID.Length > 12)
+                    orderOTCs += proID.Substring(13);
 
                 orderOTCs += "\r\n";
             }
@@ -1034,7 +1040,7 @@ namespace His_Pos.NewClass.StoreOrder
             string orderMedicines = "";
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(purchaseList.StoreOrderID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "StoOrdDet_ID";
+            dv.Sort = "Pro_ID";
             DataTable SortTable = dv.ToTable();//重新排序
 
             foreach(DataRow dr in SortTable.Rows)
