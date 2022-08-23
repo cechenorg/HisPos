@@ -828,7 +828,7 @@ namespace His_Pos.NewClass.StoreOrder
             string cusName = indexReserve.CusName;
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(indexReserve.StoOrdID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "Pro_ID";
+            dv.Sort = "StoOrdDet_ID";
             DataTable SortTable = dv.ToTable();
             foreach(DataRow dr in SortTable.Rows)
             {
@@ -861,7 +861,7 @@ namespace His_Pos.NewClass.StoreOrder
             string orderOTC = "";
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrder.ID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "Pro_ID";
+            dv.Sort = "StoOrdDet_ID";
             DataTable SortTable = dv.ToTable();
             if (storeOrder is PurchaseOrder)
             {
@@ -931,7 +931,7 @@ namespace His_Pos.NewClass.StoreOrder
             string planDate = string.Empty;
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrder.ID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "Pro_ID";
+            dv.Sort = "StoOrdDet_ID";
             DataTable SortTable = dv.ToTable();
 
             if(storeOrder is PurchaseOrder)
@@ -1003,7 +1003,7 @@ namespace His_Pos.NewClass.StoreOrder
             string orderOTCs = "";
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(purchaseList.StoreOrderID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "Pro_ID";
+            dv.Sort = "StoOrdDet_ID";
             DataTable SortTable = dv.ToTable();//重新排序
 
             foreach (DataRow dr in SortTable.Rows)
@@ -1040,7 +1040,7 @@ namespace His_Pos.NewClass.StoreOrder
             string orderMedicines = "";
             DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(purchaseList.StoreOrderID);
             DataView dv = OrderTable.DefaultView;
-            dv.Sort = "Pro_ID";
+            dv.Sort = "StoOrdDet_ID";
             DataTable SortTable = dv.ToTable();//重新排序
 
             foreach(DataRow dr in SortTable.Rows)
