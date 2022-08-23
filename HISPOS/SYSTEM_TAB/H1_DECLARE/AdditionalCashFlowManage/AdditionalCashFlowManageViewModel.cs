@@ -116,7 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             }
         }
 
-        private bool payCheck;
+        private bool payCheck = true;
 
         public bool PayCheck
         {
@@ -132,7 +132,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             }
         }
 
-        private bool gainCheck = true;
+        private bool gainCheck;
 
         public bool GainCheck
         {
@@ -218,7 +218,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             CashFlowAccountsSource.Add(new CashFlowAccount(CashFlowType.Income, "額外收入", 0));
             InitCommand();
 
-            CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
+            CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Expenses).ToList();
             SelectedCashFlowAccount = CashFlowAccounts[0];
             SelectedBank = SelectedType[0];
             CashFlowRecords = new CashFlowRecords();
