@@ -68,6 +68,7 @@ namespace His_Pos.Class
         打卡記錄查詢 = 47,  
         沖帳作業 = 48,
         每日總帳報表 = 49,
+        OTC訂購網頁 = 50
     }
 
     public enum StoreOrderProductType

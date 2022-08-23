@@ -35,14 +35,13 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
 {
-    public class ViewModelMainWindow : MainViewModel, IViewModelMainWindow, IChromeTabViewModel
+    public class ViewModelMainWindow : MainViewModel
     {
         //this property is to show you can lock the tabs with a binding
         private bool canMoveTabs;
@@ -156,6 +155,8 @@ namespace His_Pos.ChromeTabViewModel
         private IList<Stream> mStreams;
         public string pathFile;
 
+        public static string SingdeWebURI { get; private set; }
+
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
@@ -168,6 +169,8 @@ namespace His_Pos.ChromeTabViewModel
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
             ShowAddButton = false;
+
+            SingdeWebURI = $@"http://kaokaodepon.singde.com.tw:5566/id/{CurrentPharmacy.ID}/pass/{CurrentPharmacy.ID}";
 
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>

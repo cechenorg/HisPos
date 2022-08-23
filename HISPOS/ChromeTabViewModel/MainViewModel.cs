@@ -47,6 +47,7 @@ using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -164,33 +165,12 @@ namespace His_Pos.ChromeTabViewModel
         {
             switch (vm.TabName)
             {
-                case nameof(FeatureItem.處方登錄):
-                    break;
-
-                case nameof(FeatureItem.處方查詢):
-                    break;
-
-                case nameof(FeatureItem.匯出申報檔):
-                    break;
-
-                case nameof(FeatureItem.額外收支):
-                    break;
-
-                case nameof(FeatureItem.立帳作業):
-                    break;
-
-                case nameof(FeatureItem.商品查詢):
-                    break;
-
+               
                 case nameof(FeatureItem.進退貨管理): 
                     ProductPurchaseReturnViewModel PurchaseViewModel 
                         = (ProductPurchaseReturnViewModel)ItemCollection.FirstOrDefault(s => s.TabName == nameof(FeatureItem.進退貨管理));//每個功能只會同時開啟一個tab，所以tab[0]
                     PurchaseViewModel.NormalViewModel.SearchString = string.Empty;//關閉進退貨管理清空搜尋條件
                     break;
-
-                case nameof(FeatureItem.進退貨紀錄):
-                    break;
-
                 case nameof(FeatureItem.新增盤點):
                     ConfirmWindow confirmWindow = new ConfirmWindow("關閉視窗後盤點單不會儲存 是否關閉?", "關閉新增盤點確認");
                     if (!(bool)confirmWindow.DialogResult)
@@ -200,98 +180,48 @@ namespace His_Pos.ChromeTabViewModel
                         return;
                     }
                     break;
-
+                case nameof(FeatureItem.進退貨紀錄):
+                case nameof(FeatureItem.處方登錄):
+                case nameof(FeatureItem.處方查詢):
+                case nameof(FeatureItem.匯出申報檔):
+                case nameof(FeatureItem.額外收支):
+                case nameof(FeatureItem.立帳作業):
+                case nameof(FeatureItem.商品查詢):
                 case nameof(FeatureItem.庫存盤點紀錄):
-                    break;
-
                 case nameof(FeatureItem.商品類別管理):
-                    break;
-
                 case nameof(FeatureItem.供應商管理):
-                    break;
-
                 case nameof(FeatureItem.櫃位管理):
-                    //LocationManageView.Instance.SaveLocation();
-                    break;
-
                 case nameof(FeatureItem.員工管理):
-                    break;
-
                 case nameof(FeatureItem.顧客管理):
-                    break;
-
                 case nameof(FeatureItem.藥品頻率管理):
-                    break;
-
                 case nameof(FeatureItem.審核管理):
-                    break;
-
                 case nameof(FeatureItem.藥局管理):
-                    break;
-
                 case nameof(FeatureItem.庫存現值報表):
-                    break;
-
                 case nameof(FeatureItem.進退貨報表):
-                    break;
-
                 case nameof(FeatureItem.合作診所藥品耗用):
-                    break;
-
                 case nameof(FeatureItem.管制藥品簿冊申報):
-                    break;
-
                 case nameof(FeatureItem.會計總帳報表):
-                    break;
                 case nameof(FeatureItem.每日總帳報表):
-                    break;
                 case nameof(FeatureItem.系統函式):
-                    break;
-
                 case nameof(FeatureItem.申報院所點數總表):
-                    break;
-
                 case nameof(FeatureItem.盤點計畫):
-                    break;
-
                 case nameof(FeatureItem.藥袋查詢):
-                    break;
-
                 case nameof(FeatureItem.藥健康網頁):
-                    break;
-
                 case nameof(FeatureItem.促銷管理):
-                    break;
-
                 case nameof(FeatureItem.銷售紀錄):
-                    break;
-
+                case nameof(FeatureItem.OTC訂購網頁):
                 case nameof(FeatureItem.結帳作業):
-                    break;
-
                 case nameof(FeatureItem.損益報表):
-                    break;
-
                 case nameof(FeatureItem.資產負債表):
-                    break;
                 case nameof(FeatureItem.沖帳作業):
-                    break;
-
                 case nameof(FeatureItem.關班作業):
-                    break;
                 case nameof(FeatureItem.關班帳務查詢):
-                    break; 
                 case nameof(FeatureItem.上下班打卡):
-                    break; 
                 case nameof(FeatureItem.排班管理):
-                    break; 
                 case nameof(FeatureItem.打卡記錄查詢):
-                    break;
                 case nameof(FeatureItem.舊每日總帳報表):
-                    break;
                 case nameof(FeatureItem.系統教學文件):
                     break;
-
                 default:
                     return;
             }
@@ -344,8 +274,13 @@ namespace His_Pos.ChromeTabViewModel
                     newTab = new ProductTransactionRecordViewModel() { 
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.銷售作業)).Icon };
                     break;
-
-
+                case nameof(FeatureItem.OTC訂購網頁):
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = ViewModelMainWindow.SingdeWebURI,
+                        UseShellExecute = true
+                    });
+                    return;
                 //藥局管理
                 case nameof(FeatureItem.顧客管理):
                     newTab = (Application.Current.FindResource("Locator") as ViewModelLocator).CustomerManageView;
