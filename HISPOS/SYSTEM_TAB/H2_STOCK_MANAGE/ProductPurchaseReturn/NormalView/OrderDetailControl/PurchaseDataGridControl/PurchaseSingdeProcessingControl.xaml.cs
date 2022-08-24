@@ -89,19 +89,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
             }
 
-        private void DataGrid_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            StoreOrderHistory row = (StoreOrderHistory)HISTORYDG.SelectedItems[0];
+        //private void DataGrid_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        //{
+        //    StoreOrderHistory row = (StoreOrderHistory)HISTORYDG.SelectedItems[0];
 
 
 
-            string proID = row.ID.ToString();
+        //    string proID = row.ID.ToString();
 
 
-            ProductPurchaseRecordViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseRecord;
+        //    ProductPurchaseRecordViewModel viewModel = (App.Current.Resources["Locator"] as ViewModelLocator).ProductPurchaseRecord;
 
-            Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, proID, ""));
-        }
+        //    Messenger.Default.Send(new NotificationMessage<string>(this, viewModel, proID, ""));
+        //}
         private void ProductIDTextbox_OnKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
