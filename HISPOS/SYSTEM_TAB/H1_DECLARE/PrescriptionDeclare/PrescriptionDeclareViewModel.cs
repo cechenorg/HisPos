@@ -301,6 +301,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get {
                 var cellphone = currentPrescription.Patient.CellPhone;
 
+
+                if (cellphone is null)
+                    return string.Empty;
+
                 if(cellphone.Length == 10)
                 {
                     return $"{cellphone.Substring(0,4)}-{cellphone.Substring(4, 3)}-{cellphone.Substring(4, 3)}";
@@ -321,6 +325,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 var cellphone = currentPrescription.Patient.SecondPhone;
 
+                if (cellphone is null)
+                    return String.Empty;
+
                 if (cellphone.Length == 10)
                 {
                     return $"{cellphone.Substring(0, 4)}-{cellphone.Substring(4, 3)}-{cellphone.Substring(4, 3)}";
@@ -340,6 +347,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get
             {
                 var tel = currentPrescription.Patient.Tel;
+
+                if (tel is null)
+                    return string.Empty;
 
                 switch (tel.Length)
                 {
