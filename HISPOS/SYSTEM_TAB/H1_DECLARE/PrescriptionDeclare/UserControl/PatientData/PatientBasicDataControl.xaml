@@ -211,7 +211,7 @@
                             FontSize="16"
                             FontWeight="Bold"
                             Foreground="{StaticResource ForeGround}"
-                            Text="{Binding CurrentPrescription.Patient.ContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding DisplayPatientNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             TextWrapping="Wrap"
                             VerticalScrollBarVisibility="Visible">
                             <i:Interaction.Triggers>

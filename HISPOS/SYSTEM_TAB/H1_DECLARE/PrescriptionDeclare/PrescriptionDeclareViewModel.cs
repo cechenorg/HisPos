@@ -372,6 +372,39 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        public string DisplayPatientNote
+        {
+            get
+            {
+                var note = currentPrescription.Patient.Note;
+
+                if (note is null)
+                    return string.Empty;
+
+                var splitLines = note.Split(new[] { "\r\n" }, StringSplitOptions.None);
+
+                if(splitLines.First().Length > 66)
+                {
+                    splitLines[0] = splitLines.First().Substring(0, 66);
+                }
+
+                string result = default;
+
+                for(int i = 0; i < splitLines.Length; i++)
+                {
+                    result += splitLines[i];
+                    if (i < splitLines.Length - 1)
+                        result += "\r\n";
+                }
+               
+                return result;
+            }
+            set
+            {
+                currentPrescription.Patient.Note = value;
+            }
+        }
+
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;
