@@ -46,7 +46,6 @@
                 Foreground="{StaticResource ForeGround}"
                 InputMethod.IsInputMethodEnabled="False"
                 PreviewTextInput="PatientCellPhone_PreviewTextInput"
-                PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
                 Text="{Binding DisplayPatientCellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
@@ -71,7 +70,6 @@
                 Foreground="{StaticResource ForeGround}"
                 InputMethod.IsInputMethodEnabled="False"
                 PreviewTextInput="PatientCellPhone_PreviewTextInput"
-                PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
                 Text="{Binding DisplayPatientSecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
@@ -94,7 +92,6 @@
                 Foreground="{StaticResource ForeGround}"
                 InputMethod.IsInputMethodEnabled="False"
                 PreviewTextInput="PatientCellPhone_PreviewTextInput"
-                PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
                 Text="{Binding DisplayPatientTel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewKeyDown">
