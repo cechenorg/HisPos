@@ -473,8 +473,7 @@
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             FrozenColumnCount="2"
             GridLinesVisibility="Horizontal"
-            ItemsSource="{Binding CurrentStoreOrder.StoreOrderHistory}"
-            PreviewMouseDoubleClick="DataGrid_PreviewMouseDoubleClick">
+            ItemsSource="{Binding CurrentStoreOrder.StoreOrderHistory}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
