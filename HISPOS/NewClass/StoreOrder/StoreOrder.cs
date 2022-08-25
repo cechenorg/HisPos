@@ -242,6 +242,42 @@ namespace His_Pos.NewClass.StoreOrder
         /// </summary>
         public void MoveToNextStatus()
         {
+            if(OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+            {
+                if(this is ReturnOrder)
+                {
+                    ReturnOrder returnOrder = (ReturnOrder)this;
+                    List<ReturnProduct> removeProducts = new List<ReturnProduct>();
+                    List<ReturnOTC> removeOTCProducts = new List<ReturnOTC>();
+                    foreach (var returnProduct in returnOrder.ReturnProducts)
+                    {
+                        if (returnProduct is ReturnOTC)
+                        {
+                            ReturnOTC productOTC = (ReturnOTC)returnProduct;
+                            if (!returnProduct.IsChecked)
+                            {
+                                removeOTCProducts.Add(productOTC);
+                            }
+                        }
+                        if (returnProduct is ReturnProduct)
+                        {
+                            ReturnProduct product = (ReturnProduct)returnProduct;
+                            if (!returnProduct.IsChecked)
+                            {
+                                removeProducts.Add(product);
+                            }
+                        }
+                    }
+                    foreach (ReturnProduct returnProduct in removeProducts)
+                    {
+                        ((ReturnOrder)this).ReturnProducts.Remove(returnProduct);
+                    }
+                    foreach (ReturnOTC returnProduct in removeOTCProducts)
+                    {
+                        ((ReturnOrder)this).ReturnProducts.Remove(returnProduct);
+                    }
+                }
+            }
             SaveOrder();
             switch (OrderStatus)
             {

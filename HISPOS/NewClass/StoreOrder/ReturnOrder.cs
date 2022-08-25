@@ -40,7 +40,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public double ReturnStockValue
         {
-            get { return Math.Round(returnStockValue,0); }
+            get { return Math.Ceiling(returnStockValue); }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
 
@@ -198,7 +198,7 @@ namespace His_Pos.NewClass.StoreOrder
         public override void CalculateTotalPrice()
         {
             if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
-                ReturnStockValue = ReturnProducts.Sum(p => p.ReturnStockValue);
+                ReturnStockValue = ReturnProducts.Where(w=>w.IsChecked).Sum(p => p.ReturnStockValue);
 
             TotalPrice = ReturnProducts.Sum(p => Math.Round(p.SubTotal,2, MidpointRounding.AwayFromZero));
             TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
@@ -210,6 +210,20 @@ namespace His_Pos.NewClass.StoreOrder
             SelectedItem = null;
 
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
+
+            foreach (ReturnProduct returnProduct in ReturnProducts)
+            {
+                double value = 0;
+                double avgPrice = 0;
+                foreach (ReturnProductInventoryDetail detail in returnProduct.InventoryDetailCollection)
+                {
+                    value = detail.ReturnStockValue;
+                    avgPrice = detail.ReceiveAmount;
+                }
+                returnProduct.Price = avgPrice;//(平均單價)
+                returnProduct.SubTotal = Convert.ToDouble(avgPrice * returnProduct.RealAmount);
+                returnProduct.ReceiveAmount = Math.Ceiling(avgPrice * returnProduct.ReturnAmount);
+            }
             OldReturnProducts = ReturnProducts.GetOldReturnProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
 
@@ -236,6 +250,13 @@ namespace His_Pos.NewClass.StoreOrder
 
         internal void ReturnOrderRePurchase()
         {
+            foreach (ReturnProduct returnProduct in this.returnProducts)
+            {
+                if(!returnProduct.IsChecked)
+                {
+                    this.returnProducts.Remove(returnProduct);
+                }
+            }
             SaveOrder();
 
             OrderStatus = OrderStatusEnum.DONE;

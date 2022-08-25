@@ -281,7 +281,7 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", double.IsNaN(pro.SubTotal) ? 0 : pro.SubTotal);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", "");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
@@ -662,7 +662,8 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
-            parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
+            DataTable table = SetReturnOrderDetail(returnOrder);
+            parameters.Add(new SqlParameter("STOORD_DETAIL", table));
             DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.Account);
             MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }

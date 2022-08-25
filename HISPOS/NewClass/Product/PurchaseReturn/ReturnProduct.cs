@@ -15,6 +15,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private double returnAmount;
         private double realAmount;
         private double subTotal;
+        private double receiveAmount;
         private double price;
         private double returnStockValue;
         private bool isProcessing = false;
@@ -122,6 +123,15 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     CalculateRealPrice();
                 else
                     CalculatePrice();
+            }
+        }
+
+        public double ReceiveAmount
+        {
+            get { return receiveAmount; }
+            set
+            {
+                Set(() => ReceiveAmount, ref receiveAmount, value);
             }
         }
 
@@ -250,7 +260,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     break;
 
                 case ProductStartInputVariableEnum.PRICE:
-                    subTotal = Price * RealAmount;
+                    subTotal = Math.Ceiling(Price * RealAmount);
                     break;
 
                 case ProductStartInputVariableEnum.SUBTOTAL:
