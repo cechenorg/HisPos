@@ -31,7 +31,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public double ReturnAmount
         {
             get { return returnAmount; }
-            set { 
+            set
+            {
                 Set(() => ReturnAmount, ref returnAmount, value);
                 CalculateStockValue();
             }
@@ -50,7 +51,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             if (row.Table.Columns.Contains("Record_Qty") && row["Record_Qty"] != DBNull.Value)
                 ReturnAmount = Math.Abs(Convert.ToInt32(row["Record_Qty"]));
             if (row.Table.Columns.Contains("Record_Amt") && row["Record_Amt"] != DBNull.Value)
-                ReturnStockValue = Convert.ToDouble(row["Record_Amt"]);
+                ReturnStockValue = Convert.ToDouble(row["Record_Amt"]) * ReturnAmount;
             if(ReturnAmount != 0)
                 ReceiveAmount = ReturnStockValue / ReturnAmount;
         }
@@ -59,6 +60,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
 
         private void CalculateStockValue()
         {
+            if (ReturnAmount > Inventory)
+                returnAmount = Inventory;
+
             ReturnStockValue = Price * ReturnAmount;
         }
 
