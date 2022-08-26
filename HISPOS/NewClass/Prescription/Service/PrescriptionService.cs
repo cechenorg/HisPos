@@ -432,10 +432,11 @@ namespace His_Pos.NewClass.Prescription.Service
             var cusGender = p.Patient.CheckGender();
             string patientTel;
             string[] splitStr = { "\r\n" };
-            string[] note = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
+            string[] notes = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
+            string note = notes.Length > 0 ? notes[0] : string.Empty;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
             {
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? Regex.Replace(p.Patient.CellPhone, "[^0-9]", "") : Regex.Replace(p.Patient.CellPhone, "[^0-9]", "") + "(" + note[0] + ")";
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) && notes.Length > 0 ? Regex.Replace(p.Patient.CellPhone, "[^0-9]", "") : Regex.Replace(p.Patient.CellPhone, "[^0-9]", "") + "(" + note + ")";
                 if (!string.IsNullOrEmpty(p.Patient.Line))
                 {
                     patientTel = "@" + patientTel;
@@ -444,7 +445,7 @@ namespace His_Pos.NewClass.Prescription.Service
             else
             {
                 if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(" + note[0] + ")";
+                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) && notes.Length > 0 ? p.Patient.Tel : p.Patient.Tel + "(" + note + ")";
                 else
                     patientTel = p.Patient.ContactNote;
             }
