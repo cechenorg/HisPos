@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Extention;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
@@ -300,17 +301,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             get {
                 var cellphone = currentPrescription.Patient.CellPhone;
-
-
-                if (cellphone is null)
-                    return string.Empty;
-
-                if(cellphone.Length == 10)
-                {
-                    return $"{cellphone.Substring(0,4)}-{cellphone.Substring(4, 3)}-{cellphone.Substring(4, 3)}";
-                }
-
-                return cellphone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
             }
             set
             {
@@ -324,16 +315,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get
             {
                 var cellphone = currentPrescription.Patient.SecondPhone;
-
-                if (cellphone is null)
-                    return String.Empty;
-
-                if (cellphone.Length == 10)
-                {
-                    return $"{cellphone.Substring(0, 4)}-{cellphone.Substring(4, 3)}-{cellphone.Substring(4, 3)}";
-                }
-
-                return cellphone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
             }
             set
             {
@@ -347,23 +329,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get
             {
                 var tel = currentPrescription.Patient.Tel;
-
-                if (tel is null)
-                    return string.Empty;
-
-                switch (tel.Length)
-                {
-                    
-                    case 7:
-                        return $"{tel.Substring(0, 3)}-{tel.Substring(3, 4)}";
-                    case 9:
-                        return $"{tel.Substring(0, 2)}-{tel.Substring(2, 3)}-{tel.Substring(5, 4)}";
-                    case 10:
-                        return $"{tel.Substring(0, 2)}-{tel.Substring(2, 4)}-{tel.Substring(6, 4)}";
-                }
-
-
-                return tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
             }
             set
             {
@@ -377,27 +343,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get
             {
                 var note = currentPrescription.Patient.Note;
-
-                if (note is null)
-                    return string.Empty;
-
-                var splitLines = note.Split(new[] { "\r\n" }, StringSplitOptions.None);
-
-                if(splitLines.First().Length > 66)
-                {
-                    splitLines[0] = splitLines.First().Substring(0, 66);
-                }
-
-                string result = default;
-
-                for(int i = 0; i < splitLines.Length; i++)
-                {
-                    result += splitLines[i];
-                    if (i < splitLines.Length - 1)
-                        result += "\r\n";
-                }
-               
-                return result;
+                return note is null ? string.Empty : note.ToPatientNote();
             }
             set
             {
