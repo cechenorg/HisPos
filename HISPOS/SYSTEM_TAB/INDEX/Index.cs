@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Extention;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
@@ -296,6 +297,61 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             {
                 Set(() => CustomerData, ref customerData, value);
                 IsDataChanged = false;
+            }
+        }
+
+        public string DisplayPatientCellPhone
+        {
+            get
+            {
+                var cellphone = customerData.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                customerData.CellPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                var cellphone = customerData.SecondPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                customerData.SecondPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientTel
+        {
+            get
+            {
+                var tel = customerData.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                customerData.Tel = tel;
+            }
+        }
+
+        public string DisplayPatientNote
+        {
+            get
+            {
+                var note = customerData.Note;
+                return note is null ? string.Empty : note.ToPatientNote();
+            }
+            set
+            {
+                customerData.Note = value;
             }
         }
 
