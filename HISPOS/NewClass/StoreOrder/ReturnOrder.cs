@@ -40,7 +40,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public double ReturnStockValue
         {
-            get { return Math.Ceiling(returnStockValue); }
+            get { return Math.Round(returnStockValue); }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
 
@@ -213,16 +213,19 @@ namespace His_Pos.NewClass.StoreOrder
 
             foreach (ReturnProduct returnProduct in ReturnProducts)
             {
-                double value = 0;
-                double avgPrice = 0;
-                foreach (ReturnProductInventoryDetail detail in returnProduct.InventoryDetailCollection)
+                if(!returnProduct.IsDone)
                 {
-                    value = detail.ReturnStockValue;
-                    avgPrice = detail.ReceiveAmount;
+                    double value = 0;
+                    double avgPrice = 0;
+                    foreach (ReturnProductInventoryDetail detail in returnProduct.InventoryDetailCollection)
+                    {
+                        value = detail.ReturnStockValue;
+                        avgPrice = detail.ReceiveAmount;
+                    }
+                    returnProduct.Price = avgPrice;//(平均單價)
+                    returnProduct.SubTotal = Convert.ToDouble(avgPrice * returnProduct.RealAmount);
+                    returnProduct.ReceiveAmount = Math.Round(avgPrice * returnProduct.ReturnAmount);
                 }
-                returnProduct.Price = avgPrice;//(平均單價)
-                returnProduct.SubTotal = Convert.ToDouble(avgPrice * returnProduct.RealAmount);
-                returnProduct.ReceiveAmount = Math.Ceiling(avgPrice * returnProduct.ReturnAmount);
             }
             OldReturnProducts = ReturnProducts.GetOldReturnProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);

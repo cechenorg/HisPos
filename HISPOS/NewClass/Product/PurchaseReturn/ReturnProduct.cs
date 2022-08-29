@@ -20,8 +20,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         private double returnStockValue;
         private bool isProcessing = false;
         private ProductStartInputVariableEnum startInputVariable = ProductStartInputVariableEnum.INIT;
-
         private bool isChecked;
+        private bool isDone;
         public bool IsChecked
         {
             get { return isChecked; }
@@ -155,6 +155,11 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         }
 
         public ReturnProductInventoryDetails InventoryDetailCollection { get; set; } = new ReturnProductInventoryDetails();
+        public bool IsDone
+        {
+            get { return isDone; }
+            set { Set(() => IsDone, ref isDone, value); }
+        }
 
         #endregion ----- Define Variables -----
 
@@ -177,7 +182,8 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             BatchNumber = row.Field<string>("StoOrdDet_BatchNumber");
             price = (double)row.Field<decimal>("StoOrdDet_Price");
             subTotal = (double)row.Field<decimal>("StoOrdDet_SubTotal");
-
+            if(row.Table.Columns.Contains("IsDone"))
+                IsDone = Convert.ToBoolean(row["IsDone"]);
             InventoryDetailCollection.Add(new ReturnProductInventoryDetail(row));
         }
 
@@ -260,7 +266,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
                     break;
 
                 case ProductStartInputVariableEnum.PRICE:
-                    subTotal = Math.Ceiling(Price * RealAmount);
+                    subTotal = Math.Round(Price * RealAmount);
                     break;
 
                 case ProductStartInputVariableEnum.SUBTOTAL:
