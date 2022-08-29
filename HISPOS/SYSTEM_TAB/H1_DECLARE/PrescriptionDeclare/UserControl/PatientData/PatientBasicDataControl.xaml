@@ -185,100 +185,69 @@
                 </i:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <StackPanel
-            Grid.Row="0"
-            Grid.RowSpan="5"
-            Grid.Column="1"
-            Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Margin="10,10,0,10" Orientation="Vertical">
-                    <Label
-                        Content="聯絡備註"
-                        FontSize="16"
-                        Foreground="{StaticResource ForeGround}" />
-                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                        <TextBox
-                            Width="275"
-                            Height="160"
-                            VerticalContentAlignment="Top"
-                            AcceptsReturn="True"
-                            Background="{StaticResource LightForeGround}"
-                            BorderThickness="0"
-                            CaretBrush="Black"
-                            FontSize="16"
-                            FontWeight="Bold"
-                            Foreground="{StaticResource ForeGround}"
-                            Text="{Binding DisplayPatientNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            TextWrapping="Wrap"
-                            VerticalScrollBarVisibility="Visible">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="PreviewKeyDown">
-                                    <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </TextBox>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Margin="10,10,0,10" Orientation="Vertical">
-                    <Label
-                        Content="備註"
-                        FontSize="16"
-                        Foreground="{StaticResource ForeGround}" />
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox
-                            Width="275"
-                            Height="160"
-                            VerticalContentAlignment="Top"
-                            AcceptsReturn="True"
-                            Background="{StaticResource LightForeGround}"
-                            BorderThickness="0"
-                            CaretBrush="Black"
-                            FontSize="16"
-                            FontWeight="Bold"
-                            Foreground="{StaticResource ForeGround}"
+        <StackPanel Grid.RowSpan="5" Grid.Column="1" Orientation="Vertical">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label Content="聯絡備註 (此內容會印在藥袋上)" Margin="0,5,0,0" FontSize="16" Foreground="{StaticResource ForeGround}" />
+
+                <TextBox Grid.Row="1" Margin="5,0,15,0"  VerticalContentAlignment="Top" Background="{StaticResource LightForeGround}"
+                            CaretBrush="Black" FontSize="16" FontWeight="Bold" Foreground="{StaticResource ForeGround}"
+                            Text="{Binding DisplayPatientContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewKeyDown">
+                            <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+
+                <Label Grid.Row="2" Content="備註" FontSize="16" Foreground="{StaticResource ForeGround}" />
+
+                <TextBox Grid.Row="3" Margin="5,0,15,0" VerticalContentAlignment="Top" AcceptsReturn="True"
+                            Background="{StaticResource LightForeGround}"  CaretBrush="Black"
+                            FontSize="16" FontWeight="Bold" Foreground="{StaticResource ForeGround}"
                             Text="{Binding CurrentPrescription.Patient.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            TextWrapping="Wrap"
-                            VerticalScrollBarVisibility="Visible">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="PreviewKeyDown">
-                                    <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </TextBox>
-                    </StackPanel>
+                            TextWrapping="Wrap" VerticalScrollBarVisibility="Visible">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PreviewKeyDown">
+                            <i:InvokeCommandAction Command="{Binding CustomerDetailEdited}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                
+                <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="0,5,0,0">
+                    <ContentControl Margin="293,0,0,0" Content="{Binding }">
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                    
+                    <Button Width="80" Height="30" Margin="10,0,0,10"
+                        Background="DimGray"  BorderBrush="DimGray" Command="{Binding CustomerRedoEdited}" Content="取消"
+                        IsEnabled="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" />
+                    
+                    <Button Width="80" Height="30" Margin="10,0,0,10"
+                        Background="IndianRed" BorderBrush="IndianRed" Command="{Binding SavePatientData}"
+                        Content="存檔" IsEnabled="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <ContentControl Margin="293,0,0,0" Content="{Binding }">
-                    <ContentControl.Style>
-                        <Style TargetType="{x:Type ContentControl}">
-                            <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" Value="true">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" Value="false">
-                                    <Setter Property="ContentTemplate" Value="{StaticResource NonEdited}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ContentControl.Style>
-                </ContentControl>
-                <Button
-                    Width="80"
-                    Height="30"
-                    Margin="10,0,0,10"
-                    Background="DimGray"
-                    BorderBrush="DimGray"
-                    Command="{Binding CustomerRedoEdited}"
-                    Content="取消"
-                    IsEnabled="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" />
-                <Button
-                    Width="80" Height="30" Margin="10,0,0,10"
-                    Background="IndianRed" BorderBrush="IndianRed"
-                    Command="{Binding SavePatientData}"
-                    Content="存檔" IsEnabled="{Binding CustomerEdited, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
+
+            </Grid>
+            
         </StackPanel>
     </Grid>
 </UserControl>

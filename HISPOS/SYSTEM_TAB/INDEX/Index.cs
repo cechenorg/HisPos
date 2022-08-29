@@ -296,6 +296,12 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             set
             {
                 Set(() => CustomerData, ref customerData, value);
+                
+                RaisePropertyChanged(nameof(DisplayPatientCellPhone));
+                RaisePropertyChanged(nameof(DisplayPatientSecondPhone));
+                RaisePropertyChanged(nameof(DisplayPatientTel));
+                RaisePropertyChanged(nameof(DisplayPatientContactNote));
+                RaisePropertyChanged(nameof(DisplayPatientNote));
                 IsDataChanged = false;
             }
         }
@@ -342,12 +348,26 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             }
         }
 
+        public string DisplayPatientContactNote
+        {
+            get
+            {
+                var contactNote = CustomerData.ContactNote;
+                return contactNote  is null ? string.Empty : contactNote.ToPatientContactNote();
+            }
+            set
+            {
+                customerData.ContactNote = value;
+
+               
+            }
+        }
+
         public string DisplayPatientNote
         {
             get
             {
-                var note = customerData.Note;
-                return note is null ? string.Empty : note.ToPatientNote();
+                return customerData.Note;
             }
             set
             {

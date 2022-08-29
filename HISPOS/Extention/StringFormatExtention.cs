@@ -35,26 +35,16 @@ namespace His_Pos.Extention
             return input;
         }
 
-        public static string ToPatientNote(this string input)
+        public static string ToPatientContactNote(this string input)
         {
+            int limitLen = 60;
 
-            var splitLines = input.Split(new[] { "\r\n" }, StringSplitOptions.None);
-
-            if (splitLines.First().Length > 66)
+            if (input.Length > limitLen)
             {
-                splitLines[0] = splitLines.First().Substring(0, 66);
+                input = input.Substring(0, limitLen);
             }
 
-            string result = default;
-
-            for (int i = 0; i < splitLines.Length; i++)
-            {
-                result += splitLines[i];
-                if (i < splitLines.Length - 1)
-                    result += "\r\n";
-            }
-
-            return result;
+            return input;
         }
     }
 }

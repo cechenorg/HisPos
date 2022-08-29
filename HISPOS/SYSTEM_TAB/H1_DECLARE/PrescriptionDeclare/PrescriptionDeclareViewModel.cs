@@ -345,16 +345,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
-        public string DisplayPatientNote
+        public string DisplayPatientContactNote
         {
             get
             {
-                var note = currentPrescription.Patient.Note;
-                return note is null ? string.Empty : note.ToPatientNote();
+                var contactnote = currentPrescription.Patient.ContactNote;
+                return contactnote is null ? string.Empty : contactnote.ToPatientContactNote();
             }
             set
             {
-                currentPrescription.Patient.Note = value;
+                currentPrescription.Patient.ContactNote = value;
             }
         }
 
