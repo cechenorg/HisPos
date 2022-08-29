@@ -297,16 +297,20 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        private string _displayPatientCellPhone;
+
         public string DisplayPatientCellPhone
         {
             get {
                 var cellphone = currentPrescription.Patient.CellPhone;
                 return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+               
             }
             set
             {
                 string cellphone = value.Replace("-","");
                 currentPrescription.Patient.CellPhone = cellphone;
+                Set(() => DisplayPatientCellPhone, ref _displayPatientCellPhone, value);
             }
         }
 
@@ -324,6 +328,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        private string _displayPatientTel;
+
         public string DisplayPatientTel
         {
             get
@@ -335,6 +341,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 string tel = value.Replace("-", "");
                 currentPrescription.Patient.Tel = tel;
+                Set(() => DisplayPatientTel, ref _displayPatientTel, value);
             }
         }
 
