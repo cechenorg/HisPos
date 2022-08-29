@@ -4,6 +4,7 @@ using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.StockTaking.StockTaking;
 using His_Pos.NewClass.WareHouse;
+using System;
 using System.ComponentModel;
 using System.Windows;
 
@@ -19,46 +20,74 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         private string productID;
         private WareHouse wareHouse;
         private MedicineStockDetail stockDetail;
-        private string newInventory;
-
+        private double newInventory;
+        private double shelfInventory;
+        private double medInventory;
+        private int autoHeight;
+        private int autoGridHeight;
         public string NewPrice { get; set; }
 
-        public string NewInventory
+        public double NewInventory
         {
             get { return newInventory; }
             set
             {
                 newInventory = value;
+                shelfInventory = NewInventory - stockDetail.MedBagInventory;
                 OnPropertyChanged(nameof(IsOverage));
+                OnPropertyChanged(nameof(ShelfInventory));
             }
         }
-
+        public double ShelfInventory
+        {
+            get { return shelfInventory; }
+            set
+            {
+                shelfInventory = value;
+                newInventory = shelfInventory + stockDetail.MedBagInventory;
+                OnPropertyChanged(nameof(IsOverage));
+                OnPropertyChanged(nameof(NewInventory));
+            }
+        }
+        public double MedInventory
+        {
+            get { return medInventory; }
+            set { medInventory = value;}
+        }
+        public int AutoHeight
+        {
+            get { return autoHeight; }
+            set { autoHeight = value; }
+        }
+        public int AutoGridHeight
+        {
+            get { return autoGridHeight; }
+            set { autoGridHeight = value; }
+        }
         public bool IsOverage
         {
             get
             {
-                double newCheckedInventory = 0;
-                bool isDouble = double.TryParse(NewInventory, out newCheckedInventory);
-
-                if (!isDouble) return false;
-
-                if (newCheckedInventory > stockDetail.ShelfInventory) return true;
+                if (NewInventory > stockDetail.ShelfInventory) return true;
                 else return false;
             }
         }
 
         #endregion ----- Define Variables -----
 
-        public StockTakingWindow(string proID, WareHouse ware, MedicineStockDetail stock)
+        public StockTakingWindow(string proID, WareHouse ware, MedicineStockDetail stock, bool isOTCType)
         {
             InitializeComponent();
-
             DataContext = this;
-
             productID = proID;
             wareHouse = ware;
             stockDetail = stock;
             NewPrice = stock.LastPrice.ToString("0.##");
+            newInventory = stock.ShelfInventory + stock.MedBagInventory;
+            shelfInventory = stock.ShelfInventory;
+            MedInventory = stock.MedBagInventory;
+            AutoHeight = isOTCType ? 60 : 200;
+            AutoGridHeight = isOTCType ? 0 : 50;
         }
 
         #region ----- Define Functions -----
@@ -72,16 +101,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             }
             else
             {
-                double newCheckedInventory = 0;
-                bool isDouble = double.TryParse(NewInventory, out newCheckedInventory);
-
-                if (!isDouble)
-                {
-                    MessageWindow.ShowMessage("輸入數值錯誤!", MessageType.ERROR);
-                    return false;
-                }
-
-                if (newCheckedInventory < 0)
+                if (NewInventory < 0)
                 {
                     MessageWindow.ShowMessage("輸入數值不可小於0!", MessageType.ERROR);
                     return false;
@@ -112,19 +132,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         {
             if (!IsNewInventoryValid()) return;
 
-            double finalInv = double.Parse(NewInventory);
-            //double finalInv = (stockDetail.MedBagInventory > stockDetail.TotalInventory) ? stockDetail.TotalInventory + double.Parse(NewInventory) : stockDetail.MedBagInventory + double.Parse(NewInventory);
-            //double tempShelfInv = stockDetail.TotalInventory - stockDetail.ShelfInventory + double.Parse(NewInventory) - stockDetail.MedBagInventory;
-            //double shelfInv = (tempShelfInv < 0) ? 0 : tempShelfInv;
-
-           // ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將總庫存調整為 {finalInv.ToString("0.##")} ?\r\n(架上量: {shelfInv.ToString("0.##")} 藥袋量: {(finalInv - shelfInv).ToString("0.##")})", "");
-            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將總庫存調整為 {finalInv.ToString("0.##")} ?", "");
+            ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認將總庫存調整為 {NewInventory.ToString("0.##")} ?", "");
 
             if (!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
             StockTaking stockTaking = new StockTaking();
-            stockTaking.SingleStockTaking(productID, stockDetail.TotalInventory, finalInv, double.Parse(NewPrice), wareHouse);
+            stockTaking.SingleStockTaking(productID, stockDetail.TotalInventory, NewInventory, double.Parse(NewPrice), wareHouse);
             MainWindow.ServerConnection.CloseConnection();
 
             ProductDetailDB.UpdateProductLastPrice(productID, double.Parse(NewPrice), wareHouse.ID);
