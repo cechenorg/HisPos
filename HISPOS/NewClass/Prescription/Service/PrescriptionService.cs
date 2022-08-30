@@ -362,7 +362,7 @@ namespace His_Pos.NewClass.Prescription.Service
             return false;
         }
 
-        public bool PrintConfirm()
+        public bool PrintConfirm(bool manualPrint = false)
         {
             bool? focus = null;
             bool isSend = false;
@@ -378,7 +378,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (printSendData.Count == allPrepareCount)
                     focus = true;
             }
-            PrintResult = NewFunction.CheckPrint(Current, focus, isSend);
+            PrintResult = NewFunction.CheckPrint(Current, focus, isSend, manualPrint);
             var printMedBag = PrintResult[0];//是否印藥袋
             var printSingle = PrintResult[1];//是否多藥一袋
             var printReceipt = PrintResult[2];//是否印收據

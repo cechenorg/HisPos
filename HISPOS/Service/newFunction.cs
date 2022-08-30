@@ -238,11 +238,11 @@ namespace His_Pos.Service
             str.Close();
         }
 
-        public static List<bool?> CheckPrint(Prescription p, bool? focus = null, bool isSend = false )
+        public static List<bool?> CheckPrint(Prescription p, bool? focus = null, bool isSend = false , bool manualPrint = false)
         {
             bool? receiptPrint = null;
             var result = new List<bool?>();
-            if (p.AdjustDate > DateTime.Today && isSend)
+            if ((p.PrescriptionStatus.IsPrint == true || ((p.AdjustDate > DateTime.Today) && isSend)) && !manualPrint)
             {
                 if (p.PrescriptionPoint.AmountsPay > 0)
                 {

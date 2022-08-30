@@ -27,12 +27,12 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         public CooperativePrescription.Prescription Content { get; }
         public string SourceID { get; }
 
-        public override void Print()
+        public override void Print(bool manualPrint = false)
         {
             var printPre = CreatePrescription();
             var service = PrescriptionService.CreateService(printPre);
             service.CloneTempPre();
-            if (service.PrintConfirm())
+            if (service.PrintConfirm(manualPrint))
             {
                 service.Print(false);
             }

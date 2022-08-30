@@ -70,7 +70,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             }
         }
 
-        public override void Print()
+        public override void Print(bool manualPrint = false)
         {
             throw new NotImplementedException();
         }

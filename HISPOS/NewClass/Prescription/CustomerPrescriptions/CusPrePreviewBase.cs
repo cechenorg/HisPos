@@ -119,7 +119,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
         public bool IsRead { get; set; }
         public bool IsPrint { get; set; }
         public string IsPrintString { get; set; }
-        public abstract void Print();
+        public abstract void Print(bool manualPrint = false);
         public abstract void PrintDir();
         public abstract Prescription CreatePrescription();
 
