@@ -238,15 +238,11 @@ namespace His_Pos.Service
             str.Close();
         }
 
-        public static List<bool?> CheckPrint(Prescription p, bool? focus = null, bool isSend = false )
+        public static List<bool?> CheckPrint(Prescription p, bool? focus = null, bool isSend = false , bool manualPrint = false)
         {
             bool? receiptPrint = null;
             var result = new List<bool?>();
-            var print = focus ?? true;
-            var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, print);
-            var printMedBag = medBagPrint.DialogResult;
-            bool? printSingle = null;
-            if (printMedBag != null)
+            if ((p.PrescriptionStatus.IsPrint == true || ((p.AdjustDate > DateTime.Today) && isSend)) && !manualPrint)
             {
                 if (p.PrescriptionPoint.AmountsPay > 0)
                 {
@@ -255,17 +251,37 @@ namespace His_Pos.Service
                 }
                 else
                     receiptPrint = false;
-                if ((bool)printMedBag)
-                {
-                    var printBySingleMode = new MedBagSelectionWindow();
-                    printBySingleMode.ShowDialog();
-                    printSingle = printBySingleMode.result;
-                }
-            }
-            result.Add(printMedBag);
-            result.Add(printSingle);
-            result.Add(receiptPrint);
 
+                result.Add(false);
+                result.Add(false);
+                result.Add(receiptPrint);
+            }
+            else
+            {
+                var print = focus ?? true;
+                var medBagPrint = new ConfirmWindow(StringRes.藥袋列印確認, StringRes.列印確認, print);
+                var printMedBag = medBagPrint.DialogResult;
+                bool? printSingle = null;
+                if (printMedBag != null)
+                {
+                    if (p.PrescriptionPoint.AmountsPay > 0)
+                    {
+                        var receiptResult = new ConfirmWindow(StringRes.收據列印確認, StringRes.列印確認, true);
+                        receiptPrint = receiptResult.DialogResult;
+                    }
+                    else
+                        receiptPrint = false;
+                    if ((bool)printMedBag)
+                    {
+                        var printBySingleMode = new MedBagSelectionWindow();
+                        printBySingleMode.ShowDialog();
+                        printSingle = printBySingleMode.result;
+                    }
+                }
+                result.Add(printMedBag);
+                result.Add(printSingle);
+                result.Add(receiptPrint);
+            }
             return result;
         }
         public static List<bool?> CheckPrintDir(Prescription p, bool? focus = null)
@@ -361,7 +377,7 @@ namespace His_Pos.Service
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                                 if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null)
                                 {
-                                    isRePost = "2";
+                                    isRePost = "0";
                                 }
                                 else
                                 {

@@ -234,7 +234,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.Coope
         public void PrintAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            SelectedPrescription?.Print();
+            SelectedPrescription?.Print(true);
             MainWindow.ServerConnection.CloseConnection();
         }
 

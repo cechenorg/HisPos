@@ -15,7 +15,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
             AdjustDate = r.Field<DateTime>("Adj_Date");
         }
 
-        public override void Print()
+        public override void Print(bool manualPrint = false)
         {
             throw new NotImplementedException();
         }

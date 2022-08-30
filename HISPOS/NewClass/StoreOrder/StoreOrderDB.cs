@@ -281,7 +281,7 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", double.IsNaN(pro.SubTotal) ? 0 : pro.SubTotal);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", "");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
@@ -662,7 +662,8 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
-            parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
+            DataTable table = SetReturnOrderDetail(returnOrder);
+            parameters.Add(new SqlParameter("STOORD_DETAIL", table));
             DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.Account);
             MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
@@ -1001,18 +1002,24 @@ namespace His_Pos.NewClass.StoreOrder
         internal static DataTable SendOTCStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
         {
             string orderOTCs = "";
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(purchaseList.StoreOrderID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();//重新排序
 
-            foreach (var product in purchaseList)
+            foreach (DataRow dr in SortTable.Rows)
             {
-                if (product.ID.Length > 12)
-                    orderOTCs += product.ID.Substring(0, 13);
+                string proID = Convert.ToString(dr["Pro_ID"]);
+                int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                if (proID.Length > 12)
+                    orderOTCs += proID.Substring(0, 13);
                 else
-                    orderOTCs += product.ID.PadRight(12, ' ');
+                    orderOTCs += proID.PadRight(12, ' ');
 
-                orderOTCs += product.Amount.ToString("0.00").PadLeft(9, ' ');
+                orderOTCs += orderAmount.ToString("0.00").PadLeft(9, ' ');
 
-                if (product.ID.Length > 12)
-                    orderOTCs += product.ID.Substring(13);
+                if (proID.Length > 12)
+                    orderOTCs += proID.Substring(13);
 
                 orderOTCs += "\r\n";
             }

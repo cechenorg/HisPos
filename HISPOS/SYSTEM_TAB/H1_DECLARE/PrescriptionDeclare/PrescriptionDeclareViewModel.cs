@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Extention;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
@@ -293,6 +294,67 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 {
                     GetCustomersFromPOSAction();
                 }
+            }
+        }
+
+        private string _displayPatientCellPhone;
+
+        public string DisplayPatientCellPhone
+        {
+            get {
+                var cellphone = currentPrescription.Patient.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+               
+            }
+            set
+            {
+                string cellphone = value.Replace("-","");
+                currentPrescription.Patient.CellPhone = cellphone;
+                Set(() => DisplayPatientCellPhone, ref _displayPatientCellPhone, value);
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                var cellphone = currentPrescription.Patient.SecondPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                currentPrescription.Patient.SecondPhone = cellphone;
+            }
+        }
+
+        private string _displayPatientTel;
+
+        public string DisplayPatientTel
+        {
+            get
+            {
+                var tel = currentPrescription.Patient.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                currentPrescription.Patient.Tel = tel;
+                Set(() => DisplayPatientTel, ref _displayPatientTel, value);
+            }
+        }
+
+        public string DisplayPatientContactNote
+        {
+            get
+            {
+                var contactnote = currentPrescription.Patient.ContactNote;
+                return contactnote is null ? string.Empty : contactnote.ToPatientContactNote();
+            }
+            set
+            {
+                currentPrescription.Patient.ContactNote = value;
             }
         }
 

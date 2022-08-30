@@ -362,7 +362,7 @@ namespace His_Pos.NewClass.Prescription.Service
             return false;
         }
 
-        public bool PrintConfirm()
+        public bool PrintConfirm(bool manualPrint = false)
         {
             bool? focus = null;
             bool isSend = false;
@@ -378,7 +378,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (printSendData.Count == allPrepareCount)
                     focus = true;
             }
-            PrintResult = NewFunction.CheckPrint(Current, focus, isSend);
+            PrintResult = NewFunction.CheckPrint(Current, focus, isSend, manualPrint);
             var printMedBag = PrintResult[0];//是否印藥袋
             var printSingle = PrintResult[1];//是否多藥一袋
             var printReceipt = PrintResult[2];//是否印收據
@@ -432,10 +432,11 @@ namespace His_Pos.NewClass.Prescription.Service
             var cusGender = p.Patient.CheckGender();
             string patientTel;
             string[] splitStr = { "\r\n" };
-            string[] note = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
+            string[] notes = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
+            string note = notes.Length > 0 ? notes[0] : string.Empty;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
             {
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? Regex.Replace(p.Patient.CellPhone, "[^0-9]", "") : Regex.Replace(p.Patient.CellPhone, "[^0-9]", "") + "(" + note[0] + ")";
+                patientTel = string.IsNullOrEmpty(note) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + note + ")";
                 if (!string.IsNullOrEmpty(p.Patient.Line))
                 {
                     patientTel = "@" + patientTel;
@@ -444,7 +445,7 @@ namespace His_Pos.NewClass.Prescription.Service
             else
             {
                 if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(" + note[0] + ")";
+                    patientTel = string.IsNullOrEmpty(note) ? p.Patient.Tel : p.Patient.Tel + "(" + note + ")";
                 else
                     patientTel = p.Patient.ContactNote;
             }
@@ -505,10 +506,11 @@ namespace His_Pos.NewClass.Prescription.Service
             var cusGender = p.Patient.CheckGender();
             string patientTel;
             string[] splitStr = { "\r\n" };
-            string[] note = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
+            string[] notes = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
+            string note = notes.Length > 0 ? notes[0] : string.Empty;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
             {
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + note[0] + ")";
+                patientTel = string.IsNullOrEmpty(note) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + note + ")";
                 if(!string.IsNullOrEmpty(p.Patient.Line))
                 {
                     patientTel = "@" + patientTel;

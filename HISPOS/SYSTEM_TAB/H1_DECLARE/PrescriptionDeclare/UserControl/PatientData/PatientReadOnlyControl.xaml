@@ -7,8 +7,10 @@
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
+     xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
     d:DesignHeight="55"
     d:DesignWidth="915"
+    d:DataContext="{d:DesignInstance Type=prescriptionDeclare:PrescriptionDeclareViewModel, IsDesignTimeCreatable=False}" 
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -89,7 +91,7 @@
             Height="35"
             Margin="0,0,10,0"
             HorizontalContentAlignment="Center"
-            Content="{Binding CurrentPrescription.Patient.FormattedPhoneNumber, UpdateSourceTrigger=PropertyChanged}"
+            Content="{Binding  DisplayPatientCellPhone,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource BoldLabelContent18}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
@@ -108,7 +110,7 @@
             Height="35"
             Margin="0,0,10,0"
             HorizontalContentAlignment="Center"
-            Content="{Binding CurrentPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"
+            Content="{Binding DisplayPatientTel,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource BoldLabelContent18}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">

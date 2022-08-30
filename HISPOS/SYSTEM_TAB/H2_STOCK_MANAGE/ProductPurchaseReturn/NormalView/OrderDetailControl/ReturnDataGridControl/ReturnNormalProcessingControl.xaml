@@ -212,7 +212,7 @@
                                 HorizontalContentAlignment="Center"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
-                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
+                                Content="{Binding ReceiveAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

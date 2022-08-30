@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Extention;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
@@ -295,7 +296,82 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             set
             {
                 Set(() => CustomerData, ref customerData, value);
+                
+                RaisePropertyChanged(nameof(DisplayPatientCellPhone));
+                RaisePropertyChanged(nameof(DisplayPatientSecondPhone));
+                RaisePropertyChanged(nameof(DisplayPatientTel));
+                RaisePropertyChanged(nameof(DisplayPatientContactNote));
+                RaisePropertyChanged(nameof(DisplayPatientNote));
                 IsDataChanged = false;
+            }
+        }
+
+        public string DisplayPatientCellPhone
+        {
+            get
+            {
+                var cellphone = customerData.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                customerData.CellPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                var cellphone = customerData.SecondPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                customerData.SecondPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientTel
+        {
+            get
+            {
+                var tel = customerData.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                customerData.Tel = tel;
+            }
+        }
+
+        public string DisplayPatientContactNote
+        {
+            get
+            {
+                var contactNote = CustomerData.ContactNote;
+                return contactNote  is null ? string.Empty : contactNote.ToPatientContactNote();
+            }
+            set
+            {
+                customerData.ContactNote = value;
+
+               
+            }
+        }
+
+        public string DisplayPatientNote
+        {
+            get
+            {
+                return customerData.Note;
+            }
+            set
+            {
+                customerData.Note = value;
             }
         }
 
