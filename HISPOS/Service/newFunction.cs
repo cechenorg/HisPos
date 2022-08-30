@@ -242,7 +242,7 @@ namespace His_Pos.Service
         {
             bool? receiptPrint = null;
             var result = new List<bool?>();
-            if (p.PrescriptionStatus.IsPrint == true || ((p.AdjustDate > DateTime.Today) && isSend))
+            if (p.AdjustDate > DateTime.Today && isSend)
             {
                 if (p.PrescriptionPoint.AmountsPay > 0)
                 {
@@ -377,7 +377,7 @@ namespace His_Pos.Service
                                 var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                                 if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null)
                                 {
-                                    isRePost = "2";
+                                    isRePost = "0";
                                 }
                                 else
                                 {
