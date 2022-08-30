@@ -80,11 +80,11 @@
                 <TextBox Width="530" Margin="10" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold"
                     FontSize="22" Foreground="{StaticResource ForeGround}" Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            <Grid Grid.Row="4" DataContext="{Binding CustomerData}">
+            <Grid Grid.Row="4" Margin="10,0,10,0" DataContext="{Binding CustomerData}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
@@ -96,10 +96,10 @@
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding ContactNote}" TextWrapping="Wrap"  VerticalScrollBarVisibility="Visible" />
 
-                <Label Width="130" HorizontalAlignment="Left" VerticalAlignment="Center" Content="備註"
+                <Label Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Content="備註"
                         FontFamily="Segoe UI Semibold" FontSize="25"  FontWeight="Bold" Foreground="{StaticResource ForeGround}" />
                 
-                <TextBox Grid.Row="4" VerticalContentAlignment="Top" AcceptsReturn="True" Background="{StaticResource LightForeGround}" BorderThickness="0" FontFamily="Segoe UI Semibold"
+                <TextBox Grid.Row="3" VerticalContentAlignment="Top" AcceptsReturn="True" Background="{StaticResource LightForeGround}" BorderThickness="0" FontFamily="Segoe UI Semibold"
                         FontSize="22" Foreground="{StaticResource ForeGround}" Text="{Binding Note}" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" />
             </Grid>
             
