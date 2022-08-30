@@ -1175,5 +1175,36 @@ namespace His_Pos.NewClass.StoreOrder
         {
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductOnTheWay]");
         }
+
+        public static void UpdateReplaceProduct(int qty, string orderID, string pro_ID,int det_ID)
+        {
+            string sql = string.Empty;
+            if (!string.IsNullOrEmpty(pro_ID))
+            {
+                sql = string.Format(
+                @"Update [{0}].[StoreOrder].[Detail] Set StoOrdDet_OrderAmount = Case When StoOrdDet_OrderAmount > {1} Then StoOrdDet_OrderAmount - {1} Else 0 End Where StoOrdDet_MasterID = '{2}' And StoOrdDet_ProductID = '{3}'",
+                Properties.Settings.Default.SystemSerialNumber,
+                qty,//取代數量
+                orderID,//訂單編號
+                pro_ID);//商品代碼
+            }
+            else if(det_ID != 0)
+            {
+                sql = string.Format(
+                @"Update [{0}].[StoreOrder].[Detail] Set StoOrdDet_OrderAmount = Case When StoOrdDet_OrderAmount > {1} Then StoOrdDet_OrderAmount - {1} Else 0 End Where StoOrdDet_MasterID = '{2}' And StoOrdDet_ID = {3}",
+                Properties.Settings.Default.SystemSerialNumber,
+                qty,//取代數量
+                orderID,//訂單編號
+                det_ID);//訂單項次
+            }
+            else
+            {
+                return;
+            }
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                _ = conn.Query<int>(sql, commandType: CommandType.Text);
+            });
+        }
     }
 }

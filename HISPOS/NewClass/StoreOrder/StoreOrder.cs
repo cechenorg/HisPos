@@ -418,17 +418,18 @@ namespace His_Pos.NewClass.StoreOrder
                     else
                     {
                         result = StoreOrderDB.PurchaseStoreOrderToDone(ID, IsPayCash);
-                        if(type == 1)
-                            CheckStoreOrderLower();
                     }
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
                         IsDoneOrder = false;
-                        MessageWindow.ShowMessage(((OrderType == OrderTypeEnum.PURCHASE || OrderType == OrderTypeEnum.PREPARE) ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        MessageWindow.ShowMessage(((OrderType == OrderTypeEnum.PURCHASE || OrderType == OrderTypeEnum.PREPARE || OrderType == OrderTypeEnum.WAITPREPARE) ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
                         return false;
                     }
                     else
                     {
+                        if (type == 1)
+                            CheckStoreOrderLower();
+
                         string id = LowOrderID;
                         IsDoneOrder = true;
                         OrderStatus = OrderStatusEnum.DONE;
