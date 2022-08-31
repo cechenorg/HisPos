@@ -36,7 +36,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="110" />
+            <RowDefinition Height="200" />
             <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -48,11 +48,7 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <StackPanel
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="6"
-            Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6"   Orientation="Horizontal">
             <TextBox
                 x:Name="tbName"
                 Width="300"
@@ -90,16 +86,8 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </CheckBox>
-            <Button
-                Width="120"
-                Margin="50,0,10,0"
-                Background="IndianRed"
-                BorderThickness="0"
-                Command="{Binding DeleteCommand}"
-                Content="刪除"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16"
-                IsEnabled="True" />
+            <Button Width="120" Margin="50,0,10,0" Background="IndianRed" BorderThickness="0"
+                Command="{Binding DeleteCommand}"  Content="刪除"  FontFamily="Segoe UI Semibold" FontSize="16" IsEnabled="True" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
@@ -186,12 +174,7 @@
                 </i:Interaction.Triggers>
             </TextBox>
 
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="家電"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
+            <Label Margin="10,0,0,0" VerticalAlignment="Center"  Content="家電" FontFamily="Segoe UI Semibold"  FontSize="20" />
             <TextBox
                 Width="120"
                 Margin="10,0,0,0"
@@ -207,17 +190,9 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="手機1"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
-            <TextBox
-                Width="120"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                FontSize="18"
+            <Label Margin="10,0,0,0"  VerticalAlignment="Center"   Content="手機1"  FontFamily="Segoe UI Semibold"  FontSize="20" />
+            <TextBox  Width="120"  Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"  FontSize="18"
                 PreviewTextInput="TextBox_PreviewTextInput"
                 PreviewKeyDown="TextBox_PreviewKeyDown"
                 InputMethod.IsInputMethodEnabled="False"
@@ -228,12 +203,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="手機2"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
+            <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="手機2" FontFamily="Segoe UI Semibold" FontSize="20" />
             <TextBox
                 Width="120"
                 Margin="10,0,0,0"
@@ -250,17 +220,8 @@
                 </i:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <StackPanel
-            Grid.Row="2"
-            Grid.Column="0"
-            Grid.ColumnSpan="6"
-            Margin="8"
-            Orientation="Horizontal">
-            <Label
-                VerticalAlignment="Center"
-                Content="LINE"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" Margin="8" Orientation="Horizontal">
+            <Label VerticalAlignment="Center" Content="LINE" FontFamily="Segoe UI Semibold" FontSize="20" />
             <TextBox
                 Width="140"
                 Margin="10,0,0,0"
@@ -273,17 +234,8 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="電子信箱"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
-            <TextBox
-                Width="322"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                FontSize="18"
+            <Label  Margin="10,0,0,0" VerticalAlignment="Center" Content="電子信箱" FontFamily="Segoe UI Semibold" FontSize="20" />
+            <TextBox Width="322" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="18"
                 Text="{Binding Customer.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
@@ -291,18 +243,9 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="住址"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
-            <TextBox
-                Width="360"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                FontSize="18"
-                Text="{Binding Customer.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="住址" FontFamily="Segoe UI Semibold" FontSize="20" />
+
+            <TextBox Width="360"  Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Text="{Binding Customer.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
@@ -310,58 +253,36 @@
                 </i:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <StackPanel
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="6"
-            Background="{StaticResource Shadow}"
-            Orientation="Horizontal">
-            <Label
-                Margin="8,0,0,0"
-                VerticalAlignment="Center"
-                Content="聯絡備註"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
-            <TextBox
-                Width="447"
-                Margin="10,10,0,10"
-                AcceptsReturn="True"
-                Background="{StaticResource LightForeGround}"
-                FontSize="18"
-                Text="{Binding Customer.ContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                TextWrapping="Wrap"
-                VerticalScrollBarVisibility="Visible">
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6" Background="{StaticResource Shadow}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="聯絡備註" FontFamily="Segoe UI Semibold" FontSize="20" />
+            <TextBox   FontSize="18" Margin="10,0" Grid.Column="1"
+                Text="{Binding Customer.ContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Height="50"
-                Margin="20,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalContentAlignment="Center"
-                Content="備註"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
-            <TextBox
-                Width="450"
-                Margin="10,10,0,10"
-                AcceptsReturn="True"
-                Background="{StaticResource LightForeGround}"
-                FontSize="16"
+            <Label  Height="50" Grid.Row="1"  HorizontalAlignment="Center"  VerticalContentAlignment="Center"   Content="備註"  FontFamily="Segoe UI Semibold"  FontSize="20"  Foreground="Black" />
+            <TextBox  AcceptsReturn="True" Grid.Row="1" Grid.Column="1" Margin="10"
+                Background="{StaticResource LightForeGround}" FontSize="16" VerticalContentAlignment="Top"
                 Text="{Binding Customer.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                TextWrapping="Wrap"
-                VerticalScrollBarVisibility="Visible">
+                TextWrapping="Wrap"  VerticalScrollBarVisibility="Visible">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-        </StackPanel>
+        </Grid>
         <StackPanel
             Grid.Row="4"
             Grid.Column="0"
