@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DataContext="{d:DesignInstance Type=local:CustomerManageViewModel, IsDesignTimeCreatable=False}" 
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -183,7 +184,7 @@
                 PreviewTextInput="TextBox_PreviewTextInput"
                 PreviewKeyDown="TextBox_PreviewKeyDown"
                 InputMethod.IsInputMethodEnabled="False"
-                Text="{Binding Customer.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding DisplayPatientTel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
@@ -196,7 +197,7 @@
                 PreviewTextInput="TextBox_PreviewTextInput"
                 PreviewKeyDown="TextBox_PreviewKeyDown"
                 InputMethod.IsInputMethodEnabled="False"
-                Text="{Binding Customer.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:####-######}}">
+                Text="{Binding DisplayPatientCellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
@@ -212,7 +213,7 @@
                 PreviewTextInput="TextBox_PreviewTextInput"
                 PreviewKeyDown="TextBox_PreviewKeyDown"
                 InputMethod.IsInputMethodEnabled="False"
-                Text="{Binding Customer.SecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:####-######}}">
+                Text="{Binding DisplayPatientSecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
@@ -264,7 +265,7 @@
             </Grid.ColumnDefinitions>
             <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="聯絡備註" FontFamily="Segoe UI Semibold" FontSize="20" />
             <TextBox   FontSize="18" Margin="10,0" Grid.Column="1"
-                Text="{Binding Customer.ContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding DisplayPatientContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
@@ -274,7 +275,7 @@
             <Label  Height="50" Grid.Row="1"  HorizontalAlignment="Center"  VerticalContentAlignment="Center"   Content="備註"  FontFamily="Segoe UI Semibold"  FontSize="20"  Foreground="Black" />
             <TextBox  AcceptsReturn="True" Grid.Row="1" Grid.Column="1" Margin="10"
                 Background="{StaticResource LightForeGround}" FontSize="16" VerticalContentAlignment="Top"
-                Text="{Binding Customer.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding DisplayPatientNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap"  VerticalScrollBarVisibility="Visible">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
