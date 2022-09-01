@@ -1135,11 +1135,12 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderOTCMedicine]", parameters);
         }
 
-        internal static DataTable DeleteDoneOrder(string orderID)
+        internal static DataTable DeleteDoneOrder(string orderID ,string voidReason = null)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDER_ID", orderID));
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("VoidReason", voidReason));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderDoneOrderByID]", parameters);
         }
 

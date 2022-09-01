@@ -2,7 +2,10 @@
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
+using System;
 using System.Data;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 
@@ -44,33 +47,37 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         private void DeleteOrderAction()
         {
             btnDelete.IsEnabled = false;
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認刪除?", "再次確認");
-
-            if ((bool)confirmWindow.DialogResult)
+            int type = OrderID.Length > 0 && OrderID.Substring(0, 1) == "P" ? 0 : 1;
+            ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow(type);
+            ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
+            if ((bool)ScrapOrderWindow.DialogResult)
             {
-                MainWindow.ServerConnection.OpenConnection();
-                DataTable dataTable = StoreOrderDB.DeleteDoneOrder(OrderID);
-                MainWindow.ServerConnection.CloseConnection();
-
-
-
-
-                if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                ConfirmWindow confirmWindow = new ConfirmWindow("是否確認刪除?", "再次確認");
+                if ((bool)confirmWindow.DialogResult)
                 {
-                    MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
+                    string voidReason = ScrapOrder.Content + ScrapOrder.Other;
+                    MainWindow.ServerConnection.OpenConnection();
+                    DataTable dataTable = StoreOrderDB.DeleteDoneOrder(OrderID, voidReason);
+                    MainWindow.ServerConnection.CloseConnection();
+
+                    if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                    {
+                        MessageWindow.ShowMessage("刪除成功", MessageType.SUCCESS);
+                    }
+                    else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("LOW"))
+                    {
+                        MessageWindow.ShowMessage("庫存不足 刪除失敗！", MessageType.ERROR);
+                    }
+                    else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("STRIKED"))
+                    {
+                        MessageWindow.ShowMessage("刪除失敗!已沖帳過!", MessageType.ERROR);
+                    }
+
+                    else
+                        MessageWindow.ShowMessage("網路異常 刪除失敗!", MessageType.ERROR);
                 }
-                else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("LOW"))
-                {
-                    MessageWindow.ShowMessage("庫存不足 刪除失敗！", MessageType.ERROR);
-                } else if (dataTable != null && dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("STRIKED"))
-                {
-                    MessageWindow.ShowMessage("刪除失敗!已沖帳過!", MessageType.ERROR);
-                }
-
-                else
-                    MessageWindow.ShowMessage("網路異常 刪除失敗!", MessageType.ERROR);
             }
-
+            
             Close();
         }
 

@@ -162,7 +162,7 @@ namespace His_Pos.NewClass.StoreOrder
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
             Note = row.Field<string>("StoOrd_Note");
-            TotalPrice = (double)Math.Round(row.Field<decimal>("Total"),0);
+            TotalPrice = (double)Math.Round(row.Field<decimal>("Total"), 0, MidpointRounding.AwayFromZero);
             CreateDateTime = row.Field<DateTime>("StoOrd_CreateTime");
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
             initProductCount = row.Field<int>("ProductCount");
@@ -577,7 +577,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             DataTable dataTable;
             bool isCanModify = false;
-            string VoidReason = string.Empty;
+            string VoidReason = null;
             if (OrderStatus == OrderStatusEnum.WAITING || OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
             {
                 if (OrderManufactory.ID.Equals("0") && Note != "手動入庫")
@@ -651,8 +651,43 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                 }
             }
-            dataTable = StoreOrderDB.RemoveStoreOrderByID(ID, VoidReason);          
+            dataTable = StoreOrderDB.RemoveStoreOrderByID(ID, VoidReason);
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+        }
+
+        public bool DeleteReturnOrder(bool isUpSingdeData)
+        {
+            ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow(1);
+            ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
+            if (!(bool)ScrapOrderWindow.DialogResult)
+                return false;
+
+            VoidReason = ScrapOrder.Content + ScrapOrder.Other;
+            DateTime dt;
+            string update = DateTime.Now.ToString("yyyy/MM/dd");
+            string uptime = DateTime.Now.ToString("HHmmss");
+            dt = DateTime.Parse(update);
+            CultureInfo culture = new CultureInfo("zh-TW");
+            culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+            update = dt.ToString("yyyMMdd", culture);
+            DataTable dataTable = StoreOrderDB.UpdateOrderToScrap(ID, update, uptime, VoidReason);//更新杏德訂單資料
+            if (dataTable != null && dataTable.Rows.Count > 0)
+            {
+                bool isSucces = Convert.ToBoolean(dataTable.Rows[0]["Result"]);//FALSE未更新 TRUE已更新
+                if (!isSucces)
+                {
+                    MessageWindow.ShowMessage("杏德訂單更新失敗，取消作廢", MessageType.ERROR);
+                    return false;
+                }
+                else
+                {
+                    //DataTable table = StoreOrderDB.RemoveStoreOrderByID(ID, VoidReason);
+                    MainWindow.ServerConnection.OpenConnection();
+                    DataTable table = StoreOrderDB.DeleteDoneOrder(ID, VoidReason);
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+            }
+            return true;
         }
 
         public bool ReductOrder()

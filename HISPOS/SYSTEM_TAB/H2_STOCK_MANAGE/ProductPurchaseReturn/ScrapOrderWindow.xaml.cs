@@ -15,9 +15,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 {
     public partial class ScrapOrderWindow : Window
     {
-        public ScrapOrderWindow()
+        public ScrapOrderWindow(int type = 0)//0進貨 1退貨
         {
             InitializeComponent();
+            if(type == 1)
+            {
+                radio1.IsEnabled = false;
+                radio2.IsEnabled = false;
+                radio3.IsEnabled = false;
+                radio4.IsEnabled = false;
+                radio5.IsChecked = true;
+                radioContent = "5.其他:";
+            }
             DataContext = new ScrapOrderWindowViewModel();
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {

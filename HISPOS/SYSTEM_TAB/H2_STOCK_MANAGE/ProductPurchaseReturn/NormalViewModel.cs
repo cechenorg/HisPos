@@ -276,15 +276,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 if(CurrentStoreOrder.OrderType == OrderTypeEnum.RETURN && (CurrentStoreOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || CurrentStoreOrder.OrderStatus == OrderStatusEnum.NORMAL_PROCESSING))
                 {
-                    DataTable dataTable = StoreOrderDB.DeleteDoneOrder(CurrentStoreOrder.ID);
-                    if(dataTable != null && dataTable.Rows.Count > 0)
+                    isSuccess = CurrentStoreOrder.DeleteReturnOrder(true);
+                    if(isSuccess)
                     {
-                        isSuccess = Convert.ToString(dataTable.Rows[0]["RESULT"]) == "SUCCESS";
-                        if (isSuccess)
-                        {
-                            MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
-                            ReloadData();
-                        }
+                        MessageWindow.ShowMessage("已作廢刪除！", MessageType.SUCCESS);
+                        ReloadData();
                     }
                 }
                 else

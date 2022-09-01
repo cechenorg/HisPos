@@ -158,7 +158,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             if (e.Key != Key.Enter && e.Key != Key.Down && e.Key != Key.Up && e.Key != Key.Left && e.Key != Key.Right) 
                 return;
             int i = ProductDataGrid.Columns.IndexOf(ProductDataGrid.CurrentColumn);
-            if(i == 4 && e.Key == Key.Left)
+            List<ReturnMedicine> detail = new List<ReturnMedicine>();
+            foreach (ReturnMedicine item in ProductDataGrid.ItemsSource)
+            {
+                detail.Add(item);
+            }
+            int currentIndex = detail.IndexOf((ReturnMedicine)ProductDataGrid.CurrentCell.Item);
+            if (i == 4 && e.Key == Key.Left)
             {
                 return;
             }
@@ -172,7 +178,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                     key = FocusNavigationDirection.Left;
                     break;
                 case Key.Right:
-                    key = FocusNavigationDirection.Right;
+                    key = FocusNavigationDirection.Next;
                     break;
                 case Key.Up:
                     key = FocusNavigationDirection.Up;
@@ -185,6 +191,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
             var uie = e.OriginalSource as UIElement;
             uie.MoveFocus(new TraversalRequest(key));
             var focusedCell = ProductDataGrid.CurrentCell.Column?.GetCellContent(ProductDataGrid.CurrentCell.Item);
+            if(i == 6)
+            {
+                focusedCell = ProductDataGrid.Columns[4].GetCellContent(ProductDataGrid.CurrentCell.Item);
+            }
+            if (e.Key == Key.Enter && currentIndex == ProductDataGrid.Items.Count - 1 && i == 6)
+                return;
             var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
             if ((firstChild is TextBox || firstChild is TextBlock) && firstChild.Focusable)
             {

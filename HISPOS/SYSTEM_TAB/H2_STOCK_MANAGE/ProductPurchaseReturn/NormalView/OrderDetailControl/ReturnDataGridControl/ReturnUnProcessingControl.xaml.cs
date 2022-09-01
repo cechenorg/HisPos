@@ -68,7 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                     textBox.Text = "";
 
                     if (ProductDataGrid.Items.Count != oldCount)
-                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[4]);
+                        ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[ProductDataGrid.Items.Count - 2], ProductDataGrid.Columns[5]);
                 }
                 else if (ProductDataGrid.CurrentCell.Item is Product)
                 {
@@ -89,10 +89,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                 ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
 
                 var focusedCell = ProductDataGrid.CurrentCell.Column.GetCellContent(ProductDataGrid.CurrentCell.Item);
-                //UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
 
-                //if (firstChild is TextBox)
-                //    firstChild.Focus();
+                if (firstChild is TextBox)
+                    firstChild.Focus();
             }
         }
 
@@ -108,7 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
 
                 int index = ProductDataGrid.Items.IndexOf(ProductDataGrid.CurrentCell.Item);
 
-                ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index + 1], ProductDataGrid.Columns[1]);
+                ProductDataGrid.CurrentCell = new DataGridCellInfo(ProductDataGrid.Items[index + 1], ProductDataGrid.Columns[2]);
 
                 ProductDataGrid.SelectedItem = ProductDataGrid.CurrentCell.Item;
 

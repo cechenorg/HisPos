@@ -332,7 +332,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
+                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
