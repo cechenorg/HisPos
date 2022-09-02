@@ -293,12 +293,13 @@
 
                         <StackPanel Orientation="Horizontal" Grid.Column="0">
                             <TextBlock Text="家　電　" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center" Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.Tel}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown" />
+                            <TextBox VerticalAlignment="Center" Margin="5,0,0,0" Width="150" Text="{Binding  DisplayEmployeeTel,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <TextBlock Text="手　機" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.CellPhone}"
+                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding DisplayEmployeeCellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                      InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown"/>
                         </StackPanel>
 
