@@ -210,16 +210,12 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                     <Image Width="25" Height="25" Margin="10,0,10,0"  Source="/Images/Phone.png" />
-                    <TextBox
-                        Name="PatientCellPhone" Width="140" Height="30"
-                        HorizontalContentAlignment="Center"
-                        materialDesign:HintAssist.Hint="手機"
-                        FontSize="16"
+                    <TextBox Name="PatientCellPhone" Width="140" Height="30"
+                        HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機" FontSize="16"
                         Foreground="{StaticResource ForeGround}"
                         InputMethod.IsInputMethodEnabled="False"
-                        PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
-                        PreviewTextInput="PatientCellPhone_PreviewTextInput"
-                        Text="{Binding DataContext.EditedPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                        PreviewKeyDown="PatientCellPhone_PreviewKeyDown" PreviewTextInput="PatientCellPhone_PreviewTextInput"
+                        Text="{Binding DataContext.DisplayPatientCellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PreviewKeyDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
@@ -227,19 +223,12 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                     <Image Width="20" Height="25" Margin="10,0,10,0" Source="/Images/Telephone.png" />
-                    <TextBox
-                        Name="PatientTel"
-                        Width="140"
-                        Height="30"
-                        Margin="5,0,0,0"
-                        HorizontalContentAlignment="Center"
-                        materialDesign:HintAssist.Hint="家電"
+                    <TextBox Name="PatientTel" Width="140" Height="30" Margin="5,0,0,0"
+                        HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電"
                         FontSize="16"
                         Foreground="{StaticResource ForeGround}"
-                        InputMethod.IsInputMethodEnabled="False"
-                        PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
-                        PreviewTextInput="PatientCellPhone_PreviewTextInput"
-                        Text="{Binding DataContext.EditedPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                        InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="PatientCellPhone_PreviewKeyDown" PreviewTextInput="PatientCellPhone_PreviewTextInput"
+                        Text="{Binding DataContext.DisplayPatientTel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PreviewKeyDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
@@ -249,10 +238,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                     <Image  Width="25"  Height="25" Margin="10,0,10,0" Source="/Images/home-address.png" />
-                    <TextBox Name="PatientAddress" Width="325" Height="30"
-                        HorizontalContentAlignment="Center"
-                        materialDesign:HintAssist.Hint="地址"
-                        FontSize="16"
+                    <TextBox Name="PatientAddress" Width="325" Height="30" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="地址" FontSize="16"
                         Foreground="{StaticResource ForeGround}"
                         Text="{Binding DataContext.EditedPrescription.Patient.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
@@ -304,7 +290,7 @@
                     <TextBlock Text="聯絡備註" FontSize="16" Foreground="{StaticResource ForeGround}" />
 
                     <TextBox Grid.Row="1" VerticalContentAlignment="Top" Background="{StaticResource LightForeGround}" FontSize="16" FontWeight="Bold" Foreground="{StaticResource ForeGround}"
-                        Text="{Binding DataContext.EditedPrescription.Patient.ContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" >
+                        Text="{Binding DataContext.DisplayPatientContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" >
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PreviewKeyDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
@@ -316,7 +302,7 @@
 
                     <TextBox Grid.Row="3" VerticalContentAlignment="Top" AcceptsReturn="True"   TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"
                         Background="{StaticResource LightForeGround}" FontSize="16" FontWeight="Bold" Foreground="{StaticResource ForeGround}"
-                            Text="{Binding DataContext.EditedPrescription.Patient.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                            Text="{Binding DataContext.DisplayPatientNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PreviewKeyDown">
                                 <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
@@ -614,7 +600,7 @@
                         Style="{StaticResource BoldLabelContent18}" />
                     <Image Width="30" Height="30" Margin="10,0,0,0"  Source="/Images/User_48px.png" />
 
-                    <Label Width="120" Height="35" Margin="0,0,10,0"
+                    <Label Width="80" Height="35" Margin="0,0,10,0"
                         Content="{Binding EditedPrescription.Patient.Name, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource BoldLabelContent18}" />
                     <Image Width="30" Height="30" Margin="10,0,0,0" Source="/Images/birthday.png" />
@@ -625,12 +611,12 @@
 
                     <Image Width="30" Height="30" Margin="10,0,0,0" Source="/Images/Phone.png" />
 
-                    <Label Width="110" Height="30" Margin="0,0,20,0"
-                        Content="{Binding EditedPrescription.Patient.CellPhone, UpdateSourceTrigger=PropertyChanged}"
+                    <Label Width="130" Height="30" Margin="0,0,20,0"
+                        Content="{Binding DisplayPatientCellPhone, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource BoldLabelContent18}" />
                     <Image Width="25" Height="25" Margin="10,0,0,0" Source="/Images/Telephone.png" />
-                    <Label Width="120"  Height="35" Margin="0,0,20,0"
-                        Content="{Binding EditedPrescription.Patient.Tel, UpdateSourceTrigger=PropertyChanged}"
+                    <Label Width="130"  Height="35" Margin="0,0,20,0"
+                        Content="{Binding DisplayPatientTel, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource BoldLabelContent18}" />
                     <ContentControl Margin="10,0,0,0" Content="{Binding}">
                         <ContentControl.Style>
@@ -1370,9 +1356,7 @@
                                                 HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Black" FontSize="16"
                                                 FontWeight="Bold" GotFocus="InputTextBox_OnGotFocus" InputScope="AlphanumericHalfWidth"
                                                 IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged, FallbackValue=false}"
-                                                IsReadOnlyCaretVisible="False"
-                                                KeyDown="DoubleTextBox_OnKeyDown"
-                                                PreviewMouseLeftButtonDown="BuckleAmount_PreviewMouseLeftButtonDown"
+                                                IsReadOnlyCaretVisible="False" KeyDown="DoubleTextBox_OnKeyDown" PreviewMouseLeftButtonDown="BuckleAmount_PreviewMouseLeftButtonDown"
                                                 Text="{Binding BuckleAmount, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <TextBox.Style>
                                                     <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="TextBox">
@@ -1435,18 +1419,9 @@
                 </DataGrid>
                 <StackPanel  Grid.Row="3" Grid.Column="0" Margin="10,10,0,10" Orientation="Vertical">
                     <StackPanel Height="35" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                        <RadioButton
-                            Margin="10,0,0,0"
-                            VerticalAlignment="Center"
-                            Content="顧客資料"
-                            FontSize="14"
-                            GroupName="CusHistoryGroup"
+                        <RadioButton Margin="10,0,0,0"  VerticalAlignment="Center" Content="顧客資料" FontSize="14" GroupName="CusHistoryGroup"
                             IsChecked="{Binding Path=SelectedDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}" />
-                        <RadioButton
-                            Margin="10,0,0,0"
-                            VerticalAlignment="Center"
-                            Content="藥品修改紀錄"
-                            FontSize="14"  GroupName="CusHistoryGroup"
+                        <RadioButton Margin="10,0,0,0" VerticalAlignment="Center" Content="藥品修改紀錄" FontSize="14"  GroupName="CusHistoryGroup"
                             IsChecked="{Binding Path=SelectedDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}" />
                     </StackPanel>
                     <ContentControl Content="{Binding}">
