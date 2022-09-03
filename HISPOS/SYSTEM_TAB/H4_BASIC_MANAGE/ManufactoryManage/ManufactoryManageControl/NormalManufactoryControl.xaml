@@ -10,6 +10,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
+    d:DataContext="{d:DesignInstance Type=manufactoryManage:ManufactoryManageViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:DateTimeConverter x:Key="DateConverter" />
@@ -226,7 +227,7 @@
                 </TextBox>
                 <Label  Margin="10,0,0,0" VerticalAlignment="Center" Content="電話" FontFamily="Segoe UI Semibold" FontSize="20" />
                 <TextBox Width="160" Margin="5" FontFamily="Segoe UI Semi" FontSize="18"
-                    Text="{Binding ResponsibleTelephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
+                    Text="{Binding DataContext.DisplayManufactoryResponsibleTelephone,RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
@@ -246,7 +247,8 @@
             <StackPanel Grid.Row="1"  Grid.Column="0"  Margin="5" Orientation="Horizontal">
                 <Label  Content="電話"  FontFamily="Segoe UI Semibold"  FontSize="20" />
                 <TextBox Width="160"  Margin="5,0,0,0" FontFamily="Segoe UI Semi"  FontSize="18"
-                    Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
+                    Text="{Binding DataContext.DisplayManufactoryTelephone, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
@@ -287,20 +289,9 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </StackPanel>
-            <StackPanel
-                Grid.Row="2"
-                Grid.Column="0"
-                Margin="5"
-                Orientation="Horizontal">
-                <Label
-                    Content="機構代碼"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="20" />
-                <TextBox
-                    Width="120"
-                    Margin="5,0,0,0"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="18"
+            <StackPanel Grid.Row="2" Grid.Column="0" Margin="5" Orientation="Horizontal">
+                <Label Content="機構代碼" FontFamily="Segoe UI Semibold" FontSize="20" />
+                <TextBox Width="120" Margin="5,0,0,0" FontFamily="Segoe UI Semi" FontSize="18"
                     Text="{Binding MedicalID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
