@@ -705,15 +705,8 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
-                <StackPanel
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    Orientation="Horizontal">
-                    <Image
-                        Width="21"
-                        Height="25"
-                        Margin="12,0,10,0"
-                        Source="/Images/line.png" />
+                <StackPanel Grid.Row="3"  Grid.Column="0"  Orientation="Horizontal">
+                    <Image Width="21"  Height="25" Margin="12,0,10,0" Source="/Images/line.png" />
                     <TextBox
                         Name="PatientLine"
                         Width="325"
@@ -731,69 +724,40 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
-                <StackPanel
-                    Grid.Row="0"
-                    Grid.RowSpan="4"
-                    Grid.Column="1"
-                    Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Margin="10,10,0,10" Orientation="Vertical">
-                            <Label
-                                Content="聯絡備註"
-                                FontSize="16"
-                                Foreground="{StaticResource ForeGround}" />
-                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                                <TextBox
-                                    Width="448"
-                                    Height="210"
-                                    VerticalContentAlignment="Top"
-                                    AcceptsReturn="True"
-                                    Background="{StaticResource LightForeGround}"
-                                    BorderThickness="0"
-                                    FontSize="16"
-                                    FontWeight="Bold"
-                                    Foreground="{StaticResource ForeGround}"
-                                    Text="{Binding DataContext.EditedPrescription.Patient.ContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                    TextWrapping="Wrap"
-                                    VerticalScrollBarVisibility="Visible">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="PreviewKeyDown">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel Margin="10,10,0,10" Orientation="Vertical">
-                            <Label
-                                Content="備註"
-                                FontSize="16"
-                                Foreground="{StaticResource ForeGround}" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox
-                                    Width="448"
-                                    Height="210"
-                                    VerticalContentAlignment="Top"
-                                    AcceptsReturn="True"
-                                    Background="{StaticResource LightForeGround}"
-                                    BorderThickness="0"
-                                    FontSize="16"
-                                    FontWeight="Bold"
-                                    Foreground="{StaticResource ForeGround}"
-                                    Text="{Binding DataContext.EditedPrescription.Patient.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                    TextWrapping="Wrap"
-                                    VerticalScrollBarVisibility="Visible">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="PreviewKeyDown">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <ContentControl Margin="640,0,0,0" Content="{Binding}">
+                <Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="聯絡備註" FontSize="16" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" />
+
+                    <TextBox Grid.Row="1" Margin="10,0" Background="{StaticResource LightForeGround}" BorderThickness="0" FontSize="16" FontWeight="Bold" Foreground="{StaticResource ForeGround}"
+                             Text="{Binding DataContext.EditedPrescription.Patient.ContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewKeyDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Label  Content="備註" FontSize="16" Grid.Row="2" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" />
+
+                    <TextBox Grid.Row="3"  Margin="10,0"  VerticalContentAlignment="Top" AcceptsReturn="True"
+                        Background="{StaticResource LightForeGround}" BorderThickness="0" FontSize="16"  FontWeight="Bold" Foreground="{StaticResource ForeGround}"
+                        Text="{Binding DataContext.EditedPrescription.Patient.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                        TextWrapping="Wrap" VerticalScrollBarVisibility="Visible">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewKeyDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.CustomerDetailEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+
+                    <StackPanel Grid.Row="4" Orientation="Horizontal"  Margin="640,10,0,0" >
+                        <ContentControl Grid.Row="4" Content="{Binding}">
                             <ContentControl.Style>
                                 <Style TargetType="{x:Type ContentControl}">
                                     <Setter Property="ContentTemplate" Value="{StaticResource Edited}" />
@@ -808,26 +772,17 @@
                                 </Style>
                             </ContentControl.Style>
                         </ContentControl>
-                        <Button
-                            Width="80"
-                            Height="30"
-                            Margin="10,0,0,10"
-                            Background="DimGray"
-                            BorderBrush="DimGray"
+                        <Button Width="80" Height="30" Margin="10,0,0,10" Background="DimGray" BorderBrush="DimGray"   Content="取消"
                             Command="{Binding DataContext.CustomerRedoEdited, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                            Content="取消"
                             IsEnabled="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
-                        <Button
-                            Width="80"
-                            Height="30"
-                            Margin="10,0,0,10"
-                            Background="IndianRed"
-                            BorderBrush="IndianRed"
+
+                        <Button Width="80" Height="30" Margin="10,0,0,10" Background="IndianRed" BorderBrush="IndianRed" Content="存檔"
                             Command="{Binding DataContext.SavePatientData, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                            Content="存檔"
                             IsEnabled="{Binding DataContext.CustomerEdited, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
                     </StackPanel>
-                </StackPanel>
+
+                 
+                </Grid>
             </Grid>
         </Grid>
     </Viewbox>
