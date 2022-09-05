@@ -24,7 +24,11 @@
             <Label Content="筆" FontFamily="Segoe UI Semibold" FontSize="25" />
         </StackPanel>
         <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
-        <DataGrid Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding PrescriptionDetailReportView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding PrescriptionDetailReportSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}"
+                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" 
+                  CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
+                  ItemsSource="{Binding PrescriptionDetailReportView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                  SelectedItem="{Binding PrescriptionDetailReportSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding PrescriptionDetailClickCommand}" />
