@@ -1975,7 +1975,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         private void TradeProfitReportSelectionChangedActionMain()
         {
             ResetTradeProfitUI();
-            SumOTCReportMain();
+
+            var tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId == "1"));
+            SumOTCReportMainChanged(tempCollection);
         }
 
         private void ResetTradeProfitUI()
@@ -2036,7 +2038,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 //SumStockTakingDetailReport();
                 TradeChangeSelectItem = "全部";
                 TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-                SumOTCReportMainChanged();
+
+                var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
+                SumOTCReportMainChanged(tempCollection);
                 TradeDetailCount = TradeProfitDetailReportCollectionChanged.Count();
                 TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
                 EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
@@ -2070,7 +2074,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
             TradeChangeSelectItem = "全部";
             TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-            SumOTCReportChangeMain("1");
+          
+            TradeDetailReportSum.TotalChange = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1")).Sum(s => s.Profit);
+
             TradeDetailCount = TradeProfitDetailReportCollection.Count();
             TradeEmpDetailCount = TradeProfitDetailEmpReportCollection.Count();
             EmpProfit = TradeProfitDetailEmpReportCollection.Sum(e => e.Profit);
@@ -2412,13 +2418,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         private void AllPrescriptionAction()
         {
             ResetPrescriptionUI();
-            SumPrescriptionDetailReportALL();
+            SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
         }
 
         private void SelfPrescriptionAction()
         {
             ResetPrescriptionUI();
-            SumPrescriptionDetailReport();
+            SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
         }
 
         private void ResetPrescriptionUI()
@@ -2453,7 +2459,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
                 AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
                 PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-                SumPrescriptionDetailReport();
+                SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
                 IsBusy = false;
             };
             IsBusy = true;
@@ -2479,7 +2485,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
                 AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
                 PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-                SumPrescriptionDetailReport();
+                SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
                 IsBusy = false;
             };
             IsBusy = true;
@@ -2733,23 +2739,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         }
 
-        private void SumPrescriptionDetailReport()
+        private void SumPrescriptionDetailReport(PrescriptionDetailReports reports)
         {
-            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionDetailReportCollection);
+            var tempCollection = GetPrescriptionDetailReportsByType(reports);
 
             PrescriptionDetailReportSum = new PrescriptionDetailReport();
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
         }
 
-        private void SumPrescriptionDetailReportALL()
-        {
-            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionDetailReportCollectionALL);
-
-            PrescriptionDetailReportSum = new PrescriptionDetailReport();
-            PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
-
-        }
-
+      
         private void SumPrescriptionChangedDetailReport()
         {
             var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionDetailReportCollectionChanged);
@@ -2792,27 +2790,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             return result;
         }
 
-
-        private void SumOTCReportMainChanged()
+        private void SumOTCReportMainChanged(IEnumerable<TradeProfitDetailReport> reports)
         {
-            var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
-
-            TradeDetailReportSum.SumOTCReport(tempCollection);
+            TradeDetailReportSum.SumOTCReport(reports);
         }
 
-        private void SumOTCReportMain()
-        {
-            var tempCollection = TradeProfitDetailReportCollection.Where(p => (p.TypeId == "1"));
-            TradeDetailReportSum.SumOTCReport(tempCollection);
-        }
-
-        private void SumOTCReportChangeMain(string ID)
-        {
-            var tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => true);
-            tempCollection = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1"));
-            TradeDetailReportSum.TotalChange = tempCollection.Sum(s => s.Profit);
-        }
-
+       
         private void SumOTCReport(string ID)
         {
             //TradeDetailReportSum = new TradeProfitDetailReport();
