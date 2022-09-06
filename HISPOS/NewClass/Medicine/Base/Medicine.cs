@@ -409,8 +409,6 @@ namespace His_Pos.NewClass.Medicine.Base
             get => buckleAmount;
             set
             {
-                if (AdjustNoBuckle)
-                    value = 0;
                 Set(() => BuckleAmount, ref buckleAmount, value);
                 NotEnough = BuckleAmount < Amount;
             }
@@ -505,7 +503,6 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (IsClosed != value)
                 {
                     Set(() => IsClosed, ref isClosed, value);
-                    if (BuckleAmount == 0) AdjustNoBuckle = IsClosed;
                 }
             }
         }

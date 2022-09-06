@@ -1004,10 +1004,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             {
                 case true:
                     CurrentPrescription.SelectedMedicine.IsClosed = false;
+                    CurrentPrescription.SelectedMedicine.AdjustNoBuckle = false;
                     break;
 
                 case false:
                     CurrentPrescription.SelectedMedicine.IsClosed = true;
+                    if (CurrentPrescription.SelectedMedicine.BuckleAmount == 0)
+                        CurrentPrescription.SelectedMedicine.AdjustNoBuckle = true;
                     break;
             }
         }
