@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using System.Data;
 using System.Linq;
 using ClosedXML.Excel;
+using His_Pos.Extention;
 using His_Pos.NewClass.Report.DepositReport;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
@@ -27,7 +28,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Profit = r.Field<int>("Profit");
             PaySelfPoint = r.Field<int>("PaySelfPoint");
             IsCooperative = r.Field<int>("IsCooperative") == 1;
-            AdjustDate = r.Field<DateTime>("AdjustDate");
+            AdjustDate = r.Field<DateTime>("AdjustDate").ToTaiwanDateTime();
         }
 
         private string insName;
@@ -72,9 +73,9 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         public bool IsCooperative { get; set; }
 
 
-        private DateTime _adjustDate;
+        private string _adjustDate;
 
-        public DateTime AdjustDate
+        public string AdjustDate
         {
             get => _adjustDate;
             set

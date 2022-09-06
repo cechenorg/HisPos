@@ -40,7 +40,10 @@
                 <ColumnDefinition Width="672*" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,0,0,400" Grid.RowSpan="2">
-                <xctk:MaskedTextBox x:Name="StartDate" Width="130" Margin="20,0,10,5" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="27" Foreground="{StaticResource ForeGround}" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00" PreviewKeyDown="StartDate_PreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" ValueDataType="xctk:DateTimeFormat">
+                <xctk:MaskedTextBox x:Name="StartDate" Width="130" Margin="20,0,10,5" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" 
+                                    FontSize="27" Foreground="{StaticResource ForeGround}" InputScope="Number" InsertKeyMode="Overwrite"
+                                    Mask="000/00/00" PreviewKeyDown="StartDate_PreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" 
+                                    ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
                         <Binding Converter="{StaticResource NullableDateConverter}" Mode="TwoWay" NotifyOnValidationError="True" Path="StartDate" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
                             <Binding.ValidationRules>

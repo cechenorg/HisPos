@@ -334,6 +334,7 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\ToNextTextBoxBehavior.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelOfflineOperationWindow.cs" />
+    <Compile Include="Extention\DateTimeFormatExtention.cs" />
     <Compile Include="Extention\StringFormatExtention.cs" />
     <Compile Include="FunctionWindow\AddCustomerWindow\AddCustomerWindow.xaml.cs">
       <DependentUpon>AddCustomerWindow.xaml</DependentUpon>

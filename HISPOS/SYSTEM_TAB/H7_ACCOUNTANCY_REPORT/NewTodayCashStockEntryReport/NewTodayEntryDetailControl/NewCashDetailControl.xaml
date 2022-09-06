@@ -20,7 +20,11 @@
             <Label Margin="20,0,0,0" Content="合作院所" FontFamily="Segoe UI Semibold" FontSize="25" Visibility="{Binding CashCoopVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <ComboBox Width="200" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding CashCoopString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CashCoopSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding CashCoopVis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
-        <DataGrid Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding CashDetailReportView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CashDetailReportSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" 
+                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
+                  ItemsSource="{Binding CashDetailReportView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding CashDetailReportSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding CashDetailClickCommand}" />
