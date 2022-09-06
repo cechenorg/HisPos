@@ -30,6 +30,7 @@
             Background="{StaticResource GridDarkestBackGround}"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             GridLinesVisibility="Horizontal"
@@ -84,7 +85,8 @@
                     Width="210"
                     MaxWidth="210"
                     Header="商品名稱"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -116,7 +118,8 @@
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="退貨量"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserSort="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -127,6 +130,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid
+            Name="ProductDataGrid"
             EnableRowVirtualization="False"
             Grid.Row="0"
             Grid.Column="1"

@@ -28,7 +28,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 
         public void GetCooperative(DateTime sDate, DateTime eDate)
         {
-            NewFunction.GetXmlFiles();
+            NewFunction.GetXmlFiles();//.txt轉.xml
             GetOrthopedics(sDate, eDate);
             var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(sDate, eDate);
             foreach (DataRow r in table.Rows)

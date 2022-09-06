@@ -201,32 +201,33 @@ namespace His_Pos.NewClass.StoreOrder
 
         protected override bool CheckNormalProcessingOrder()
         {
-            //bool isLowerThenOrderAmount = false;
             bool hasControlMed = false;
-            bool hasNoBatch = false;
-            //var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
-
+            bool IsRepBatch = false;
             foreach (var product in OrderProducts)
             {
                 if(product.IsDone == 1)
                 {
                     break;
                 }
+
                 if (product.OrderAmount < 0 || product.FreeAmount < 0)
                 {
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
                     return false;
                 }
 
+                if(!string.IsNullOrEmpty(product.BatchNumber))
+                {
+                    if (OrderProducts.Count(s => !string.IsNullOrEmpty(s.BatchNumber) && s.BatchNumber.ToString().Trim() == product.BatchNumber.ToString().Trim() && s.ID == product.ID && s.IsDone == 0) > 1)
+                    {
+                        IsRepBatch = true;
+                    }
+                }
+
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null)
                 {
                     hasControlMed = true;
                 }
-
-                //if (OrderProducts.Where(s => s.ID == product.ID).Count() > 1 && product.RealAmount != 0 && (product.BatchNumber == "" || product.BatchNumber == null))
-                //{
-                //    hasNoBatch = true;
-                //}
 
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null) && product.RealAmount > 0)
                 {
@@ -235,11 +236,11 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            //if (hasNoBatch == true)
-            //{
-            //    MessageWindow.ShowMessage("拆批不可沒有批號!", MessageType.ERROR);
-            //    return false;
-            //}
+            if (IsRepBatch)
+            {
+                MessageWindow.ShowMessage("批號重覆!", MessageType.ERROR);
+                return false;
+            }
 
             if (hasControlMed)
             {
@@ -258,29 +259,6 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
-            //foreach (var product in products)
-            //{
-            //    if (product.RealAmount < product.OrderAmount)
-            //    {
-            //        isLowerThenOrderAmount = true;
-            //        break;
-            //    }
-            //}
-
-            //if (isLowerThenOrderAmount)
-            //{
-            //    ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
-
-            //    if ((bool)confirmWindow.DialogResult)
-            //    {
-            //        bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
-
-            //        if (!isSuccess) return false;
-            //    }
-            //}
-            //ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
-
-            //return (bool)confirmWindow1.DialogResult;
             return true;
         }
         protected override bool CheckStoreOrderLower()

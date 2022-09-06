@@ -85,7 +85,7 @@ namespace His_Pos.NewClass.StoreOrder
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
         public string ModifyUser { get; set; }
-        public string ModifyTime { get; set; }
+        public DateTime ModifyTime { get; set; }
         public string VoidReason { get; set; }
         public string TargetPreOrderCustomer { get; set; }
         public DateTime Day { get; set; }
@@ -94,6 +94,7 @@ namespace His_Pos.NewClass.StoreOrder
         public string IsEnableVoid { get; set; }
         public bool IsScrap { get; set; }
         public bool IsCanDelete { get; set; }
+        public bool IsCancel { get; set; }
         public string Visibility { get; set; }
         public int IsWaitOrder = 0;
         public double TotalPrice
@@ -175,7 +176,7 @@ namespace His_Pos.NewClass.StoreOrder
             if (row.Table.Columns.Contains("StoOrd_ModifyTime"))
             {
                 if (!DBNull.Value.Equals(row["StoOrd_ModifyTime"]))
-                    ModifyTime = (row.Field<DateTime>("StoOrd_ModifyTime")).ToString("yyyy/MM/dd");
+                    ModifyTime = Convert.ToDateTime(row.Field<DateTime>("StoOrd_ModifyTime"));
             }
             if (row.Table.Columns.Contains("StoOrd_VoidReason"))
             {
@@ -190,11 +191,16 @@ namespace His_Pos.NewClass.StoreOrder
                 {
                     OrderStatus = OrderStatusEnum.SCRAP;
                     IsCanDelete = false;
-                    Visibility = "Hidden"; 
+                    Visibility = "Hidden";
                 }
                 else
                 {
                     IsEnableVoid = "Hidden";
+                }
+                if (ID.Substring(0, 1) == "R" && (OrderStatus== OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                {
+                    IsCanDelete = true;
+                    Visibility = "Visibility";
                 }
             }
         }
@@ -236,6 +242,42 @@ namespace His_Pos.NewClass.StoreOrder
         /// </summary>
         public void MoveToNextStatus()
         {
+            if(OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+            {
+                if(this is ReturnOrder)
+                {
+                    ReturnOrder returnOrder = (ReturnOrder)this;
+                    List<ReturnProduct> removeProducts = new List<ReturnProduct>();
+                    List<ReturnOTC> removeOTCProducts = new List<ReturnOTC>();
+                    foreach (var returnProduct in returnOrder.ReturnProducts)
+                    {
+                        if (returnProduct is ReturnOTC)
+                        {
+                            ReturnOTC productOTC = (ReturnOTC)returnProduct;
+                            if (!returnProduct.IsChecked)
+                            {
+                                removeOTCProducts.Add(productOTC);
+                            }
+                        }
+                        if (returnProduct is ReturnProduct)
+                        {
+                            ReturnProduct product = (ReturnProduct)returnProduct;
+                            if (!returnProduct.IsChecked)
+                            {
+                                removeProducts.Add(product);
+                            }
+                        }
+                    }
+                    foreach (ReturnProduct returnProduct in removeProducts)
+                    {
+                        ((ReturnOrder)this).ReturnProducts.Remove(returnProduct);
+                    }
+                    foreach (ReturnOTC returnProduct in removeOTCProducts)
+                    {
+                        ((ReturnOrder)this).ReturnProducts.Remove(returnProduct);
+                    }
+                }
+            }
             SaveOrder();
             switch (OrderStatus)
             {
@@ -245,11 +287,6 @@ namespace His_Pos.NewClass.StoreOrder
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
                     ToWaitingStatus();//傳送訂單至杏德
                     ToNormalProcessingStatus();
-                    // 直接結案
-                    if (OrderType == OrderTypeEnum.RETURN)
-                    {
-                        ToDoneStatus(0);
-                    }
                     break;
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
@@ -375,6 +412,7 @@ namespace His_Pos.NewClass.StoreOrder
                     if (!(bool)confirmWindow.DialogResult)
                     {
                         IsDoneOrder = false;
+                        IsCancel = true;
                         return false;
                     }
                     else
@@ -489,7 +527,7 @@ namespace His_Pos.NewClass.StoreOrder
             }
         }
 
-        public void UpdateOrderDataFromSingde(DataRow dataRow)
+        public bool UpdateOrderDataFromSingde(DataRow dataRow)
         {
             string orderID = dataRow.Field<string>("ORDER_ID");
             long orderFlag = dataRow.Field<long>("FLAG");
@@ -507,17 +545,19 @@ namespace His_Pos.NewClass.StoreOrder
                 ToScrapStatus();
             }
             else*/
-            if (isShipment)
+            bool isSuccess = false;
+            if (orderFlag != 2)
             {
                 SourceID = orderID;
                 ReceiveID = prescriptionReceiveID;
                 CheckCode = checkCode;
 
-                bool isSuccess = UpdateOrderProductsFromSingde();
+                isSuccess = UpdateOrderProductsFromSingde();
 
                 if (isSuccess)
                     OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
             }
+            return isSuccess;
         }
 
         private bool UpdateOrderProductsFromSingde()

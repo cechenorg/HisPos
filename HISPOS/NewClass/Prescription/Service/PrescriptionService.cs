@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
@@ -361,7 +362,7 @@ namespace His_Pos.NewClass.Prescription.Service
             return false;
         }
 
-        public bool PrintConfirm()
+        public bool PrintConfirm(bool manualPrint = false)
         {
             bool? focus = null;
             bool isSend = false;
@@ -377,10 +378,10 @@ namespace His_Pos.NewClass.Prescription.Service
                 else if (printSendData.Count == allPrepareCount)
                     focus = true;
             }
-            PrintResult = NewFunction.CheckPrint(Current, focus, isSend);
-            var printMedBag = PrintResult[0];
-            var printSingle = PrintResult[1];
-            var printReceipt = PrintResult[2];
+            PrintResult = NewFunction.CheckPrint(Current, focus, isSend, manualPrint);
+            var printMedBag = PrintResult[0];//是否印藥袋
+            var printSingle = PrintResult[1];//是否多藥一袋
+            var printReceipt = PrintResult[2];//是否印收據
             if (printMedBag is null || printReceipt is null)
                 return false;
             if ((bool)printMedBag && printSingle is null)
@@ -430,12 +431,21 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             var cusGender = p.Patient.CheckGender();
             string patientTel;
+            string[] splitStr = { "\r\n" };
+            string[] notes = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
+            string note = notes.Length > 0 ? notes[0] : string.Empty;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
+            {
+                patientTel = string.IsNullOrEmpty(note) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + note + ")";
+                if (!string.IsNullOrEmpty(p.Patient.Line))
+                {
+                    patientTel = "@" + patientTel;
+                }
+            }
             else
             {
                 if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
+                    patientTel = string.IsNullOrEmpty(note) ? p.Patient.Tel : p.Patient.Tel + "(" + note + ")";
                 else
                     patientTel = p.Patient.ContactNote;
             }
@@ -495,12 +505,21 @@ namespace His_Pos.NewClass.Prescription.Service
             }
             var cusGender = p.Patient.CheckGender();
             string patientTel;
+            string[] splitStr = { "\r\n" };
+            string[] notes = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
+            string note = notes.Length > 0 ? notes[0] : string.Empty;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
+            {
+                patientTel = string.IsNullOrEmpty(note) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + note + ")";
+                if(!string.IsNullOrEmpty(p.Patient.Line))
+                {
+                    patientTel = "@" + patientTel;
+                }
+            }
             else
             {
                 if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
+                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(" + note[0] + ")";
                 else
                     patientTel = p.Patient.ContactNote;
             }
@@ -633,13 +652,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void Print(bool noCard)
         {
-            if (this.TempPre.PrescriptionStatus.IsPrint == true)
-            { 
-            }
-            else {
-                PrintMedBag();
-            }
-            
+            PrintMedBag();
             PrintReceipt(noCard);
         }
         public void PrintDir(bool noCard)
@@ -670,6 +683,7 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
+            var reportFormat = Properties.Settings.Default.ReportFormat;
             if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
             {
                 TempPrint.Division.Name = "";
@@ -679,8 +693,8 @@ namespace His_Pos.NewClass.Prescription.Service
                 else
                     TempPrint.PrintMedBagMultiMode();
             }
-            else if (VM.CurrentPharmacy.ID == "5931017216") {
-
+            else if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+            {
                 TempPre.PrintMedBagSingleModeByCE();
             }
             else
@@ -703,6 +717,14 @@ namespace His_Pos.NewClass.Prescription.Service
         public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
             var printSendData = vm.PrescriptionSendData.DeepCloneViaJson();
+            var tempPrintSendData = new PrescriptionSendDatas();
+            tempPrintSendData.Clear();
+            foreach (var printData in printSendData)
+            {
+                if (printData.IsCommon == false)
+                    tempPrintSendData.Add(printData);
+            }
+
             var sendData = vm.PrescriptionSendData;
             if (sendData.Count(s => s.SendAmount == 0) != sendData.Count)
             {
@@ -736,7 +758,7 @@ namespace His_Pos.NewClass.Prescription.Service
             if (selfcoSendCount > 0 || (selfallSendCount < printSendData.Count && selfallSendCount > 0))
             {
                 var rptViewer = new ReportViewer();
-                SetReserveMedicinesSheetReportViewer(rptViewer, printSendData);
+                SetReserveMedicinesSheetReportViewer(rptViewer, tempPrintSendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
@@ -854,10 +876,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
-            if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
-            {
-                TempPrint = (Prescription)Current.PrintClone();
-            }
+            //if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
+            //{
+            //    TempPrint = (Prescription)Current.PrintClone();
+            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]

@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -75,6 +76,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
             btnSubmit.IsEnabled = false;
             lblChanged.Content = "未修改";
             lblChanged.Foreground = Brushes.Black;
+            Authority userAuthority = ViewModelMainWindow.CurrentUser.Authority;
+            if(userAuthority == Authority.Admin)
+                btnDelete.IsEnabled = true;
+            else
+                btnDelete.IsEnabled = false;
         }
 
         private void GetEmployeeList()
@@ -187,7 +193,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail
                     MessageWindow.ShowMessage("刪除成功！", MessageType.SUCCESS);
                     Close();
                 }
-                else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN")) 
+                else if (result.Rows[0].Field<string>("RESULT").Equals("NORETURN"))
                 {
                     MessageWindow.ShowMessage("訂金餘額不足！", MessageType.ERROR);
                 }

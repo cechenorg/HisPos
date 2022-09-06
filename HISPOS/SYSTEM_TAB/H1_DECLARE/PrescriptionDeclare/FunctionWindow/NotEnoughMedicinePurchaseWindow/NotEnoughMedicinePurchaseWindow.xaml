@@ -74,7 +74,7 @@
                             <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                         </Trigger>
                         <DataTrigger Binding="{Binding IsSingdeMedEnough}" Value="False">
-                            <Setter Property="Background" Value="IndianRed"></Setter>
+                            <Setter Property="Background" Value="Pink"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -236,7 +236,6 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-
         <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -245,7 +244,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Margin="10,0,0,0"
                        Visibility="{Binding IsVisibleSingdeNoEnoughMedMessage,Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Foreground="IndianRed" Text="因杏德庫存量無法滿足採購量, 建議更換同成份同劑量同錠型的其他藥品" VerticalAlignment="Center" FontSize="18"/>
+                    Foreground="IndianRed" Text="※因杏德庫存量無法滿足採購量，建議更換同成份同劑量同錠型的其他藥品" VerticalAlignment="Center" FontSize="18"/>
             <Button Grid.Column="1"
                 Background="DimGray" BorderThickness="0"
                 Command="{Binding Cancel}" CommandParameter="{Binding ElementName=NotEnoughMedicinePurchaseWindow_MainWindow}"

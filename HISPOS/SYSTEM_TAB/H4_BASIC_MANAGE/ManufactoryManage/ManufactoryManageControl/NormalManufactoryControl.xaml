@@ -106,7 +106,10 @@
                         Margin="10,0,0,0"
                         FontFamily="Segoe UI Semi"
                         FontSize="18"
-                        Text="{Binding Telephone, Mode=TwoWay}">
+                        Text="{Binding Telephone, Mode=TwoWay}" 
+                        InputMethod.IsInputMethodEnabled="False" 
+                        PreviewTextInput="TextBox_PreviewTextInput" 
+                        PreviewKeyDown="TextBox_PreviewKeyDown">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
@@ -128,7 +131,10 @@
                         Margin="10,0,0,0"
                         FontFamily="Segoe UI Semi"
                         FontSize="18"
-                        Text="{Binding Fax, Mode=TwoWay}">
+                        Text="{Binding Fax, Mode=TwoWay}"
+                        InputMethod.IsInputMethodEnabled="False" 
+                        PreviewTextInput="TextBox_PreviewTextInput" 
+                        PreviewKeyDown="TextBox_PreviewKeyDown">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="TextChanged">
                                 <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
@@ -378,7 +384,7 @@
                     Margin="5"
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
-                    Text="{Binding ResponsibleTelephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    Text="{Binding ResponsibleTelephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
@@ -418,7 +424,7 @@
                     Margin="5,0,0,0"
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
-                    Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    Text="{Binding Telephone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
@@ -440,7 +446,7 @@
                     Margin="5,0,0,0"
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
-                    Text="{Binding Fax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    Text="{Binding Fax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
@@ -462,7 +468,7 @@
                     Margin="5,0,0,0"
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
-                    Text="{Binding EIN, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    Text="{Binding EIN, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:InvokeCommandAction Command="{Binding DataContext.DataChangedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />

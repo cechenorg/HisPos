@@ -19,7 +19,10 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             OnTheFrameAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
-            SingdeInv = r.Field<int>("Singde_Inv");
+            if (NewFunction.CheckDataRowContainsColumn(r, "Singde_Inv"))
+                SingdeInv = r.Field<int>("Singde_Inv");
+            else
+                SingdeInv = 0;
             CostPrice = (double)(r.Field<decimal?>("Inv_LastPrice") is null ? 0 : r.Field<decimal>("Inv_LastPrice"));
             AveragePrice = r.Field<double?>("AveragePrice") is null ? 0 : r.Field<double>("AveragePrice");
             Price = r.Field<double>("Pro_SelfPayPrice");
@@ -406,8 +409,6 @@ namespace His_Pos.NewClass.Medicine.Base
             get => buckleAmount;
             set
             {
-                if (AdjustNoBuckle)
-                    value = 0;
                 Set(() => BuckleAmount, ref buckleAmount, value);
                 NotEnough = BuckleAmount < Amount;
             }
@@ -502,7 +503,6 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (IsClosed != value)
                 {
                     Set(() => IsClosed, ref isClosed, value);
-                    if (BuckleAmount == 0) AdjustNoBuckle = IsClosed;
                 }
             }
         }

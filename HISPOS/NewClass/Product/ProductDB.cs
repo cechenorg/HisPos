@@ -8,12 +8,12 @@ namespace His_Pos.NewClass.Product
 {
     public class ProductDB
     {
-        internal static DataTable GetProductStructsBySearchString(string searchString, string wareID)
+        internal static DataTable GetProductStructsBySearchString(string searchString, string wareID,int noOTC)
         {
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
             parameters.Add(new SqlParameter("WAREID", wareID));
-
+            parameters.Add(new SqlParameter("noOTC", noOTC));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductStructBySearchString]", parameters);
         }
 
@@ -25,12 +25,13 @@ namespace His_Pos.NewClass.Product
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PurchaseProductStructCountBySearchString]", parameters);
         }
 
-        internal static DataTable GetProductStructCountBySearchString(string searchString, string wareID, int type)
+        internal static DataTable GetProductStructCountBySearchString(string searchString, string wareID, int type, int noOTC)
         {
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
             parameters.Add(new SqlParameter("WAREID", wareID));
             parameters.Add(new SqlParameter("TYPE", type));
+            parameters.Add(new SqlParameter("noOTC", noOTC));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductStructCountBySearchString]", parameters);
         }
 

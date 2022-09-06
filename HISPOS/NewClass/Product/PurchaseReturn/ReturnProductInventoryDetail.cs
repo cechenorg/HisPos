@@ -15,6 +15,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         public string BatchNumber { get; set; }
         public DateTime? ValidDate { get; set; }
         public double Price { get; set; }
+
+        public double ReceiveAmount { get; set; }
+
         public double Inventory { get; set; }
 
         public int TypeOTC { get; set; }
@@ -30,11 +33,7 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             get { return returnAmount; }
             set
             {
-                if (value > Inventory)
-                    Set(() => ReturnAmount, ref returnAmount, Inventory);
-                else
-                    Set(() => ReturnAmount, ref returnAmount, value);
-
+                Set(() => ReturnAmount, ref returnAmount, value);
                 CalculateStockValue();
             }
         }
@@ -49,14 +48,21 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             ValidDate = row.Field<DateTime?>("InvDet_ValidDate");
             Price = (double)row.Field<decimal>("InvDet_Price");
             Inventory = row.Field<double>("InvDet_Amount");
-            ReturnStockValue = 0;
-            ReturnAmount = 0;
+            if (row.Table.Columns.Contains("Record_Qty") && row["Record_Qty"] != DBNull.Value)
+                ReturnAmount = Math.Abs(Convert.ToInt32(row["Record_Qty"]));
+            if (row.Table.Columns.Contains("Record_Amt") && row["Record_Amt"] != DBNull.Value)
+                ReturnStockValue = Convert.ToDouble(row["Record_Amt"]) * ReturnAmount;
+            if(ReturnAmount != 0)
+                ReceiveAmount = ReturnStockValue / ReturnAmount;
         }
 
         #region ----- Define Functions -----
 
         private void CalculateStockValue()
         {
+            if (ReturnAmount > Inventory)
+                returnAmount = Inventory;
+
             ReturnStockValue = Price * ReturnAmount;
         }
 

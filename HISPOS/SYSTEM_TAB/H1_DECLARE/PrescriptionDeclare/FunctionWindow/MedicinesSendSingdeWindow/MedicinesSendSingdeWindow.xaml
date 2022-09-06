@@ -51,6 +51,13 @@
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding Path=SingdeInvNotEnough}" Value="true">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Opacity="0.5" Color="Pink" />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
@@ -155,7 +162,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     MinWidth="80"
-                    Binding="{Binding SingdeCanUseAmount}"
+                    Binding="{Binding SingdeInv}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="14"
                     FontWeight="Bold"
@@ -172,12 +179,13 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel
-            Grid.Row="1"
-            Margin="8"
-            Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
             <!--<CheckBox Content="全傳送"  IsChecked="{Binding IsAllSend,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />-->
-            <Rectangle Width="610" />
+            <!--<Rectangle Width="610" />-->
+            <StackPanel Width="650" Visibility="{Binding SingdeInvNotEnough, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Label Content="※因杏德庫存量無法滿足採購量，建議更換同成分同劑量同錠型的其他藥品"
+                       Foreground="IndianRed" Style="{StaticResource BoldLabelContent18}"></Label>
+            </StackPanel>
             <Button
                 Width="125"
                 Background="{StaticResource Shadow}"

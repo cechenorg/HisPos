@@ -299,6 +299,9 @@
                         materialDesign:HintAssist.Hint="手機"
                         FontSize="16"
                         Foreground="{StaticResource ForeGround}"
+                        InputMethod.IsInputMethodEnabled="False"
+                        PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
+                        PreviewTextInput="PatientCellPhone_PreviewTextInput"
                         Text="{Binding DataContext.EditedPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PreviewKeyDown">
@@ -320,6 +323,9 @@
                         materialDesign:HintAssist.Hint="家電"
                         FontSize="16"
                         Foreground="{StaticResource ForeGround}"
+                        InputMethod.IsInputMethodEnabled="False"
+                        PreviewKeyDown="PatientCellPhone_PreviewKeyDown"
+                        PreviewTextInput="PatientCellPhone_PreviewTextInput"
                         Text="{Binding DataContext.EditedPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PreviewKeyDown">

@@ -10,6 +10,7 @@
     xmlns:myPharmacyControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl"
     xmlns:printerControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.PrinterControl"
     xmlns:wareHouseControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.WareHouseControl"
+    xmlns:systemControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SystemControl"
     Title="設定"
     Width="1000"
     Height="600"
@@ -45,6 +46,9 @@
         </DataTemplate>
         <DataTemplate x:Key="WareHouse">
             <wareHouseControl:WareHouseControl />
+        </DataTemplate>
+        <DataTemplate x:Key="System">
+            <systemControl:SystemControl />
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -155,6 +159,9 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding SelectedSettingTab.Tab, UpdateSourceTrigger=PropertyChanged}" Value="WareHouse">
                             <Setter Property="ContentTemplate" Value="{StaticResource WareHouse}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedSettingTab.Tab, UpdateSourceTrigger=PropertyChanged}" Value="System">
+                            <Setter Property="ContentTemplate" Value="{StaticResource System}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

@@ -293,12 +293,13 @@
 
                         <StackPanel Orientation="Horizontal" Grid.Column="0">
                             <TextBlock Text="家　電　" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.Tel}"/>
+                            <TextBox VerticalAlignment="Center" Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.Tel}" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <TextBlock Text="手　機" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.CellPhone}"/>
+                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.CellPhone}"
+                                     InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" Width="445">
@@ -353,7 +354,7 @@
                                                                     Foreground="{StaticResource ForeGround}"
                                                                     InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
                                                                     Style="{StaticResource MaterialDesignTextBox}"
-                                                                    ValueDataType="xctk:DateTimeFormat">
+                                                                    ValueDataType="xctk:DateTimeFormat" InputMethod.IsInputMethodEnabled="False"             PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding
                                     Converter="{StaticResource NullableDateConverter}"
@@ -375,7 +376,7 @@
                                                                      Foreground="{StaticResource ForeGround}"
                                                                      InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
                                                                      Style="{StaticResource MaterialDesignTextBox}"
-                                                                     ValueDataType="xctk:DateTimeFormat">
+                                                                     ValueDataType="xctk:DateTimeFormat" InputMethod.IsInputMethodEnabled="False"             PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding
                                     Converter="{StaticResource NullableDateConverter}"

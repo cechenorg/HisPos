@@ -99,7 +99,7 @@ namespace His_Pos.Service
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
                 ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>()) + " " +
-                  value.ConvertTo<DateTime>().ToLongTimeString()
+                  value.ConvertTo<DateTime>().ToString("HH:mm:ss")
                 : string.Empty;
             return result;
         }
@@ -123,7 +123,7 @@ namespace His_Pos.Service
                 return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
                 ? DateTimeExtensions.ConvertToTaiwanCalenderWithSplit(value.ConvertTo<DateTime>()) + " " +
-                  value.ConvertTo<DateTime>().ToString("hh:mm")
+                  value.ConvertTo<DateTime>().ToString("HH:mm")
                 : string.Empty;
             return result;
         }

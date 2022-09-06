@@ -68,6 +68,7 @@ namespace His_Pos.Class
         打卡記錄查詢 = 47,  
         沖帳作業 = 48,
         每日總帳報表 = 49,
+        OTC訂購網頁 = 50
     }
 
     public enum StoreOrderProductType
@@ -855,5 +856,13 @@ namespace His_Pos.Class
         CODE_05206B = 65,
         CODE_05223B = 54,
         CODE_05210B = 75
+    }
+
+    public enum PrintFormat
+    {
+        [Description("公版")]
+        PublicReport = 0,
+        [Description("藥健康版")]
+        PrivateReport = 1
     }
 }

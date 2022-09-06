@@ -197,6 +197,9 @@
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontSize="18"
+                PreviewTextInput="TextBox_PreviewTextInput"
+                PreviewKeyDown="TextBox_PreviewKeyDown"
+                InputMethod.IsInputMethodEnabled="False"
                 Text="{Binding Customer.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
@@ -215,6 +218,9 @@
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontSize="18"
+                PreviewTextInput="TextBox_PreviewTextInput"
+                PreviewKeyDown="TextBox_PreviewKeyDown"
+                InputMethod.IsInputMethodEnabled="False"
                 Text="{Binding Customer.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:####-######}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
@@ -233,6 +239,9 @@
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontSize="18"
+                PreviewTextInput="TextBox_PreviewTextInput"
+                PreviewKeyDown="TextBox_PreviewKeyDown"
+                InputMethod.IsInputMethodEnabled="False"
                 Text="{Binding Customer.SecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:####-######}}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">

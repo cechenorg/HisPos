@@ -13,7 +13,7 @@ using System.Text;
 using System.Windows.Forms;
 using System;
 using System.Reflection;
-
+using System.ComponentModel;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
@@ -363,9 +363,9 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void ShowHistoryAction()
         {
             var historyWindow = new StrikeHistoryWindow();
-            historyWindow.ShowDialog();
+            historyWindow.Show();
 
-            ReloadAction();
+            //ReloadAction();
         }
 
         private void AccountManageAction()

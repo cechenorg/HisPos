@@ -34,7 +34,8 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="15"
                     Foreground="DarkOrange"
-                    Text="待入庫" />
+                    Text="待入庫"
+                    ToolTip="預計今日到貨" />
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="PrepareOrderIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
@@ -49,7 +50,8 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="15"
                     Foreground="RoyalBlue"
-                    Text="已出貨" />
+                    Text="已出貨"
+                    ToolTip="處理中，預計明日到貨"/>
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="PurchaseOrderIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
@@ -64,7 +66,8 @@
                     FontFamily="Segoe UI Semi"
                     FontSize="15"
                     Foreground="Green"
-                    Text="進貨" />
+                    Text="訂單"
+                    ToolTip="已下訂單廠商尚未處理"/>
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="ReturnOrderIcon" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">

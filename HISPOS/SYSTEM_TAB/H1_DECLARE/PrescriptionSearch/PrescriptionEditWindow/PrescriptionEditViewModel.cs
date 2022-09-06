@@ -433,6 +433,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var printMedBag = printConfirmResult[0];
             var printSingle = printConfirmResult[1];
             var printReceipt = printConfirmResult[2];
+            var reportFormat = Properties.Settings.Default.ReportFormat;
             if (printMedBag is null || printReceipt is null)
                 return;
             if ((bool)printMedBag && printSingle is null)
@@ -440,79 +441,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                if (EditedPrescription.Institution.ID == "3532082753")
+                if ((bool)printMedBag)
                 {
-                    if ((bool)printMedBag)
+                    BusyContent = Resources.藥袋列印;
+                    switch (printSingle != null && (bool)printSingle)
                     {
-                        BusyContent = Resources.藥袋列印;
-                        switch (printSingle != null && (bool)printSingle)
-                        {
-                            case false:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
-                                {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else
-                                {
-                                    PrintEditedPrescription.PrintMedBagMultiMode();
-                                }
-                                break;
-
-                            case true:
-                                 if (VM.CurrentPharmacy.ID == "5931017216")
-                                {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else {
-                                    PrintEditedPrescription.PrintMedBagSingleMode();
-                                } break;
-                        }
-                          
-                    }
-                }
-              
-                else
-                {
-                    if ((bool)printMedBag)
-                    {
-
-                        BusyContent = Resources.藥袋列印;
-                        switch (printSingle != null && (bool)printSingle)
-                        {
-                            case false:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
-                                {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else
-                                {
-                                    EditedPrescription.PrintMedBagMultiMode();
-                                }
-                                break;
-
-                            case true:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
-                                {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else
-                                {
-                                    EditedPrescription.PrintMedBagSingleMode();
-                                }
-                                break;
-                        }
+                        case false:
+                            if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+                            {
+                                EditedPrescription.PrintMedBagSingleModeByCE();
+                            }
+                            else
+                            {
+                                EditedPrescription.PrintMedBagMultiMode();
+                            }
+                            break;
+                        case true:
+                            if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+                            {
+                                EditedPrescription.PrintMedBagSingleModeByCE();
+                            }
+                            else
+                            {
+                                EditedPrescription.PrintMedBagSingleMode();
+                            }
+                            break;
                     }
                 }
                 if ((bool)printReceipt)
@@ -780,7 +733,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             currentService = PrescriptionService.CreateService(EditedPrescription);
             if (!currentService.CheckEditPrescription(EditedPrescription.PrescriptionStatus.IsGetCard)) return;
             EditedPrescription.SetDetail();
-            MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
             var result = EditedPrescription.Update();
             if (result && EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
@@ -803,7 +755,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 var paySelfDiff = editedPaySelf - originPaySelf;
                 PrescriptionDb.InsertPrescriptionPointEditRecord(EditedPrescription.ID, medicalServiceDiff, medicineDiff, paySelfDiff);
             }
-            MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             if (result)
                 MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);

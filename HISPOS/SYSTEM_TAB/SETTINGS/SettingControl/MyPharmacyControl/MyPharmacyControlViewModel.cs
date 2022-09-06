@@ -128,6 +128,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl
                 fileWriter.WriteLine("INumC " + Properties.Settings.Default.InvoiceNumberCount);
                 fileWriter.WriteLine("INumE " + Properties.Settings.Default.InvoiceNumberEng);
                 fileWriter.WriteLine("PP " + Properties.Settings.Default.PrePrint);
+                fileWriter.WriteLine("RPF " + Properties.Settings.Default.ReportFormat);
             }
 
             IsDataChanged = false;

@@ -88,7 +88,9 @@ namespace His_Pos
             HisFeatures.Add(new Feature(@"..\Images\Transaction.png", nameof(FeatureTab.銷售作業),
                             new[] {
                                 nameof(FeatureItem.結帳作業) ,
-                                nameof(FeatureItem.銷售紀錄) }));
+                                nameof(FeatureItem.銷售紀錄) ,
+                                nameof(FeatureItem.OTC訂購網頁) ,
+                            }));
              
             HisFeatures.Add(new Feature(@"..\Images\Transaction.png", nameof(FeatureTab.藥局管理),
                          new[] {  
