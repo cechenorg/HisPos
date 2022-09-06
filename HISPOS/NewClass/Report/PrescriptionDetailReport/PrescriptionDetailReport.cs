@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using System.Data;
 using System.Linq;
+using ClosedXML.Excel;
 using His_Pos.NewClass.Report.DepositReport;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 {
@@ -23,7 +26,8 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Meduse = r.Field<int>("Meduse");
             Profit = r.Field<int>("Profit");
             PaySelfPoint = r.Field<int>("PaySelfPoint");
-            IsCooperative = r.Field<int>("IsCooperative") == 1; 
+            IsCooperative = r.Field<int>("IsCooperative") == 1;
+            AdjustTime = r.Field<DateTime>("AdjustDate");
         }
 
         private string insName;
@@ -66,6 +70,18 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         public string CusName { get; set; }
 
         public bool IsCooperative { get; set; }
+
+
+        private DateTime _adjustTime;
+
+        public DateTime AdjustTime
+        {
+            get => _adjustTime;
+            set
+            {
+                Set(() => AdjustTime, ref _adjustTime, value);
+            }
+        }
 
         public string InsName
         {
