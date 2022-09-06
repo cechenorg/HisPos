@@ -27,7 +27,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Profit = r.Field<int>("Profit");
             PaySelfPoint = r.Field<int>("PaySelfPoint");
             IsCooperative = r.Field<int>("IsCooperative") == 1;
-            AdjustTime = r.Field<DateTime>("AdjustDate");
+            AdjustDate = r.Field<DateTime>("AdjustDate");
         }
 
         private string insName;
@@ -72,14 +72,14 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         public bool IsCooperative { get; set; }
 
 
-        private DateTime _adjustTime;
+        private DateTime _adjustDate;
 
-        public DateTime AdjustTime
+        public DateTime AdjustDate
         {
-            get => _adjustTime;
+            get => _adjustDate;
             set
             {
-                Set(() => AdjustTime, ref _adjustTime, value);
+                Set(() => AdjustDate, ref _adjustDate, value);
             }
         }
 
