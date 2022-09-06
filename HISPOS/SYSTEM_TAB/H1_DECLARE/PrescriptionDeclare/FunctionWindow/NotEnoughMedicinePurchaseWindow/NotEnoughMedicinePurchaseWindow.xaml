@@ -100,6 +100,7 @@
                                 CharacterCasing="Upper"
                                 FontSize="17"
                                 InputScope="AlphanumericHalfWidth"
+                                IsReadOnly="True"
                                 Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
