@@ -2756,6 +2756,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Resource Include="Images\RedDot.png" />
+    <Resource Include="Images\line_enable.png" />
     <Content Include="RDLC\MedBagReportSingleByCE.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

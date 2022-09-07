@@ -12,149 +12,66 @@
     d:DesignWidth="850"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Image x:Key="AddCustomer" Source="/Images/add-user.png" />
+        <Image x:Key="AddCustomer" Width="30" Height="30" Margin="0" Source="/Images/add-user.png" />
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
     <StackPanel Margin="0,0,10,0" Orientation="Horizontal">
-        <Image
-            Width="30"
-            Height="30"
-            Margin="10,0,10,0"
-            Source="/Images/IDcard.png" />
-        <TextBox
-            Name="PatientIDNumber"
-            Width="120"
-            Height="35"
-            Margin="0,0,10,0"
-            HorizontalContentAlignment="Center"
-            materialDesign:HintAssist.Hint="身分證字號"
-            CaretBrush="Black"
-            CharacterCasing="Upper"
-            FontSize="18"
-            Foreground="{StaticResource ForeGround}"
-            InputMethod.IsInputMethodEnabled="False"
-            Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <Image Width="30" Height="30" Margin="20,0,5,0" Source="/Images/IDcard.png" />
+        <TextBox Name="PatientIDNumber" Width="120" Height="35" Margin="5,0,5,0"
+                 HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號"
+                 CaretBrush="Black" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}"
+                 InputMethod.IsInputMethodEnabled="False"
+                 Text="{Binding CurrentPrescription.Patient.IDNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
-                <KeyBinding
-                    Key="Enter"
-                    Command="{Binding GetCustomers}"
-                    CommandParameter="{Binding ElementName=PatientIDNumber}" />
+                <KeyBinding Key="Enter" Command="{Binding GetCustomers}" CommandParameter="{Binding ElementName=PatientIDNumber}" />
             </TextBox.InputBindings>
         </TextBox>
-        <Button
-            x:Name="AddCustomer"
-            Width="25"
-            Height="25"
-            Margin="10,0,15,0"
-            Padding="0"
-            Background="Transparent"
-            BorderBrush="Transparent"
-            Command="{Binding AddCustomer}"
-            Content="{StaticResource AddCustomer}" />
-        <TextBox
-            Name="PatientName"
-            Width="120"
-            Height="35"
-            Margin="0,10,10,9.857"
-            HorizontalContentAlignment="Center"
-            materialDesign:HintAssist.Hint="姓名"
-            CaretBrush="Black"
-            CharacterCasing="Upper"
-            FontSize="18"
-            Foreground="{StaticResource ForeGround}"
-            Text="{Binding CurrentPrescription.Patient.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <Button x:Name="AddCustomer" Width="40" Height="40" Margin="10,0,0,0" Padding="0"
+                Background="Transparent" BorderBrush="Transparent"
+                Command="{Binding AddCustomer}"
+                Content="{StaticResource AddCustomer}" />
+        <TextBox Name="PatientName" Width="120" Height="35" Margin="0,10,5,9.857"
+                 HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名"
+                 CaretBrush="Black" CharacterCasing="Upper" FontSize="18"
+                 Foreground="{StaticResource ForeGround}"
+                 Text="{Binding CurrentPrescription.Patient.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
-                <KeyBinding
-                    Key="Enter"
-                    Command="{Binding GetCustomers}"
-                    CommandParameter="{Binding ElementName=PatientName}" />
+                <KeyBinding Key="Enter" Command="{Binding GetCustomers}" CommandParameter="{Binding ElementName=PatientName}" />
             </TextBox.InputBindings>
         </TextBox>
-        <Image
-            Width="30"
-            Height="30"
-            Margin="10,0,10,0"
-            Source="/Images/birthday.png" />
-        <xctk:MaskedTextBox
-            x:Name="PatientBirthday"
-            Width="90"
-            Height="35"
-            Margin="0,0,10,0"
-            HorizontalContentAlignment="Center"
-            CaretBrush="Black"
-            FontSize="16"
-            Foreground="{StaticResource ForeGround}"
-            GotFocus="DateControl_GotFocus"
-            InputMethod.IsInputMethodEnabled="False"
-            InputScope="Number"
-            InsertKeyMode="Default"
-            Mask="000/00/00"
-            PreviewKeyDown="PatientBirthday_OnKeyDown"
-            PromptChar="-"
-            Style="{StaticResource MaterialDesignTextBox}"
-            ValueDataType="{x:Type xctk:DateTimeFormat}">
+        <Image Width="30" Height="30" Margin="5,0,5,0" Source="/Images/birthday.png" />
+        <xctk:MaskedTextBox x:Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0"
+                            HorizontalContentAlignment="Center" CaretBrush="Black" FontSize="16" Foreground="{StaticResource ForeGround}"
+                            GotFocus="DateControl_GotFocus" InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Default"
+                            Mask="000/00/00" PreviewKeyDown="PatientBirthday_OnKeyDown" PromptChar="-"
+                            Style="{StaticResource MaterialDesignTextBox}"
+                            ValueDataType="{x:Type xctk:DateTimeFormat}">
             <xctk:MaskedTextBox.InputBindings>
-                <KeyBinding
-                    Key="Enter"
-                    Command="{Binding GetCustomers}"
-                    CommandParameter="{Binding ElementName=PatientBirthday}" />
+                <KeyBinding Key="Enter" Command="{Binding GetCustomers}" CommandParameter="{Binding ElementName=PatientBirthday}" />
             </xctk:MaskedTextBox.InputBindings>
-            <Binding
-                Converter="{StaticResource NullableDateConverter}"
-                Mode="TwoWay"
-                NotifyOnValidationError="True"
-                Path="CurrentPrescription.Patient.Birthday"
-                UpdateSourceTrigger="PropertyChanged"
-                ValidatesOnDataErrors="True">
+            <Binding Converter="{StaticResource NullableDateConverter}" Mode="TwoWay" NotifyOnValidationError="True" 
+                     Path="CurrentPrescription.Patient.Birthday" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
                 <Binding.ValidationRules>
                     <service:DateValidationRule />
                 </Binding.ValidationRules>
             </Binding>
         </xctk:MaskedTextBox>
-        <Image
-            Width="30"
-            Height="30"
-            Margin="10,0,10,0"
-            Source="/Images/Phone.png" />
-        <TextBox
-            Name="PatientCellPhone"
-            Width="120"
-            Height="35"
-            Margin="0,10,10,9.857"
-            HorizontalContentAlignment="Center"
-            materialDesign:HintAssist.Hint="手機"
-            CaretBrush="Black"
-            FontSize="18"
-            Foreground="{StaticResource ForeGround}"
-            Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <Image Width="30" Height="30" Margin="0,0,5,0" Source="/Images/Phone.png" />
+        <TextBox Name="PatientCellPhone" Width="130" Height="35" Margin="0,10,5,9.857"
+                 HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="手機"
+                 CaretBrush="Black" FontSize="18" Foreground="{StaticResource ForeGround}"
+                 Text="{Binding CurrentPrescription.Patient.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
-                <KeyBinding
-                    Key="Enter"
-                    Command="{Binding GetCustomers}"
-                    CommandParameter="{Binding ElementName=PatientCellPhone}" />
+                <KeyBinding Key="Enter" Command="{Binding GetCustomers}" CommandParameter="{Binding ElementName=PatientCellPhone}" />
             </TextBox.InputBindings>
         </TextBox>
-        <Image
-            Width="25"
-            Height="25"
-            Margin="10,0,10,0"
-            Source="/Images/Telephone.png" />
-        <TextBox
-            Name="PatientTel"
-            Width="120"
-            Height="35"
-            Margin="0,10,10,9.857"
-            HorizontalContentAlignment="Center"
-            materialDesign:HintAssist.Hint="家電"
-            CaretBrush="Black"
-            FontSize="18"
-            Foreground="{StaticResource ForeGround}"
-            Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <Image Width="25" Height="25" Margin="5,0,5,0" Source="/Images/Telephone.png" />
+        <TextBox Name="PatientTel" Width="130" Height="35" Margin="0,10,5,9.857" 
+                 HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="家電"
+                 CaretBrush="Black" FontSize="18" Foreground="{StaticResource ForeGround}"
+                 Text="{Binding CurrentPrescription.Patient.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
-                <KeyBinding
-                    Key="Enter"
-                    Command="{Binding GetCustomers}"
-                    CommandParameter="{Binding ElementName=PatientTel}" />
+                <KeyBinding Key="Return" Command="{Binding GetCustomers}" CommandParameter="{Binding ElementName=PatientTel}" />
             </TextBox.InputBindings>
         </TextBox>
     </StackPanel>

@@ -241,7 +241,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 editedPrescription.Patient.Tel = tel;
             }
         }
-
+        private bool _isLineEnable = false;
+        public bool IsLineEnable
+        {
+            get
+            {
+                var line = editedPrescription.Patient.Line;
+                return line is null ? false : true;
+            }
+            set
+            {
+                Set(() => IsLineEnable, ref _isLineEnable, value);
+            }
+        }
         public string DisplayPatientContactNote
         {
             get
