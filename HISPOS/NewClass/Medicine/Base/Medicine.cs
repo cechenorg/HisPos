@@ -769,5 +769,9 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             BuckleAmount = Amount;
         }
+        public void ClearBuckleAmount()
+        {
+            BuckleAmount = 0;
+        }
     }
 }

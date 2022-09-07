@@ -724,6 +724,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 ((PrescriptionDeclareViewModel)DataContext).ResetBuckleAmount.Execute(null);
             textBox.Focus();
         }
+        private void BuckleAmount_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            e.Handled = true;
+            if (textBox.SelectedText.Length.Equals(textBox.Text.Length))
+                ((PrescriptionDeclareViewModel)DataContext).ClearBuckleAmount.Execute(null);
+        }
 
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {

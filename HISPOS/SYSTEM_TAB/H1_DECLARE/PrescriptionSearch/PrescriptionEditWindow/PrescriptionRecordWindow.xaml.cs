@@ -170,5 +170,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 ((PrescriptionEditViewModel)DataContext).ResetBuckleAmount.Execute(null);
             textBox.Focus();
         }
+        private void BuckleAmount_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            e.Handled = true;
+            if (textBox.SelectedText.Length.Equals(textBox.Text.Length))
+                ((PrescriptionEditViewModel)DataContext).ClearBuckleAmount.Execute(null);
+        }
     }
 }
