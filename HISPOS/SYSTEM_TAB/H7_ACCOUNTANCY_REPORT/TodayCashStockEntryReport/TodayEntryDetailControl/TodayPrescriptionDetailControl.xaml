@@ -78,25 +78,6 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="170" Binding="{Binding InsName}" FontFamily="Segoe UI Semi" Header="醫療院所" IsReadOnly="True">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="HorizontalAlignment" Value="Left" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                            <Setter Property="FontSize" Value="18" />
-                            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-                            <Setter Property="Height" Value="41" />
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Left" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
                 <DataGridTextColumn Width="100" Binding="{Binding AdjustDate,StringFormat=yyyy-MM-dd}" FontFamily="Segoe UI Semi" Header="調劑日" IsReadOnly="True">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -116,6 +97,26 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn Width="90" Binding="{Binding InsName}" FontFamily="Segoe UI Semi" Header="醫療院所" IsReadOnly="True">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="FontSize" Value="18" />
+                            <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+                            <Setter Property="Height" Value="41" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+               
                 <DataGridTextColumn Width="75" Binding="{Binding MedicalServicePoint, StringFormat=N0}" FontFamily="Segoe UI Semi" Header="藥服(估)" IsReadOnly="True" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -219,9 +220,9 @@
 
                 <Label Width="110" Margin="0,0,0,0" VerticalAlignment="Center" Content="" FontFamily="Segoe UI Semibold" FontSize="20" />
                 <Label Width="180" Margin="0,0,0,0" VerticalAlignment="Center" Content="{Binding PrescriptionDetailReportSum.InsName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="20" />
-                <TextBlock Width="55" Margin="0,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                <TextBlock Width="70" Margin="0,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.MedicalServicePoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
                 <TextBlock Width="70" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.MedicalPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
-                <TextBlock Width="78" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
+                <TextBlock Width="80" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.PaySelfPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.IncomeVis, Source={x:Reference dummyElement}}" />
                 <TextBlock Width="70" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.Meduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.CostVis, Source={x:Reference dummyElement}}" />
                 <TextBlock Width="70" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16" Text="{Binding PrescriptionDetailReportSum.Profit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" TextAlignment="Right" Visibility="{Binding DataContext.ProfitVis, Source={x:Reference dummyElement}}" />
             </StackPanel>
