@@ -1835,6 +1835,7 @@
                                                 IsReadOnlyCaretVisible="False"
                                                 KeyDown="DoubleTextBox_OnKeyDown"
                                                 PreviewMouseLeftButtonDown="BuckleAmount_PreviewMouseLeftButtonDown"
+                                                PreviewMouseRightButtonUp="BuckleAmount_PreviewMouseRightButtonUp"
                                                 Text="{Binding BuckleAmount, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <TextBox.Style>
                                                     <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="TextBox">
@@ -1870,6 +1871,7 @@
                                                 IsReadOnlyCaretVisible="False"
                                                 KeyDown="DoubleTextBox_OnKeyDown"
                                                 PreviewMouseLeftButtonDown="BuckleAmount_PreviewMouseLeftButtonDown"
+                                                PreviewMouseRightButtonUp="BuckleAmount_PreviewMouseRightButtonUp"
                                                 Text="{Binding BuckleAmount, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <TextBox.Style>
                                                     <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="TextBox">
