@@ -142,40 +142,30 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             }
             if (listOrder.Count > 0)//如果有不足量訂單
             {
-                string lowOrder = String.Join("\r\n", listOrder.ToArray());
-                bool confirm = false;
-                string msg = string.Format("{0}\r\n是否將不足訂購量之品項\r\n轉為新的收貨單?", lowOrder);//確認使用者是否新增不足量訂單
-                Application.Current.Dispatcher.Invoke(() => {
-                    ConfirmWindow confirmWindow = new ConfirmWindow(msg, "", false);
-                    confirm = (bool)confirmWindow.DialogResult;
-                });
-                if (confirm)
+                List<string> succesOrder = new List<string>();
+                foreach (var order in StoreOrders)
                 {
-                    List<string> succesOrder = new List<string>();
-                    foreach (var order in StoreOrders)
+                    if (listOrder.Contains(order.ID))
                     {
-                        if (listOrder.Contains(order.ID))
+                        DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
+                        OrderStatusEnum orderStatus = order.Status;
+                        PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
+                        string ReceiveID = order.RecID;//杏德出貨單
+                        string ManID = Convert.ToString(OrderTable.Rows[0]["StoOrd_ManufactoryID"]); ;//供應商
+                        string wareID = Convert.ToString(OrderTable.Rows[0]["StoOrd_WarehouseID"]);//出貨倉庫
+                        DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
+                        if (dataTable != null && dataTable.Rows.Count > 0)
                         {
-                            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
-                            OrderStatusEnum orderStatus = order.Status;
-                            PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
-                            string ReceiveID = order.RecID;//杏德出貨單
-                            string ManID = Convert.ToString(OrderTable.Rows[0]["StoOrd_ManufactoryID"]); ;//供應商
-                            string wareID = Convert.ToString(OrderTable.Rows[0]["StoOrd_WarehouseID"]);//出貨倉庫
-                            DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
-                            if (dataTable != null && dataTable.Rows.Count > 0)
-                            {
-                                succesOrder.Add(dataTable.Rows[0].Field<string>("NEW_ID"));
-                            }
+                            succesOrder.Add(dataTable.Rows[0].Field<string>("NEW_ID"));
                         }
                     }
-                    if (succesOrder.Count > 0)
-                    {
-                        Application.Current.Dispatcher.Invoke(() => {
-                            MessageWindow.ShowMessage(string.Format("已新增收貨單 {0}{1}", "\r\n",String.Join("\r\n", succesOrder.ToArray())), MessageType.SUCCESS);
-                        });
-                    }
-                }   
+                }
+                if (succesOrder.Count > 0)
+                {
+                    Application.Current.Dispatcher.Invoke(() => {
+                        MessageWindow.ShowMessage(string.Format("已新增收貨單 {0}{1}", "\r\n", String.Join("\r\n", succesOrder.ToArray())), MessageType.SUCCESS);
+                    });
+                }
             }
 
             foreach (var order in StoreOrders)
@@ -219,31 +209,23 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             DataRow[] drs = OrderTable.Select("StoOrdDet_OrderAmount > StoOrdDet_RealAmount");//預訂量 > 實際量 
             if (drs != null && drs.Length > 0)
             {
-                bool confirm = false;
-                Application.Current.Dispatcher.Invoke(() => {
-                    ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
-                    confirm = (bool)confirmWindow.DialogResult;
-                });
-                if (confirm)
+                string ReceiveID = order.RecID;//杏德出貨單
+                string ManID = Convert.ToString(drs[0]["StoOrd_ManufactoryID"]); ;//供應商
+                string wareID = Convert.ToString(drs[0]["StoOrd_WarehouseID"]);//出貨倉庫
+                DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
+                if (dataTable.Rows.Count > 0)
                 {
-                    string ReceiveID = order.RecID;//杏德出貨單
-                    string ManID = Convert.ToString(drs[0]["StoOrd_ManufactoryID"]); ;//供應商
-                    string wareID = Convert.ToString(drs[0]["StoOrd_WarehouseID"]);//出貨倉庫
-                    DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        Application.Current.Dispatcher.Invoke(() => {
-                            MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
-                        });
-                        return true;
-                    }
-                    else
-                    {
-                        Application.Current.Dispatcher.Invoke(() => {
-                            MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
-                        });
-                        return false;
-                    }
+                    Application.Current.Dispatcher.Invoke(() => {
+                        MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+                    });
+                    return true;
+                }
+                else
+                {
+                    Application.Current.Dispatcher.Invoke(() => {
+                        MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
+                    });
+                    return false;
                 }
             }
             return true;
