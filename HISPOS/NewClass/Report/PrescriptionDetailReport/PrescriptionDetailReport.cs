@@ -37,11 +37,22 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         private double paySelfPoint;
         private decimal meduse;
         private int profit;
+
         private int count;
+        private int disableCount;
+
         private int coopCount;
+        private int coopDisableCount;
+
         private int paySelfCount;
+        private int paySelfDisableCount;
+
         private int slowCount;
+        private int slowDisableCount;
+
         private int normalCount;
+        private int normalDisableCount;
+
         private int coopProfit;
         private int paySelfProfit;
         private int slowProfit;
@@ -146,6 +157,25 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => Count, ref count, value);
             }
         }
+
+        public int DisableCount
+        {
+            get => disableCount;
+            set
+            {
+                Set(() => DisableCount, ref disableCount, value);
+            }
+        }
+
+        public int CoopDisableCount
+        {
+            get => coopDisableCount;
+            set
+            {
+                Set(() => CoopDisableCount, ref coopDisableCount, value);
+            }
+        }
+
         public int CoopCount
         {
             get => coopCount;
@@ -154,6 +184,16 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => CoopCount, ref coopCount, value);
             }
         }
+
+        public int PaySelfDisableCount
+        {
+            get => paySelfDisableCount;
+            set
+            {
+                Set(() => PaySelfDisableCount, ref paySelfDisableCount, value);
+            }
+        }
+
         public int PaySelfCount
         {
             get => paySelfCount;
@@ -162,12 +202,31 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => PaySelfCount, ref paySelfCount, value);
             }
         }
+
+        public int SlowDisableCount
+        {
+            get => slowDisableCount;
+            set
+            {
+                Set(() => SlowDisableCount, ref slowDisableCount, value);
+            }
+        }
+
         public int SlowCount
         {
             get => slowCount;
             set
             {
                 Set(() => SlowCount, ref slowCount, value);
+            }
+        }
+
+        public int NormalDisableCount
+        {
+            get => normalDisableCount;
+            set
+            {
+                Set(() => NormalDisableCount, ref normalDisableCount, value);
             }
         }
 
