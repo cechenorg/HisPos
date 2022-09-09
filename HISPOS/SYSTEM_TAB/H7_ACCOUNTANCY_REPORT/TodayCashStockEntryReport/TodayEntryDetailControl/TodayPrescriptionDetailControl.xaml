@@ -18,10 +18,32 @@
             <ColumnDefinition Width="700" />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <Label Content="處方詳細" FontFamily="Segoe UI Semibold" FontSize="25" />
-            <Label Margin="20,0,0,0" Content="共" FontFamily="Segoe UI Semibold" FontSize="25" />
-            <Label Content="{Binding PrescriptionDetailReportSum.Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}" FontFamily="Segoe UI Semibold" FontSize="25" />
-            <Label Content="筆" FontFamily="Segoe UI Semibold" FontSize="25" />
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+                    <Setter Property="FontSize" Value="25"/>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock Text="處方詳細" />
+
+            <TextBlock Margin="20,0,0,0" >
+                <Run Text="已調劑"/>
+                <Run Text="{Binding PrescriptionDetailReportSum.EnableCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <Run Text="筆"></Run>
+            </TextBlock>
+
+            <TextBlock Margin="20,0,0,0" >
+                <Run Text="已刪除"/>
+                <Run Text="{Binding PrescriptionDetailReportSum.DisableCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <Run Text="筆"></Run>
+            </TextBlock>
+
+            <TextBlock Margin="20,0,0,0" >
+                <Run Text="共"/>
+                <Run Text="{Binding PrescriptionDetailReportSum.Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <Run Text="筆"></Run>
+            </TextBlock>
         </StackPanel>
         <FrameworkElement x:Name="dummyElement" Visibility="Collapsed" />
         <DataGrid Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}"

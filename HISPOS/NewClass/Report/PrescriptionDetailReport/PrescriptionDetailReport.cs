@@ -41,18 +41,15 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
         private int count;
         private int disableCount;
+        private int enableCount;
 
         private int coopCount;
-        private int coopDisableCount;
 
         private int paySelfCount;
-        private int paySelfDisableCount;
 
         private int slowCount;
-        private int slowDisableCount;
 
         private int normalCount;
-        private int normalDisableCount;
 
         private int coopProfit;
         private int paySelfProfit;
@@ -178,14 +175,15 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public int CoopDisableCount
+        public int EnableCount
         {
-            get => coopDisableCount;
+            get => enableCount;
             set
             {
-                Set(() => CoopDisableCount, ref coopDisableCount, value);
+                Set(() => EnableCount, ref enableCount, value);
             }
         }
+
 
         public int CoopCount
         {
@@ -195,15 +193,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => CoopCount, ref coopCount, value);
             }
         }
-
-        public int PaySelfDisableCount
-        {
-            get => paySelfDisableCount;
-            set
-            {
-                Set(() => PaySelfDisableCount, ref paySelfDisableCount, value);
-            }
-        }
+        
 
         public int PaySelfCount
         {
@@ -214,14 +204,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public int SlowDisableCount
-        {
-            get => slowDisableCount;
-            set
-            {
-                Set(() => SlowDisableCount, ref slowDisableCount, value);
-            }
-        }
+   
 
         public int SlowCount
         {
@@ -232,14 +215,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             }
         }
 
-        public int NormalDisableCount
-        {
-            get => normalDisableCount;
-            set
-            {
-                Set(() => NormalDisableCount, ref normalDisableCount, value);
-            }
-        }
+   
 
         public int NormalCount
         {
@@ -448,7 +424,6 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
 
             NormalCount = tempCollectionNormal.Count();
-            NormalDisableCount = tempCollectionNormal.Count(_ => _.IsEnable == false);
             NormalMeduse = (int)tempCollectionNormal.Sum(s => s.Meduse);
 
             //profit normal
@@ -456,7 +431,6 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             NormalIncome = (int)tempCollectionNormal.Sum(s => s.MedicalPoint) + (int)tempCollectionNormal.Sum(s => s.MedicalServicePoint) + (int)tempCollectionNormal.Sum(s => s.PaySelfPoint);
 
             SlowCount = tempCollectionSlow.Count();
-            SlowDisableCount = tempCollectionSlow.Count(_ => _.IsEnable == false);
             SlowMeduse = (int)tempCollectionSlow.Sum(s => s.Meduse);
             NormalProfit = (int)(NormalIncome + NormalMeduse + (double)NormalChange );
 
@@ -464,7 +438,6 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             SlowIncome = (int)tempCollectionSlow.Sum(s => s.MedicalPoint) + (int)tempCollectionSlow.Sum(s => s.MedicalServicePoint) + (int)tempCollectionSlow.Sum(s => s.PaySelfPoint);
 
             PaySelfCount = tempCollectionPaySelf.Count();
-            PaySelfDisableCount = tempCollectionPaySelf.Count(_ => _.IsEnable == false);
             PaySelfMeduse = (int)tempCollectionPaySelf.Sum(s => s.Meduse);
             SlowProfit = (int)(SlowIncome + SlowMeduse + (double)SlowChange );
             //profit payself
@@ -498,6 +471,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Profit = prescriptionDetailReports.Sum(s => s.Profit);
             Count = prescriptionDetailReports.Count();
             DisableCount = prescriptionDetailReports.Count(_ => _.IsEnable == false);
+            EnableCount = prescriptionDetailReports.Count(_ => _.IsEnable == true);
         }
 
        
