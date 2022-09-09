@@ -2412,11 +2412,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport
 
         private void CashCoopSelectionChangedAction()
         {
-            /*if (CashflowSelectedItem is null)
-            {
-                CashDetailReportCollection.Clear();
-                return;
-            }*/
             CashCoopVis = Visibility.Collapsed;
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>

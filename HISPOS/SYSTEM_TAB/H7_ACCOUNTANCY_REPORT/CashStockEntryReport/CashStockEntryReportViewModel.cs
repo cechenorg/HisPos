@@ -2568,6 +2568,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                         TradeDeleteReportCollection.Add(r);
                 }
                 
+
                 CalculateTotalTradeProfit();
                 CalculateTotalTradeNormal();
                 CalculateTotalTradeDelete();

@@ -289,9 +289,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             set
             {
                 Set(() => CashCoopSelectItem, ref cashcoopSelectItem, value);
-
-                //CashDetailReportViewSource.Filter += CashCoopFilter;
-                // SumCashDetailReport();
+                
             }
         }
 
@@ -1561,7 +1559,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand PrescriptionDetailClickCommand { get; set; }
         public RelayCommand PrescriptionDetailDoubleClickCommand { get; set; }
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
-        public RelayCommand PrintCashPerDayCommand { get; set; }
+        
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
         public RelayCommand StockTakingReportSelectionChangedCommand { get; set; }
 
@@ -1663,8 +1661,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
-
-            PrintCashPerDayCommand = new RelayCommand(PrintCashPerDayAction);
+            
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
             StockTakingReportSelectionChangedCommand = new RelayCommand(StockTakingReportSelectionChangedAction);
 
@@ -1750,10 +1747,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrintService.PrintPrescriptionProfitDetailAction(StartDate, EndDate, PrescriptionDetailReportView);
         }
 
-        private void PrintCashPerDayAction()
-        {
-            PrintService.PrintCashPerDayAction(StartDate, EndDate, new CashReport());
-        }
+      
 
         private void PrescriptionDetailMedicineDoubleClickAction()
         {
