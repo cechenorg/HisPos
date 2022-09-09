@@ -1551,7 +1551,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand CooperativePrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand CooperativePrescriptionChangeSelectionChangedCommand { get; set; }
         public RelayCommand CashDetailMouseDoubleClickCommand { get; set; }
-        public RelayCommand CashSelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand CashDetailClickCommand { get; set; }
         public RelayCommand PrescriptionDetailClickCommand { get; set; }
@@ -1650,7 +1649,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             AllPrescriptionChangeSelectionChangedCommand = new RelayCommand(AllPrescriptionChangeSelectionChangedAction);
 
             CooperativePrescriptionChangeSelectionChangedCommand = new RelayCommand(CooperativePrescriptionChangeSelectionChangedAction);
-            CashSelectionChangedCommand = new RelayCommand(CashSelectionChangedAction);
             
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
 
@@ -1757,23 +1755,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             if (RewardDetailMedicineReportSelectItem is null) return;
 
             string TradeID = RewardDetailMedicineReportSelectItem.MasterID.ToString();
-
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MasterID", TradeID));
-            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
-            parameters.Add(new SqlParameter("sDate", ""));
-            parameters.Add(new SqlParameter("eDate", ""));
-            parameters.Add(new SqlParameter("sInvoice", ""));
-            parameters.Add(new SqlParameter("eInvoice", ""));
-            parameters.Add(new SqlParameter("flag", "1"));
-            parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
-            parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
-            parameters.Add(new SqlParameter("Cashier", -1));
-            parameters.Add(new SqlParameter("ProID", DBNull.Value));
-            parameters.Add(new SqlParameter("ProName", DBNull.Value));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable result = ReportService.TradeRecordQuery(TradeID);
 
             result.Columns.Add("TransTime_Format", typeof(string));
             foreach (DataRow dr in result.Rows)
@@ -2127,46 +2109,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SumStockTakingOTCDetailReport();
             StockOTCDetailCount = StockTakingOTCDetailReportCollection.Count();
 
-        }
-
-        private void CashSelectionChangedAction()
-        {
-
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                BusyContent = "報表查詢中";
-                CashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
-                CashDetailReportCollection.GetDataByDate("1", StartDate, EndDate);
-                MainWindow.ServerConnection.CloseConnection();
-                var CashCoopStringCopy = new List<string>() { };
-                foreach (var r in CashDetailReportCollection)
-                {
-                    CashCoopStringCopy.Add(r.Ins_Name);
-                }
-                var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
-                CashCoopString = new List<string>() { "全部" };
-                foreach (var item in DistinctItems)
-                {
-                    CashCoopString.Add(item);
-                }
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                CashDetailReportViewSource = new CollectionViewSource { Source = CashDetailReportCollection };
-                CashDetailReportView = CashDetailReportViewSource.View;
-                CashCoopSelectItem = "全部";
-                CashDetailReportViewSource.Filter += CashCoopFilter;
-
-                SumCashDetailReport();
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-
-            CooperativePrescriptionSelectedItem = null;
-            StockTakingSelectedItem = null;
         }
 
         private void CooperativeCostPrescriptionSelectionChangedAction()
