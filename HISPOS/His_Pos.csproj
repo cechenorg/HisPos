@@ -1309,11 +1309,18 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\DepositDetailControl.xaml.cs">
       <DependentUpon>DepositDetailControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\NewCashDetailControl.xaml.cs">
-      <DependentUpon>NewCashDetailControl.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\PrintService.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnSingdeReportControl.xaml.cs">
+      <DependentUpon>PurchaseReturnSingdeReportControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\CashDetailControl.xaml.cs">
+      <DependentUpon>CashDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\ExtraMoneyDetailControl.xaml.cs">
       <DependentUpon>ExtraMoneyDetailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TodayPrescriptionDetailControl.xaml.cs">
+      <DependentUpon>TodayPrescriptionDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\RewardDetailControl.xaml.cs">
       <DependentUpon>RewardDetailControl.xaml</DependentUpon>
@@ -1324,35 +1331,7 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\StockTakingOTCDetailControl.xaml.cs">
       <DependentUpon>StockTakingOTCDetailControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TodayPrescriptionDetailControl.xaml.cs">
-      <DependentUpon>TodayPrescriptionDetailControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TradeProfitDetailControl.xaml.cs">
-      <DependentUpon>TradeProfitDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\PrintService.cs" />
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnSingdeReportControl.xaml.cs">
-      <DependentUpon>PurchaseReturnSingdeReportControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\CashDetailControl.xaml.cs">
-      <DependentUpon>CashDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\ExtraMoneyDetailControl.xaml.cs">
-      <DependentUpon>ExtraMoneyDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\TodayPrescriptionDetailControl.xaml.cs">
-      <DependentUpon>TodayPrescriptionDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\RewardDetailControl.xaml.cs">
-      <DependentUpon>RewardDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\StockTakingDetailControl.xaml.cs">
-      <DependentUpon>StockTakingDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\StockTakingOTCDetailControl.xaml.cs">
-      <DependentUpon>StockTakingOTCDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\TradeProfitDetailControl.xaml.cs">
       <DependentUpon>TradeProfitDetailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\CashStockEntryReport.xaml.cs">
@@ -2288,11 +2267,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\NewCashDetailControl.xaml">
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnSingdeReportControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\CashDetailControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\ExtraMoneyDetailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TodayPrescriptionDetailControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -2308,43 +2295,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TodayPrescriptionDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\NewTodayCashStockEntryReport\NewTodayEntryDetailControl\TradeProfitDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnSingdeReportControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\CashDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\ExtraMoneyDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\TodayPrescriptionDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\RewardDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\StockTakingDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\StockTakingOTCDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\TradeProfitDetailControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

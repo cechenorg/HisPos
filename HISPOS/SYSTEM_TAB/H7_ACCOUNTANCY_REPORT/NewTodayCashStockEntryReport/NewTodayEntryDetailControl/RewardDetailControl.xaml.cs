@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayEntryDetailControl
+namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.TodayEntryDetailControl
 {
     /// <summary>
     /// PrescriptionDetailControl.xaml 的互動邏輯
