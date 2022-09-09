@@ -29,6 +29,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             PaySelfPoint = r.Field<int>("PaySelfPoint");
             IsCooperative = r.Field<int>("IsCooperative") == 1;
             AdjustDate = r.Field<DateTime>("AdjustDate").ToTaiwanDateTime();
+            IsEnable = r.Field<string>("IsEnable") == "1";
         }
 
         private string insName;
@@ -83,6 +84,16 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
         public bool IsCooperative { get; set; }
 
+        private bool _isEnable;
+
+        public bool IsEnable
+        {
+            get => _isEnable;
+            set
+            {
+                Set(() => IsEnable, ref _isEnable, value);
+            }
+        }
 
         private string _adjustDate;
 
