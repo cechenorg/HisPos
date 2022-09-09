@@ -1334,10 +1334,6 @@
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnSingdeReportControl.xaml.cs">
       <DependentUpon>PurchaseReturnSingdeReportControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayCashStockEntryReport.xaml.cs">
-      <DependentUpon>TodayCashStockEntryReport.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayCashStockEntryReportViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\CashDetailControl.xaml.cs">
       <DependentUpon>CashDetailControl.xaml</DependentUpon>
     </Compile>
@@ -1358,9 +1354,6 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\TradeProfitDetailControl.xaml.cs">
       <DependentUpon>TradeProfitDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\ExportIncomeStatementWindow.xaml.cs">
-      <DependentUpon>ExportIncomeStatementWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CashStockEntryReport\CashStockEntryReport.xaml.cs">
       <DependentUpon>CashStockEntryReport.xaml</DependentUpon>
@@ -2327,10 +2320,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayCashStockEntryReport.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\CashDetailControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -2356,10 +2345,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\TodayEntryDetailControl\TradeProfitDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\TodayCashStockEntryReport\ExportIncomeStatementWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

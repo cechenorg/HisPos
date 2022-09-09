@@ -1,28 +1,30 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayCashStockEntryReport" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:entryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.TodayEntryDetailControl" xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:newTodayCashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport" xmlns:newTodayEntryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayEntryDetailControl" d:DesignHeight="839" d:DesignWidth="1365" d:DataContext="{d:DesignInstance Type=newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}" mc:Ignorable="d">
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayCashStockEntryReport" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:entryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport.TodayEntryDetailControl" xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:newTodayCashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport" xmlns:newTodayEntryDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport.NewTodayEntryDetailControl" d:DesignHeight="839" d:DesignWidth="1365" d:DataContext="{d:DesignInstance Type=newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}" mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
-        <DataTemplate x:Key="CashDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+        <DataTemplate x:Key="CashDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <entryDetailControl:CashDetailControl />
         </DataTemplate>
-        <DataTemplate x:Key="TodayPrescriptionDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+        <DataTemplate x:Key="TodayPrescriptionDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <entryDetailControl:TodayPrescriptionDetailControl />
         </DataTemplate>
-        <DataTemplate x:Key="StockTakingDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+        <DataTemplate x:Key="StockTakingDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <entryDetailControl:StockTakingDetailControl />
         </DataTemplate>
-        <DataTemplate x:Key="StockTakingOTCDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+        <DataTemplate x:Key="StockTakingOTCDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <entryDetailControl:StockTakingOTCDetailControl />
         </DataTemplate>
-        <DataTemplate x:Key="TradeProfitDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+        <DataTemplate x:Key="TradeProfitDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <entryDetailControl:TradeProfitDetailControl />
         </DataTemplate>
-        <DataTemplate x:Key="ExtraMoneyDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+        <DataTemplate x:Key="ExtraMoneyDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <entryDetailControl:ExtraMoneyDetailControl />
         </DataTemplate>
-        <DataTemplate x:Key="RewardDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+        <DataTemplate x:Key="RewardDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <entryDetailControl:RewardDetailControl />
         </DataTemplate>
-        <DataTemplate x:Key="DepositDetailControl" DataType="{x:Type local:TodayCashStockEntryReportViewModel}">
+        <DataTemplate x:Key="DepositDetailControl" DataType="{x:Type newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <newTodayEntryDetailControl:DepositDetailControl />
         </DataTemplate>
 
