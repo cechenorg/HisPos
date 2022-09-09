@@ -448,6 +448,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 
 
             NormalCount = tempCollectionNormal.Count();
+            NormalDisableCount = tempCollectionNormal.Count(_ => _.IsEnable == false);
             NormalMeduse = (int)tempCollectionNormal.Sum(s => s.Meduse);
 
             //profit normal
@@ -455,6 +456,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             NormalIncome = (int)tempCollectionNormal.Sum(s => s.MedicalPoint) + (int)tempCollectionNormal.Sum(s => s.MedicalServicePoint) + (int)tempCollectionNormal.Sum(s => s.PaySelfPoint);
 
             SlowCount = tempCollectionSlow.Count();
+            SlowDisableCount = tempCollectionSlow.Count(_ => _.IsEnable == false);
             SlowMeduse = (int)tempCollectionSlow.Sum(s => s.Meduse);
             NormalProfit = (int)(NormalIncome + NormalMeduse + (double)NormalChange );
 
@@ -462,6 +464,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             SlowIncome = (int)tempCollectionSlow.Sum(s => s.MedicalPoint) + (int)tempCollectionSlow.Sum(s => s.MedicalServicePoint) + (int)tempCollectionSlow.Sum(s => s.PaySelfPoint);
 
             PaySelfCount = tempCollectionPaySelf.Count();
+            PaySelfDisableCount = tempCollectionPaySelf.Count(_ => _.IsEnable == false);
             PaySelfMeduse = (int)tempCollectionPaySelf.Sum(s => s.Meduse);
             SlowProfit = (int)(SlowIncome + SlowMeduse + (double)SlowChange );
             //profit payself
@@ -494,7 +497,7 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Meduse = prescriptionDetailReports.Sum(s => s.Meduse);
             Profit = prescriptionDetailReports.Sum(s => s.Profit);
             Count = prescriptionDetailReports.Count();
-             
+            DisableCount = prescriptionDetailReports.Count(_ => _.IsEnable == false);
         }
 
        
