@@ -1791,22 +1791,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             {
                 return;
             }
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MasterID", TradeProfitDetailReportSelectItem.Id));
-            parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
-            parameters.Add(new SqlParameter("sDate", ""));
-            parameters.Add(new SqlParameter("eDate", ""));
-            parameters.Add(new SqlParameter("sInvoice", ""));
-            parameters.Add(new SqlParameter("eInvoice", ""));
-            parameters.Add(new SqlParameter("flag", "1"));
-            parameters.Add(new SqlParameter("ShowIrregular", DBNull.Value));
-            parameters.Add(new SqlParameter("ShowReturn", DBNull.Value));
-            parameters.Add(new SqlParameter("Cashier", -1));
-            parameters.Add(new SqlParameter("ProID", DBNull.Value));
-            parameters.Add(new SqlParameter("ProName", DBNull.Value));
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
-            MainWindow.ServerConnection.CloseConnection();
+
+            DataTable result = ReportService.TradeRecordQuery(TradeProfitDetailReportSelectItem.Id.ToString());
             DataRow masterRow = result.Rows[0];
             result.Columns.Add("TransTime_Format", typeof(string));
             foreach (DataRow dr in result.Rows)
@@ -2324,9 +2310,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                MainWindow.ServerConnection.OpenConnection();
                 BusyContent = "報表查詢中";
-                MainWindow.ServerConnection.CloseConnection();
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
@@ -2485,14 +2469,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
 
             BusyContent = "報表查詢中";
-
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "sDate", StartDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "eDate", EndDate);
-            Ds = MainWindow.ServerConnection.ExecuteProcReturnDataSet("[Get].[TodayCashStockEntryReport]", parameterList);
-            MainWindow.ServerConnection.CloseConnection();
-
+            
+            DataSet DS = ReportService.TodayCashStockEntryReport(StartDate, EndDate);
             PrescriptionAllDataTable = new DataTable();
             PrescriptionAllDataTable.Merge(Ds.Tables[0]);
             PrescriptionAllDataTable.Merge(Ds.Tables[2]);
