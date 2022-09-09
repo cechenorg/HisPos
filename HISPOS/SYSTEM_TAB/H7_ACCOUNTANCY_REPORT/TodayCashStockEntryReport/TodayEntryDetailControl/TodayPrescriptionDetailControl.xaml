@@ -82,15 +82,15 @@
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
-                        <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
-                        </Trigger>
                         <DataTrigger Binding="{Binding IsEnable}" Value="False">
                             <Setter Property="Background" Value="IndianRed"></Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsEnable}" Value="True">
                             <Setter Property="Background" Value="Transparent"></Setter>
                         </DataTrigger>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                        </Trigger>
                     </Style.Triggers>
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="FontSize" Value="16" />
