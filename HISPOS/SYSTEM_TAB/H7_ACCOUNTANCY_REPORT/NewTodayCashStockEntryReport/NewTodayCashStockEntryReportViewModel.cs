@@ -1552,8 +1552,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand CooperativePrescriptionChangeSelectionChangedCommand { get; set; }
         public RelayCommand CashDetailMouseDoubleClickCommand { get; set; }
         public RelayCommand CashSelectionChangedCommand { get; set; }
-        public RelayCommand CashCoopSelectionChangedCommand { get; set; }
-        public RelayCommand CashNotCoopSelectionChangedCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand CashDetailClickCommand { get; set; }
         public RelayCommand PrescriptionDetailClickCommand { get; set; }
@@ -1653,9 +1651,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             CooperativePrescriptionChangeSelectionChangedCommand = new RelayCommand(CooperativePrescriptionChangeSelectionChangedAction);
             CashSelectionChangedCommand = new RelayCommand(CashSelectionChangedAction);
-
-            CashCoopSelectionChangedCommand = new RelayCommand(CashCoopSelectionChangedAction);
-            CashNotCoopSelectionChangedCommand = new RelayCommand(CashNotCoopSelectionChangedAction);
+            
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
 
             PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
@@ -2028,8 +2024,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 TradeProfitDetailEmpReportViewSource = new CollectionViewSource { Source = TradeProfitDetailEmpReportCollection };
 
                 TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
-                //StockTakingDetailReportViewSource.Filter += AdjustCaseFilter;
-                //SumStockTakingDetailReport();
                 TradeChangeSelectItem = "全部";
                 TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
 
@@ -2165,87 +2159,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 CashCoopSelectItem = "全部";
                 CashDetailReportViewSource.Filter += CashCoopFilter;
 
-                SumCashDetailReport();
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-
-            CooperativePrescriptionSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
-
-        private void CashCoopSelectionChangedAction()
-        {
-
-            CashCoopVis = Visibility.Collapsed;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                BusyContent = "報表查詢中";
-                CashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
-                CashDetailReportCollection = new CashDetailReports("0", StartDate, EndDate);
-                MainWindow.ServerConnection.CloseConnection();
-                var CashCoopStringCopy = new List<string>() { };
-                foreach (var r in CashDetailReportCollection)
-                {
-                    CashCoopStringCopy.Add(r.Ins_Name);
-                }
-                var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
-                CashCoopString = new List<string>() { "全部" };
-                foreach (var item in DistinctItems)
-                {
-                    CashCoopString.Add(item);
-                }
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                CashDetailReportViewSource = new CollectionViewSource { Source = CashDetailReportCollection };
-                CashDetailReportView = CashDetailReportViewSource.View;
-                CashCoopSelectItem = "全部";
-                CashDetailReportViewSource.Filter += CashCoopFilter;
-                SumCashDetailReport();
-                IsBusy = false;
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
-
-            CooperativePrescriptionSelectedItem = null;
-            StockTakingSelectedItem = null;
-        }
-
-        private void CashNotCoopSelectionChangedAction()
-        {
-
-            CashCoopVis = Visibility.Visible;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                MainWindow.ServerConnection.OpenConnection();
-                BusyContent = "報表查詢中";
-                CashStockEntryReportEnum = CashStockEntryReportEnum.Cash;
-                CashDetailReportCollection = new CashDetailReports("1", StartDate, EndDate);
-
-                MainWindow.ServerConnection.CloseConnection();
-                var CashCoopStringCopy = new List<string>() { };
-                foreach (var r in CashDetailReportCollection)
-                {
-                    CashCoopStringCopy.Add(r.Ins_Name);
-                }
-                var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
-                CashCoopString = new List<string>() { "全部" };
-                foreach (var item in DistinctItems)
-                {
-                    CashCoopString.Add(item);
-                }
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                CashDetailReportViewSource = new CollectionViewSource { Source = CashDetailReportCollection };
-                CashDetailReportView = CashDetailReportViewSource.View;
-                CashCoopSelectItem = "全部";
-                CashDetailReportViewSource.Filter += CashCoopFilter;
                 SumCashDetailReport();
                 IsBusy = false;
             };
