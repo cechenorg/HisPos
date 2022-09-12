@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using DomainModel.Enum;
 using System;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -150,6 +151,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             bool hasControlMed = false;
             bool hasZeroPrice = false;
+            bool hasZeroRealAmount = TotalPrice == 0 ? true : false;
 
             foreach (var product in ReturnProducts)
             {
@@ -177,6 +179,11 @@ namespace His_Pos.NewClass.StoreOrder
             if (hasZeroPrice)
             {
                 ConfirmWindow confirmWindow = new ConfirmWindow($"部分品項退貨價為0，\n是否確認完成退貨單?", "", false);
+                return (bool)confirmWindow.DialogResult;
+            }
+            else if(hasZeroRealAmount)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow("退貨金額為零\n是否確認完成退貨單?", "", false);
                 return (bool)confirmWindow.DialogResult;
             }
             else

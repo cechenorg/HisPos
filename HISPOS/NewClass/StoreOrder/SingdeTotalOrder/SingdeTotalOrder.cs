@@ -96,6 +96,11 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             {
                 if (order.ID == id)
                 {
+                    bool isReturnOrderToDone = CheckOrderToDone(string.Empty, order.Total);
+                    if(!isReturnOrderToDone)
+                    {
+                        return;
+                    }
                     bool IsSusses = InsertLowerOrder(order);
                     if (!IsSusses)
                         break;
@@ -125,7 +130,8 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
         internal void AllOrderToDone()
         {
-            List<string> listOrder = new List<string>();
+            List<string> returnOrderNoDone = new List<string>();//退貨單為零，使用者選擇是否完成退貨
+            List<string> listOrder = new List<string>();//紀錄不足量訂單
             foreach (var order in StoreOrders)//先檢查有無不足量訂單
             {
                 OrderStatusEnum orderStatus = order.Status;
@@ -134,9 +140,17 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                     DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
                     PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
                     DataRow[] drs = OrderTable.Select("StoOrdDet_OrderAmount > StoOrdDet_RealAmount");//預訂量 > 實際量
-                    if (drs != null && drs.Length > 0)
+                    if (drs != null && drs.Length > 0 && order.Type != OrderTypeEnum.RETURN)
                     {
                         listOrder.Add(order.ID);
+                    }
+                    if(order.Type == OrderTypeEnum.RETURN)
+                    {
+                        bool isReturnOrderToDone = CheckOrderToDone(order.ID, order.Total);
+                        if (!isReturnOrderToDone)
+                        {
+                            returnOrderNoDone.Add(order.ID);
+                        }
                     }
                 }
             }
@@ -145,7 +159,7 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                 List<string> succesOrder = new List<string>();
                 foreach (var order in StoreOrders)
                 {
-                    if (listOrder.Contains(order.ID))
+                    if (listOrder.Contains(order.ID) && order.Type != OrderTypeEnum.RETURN)
                     {
                         DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
                         OrderStatusEnum orderStatus = order.Status;
@@ -154,7 +168,7 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                         string ManID = Convert.ToString(OrderTable.Rows[0]["StoOrd_ManufactoryID"]); ;//供應商
                         string wareID = Convert.ToString(OrderTable.Rows[0]["StoOrd_WarehouseID"]);//出貨倉庫
                         DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
-                        if (dataTable != null && dataTable.Rows.Count > 0)
+                        if (dataTable != null && dataTable.Rows.Count > 0 && order.Type != OrderTypeEnum.RETURN)
                         {
                             succesOrder.Add(dataTable.Rows[0].Field<string>("NEW_ID"));
                         }
@@ -180,19 +194,26 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                             break;
 
                         case OrderTypeEnum.RETURN:
-                            result = StoreOrderDB.ReturnStoreOrderToDone(order.ID);
+                            if(!returnOrderNoDone.Contains(order.ID))
+                            {
+                                result = StoreOrderDB.ReturnStoreOrderToDone(order.ID);
+                            }
                             break;
                     }
 
-                    if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
+                    if (result != null && result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("FAIL") && !returnOrderNoDone.Contains(order.ID))
                     {
                         Application.Current.Dispatcher.Invoke(() => {
                             MessageWindow.ShowMessage((order.Type == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨單未完成\r\n請重新整理後重試", MessageType.ERROR);
                         });
-                        
+
                         break;
                     }
-                     else
+                    else if (returnOrderNoDone.Contains(order.ID))
+                    {
+                        break;
+                    }
+                    else
                     {
                         order.Status = OrderStatusEnum.DONE;
                     }
@@ -200,6 +221,17 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             }
 
             RaisePropertyChanged(nameof(IsAllDone));
+        }
+
+        private bool CheckOrderToDone(string orderID, double amt)
+        {
+            bool confirm = false;
+            Application.Current.Dispatcher.Invoke(() => {
+                string msg = string.Format("{0}退貨金額為零\n是否確認完成退貨單?", orderID);
+                ConfirmWindow confirmWindow = new ConfirmWindow(msg, "", false);
+                confirm = (bool)confirmWindow.DialogResult;
+            });
+            return confirm;
         }
         private bool InsertLowerOrder(ProcessingStoreOrder order)
         {
