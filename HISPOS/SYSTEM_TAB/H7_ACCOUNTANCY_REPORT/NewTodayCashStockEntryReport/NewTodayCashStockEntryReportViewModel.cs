@@ -2470,7 +2470,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             BusyContent = "報表查詢中";
             
-            DataSet DS = ReportService.TodayCashStockEntryReport(StartDate, EndDate);
+            Ds = ReportService.TodayCashStockEntryReport(StartDate, EndDate);
+
             PrescriptionAllDataTable = new DataTable();
             PrescriptionAllDataTable.Merge(Ds.Tables[0]);
             PrescriptionAllDataTable.Merge(Ds.Tables[2]);
