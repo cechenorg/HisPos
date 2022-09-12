@@ -68,7 +68,7 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                     DirectoryInfo di = new DirectoryInfo(c.FilePath);
                     TaiwanCalendar tc = new TaiwanCalendar();
                     DateTime now = DateTime.Now;
-                    string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2,'0'), tc.GetDayOfMonth(now));
+                    string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2,'0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
                     foreach (FileInfo f in di.GetFiles("*.xml", SearchOption.AllDirectories))
                     {
                         string[] file = f.FullName.Split('_');

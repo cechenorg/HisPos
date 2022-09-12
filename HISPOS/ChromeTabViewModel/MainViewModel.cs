@@ -28,7 +28,6 @@ using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
-using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.InstitutionDeclarePointReport;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.NewIncomeStatement;
@@ -427,10 +426,6 @@ namespace His_Pos.ChromeTabViewModel
                      
                 case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { Icon = MainWindow.HisFeatures[6].Icon };
-                    break;
-                      
-                case nameof(FeatureItem.舊每日總帳報表):
-                    newTab = new TodayCashStockEntryReportViewModel() {  Icon = MainWindow.HisFeatures[7].Icon };
                     break;
                       
                 case nameof(FeatureItem.系統教學文件):

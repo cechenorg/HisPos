@@ -85,7 +85,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                         Width="120"
-                        MaxWidth="120"
+                        MaxWidth="150"
                         Binding="{Binding Name}"
                         Header="姓名"
                         IsReadOnly="True">
@@ -96,42 +96,18 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                        Width="120"
-                        MaxWidth="120"
-                        Binding="{Binding Birthday, Converter={StaticResource BirthDayConverter}}"
-                        Header="生日"
-                        IsReadOnly="True" />
-                        <DataGridTextColumn
-                        Width="150"
-                        MaxWidth="120"
-                        Binding="{Binding IDNumber}"
-                        Header="身分證"
-                        IsReadOnly="True" />
-                        <DataGridTextColumn
-                        Width="150"
-                        MaxWidth="120"
-                        Binding="{Binding CellPhone}"
-                        Header="手機1"
-                        IsReadOnly="True" />
-                        <DataGridTextColumn
-                        Width="150"
-                        MaxWidth="120"
-                        Binding="{Binding SecondPhone}"
-                        Header="手機2"
-                        IsReadOnly="True" />
-                        <DataGridTextColumn
-                        Width="150"
-                        MaxWidth="120"
-                        Binding="{Binding Tel}"
-                        Header="家電"
-                        IsReadOnly="True" />
-                        <DataGridTextColumn
-                        Width="150"
-                        MaxWidth="120"
-                        Binding="{Binding LastEdit, StringFormat='{}{0:MM/dd HH:mm}'}"
-                        Header="編輯時間"
-                        IsReadOnly="True" />
+                        <DataGridTextColumn Width="120" MaxWidth="120" Binding="{Binding Birthday, Converter={StaticResource BirthDayConverter}}"
+                                            Header="生日" IsReadOnly="True" />
+                        <DataGridTextColumn Width="150" MaxWidth="120" Binding="{Binding IDNumber}"
+                                            Header="身分證" IsReadOnly="True" />
+                        <DataGridTextColumn Width="160" MaxWidth="160" Binding="{Binding CellPhone}"
+                                            Header="手機" IsReadOnly="True" />
+                        <DataGridTextColumn Width="150" MaxWidth="120" Binding="{Binding Tel}" 
+                                            Header="家電" IsReadOnly="True" />
+                        <DataGridTextColumn Width="80" MaxWidth="80" Binding="{Binding Line}" 
+                                            Header="Line" IsReadOnly="True" />
+                        <DataGridTextColumn Width="150" MaxWidth="120" Binding="{Binding LastEdit, StringFormat='{}{0:MM/dd HH:mm}'}"
+                                            Header="編輯時間" IsReadOnly="True" />
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>

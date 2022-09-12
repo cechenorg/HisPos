@@ -114,11 +114,7 @@
                 <RowDefinition />
                 <RowDefinition Height="300" />
             </Grid.RowDefinitions>
-            <StackPanel
-                Grid.Row="0"
-                Width="1365"
-                Margin="0,0,10,0"
-                Orientation="Horizontal">
+            <StackPanel Grid.Row="0" Width="1365" Margin="0" Orientation="Horizontal">
                 <ContentControl Content="{Binding}">
                     <ContentControl.Style>
                         <Style TargetType="{x:Type ContentControl}">
@@ -134,11 +130,7 @@
                         </Style>
                     </ContentControl.Style>
                 </ContentControl>
-                <Button
-                    x:Name="ClearPatient"
-                    Width="30"
-                    Height="30"
-                    Margin="0,0,10,0"
+                <Button x:Name="ClearPatient" Width="30" Height="30" Margin="0,0,10,0"
                     Padding="0"
                     Background="Transparent"
                     BorderBrush="Transparent"
@@ -156,10 +148,10 @@
                     </i:Interaction.Triggers>
                 </TextBox>
                 <Label Content="處方數" Style="{StaticResource BoldLabelContent18}" />
-                <Label
-                    Width="40"
-                    Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    Style="{StaticResource BoldLabelContent18}"  />
+                <Label Width="50" 
+                       Content="{Binding PrescriptionCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                       Style="{StaticResource BoldLabelContent18}"  />
+                <StackPanel Grid.Row="0" Width="350" Margin="0,0,10,0" Orientation="Horizontal">
                 <Button
                     Name="btnCloud_Info"
                     Width="40"
@@ -182,7 +174,7 @@
                     Content="{StaticResource QrCode}"
                     IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                     Visibility="Visible"/>
-                <Button
+                <Button Width="115"
                     Height="35"
                     Margin="10,0,0,0"
                     Background="DarkCyan"
@@ -190,13 +182,15 @@
                     Command="{Binding GetCooperativePres}"
                     Content="合作診所處方"
                     IsEnabled="{Binding NotPrescribe, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                <Button
+                    <Button Width="115"
                     Height="35"
                     Margin="10,0,0,0"
                     Background="RoyalBlue"
                     BorderThickness="0"
                     Command="{Binding GetPatientData}"
-                    Content="讀取健保卡" />
+                    Content="讀取健保卡" />                   
+                </StackPanel>
+ 
             </StackPanel>
             <Grid
                 Grid.Row="1"

@@ -7,6 +7,7 @@ using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Manufactory.ManufactoryManagement;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow;
 using System.Data;
+using His_Pos.Extention;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
@@ -51,7 +52,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             {
                 currentManufactoryBackUp = value?.Clone() as ManufactoryManageDetail;
                 Set(() => CurrentManufactory, ref currentManufactory, value);
-
+                RaisePropertyChanged(nameof(DisplayManufactoryTelephone));
+                RaisePropertyChanged(nameof(DisplayManufactoryResponsibleTelephone));
                 MainWindow.ServerConnection.OpenConnection();
              
                 if (value != null && CurrentManufactory != null)
@@ -90,6 +92,43 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         {
             get { return currentManufactoryType; }
             set { Set(() => CurrentManufactoryType, ref currentManufactoryType, value); }
+        }
+
+        public string DisplayManufactoryResponsibleTelephone
+        {
+            get
+            {
+                if (currentManufactory is null)
+                    return string.Empty;
+
+
+                var tel = currentManufactory.ResponsibleTelephone;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                currentManufactory.ResponsibleTelephone = tel;
+            }
+        }
+
+        
+        public string DisplayManufactoryTelephone
+        {
+            get
+            {
+                if (currentManufactory is null)
+                    return string.Empty;
+
+
+                var tel = currentManufactory.Telephone;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                currentManufactory.Telephone = tel;
+            }
         }
 
         #endregion ----- Define Variables -----

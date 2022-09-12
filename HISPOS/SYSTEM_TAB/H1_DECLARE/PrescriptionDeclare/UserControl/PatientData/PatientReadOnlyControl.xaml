@@ -7,90 +7,56 @@
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.UserControl.PatientData"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
-     xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
+    xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
     d:DesignHeight="55"
     d:DesignWidth="915"
     d:DataContext="{d:DesignInstance Type=prescriptionDeclare:PrescriptionDeclareViewModel, IsDesignTimeCreatable=False}" 
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
-        <Image
-            x:Key="CustomerManage"
-            Width="30"
-            Height="30"
-            Margin="10,0,10,0"
-            Source="/Images/IDcardValid.png" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Image x:Key="CustomerManage" Width="30" Height="30" Margin="0" Source="/Images/IDcardValid.png" />
     </UserControl.Resources>
     <StackPanel Margin="0,0,10,0" Orientation="Horizontal">
-        <Button
-            Width="50"
-            Height="50"
-            Padding="0"
-            Background="Transparent"
-            BorderBrush="Transparent"
-            Command="{Binding OpenCustomerManage}"
-            Content="{StaticResource CustomerManage}" />
-        <Label
-            Name="PatientIDNumber"
-            Width="110"
-            Height="35"
-            Margin="0,0,10,0"
-            Content="{Binding CurrentPrescription.Patient.IDNumber, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource BoldLabelContent18}">
+        <Button Width="40" Height="40" Margin="20,0,0,0" Padding="0"
+                Background="Transparent" BorderBrush="Transparent"
+                Command="{Binding OpenCustomerManage}"
+                Content="{StaticResource CustomerManage}" />
+        <Label Name="PatientIDNumber" Width="120" Height="35" Margin="0,0,10,0"
+               Content="{Binding CurrentPrescription.Patient.IDNumber, UpdateSourceTrigger=PropertyChanged}"
+               Style="{StaticResource BoldLabelContent18}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientIDNumber}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Label>
-        <Image
-            Width="30"
-            Height="30"
-            Margin="10,0,10,0"
-            Source="../../../../../Images/User_48px.png" />
-        <Label
-            Name="PatientName"
-            Width="120"
-            Height="35"
-            Margin="0,0,10,0"
-            Content="{Binding CurrentPrescription.Patient.Name, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource BoldLabelContent18}">
+        <Image Width="30" Height="30" Margin="5,0,0,0" Source="../../../../../Images/User_48px.png" />
+        <Label Name="PatientName" Width="120" Height="35" Margin="0,0,5,0"
+               Content="{Binding CurrentPrescription.Patient.Name, UpdateSourceTrigger=PropertyChanged}"
+               Style="{StaticResource BoldLabelContent18}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientName}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Label>
-        <Image
-            Width="30"
-            Height="30"
-            Margin="10,0,10,0"
-            Source="/Images/birthday.png" />
-        <Label
-            Name="PatientBirthday"
-            Width="100"
-            Height="35"
-            Margin="0,0,10,0"
-            HorizontalContentAlignment="Center"
-            Content="{Binding CurrentPrescription.Patient.Birthday, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
-            Style="{StaticResource BoldLabelContent18}">
+        <Image Width="30" Height="30" Margin="0" Source="/Images/birthday.png" />
+        <Label Name="PatientBirthday" Width="100" Height="35" Margin="0,0,10,0" HorizontalContentAlignment="Center"
+               Content="{Binding CurrentPrescription.Patient.Birthday, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableDateConverter}}"
+               Style="{StaticResource BoldLabelContent18}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientBirthday}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Label>
-        <Image
-            Width="30"
-            Height="30"
-            Margin="10,0,10,0"
-            Source="/Images/Phone.png" />
-        <Label
-            Name="PatientCellPhone"
-            Width="125"
-            Height="35"
-            Margin="0,0,10,0"
-            HorizontalContentAlignment="Center"
+        <StackPanel Width="30" VerticalAlignment="Center">
+            <Image Width="30" Height="30" Margin="0" Source="/Images/line_enable.png" 
+                   Visibility="{Binding IsLineEnable, Converter={StaticResource BooleanToVisibilityConverter}}" />          
+        </StackPanel>
+        <Image Width="30" Height="30" Margin="0" Source="/Images/Phone.png" />
+        <Label Name="PatientCellPhone" Width="130" Height="35" Margin="0,0,5,0" HorizontalContentAlignment="Left"
             Content="{Binding  DisplayPatientCellPhone,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource BoldLabelContent18}">
             <i:Interaction.Triggers>
@@ -99,19 +65,10 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Label>
-        <Image
-            Width="25"
-            Height="25"
-            Margin="10,0,10,0"
-            Source="/Images/Telephone.png" />
-        <Label
-            Name="PatientTel"
-            Width="120"
-            Height="35"
-            Margin="0,0,10,0"
-            HorizontalContentAlignment="Center"
-            Content="{Binding DisplayPatientTel,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource BoldLabelContent18}">
+        <Image Width="25" Height="25" Margin="0" Source="/Images/Telephone.png" />
+        <Label Name="PatientTel" Width="130" Height="35" Margin="5,0,5,0" HorizontalContentAlignment="Left"
+               Content="{Binding DisplayPatientTel,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+               Style="{StaticResource BoldLabelContent18}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding GetCustomersEditedToday}" CommandParameter="{Binding ElementName=PatientTel}" />

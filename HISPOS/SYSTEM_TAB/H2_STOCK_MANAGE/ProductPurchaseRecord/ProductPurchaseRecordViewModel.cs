@@ -161,7 +161,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 double purchaseSum = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP && s.OrderType == OrderTypeEnum.PURCHASE).Sum(s => s.TotalPrice);
                 double returnSum = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP && s.OrderType == OrderTypeEnum.RETURN).Sum(s => s.TotalPrice);
 
-                TotalPrice = Math.Round((purchaseSum - returnSum),0, MidpointRounding.AwayFromZero);
+                TotalPrice = Math.Round(purchaseSum - returnSum, 0, MidpointRounding.AwayFromZero);
             }
             else
             {

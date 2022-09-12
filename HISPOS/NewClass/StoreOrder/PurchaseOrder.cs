@@ -537,7 +537,10 @@ namespace His_Pos.NewClass.StoreOrder
 
         public static void UpdatePrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
         {
-            string stoordId = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.ID).Rows[0][0].ToString();
+            DataTable table = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.ID);
+            if (table == null || table.Rows.Count == 0) return;
+
+            string stoordId = table.Rows[0][0].ToString();
             try
             {
                 int result = PrescriptionDb.UpdateDeclareOrderToSingde(stoordId, p, pSendData);

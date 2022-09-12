@@ -32,6 +32,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
+using His_Pos.Extention;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
@@ -186,6 +187,102 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             set
             {
                 Set(() => EditedPrescription, ref editedPrescription, value);
+            }
+        }
+
+
+
+        public string DisplayPatientCellPhone
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+                var cellphone = editedPrescription.Patient.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                editedPrescription.Patient.CellPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+                var cellphone = editedPrescription.Patient.SecondPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                editedPrescription.Patient.SecondPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientTel
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+
+
+                var tel = editedPrescription.Patient.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                editedPrescription.Patient.Tel = tel;
+            }
+        }
+        private bool _isLineEnable = false;
+        public bool IsLineEnable
+        {
+            get
+            {
+                var line = editedPrescription.Patient.Line;
+                return line is null ? false : true;
+            }
+            set
+            {
+                Set(() => IsLineEnable, ref _isLineEnable, value);
+            }
+        }
+        public string DisplayPatientContactNote
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+                var contactNote = editedPrescription.Patient.ContactNote;
+                return contactNote is null ? string.Empty : contactNote.ToPatientContactNote();
+            }
+            set
+            {
+                editedPrescription.Patient.ContactNote = value;
+
+
+            }
+        }
+
+        public string DisplayPatientNote
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+                return editedPrescription.Patient.Note;
+            }
+            set
+            {
+                editedPrescription.Patient.Note = value;
+
             }
         }
 
