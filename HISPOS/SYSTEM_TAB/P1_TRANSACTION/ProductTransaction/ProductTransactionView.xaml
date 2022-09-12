@@ -317,14 +317,14 @@
                     <DataGridTemplateColumn Width="160" Header="商品代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Name="ProductIDTextbox" Width="140" Margin="0,0,0,2" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" InputMethod.IsInputMethodEnabled="True" PreviewKeyDown="ProductIDTextbox_KeyDown" Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="ProductIDTextbox_TextChanged">
-                                    <TextBox.InputScope>
-                                        <InputScope>
-                                            <InputScope.Names>
-                                                <InputScopeName NameValue="AlphanumericHalfWidth" />
-                                            </InputScope.Names>
-                                        </InputScope>
-                                    </TextBox.InputScope>
+                                <TextBox Name="ProductIDTextbox" Width="140" Margin="0,0,0,2" HorizontalContentAlignment="Center"
+                                         FontFamily="Segoe UI Semi" FontSize="18" InputScope="AlphanumericHalfWidth"
+                                         InputMethod.IsInputMethodEnabled="True"  PreviewKeyDown="ProductIDTextbox_KeyDown"
+                                         MouseLeftButtonUp="ProductIDTextbox_OnMouseLeftButtonUp"
+                                         PreviewMouseLeftButtonDown="ProductIDTextbox_OnPreviewMouseLeftButtonDown"
+                                         Text="{Binding Path=Pro_ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                         TextChanged="ProductIDTextbox_TextChanged">
+
                                 </TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -349,7 +349,10 @@
                     <DataGridTemplateColumn Width="80" Header="售價">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Price" Width="60" Margin="0,0,0,2" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" IsEnabled="{Binding Path=Pro_TypeID}" LostFocus="Price_LostFocus" PreviewKeyDown="Price_PreviewKeyDown" Text="{Binding Path=CurrentPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Price_TextChanged">
+                                <TextBox x:Name="Price" Width="60" Margin="0,0,0,2" HorizontalContentAlignment="Center"
+                                         FontFamily="Segoe UI Semi" FontSize="18" IsEnabled="{Binding Path=Pro_TypeID}" LostFocus="Price_LostFocus" PreviewKeyDown="Price_PreviewKeyDown"
+                                         PreviewMouseLeftButtonDown="Price_OnPreviewMouseLeftButtonDown" 
+                                         Text="{Binding Path=CurrentPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Price_TextChanged">
                                     <TextBox.InputScope>
                                         <InputScope>
                                             <InputScope.Names>
@@ -373,7 +376,10 @@
                     <DataGridTemplateColumn Width="60" Header="數量">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox x:Name="Amount" Width="50" Margin="0,0,0,2" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" LostFocus="Amount_LostFocus" PreviewKeyDown="Amount_PreviewKeyDown" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Amount_TextChanged">
+                                <TextBox x:Name="Amount" Width="50" Margin="0,0,0,2"
+                                         HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" LostFocus="Amount_LostFocus"
+                                         PreviewMouseLeftButtonDown="Amount_OnPreviewMouseLeftButtonDown"
+                                         PreviewKeyDown="Amount_PreviewKeyDown" Text="{Binding Path=Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Amount_TextChanged">
                                     <TextBox.InputScope>
                                         <InputScope>
                                             <InputScope.Names>

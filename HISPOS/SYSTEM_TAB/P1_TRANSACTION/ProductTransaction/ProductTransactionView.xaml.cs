@@ -1637,5 +1637,51 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 MessageWindow.ShowMessage("預付訂金須單獨結帳", MessageType.ERROR);
             }
         }
+
+        private void ProductIDTextbox_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox t)
+            {
+                t.SelectAll();
+            }
+        }
+
+        private void ProductIDTextbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                if (!tb.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    tb.Focus();
+                }
+            }
+        }
+
+        private void Price_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                if (!tb.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    tb.Focus();
+                    tb.SelectAll();
+                }
+            }
+        }
+
+        private void Amount_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                if (!tb.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    tb.Focus();
+                    tb.SelectAll();
+                }
+            }
+        }
     }
 }
