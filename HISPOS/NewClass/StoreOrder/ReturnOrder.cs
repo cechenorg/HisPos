@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using DomainModel.Enum;
 using System;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -40,7 +41,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public double ReturnStockValue
         {
-            get { return Math.Round(returnStockValue); }
+            get { return Math.Round(returnStockValue, MidpointRounding.AwayFromZero); }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
 
@@ -150,6 +151,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             bool hasControlMed = false;
             bool hasZeroPrice = false;
+            bool hasZeroRealAmount = TotalPrice == 0 ? true : false;
 
             foreach (var product in ReturnProducts)
             {
@@ -179,6 +181,11 @@ namespace His_Pos.NewClass.StoreOrder
                 ConfirmWindow confirmWindow = new ConfirmWindow($"部分品項退貨價為0，\n是否確認完成退貨單?", "", false);
                 return (bool)confirmWindow.DialogResult;
             }
+            else if(hasZeroRealAmount)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow("退貨金額為零\n是否確認完成退貨單?", "", false);
+                return (bool)confirmWindow.DialogResult;
+            }
             else
             {
                 ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?", "", false);
@@ -198,9 +205,9 @@ namespace His_Pos.NewClass.StoreOrder
         public override void CalculateTotalPrice()
         {
             if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
-                ReturnStockValue = ReturnProducts.Where(w=>w.IsChecked).Sum(p => p.ReturnStockValue);
+                ReturnStockValue = ReturnProducts.Where(w => w.IsChecked).Sum(p => p.ReturnStockValue);
 
-            TotalPrice = ReturnProducts.Sum(p => Math.Round(p.SubTotal,2, MidpointRounding.AwayFromZero));
+            TotalPrice = ReturnProducts.Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
             TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
             RaisePropertyChanged(nameof(ReturnDiff));
         }
@@ -210,23 +217,26 @@ namespace His_Pos.NewClass.StoreOrder
             SelectedItem = null;
 
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
-
-            foreach (ReturnProduct returnProduct in ReturnProducts)
+            if(OrderStatus != OrderStatusEnum.DONE && OrderStatus != OrderStatusEnum.SCRAP)
             {
-                if(!returnProduct.IsDone)
+                foreach (ReturnProduct returnProduct in ReturnProducts)
                 {
-                    double value = 0;
-                    double avgPrice = 0;
-                    foreach (ReturnProductInventoryDetail detail in returnProduct.InventoryDetailCollection)
+                    if (!returnProduct.IsDone)
                     {
-                        value = detail.ReturnStockValue;
-                        avgPrice = detail.ReceiveAmount;
+                        double value = 0;
+                        double avgPrice = 0;
+                        foreach (ReturnProductInventoryDetail detail in returnProduct.InventoryDetailCollection)
+                        {
+                            value = detail.ReturnStockValue;
+                            avgPrice = detail.ReceiveAmount;
+                        }
+                        returnProduct.Price = avgPrice;//(平均單價)
+                        returnProduct.SubTotal = Math.Round(Convert.ToDouble(avgPrice * returnProduct.RealAmount), MidpointRounding.AwayFromZero);
+                        returnProduct.ReceiveAmount = Math.Round(avgPrice * returnProduct.ReturnAmount, MidpointRounding.AwayFromZero);
                     }
-                    returnProduct.Price = avgPrice;//(平均單價)
-                    returnProduct.SubTotal = Convert.ToDouble(avgPrice * returnProduct.RealAmount);
-                    returnProduct.ReceiveAmount = Math.Round(avgPrice * returnProduct.ReturnAmount);
                 }
             }
+            
             OldReturnProducts = ReturnProducts.GetOldReturnProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
 

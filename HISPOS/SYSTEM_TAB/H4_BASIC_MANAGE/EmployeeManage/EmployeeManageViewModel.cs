@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using His_Pos.Extention;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
@@ -42,7 +43,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => SelectedEmployee, ref _selectedEmployee, value);
-
+                RaisePropertyChanged(nameof(DisplayEmployeeCellPhone));
+                RaisePropertyChanged(nameof(DisplayEmployeeTel));
                 if (ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
                 {
                     SelectedEmployee.GroupPharmacyEmployeeList.Clear();
@@ -54,6 +56,40 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                     } 
                 }
                     
+            }
+        }
+
+        public string DisplayEmployeeTel
+        {
+            get
+            {
+                if (_selectedEmployee is null)
+                    return string.Empty;
+
+
+                var tel = _selectedEmployee.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                _selectedEmployee.Tel = tel;
+            }
+        }
+
+        public string DisplayEmployeeCellPhone
+        {
+            get
+            {
+                if (_selectedEmployee is null)
+                    return string.Empty;
+                var cellphone = _selectedEmployee.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                _selectedEmployee.CellPhone = cellphone;
             }
         }
 

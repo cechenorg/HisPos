@@ -11,6 +11,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
+        <service:DateTimeConverter x:Key="DateTimeConverter" />
         <service:SentinelConverter x:Key="SentinelConverter" />
         <service:NullableDateConverter x:Key="DateConverter" />
         <service:SelectedItemConverter x:Key="SelectedItemConverter" />
@@ -18,7 +19,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="250" />
+            <RowDefinition Height="220" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <DataGrid
@@ -367,6 +369,59 @@
         </DataGrid>
         <StackPanel
             Grid.Row="2"
+            Background="{StaticResource GridDarkerBackGround}"
+            Orientation="Horizontal">
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="最後修改人:"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentStoreOrder.ModifyUser}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="時間:"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentStoreOrder.ModifyTime, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateTimeConverter}}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="作廢原因:"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+            <Label
+                Visibility="{Binding CurrentStoreOrder.IsEnableVoid}"
+                VerticalAlignment="Center"
+                Content="{Binding CurrentStoreOrder.VoidReason}"
+                FontFamily="Segoe UI Semibold"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="Black" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="3"
             Background="{StaticResource GridDarkerBackGround}"
             Orientation="Horizontal">
             <Button

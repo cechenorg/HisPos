@@ -308,7 +308,7 @@ namespace His_Pos.ChromeTabViewModel
             var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
             TaiwanCalendar tc = new TaiwanCalendar();
             DateTime now = DateTime.Now;
-            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now));
+            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
             bool isRe = false;
             string isRePost = "0";
             
@@ -374,14 +374,15 @@ namespace His_Pos.ChromeTabViewModel
                                     var xDocument = XDocument.Load(filePath);
                                     var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
                                     if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) 
-                                    { 
-                                        isRePost = "0"; 
+                                    {
+                                        isRePost = "0";
                                     }
                                     else
                                     {
-                                        isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                        isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString().Trim();
+                                        isRePost = string.IsNullOrEmpty(isRePost) ? "0" : isRePost;
                                     }
-                                    if (isRePost != "0")
+                                    if (isRePost != "0" )
                                     {
                                         isRe = true;
                                     }

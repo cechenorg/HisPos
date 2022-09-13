@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using System.Data;
 using System.Linq;
+using ClosedXML.Excel;
+using His_Pos.Extention;
 using His_Pos.NewClass.Report.DepositReport;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace His_Pos.NewClass.Report.PrescriptionDetailReport
 {
@@ -23,7 +27,9 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Meduse = r.Field<int>("Meduse");
             Profit = r.Field<int>("Profit");
             PaySelfPoint = r.Field<int>("PaySelfPoint");
-            IsCooperative = r.Field<int>("IsCooperative") == 1; 
+            IsCooperative = r.Field<int>("IsCooperative") == 1;
+            AdjustDate = r.Field<DateTime>("AdjustDate").ToTaiwanDateTime();
+            IsEnable = r.Field<string>("IsEnable") == "1";
         }
 
         private string insName;
@@ -32,11 +38,19 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         private double paySelfPoint;
         private decimal meduse;
         private int profit;
+
         private int count;
+        private int disableCount;
+        private int enableCount;
+
         private int coopCount;
+
         private int paySelfCount;
+
         private int slowCount;
+
         private int normalCount;
+
         private int coopProfit;
         private int paySelfProfit;
         private int slowProfit;
@@ -66,6 +80,28 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
         public string CusName { get; set; }
 
         public bool IsCooperative { get; set; }
+
+        private bool _isEnable;
+
+        public bool IsEnable
+        {
+            get => _isEnable;
+            set
+            {
+                Set(() => IsEnable, ref _isEnable, value);
+            }
+        }
+
+        private string _adjustDate;
+
+        public string AdjustDate
+        {
+            get => _adjustDate;
+            set
+            {
+                Set(() => AdjustDate, ref _adjustDate, value);
+            }
+        }
 
         public string InsName
         {
@@ -129,6 +165,26 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => Count, ref count, value);
             }
         }
+
+        public int DisableCount
+        {
+            get => disableCount;
+            set
+            {
+                Set(() => DisableCount, ref disableCount, value);
+            }
+        }
+
+        public int EnableCount
+        {
+            get => enableCount;
+            set
+            {
+                Set(() => EnableCount, ref enableCount, value);
+            }
+        }
+
+
         public int CoopCount
         {
             get => coopCount;
@@ -137,6 +193,8 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => CoopCount, ref coopCount, value);
             }
         }
+        
+
         public int PaySelfCount
         {
             get => paySelfCount;
@@ -145,6 +203,9 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => PaySelfCount, ref paySelfCount, value);
             }
         }
+
+   
+
         public int SlowCount
         {
             get => slowCount;
@@ -153,6 +214,8 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
                 Set(() => SlowCount, ref slowCount, value);
             }
         }
+
+   
 
         public int NormalCount
         {
@@ -407,7 +470,8 @@ namespace His_Pos.NewClass.Report.PrescriptionDetailReport
             Meduse = prescriptionDetailReports.Sum(s => s.Meduse);
             Profit = prescriptionDetailReports.Sum(s => s.Profit);
             Count = prescriptionDetailReports.Count();
-             
+            DisableCount = prescriptionDetailReports.Count(_ => _.IsEnable == false);
+            EnableCount = prescriptionDetailReports.Count(_ => _.IsEnable == true);
         }
 
        

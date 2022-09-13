@@ -344,6 +344,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 Set(() => DisplayPatientTel, ref _displayPatientTel, value);
             }
         }
+        private bool _isLineEnable = false;
+        public bool IsLineEnable
+        {
+            get
+            {
+                var line = CurrentPrescription.Patient.Line;
+                return line is null ? false : true;
+            }
+            set
+            {
+                Set(() => IsLineEnable, ref _isLineEnable, value);
+            }
+        }
 
         public string DisplayPatientContactNote
         {

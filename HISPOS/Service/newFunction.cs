@@ -304,7 +304,7 @@ namespace His_Pos.Service
             var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
             TaiwanCalendar tc = new TaiwanCalendar();
             DateTime now = DateTime.Now;
-            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now));
+            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2,'0'));
             bool isRe = false;
             string isRePost = "";
             var cooperativeClinicSettings = new CooperativeClinicSettings();
@@ -381,7 +381,8 @@ namespace His_Pos.Service
                                 }
                                 else
                                 {
-                                    isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                    isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString().Trim();
+                                    isRePost = string.IsNullOrEmpty(isRePost) ? "0" : isRePost;
                                 }
                                 if (isRePost != "0")
                                 {
