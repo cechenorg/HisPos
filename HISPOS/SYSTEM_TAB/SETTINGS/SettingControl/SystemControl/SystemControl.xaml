@@ -47,29 +47,26 @@
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"
-                Content="自動沖帳"
+                Content="計算方式"
                 FontFamily="Segoe UI Semibold"
                 FontSize="28"
                 Foreground="DimGray" />
-            <CheckBox
-                x:Name="InvoiceCheck"
-                Width="20"
+            <ComboBox
+                Width="150"
                 Margin="20,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
                 FontFamily="Segoe UI Semi"
-                FontSize="28"
-                Foreground="DimGray"
-                IsChecked="{Binding IsCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                FontSize="18"
+                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                ItemsSource="{Binding DisItem}"
+                DisplayMemberPath="Value"
+                SelectedValuePath="Key"
+                SelectedValue="{Binding SelectItem}">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Checked">
-                        <i:InvokeCommandAction Command="{Binding DataChangedCommand}" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="Unchecked">
-                        <i:InvokeCommandAction Command="{Binding DataChangedCommand}" />
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <command:EventToCommand Command="{Binding DataChangedCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </CheckBox>
+            </ComboBox>
         </StackPanel>
         <StackPanel Grid.Row="6" Orientation="Horizontal">
             <ContentControl Margin="415,0,0,0">
