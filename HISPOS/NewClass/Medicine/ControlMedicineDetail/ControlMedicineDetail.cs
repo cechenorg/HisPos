@@ -34,6 +34,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             Description = r.Field<string>("Description");
             ManufactoryName = r.Field<string>("Man_Name");
             ManufactoryControlMedicinesID = r.Field<string>("Man_ControlMedicineID");
+            FinalStock = stock + InputAmount + OutputAmount;
         }
 
         public DateTime Date { get; set; }
