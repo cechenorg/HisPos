@@ -1,7 +1,10 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Dapper;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.Database;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +18,6 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SystemControl
         public RelayCommand DataChangedCommand { get; set; }
 
         private bool isDataChanged;
-        private bool isCheck;
         public bool IsDataChanged
         {
             get { return isDataChanged; }
@@ -26,32 +28,63 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SystemControl
                 ConfirmChangeCommand.RaiseCanExecuteChanged();
             }
         }
-        public bool IsCheck
+        private Dictionary<int, string> disItem;
+        public Dictionary<int, string> DisItem
         {
-            get => isCheck;
-            set { Set(() => IsCheck, ref isCheck, value); }
+            get => disItem;
+            set => Set(() => DisItem, ref disItem, value);
+        }
+        private int selectItem;
+        public int SelectItem
+        {
+            get => selectItem;
+            set
+            {
+                Set(() => SelectItem, ref selectItem, value);
+            }
         }
         private void DataChangedAction()
         {
             IsDataChanged = true;
         }
-        private bool IsPrinterDataChanged()
-        {
-            return IsDataChanged;
-        }
         public SystemControlViewModel()
         {
-            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsPrinterDataChanged);
-            CancelChangeCommand = new RelayCommand(CancelChangeAction, IsPrinterDataChanged);
+            ConfirmChangeCommand = new RelayCommand(ConfirmChangeAction, IsDataChanged);
+            CancelChangeCommand = new RelayCommand(CancelChangeAction, IsDataChanged);
             DataChangedCommand = new RelayCommand(DataChangedAction);
+            DisItem = new Dictionary<int, string>
+            {
+                { 0, "0.先進先出" },
+                { 1, "1.移動平均" }
+            };
+            Init();
         }
         private void ConfirmChangeAction()
         {
+            string sql = string.Format(
+                @"Update [{0}].[SystemInfo].[SystemParameters] Set SysPar_Value = {1} Where SysPar_Name = 'AvgCost'",
+                Properties.Settings.Default.SystemSerialNumber,
+                SelectItem);
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                _ = conn.Query<int>(sql, commandType: CommandType.Text);
+            });
             IsDataChanged = false;
         }
         private void CancelChangeAction()
         {
             IsDataChanged = false;
+        }
+        private void Init()
+        {
+            string sql = string.Format(@"Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'AvgCost'",
+                Properties.Settings.Default.SystemSerialNumber);
+            int calculate = 0;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                calculate = conn.Query<int>(sql, commandType: CommandType.Text).First();
+            });
+            SelectItem = calculate;
         }
     }
 }

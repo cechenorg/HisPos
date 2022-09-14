@@ -205,5 +205,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.NormalView.Or
                     t.SelectAll();
             }
         }
+
+        private void ProductSubTotalTextbox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (tb.Text == "")
+            { tb.Text = "0"; }
+        }
     }
 }
