@@ -49,9 +49,9 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             Price = (double)row.Field<decimal>("InvDet_Price");
             Inventory = row.Field<double>("InvDet_Amount");
             if (row.Table.Columns.Contains("Record_Qty") && row["Record_Qty"] != DBNull.Value)
-                ReturnAmount = Math.Abs(Convert.ToInt32(row["Record_Qty"]));
+                returnAmount = Math.Abs(Convert.ToInt32(row["Record_Qty"]));
             if (row.Table.Columns.Contains("Record_Amt") && row["Record_Amt"] != DBNull.Value)
-                ReturnStockValue = Convert.ToDouble(row["Record_Amt"]) * ReturnAmount;
+                returnStockValue = Convert.ToDouble(row["Record_Amt"]) * ReturnAmount;
             if(ReturnAmount != 0)
                 ReceiveAmount = ReturnStockValue / ReturnAmount;
         }

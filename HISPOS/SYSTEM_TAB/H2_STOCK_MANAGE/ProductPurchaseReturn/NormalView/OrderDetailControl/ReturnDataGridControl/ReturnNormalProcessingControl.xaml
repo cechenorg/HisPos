@@ -234,6 +234,7 @@
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 PreviewKeyDown="RealAmount_PreviewKeyDown"
+                                LostFocus="ProductSubTotalTextbox_LostFocus"
                                 Text="{Binding RealAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -256,6 +257,7 @@
                                 KeyDown="UIElement_OnKeyDown"
                                 PreviewMouseLeftButtonDown="UIElement_OnPreviewMouseLeftButtonDown"
                                 PreviewKeyDown="RealAmount_PreviewKeyDown"
+                                LostFocus="ProductSubTotalTextbox_LostFocus"
                                 Text="{Binding SubTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="TextChanged">

@@ -39,13 +39,14 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS
 
         private void InitSettingCollections()
         {
-            SettingTabCollection = new SettingTabDatas();
-
-            SettingTabCollection.Add(new SettingTabData(SettingTabs.MyPharmacy, "藥局設定", "/Images/pharmacy.png"));
-            SettingTabCollection.Add(new SettingTabData(SettingTabs.Invoice, "發票設定", "/Images/pharmacy.png"));
-            SettingTabCollection.Add(new SettingTabData(SettingTabs.Printer, "印表機設定", "/Images/Printer.png"));
-            SettingTabCollection.Add(new SettingTabData(SettingTabs.CooperativeClinic, "合作診所設定", "/Images/Cooperate.png"));
-            SettingTabCollection.Add(new SettingTabData(SettingTabs.WareHouse, "庫別設定", "/Images/StockTaking.png"));
+            SettingTabCollection = new SettingTabDatas
+            {
+                new SettingTabData(SettingTabs.MyPharmacy, "藥局設定", "/Images/pharmacy.png"),
+                new SettingTabData(SettingTabs.Invoice, "發票設定", "/Images/pharmacy.png"),
+                new SettingTabData(SettingTabs.Printer, "印表機設定", "/Images/Printer.png"),
+                new SettingTabData(SettingTabs.CooperativeClinic, "合作診所設定", "/Images/Cooperate.png"),
+                new SettingTabData(SettingTabs.WareHouse, "庫別設定", "/Images/StockTaking.png")
+            };
             if (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin)
             {
                 SettingTabCollection.Add(new SettingTabData(SettingTabs.System, "其他設定", "/Images/Management.png"));
