@@ -54,8 +54,8 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.SystemControl
             DataChangedCommand = new RelayCommand(DataChangedAction);
             DisItem = new Dictionary<int, string>
             {
-                { 0, "先進先出" },
-                { 1, "移動平均" }
+                { 0, "0.先進先出" },
+                { 1, "1.移動平均" }
             };
             Init();
         }
