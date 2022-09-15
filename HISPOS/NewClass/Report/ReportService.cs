@@ -5,8 +5,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using His_Pos.Database;
+using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
@@ -50,13 +52,31 @@ namespace His_Pos.NewClass.Report
             return result;
         }
 
-        public static DataTable GetStockTakingDetailRecordByDate(string Id, DateTime sDate, DateTime eDate )
+        public static DataTable GetStockTakingDetailRecordDataTableByDate(string Id, DateTime sDate, DateTime eDate)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Id", Id);
-            DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingDetailRecordByDate]", parameterList);
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Id", Id)); 
+            parameters.Add(new SqlParameter("sDate", sDate));
+            parameters.Add(new SqlParameter("eDate", eDate));    
+            DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+
+            return result;
+        }
+
+        public static IEnumerable<StockTakingDetailRecordReport> GetStockTakingDetailRecordByDate(string Id, DateTime sDate, DateTime eDate )
+        {
+            IEnumerable<StockTakingDetailRecordReport> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<StockTakingDetailRecordReport>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[StockTakingDetailRecordByDate]",
+                    param: new { Id = Id , sDate = sDate ,eDate = eDate},
+                    commandType: CommandType.StoredProcedure);
+
+            });
+
+            return result;
         }
     }
 }

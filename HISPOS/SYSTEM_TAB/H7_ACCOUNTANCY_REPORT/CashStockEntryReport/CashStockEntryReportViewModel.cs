@@ -17,7 +17,6 @@ using His_Pos.NewClass.Report.RewardDetailReport;
 using His_Pos.NewClass.Report.RewardReport;
 using His_Pos.NewClass.Report.StockTakingDetailReport;
 using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport;
-using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingOTCDetailRecordReport;
 using His_Pos.NewClass.Report.StockTakingOTCReport;
 using His_Pos.NewClass.Report.StockTakingReport;
 using His_Pos.NewClass.Report.TradeProfitDetailEmpReport;
@@ -31,6 +30,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail;
 using His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionDetail;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -563,9 +563,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             }
         }
 
-        private StockTakingDetailRecordReports stockTakingDetailRecordReportCollection = new StockTakingDetailRecordReports();
+        private ObservableCollection<StockTakingDetailRecordReport> stockTakingDetailRecordReportCollection = new ObservableCollection<StockTakingDetailRecordReport>();
 
-        public StockTakingDetailRecordReports StockTakingDetailRecordReportCollection
+        public ObservableCollection<StockTakingDetailRecordReport> StockTakingDetailRecordReportCollection
         {
             get => stockTakingDetailRecordReportCollection;
             set
@@ -828,9 +828,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             }
         }
 
-        private StockTakingOTCDetailRecordReports stockTakingOTCDetailRecordReportCollection = new StockTakingOTCDetailRecordReports();
+        private ObservableCollection<StockTakingDetailRecordReport> stockTakingOTCDetailRecordReportCollection = new ObservableCollection<StockTakingDetailRecordReport>();
 
-        public StockTakingOTCDetailRecordReports StockTakingOTCDetailRecordReportCollection
+        public ObservableCollection<StockTakingDetailRecordReport> StockTakingOTCDetailRecordReportCollection
         {
             get => stockTakingOTCDetailRecordReportCollection;
             set
@@ -839,9 +839,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             }
         }
 
-        private StockTakingOTCDetailRecordReport stockTakingOTCDetailMedicineReportSelectItem;
+        private StockTakingDetailRecordReport stockTakingOTCDetailMedicineReportSelectItem;
 
-        public StockTakingOTCDetailRecordReport StockTakingOTCDetailMedicineReportSelectItem
+        public StockTakingDetailRecordReport StockTakingOTCDetailMedicineReportSelectItem
         {
             get => stockTakingOTCDetailMedicineReportSelectItem;
             set
@@ -1984,7 +1984,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 StockTakingDetailRecordReportCollection.Clear();
                 return;
             }
-            StockTakingDetailRecordReportCollection.GetDateByDate(StockTakingDetailReportSelectItem.InvRecSourceID, StartDate, EndDate);
+            StockTakingDetailRecordReportCollection
+                = new ObservableCollection<StockTakingDetailRecordReport>(
+                    ReportService.GetStockTakingDetailRecordByDate(StockTakingDetailReportSelectItem.InvRecSourceID, StartDate, EndDate));
         }
 
         private void StockTakingOTCDetailClickAction()
@@ -1994,7 +1996,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 StockTakingOTCDetailRecordReportCollection.Clear();
                 return;
             }
-            StockTakingOTCDetailRecordReportCollection.GetDateByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID, StartDate, EndDate);
+
+            var data
+                = ReportService.GetStockTakingDetailRecordByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID,
+                    StartDate, EndDate);
+
+            StockTakingOTCDetailRecordReportCollection = new ObservableCollection<StockTakingDetailRecordReport>(data);
         }
 
         private void TradeProfitReportSelectionChangedAction()

@@ -652,8 +652,6 @@
     <Compile Include="NewClass\Report\ExtraMoneyDetailReport\ExtraMoneyDetailReports.cs" />
     <Compile Include="NewClass\Report\IncomeStatement\PointLostMatrix.cs" />
     <Compile Include="NewClass\Report\ReportTypeEnum.cs" />
-    <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReport.cs" />
-    <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailRecordReport\StockTakingOTCDetailRecordReports.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailReport.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailReportDb.cs" />
     <Compile Include="NewClass\Report\StockTakingOTCDetailReport\StockTakingOTCDetailReports.cs" />
@@ -679,7 +677,6 @@
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailReportDb.cs" />
     <Compile Include="NewClass\Report\TradeProfitDetailReport\TradeProfitDetailReports.cs" />
     <Compile Include="NewClass\Report\StockTakingDetailReport\StockTakingDetailRecordReport\StockTakingDetailRecordReport.cs" />
-    <Compile Include="NewClass\Report\StockTakingDetailReport\StockTakingDetailRecordReport\StockTakingDetailRecordReports.cs" />
     <Compile Include="NewClass\Report\StockTakingDetailReport\StockTakingDetailReport.cs" />
     <Compile Include="NewClass\Report\StockTakingDetailReport\StockTakingDetailReportDb.cs" />
     <Compile Include="NewClass\Report\StockTakingDetailReport\StockTakingDetailReports.cs" />
