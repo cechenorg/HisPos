@@ -5,8 +5,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using His_Pos.Database;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace His_Pos.NewClass.Report
 {
@@ -46,6 +48,15 @@ namespace His_Pos.NewClass.Report
             MainWindow.ServerConnection.CloseConnection();
 
             return result;
+        }
+
+        public static DataTable GetStockTakingDetailRecordByDate(string Id, DateTime sDate, DateTime eDate )
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            DataBaseFunction.AddSqlParameter(parameterList, "Id", Id);
+            DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
+            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StockTakingDetailRecordByDate]", parameterList);
         }
     }
 }

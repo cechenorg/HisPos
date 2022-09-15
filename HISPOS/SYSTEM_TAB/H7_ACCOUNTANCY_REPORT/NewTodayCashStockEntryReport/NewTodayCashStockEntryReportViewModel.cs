@@ -1866,7 +1866,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 StockTakingDetailRecordReportCollection.Clear();
                 return;
             }
-            StockTakingDetailRecordReportCollection.GetDateByDate(StockTakingDetailReportSelectItem.InvRecSourceID, StartDate, EndDate, StockTakingDetailReportSelectItem.Type, StockTakingDetailReportSelectItem.Time);
+            StockTakingDetailRecordReportCollection.GetDateByDate(StockTakingDetailReportSelectItem.InvRecSourceID, StartDate, EndDate);
         }
 
         private void StockTakingOTCDetailClickAction()
@@ -1876,7 +1876,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 StockTakingOTCDetailRecordReportCollection.Clear();
                 return;
             }
-            StockTakingOTCDetailRecordReportCollection.GetDateByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID, StartDate, EndDate, StockTakingOTCDetailReportSelectItem.Type, StockTakingOTCDetailReportSelectItem.Time);
+            StockTakingOTCDetailRecordReportCollection.GetDateByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID, StartDate, EndDate );
         }
 
         private void SetVisAllCollapsed()
