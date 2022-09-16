@@ -1348,9 +1348,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
             }
         }
 
-        private PrescriptionDetailMedicineRepots prescriptionDetailMedicineRepotCollection = new PrescriptionDetailMedicineRepots();
+        private ObservableCollection<PrescriptionDetailMedicineRepot> prescriptionDetailMedicineRepotCollection = new ObservableCollection<PrescriptionDetailMedicineRepot>();
 
-        public PrescriptionDetailMedicineRepots PrescriptionDetailMedicineRepotCollection
+        public ObservableCollection<PrescriptionDetailMedicineRepot> PrescriptionDetailMedicineRepotCollection
         {
             get => prescriptionDetailMedicineRepotCollection;
             set
@@ -1934,7 +1934,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 PrescriptionDetailMedicineRepotCollection.Clear();
                 return;
             }
-            PrescriptionDetailMedicineRepotCollection.GerDataById(PrescriptionDetailReportSelectItem.Id);
+
+            var data = ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id);
+            PrescriptionDetailMedicineRepotCollection = new ObservableCollection<PrescriptionDetailMedicineRepot>(data);
         }
 
         private void CashDetailClickAction()

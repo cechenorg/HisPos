@@ -708,8 +708,6 @@
     <Compile Include="NewClass\Report\IncomeStatement\ProfitSummaryMatrix.cs" />
     <Compile Include="NewClass\Report\InventoryDifference.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepot.cs" />
-    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepotDb.cs" />
-    <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailMedicineRepot\PrescriptionDetailMedicineRepots.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReport.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReportDb.cs" />
     <Compile Include="NewClass\Report\PrescriptionDetailReport\PrescriptionDetailReports.cs" />
