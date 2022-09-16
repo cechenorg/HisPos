@@ -90,7 +90,6 @@ namespace His_Pos.NewClass.Report
                     commandType: CommandType.StoredProcedure);
 
             });
-
             return result;
         }
     }
