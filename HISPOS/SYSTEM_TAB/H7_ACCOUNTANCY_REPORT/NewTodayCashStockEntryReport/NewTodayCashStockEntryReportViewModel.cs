@@ -1713,29 +1713,25 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                     RefreshPrescriptionReportView();
                     break;
                 case ReportDetailType.AllPrescription_StockTaking:
-                    CashStockEntryReportEnum = CashStockEntryReportEnum.StockTaking;
-
-                    var CashCoopStringCopy = new List<string>() { };
-                    foreach (var r in StockTakingDetailReportCollection)
-                    {
-                        CashCoopStringCopy.Add(r.Type);
-                    }
-                    var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
-                    StockTakingString = new List<string>() { "全部" };
-                    foreach (var item in DistinctItems)
-                    {
-                        StockTakingString.Add(item);
-                    }
-
-                    StockTakingDetailReportViewSource = new CollectionViewSource { Source = StockTakingDetailReportCollection };
-                    StockTakingDetailReportView = StockTakingDetailReportViewSource.View;
-                    StockTakingSelectItem = "全部";
-                    StockTakingDetailReportViewSource.Filter += StockTakingDetailFilter;
-
-                    SumStockTakingDetailReport();
-                    StockDetailCount = StockTakingDetailReportCollection.Count();
+                    GetAllPrescriptionStockTaking();
                     break;
             }
+        }
+
+        private void GetAllPrescriptionStockTaking()
+        {
+            CashStockEntryReportEnum = CashStockEntryReportEnum.StockTaking;
+
+            StockTakingString = new List<string>() { "全部" };
+            StockTakingString.AddRange(StockTakingDetailReportCollection.Select(x => x.Type).Distinct());
+
+            StockTakingDetailReportViewSource = new CollectionViewSource { Source = StockTakingDetailReportCollection };
+            StockTakingDetailReportView = StockTakingDetailReportViewSource.View;
+            StockTakingSelectItem = "全部";
+            StockTakingDetailReportViewSource.Filter += StockTakingDetailFilter;
+
+            SumStockTakingDetailReport();
+            StockDetailCount = StockTakingDetailReportCollection.Count();
         }
 
         private void DepositDetailDoubleClickAction()
@@ -2369,7 +2365,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportView = PrescriptionDetailReportViewSource.View;
 
             PrescriptionDetailReportViewSource.Filter += AdjustCaseFilter;
-            SumPrescriptionChangedDetailReport();
+            SumPrescriptionDetailReport(PrescriptionDetailReportCollectionChanged);
 
             CooperativePrescriptionSelectedItem = null;
             StockTakingSelectedItem = null;
@@ -2508,7 +2504,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             StockTakingOTCReportSelectionChangedAction();
             CalculateTotalRewardProfit();
             TradeProfitAllReportSelectionChangedAction();
-
+            GetAllPrescriptionStockTaking();
 
             CoopVis = Visibility.Collapsed;
             CashStockEntryReportEnum = CashStockEntryReportEnum.Prescription;
@@ -2535,26 +2531,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailMedicineRepotCollection.Clear();
         }
 
-        private void SumCashDetailReport()
-        {
-            CashDetailReportSum = new CashDetailReport();
-            CashDetailReportSum.CusName = "總計";
-
-            var tempCollection = CashDetailReportCollection.Where(p => true);
-
-            if (CashCoopSelectItem != "全部")
-            {
-                tempCollection = CashDetailReportCollection.Where(p => (p.Ins_Name == CashCoopSelectItem));
-            }
-            else
-            {
-                tempCollection = CashDetailReportCollection;
-            }
-
-            CashDetailReportSum.SumCashDetail(tempCollection);
-
-        }
-
+       
         private void SumPrescriptionDetailReport(PrescriptionDetailReports reports)
         {
             var tempCollection = GetPrescriptionDetailReportsByType(reports);
@@ -2564,15 +2541,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
       
-        private void SumPrescriptionChangedDetailReport()
-        {
-            var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionDetailReportCollectionChanged);
-
-            PrescriptionDetailReportSum = new PrescriptionDetailReport();
-            PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
-
-        }
-
         private void SumCoopChangePrescriptionDetailReport()
         {
             var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionCoopChangeDetailReportCollectionChanged);
