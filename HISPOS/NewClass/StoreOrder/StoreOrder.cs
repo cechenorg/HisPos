@@ -102,7 +102,12 @@ namespace His_Pos.NewClass.StoreOrder
             get { return totalPrice; }
             set { Set(() => TotalPrice, ref totalPrice, value); }
         }
-
+        private string prescriptionID;
+        public string PrescriptionID
+        {
+            get { return prescriptionID; }
+            set { Set(() => PrescriptionID, ref prescriptionID, value); }
+        }
         #endregion ----- Define Variables -----
 
         protected StoreOrder()
@@ -202,6 +207,10 @@ namespace His_Pos.NewClass.StoreOrder
                     IsCanDelete = true;
                     Visibility = "Visibility";
                 }
+            }
+            if (row.Table.Columns.Contains("StoOrd_PrescriptionID"))
+            {
+                PrescriptionID = Convert.ToString(row["StoOrd_PrescriptionID"]);
             }
         }
 
@@ -610,9 +619,9 @@ namespace His_Pos.NewClass.StoreOrder
                         //var auth = ViewModelMainWindow.CurrentUser.Authority;
                         //if (auth == Authority.Admin)
                         //{
-                            ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
-                            if (!(bool)confirmWindow.DialogResult)
-                                return false;
+                        ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
+                        if (!(bool)confirmWindow.DialogResult)
+                            return false;
                         //}
                         //else
                         //{
@@ -620,6 +629,12 @@ namespace His_Pos.NewClass.StoreOrder
                         //    return false;
                         //}
                     }
+                }
+                if (!string.IsNullOrEmpty(PrescriptionID))
+                {
+                    ConfirmWindow confirmWindow = new ConfirmWindow("此訂單有綁定處方，是否確定刪除?", "確認");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return false;
                 }
                 //作廢原因                
                 ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow();
@@ -655,8 +670,14 @@ namespace His_Pos.NewClass.StoreOrder
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
-        public bool DeleteReturnOrder(bool isUpSingdeData)
+        public bool DeleteReturnOrder(bool isUpdSingdeData)
         {
+            if(!string.IsNullOrEmpty(PrescriptionID))
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow("此訂單有綁定處方，是否確定刪除?", "確認");
+                if (!(bool)confirmWindow.DialogResult)
+                    return false;
+            }
             ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow(1);
             ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
             if (!(bool)ScrapOrderWindow.DialogResult)

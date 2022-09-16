@@ -414,6 +414,22 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
+        private static string BuildPatientTel(Prescription p)
+        {
+            string patientTel = string.Empty;
+            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
+            {
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + p.Patient.ContactNote + ")";
+                patientTel = string.IsNullOrEmpty(p.Patient.Line) ? patientTel : "@" + patientTel;
+            }
+            else
+            {
+                patientTel = string.IsNullOrEmpty(p.Patient.Tel) ? string.Empty : p.Patient.Tel;
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? patientTel : patientTel + "(" + p.Patient.ContactNote + ")";
+                patientTel = string.IsNullOrEmpty(p.Patient.Line) ? patientTel : "@" + patientTel;
+            }
+            return patientTel;
+        }
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p, string orderNumber, int medDays)
         {
             var adjustDate = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(p.AdjustDate, true);
@@ -430,25 +446,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 treatReturn = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(treatReturnDate, true);
             }
             var cusGender = p.Patient.CheckGender();
-            string patientTel;
-            string[] splitStr = { "\r\n" };
-            string[] notes = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
-            string note = notes.Length > 0 ? notes[0] : string.Empty;
-            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-            {
-                patientTel = string.IsNullOrEmpty(note) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + note + ")";
-                if (!string.IsNullOrEmpty(p.Patient.Line))
-                {
-                    patientTel = "@" + patientTel;
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(note) ? p.Patient.Tel : p.Patient.Tel + "(" + note + ")";
-                else
-                    patientTel = p.Patient.ContactNote;
-            }
+            string patientTel = BuildPatientTel(p);
             return new List<ReportParameter>
                     {
                         new ReportParameter("OrderNumber",orderNumber),
@@ -504,25 +502,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 treatmentDateChi = $"{year}年{month}月{day}日";
             }
             var cusGender = p.Patient.CheckGender();
-            string patientTel;
-            string[] splitStr = { "\r\n" };
-            string[] notes = (string.IsNullOrEmpty(p.Patient.ContactNote) ? string.Empty : p.Patient.ContactNote).Split(splitStr, StringSplitOptions.RemoveEmptyEntries);
-            string note = notes.Length > 0 ? notes[0] : string.Empty;
-            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-            {
-                patientTel = string.IsNullOrEmpty(note) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + note + ")";
-                if(!string.IsNullOrEmpty(p.Patient.Line))
-                {
-                    patientTel = "@" + patientTel;
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(" + note[0] + ")";
-                else
-                    patientTel = p.Patient.ContactNote;
-            }
+            string patientTel = BuildPatientTel(p);
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",$"{VM.CurrentPharmacy.Name}({VM.CurrentPharmacy.ID})"),
