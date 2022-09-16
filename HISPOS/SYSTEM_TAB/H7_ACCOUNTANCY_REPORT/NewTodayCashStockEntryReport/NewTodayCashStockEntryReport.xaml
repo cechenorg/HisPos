@@ -240,7 +240,9 @@
 
                     <StackPanel x:Name="PREAll" Grid.Row="2" Grid.Column="1" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="PREAll_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding AllAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" 
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.AllPrescription_Count}" 
+                                          Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.MedTotalCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" />
@@ -248,7 +250,10 @@
                     </StackPanel>
                     <StackPanel x:Name="PREIncome" Grid.Row="2" Grid.Column="2" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="PREIncome_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding AllIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" 
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.AllPrescription_Income}"
+                                          Gesture="LeftClick" />
+
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.MedTotalIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" />
@@ -256,7 +261,8 @@
                     </StackPanel>
                     <StackPanel x:Name="PRECost" Grid.Row="2" Grid.Column="3" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="PRECost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding AllCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.AllPrescription_Cost}" Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.MedTotalMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" />

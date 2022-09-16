@@ -1604,13 +1604,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand CooperativeAllPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitAllReportSelectionChangedCommand { get; set; }
         public RelayCommand AllPrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand AllIncomePrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand AllCostPrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand AllAllPrescriptionSelectionChangedCommand { get; set; }
+         
         public RelayCommand AllPrescriptionChangeSelectionChangedCommand { get; set; }
 
         public RelayCommand TradeProfitTicketReportSelectionChangedCommand { get; set; }
         public RelayCommand PrintTradeProfitDetailCommand { get; set; }
+
+        public RelayCommand<ReportDetailType> ViewReportDetailCommand { get; set; }
         #endregion Command
 
         public NewTodayCashStockEntryReportViewModel()
@@ -1618,10 +1618,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SearchCommand = new RelayCommand(GetData);
 
             AllPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
-            AllIncomePrescriptionSelectionChangedCommand = new RelayCommand(AllIncomePrescriptionSelectionChangedAction);
-            AllCostPrescriptionSelectionChangedCommand = new RelayCommand(AllCostPrescriptionSelectionChangedAction);
-            AllAllPrescriptionSelectionChangedCommand = new RelayCommand(AllAllPrescriptionSelectionChangedAction);
-
             SelfNormalPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
             SelfNormalIncomePrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalIncomePrescriptionSelectionChangedAction);
             SelfNormalCostPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalCostPrescriptionSelectionChangedAction);
@@ -1684,7 +1680,37 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeChangeReportSelectionChangedCommand = new RelayCommand(TradeChangeReportSelectionChangedAction);
             RewardExcelCommand = new RelayCommand(RewardExcelAction);
             PrintTradeProfitDetailCommand = new RelayCommand(PrintTradeProfitDetailAction);
+            ViewReportDetailCommand = new RelayCommand<ReportDetailType>(ViewReportDetailAction);
             GetData();
+        }
+
+        private void ViewReportDetailAction(ReportDetailType type)
+        {
+
+            switch (type)
+            {
+                case ReportDetailType.AllPrescription_Count:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Visible;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
+                    SelfPrescriptionAction();
+                    break;
+                case ReportDetailType.AllPrescription_Income:
+                    CostVis = Visibility.Collapsed;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Collapsed;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
+                    SelfPrescriptionAction();
+                    break;
+                case ReportDetailType.AllPrescription_Cost:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Collapsed;
+                    ProfitVis = Visibility.Collapsed;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
+                    SelfPrescriptionAction();
+                    break;
+            }
         }
 
         private void DepositDetailDoubleClickAction()
@@ -2231,40 +2257,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
             SelfPrescriptionAction();
         }
-
-        private void AllAllPrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Visible;
-            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
-            AllPrescriptionAction();
-        }
-
-        private void AllCostPrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Collapsed;
-            ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
-            AllPrescriptionAction();
-        }
-
-        private void AllIncomePrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Collapsed;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
-            AllPrescriptionAction();
-        }
-
-        private void AllPrescriptionAction()
-        {
-            ResetPrescriptionUI();
-            SumPrescriptionDetailReport(PrescriptionDetailReportCollectionALL);
-        }
-
         private void SelfPrescriptionAction()
         {
             ResetPrescriptionUI();
@@ -2788,6 +2780,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             Chronic, //慢箋
             Presribtion, //自費調劑
             Cooperative //合作
+        }
+
+        public enum ReportDetailType
+        {
+          
+            AllPrescription_Count,  //全部處方-張數
+            AllPrescription_Income, //全部處方-收入
+            AllPrescription_Cost, //全部處方-耗用
+            AllPrescription_Adjust, //全部處方-調整
         }
     }
 }
