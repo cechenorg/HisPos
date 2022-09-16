@@ -135,7 +135,6 @@
                 <DataGridTemplateColumn
                     Width="150"
                     Header="商品代碼"
-                    IsReadOnly="True"
                     CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -147,6 +146,7 @@
                                 CharacterCasing="Upper"
                                 FontFamily="Segoe UI Semi"
                                 FontSize="18"
+                                IsReadOnly="True"
                                 PreviewKeyDown="Amount_PreviewKeyDown"
                                 KeyDown="ProductIDTextbox_OnKeyDown"
                                 Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
