@@ -270,7 +270,9 @@
                     </StackPanel>
                     <StackPanel x:Name="PREChange" Grid.Row="2" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="PREChange_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding AllPrescriptionChangeSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" 
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.AllPrescription_Change}" 
+                                          Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.MedTotalChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" />
@@ -278,7 +280,9 @@
                     </StackPanel>
                     <StackPanel x:Name="PREStockChange" Grid.Row="2" Grid.Column="5" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="PREStockChange_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding StockTakingReportSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" 
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.AllPrescription_StockTaking}" 
+                                          Gesture="LeftClick" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding StockTakingDetailReportSum.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" />

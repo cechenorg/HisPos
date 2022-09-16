@@ -1555,10 +1555,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand PrescriptionDetailClickCommand { get; set; }
         public RelayCommand PrescriptionDetailDoubleClickCommand { get; set; }
         public RelayCommand PrescriptionDetailMedicineDoubleClickCommand { get; set; }
-        
         public RelayCommand PrintPrescriptionProfitDetailCommand { get; set; }
-        public RelayCommand StockTakingReportSelectionChangedCommand { get; set; }
-
         public RelayCommand AllDepositReportSelectionChangedCommand { get; set; }
         public RelayCommand DepositDetailClickCommand { get; set; }
         public RelayCommand DepositDetailDoubleClickCommand { get; set; }
@@ -1604,8 +1601,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand CooperativeAllPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitAllReportSelectionChangedCommand { get; set; }
         public RelayCommand AllPrescriptionSelectionChangedCommand { get; set; }
-         
-        public RelayCommand AllPrescriptionChangeSelectionChangedCommand { get; set; }
 
         public RelayCommand TradeProfitTicketReportSelectionChangedCommand { get; set; }
         public RelayCommand PrintTradeProfitDetailCommand { get; set; }
@@ -1641,7 +1636,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SelfNormalPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfNomalPrescriptionChangeSelectionChangedAction);
             SelfSlowPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfSlowPrescriptionChangeSelectionChangedAction);
             SelfSelfPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionChangeSelectionChangedAction);
-            AllPrescriptionChangeSelectionChangedCommand = new RelayCommand(AllPrescriptionChangeSelectionChangedAction);
 
             CooperativePrescriptionChangeSelectionChangedCommand = new RelayCommand(CooperativePrescriptionChangeSelectionChangedAction);
             
@@ -1652,7 +1646,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
             
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
-            StockTakingReportSelectionChangedCommand = new RelayCommand(StockTakingReportSelectionChangedAction);
 
             AllDepositReportSelectionChangedCommand = new RelayCommand(AllDepositReportSelectionChangedAction);
             DepositDetailClickCommand = new RelayCommand(DepositDetailClickAction);
@@ -1709,6 +1702,38 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                     ProfitVis = Visibility.Collapsed;
                     AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
                     SelfPrescriptionAction();
+                    break;
+                case ReportDetailType.AllPrescription_Change:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Visible;
+                    CoopVis = Visibility.Collapsed;
+
+                    AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
+                    RefreshPrescriptionReportView();
+                    break;
+                case ReportDetailType.AllPrescription_StockTaking:
+                    CashStockEntryReportEnum = CashStockEntryReportEnum.StockTaking;
+
+                    var CashCoopStringCopy = new List<string>() { };
+                    foreach (var r in StockTakingDetailReportCollection)
+                    {
+                        CashCoopStringCopy.Add(r.Type);
+                    }
+                    var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
+                    StockTakingString = new List<string>() { "全部" };
+                    foreach (var item in DistinctItems)
+                    {
+                        StockTakingString.Add(item);
+                    }
+
+                    StockTakingDetailReportViewSource = new CollectionViewSource { Source = StockTakingDetailReportCollection };
+                    StockTakingDetailReportView = StockTakingDetailReportViewSource.View;
+                    StockTakingSelectItem = "全部";
+                    StockTakingDetailReportViewSource.Filter += StockTakingDetailFilter;
+
+                    SumStockTakingDetailReport();
+                    StockDetailCount = StockTakingDetailReportCollection.Count();
                     break;
             }
         }
@@ -2079,31 +2104,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CashStockEntryReportEnum = CashStockEntryReportEnum.Deposit;
         }
 
-        private void StockTakingReportSelectionChangedAction()
-        {
-            CashStockEntryReportEnum = CashStockEntryReportEnum.StockTaking;
-
-            var CashCoopStringCopy = new List<string>() { };
-            foreach (var r in StockTakingDetailReportCollection)
-            {
-                CashCoopStringCopy.Add(r.Type);
-            }
-            var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
-            StockTakingString = new List<string>() { "全部" };
-            foreach (var item in DistinctItems)
-            {
-                StockTakingString.Add(item);
-            }
-
-            StockTakingDetailReportViewSource = new CollectionViewSource { Source = StockTakingDetailReportCollection };
-            StockTakingDetailReportView = StockTakingDetailReportViewSource.View;
-            StockTakingSelectItem = "全部";
-            StockTakingDetailReportViewSource.Filter += StockTakingDetailFilter;
-
-            SumStockTakingDetailReport();
-            StockDetailCount = StockTakingDetailReportCollection.Count();
-
-        }
+       
 
         private void StockTakingOTCReportSelectionChangedAction()
         {
@@ -2338,19 +2339,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CoopVis = Visibility.Collapsed;
             AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
             RefreshPrescriptionReportView();
-
-
-        }
-
-        private void AllPrescriptionChangeSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Visible;
-            CoopVis = Visibility.Collapsed;
-
-            AdjustCaseSelectItem = SelectAdjustCaseType.ALL;
-            RefreshPrescriptionReportView();
         }
 
         private void SelfSlowPrescriptionChangeSelectionChangedAction()
@@ -2518,7 +2506,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeChangeReportSelectionChangedActionMain();
             SumCoopChangePrescriptionDetailReport();
             StockTakingOTCReportSelectionChangedAction();
-            StockTakingReportSelectionChangedAction();
             CalculateTotalRewardProfit();
             TradeProfitAllReportSelectionChangedAction();
 
@@ -2788,7 +2775,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             AllPrescription_Count,  //全部處方-張數
             AllPrescription_Income, //全部處方-收入
             AllPrescription_Cost, //全部處方-耗用
-            AllPrescription_Adjust, //全部處方-調整
+            AllPrescription_Change, //全部處方-調整
+            AllPrescription_StockTaking, //全部處方-盤差
         }
     }
 }
