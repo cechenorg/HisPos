@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Dapper;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using His_Pos.Database;
+using His_Pos.NewClass.Report.PrescriptionDetailReport.PrescriptionDetailMedicineRepot;
 using His_Pos.NewClass.Report.StockTakingDetailReport.StockTakingDetailRecordReport;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
@@ -72,6 +73,20 @@ namespace His_Pos.NewClass.Report
             {
                 result = conn.Query<StockTakingDetailRecordReport>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[StockTakingDetailRecordByDate]",
                     param: new { Id = Id , sDate = sDate ,eDate = eDate},
+                    commandType: CommandType.StoredProcedure);
+
+            });
+
+            return result;
+        }
+
+        public static IEnumerable<PrescriptionDetailMedicineRepot> GetPrescriptionDetailMedicineReportById(int id )
+        {
+            IEnumerable<PrescriptionDetailMedicineRepot> result = default;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<PrescriptionDetailMedicineRepot>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[PrescriptionDetailMedicineReportById]",
+                    param: new { Id = id },
                     commandType: CommandType.StoredProcedure);
 
             });
