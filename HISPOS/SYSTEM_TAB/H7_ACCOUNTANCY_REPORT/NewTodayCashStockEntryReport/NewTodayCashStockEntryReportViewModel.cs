@@ -2106,19 +2106,10 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         {
             CashStockEntryReportEnum = CashStockEntryReportEnum.OTCStockTaking;
 
-            var CashCoopStringCopy = new List<string>() { };
-            foreach (var r in StockTakingOTCDetailReportCollection)
-            {
-                CashCoopStringCopy.Add(r.Type);
-            }
-            var DistinctItems = CashCoopStringCopy.Select(x => x).Distinct();
+            var DistinctItems = StockTakingOTCDetailReportCollection.Select(_ => _.Type).Distinct();
             StockTakingOTCString = new List<string>() { "全部" };
-            foreach (var item in DistinctItems)
-            {
-                StockTakingOTCString.Add(item);
-            }
-
-            MainWindow.ServerConnection.CloseConnection();
+            StockTakingOTCString.AddRange(DistinctItems);
+          
 
             StockTakingOTCDetailReportViewSource = new CollectionViewSource { Source = StockTakingOTCDetailReportCollection };
             StockTakingOTCDetailReportView = StockTakingOTCDetailReportViewSource.View;
