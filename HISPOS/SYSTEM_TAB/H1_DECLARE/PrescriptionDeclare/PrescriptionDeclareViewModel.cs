@@ -1348,10 +1348,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 isCardReading = false;
                 if (CheckReadCardResult())
                     WriteCard();
-                else
-                {
-                    IsBusy = false;
-                }
+
+                IsBusy = false;
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -1429,20 +1427,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (!CheckIsGetMedicalNumber()) return;
             if (!CheckPatientMatch()) return;
-            worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = Resources.寫卡;
-                currentService.SetCard(currentCard);
-                currentService.CreateDailyUploadData(ErrorCode);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                StartNormalAdjust();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+
+            BusyContent = Resources.寫卡;
+            currentService.SetCard(currentCard);
+            currentService.CreateDailyUploadData(ErrorCode);
+            StartNormalAdjust();
+
         }
 
         private bool CheckPatientMatch()
