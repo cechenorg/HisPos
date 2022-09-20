@@ -69,7 +69,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="170"
+                    Width="Auto"
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"
@@ -177,7 +177,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="170"
+                    Width="Auto"
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"
