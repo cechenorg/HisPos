@@ -354,41 +354,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
 
                 string realProductID = row.Field<string>("PRO_ID");
-
-                switch (realProductID)
-                {
-                    case "NAN02A1000Z4":
-                        realProductID = "NAN02A1000ZZ-4";
-                        break;
-
-                    case "NAN02A1000Z5":
-                        realProductID = "NAN02A1000ZZ-5";
-                        break;
-
-                    case "NAN020632GNR":
-                        realProductID = "NAN02A1000ZZ-N6";
-                        break;
-
-                    case "NAN02A1000Z8":
-                        realProductID = "NAN02A1000ZZ-8";
-                        break;
-
-                    case "NAN020050NNR":
-                        realProductID = "NAN02A1000ZZ-N8";
-                        break;
-
-                    case "NCS03A1000.3":
-                        realProductID = "NCS03A1000ZZ-0.3";
-                        break;
-
-                    case "NCS03A1000.5":
-                        realProductID = "NCS03A1000ZZ-0.5";
-                        break;
-
-                    case "NCS03A1001.0":
-                        realProductID = "NCS03A1000ZZ-1.0";
-                        break;
-                }
+                realProductID = ReplaceProduct(realProductID);
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", realProductID);
@@ -409,7 +375,45 @@ namespace His_Pos.NewClass.StoreOrder
             }
             return storeOrderDetailTable;
         }
+        public static string ReplaceProduct(string proID)
+        {
+            string productID = proID;
+            switch (proID)
+            {
+                case "NAN02A1000Z4":
+                    productID = "NAN02A1000ZZ-4";
+                    break;
 
+                case "NAN02A1000Z5":
+                    productID = "NAN02A1000ZZ-5";
+                    break;
+
+                case "NAN020632GNR":
+                    productID = "NAN02A1000ZZ-N6";
+                    break;
+
+                case "NAN02A1000Z8":
+                    productID = "NAN02A1000ZZ-8";
+                    break;
+
+                case "NAN020050NNR":
+                    productID = "NAN02A1000ZZ-N8";
+                    break;
+
+                case "NCS03A1000.3":
+                    productID = "NCS03A1000ZZ-0.3";
+                    break;
+
+                case "NCS03A1000.5":
+                    productID = "NCS03A1000ZZ-0.5";
+                    break;
+
+                case "NCS03A1001.0":
+                    productID = "NCS03A1000ZZ-1.0";
+                    break;
+            }
+            return productID;
+        }
         private static DataTable SetPurchaseOrderDetail(string productsFromSingde, string storeOrderID, bool IsPrescription)
         {
             int detailId = 1;
@@ -608,7 +612,8 @@ namespace His_Pos.NewClass.StoreOrder
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", orederID));
             parameters.Add(new SqlParameter("RECSTOORD_ID", receiveID));
-            parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(dataTable, orederID)));
+            DataTable table = SetPurchaseOrderDetail(dataTable, orederID);
+            parameters.Add(new SqlParameter("DETAILS", table));
             parameters.Add(new SqlParameter("CHECK_CODE", checkCode));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
         }

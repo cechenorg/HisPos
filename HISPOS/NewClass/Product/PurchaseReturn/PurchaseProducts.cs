@@ -63,27 +63,26 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             {
                 dataTable = PurchaseReturnProductDB.GetSingdeProductsByStoreOrderID(orederID);
             }
-
-            if (dataTable.Rows.Count == 0)
-                return false;
-
             #region 測試資料
-            //if (1 == 1)
+            //if (1 == 1 && orederID == "P20220920-01")
             //{
             //    DataTable testtable = dataTable.Clone();
             //    DataRow testrow1 = testtable.NewRow();
-            //    testrow1["TYPE"] = "O";
-            //    testrow1["PRO_ID"] = "N013396209";
-            //    testrow1["AMOUNT"] = 5;
-            //    testrow1["PRICE"] = 10;
-            //    testrow1["BATCHNUM"] = "TEST1-1";
+            //    testrow1["TYPE"] = "M";
+            //    testrow1["PRO_ID"] = "NAN02A1000Z4";
+            //    testrow1["AMOUNT"] = 28;
+            //    testrow1["PRICE"] = 87;
+            //    testrow1["BATCHNUM"] = "TEST1";
             //    testrow1["VALIDDATE"] = "1151231";
-            //    testrow1["rep_no"] = 2;
+            //    testrow1["rep_no"] = 1;
             //    testtable.Rows.Add(testrow1);
             //    dataTable = testtable;
-            //    receiveID = "1110830W01";//更改ReceiveID(測試用)
+            //    receiveID = "1110920W02";//更改ReceiveID(測試用)
             //}
             #endregion
+            if (dataTable.Rows.Count == 0)
+                return false;
+
             DataTable table = PurchaseReturnProductDB.GetProductsByStoreOrderID(orederID);//找訂單明細
             Dictionary<string, int> pairsProID = new Dictionary<string, int>();//取代商品、取代數量(商品取代
             Dictionary<int, int> pairsDetID = new Dictionary<int, int>();//取代代碼、取代數量(項次取代
@@ -94,8 +93,13 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
             {
                 int rep_no = Convert.ToInt32(Convert.ToString(dr["rep_no"]) == string.Empty ? 0 : dr["rep_no"]);//傳回需取代的代碼
                 string pro_ID = Convert.ToString(dr["PRO_ID"]);//傳回藥品代號
+                string repProID = StoreOrderDB.ReplaceProduct(pro_ID);
+                if(pro_ID != repProID)//已經被取代，跳過取代由預存填入資料
+                {
+                    continue;
+                }
                 int qty = Math.Abs(Convert.ToInt32(dr["AMOUNT"]));//取代數量
-                string wareID = Convert.ToString(SortTable.Rows[0]["ProInv_WareHouseID"]);//倉庫代碼
+                string wareID = Convert.ToString(SortTable != null && SortTable.Rows.Count > 0 ? SortTable.Rows[0]["ProInv_WareHouseID"] : "0");//倉庫代碼
                 var dataList = ProductGroupSettingDB.GetProductGroupSettingListByID(pro_ID, wareID);//商品群組
                 bool isContains = SortTable.Select(string.Format("Pro_ID = '{0}'", pro_ID)).Length > 0;
                 if (!isContains)//如果傳回藥品不存在系統訂單內(不存在同商品)
