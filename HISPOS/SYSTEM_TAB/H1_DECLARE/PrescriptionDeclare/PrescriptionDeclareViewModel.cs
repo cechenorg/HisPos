@@ -1135,76 +1135,67 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ErrorAdjustAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                currentService = PrescriptionService.CreateService(CurrentPrescription);
-                if (!currentService.CheckCustomerSelected())
-                    return;
-                CheckCustomerEdited();
-                if (!CheckAdjustDate()) return;
-                CheckWay();
-                if (!ErrorAdjustConfirm()) return;
-                isAdjusting = true;
-                if (!CheckMedicinesNegativeStock()) return;
-                CheckChronicCopayment();
-                if (!CheckPrescription(false, true)) return;
-                StartErrorAdjust();
-            });
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            if (!currentService.CheckCustomerSelected())
+                return;
+            CheckCustomerEdited();
+            if (!CheckAdjustDate()) return;
+            CheckWay();
+            if (!ErrorAdjustConfirm()) return;
+            isAdjusting = true;
+            if (!CheckMedicinesNegativeStock()) return;
+            CheckChronicCopayment();
+            if (!CheckPrescription(false, true)) return;
+            StartErrorAdjust();
         }
 
         private void DepositAdjustAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                CheckCustomerValid();
-                currentService = PrescriptionService.CreateService(CurrentPrescription);
-                if (!currentService.CheckCustomerSelected())
-                    return;
-                CheckCustomerEdited();
-                if (!CheckAdjustDate()) return;
-                CheckWay();
-                isAdjusting = true;
-                if (!CheckMedicinesNegativeStock()) return;
-                if (!CheckPrescription(true, false)) return;
-                StartDepositAdjust();
-            });
+            CheckCustomerValid();
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            if (!currentService.CheckCustomerSelected())
+                return;
+            CheckCustomerEdited();
+            if (!CheckAdjustDate()) return;
+            CheckWay();
+            isAdjusting = true;
+            if (!CheckMedicinesNegativeStock()) return;
+            if (!CheckPrescription(true, false)) return;
+            StartDepositAdjust();
         }
 
         private void AdjustAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
+            CheckCustomerValid();
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            if (!currentService.CheckCustomerSelected())
+                return;
+
+            CheckCustomerEdited();
+            if (!CheckAdjustDate()) 
+                return;
+            CheckWay();
+
+            isAdjusting = true;
+
+            if (!CheckPrescriptionBeforeOrder(false, false))
+                return;
+
+            if (!CheckMedicinesNegativeStock())
+                return;
+
+            CheckChronicCopayment();
+
+            if (!CheckPrescription(false, false)) 
+                return;
+
+            if (VM.CurrentPharmacy.NewInstitution)
             {
-                CheckCustomerValid();
-                currentService = PrescriptionService.CreateService(CurrentPrescription);
-                if (!currentService.CheckCustomerSelected())
-                    return;
-
-                CheckCustomerEdited();
-                if (!CheckAdjustDate())
-                    return;
-                CheckWay();
-
-                isAdjusting = true;
-
-                if (!CheckPrescriptionBeforeOrder(false, false))
-                    return;
-
-                if (!CheckMedicinesNegativeStock())
-                    return;
-
-                CheckChronicCopayment();
-
-                if (!CheckPrescription(false, false))
-                    return;
-
-                if (VM.CurrentPharmacy.NewInstitution)
-                {
-                    SetNewInstitutionUploadData();
-                    StartNormalAdjust();
-                }
-                else
-                    CheckIsReadCard();
-            });
+                SetNewInstitutionUploadData();
+                StartNormalAdjust();
+            }
+            else
+                CheckIsReadCard();
         }
 
         private void CheckCustomerValid()
@@ -1234,34 +1225,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
+            CheckCustomerValid();
+            CheckCustomerEdited();
+            isAdjusting = true;
+            CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
+            if (!CheckRegisterPrescription(false, false))
             {
-                CheckCustomerValid();
-                CheckCustomerEdited();
-                isAdjusting = true;
-                CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
-                if (!CheckRegisterPrescription(false, false))
-                {
-                    CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
-                    return;
-                }
-                StartRegister();
-            });
+                CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
+                return;
+            }
+            StartRegister();
         }
 
         private void PrescribeAdjustAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                currentService = PrescriptionService.CreateService(CurrentPrescription);
-                if (!currentService.CheckCustomerSelected())
-                    return;
-                CheckCustomerEdited();
-                isAdjusting = true;
-                if (!CheckMedicinesNegativeStock()) return;
-                if (!CheckPrescription(false, false)) return;
-                StartPrescribeAdjust();
-            });
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            if (!currentService.CheckCustomerSelected())
+                return;
+            CheckCustomerEdited();
+            isAdjusting = true;
+            if (!CheckMedicinesNegativeStock()) return;
+            if (!CheckPrescription(false, false)) return;
+            StartPrescribeAdjust();
         }
 
         #endregion CommandAction
