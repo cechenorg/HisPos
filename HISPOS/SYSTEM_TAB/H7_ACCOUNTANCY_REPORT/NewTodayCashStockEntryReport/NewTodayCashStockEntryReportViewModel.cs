@@ -1931,7 +1931,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             }
 
             var data
-                = ReportService.GetStockTakingDetailRecordByDate(StockTakingDetailReportSelectItem.InvRecSourceID, StartDate, EndDate);
+                = ReportService.GetStockTakingDetailRecordByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID, StartDate, EndDate);
             StockTakingOTCDetailRecordReportCollection = new ObservableCollection<StockTakingDetailRecordReport>(data );
         }
 
