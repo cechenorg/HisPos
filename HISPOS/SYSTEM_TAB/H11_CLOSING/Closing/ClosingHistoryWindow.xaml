@@ -104,7 +104,7 @@
                     Width="150"
                     Binding="{Binding OGValue, StringFormat=N0}"
                     FontFamily="Segoe UI Semi"
-                    Header="系統金額"
+                    Header="當日現金帳"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
