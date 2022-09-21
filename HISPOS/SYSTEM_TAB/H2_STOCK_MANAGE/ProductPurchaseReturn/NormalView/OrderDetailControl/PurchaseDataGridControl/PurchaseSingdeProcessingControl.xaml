@@ -133,14 +133,14 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
-                    Width="150"
+                    Width="Auto"
                     Header="商品代碼"
                     CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
                                 x:Name="ProductIDTextbox"
-                                Width="150"
+                                Width="Auto"
                                 Margin="10,0,0,2"
                                 HorizontalContentAlignment="Center"
                                 CharacterCasing="Upper"

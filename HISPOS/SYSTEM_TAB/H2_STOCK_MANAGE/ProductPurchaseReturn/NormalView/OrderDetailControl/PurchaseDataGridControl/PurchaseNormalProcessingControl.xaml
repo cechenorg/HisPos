@@ -156,7 +156,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="175"
+                    Width="Auto"
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"
@@ -165,6 +165,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="Width" Value="Auto" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
