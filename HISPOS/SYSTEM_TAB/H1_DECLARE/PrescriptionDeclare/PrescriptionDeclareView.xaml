@@ -387,6 +387,11 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Price0, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <Setter Property="Foreground" Value="IndianRed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>

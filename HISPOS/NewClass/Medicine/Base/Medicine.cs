@@ -433,9 +433,20 @@ namespace His_Pos.NewClass.Medicine.Base
             set
             {
                 Set(() => NHIPrice, ref nhiPrice, value);
+                price0 = NHIPrice == 0 ? true : false;
             }
         }
 
+        private bool price0;
+
+        public bool Price0
+        {
+            get => price0;
+            set
+            {
+                Set(() => Price0, ref price0, value);
+            }
+        }
         private bool isSelected;
 
         public bool IsSelected
