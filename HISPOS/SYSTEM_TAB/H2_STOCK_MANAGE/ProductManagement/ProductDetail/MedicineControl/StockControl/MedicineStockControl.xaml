@@ -724,18 +724,10 @@
             <Label
                 VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
-                Content="近3個月耗用量"
+                Content="3個月耗用"
                 FontFamily="Segoe UI Semibold"
                 FontSize="15"
                 Foreground="{StaticResource ForeGround}" />
-            <Image
-                Width="20"
-                VerticalAlignment="Center"
-                Source="/Images/chart.png">
-                <!--<Image.InputBindings>
-                    <MouseBinding MouseAction="LeftClick" Command="{Binding ShowConsumeRecordCommand}" />
-                </Image.InputBindings>-->
-            </Image>
         </StackPanel>
         <TextBlock
             Grid.Row="3"
