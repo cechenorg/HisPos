@@ -686,6 +686,24 @@
             FontFamily="Segoe UI Semibold"
             FontSize="25"
             Foreground="{StaticResource ForeGround}" />
+        <Label
+            Grid.Row="2"
+            Grid.Column="2"
+            VerticalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            Content="平均成本"
+            FontFamily="Segoe UI Semibold"
+            FontSize="25"
+            Foreground="{StaticResource ForeGround}" />
+        <Label
+            Grid.Row="3"
+            Grid.Column="2"
+            VerticalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            Content="{Binding StockDetail.AvgPrice, FallbackValue=0, UpdateSourceTrigger=PropertyChanged, StringFormat=$0.00}"
+            FontFamily="Segoe UI Semibold"
+            FontSize="25"
+            Foreground="{StaticResource ForeGround}" />
         <TextBlock
             Grid.Row="1"
             Grid.Column="3"
@@ -699,9 +717,8 @@
             TextAlignment="Center" />
         <StackPanel
             Grid.Row="2"
-            Grid.Column="2"
+            Grid.Column="3"
             Grid.ColumnSpan="2"
-            Margin="0,10,0,0"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Label
@@ -709,11 +726,10 @@
                 HorizontalContentAlignment="Center"
                 Content="近3個月耗用量"
                 FontFamily="Segoe UI Semibold"
-                FontSize="25"
+                FontSize="15"
                 Foreground="{StaticResource ForeGround}" />
             <Image
-                Width="25"
-                Margin="0,2,0,0"
+                Width="20"
                 VerticalAlignment="Center"
                 Source="/Images/chart.png">
                 <!--<Image.InputBindings>
@@ -723,8 +739,8 @@
         </StackPanel>
         <TextBlock
             Grid.Row="3"
-            Grid.Column="2"
-            Grid.ColumnSpan="2"
+            Grid.Column="3"
+            Grid.ColumnSpan="1"
             Width="80"
             Margin="0,0,0,10"
             VerticalAlignment="Center"
