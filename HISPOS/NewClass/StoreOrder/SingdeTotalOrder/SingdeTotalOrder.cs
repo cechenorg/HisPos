@@ -96,12 +96,17 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             {
                 if (order.ID == id)
                 {
-                    bool isReturnOrderToDone = CheckOrderToDone(string.Empty, order.Total);
+                    bool isReturnOrderToDone = CheckOrderToDone(id, order.Total);
                     if(!isReturnOrderToDone)
                     {
                         return;
                     }
-                    bool IsSusses = InsertLowerOrder(order);
+
+                    bool IsSusses = true;
+                    if (order.Type != OrderTypeEnum.RETURN)
+                    {
+                        IsSusses = InsertLowerOrder(order);
+                    }
                     if (!IsSusses)
                         break;
 
@@ -225,11 +230,14 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
 
         private bool CheckOrderToDone(string orderID, double amt)
         {
-            bool confirm = false;
+            bool confirm = amt > 0 ? true : false;
             Application.Current.Dispatcher.Invoke(() => {
                 string msg = string.Format("{0}退貨金額為零\n是否確認完成退貨單?", orderID);
-                ConfirmWindow confirmWindow = new ConfirmWindow(msg, "", false);
-                confirm = (bool)confirmWindow.DialogResult;
+                if(amt == 0)
+                {
+                    ConfirmWindow confirmWindow = new ConfirmWindow(msg, "", false);
+                    confirm = (bool)confirmWindow.DialogResult;
+                }
             });
             return confirm;
         }
