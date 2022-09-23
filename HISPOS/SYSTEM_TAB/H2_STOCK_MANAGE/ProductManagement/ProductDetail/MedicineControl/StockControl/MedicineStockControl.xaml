@@ -726,7 +726,7 @@
                 HorizontalContentAlignment="Center"
                 Content="3個月耗用"
                 FontFamily="Segoe UI Semibold"
-                FontSize="15"
+                FontSize="25"
                 Foreground="{StaticResource ForeGround}" />
         </StackPanel>
         <TextBlock
