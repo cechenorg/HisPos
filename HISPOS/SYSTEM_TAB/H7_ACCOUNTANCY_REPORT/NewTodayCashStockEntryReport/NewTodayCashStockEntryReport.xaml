@@ -521,7 +521,8 @@
                     </StackPanel>
                     <StackPanel x:Name="SELFAll" Grid.Row="6" Grid.Column="1" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="SELFAll_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfSelfAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.Prescribtion_Count}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.PaySelfCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />
@@ -529,7 +530,8 @@
                     </StackPanel>
                     <StackPanel x:Name="SELFIncome" Grid.Row="6" Grid.Column="2" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="SELFIncome_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfSelfIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick" 
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.Prescribtion_Income}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.PaySelfIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />
@@ -537,7 +539,8 @@
                     </StackPanel>
                     <StackPanel x:Name="SELFCost" Grid.Row="6" Grid.Column="3" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="SELFCost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfSelfCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick" 
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.Prescribtion_Cost}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding  PrescriptionDetailReportSumMain.PaySelfMeduse , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />
@@ -545,7 +548,8 @@
                     </StackPanel>
                     <StackPanel x:Name="SELFChange" Grid.Row="6" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="SELFChange_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfSelfPrescriptionChangeSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick" 
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.Prescribtion_Change}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.PaySelfChange , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />

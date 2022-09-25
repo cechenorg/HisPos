@@ -1575,12 +1575,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand SelfSelfPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand SelfSlowPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand SelfNormalPrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand SelfSelfPrescriptionChangeSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitIcomeReportSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitCostCostReportSelectionChangedCommand { get; set; }
-        public RelayCommand SelfSelfIncomePrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand SelfSelfCostPrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand SelfSelfAllPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitAllReportSelectionChangedCommand { get; set; }
         public RelayCommand AllPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitTicketReportSelectionChangedCommand { get; set; }
@@ -1597,15 +1593,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SelfNormalPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
 
             SelfSlowPrescriptionSelectionChangedCommand = new RelayCommand(SelfSlowPrescriptionSelectionChangedAction);
-
             SelfSelfPrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionSelectionChangedAction);
-            SelfSelfIncomePrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfIncomePrescriptionSelectionChangedAction);
-            SelfSelfCostPrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfCostPrescriptionSelectionChangedAction);
-            SelfSelfAllPrescriptionSelectionChangedCommand = new RelayCommand(SelfSelfAllPrescriptionSelectionChangedAction);
-
             CooperativePrescriptionSelectionChangedCommand = new RelayCommand(CooperativePrescriptionSelectionChangedAction);
 
-            SelfSelfPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionChangeSelectionChangedAction);
 
 
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
@@ -1794,7 +1784,39 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                     RefreshPrescriptionReportView();
                     break;
 
+                //配藥
+                case ReportDetailType.Prescribtion_Count:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Visible;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
+                    SelfPrescriptionAction();
+                    break;
 
+                case ReportDetailType.Prescribtion_Income:
+                    CostVis = Visibility.Collapsed;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Collapsed;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
+                    SelfPrescriptionAction();
+                    break;
+
+                case ReportDetailType.Prescribtion_Cost:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Collapsed;
+                    ProfitVis = Visibility.Collapsed;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
+                    SelfPrescriptionAction();
+                    break;
+
+                case ReportDetailType.Prescribtion_Change:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Visible;
+                    CoopVis = Visibility.Collapsed;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
+                    RefreshPrescriptionReportView();
+                    break;
             }
         }
 
@@ -2221,35 +2243,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         /******* 各種箋明細 *******/
-
-        private void SelfSelfAllPrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Visible;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
-            SelfPrescriptionAction();
-        }
-
-        private void SelfSelfCostPrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Collapsed;
-            ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
-            SelfPrescriptionAction();
-        }
-
-        private void SelfSelfIncomePrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Collapsed;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
-            SelfPrescriptionAction();
-        }
-
-
+      
         private void SelfPrescriptionAction()
         {
             ResetPrescriptionUI();
@@ -2322,16 +2316,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         }
 
         /******* 各種箋調整明細 *******/
-
-        private void SelfSelfPrescriptionChangeSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Visible;
-            CoopVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Presribtion;
-            RefreshPrescriptionReportView();
-        }
 
         private void RefreshPrescriptionReportView()
         {
@@ -2719,6 +2703,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             NormalPrescription_Income, //一般箋處方-收入
             NormalPrescription_Cost, //一般箋處方-耗用
             NormalPrescription_Change, //一般箋處方-調整
+
             Prescribtion_Count,  //配藥-張數
             Prescribtion_Income, //配藥-收入
             Prescribtion_Cost, //配藥-耗用
