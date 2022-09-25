@@ -288,7 +288,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             set
             {
                 Set(() => CashCoopSelectItem, ref cashcoopSelectItem, value);
-                
+
             }
         }
 
@@ -1638,13 +1638,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             SelfSelfPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionChangeSelectionChangedAction);
 
             CooperativePrescriptionChangeSelectionChangedCommand = new RelayCommand(CooperativePrescriptionChangeSelectionChangedAction);
-            
+
             CashDetailClickCommand = new RelayCommand(CashDetailClickAction);
 
             PrescriptionDetailClickCommand = new RelayCommand(PrescriptionDetailClickAction);
             PrescriptionDetailDoubleClickCommand = new RelayCommand(PrescriptionDetailDoubleClickAction);
             PrescriptionDetailMedicineDoubleClickCommand = new RelayCommand(PrescriptionDetailMedicineDoubleClickAction);
-            
+
             PrintPrescriptionProfitDetailCommand = new RelayCommand(PrintPrescriptionProfitDetailAction);
 
             AllDepositReportSelectionChangedCommand = new RelayCommand(AllDepositReportSelectionChangedAction);
@@ -1789,7 +1789,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrintService.PrintPrescriptionProfitDetailAction(StartDate, EndDate, PrescriptionDetailReportView);
         }
 
-      
+
 
         private void PrescriptionDetailMedicineDoubleClickAction()
         {
@@ -1917,7 +1917,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 return;
             }
 
-            var data 
+            var data
                 = ReportService.GetStockTakingDetailRecordByDate(StockTakingDetailReportSelectItem.InvRecSourceID, StartDate, EndDate);
             StockTakingDetailRecordReportCollection = new ObservableCollection<StockTakingDetailRecordReport>(data);
         }
@@ -1932,7 +1932,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             var data
                 = ReportService.GetStockTakingDetailRecordByDate(StockTakingOTCDetailReportSelectItem.InvRecSourceID, StartDate, EndDate);
-            StockTakingOTCDetailRecordReportCollection = new ObservableCollection<StockTakingDetailRecordReport>(data );
+            StockTakingOTCDetailRecordReportCollection = new ObservableCollection<StockTakingDetailRecordReport>(data);
         }
 
         private void SetVisAllCollapsed()
@@ -2086,7 +2086,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeProfitDetailEmpReportView = TradeProfitDetailEmpReportViewSource.View;
             TradeChangeSelectItem = "全部";
             TradeProfitDetailReportViewSource.Filter += OTCChangeFilter;
-          
+
             TradeDetailReportSum.TotalChange = TradeProfitDetailReportCollectionChanged.Where(p => (p.TypeId != "1")).Sum(s => s.Profit);
 
             TradeDetailCount = TradeProfitDetailReportCollection.Count();
@@ -2100,7 +2100,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             CashStockEntryReportEnum = CashStockEntryReportEnum.Deposit;
         }
 
-       
+
 
         private void StockTakingOTCReportSelectionChangedAction()
         {
@@ -2109,7 +2109,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             var DistinctItems = StockTakingOTCDetailReportCollection.Select(_ => _.Type).Distinct();
             StockTakingOTCString = new List<string>() { "全部" };
             StockTakingOTCString.AddRange(DistinctItems);
-          
+
 
             StockTakingOTCDetailReportViewSource = new CollectionViewSource { Source = StockTakingOTCDetailReportCollection };
             StockTakingOTCDetailReportView = StockTakingOTCDetailReportViewSource.View;
@@ -2445,7 +2445,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             StockTakingOTCDetailReportSum = new StockTakingOTCDetailReport();
 
             BusyContent = "報表查詢中";
-            
+
             Ds = ReportService.TodayCashStockEntryReport(StartDate, EndDate);
 
             PrescriptionAllDataTable = new DataTable();
@@ -2522,7 +2522,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailMedicineRepotCollection.Clear();
         }
 
-       
+
         private void SumPrescriptionDetailReport(PrescriptionDetailReports reports)
         {
             var tempCollection = GetPrescriptionDetailReportsByType(reports);
@@ -2531,7 +2531,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             PrescriptionDetailReportSum.SumCoopChangePrescriptionDetail(tempCollection);
         }
 
-      
+
         private void SumCoopChangePrescriptionDetailReport()
         {
             var tempCollection = GetPrescriptionDetailReportsByType(PrescriptionCoopChangeDetailReportCollectionChanged);
@@ -2570,7 +2570,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             TradeDetailReportSum.SumOTCReport(reports);
         }
 
-       
+
         private void SumOTCReport(string ID)
         {
             //TradeDetailReportSum = new TradeProfitDetailReport();
@@ -2730,12 +2730,39 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         public enum ReportDetailType
         {
-          
+
             AllPrescription_Count,  //全部處方-張數
             AllPrescription_Income, //全部處方-收入
             AllPrescription_Cost, //全部處方-耗用
             AllPrescription_Change, //全部處方-調整
             AllPrescription_StockTaking, //全部處方-盤差
+
+            CoopPrescription_Count,  //合作處方-張數
+            CoopPrescription_Income, //合作處方-收入
+            CoopPrescription_Cost, //合作處方-耗用
+            CoopPrescription_Change, //合作處方-調整
+            CoopPrescription_StockTaking, //合作處方-盤差
+
+
+            Chironic_Count,  //慢箋處方-張數
+            Chironic_Income, //慢箋處方-收入
+            Chironic_Cost, //慢箋處方-耗用
+            Chironic_Change, //慢箋處方-調整
+            Chironic_StockTaking, //慢箋處方-盤差
+
+            NormalPrescription_Count,  //一般箋處方-張數
+            NormalPrescription_Income, //一般箋處方-收入
+            NormalPrescription_Cost, //一般箋處方-耗用
+            NormalPrescription_Change, //一般箋處方-調整
+            NormalPrescription_StockTaking, //一般箋處方-盤差
+
+            Prescribtion_Count,  //配藥-張數
+            Prescribtion_Income, //配藥-收入
+            Prescribtion_Cost, //配藥-耗用
+            Prescribtion_Change, //配藥-調整
+            Prescribtion_StockTaking, //配藥-盤差  
+
+
         }
     }
 }
