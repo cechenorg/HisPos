@@ -451,7 +451,8 @@
                     </StackPanel>
                     <StackPanel x:Name="NORMALAll" Grid.Row="5" Grid.Column="1" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="NORMALAll_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfNormalAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.NormalPrescription_Count}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.NormalCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Silver" Padding="0,0,30,0" />
@@ -459,7 +460,8 @@
                     </StackPanel>
                     <StackPanel x:Name="NORMALIncome" Grid.Row="5" Grid.Column="2" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="NORMALIncome_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfNormalIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick" 
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.NormalPrescription_Income}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.NormalIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Silver" Padding="0,0,30,0" />
@@ -467,7 +469,8 @@
                     </StackPanel>
                     <StackPanel x:Name="NORMALCost" Grid.Row="5" Grid.Column="3" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="NORMALCost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfNormalCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.NormalPrescription_Cost}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.NormalMeduse , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Silver" Padding="0,0,30,0" />
@@ -475,7 +478,8 @@
                     </StackPanel>
                     <StackPanel x:Name="NORMALChange" Grid.Row="5" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="NORMALChange_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding SelfNormalPrescriptionChangeSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.NormalPrescription_Change}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.NormalChange  , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Silver" Padding="0,0,30,0" />

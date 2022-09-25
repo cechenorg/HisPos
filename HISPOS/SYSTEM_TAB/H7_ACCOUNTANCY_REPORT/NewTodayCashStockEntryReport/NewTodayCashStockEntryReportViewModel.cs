@@ -1576,12 +1576,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand SelfSlowPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand SelfNormalPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand SelfSelfPrescriptionChangeSelectionChangedCommand { get; set; }
-        public RelayCommand SelfNormalPrescriptionChangeSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitIcomeReportSelectionChangedCommand { get; set; }
         public RelayCommand TradeProfitCostCostReportSelectionChangedCommand { get; set; }
-        public RelayCommand SelfNormalIncomePrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand SelfNormalCostPrescriptionSelectionChangedCommand { get; set; }
-        public RelayCommand SelfNormalAllPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand SelfSelfIncomePrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand SelfSelfCostPrescriptionSelectionChangedCommand { get; set; }
         public RelayCommand SelfSelfAllPrescriptionSelectionChangedCommand { get; set; }
@@ -1599,9 +1595,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             AllPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
             SelfNormalPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
-            SelfNormalIncomePrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalIncomePrescriptionSelectionChangedAction);
-            SelfNormalCostPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalCostPrescriptionSelectionChangedAction);
-            SelfNormalAllPrescriptionSelectionChangedCommand = new RelayCommand(SelfNormalAllPrescriptionSelectionChangedAction);
 
             SelfSlowPrescriptionSelectionChangedCommand = new RelayCommand(SelfSlowPrescriptionSelectionChangedAction);
 
@@ -1612,7 +1605,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             CooperativePrescriptionSelectionChangedCommand = new RelayCommand(CooperativePrescriptionSelectionChangedAction);
 
-            SelfNormalPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfNomalPrescriptionChangeSelectionChangedAction);
             SelfSelfPrescriptionChangeSelectionChangedCommand = new RelayCommand(SelfSelfPrescriptionChangeSelectionChangedAction);
 
 
@@ -1767,7 +1759,41 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                     AdjustCaseSelectItem = SelectAdjustCaseType.Chronic;
                     RefreshPrescriptionReportView();
                     break;
-                    
+
+                //一般處方
+                case ReportDetailType.NormalPrescription_Count:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Visible;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
+                    SelfPrescriptionAction();
+                    break;
+
+                case ReportDetailType.NormalPrescription_Income:
+                    CostVis = Visibility.Collapsed;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Collapsed;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
+                    SelfPrescriptionAction();
+                    break;
+
+                case ReportDetailType.NormalPrescription_Cost:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Collapsed;
+                    ProfitVis = Visibility.Collapsed;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
+                    SelfPrescriptionAction();
+                    break;
+
+                case ReportDetailType.NormalPrescription_Change:
+                    CostVis = Visibility.Visible;
+                    IncomeVis = Visibility.Visible;
+                    ProfitVis = Visibility.Visible;
+                    CoopVis = Visibility.Collapsed;
+                    AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
+                    RefreshPrescriptionReportView();
+                    break;
+
 
             }
         }
@@ -2196,33 +2222,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         /******* 各種箋明細 *******/
 
-        private void SelfNormalAllPrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Visible;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
-            SelfPrescriptionAction();
-        }
-
-        private void SelfNormalCostPrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Collapsed;
-            ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
-            SelfPrescriptionAction();
-        }
-
-        private void SelfNormalIncomePrescriptionSelectionChangedAction()
-        {
-            CostVis = Visibility.Collapsed;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
-            SelfPrescriptionAction();
-        }
-
         private void SelfSelfAllPrescriptionSelectionChangedAction()
         {
             CostVis = Visibility.Visible;
@@ -2324,16 +2323,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         /******* 各種箋調整明細 *******/
 
-        private void SelfNomalPrescriptionChangeSelectionChangedAction()
-        {
-            CostVis = Visibility.Visible;
-            IncomeVis = Visibility.Visible;
-            ProfitVis = Visibility.Visible;
-            CoopVis = Visibility.Collapsed;
-            AdjustCaseSelectItem = SelectAdjustCaseType.Normal;
-            RefreshPrescriptionReportView();
-        }
-       
         private void SelfSelfPrescriptionChangeSelectionChangedAction()
         {
             CostVis = Visibility.Visible;
