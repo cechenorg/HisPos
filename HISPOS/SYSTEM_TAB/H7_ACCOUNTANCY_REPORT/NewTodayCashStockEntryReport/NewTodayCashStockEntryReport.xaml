@@ -325,7 +325,8 @@
                     </StackPanel>
                     <StackPanel x:Name="COOPAll" Grid.Row="3" Grid.Column="1" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="COOPAll_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding CooperativeAllPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.CoopPrescription_Count}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding  PrescriptionDetailReportSumMain.CoopCount , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />
@@ -333,7 +334,8 @@
                     </StackPanel>
                     <StackPanel x:Name="COOPIncome" Grid.Row="3" Grid.Column="2" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="COOPIncome_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding CooperativeIncomePrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.CoopPrescription_Income}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.CoopIncome , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" Margin="0,0,0,0" />
@@ -341,7 +343,8 @@
                     </StackPanel>
                     <StackPanel x:Name="COOPCost" Grid.Row="3" Grid.Column="3" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="COOPCost_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding CooperativeCostPrescriptionSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.CoopPrescription_Cost}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="{Binding  PrescriptionDetailReportSumMain.CoopMeduse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" Foreground="Silver" Padding="0,0,30,0" />
@@ -349,16 +352,14 @@
                     </StackPanel>
                     <StackPanel x:Name="COOPChange" Grid.Row="3" Grid.Column="4" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="COOPChange_PreviewMouseDown">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding CooperativePrescriptionChangeSelectionChangedCommand}" Gesture="LeftClick" />
+                            <MouseBinding Command="{Binding ViewReportDetailCommand}" Gesture="LeftClick"
+                                          CommandParameter="{x:Static newTodayCashStockEntryReport:NewTodayCashStockEntryReportViewModel+ReportDetailType.CoopPrescription_Change}" />
                         </StackPanel.InputBindings>
                         <Border BorderBrush="Gray" BorderThickness="0,0,0,0">
                             <Label Width="130" VerticalAlignment="Center" HorizontalContentAlignment="Right" Content="{Binding PrescriptionDetailReportSumMain.CoopChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:N0}" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="Silver" Padding="0,0,30,0" />
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.Column="5" Background="Transparent" Orientation="Horizontal" PreviewMouseDown="OTCFee_PreviewMouseDown">
-                        <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding TradeChangeReportSelectionChangedCommandi}" Gesture="LeftClick" />
-                        </StackPanel.InputBindings>
                         <Border BorderBrush="Gray">
                             <Label Width="130" HorizontalContentAlignment="Right" Content="-" ContentStringFormat="{}{0:N0}" Padding="0,0,30,0" />
                         </Border>
