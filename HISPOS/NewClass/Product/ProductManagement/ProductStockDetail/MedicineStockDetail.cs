@@ -26,6 +26,7 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
         public double ShelfInventory { get; set; }//架上量
         public double MedBagInventory { get; set; }//藥袋量
         public double DemandInventory { get; set; }//需求量
+        public double AvgPrice { get; set; }//平均單價
         public double ConsumeIn90Days { get; set; }
 
         public string StockDetail
@@ -67,8 +68,12 @@ namespace His_Pos.NewClass.Product.ProductManagement.ProductStockDetail
             MedBagOnTheWayAmount = row.Field<double>("Inv_MedBagOnTheWay");
             ConsumeIn90Days = row.Field<double>("CONSUME_AMOUNT");
             DemandInventory = row.Field<double>("MEDBAG_INV");//需求量
-            InsuffInventory = row.Field<double>("InsuffInventory");//不足量  
-            //IsInventoryError = InsuffInventory > 0 ? true : false;//不足量顯示
+            InsuffInventory = row.Field<double>("InsuffInventory");//不足量
+            if(row.Table.Columns.Contains("AvgPrice"))
+            {
+                AvgPrice = row.Field<double>("AvgPrice");//平均單價
+            }
+            
         }
 
         #region ----- Define Functions -----
