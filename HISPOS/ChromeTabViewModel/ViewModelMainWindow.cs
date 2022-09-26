@@ -7,6 +7,7 @@ using His_Pos.NewClass.Cooperative.XmlOfPrescription;
 using His_Pos.NewClass.Medicine.Position;
 using His_Pos.NewClass.Medicine.Usage;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Prescription;
 using His_Pos.NewClass.Prescription.CustomerPrescriptions;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -16,6 +17,7 @@ using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.StoreOrder;
 using His_Pos.NewClass.WareHouse;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CooperativePrescriptionWindow;
@@ -23,22 +25,23 @@ using Microsoft.Reporting.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using StringRes = His_Pos.Properties.Resources;
 
 namespace His_Pos.ChromeTabViewModel
 {
-    public class ViewModelMainWindow : MainViewModel, IViewModelMainWindow, IChromeTabViewModel
+    public class ViewModelMainWindow : MainViewModel
     {
         //this property is to show you can lock the tabs with a binding
         private bool canMoveTabs;
@@ -143,6 +146,7 @@ namespace His_Pos.ChromeTabViewModel
         public static SpecialTreats SpecialTreats { get; set; }
         public static Usages Usages { get; set; }
         public static Positions Positions { get; set; }
+        public static int StoreOrderDays { get; set; }
         public static Pharmacy CurrentPharmacy { get; set; }
         public static Employee CurrentUser { get; set; }
         public static Employees EmployeeCollection { get; set; }
@@ -151,17 +155,22 @@ namespace His_Pos.ChromeTabViewModel
         private IList<Stream> mStreams;
         public string pathFile;
 
+        public static string SingdeWebURI { get; private set; }
+
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
             MainWindow.ServerConnection.OpenConnection();
+            StoreOrderDays = StoreOrderDB.GetStoreOrderDays();
             CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnels = new Employees();
             CooperativeInstitutionID = WebApi.GetCooperativeClinicId(CurrentPharmacy.ID);
             MainWindow.ServerConnection.CloseConnection();
             CanMoveTabs = true;
             ShowAddButton = false;
+
+            SingdeWebURI = $@"http://kaokaodepon.singde.com.tw:5566/id/{CurrentPharmacy.ID}/pass/{CurrentPharmacy.ID}";
 
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
@@ -208,7 +217,7 @@ namespace His_Pos.ChromeTabViewModel
                         if (c.AutoPrint == true)
                         {
                             pathFile = c.FilePath;
-                            if (c.FilePath == null)
+                            if (c.FilePath == null || Directory.Exists(c.FilePath) == false)
                             {
                                 continue;
                             }
@@ -218,18 +227,14 @@ namespace His_Pos.ChromeTabViewModel
                             //是否連子資料夾都要偵測
                             watch.IncludeSubdirectories = true;
                             //新增時觸發事件
-
-
-
                             watch.Created += watch_Created;
                         }
                     }
-
                 }
 
-                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);
-                CooperativeClinicSettings.Init();
-                CooperativeClinicSettings.FilePurge();
+                cooperativePres.GetCooperative(DateTime.Today.AddDays(-10), DateTime.Today);//取得10天內的合作處方
+                CooperativeClinicSettings.Init();//取得合作診所設定
+                CooperativeClinicSettings.FilePurge();//打包檔案
                 BusyContent = StringRes.GetAdjustCases;
                 AdjustCases = new AdjustCases(true);
                 BusyContent = StringRes.取得給付類別;
@@ -256,6 +261,8 @@ namespace His_Pos.ChromeTabViewModel
                 {
                     BusyContent = "回傳合作診所處方中...";
                 }
+                
+                PrintCooPre();//列印還未列印藥袋
                 //骨科上傳
                 //OfflineDataSet offlineData = new OfflineDataSet(Institutions, Divisions, CurrentPharmacy.MedicalPersonnels, AdjustCases, PrescriptionCases, Copayments, PaymentCategories, SpecialTreats, Usages, Positions);
                 //var bytes = ZeroFormatterSerializer.Serialize(offlineData);
@@ -272,11 +279,38 @@ namespace His_Pos.ChromeTabViewModel
             IsBusy = true;
             worker.RunWorkerAsync();
         }
-
+        private void PrintCooPre()
+        {
+            CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
+            if (gg.CooPreCollectionView != null)
+            {
+                foreach (CusPrePreviewBase ff in cooperativePres)
+                {
+                    if (Properties.Settings.Default.PrePrint == "True")
+                    {
+                        foreach (var c in CooperativeClinicSettings)
+                        {
+                            if (c.AutoPrint == true)
+                            {
+                                if (ff.IsPrint == false)
+                                {
+                                    gg.PrintAction(ff);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         void watch_Created(object sender, FileSystemEventArgs e)
         {
-            bool isRe=false;
-            string isRePost="0";
+            //NewFunction.GetXmlFiles();
+            var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(DateTime.Today, DateTime.Today);
+            TaiwanCalendar tc = new TaiwanCalendar();
+            DateTime now = DateTime.Now;
+            string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2, '0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
+            bool isRe = false;
+            string isRePost = "0";
             
             string DirectPath = e.FullPath;
             //如果偵測到為檔案，則依路徑對此資料夾做檔案處理
@@ -287,74 +321,96 @@ namespace His_Pos.ChromeTabViewModel
                 var xDocs = new List<XDocument>();
                 var cusIdNumbers = new List<string>();
                 var paths = new List<string>();
-                foreach (var c in cooperativeClinicSettings)
+                #region 先把全部的.txt轉成.xml
+                foreach (var setting in cooperativeClinicSettings)
+                {
+                    if((string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
+                    {
+                        if (!string.IsNullOrEmpty(setting.FilePath))
+                        {
+                            var fileEntries = Directory.GetFiles(setting.FilePath);
+                            foreach (var filePath in fileEntries)
+                            {
+                                if (!string.IsNullOrEmpty(filePath))
+                                {
+                                    if (Path.GetExtension(filePath).ToLower() == ".txt")
+                                    {
+                                        string[] file = filePath.Split('_');
+                                        if (file != null && file.Length > 2)
+                                        {
+                                            DataRow[] drs = table.Select(string.Format("Cooli_FilePath= '{0}'", filePath + ".xml"));
+                                            if ((drs != null && drs.Length > 0) || Directory.Exists(filePath + ".xml"))
+                                            {
+                                                continue;
+                                            }
+                                            GetTxtFiles(filePath);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                #endregion
+                foreach (var setting in cooperativeClinicSettings)
                 {
                     try
                     {
-                        
-                        var fileEntries = Directory.GetFiles(pathFile);
-                        foreach (var s in fileEntries)
+                        if (!string.IsNullOrEmpty(setting.FilePath))
                         {
-
-                            try
+                            var fileEntries = Directory.GetFiles(setting.FilePath);
+                            foreach (var filePath in fileEntries)
                             {
-                                if (c.TypeName == "杏翔" && Path.GetExtension(s) == ".txt")
+                                string[] file = filePath.Split('_');
+                                if (file != null && file.Length > 2 && (string.IsNullOrEmpty(setting.TypeName) ? string.Empty : setting.TypeName) == "杏翔")
                                 {
-                                    GetTxtFiles(s, pathFile, Path.GetFileName(s));
+                                    if (date != file[1])//非今日的處方，不新增處方紀錄
+                                    {
+                                        continue;
+                                    }
                                 }
-
-                                //if (Path.GetExtension(s) == ".xml")
-                                //{
-                                    var xDocument = XDocument.Load(s);
+                                if (Path.GetExtension(filePath).ToLower() == ".xml")
+                                {
+                                    var xDocument = XDocument.Load(filePath);
                                     var cusIdNumber = xDocument.Element("case").Element("profile").Element("person").Attribute("id").Value;
-                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null ) { isRePost = "2"; }
+                                    if (xDocument.Element("case").Element("continous_prescription").Attribute("other_mo") == null) 
+                                    {
+                                        isRePost = "0";
+                                    }
                                     else
                                     {
-                                        isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString();
+                                        isRePost = xDocument.Element("case").Element("continous_prescription").Attribute("other_mo").Value.ToString().Trim();
+                                        isRePost = string.IsNullOrEmpty(isRePost) ? "0" : isRePost;
                                     }
-                                    if (isRePost != "0") 
+                                    if (isRePost != "0" )
                                     {
                                         isRe = true;
                                     }
                                     else
-                                    { 
+                                    {
                                         isRe = false;
                                     }
                                     xDocs.Add(xDocument);
                                     cusIdNumbers.Add(cusIdNumber);
-                                //}
-                                paths.Add(s);
+                                    paths.Add(filePath);
+                                }
                             }
-                            catch (Exception ex)
+                            if (cusIdNumbers.Count > 0)
                             {
-                                
+                                XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, setting.TypeName, isRe);
                             }
-                        }
-                        if (ViewModelMainWindow.CurrentPharmacy.ID == "5931017216"|| ViewModelMainWindow.CurrentPharmacy.ID == "7777777777")
-                        {
-                            XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, isRe);
-                        }
-                        else
-                        {
-                            XmlOfPrescriptionDb.Insert(cusIdNumbers, paths, xDocs, c.TypeName, false);
                         }
                     }
                     catch (Exception ex)
                     {
-                       
                     }
                 }
 
                 CooperativePrescriptionViewModel gg = new CooperativePrescriptionViewModel(11);
-                if (gg.CooPreCollectionView == null)
-                {
-
-                }
-                else
+                if (gg.CooPreCollectionView != null)
                 {
                     foreach (CusPrePreviewBase ff in gg.CooPreCollectionView)
                     {
-                  
                         MainWindow.Instance.Dispatcher.Invoke(() =>
                         {
                             if (Properties.Settings.Default.PrePrint == "True")
@@ -365,7 +421,6 @@ namespace His_Pos.ChromeTabViewModel
                                     {
                                         if (ff.IsPrint == false)
                                         {
-
                                             gg.PrintAction(ff);
                                         }
                                     }
@@ -374,12 +429,10 @@ namespace His_Pos.ChromeTabViewModel
                         });
                     }
                 }
-                
-               
             }
-
+            CooperativeClinicSettings.FilePurge();//打包檔案
         }
-        public static void GetTxtFiles(string path, string path1, string v)
+        public static void GetTxtFiles(string path)
         {
             int counter = 0;
             string line;
@@ -399,13 +452,8 @@ namespace His_Pos.ChromeTabViewModel
             orders.SetAttribute("mill", "");
             orders.SetAttribute("dosage_method", "5");
 
-
-
-
             if (counter == 0)
             {
-
-
                 //建立子節點
                 XmlElement case1 = doc.CreateElement("case");
                 case1.SetAttribute("from", ss[1]);//設定屬性
@@ -417,7 +465,6 @@ namespace His_Pos.ChromeTabViewModel
                 case1.SetAttribute("app", "VISW");//設定屬性
                 case1.SetAttribute("request_method", "UF");//設定屬性
                 doc.AppendChild(case1);
-
 
                 XmlElement profile = doc.CreateElement("profile");//建立節點
                 case1.AppendChild(profile);
@@ -438,7 +485,6 @@ namespace His_Pos.ChromeTabViewModel
                 person.SetAttribute("blood_rh", "");
                 profile.AppendChild(person);
 
-
                 XmlElement addr = doc.CreateElement("addr");
                 person.AppendChild(addr);
 
@@ -456,9 +502,6 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement blood_pressure = doc.CreateElement("blood_pressure");
                 person.AppendChild(blood_pressure);
-
-
-
 
                 XmlElement insurance = doc.CreateElement("insurance");
                 insurance.SetAttribute("insurance_type", "A");
@@ -491,7 +534,6 @@ namespace His_Pos.ChromeTabViewModel
                 itemb.SetAttribute("desc", "");
                 diseases.AppendChild(itemb);
 
-
                 XmlElement treatments = doc.CreateElement("treatments");
                 study.AppendChild(treatments);
 
@@ -500,7 +542,6 @@ namespace His_Pos.ChromeTabViewModel
 
                 XmlElement physical_examination = doc.CreateElement("physical_examination");
                 study.AppendChild(physical_examination);
-
 
                 XmlElement continous_prescription = doc.CreateElement("continous_prescription");
                 continous_prescription.SetAttribute("start_at", ss[6]);
@@ -535,11 +576,7 @@ namespace His_Pos.ChromeTabViewModel
                 continous_prescription.SetAttribute("eat_at", "");
                 case1.AppendChild(continous_prescription);
 
-
-
-
                 case1.AppendChild(orders);
-
 
                 XmlElement item0 = doc.CreateElement("item");
                 item0.SetAttribute("remark", "0");
@@ -566,10 +603,7 @@ namespace His_Pos.ChromeTabViewModel
             while ((line = file.ReadLine()) != null)
             {
                 ss = new string[] { };
-
                 ss = line.Split(',');
-
-
 
                 XmlElement item = doc.CreateElement("item");
                 item.SetAttribute("remark", "0");
@@ -592,10 +626,8 @@ namespace His_Pos.ChromeTabViewModel
                 item.SetAttribute("dtp1", "");
                 orders.AppendChild(item);
 
-
                 counter++;
             }
-
 
             try
             {
@@ -607,7 +639,6 @@ namespace His_Pos.ChromeTabViewModel
             {
                 MessageBox.Show(e.ToString());
             }
-
         }
         public static WareHouse GetWareHouse(string id)
         {
@@ -627,8 +658,6 @@ namespace His_Pos.ChromeTabViewModel
             {
                 MessageBox.Show(id);
             }
-
-
             return AdjustCases.SingleOrDefault(a => a.ID.Equals(id));
         }
 
@@ -736,13 +765,7 @@ namespace His_Pos.ChromeTabViewModel
             var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.ID.Equals(id));
             return result;
         }
-
-        public static Employee GetMedicalPersonByIDNumber(string idNum)
-        {
-            var result = CurrentPharmacy.MedicalPersonnels.SingleOrDefault(i => i.IDNumber.Equals(idNum));
-            return result;
-        }
-
+        
         public static Employee GetEmployeeByID(int ID)
         {
             var result = EmployeeCollection.SingleOrDefault(i => i.ID.Equals(ID));

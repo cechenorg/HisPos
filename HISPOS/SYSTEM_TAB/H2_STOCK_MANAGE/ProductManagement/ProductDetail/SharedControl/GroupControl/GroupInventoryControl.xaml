@@ -4,8 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:productGroupSettingWindow="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedWindow.ProductGroupSettingWindow"
+    d:DataContext="{d:DesignInstance Type=productGroupSettingWindow:ProductGroupSettingWindowViewModel}"
     mc:Ignorable="d">
     <Grid Background="{StaticResource GridBackGround}">
         <Grid.RowDefinitions>
@@ -26,8 +27,7 @@
                 Height="35"
                 Margin="30,0,0,0"
                 Padding="0"
-                Background="DimGray"
-                BorderThickness="0"
+                Background="DimGray" BorderThickness="0"
                 Command="{Binding ShowProductGroupWindowCommand}"
                 Content="設定"
                 FontFamily="Segoe UI Semi"
@@ -37,11 +37,11 @@
             Grid.Row="1"
             AutoGenerateColumns="False"
             Background="{StaticResource GridDarkerBackGround}"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
+            CanUserAddRows="False" CanUserDeleteRows="False"
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             HorizontalScrollBarVisibility="Disabled"
+            CanUserSortColumns="False"
             ItemsSource="{Binding ProductGroupSettingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             VirtualizingPanel.IsVirtualizing="True">
             <DataGrid.Resources>
@@ -77,8 +77,16 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
+                <DataGridTemplateColumn Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="../../../../../../Images/Checked.png" 
+                                   Visibility="{Binding IsMainFlag,Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>                                                              
+                </DataGridTemplateColumn>
                 <DataGridTextColumn
-                    Width="160"
+                    Width="120"
                     Binding="{Binding ID}"
                     Header="商品代碼"
                     IsReadOnly="True">

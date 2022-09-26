@@ -683,8 +683,10 @@ namespace His_Pos.NewClass.Medicine.Base
                 foreach (var m in this)
                 {
                     if (!m.InventoryID.Equals(inv.ID) || m is MedicineVirtual) continue;
+                    if (m.IsCommon) continue; //常備藥不可於登錄採購
                     var controlLevel = m is MedicineNHI nhiMed ? nhiMed.ControlLevel : null;
-                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount));
+                    //notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount));
+                    notEnoughMedicines.Add(new NotEnoughMedicine.NotEnoughMedicine(m.ID, m.FullName, m.Amount - m.UsableAmount, m.IsCommon, m.Frozen, controlLevel, m.AveragePrice, m.Amount - m.UsableAmount, m.UsableAmount, m.Amount,m.SingdeInv));
                 }
                 negativeStock = this.Where(med => !(med is MedicineVirtual))
                     .Where(med => med.InventoryID.Equals(inv.ID))
@@ -700,7 +702,6 @@ namespace His_Pos.NewClass.Medicine.Base
                 else
                 {
                     SetBuckleAmountToUsableAmount(notEnoughMedicines);
-                    MessageWindow.ShowMessage("欠藥已採購並更改扣庫量為可用量，收貨後請記得修改扣庫量。", MessageType.WARNING);
                     return string.Empty;
                 }
             }

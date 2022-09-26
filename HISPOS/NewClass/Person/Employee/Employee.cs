@@ -1,4 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel;
+using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Pharmacy;
 using His_Pos.Service;
@@ -17,59 +19,13 @@ namespace His_Pos.NewClass.Person.Employee
         public Employee()
         {
             Gender = "男";
-            WorkPosition = new WorkPosition.WorkPosition();
-            WorkPosition.WorkPositionId = 2;
             StartDate = DateTime.Today;
             Birthday = DateTime.Today;
-            IsEnable = true;
-            AuthorityValue = 4;
-
-            AuthorityFullName = TransAuthorityFullName(AuthorityValue);
+            IsEnable = true; 
+            Authority = EnumFactory.TranValueToAuthority(4);
         }
 
-        public Employee(DataRow r) : base(r)
-        {
-           // EmpID = r.Field<string>("ID");
-            Account = r.Field<string>("Emp_Account");
-            Password = r.Field<string>("Aut_Password");
-            NickName = r.Field<string>("Emp_NickName");
-            StartDate = r.Field<DateTime?>("Emp_StartDate");
-            LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
-            PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
-            IsEnable = r.Field<bool>("Emp_IsEnable");
-            AuthorityValue = r.Field<byte>("Aut_LevelID");
-            IsLocal = r.Field<bool>("Emp_IsLocal");
-            CashierID = r.Field<string>("Emp_CashierID");
-            WorkPosition = new WorkPosition.WorkPosition(r);
-
-            AuthorityFullName = TransAuthorityFullName(AuthorityValue);
-        }
-
-        public void GetGroupPharmacyAuthority()
-        {
-            
-        }
          
-        private string TransAuthorityFullName(int AuthorityValue)
-        {
-            string result = string.Empty;
-            
-            switch (AuthorityValue)
-            {
-                case 1:
-                    return "系統管理員";
-                case 2:
-                    return "店長";
-                case 3:
-                    return "店員";
-                case 4:
-                    return "藥師"; 
-            }
-
-
-            return result;
-        }
-
         private string cashierID;
 
         [IgnoreFormat]
@@ -105,19 +61,7 @@ namespace His_Pos.NewClass.Person.Employee
                 Set(() => NickName, ref nickName, value);
             }
         }
-
-        private WorkPosition.WorkPosition workPosition;
-
-        [IgnoreFormat]
-        public virtual WorkPosition.WorkPosition WorkPosition
-        {
-            get => workPosition;
-            set
-            {
-                Set(() => WorkPosition, ref workPosition, value);
-            }
-        }
-
+         
         private DateTime? startDate;//到職日
 
         [IgnoreFormat]
@@ -167,10 +111,10 @@ namespace His_Pos.NewClass.Person.Employee
         }
 
         [IgnoreFormat]
-        public int AuthorityValue { get; set; }
-
+        public Authority Authority { get; set; }
+         
         [IgnoreFormat]
-        public string AuthorityFullName { get; set; }
+        public string AuthorityFullName { get { return Authority.GetDescriptionText(); } }
 
         private string account;//帳號
 
@@ -196,10 +140,10 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private ObservableCollection<GroupWorkPosition> groupPharmacyEmployeeList;//在其他加盟藥局對應的職位
+        private ObservableCollection<GroupAuthority> groupPharmacyEmployeeList = new ObservableCollection<GroupAuthority>();//在其他加盟藥局對應的職位
 
         [IgnoreFormat]
-        public ObservableCollection<GroupWorkPosition> GroupPharmacyEmployeeList
+        public ObservableCollection<GroupAuthority> GroupPharmacyEmployeeList
         {
             get => groupPharmacyEmployeeList;
             set
@@ -208,10 +152,10 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        private GroupWorkPosition selectedGroupPharmacyEmployee;//在其他加盟藥局對應的職位
+        private GroupAuthority selectedGroupPharmacyEmployee;//在其他加盟藥局對應的職位
 
         [IgnoreFormat]
-        public GroupWorkPosition SelectedGroupPharmacyEmployee
+        public GroupAuthority SelectedGroupPharmacyEmployee
         {
             get => selectedGroupPharmacyEmployee;
             set
@@ -219,122 +163,45 @@ namespace His_Pos.NewClass.Person.Employee
                 Set(() => SelectedGroupPharmacyEmployee, ref selectedGroupPharmacyEmployee, value);
             }
         }
-
-        #region Function
-
-        public void InitGroupPharmacyWorkPositionList(List<PharmacyInfo> groupServerList,WorkPosition.WorkPositions workPositions)
+         
+        public bool IsPharmist()
         {
-            GroupPharmacyEmployeeList = new ObservableCollection<GroupWorkPosition>();
-
-            var employeeList= EmployeeDb.GetGroupPharmacyDataByID(groupServerList.Select(_ => _.PHAMAS_VerifyKey ).ToList(), ID);
-
-            for(int i =0; i < groupServerList.Count; i++)
-            {
-                GroupWorkPosition tempData = new GroupWorkPosition()
-                {
-                    PharmacyName = groupServerList[i].PHAMAS_NAME,
-                    PharmacyVerifyKey = groupServerList[i].PHAMAS_VerifyKey
-                };
-                tempData.EmployeeWorkPosition = workPositions.SingleOrDefault(_ => _.WorkPositionId == employeeList[i].WorkPosition.WorkPositionId);
-                GroupPharmacyEmployeeList.Add(tempData);
-            }
-
-            SelectedGroupPharmacyEmployee = GroupPharmacyEmployeeList.FirstOrDefault(); 
-            
+            return Authority == Authority.MasterPharmacist || Authority == Authority.NormalPharmacist || Authority == Authority.SupportPharmacist;
         }
 
-        public Employee GetDataByID(int id)
+        public bool IsLocalPharmist()
         {
-            DataTable table = EmployeeDb.GetDataByID(id);
-            return new Employee(table.Rows[0]);
+            return Authority == Authority.MasterPharmacist || Authority == Authority.NormalPharmacist;
         }
-
-        public bool CheckIdNumber()
-        {
-            if (string.IsNullOrEmpty(IDNumber)) return false;
-
-            if (!VerifyService.VerifyIDNumber(IDNumber))
-            {
-                MessageWindow.ShowMessage("身分證格式錯誤!", Class.MessageType.ERROR);
-                return false;
-            }
-
-            var table = EmployeeDb.CheckIdNumber(IDNumber);
-            if (table.Rows[0].Field<int>("Count") > 0)
-            {
-                MessageWindow.ShowMessage("此身分證已經存在!", Class.MessageType.ERROR);
-                return false;
-            }
-
-            return true;
-        }
-
-        public bool CheckEmployeeAccountSame()
-        {
-            var table = EmployeeDb.CheckEmployeeAccountSame(Account);
-            return table.Rows[0].Field<int>("Count") == 0 ? true : false;
-        }
-
-        public void Insert()
-        {
-            EmployeeDb.Insert(this);
-        }
-
-        public void Update()
-        {
-
-            EmployeeDb.Update(this);
-        }
-
-        public void Delete()
-        {
-            EmployeeDb.Delete(ID);
-        }
-
-        public string GetEmployeeNewAccount()
-        {
-            DataTable table = EmployeeDb.GetEmployeeNewAccount();
-            return table.Rows[0].Field<string>("Account");
-        }
-
-        public static Employee Login(string Account, string Password)
-        {
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable table = EmployeeDb.EmployeeLogin(Account, Password);
-            MainWindow.ServerConnection.CloseConnection();
-            return table.Rows.Count == 0 ? null : new Employee(table.Rows[0]);
-        }
-
-        public Collection<string> GetTabAuth()
-        {
-            DataTable table = EmployeeDb.GetTabAuth(AuthorityValue);
-            Collection<string> tabAuths = new Collection<string>();
-            foreach (DataRow row in table.Rows)
-            {
-                tabAuths.Add(row["Aut_TabName"].ToString());
-            }
-            return tabAuths;
-        }
-
-        #endregion Function
-
+          
         public bool CheckLeave(DateTime date)
         {
             return StartDate <= date && (LeaveDate is null || LeaveDate >= date);
         }
     }
 
-    public class GroupWorkPosition : ObservableObject
+    public class GroupAuthority : ObservableObject
     {
         public string PharmacyVerifyKey { get; set; }
         public string PharmacyName { get; set; }
 
 
-        private WorkPosition.WorkPosition _employeeWorkPosition;
-        public WorkPosition.WorkPosition EmployeeWorkPosition {
-            get { return _employeeWorkPosition; }
-            set { 
-                Set(() => EmployeeWorkPosition, ref _employeeWorkPosition, value); } 
+        private Authority _employeeAuthority;
+        public Authority EmployeeAuthority {
+            get { return _employeeAuthority; }
+            set
+            {
+                Set(() => EmployeeAuthority, ref _employeeAuthority, value);
+                IsDirty = true;
+            } 
+        }
+
+        private bool _isDirty;
+
+        public bool IsDirty
+        {
+            get { return _isDirty; }
+            set { Set(() => IsDirty, ref _isDirty, value); }
         }
     }
 }

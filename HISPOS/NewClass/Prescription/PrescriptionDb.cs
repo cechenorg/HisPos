@@ -551,13 +551,7 @@ namespace His_Pos.NewClass.Prescription
             DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[XmlOfPrescriptionByDate]", parameterList);
         }
-        public static DataTable GetXmlOfPrescriptionsByDateAuto(DateTime sDate, DateTime eDate)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "sDate", sDate);
-            DataBaseFunction.AddSqlParameter(parameterList, "eDate", eDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[XmlOfPrescriptionByDate]", parameterList);
-        }
+       
         public static void UpdateDeclareContent(int id, XDocument declareContent)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
@@ -712,6 +706,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", pdata.Order);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", pdata.SendAmount < 0 ? 0 : pdata.SendAmount);
                 DataBaseFunction.AddColumnValue(newRow, "PreDet_AdjustNoBuckle", pdata.AdjustNoBuckle);
+                DataBaseFunction.AddColumnValue(newRow, "PreDet_IsClosed", pdata.IsClosed);
 
                 prescriptionDetailTable.Rows.Add(newRow);
             }
@@ -788,6 +783,7 @@ namespace His_Pos.NewClass.Prescription
             detailTable.Columns.Add("PreDet_Order", typeof(int));
             detailTable.Columns.Add("PreDet_SendAmount", typeof(float));
             detailTable.Columns.Add("PreDet_AdjustNoBuckle", typeof(bool));
+            detailTable.Columns.Add("PreDet_IsClosed", typeof(bool));
             return detailTable;
         }
 
@@ -911,6 +907,7 @@ namespace His_Pos.NewClass.Prescription
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeclare", true);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsDeposit", false);
                 DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", false);
+                DataBaseFunction.AddColumnValue(newRow, "PreMas_IsAdjust", false);
 
                 prescriptionMasterTable.Rows.Add(newRow);
                 preId++;
@@ -945,6 +942,7 @@ namespace His_Pos.NewClass.Prescription
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_Order", count);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_SendAmount", 0);
                     DataBaseFunction.AddColumnValue(newRow, "PreDet_AdjustNoBuckle", false);
+                    DataBaseFunction.AddColumnValue(newRow, "PreDet_IsClosed", false);
                     prescriptionDetailTable.Rows.Add(newRow);
                     count++;
                 }

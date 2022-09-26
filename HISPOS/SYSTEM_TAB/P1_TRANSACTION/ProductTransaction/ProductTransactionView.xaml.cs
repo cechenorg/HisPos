@@ -5,6 +5,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.Medicine.NotEnoughMedicine;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Product;
@@ -166,7 +167,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                                 false,
                                 0,
                                 0,
-                                int.Parse(amount) - buckle));
+                                int.Parse(amount) - buckle,
+                                int.Parse(amount), 
+                                buckle,0));
                         }
                         else
                         {
@@ -178,7 +181,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                                 false,
                                 0,
                                 0,
-                                int.Parse(amount) - int.Parse(inventory)));
+                                int.Parse(amount) - int.Parse(inventory), 
+                                int.Parse(amount),
+                                int.Parse(inventory), 0));
                         }
                     }
                 }
@@ -1222,20 +1227,20 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                 bool isCell = tb.Text.StartsWith("09");
                 if (isCell)
                 {
-                    parameters.Add(new SqlParameter("Cus_Cellphone", tb.Text));
-                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+                    parameters.Add(new SqlParameter("@Cus_Cellphone", tb.Text));
+                    parameters.Add(new SqlParameter("@Cus_Telephone", DBNull.Value));
                     Con = CustomerSearchCondition.CellPhone;
                 }
                 else if (tb.Text.Length >= 7 && tb.Text.Length <= 10 && !tb.Text.StartsWith("1"))
                 {
-                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
-                    parameters.Add(new SqlParameter("Cus_Telephone", tb.Text));
+                    parameters.Add(new SqlParameter("@Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("@Cus_Telephone", tb.Text));
                     Con = CustomerSearchCondition.Tel;
                 }
                 else
                 {
-                    parameters.Add(new SqlParameter("Cus_Cellphone", DBNull.Value));
-                    parameters.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
+                    parameters.Add(new SqlParameter("@Cus_Cellphone", DBNull.Value));
+                    parameters.Add(new SqlParameter("@Cus_Telephone", DBNull.Value));
                 }
 
                 // 姓名查詢
@@ -1255,21 +1260,44 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     int.TryParse(tb.Text.Substring(0, 2), out int year);
                     int.TryParse(tb.Text.Substring(2, 2), out int month);
                     int.TryParse(tb.Text.Substring(4, 2), out int day);
-                    string yearStr = (year + 1911).ToString();
-                    string dateStr = yearStr + month.ToString("00") + day.ToString("00");
-
-                    parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
-                    Con = CustomerSearchCondition.Birthday;
+                    if(year != 0 && month != 0 && day != 0)
+                    {
+                        string yearStr = (year + 1911).ToString();
+                        string dateStr = yearStr +"-"+ month.ToString("00") + "-" +day.ToString("00");
+                        bool isQualifyDate = DateTime.TryParse(dateStr,out DateTime date);
+                        if(isQualifyDate)
+                        {
+                            DateTime searchDate = new DateTime(Convert.ToInt32(yearStr), month, day);
+                            TimeSpan ts = DateTime.Now - searchDate;
+                            if (ts.TotalDays > 0)
+                            {
+                                parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+                                Con = CustomerSearchCondition.Birthday;
+                            }
+                        }
+                    }
                 }
                 else if (tb.Text.Length == 7 && tb.Text.StartsWith("1"))
                 {
                     int.TryParse(tb.Text.Substring(0, 3), out int year);
                     int.TryParse(tb.Text.Substring(3, 2), out int month);
                     int.TryParse(tb.Text.Substring(5, 2), out int day);
-                    string yearStr = (year + 1911).ToString();
-                    string dateStr = yearStr + month.ToString("00") + day.ToString("00");
-                    parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
-                    Con = CustomerSearchCondition.Birthday;
+                    if (year != 0 && month != 0 && day != 0)
+                    {
+                        string yearStr = (year + 1911).ToString();
+                        string dateStr = yearStr + "-" + month.ToString("00") + "-" + day.ToString("00");
+                        bool isQualifyDate = DateTime.TryParse(dateStr, out DateTime date);
+                        if(isQualifyDate)
+                        {
+                            DateTime searchDate = new DateTime(Convert.ToInt32(yearStr), month, day);
+                            TimeSpan ts = DateTime.Now - searchDate;
+                            if (ts.TotalDays > 0)
+                            {
+                                parameters.Add(new SqlParameter("@Cus_Birthday", dateStr));
+                                Con = CustomerSearchCondition.Birthday;
+                            }
+                        }
+                    }
                 }
                 else
                 {
@@ -1285,7 +1313,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     if (!(bool)cw.DialogResult) { return; }
                     else
                     {
-                        NewClass.Person.Customer.Customer customer = new NewClass.Person.Customer.Customer();
+                        Customer customer = new Customer();
 
                         if (TbText != null) { }
                         {
@@ -1294,6 +1322,11 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
                         addCustomerWindow = new AddCustomerWindow(customer);
                         addCustomerWindow.Closed += new EventHandler(SetContentHandler);
+                        AddCustomerWindowViewModel addCustomer = (AddCustomerWindowViewModel)addCustomerWindow.DataContext;
+                        if(addCustomer.NewCustomer != null)
+                        {
+                            customer = addCustomer.NewCustomer;
+                        }
                     }
                 }
                 else if (result.Rows.Count > 1)
@@ -1301,7 +1334,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                     CustomerSearchWindow customerSearch;
                     if (Con == CustomerSearchCondition.Birthday)
                     {
-                        Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                        Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
                         var twCulture = new System.Globalization.CultureInfo("zh-TW", true);
                         twCulture.DateTimeFormat.Calendar = new System.Globalization.TaiwanCalendar();
 
@@ -1310,13 +1343,13 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         var date = DateTime.ParseExact(dateString, "yMMdd", twCulture);
 
                         customerSearch = new CustomerSearchWindow(date);
-                        Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                        Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     }
                     else
                     {
-                        Messenger.Default.Register<NotificationMessage<NewClass.Person.Customer.Customer>>(this, GetSelectedCustomer);
+                        Messenger.Default.Register<NotificationMessage<Customer>>(this, GetSelectedCustomer);
                         customerSearch = new CustomerSearchWindow(Con, 0, tb.Text.Trim());
-                        Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+                        Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
                     }
 
                     if (ID != 0)
@@ -1348,9 +1381,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             }
         }
 
-        private void GetSelectedCustomer(NotificationMessage<NewClass.Person.Customer.Customer> receiveSelectedCustomer)
+        private void GetSelectedCustomer(NotificationMessage<Customer> receiveSelectedCustomer)
         {
-            Messenger.Default.Unregister<NotificationMessage<NewClass.Person.Customer.Customer>>(this);
+            Messenger.Default.Unregister<NotificationMessage<Customer>>(this);
             if (receiveSelectedCustomer.Content is null)
             {
                 if (!receiveSelectedCustomer.Notification.Equals("AskAddCustomerData")) return;
@@ -1359,7 +1392,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             {
                 CurrentPrescription = new NewClass.Prescription.Prescription();
 
-                CurrentPrescription.Patient = new NewClass.Person.Customer.Customer();
+                CurrentPrescription.Patient = new Customer();
                 CurrentPrescription.Patient = receiveSelectedCustomer.Content;
 
                 ID = CurrentPrescription.Patient.ID;
@@ -1406,7 +1439,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
 
         private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
         {
-            NewClass.Person.Customer.Customer customer = new NewClass.Person.Customer.Customer();
+            Customer customer = new Customer();
 
             if (TbText != null) { }
             {
@@ -1606,6 +1639,52 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
             else
             {
                 MessageWindow.ShowMessage("預付訂金須單獨結帳", MessageType.ERROR);
+            }
+        }
+
+        private void ProductIDTextbox_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox t)
+            {
+                t.SelectAll();
+            }
+        }
+
+        private void ProductIDTextbox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                if (!tb.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    tb.Focus();
+                }
+            }
+        }
+
+        private void Price_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                if (!tb.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    tb.Focus();
+                    tb.SelectAll();
+                }
+            }
+        }
+
+        private void Amount_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                if (!tb.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    tb.Focus();
+                    tb.SelectAll();
+                }
             }
         }
     }

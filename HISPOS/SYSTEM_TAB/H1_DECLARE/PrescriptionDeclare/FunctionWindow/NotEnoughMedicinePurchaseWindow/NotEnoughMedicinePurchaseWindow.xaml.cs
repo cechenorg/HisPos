@@ -20,21 +20,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.NotEn
         {
             InitializeComponent();
             DataContext = new NotEnoughMedicinePurchaseViewModel(note, cusName, purchaseList);
-            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
-            {
-                switch (notificationMessage.Notification)
-                {
-                    case "CloseNotEnoughMedicinePurchaseWindowPurchase":
-                        DialogResult = true;
-                        Close();
-                        break;
-
-                    case "CloseNotEnoughMedicinePurchaseWindowCancel":
-                        DialogResult = false;
-                        Close();
-                        break;
-                }
-            });
             ShowDialog();
         }
 

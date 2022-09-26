@@ -34,10 +34,7 @@ namespace His_Pos.NewClass.Medicine.ControlMedicineDetail
             Description = r.Field<string>("Description");
             ManufactoryName = r.Field<string>("Man_Name");
             ManufactoryControlMedicinesID = r.Field<string>("Man_ControlMedicineID");
-            if (TypeName != "調劑(未過卡)")
-                FinalStock = stock + InputAmount + OutputAmount;
-            else
-                FinalStock = stock;
+            FinalStock = stock + InputAmount + OutputAmount;
         }
 
         public DateTime Date { get; set; }

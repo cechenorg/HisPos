@@ -10,7 +10,9 @@ using His_Pos.Service;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Timers;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Medicine = His_Pos.NewClass.Medicine.Base.Medicine;
@@ -24,16 +26,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
     public partial class QRCodeReceiveWindow : Window
     {
         private Prescription p;
-        private System.Timers.Timer timer = new System.Timers.Timer(200);
-
+        private Timer timer = new Timer(200);
+        private int ScanCountNum { get; set; }
         public QRCodeReceiveWindow()
         {
             InitializeComponent();
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(InputIdle);
+            timer.Elapsed += new ElapsedEventHandler(InputIdle);
             p = new Prescription();
             QRCodeReceiver.Focus();
             ShowDialog();
         }
+        Dictionary<int, string[]> QRCode = new Dictionary<int, string[]>();
 
         private void InputIdle(object source, System.Timers.ElapsedEventArgs e)
         {
@@ -66,17 +69,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
         {
             try
             {
-                var result = QRCodeReceiver.Text.Split(';');
-                //var prescriptionCase = ViewModelMainWindow.GetPrescriptionCases(result[2]);
-                //var medicineDays = result[9];
-                SetPatient(result);
-                SetTreatmentData(result);
-                GetMedicines(result);
-                SetMedicinesValue(result);
+                if(string.IsNullOrEmpty(QRCodeReceiver.Text))
+                {
+                    return;
+                }
+                string[] result = QRCodeReceiver.Text.Split(';');
+                QRCode.Add(ScanCountNum, result);
+                ScanCountNum += 1;
+                ScanCount.Content = string.Format("目前已掃描 {0} 個條碼", ScanCountNum);
+                QRCodeReceiver.Text = string.Empty;
             }
             catch (Exception e)
             {
-                MessageWindow.ShowMessage(e.Message, MessageType.ERROR);
+                //MessageWindow.ShowMessage(e.Message, MessageType.ERROR);
             }
         }
 
@@ -217,7 +222,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
         private List<string> CreateMedicineIDList(string[] result)
         {
             var medIdList = new List<string>();
-            for (var x = 14; x < result.Length - 1; x += 5)
+            int local = 14;//如果只有一個QRCODE，result的陣列大小會是20，藥品從14開始
+            if (QRCode.Count > 1)//多個QRCODE從0開始
+            {
+                local = 0;
+            }
+            for (var x = local; x < result.Length - 1; x += 5)
             {
                 if (result[x].Equals(string.Empty)) continue;
                 var id = result[x];
@@ -229,7 +239,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
         private void SetMedicinesValue(string[] result)
         {
             var i = 0;
-            for (var x = 14; x < result.Length - 1; x += 5)
+            int local = 14;
+            if (QRCode.Count > 1)
+            {
+                local = 0;
+            }
+                
+            for (int x = local; x < result.Length - 1; x += 5)
             {
                 if (result[x].Equals(string.Empty)) continue;
                 var dosage = double.Parse(result[x + 1].Replace("+", ""));
@@ -314,9 +330,17 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
 
         private void btnFinish_Click(object sender, RoutedEventArgs e)
         {
-            SetPrescriptionData();
-            Close();
-            Messenger.Default.Send(new NotificationMessage<Prescription>(this, p, "CustomerPrescriptionSelected"));
+            Button button = sender as Button;
+            if(button.IsMouseOver)
+            {
+                FillData();
+                Close();
+                Messenger.Default.Send(new NotificationMessage<Prescription>(this, p, "CustomerPrescriptionSelected"));
+            }
+            else
+            {
+                SetPrescriptionData();
+            }
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -333,6 +357,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow
             if (e.Key == Key.Escape)
             {
                 btnCancel.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            }
+        }
+        private void FillData()
+        {
+            foreach(KeyValuePair<int, string[]> pair in QRCode)
+            {
+                if(p.Patient.IDNumber == null)//病人&診斷只會有一個QRCODE
+                {
+                    try
+                    {
+                        SetPatient(pair.Value);//病人資料
+                        SetTreatmentData(pair.Value);//診斷資料
+                    }
+                    catch
+                    {
+                    }
+                }
+                try//可能不只一個藥品QRCODE
+                {
+                    GetMedicines(pair.Value);//藥品
+                    SetMedicinesValue(pair.Value);//藥品明細計算
+                }
+                catch
+                {
+                }
             }
         }
     }

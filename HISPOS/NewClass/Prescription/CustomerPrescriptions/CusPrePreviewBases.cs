@@ -28,30 +28,19 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
 
         public void GetCooperative(DateTime sDate, DateTime eDate)
         {
-            NewFunction.GetXmlFiles();
+            NewFunction.GetXmlFiles();//.txt轉.xml
             GetOrthopedics(sDate, eDate);
             var table = PrescriptionDb.GetXmlOfPrescriptionsByDate(sDate, eDate);
             foreach (DataRow r in table.Rows)
             {
                 var xDocument = new XmlDocument();
                 xDocument.LoadXml(r["CooCli_XML"].ToString());
-                Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml), r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
+                Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml),
+                    r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), 
+                    r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
             }
         }
-
-        public void GetAutoCooperative(DateTime sDate, DateTime eDate)
-        {
-            NewFunction.GetXmlFiles();
-            GetOrthopedics(sDate, eDate);
-            var table = PrescriptionDb.GetXmlOfPrescriptionsByDateAuto(sDate, eDate);
-            foreach (DataRow r in table.Rows)
-            {
-                var xDocument = new XmlDocument();
-                xDocument.LoadXml(r["CooCli_XML"].ToString());
-                Add(new CooperativePreview(XmlService.Deserialize<CooperativePrescription.Prescription>(xDocument.InnerXml), r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead"), r.Field<bool>("CooCli_IsPrint")));
-            }
-        }
-
+        
         private void GetOrthopedicsByCustomerIDNumber(string idNumber)
         {
             var table = PrescriptionDb.GetOrthopedicsPrescriptionsByCusIdNumber(idNumber);

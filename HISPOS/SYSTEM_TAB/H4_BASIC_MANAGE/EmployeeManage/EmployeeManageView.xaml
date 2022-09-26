@@ -8,6 +8,7 @@
     xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:enum="clr-namespace:DomainModel.Enum;assembly=DomainModel"
     d:DesignHeight="840" d:DesignWidth="1365" mc:Ignorable="d" >
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="840" Margin="20"> 
@@ -23,9 +24,13 @@
                 <service:NullableDateConverter x:Key="NullableDateConverter" />
  
             </Grid.Resources>
-            <DockPanel  Margin="10,0">
-                <RadioButton Content="本店"  VerticalContentAlignment="Center" IsChecked="{Binding LocalCheck}" FontSize="20"  />
-                <RadioButton  Margin="5,0,0,0"  Content="全部"  VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck}" FontSize="20"  />
+            <DockPanel  Margin="10,0"   >
+                <RadioButton
+                    Visibility="{Binding IsVisibleGlobalEmployee,Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Content="本店"  VerticalContentAlignment="Center" IsChecked="{Binding LocalCheck}" FontSize="20"  />
+                <RadioButton  
+                    Visibility="{Binding IsVisibleGlobalEmployee,Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Margin="5,0,0,0"  Content="全部"  VerticalContentAlignment="Center" IsChecked="{Binding GlobalCheck}" FontSize="20"  />
 
                 <CheckBox Margin="5,0,0,0" Content="排除已離職" FontSize="20" IsChecked="{Binding IsQuit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
 
@@ -100,19 +105,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-
-                        <DataGridTextColumn
-                            Width="160" Header="職位"
-                            Binding="{Binding  WorkPosition.WorkPositionName}"
-                            FontFamily="Segoe UI Semibold" IsReadOnly="True">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-
+ 
                         <DataGridTextColumn
                             Width="160" Header="權限"
                             Binding="{Binding AuthorityFullName }"
@@ -160,14 +153,14 @@
                     <ColumnDefinition  Width="Auto"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Grid Width="270" Visibility="{Binding IsGroupPharmacy,Converter={StaticResource BooleanToVisibilityConverter}}"  Background="{StaticResource GridDarkerBackGround}"  >
+                <Grid Width="280" Visibility="{Binding IsEnableEditAuthority,Converter={StaticResource BooleanToVisibilityConverter}}"  Background="{StaticResource GridDarkerBackGround}"  >
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
 
                     <DataGrid AutoGenerateColumns="False"   Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False" 
-                    CellStyle="{StaticResource DataGridCellStyle}"  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  
                     ItemsSource="{Binding SelectedEmployee.GroupPharmacyEmployeeList, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValue="{Binding SelectedEmployee.SelectedGroupPharmacyEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                     VerticalScrollBarVisibility="Hidden">
@@ -194,16 +187,20 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <DataGridTemplateColumn Header="職位" >
+                            <DataGridTemplateColumn Header="權限" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox FontSize="20"   DataContext="{Binding }"
-                                                      DisplayMemberPath="WorkPositionName"  
-                                                      ItemsSource="{Binding DataContext.WorkPositions , RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        
-                                                      SelectedValue="{Binding EmployeeWorkPosition,UpdateSourceTrigger=PropertyChanged}"  >
-                                            
-                                    </ComboBox>
+                                    <ComboBox FontSize="20"   DataContext="{Binding }" 
+                                              SelectedValuePath="Tag"
+                                              SelectedValue="{Binding EmployeeAuthority,UpdateSourceTrigger=PropertyChanged}"  > 
+                                            <ComboBoxItem Content="藥局經理" Tag="{x:Static enum:Authority.PharmacyManager}" />
+                                            <ComboBoxItem Content="會計人員" Tag="{x:Static enum:Authority.AccountingStaff}" />
+                                            <ComboBoxItem Content="店長" Tag="{x:Static enum:Authority.StoreManager}" />
+                                            <ComboBoxItem Content="店員" Tag="{x:Static enum:Authority.StoreEmployee}" />
+                                            <ComboBoxItem Content="負責藥師" Tag="{x:Static enum:Authority.MasterPharmacist}" />
+                                            <ComboBoxItem Content="執業藥師" Tag="{x:Static enum:Authority.NormalPharmacist}" />
+                                            <ComboBoxItem Content="支援藥師" Tag="{x:Static enum:Authority.SupportPharmacist}" />
+                                        </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -296,12 +293,14 @@
 
                         <StackPanel Orientation="Horizontal" Grid.Column="0">
                             <TextBlock Text="家　電　" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.SecondPhone}"/>
+                            <TextBox VerticalAlignment="Center" Margin="5,0,0,0" Width="150" Text="{Binding  DisplayEmployeeTel,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <TextBlock Text="手　機" VerticalAlignment="Center" />
-                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding SelectedEmployee.CellPhone}"/>
+                            <TextBox VerticalAlignment="Center"  Margin="5,0,0,0" Width="150" Text="{Binding DisplayEmployeeCellPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                     InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" Width="445">
@@ -335,12 +334,17 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Horizontal" Grid.Column="0">
-                            <TextBlock   Text="職　位　"  VerticalAlignment="Center" />
-                            <ComboBox  Width="150" DisplayMemberPath="WorkPositionName" FontSize="20" HorizontalContentAlignment="Center"
-                                                                 ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                                                                 ItemsSource="{Binding WorkPositions, UpdateSourceTrigger=PropertyChanged}"
-                                                                 SelectedItem="{Binding SelectedEmployee.WorkPosition}"
-                                                                 Text="{Binding SelectedEmployee.WorkPosition.WorkPositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBlock   Text="權限"  VerticalAlignment="Center" /> 
+                            <ComboBox  Width="150"   FontSize="20" HorizontalContentAlignment="Center"
+                                       SelectedValuePath="Tag"
+                                       SelectedValue="{Binding SelectedEmployee.Authority,UpdateSourceTrigger=PropertyChanged}"  > 
+                                <ComboBoxItem Content="藥局經理" Tag="{x:Static enum:Authority.PharmacyManager}" />
+                                <ComboBoxItem Content="會計人員" Tag="{x:Static enum:Authority.AccountingStaff}" />
+                                <ComboBoxItem Content="店長" Tag="{x:Static enum:Authority.StoreManager}" />
+                                <ComboBoxItem Content="店員" Tag="{x:Static enum:Authority.StoreEmployee}" />
+                                <ComboBoxItem Content="負責藥師" Tag="{x:Static enum:Authority.MasterPharmacist}" />
+                                <ComboBoxItem Content="執業藥師" Tag="{x:Static enum:Authority.NormalPharmacist}" />
+                                <ComboBoxItem Content="支援藥師" Tag="{x:Static enum:Authority.SupportPharmacist}" />
                             </ComboBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -351,7 +355,7 @@
                                                                     Foreground="{StaticResource ForeGround}"
                                                                     InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
                                                                     Style="{StaticResource MaterialDesignTextBox}"
-                                                                    ValueDataType="xctk:DateTimeFormat">
+                                                                    ValueDataType="xctk:DateTimeFormat" InputMethod.IsInputMethodEnabled="False"             PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding
                                     Converter="{StaticResource NullableDateConverter}"
@@ -373,7 +377,7 @@
                                                                      Foreground="{StaticResource ForeGround}"
                                                                      InsertKeyMode="Overwrite" Mask="000/00/00" PromptChar="-"
                                                                      Style="{StaticResource MaterialDesignTextBox}"
-                                                                     ValueDataType="xctk:DateTimeFormat">
+                                                                     ValueDataType="xctk:DateTimeFormat" InputMethod.IsInputMethodEnabled="False"             PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding
                                     Converter="{StaticResource NullableDateConverter}"

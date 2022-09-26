@@ -145,27 +145,14 @@ namespace His_Pos.NewClass.Person.Customer
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomerExist]", parameterList);
         }
 
-        public static DataTable InsertCustomerData(Customer c)
+        public static DataTable InsertNewCustomerData(Customer c,int isCheckTel)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertDeclareCustomer]", parameterList);
-        }
-
-        public static DataTable InsertNewCustomerData(Customer c)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
+            DataBaseFunction.AddSqlParameter(parameterList, "IsCheckTel", isCheckTel);
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertNewCustomer]", parameterList);
         }
 
-
-        public static DataTable AddNewCustomer(Customer c)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Customer", SetCustomer(c));
-            return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCustomer]", parameterList);
-        }
 
         public static DataTable SearchCustomers(string idNumber, string name, string cellPhone, string tel, DateTime? birth)
         {

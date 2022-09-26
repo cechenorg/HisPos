@@ -39,20 +39,15 @@ namespace His_Pos.NewClass.StoreOrder
         public static StoreOrders GetOrdersNotDone()
         {
             StoreOrders data = new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
-
-
-            var orderedList = data.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
-
+            var orderedList = data.OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1,11)).ToList();
             StoreOrders result = new StoreOrders();
-
-            for (int i = orderedList.Count() - 1; i >= 0; i--)
+            for (int i = 0; i < orderedList.Count(); i++)
             {
                 result.Add(orderedList[i]);
             }
-
             return result;
         }
-        internal static  StoreOrders GetOrdersMinus(string ID)
+        internal static StoreOrders GetOrdersMinus(string ID)
         {
             return new StoreOrders(StoreOrderDB.GetNotDoneMinus(ID));
         }
@@ -70,19 +65,19 @@ namespace His_Pos.NewClass.StoreOrder
                 //Remove(tempOrder);
         }
 
-        internal void UpdateSingdeOrderStatus(DataTable dataTable)
-        {
-            foreach (var storeOrder in Items)
-            {
-                if (storeOrder.OrderStatus == OrderStatusEnum.WAITING || storeOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
-                {
-                    DataRow[] dataRows = dataTable.Select("ORDER_ID = '" + storeOrder.ID + "'");
+        //internal void UpdateSingdeOrderStatus(DataTable dataTable)
+        //{
+        //    foreach (var storeOrder in Items)
+        //    {
+        //        if (storeOrder.OrderStatus == OrderStatusEnum.WAITING || storeOrder.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
+        //        {
+        //            DataRow[] dataRows = dataTable.Select("ORDER_ID = '" + storeOrder.ID + "'");
 
-                    if (dataRows.Length > 0)
-                        storeOrder.UpdateOrderDataFromSingde(dataRows[0]);
-                }
-            }
-        }
+        //            if (dataRows.Length > 0)
+        //                storeOrder.UpdateOrderDataFromSingde(dataRows[0]);
+        //        }
+        //    }
+        //}
 
         internal static void AddNewOrdersFromSingde(DataTable dataTable)
         {

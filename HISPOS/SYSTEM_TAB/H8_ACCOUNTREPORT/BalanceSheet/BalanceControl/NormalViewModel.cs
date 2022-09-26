@@ -9,6 +9,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet;
+using His_Pos.NewClass.Report.CashReport;
+using His_Pos.NewClass.BalanceSheet;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
@@ -382,16 +384,27 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             ConfirmWindow cw = new ConfirmWindow("是否進行科目沖帳?", "確認");
             if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("VALUE", SelectedDetail.StrikeValue));
-            parameters.Add(new SqlParameter("TYPE", SelectedDetail.ID));
-            parameters.Add(new SqlParameter("NOTE", Selected.Name));
-            parameters.Add(new SqlParameter("TARGET", SelectedBank.ID));
-            parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
-            MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
+            //List<SqlParameter> parameters = new List<SqlParameter>();
+            //parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            //parameters.Add(new SqlParameter("VALUE", SelectedDetail.StrikeValue));
+            //if (SelectedDetail.TransferID != null && SelectedDetail.TransferID != string.Empty)
+            //{
+            //    parameters.Add(new SqlParameter("TYPE", SelectedDetail.TransferID));
+            //}
+            //else
+            //{
+            //    parameters.Add(new SqlParameter("TYPE", SelectedDetail.ID));
+            //}
+            //parameters.Add(new SqlParameter("NOTE", Selected.Name));
+            //parameters.Add(new SqlParameter("TARGET", SelectedBank.ID));
+            //parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
+            //MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
+
+            string type = (SelectedDetail.TransferID != null && SelectedDetail.TransferID != string.Empty) ? SelectedDetail.TransferID : SelectedDetail.ID;
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedBank.ID, type, (double)SelectedDetail.StrikeValue, Selected.ID, Selected.Name);
+
             MainWindow.ServerConnection.CloseConnection();
+            MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
             if (SelectedDetail.StrikeValue == SelectedDetail.Value)
             {
             }
@@ -427,16 +440,27 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             ConfirmWindow cw = new ConfirmWindow("是否進行科目沖帳?", "確認");
             if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("VALUE", SelectedDetail.StrikeValue));
-            parameters.Add(new SqlParameter("TYPE", SelectedDetail.ID));
-            parameters.Add(new SqlParameter("NOTE", Selected.Name));
-            parameters.Add(new SqlParameter("TARGET", SelectedBank.ID));
-            parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
-            MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
-            MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
+            //List<SqlParameter> parameters = new List<SqlParameter>();
+            //parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            //parameters.Add(new SqlParameter("VALUE", SelectedDetail.StrikeValue));
+            ////parameters.Add(new SqlParameter("TYPE", SelectedDetail.ID));
+            //if (SelectedDetail.TransferID != null && SelectedDetail.TransferID != string.Empty)
+            //{
+            //    parameters.Add(new SqlParameter("TYPE", SelectedDetail.TransferID));
+            //}
+            //else
+            //{
+            //    parameters.Add(new SqlParameter("TYPE", SelectedDetail.ID));
+            //}
+            //parameters.Add(new SqlParameter("NOTE", Selected.Name));
+            //parameters.Add(new SqlParameter("TARGET", SelectedBank.ID));
+            //parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
+            //MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByAccount]", parameters);
+
+            string type = (SelectedDetail.TransferID != null && SelectedDetail.TransferID != string.Empty) ? SelectedDetail.TransferID : SelectedDetail.ID;
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedBank.ID, type, (double)SelectedDetail.StrikeValue, Selected.ID, Selected.Name);
             MainWindow.ServerConnection.CloseConnection();
+            MessageWindow.ShowMessage("沖帳成功", MessageType.SUCCESS);
             if (SelectedDetail.StrikeValue == SelectedDetail.Value)
             {
             }

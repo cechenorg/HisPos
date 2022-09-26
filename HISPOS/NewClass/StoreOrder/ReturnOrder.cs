@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using DomainModel.Enum;
 using System;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -40,7 +41,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public double ReturnStockValue
         {
-            get { return Math.Round(returnStockValue,0); }
+            get { return Math.Round(returnStockValue, MidpointRounding.AwayFromZero); }
             set { Set(() => ReturnStockValue, ref returnStockValue, value); }
         }
 
@@ -48,7 +49,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         #endregion ----- Define Variables -----
 
-        private ReturnOrder()
+        public ReturnOrder()
         {
         }
 
@@ -74,6 +75,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             foreach (var product in ReturnProducts)
             {
+                if (!product.IsChecked)
+                    continue;
                 if (product.ReturnAmount == 0)
                 {
                     MessageWindow.ShowMessage(product.ID + " 退貨量為0!", MessageType.ERROR);
@@ -109,7 +112,31 @@ namespace His_Pos.NewClass.StoreOrder
             if (!(bool)confirmWindow.DialogResult)
                 return false;
 
-            DataTable dataTable = StoreOrderDB.CheckReturnProductValid(this);
+            DataTable dataTable;
+            if (this is ReturnOrder)
+            {
+                ReturnOrder returnOrder = new ReturnOrder
+                {
+                    returnProducts = new ReturnProducts()
+                };
+                foreach (var item in this.returnProducts)
+                {
+                    if (item.IsChecked == true)
+                    {
+                        returnOrder.returnProducts.Add(item);
+                    }
+                }
+                if (returnOrder.returnProducts.Count == 0)
+                {
+                    MessageWindow.ShowMessage("未選擇退貨項目 請重新設定後再傳送", MessageType.ERROR);
+                    return false;
+                }
+                dataTable = StoreOrderDB.CheckReturnProductValid(returnOrder);
+            }
+            else
+            {
+                dataTable = StoreOrderDB.CheckReturnProductValid(this);
+            }
 
             if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
             {
@@ -124,6 +151,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             bool hasControlMed = false;
             bool hasZeroPrice = false;
+            bool hasZeroRealAmount = TotalPrice == 0 ? true : false;
 
             foreach (var product in ReturnProducts)
             {
@@ -153,6 +181,11 @@ namespace His_Pos.NewClass.StoreOrder
                 ConfirmWindow confirmWindow = new ConfirmWindow($"部分品項退貨價為0，\n是否確認完成退貨單?", "", false);
                 return (bool)confirmWindow.DialogResult;
             }
+            else if(hasZeroRealAmount)
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow("退貨金額為零\n是否確認完成退貨單?", "", false);
+                return (bool)confirmWindow.DialogResult;
+            }
             else
             {
                 ConfirmWindow confirmWindow = new ConfirmWindow($"是否確認完成退貨單?", "", false);
@@ -172,9 +205,9 @@ namespace His_Pos.NewClass.StoreOrder
         public override void CalculateTotalPrice()
         {
             if (OrderStatus == OrderStatusEnum.NORMAL_UNPROCESSING || OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
-                ReturnStockValue = ReturnProducts.Sum(p => p.ReturnStockValue);
+                ReturnStockValue = ReturnProducts.Where(w => w.IsChecked).Sum(p => p.ReturnStockValue);
 
-            TotalPrice = ReturnProducts.Sum(p => Math.Round(p.SubTotal,2, MidpointRounding.AwayFromZero));
+            TotalPrice = ReturnProducts.Sum(p => Math.Round(p.SubTotal, 2, MidpointRounding.AwayFromZero));
             TotalPrice = Math.Round(TotalPrice, 0, MidpointRounding.AwayFromZero);
             RaisePropertyChanged(nameof(ReturnDiff));
         }
@@ -184,6 +217,26 @@ namespace His_Pos.NewClass.StoreOrder
             SelectedItem = null;
 
             ReturnProducts = ReturnProducts.GetProductsByStoreOrderID(ID);
+            if(OrderStatus != OrderStatusEnum.DONE && OrderStatus != OrderStatusEnum.SCRAP)
+            {
+                foreach (ReturnProduct returnProduct in ReturnProducts)
+                {
+                    if (!returnProduct.IsDone)
+                    {
+                        double value = 0;
+                        double avgPrice = 0;
+                        foreach (ReturnProductInventoryDetail detail in returnProduct.InventoryDetailCollection)
+                        {
+                            value = detail.ReturnStockValue;
+                            avgPrice = detail.ReceiveAmount;
+                        }
+                        returnProduct.Price = avgPrice;//(平均單價)
+                        returnProduct.SubTotal = Math.Round(Convert.ToDouble(avgPrice * returnProduct.RealAmount), MidpointRounding.AwayFromZero);
+                        returnProduct.ReceiveAmount = Math.Round(avgPrice * returnProduct.ReturnAmount, MidpointRounding.AwayFromZero);
+                    }
+                }
+            }
+            
             OldReturnProducts = ReturnProducts.GetOldReturnProductsByStoreOrderID(ID);
             TotalPrice = ReturnProducts.Sum(p => p.SubTotal);
 
@@ -210,6 +263,13 @@ namespace His_Pos.NewClass.StoreOrder
 
         internal void ReturnOrderRePurchase()
         {
+            foreach (ReturnProduct returnProduct in this.returnProducts)
+            {
+                if(!returnProduct.IsChecked)
+                {
+                    this.returnProducts.Remove(returnProduct);
+                }
+            }
             SaveOrder();
 
             OrderStatus = OrderStatusEnum.DONE;
@@ -279,8 +339,9 @@ namespace His_Pos.NewClass.StoreOrder
 
                 if ((tempProduct as ReturnMedicine).IsControl != null)
                 {
-                    MessageWindow.ShowMessage("管藥無法退貨", MessageType.ERROR);
-                    return;
+                    ConfirmWindow confirmWindow = new ConfirmWindow("管藥正常不可退貨，確認繼續退貨作業?", "確認");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return;
                 }
             }
 
@@ -352,6 +413,10 @@ namespace His_Pos.NewClass.StoreOrder
         }
 
         public override bool ChkPurchase()
+        {
+            return true;
+        }
+        protected override bool CheckStoreOrderLower()
         {
             return true;
         }

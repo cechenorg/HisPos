@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using DomainModel.Enum;
+using System.Windows;
 
 namespace His_Pos.NewClass.StoreOrder.Report
 {
@@ -16,10 +17,15 @@ namespace His_Pos.NewClass.StoreOrder.Report
 
         public OrderTypeEnum Type { get; set; }
         public string ID { get; set; }
+        public string ReceiveID { get; set; }
         public DateTime DoneTime { get; set; }
         private double InitialPrice { get; set; }
         public double ReturnStockValue { get; set; }
-
+        public string CheckCode { get; set; }
+        public string OTCType { get; set; }
+        public string Note { get; set; }
+        public int IsControl { get; set; }
+        public int IsFrozen { get; set; }
         public double UnTaxPrice
         {
             get { return unTaxPrice; }
@@ -52,10 +58,19 @@ namespace His_Pos.NewClass.StoreOrder.Report
         {
             Type = dataRow.Field<string>("StoOrd_Type").Equals("P") ? OrderTypeEnum.PURCHASE : OrderTypeEnum.RETURN;
             ID = dataRow.Field<string>("StoOrd_ID");
+            if(dataRow.Table.Columns.Contains("StoOrd_ReceiveID"))
+            {
+                ReceiveID = dataRow.Field<string>("StoOrd_ReceiveID");
+            }
             DoneTime = dataRow.Field<DateTime>("StoOrd_ReceiveTime");
             InitialPrice = (double)dataRow.Field<decimal>("PRICE");
             ReturnStockValue = (double)dataRow.Field<decimal>("RETURN_PRICE");
             Name = dataRow.Field<string>("Man_Name");
+            CheckCode = dataRow.Field<string>("StoOrd_CheckCode");
+            OTCType = dataRow.Field<string>("StoOrd_IsOTCType");
+            Note = dataRow.Field<string>("StoOrd_Note");
+            IsFrozen = dataRow.Field<int>("IsFrozen");
+            IsControl = dataRow.Field<int>("IsControl");
             CalculateTax();
         }
 

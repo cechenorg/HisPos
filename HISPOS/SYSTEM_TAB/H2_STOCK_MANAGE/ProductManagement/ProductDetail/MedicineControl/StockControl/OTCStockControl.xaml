@@ -380,8 +380,8 @@
                                 </DataGrid.CellStyle>
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Width="90" Binding="{Binding Status}" />
-                                    <DataGridTextColumn Width="150" Binding="{Binding ID}" />
-                                    <DataGridTextColumn Width="250" Binding="{Binding CreateDate, Converter={StaticResource DateTimeToMinuteConverter}}" />
+                                    <DataGridTextColumn Width="180" Binding="{Binding ID}" />
+                                    <DataGridTextColumn Width="220" Binding="{Binding CreateDate, Converter={StaticResource DateTimeToMinuteConverter}}" />
                                     <DataGridTextColumn Width="100" Binding="{Binding CusName}" />
                                     <DataGridTextColumn Width="60" Binding="{Binding AmountHeader}" />
                                     <DataGridTextColumn Width="60" Binding="{Binding Amount, StringFormat=N0}">

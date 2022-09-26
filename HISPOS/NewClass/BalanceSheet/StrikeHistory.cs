@@ -20,6 +20,7 @@ namespace His_Pos.NewClass.BalanceSheet
             StrikeSource = r.Field<string>("StrikeSource");
             StrikeSourceID = r.Field<string>("StrikeSourceID");
             StrikeTime = r.Field<DateTime>("StrikeTime");
+            InsertTime = r.Field<DateTime>("InsertTime");
             StrikeNote = r.Field<string>("StrikeNote");
             CanDelete = r.Field<bool>("CAN_DELETE");
             StrikeWay = r.Field<string>("StrikeWay");
@@ -124,6 +125,17 @@ namespace His_Pos.NewClass.BalanceSheet
             set
             {
                 Set(() => StrikeTime, ref strikeTime, value);
+            }
+        }
+
+        private DateTime insertTime;
+
+        public DateTime InsertTime
+        {
+            get => insertTime;
+            set
+            {
+                Set(() => InsertTime, ref insertTime, value);
             }
         }
 

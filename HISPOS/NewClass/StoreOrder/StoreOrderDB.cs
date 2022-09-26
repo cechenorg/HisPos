@@ -11,6 +11,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using DomainModel.Enum;
+using System.Globalization;
+using His_Pos.FunctionWindow;
+using His_Pos.Class;
+using Dapper;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -238,23 +242,26 @@ namespace His_Pos.NewClass.StoreOrder
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
             foreach (var pro in p.OrderProducts)
             {
-                DataRow newRow = storeOrderDetailTable.NewRow();
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", p.ID);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.OrderAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", pro.UnitName);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", pro.ValidDate);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", pro.BatchNumber);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", pro.FreeAmount);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", pro.Invoice);
-                storeOrderDetailTable.Rows.Add(newRow);
-                detailId++;
+                if(pro.IsDone != 1)
+                {
+                    DataRow newRow = storeOrderDetailTable.NewRow();
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", p.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", pro.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ID", detailId);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_OrderAmount", pro.OrderAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitName", pro.UnitName);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", pro.ValidDate);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", pro.BatchNumber);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_FreeAmount", pro.FreeAmount);
+                    DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Invoice", pro.Invoice);
+                    storeOrderDetailTable.Rows.Add(newRow);
+                    detailId++;
+                }
             }
             return storeOrderDetailTable;
         }
@@ -274,7 +281,7 @@ namespace His_Pos.NewClass.StoreOrder
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_UnitAmount", pro.UnitAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_RealAmount", pro.RealAmount);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Price", pro.Price);
-                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", pro.SubTotal);
+                DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_SubTotal", double.IsNaN(pro.SubTotal) ? 0 : pro.SubTotal);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ValidDate", null);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_BatchNumber", "");
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_Note", pro.Note);
@@ -347,41 +354,7 @@ namespace His_Pos.NewClass.StoreOrder
                 }
 
                 string realProductID = row.Field<string>("PRO_ID");
-
-                switch (realProductID)
-                {
-                    case "NAN02A1000Z4":
-                        realProductID = "NAN02A1000ZZ-4";
-                        break;
-
-                    case "NAN02A1000Z5":
-                        realProductID = "NAN02A1000ZZ-5";
-                        break;
-
-                    case "NAN020632GNR":
-                        realProductID = "NAN02A1000ZZ-N6";
-                        break;
-
-                    case "NAN02A1000Z8":
-                        realProductID = "NAN02A1000ZZ-8";
-                        break;
-
-                    case "NAN020050NNR":
-                        realProductID = "NAN02A1000ZZ-N8";
-                        break;
-
-                    case "NCS03A1000.3":
-                        realProductID = "NCS03A1000ZZ-0.3";
-                        break;
-
-                    case "NCS03A1000.5":
-                        realProductID = "NCS03A1000ZZ-0.5";
-                        break;
-
-                    case "NCS03A1001.0":
-                        realProductID = "NCS03A1000ZZ-1.0";
-                        break;
-                }
+                realProductID = ReplaceProduct(realProductID);
                 DataRow newRow = storeOrderDetailTable.NewRow();
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_MasterID", storeOrderID);
                 DataBaseFunction.AddColumnValue(newRow, "StoOrdDet_ProductID", realProductID);
@@ -402,7 +375,45 @@ namespace His_Pos.NewClass.StoreOrder
             }
             return storeOrderDetailTable;
         }
+        public static string ReplaceProduct(string proID)
+        {
+            string productID = proID;
+            switch (proID)
+            {
+                case "NAN02A1000Z4":
+                    productID = "NAN02A1000ZZ-4";
+                    break;
 
+                case "NAN02A1000Z5":
+                    productID = "NAN02A1000ZZ-5";
+                    break;
+
+                case "NAN020632GNR":
+                    productID = "NAN02A1000ZZ-N6";
+                    break;
+
+                case "NAN02A1000Z8":
+                    productID = "NAN02A1000ZZ-8";
+                    break;
+
+                case "NAN020050NNR":
+                    productID = "NAN02A1000ZZ-N8";
+                    break;
+
+                case "NCS03A1000.3":
+                    productID = "NCS03A1000ZZ-0.3";
+                    break;
+
+                case "NCS03A1000.5":
+                    productID = "NCS03A1000ZZ-0.5";
+                    break;
+
+                case "NCS03A1001.0":
+                    productID = "NCS03A1000ZZ-1.0";
+                    break;
+            }
+            return productID;
+        }
         private static DataTable SetPurchaseOrderDetail(string productsFromSingde, string storeOrderID, bool IsPrescription)
         {
             int detailId = 1;
@@ -469,7 +480,7 @@ namespace His_Pos.NewClass.StoreOrder
             int detailId = 1;
             DataTable storeOrderDetailTable = StoreOrderDetailTable();
 
-            var productsAmount = orderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            var productsAmount = orderProducts.Where(w=>w.IsDone == 0).GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, Price = g.First().Price, OrderAmount = g.Sum(p => p.OrderAmount), RealAmount = g.Sum(p => p.RealAmount) }).ToList();
 
             foreach (var pro in productsAmount)
             {
@@ -601,7 +612,8 @@ namespace His_Pos.NewClass.StoreOrder
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", orederID));
             parameters.Add(new SqlParameter("RECSTOORD_ID", receiveID));
-            parameters.Add(new SqlParameter("DETAILS", SetPurchaseOrderDetail(dataTable, orederID)));
+            DataTable table = SetPurchaseOrderDetail(dataTable, orederID);
+            parameters.Add(new SqlParameter("DETAILS", table));
             parameters.Add(new SqlParameter("CHECK_CODE", checkCode));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateSingdeProductsByStoreOrderID]", parameters);
         }
@@ -634,6 +646,19 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderNotDone]");
         }
 
+        internal static int GetStoreOrderDays()
+        {
+            string sql = $@"Select SysPar_Value From [SystemInfo].[SystemParameters] Where SysPar_Name = 'StoreOrderDays'";
+            int result = 0;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.QueryFirst<int>(string.Format("Select SysPar_Value From [{0}].[SystemInfo].[SystemParameters] Where SysPar_Name = 'StoreOrderDays'", Properties.Settings.Default.SystemSerialNumber),
+                     commandType: CommandType.Text);
+            });
+                // = Convert.ToInt32(conn.QueryFirst<string>(sql));
+            return result;
+        }
+
         internal static void SaveReturnOrder(ReturnOrder returnOrder)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -642,7 +667,8 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "TARGET_CUS_NAME", null);
             DataBaseFunction.AddSqlParameter(parameters, "PLAN_DATE", null);
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", returnOrder.Note);
-            parameters.Add(new SqlParameter("STOORD_DETAIL", SetReturnOrderDetail(returnOrder)));
+            DataTable table = SetReturnOrderDetail(returnOrder);
+            parameters.Add(new SqlParameter("STOORD_DETAIL", table));
             DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.Account);
             MainWindow.ServerConnection.ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
@@ -657,6 +683,21 @@ namespace His_Pos.NewClass.StoreOrder
             DataBaseFunction.AddSqlParameter(parameters, "STOORD_NOTE", purchaseOrder.Note);
             parameters.Add(new SqlParameter("STOORD_DETAIL", SetPurchaseOrderDetail(purchaseOrder)));
             DataBaseFunction.AddSqlParameter(parameters, "ModifyUser", ViewModelMainWindow.CurrentUser.Account);
+            if (purchaseOrder.DemandDate != null && purchaseOrder.DemandDate != "---/--/--")
+            {
+                try
+                {
+                    CultureInfo culture = new CultureInfo("zh-TW");
+                    culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                    DateTime dt = DateTime.Parse(purchaseOrder.DemandDate, culture);
+                    DataBaseFunction.AddSqlParameter(parameters, "DemandDate", dt);
+                }
+                catch(Exception e)
+                {
+                    MessageWindow.ShowMessage("需求日期格式錯誤!", MessageType.ERROR);
+                    DataBaseFunction.AddSqlParameter(parameters, "DemandDate", null);
+                }
+            }
             new SQLServerConnection().ExecuteProc("[Set].[SaveStoreOrder]", parameters);
         }
 
@@ -690,7 +731,8 @@ namespace His_Pos.NewClass.StoreOrder
 
         internal static DataTable GetSingdeOrderNewStatusByNo(string dateTime, string storeOrderID)
         {
-            return MainWindow.SingdeConnection.ExecuteProc($"call GetOrderStatusByNo('{ViewModelMainWindow.CurrentPharmacy.ID}', '{dateTime}', '{storeOrderID}')");
+            string query = string.Format(@"call GetOrderStatusByList('{0}','{1}',""{2}"")", ViewModelMainWindow.CurrentPharmacy.ID, dateTime, storeOrderID);
+            return MainWindow.SingdeConnection.ExecuteProc(query);
         }
 
         /// <summary>
@@ -724,6 +766,11 @@ namespace His_Pos.NewClass.StoreOrder
         {
             return MainWindow.SingdeConnection.ExecuteProc($"call UpdateStoreOrderSyncFlag('{storeOrderID}', '{ViewModelMainWindow.CurrentPharmacy.ID}')");
         }
+        public static DataTable GetOrderByNo(string storeOrderID,string date)
+        {
+            string sql = string.Format(@"call GetOrderByNo('{0}','{1}','{2}')", ViewModelMainWindow.CurrentPharmacy.ID, date, storeOrderID);
+            return MainWindow.SingdeConnection.ExecuteProc(sql);
+        }
 
         internal static DataTable PurchaseStoreOrderToDone(string storeOrderID, bool isPayCash)
         {
@@ -756,6 +803,13 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToScrap]", parameters);
         }
+        internal static DataTable UpdateStoreOrderToOriginal(string storeOrderID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("OrderID", storeOrderID));
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToOriginal]", parameters);
+            return table;
+        }
 
         internal static DataTable GetNewSingdePrescriptionOrders()
         {
@@ -768,160 +822,209 @@ namespace His_Pos.NewClass.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", storeOrderID));
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateStoreOrderToWaiting]", parameters);
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，預約採購
+        /// </summary>
+        /// <param name="indexReserve"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
         internal static DataTable SendStoreOrderToSingde(IndexReserve indexReserve, string note)
         {
             string orderMedicines = "";
-            string cusName = "";
-            string planDate = "";
-            foreach (var product in indexReserve.IndexReserveDetailCollection)
+            string cusName = indexReserve.CusName;
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(indexReserve.StoOrdID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();
+            foreach(DataRow dr in SortTable.Rows)
             {
-                if (product.SendAmount == 0) continue;
-                if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(0, 12);
+                string proID = Convert.ToString(dr["Pro_ID"]);
+                int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                int isDone = Convert.ToInt32(dr["IsDone"]);
+                if(isDone == 1) continue;
+                if (orderAmount == 0) continue;
+                if (proID.Length > 12)
+                    orderMedicines += proID.Substring(0, 12);
                 else
-                    orderMedicines += product.ID.PadRight(12, ' ');
+                    orderMedicines += proID.PadRight(12, ' ');
 
-                orderMedicines += product.SendAmount.ToString().PadLeft(10, ' ');
+                orderMedicines += orderAmount.ToString().PadLeft(10, ' ');
 
-                if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(13);
+                if (proID.Length > 12)
+                    orderMedicines += proID.Substring(13);
 
                 orderMedicines += "\r\n";
             }
-            cusName = indexReserve.CusName;
-            //planDate = (indexReserve.AdjustDate.Year - 1911) + indexReserve.AdjustDate.ToString("MMdd");
             return MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{indexReserve.StoOrdID}','{cusName}','','{note}', '{orderMedicines}')");
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，(OTC)常備採&一般採
+        /// </summary>
+        /// <param name="storeOrder"></param>
+        /// <returns></returns>
         internal static DataTable SendOTCStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderOTC = "";
-            //string cusName = "";
-            //string planDate = "";
-
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrder.ID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();
             if (storeOrder is PurchaseOrder)
             {
-                foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
+                foreach (DataRow product in SortTable.Rows)
                 {
-                    if (product.Type == 2)
+                    int type = Convert.ToInt32(product["Pro_TypeID"]);
+                    string proID = Convert.ToString(product["Pro_ID"]);
+                    int orderAmount = Convert.ToInt32(product["StoOrdDet_OrderAmount"]);
+                    string note = Convert.ToString(product["StoOrdDet_Note"]);
+                    int isDone = Convert.ToInt32(product["IsDone"]);
+                    if (type == 2 && isDone == 0)
                     {
-                        if (product.ID.Length > 12)
-                            orderOTC += product.ID.Substring(0, 13);
+                        if (proID.Length > 12)
+                            orderOTC += proID.Substring(0, 13);
                         else
-                            orderOTC += product.ID.PadRight(12, ' ');
+                            orderOTC += proID.PadRight(12, ' ');
 
-                        orderOTC += product.OrderAmount.ToString("0.00").PadLeft(9, ' ');
+                        orderOTC += orderAmount.ToString("0.00").PadLeft(9, ' ');
 
-                        if (product.ID.Length > 12)
-                            orderOTC += product.ID.Substring(13);
+                        if (proID.Length > 12)
+                            orderOTC += proID.Substring(13);
 
-                        orderOTC += product.Note;
+                        orderOTC += note;
                         orderOTC += "\r\n";
                     }
                 }
-
-                //cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
-
-                //if (((PurchaseOrder)storeOrder).PlanArriveDate != null)
-                // planDate = (((PurchaseOrder)storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
             }
             else
             {
-                foreach (var product in ((ReturnOrder)storeOrder).ReturnProducts)
+                foreach (DataRow product in SortTable.Rows)
                 {
-                    if (product.ID.Length > 12)
-                        orderOTC += product.ID.Substring(0, 13);
-                    else
-                        orderOTC += product.ID.PadRight(12, ' ');
+                    string proID = Convert.ToString(product["Pro_ID"]);
+                    int orderAmount = Convert.ToInt32(product["StoOrdDet_OrderAmount"]);
+                    string note = Convert.ToString(product["StoOrdDet_Note"]);
+                    int isDone = Convert.ToInt32(product["IsDone"]);
+                    if(isDone == 0)
+                    {
+                        if (proID.Length > 12)
+                            orderOTC += proID.Substring(0, 13);
+                        else
+                            orderOTC += proID.PadRight(12, ' ');
 
-                    orderOTC += (-product.ReturnAmount).ToString().PadLeft(9, ' ');
+                        orderOTC += (-orderAmount).ToString().PadLeft(9, ' ');
 
-                    if (product.ID.Length > 12)
-                        orderOTC += product.ID.Substring(13);
+                        if (proID.Length > 12)
+                            orderOTC += proID.Substring(13);
 
-                    orderOTC += product.Note;
-                    orderOTC += "\r\n";
+                        orderOTC += note;
+                        orderOTC += "\r\n";
+                    }
                 }
             }
-            DataTable tableOTC;
 
-            tableOTC = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOTCOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{storeOrder.Note}', '{orderOTC}')");
+            DataTable tableOTC = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOTCOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{storeOrder.Note}', '{orderOTC}')");
 
             return tableOTC;
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，(藥品)常備採&一般採
+        /// </summary>
+        /// <param name="storeOrder"></param>
+        /// <returns></returns>
         internal static DataTable SendStoreOrderToSingde(StoreOrder storeOrder)
         {
             string orderMedicines = "";
-            string cusName = "";
-            string planDate = "";
+            string cusName = string.Empty;
+            string planDate = string.Empty;
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(storeOrder.ID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();
 
-            if (storeOrder is PurchaseOrder)
+            if(storeOrder is PurchaseOrder)
             {
-                foreach (var product in ((PurchaseOrder)storeOrder).OrderProducts)
+                foreach (DataRow dr in SortTable.Rows)
                 {
-                    if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(0, 12);
-                    else
-                        orderMedicines += product.ID.PadRight(12, ' ');
+                    string proID = Convert.ToString(dr["Pro_ID"]);
+                    int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                    string note = Convert.ToString(dr["StoOrdDet_Note"]);
+                    int isDone = Convert.ToInt32(dr["IsDone"]);
+                    if(isDone == 0)
+                    {
+                        if (proID.Length > 12)
+                            orderMedicines += proID.Substring(0, 12);
+                        else
+                            orderMedicines += proID.PadRight(12, ' ');
 
-                    orderMedicines += product.OrderAmount.ToString("0.00").ToString().PadLeft(10, ' ');
+                        orderMedicines += orderAmount.ToString("0.00").ToString().PadLeft(10, ' ');
 
-                    if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(13);
+                        if (proID.Length > 12)
+                            orderMedicines += proID.Substring(13);
 
-                    orderMedicines += product.Note;
-                    orderMedicines += "\r\n";
+                        orderMedicines += note;
+                        orderMedicines += "\r\n";
+                    }
                 }
-
                 cusName = ((PurchaseOrder)storeOrder).PreOrderCustomer;
 
                 if (((PurchaseOrder)storeOrder).PlanArriveDate != null)
-                    planDate = (((PurchaseOrder)storeOrder).PlanArriveDate?.Year - 1911) + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
+                    planDate = ((PurchaseOrder)storeOrder).PlanArriveDate?.Year - 1911 + ((PurchaseOrder)storeOrder).PlanArriveDate?.ToString("MMdd");
             }
             else
             {
-                foreach (var product in ((ReturnOrder)storeOrder).ReturnProducts)
+                foreach (DataRow dr in SortTable.Rows)
                 {
-                    if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(0, 12);
-                    else
-                        orderMedicines += product.ID.PadRight(12, ' ');
+                    string proID = Convert.ToString(dr["Pro_ID"]);
+                    int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                    string note = Convert.ToString(dr["StoOrdDet_Note"]);
+                    int isDone = Convert.ToInt32(dr["IsDone"]);
+                    if (isDone == 0)
+                    {
+                        if (proID.Length > 12)
+                            orderMedicines += proID.Substring(0, 12);
+                        else
+                            orderMedicines += proID.PadRight(12, ' ');
 
-                    orderMedicines += (-product.ReturnAmount).ToString().PadLeft(10, ' ');
+                        orderMedicines += (-orderAmount).ToString().PadLeft(10, ' ');
 
-                    if (product.ID.Length > 12)
-                        orderMedicines += product.ID.Substring(13);
+                        if (proID.Length > 12)
+                            orderMedicines += proID.Substring(13);
 
-                    orderMedicines += product.Note;
-                    orderMedicines += "\r\n";
+                        orderMedicines += note;
+                        orderMedicines += "\r\n";
+                    }
                 }
             }
-
-            DataTable tableMedicines;
-
-            tableMedicines = MainWindow.SingdeConnection.ExecuteProc($"call InsertNewOrderOrPreOrder('{ViewModelMainWindow.CurrentPharmacy.ID}','{storeOrder.ID}','{cusName}','{planDate}','{storeOrder.Note}', '{orderMedicines}')");
+            string sql = string.Format(@"Call InsertNewOrderOrPreOrder('{0}','{1}','{2}','{3}','{4}','{5}')", ViewModelMainWindow.CurrentPharmacy.ID, storeOrder.ID, cusName, planDate, storeOrder.Note, orderMedicines);
+            DataTable tableMedicines = MainWindow.SingdeConnection.ExecuteProc(sql);
             return tableMedicines;
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，OTC代採
+        /// </summary>
+        /// <param name="purchaseList"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
         internal static DataTable SendOTCStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
         {
             string orderOTCs = "";
-            string cusName = "";
-            string planDate = "";
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(purchaseList.StoreOrderID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();//重新排序
 
-            foreach (var product in purchaseList)
+            foreach (DataRow dr in SortTable.Rows)
             {
-                if (product.ID.Length > 12)
-                    orderOTCs += product.ID.Substring(0, 13);
+                string proID = Convert.ToString(dr["Pro_ID"]);
+                int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                if (proID.Length > 12)
+                    orderOTCs += proID.Substring(0, 13);
                 else
-                    orderOTCs += product.ID.PadRight(12, ' ');
+                    orderOTCs += proID.PadRight(12, ' ');
 
-                orderOTCs += product.Amount.ToString("0.00").PadLeft(9, ' ');
+                orderOTCs += orderAmount.ToString("0.00").PadLeft(9, ' ');
 
-                if (product.ID.Length > 12)
-                    orderOTCs += product.ID.Substring(13);
+                if (proID.Length > 12)
+                    orderOTCs += proID.Substring(13);
 
                 orderOTCs += "\r\n";
             }
@@ -932,24 +1035,33 @@ namespace His_Pos.NewClass.StoreOrder
 
             return tableOTC;
         }
-
+        /// <summary>
+        /// 傳送訂單至杏德，欠藥採購
+        /// </summary>
+        /// <param name="purchaseList"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
         internal static DataTable SendStoreOrderToSingde(NotEnoughMedicines purchaseList, string note)
         {
             string orderMedicines = "";
-            string cusName = "";
-            string planDate = "";
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(purchaseList.StoreOrderID);
+            DataView dv = OrderTable.DefaultView;
+            dv.Sort = "StoOrdDet_ID";
+            DataTable SortTable = dv.ToTable();//重新排序
 
-            foreach (var product in purchaseList)
+            foreach(DataRow dr in SortTable.Rows)
             {
-                if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(0, 12);
+                string proID = Convert.ToString(dr["Pro_ID"]);
+                int orderAmount = Convert.ToInt32(dr["StoOrdDet_OrderAmount"]);
+                if (proID.Length > 12)
+                    orderMedicines += proID.Substring(0, 12);
                 else
-                    orderMedicines += product.ID.PadRight(12, ' ');
+                    orderMedicines += proID.PadRight(12, ' ');
 
-                orderMedicines += product.Amount.ToString().PadLeft(10, ' ');
+                orderMedicines += orderAmount.ToString().PadLeft(10, ' ');
 
-                if (product.ID.Length > 12)
-                    orderMedicines += product.ID.Substring(13);
+                if (proID.Length > 12)
+                    orderMedicines += proID.Substring(13);
 
                 orderMedicines += "\r\n";
             }
@@ -991,6 +1103,13 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderOrderDetail]", parameters);
         }
 
+        internal static DataTable GetStoreOrderByID(string orderId)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("StoOrd_ID", orderId));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[StoreOrderByID]", parameters);
+        }
+
         internal static DataTable StoreOrderReserveByResIDList(DateTime sDate, DateTime eDate)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -1021,11 +1140,12 @@ namespace His_Pos.NewClass.StoreOrder
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertStoreOrderOTCMedicine]", parameters);
         }
 
-        internal static DataTable DeleteDoneOrder(string orderID)
+        internal static DataTable DeleteDoneOrder(string orderID ,string voidReason = null)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDER_ID", orderID));
             parameters.Add(new SqlParameter("EMPLOYEE", ViewModelMainWindow.CurrentUser.ID));
+            parameters.Add(new SqlParameter("VoidReason", voidReason));
             return MainWindow.ServerConnection.ExecuteProc("[Set].[DeleteStoreOrderDoneOrderByID]", parameters);
         }
 
@@ -1060,6 +1180,37 @@ namespace His_Pos.NewClass.StoreOrder
         public static void UpdateProductOnTheWay()
         {
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateProductOnTheWay]");
+        }
+
+        public static void UpdateReplaceProduct(int qty, string orderID, string pro_ID,int det_ID)
+        {
+            string sql = string.Empty;
+            if (!string.IsNullOrEmpty(pro_ID))
+            {
+                sql = string.Format(
+                @"Update [{0}].[StoreOrder].[Detail] Set StoOrdDet_OrderAmount = Case When StoOrdDet_OrderAmount > {1} Then StoOrdDet_OrderAmount - {1} Else 0 End Where StoOrdDet_MasterID = '{2}' And StoOrdDet_ProductID = '{3}'",
+                Properties.Settings.Default.SystemSerialNumber,
+                qty,//取代數量
+                orderID,//訂單編號
+                pro_ID);//商品代碼
+            }
+            else if(det_ID != 0)
+            {
+                sql = string.Format(
+                @"Update [{0}].[StoreOrder].[Detail] Set StoOrdDet_OrderAmount = Case When StoOrdDet_OrderAmount > {1} Then StoOrdDet_OrderAmount - {1} Else 0 End Where StoOrdDet_MasterID = '{2}' And StoOrdDet_ID = {3}",
+                Properties.Settings.Default.SystemSerialNumber,
+                qty,//取代數量
+                orderID,//訂單編號
+                det_ID);//訂單項次
+            }
+            else
+            {
+                return;
+            }
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                _ = conn.Query<int>(sql, commandType: CommandType.Text);
+            });
         }
     }
 }

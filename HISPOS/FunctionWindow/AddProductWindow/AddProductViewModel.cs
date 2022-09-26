@@ -118,7 +118,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             SearchString = searchString;
             wareID = wareHouseID;
             orderStatus = OrderStatus;
-            GetRelatedDataAction();
+            GetRelatedDataAction(addProductEnum);
         }
 
         public AddProductViewModel(string searchString, AddProductEnum addProductEnum, string wareHouseID)
@@ -129,7 +129,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
 
             SearchString = searchString;
             wareID = wareHouseID;
-            GetRelatedDataAction();
+            GetRelatedDataAction(addProductEnum);
         }
 
         public AddProductViewModel(string searchString, AddProductEnum addProductEnum, string wareHouseID, OrderStatusEnum OrderStatus, string orderTypeIsOTC)
@@ -142,7 +142,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             wareID = wareHouseID;
 
             OrderTypeIsOTC = orderTypeIsOTC;
-            GetRelatedDataAction();
+            GetRelatedDataAction(addProductEnum);
         }
 
         ~AddProductViewModel()
@@ -152,17 +152,21 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         }
 
         #region ----- Define Actions -----
-
         private void GetRelatedDataAction()
+        {
+            GetRelatedDataAction(AddProductEnum.PrescriptionDeclare);
+        }
+        private void GetRelatedDataAction(AddProductEnum addProductEnum)
         {
             if (IsEditing)
             {
                 if (SearchString.Length >0)
                 {
+                    int noOTC = addProductEnum == AddProductEnum.PrescriptionDeclare? 1 : 0;
                     IsEditing = false;
                     HideDisableProduct = false;
                     MainWindow.ServerConnection.OpenConnection();
-                    ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString, wareID);
+                    ProductStructCollection = ProductStructs.GetProductStructsBySearchString(SearchString, wareID, noOTC);
                     MainWindow.ServerConnection.CloseConnection();
                     ProStructCollectionViewSource = new CollectionViewSource { Source = ProductStructCollection };
                     ProStructCollectionView = ProStructCollectionViewSource.View;
@@ -189,7 +193,8 @@ namespace His_Pos.FunctionWindow.AddProductWindow
                         default:
                             ProStructCollectionViewSource.View.MoveCurrentToFirst();
                             SelectedProductStruct = (ProductStruct)ProStructCollectionViewSource.View.CurrentItem;
-                            if (ProductStructCollection.Count==1) {
+                            if (ProductStructCollection.Count==1) 
+                            {
                                 ProductSelectedAction();
                             }
                             
@@ -260,6 +265,11 @@ namespace His_Pos.FunctionWindow.AddProductWindow
             switch (addProEnum)
             {
                 case AddProductEnum.ProductReturn:
+                    if (SelectedProductStruct.Inventory == 0)
+                    {
+                        MessageWindow.ShowMessage(string.Format("{0} \n 庫存為零，不能退貨!", SelectedProductStruct.ID), MessageType.ERROR);
+                        return;
+                    }
                     Messenger.Default.Send(new NotificationMessage<ProductStruct>(this, SelectedProductStruct, nameof(ProductPurchaseReturnViewModel)));
                     break;
 

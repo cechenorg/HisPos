@@ -23,6 +23,9 @@ namespace DomainModel.Enum
     {
         NODATA = 0,
         PURCHASE = 1,
-        RETURN = 2
+        RETURN = 2,
+        PREPARE = 3,
+        WAIT = 4,
+        WAITPREPARE = 5
     }
 }

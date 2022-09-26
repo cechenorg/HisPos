@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DataContext="{d:DesignInstance Type=local:CustomerManageViewModel, IsDesignTimeCreatable=False}" 
     mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
@@ -36,7 +37,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="110" />
+            <RowDefinition Height="200" />
             <RowDefinition Height="50" />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -48,11 +49,7 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <StackPanel
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="6"
-            Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6"   Orientation="Horizontal">
             <TextBox
                 x:Name="tbName"
                 Width="300"
@@ -90,16 +87,8 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </CheckBox>
-            <Button
-                Width="120"
-                Margin="50,0,10,0"
-                Background="IndianRed"
-                BorderThickness="0"
-                Command="{Binding DeleteCommand}"
-                Content="刪除"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16"
-                IsEnabled="True" />
+            <Button Width="120" Margin="50,0,10,0" Background="IndianRed" BorderThickness="0"
+                Command="{Binding DeleteCommand}"  Content="刪除"  FontFamily="Segoe UI Semibold" FontSize="16" IsEnabled="True" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
@@ -186,54 +175,45 @@
                 </i:Interaction.Triggers>
             </TextBox>
 
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="家電"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
+            <Label Margin="10,0,0,0" VerticalAlignment="Center"  Content="家電" FontFamily="Segoe UI Semibold"  FontSize="20" />
             <TextBox
                 Width="120"
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontSize="18"
-                Text="{Binding Customer.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                PreviewTextInput="TextBox_PreviewTextInput"
+                PreviewKeyDown="TextBox_PreviewKeyDown"
+                InputMethod.IsInputMethodEnabled="False"
+                Text="{Binding DisplayPatientTel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="手機1"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
-            <TextBox
-                Width="120"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                FontSize="18"
-                Text="{Binding Customer.CellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:####-######}}">
+            <Label Margin="10,0,0,0"  VerticalAlignment="Center"   Content="手機1"  FontFamily="Segoe UI Semibold"  FontSize="20" />
+            <TextBox  Width="120"  Margin="10,0,0,0"
+                HorizontalContentAlignment="Center"  FontSize="18"
+                PreviewTextInput="TextBox_PreviewTextInput"
+                PreviewKeyDown="TextBox_PreviewKeyDown"
+                InputMethod.IsInputMethodEnabled="False"
+                Text="{Binding DisplayPatientCellPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="手機2"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
+            <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="手機2" FontFamily="Segoe UI Semibold" FontSize="20" />
             <TextBox
                 Width="120"
                 Margin="10,0,0,0"
                 HorizontalContentAlignment="Center"
                 FontSize="18"
-                Text="{Binding Customer.SecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:####-######}}">
+                PreviewTextInput="TextBox_PreviewTextInput"
+                PreviewKeyDown="TextBox_PreviewKeyDown"
+                InputMethod.IsInputMethodEnabled="False"
+                Text="{Binding DisplayPatientSecondPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
@@ -241,17 +221,8 @@
                 </i:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <StackPanel
-            Grid.Row="2"
-            Grid.Column="0"
-            Grid.ColumnSpan="6"
-            Margin="8"
-            Orientation="Horizontal">
-            <Label
-                VerticalAlignment="Center"
-                Content="LINE"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" Margin="8" Orientation="Horizontal">
+            <Label VerticalAlignment="Center" Content="LINE" FontFamily="Segoe UI Semibold" FontSize="20" />
             <TextBox
                 Width="140"
                 Margin="10,0,0,0"
@@ -264,17 +235,8 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="電子信箱"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
-            <TextBox
-                Width="322"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                FontSize="18"
+            <Label  Margin="10,0,0,0" VerticalAlignment="Center" Content="電子信箱" FontFamily="Segoe UI Semibold" FontSize="20" />
+            <TextBox Width="322" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="18"
                 Text="{Binding Customer.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
@@ -282,18 +244,9 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Content="住址"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
-            <TextBox
-                Width="360"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                FontSize="18"
-                Text="{Binding Customer.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="住址" FontFamily="Segoe UI Semibold" FontSize="20" />
+
+            <TextBox Width="360"  Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Text="{Binding Customer.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
@@ -301,63 +254,37 @@
                 </i:Interaction.Triggers>
             </TextBox>
         </StackPanel>
-        <StackPanel
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="6"
-            Background="{StaticResource Shadow}"
-            Orientation="Horizontal">
-            <Label
-                Margin="8,0,0,0"
-                VerticalAlignment="Center"
-                Content="聯絡備註"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20" />
-            <TextBox
-                Width="447"
-                Margin="10,10,0,10"
-                AcceptsReturn="True"
-                Background="{StaticResource LightForeGround}"
-                FontSize="18"
-                Text="{Binding Customer.ContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                TextWrapping="Wrap"
-                VerticalScrollBarVisibility="Visible">
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="6" Background="{StaticResource Shadow}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="聯絡備註" FontFamily="Segoe UI Semibold" FontSize="20" />
+            <TextBox   FontSize="18" Margin="10,0" Grid.Column="1"
+                Text="{Binding DisplayPatientContactNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Label
-                Height="50"
-                Margin="20,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalContentAlignment="Center"
-                Content="備註"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                Foreground="Black" />
-            <TextBox
-                Width="450"
-                Margin="10,10,0,10"
-                AcceptsReturn="True"
-                Background="{StaticResource LightForeGround}"
-                FontSize="16"
-                Text="{Binding Customer.Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                TextWrapping="Wrap"
-                VerticalScrollBarVisibility="Visible">
+            <Label  Height="50" Grid.Row="1"  HorizontalAlignment="Center"  VerticalContentAlignment="Center"   Content="備註"  FontFamily="Segoe UI Semibold"  FontSize="20"  Foreground="Black" />
+            <TextBox  AcceptsReturn="True" Grid.Row="1" Grid.Column="1" Margin="10"
+                Background="{StaticResource LightForeGround}" FontSize="16" VerticalContentAlignment="Top"
+                Text="{Binding DisplayPatientNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap"  VerticalScrollBarVisibility="Visible">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding DataChangeCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-        </StackPanel>
-        <StackPanel
-            Grid.Row="4"
-            Grid.Column="0"
-            Grid.ColumnSpan="6"
-            Orientation="Horizontal">
+        </Grid>
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="6" Orientation="Horizontal">
             <Rectangle Width="726" />
             <ContentControl>
                 <ContentControl.Style>
@@ -371,28 +298,13 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
-            <Button
-                Width="120"
-                Margin="10,0,10,0"
-                Background="Gray"
-                BorderThickness="0"
-                Command="{Binding CancelCommand}"
-                Content="取消"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" />
-            <Button
-                Width="150"
-                Background="IndianRed"
-                BorderThickness="0"
+            <Button Width="120" Margin="10,0,10,0" Background="Gray"
+                BorderThickness="0" Command="{Binding CancelCommand}" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" />
+            <Button Width="150" Background="IndianRed" BorderThickness="0"
                 Command="{Binding SubmitCommand}"
-                Content="確認"
-                FontFamily="Segoe UI Semibold"
-                FontSize="16" />
+                Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
-        <Grid
-            Grid.Row="5"
-            Grid.ColumnSpan="6"
-            Margin="0,0,0,0.333">
+        <Grid Grid.Row="5" Grid.ColumnSpan="6" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="570" />
                 <ColumnDefinition />
@@ -402,15 +314,8 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
-                <Label
-                    Margin="10,0,0,0"
-                    VerticalAlignment="Center"
-                    BorderThickness="0"
-                    Content="處方歷程"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="25"
-                    FontWeight="Bold"
-                    Foreground="{StaticResource ForeGround}" />
+                <Label Margin="10,0,0,0" VerticalAlignment="Center" BorderThickness="0"
+                    Content="處方歷程" FontFamily="Segoe UI Semibold" FontSize="25" FontWeight="Bold" Foreground="{StaticResource ForeGround}" />
                 <ComboBox
                     Width="100"
                     Margin="10,0,0,0"
@@ -422,10 +327,8 @@
                     SelectedItem="{Binding PrescriptionCaseSelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <DataGrid
-                Grid.Row="1"
-                Grid.Column="0"
-                Margin="10,0,0,10"
-                AutoGenerateColumns="False"
+                Grid.Row="1"  Grid.Column="0"
+                Margin="10,0,0,10" AutoGenerateColumns="False"
                 Background="{StaticResource GridBackGround}"
                 CanUserAddRows="False"
                 CellStyle="{StaticResource DataGridCellStyle}"
@@ -450,12 +353,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="150"
-                        Binding="{Binding InsName}"
-                        FontFamily="Segoe UI Semi"
-                        Header="院所"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="150" Binding="{Binding InsName}" FontFamily="Segoe UI Semi" Header="院所" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -464,12 +362,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="80"
-                        Binding="{Binding DivName}"
-                        FontFamily="Segoe UI Semi"
-                        Header="科別"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="80" Binding="{Binding DivName}" FontFamily="Segoe UI Semi" Header="科別" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -477,12 +370,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding TreatMentDate, Converter={StaticResource NullableDateConverter}}"
-                        FontFamily="Segoe UI Semi"
-                        Header="就醫日"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="100"  Binding="{Binding TreatMentDate, Converter={StaticResource NullableDateConverter}}" FontFamily="Segoe UI Semi" Header="就醫日" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -490,12 +378,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}"
-                        FontFamily="Segoe UI Semi"
-                        Header="調劑日"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="100" Binding="{Binding AdjustDate, Converter={StaticResource NullableDateConverter}}" FontFamily="Segoe UI Semi" Header="調劑日" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -503,12 +386,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding ChronicStatus}"
-                        FontFamily="Segoe UI Semi"
-                        Header="慢箋狀態"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="100" Binding="{Binding ChronicStatus}" FontFamily="Segoe UI Semi"  Header="慢箋狀態" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -518,11 +396,7 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="10,0,10,10"
-                AutoGenerateColumns="False"
+            <DataGrid Grid.Row="1" Grid.Column="1" Margin="10,0,10,10" AutoGenerateColumns="False"
                 Background="{StaticResource GridBackGround}"
                 CanUserAddRows="False"
                 CellStyle="{StaticResource DataGridCellStyle}"
@@ -541,12 +415,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding ID}"
-                        FontFamily="Segoe UI Semi"
-                        Header="藥品代碼"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="100" Binding="{Binding ID}" FontFamily="Segoe UI Semi"  Header="藥品代碼" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -554,12 +423,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="200"
-                        Binding="{Binding Name}"
-                        FontFamily="Segoe UI Semi"
-                        Header="藥品名稱"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="200" Binding="{Binding Name}" FontFamily="Segoe UI Semi" Header="藥品名稱" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -567,12 +431,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding Usage}"
-                        FontFamily="Segoe UI Semi"
-                        Header="用法"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="100" Binding="{Binding Usage}" FontFamily="Segoe UI Semi" Header="用法" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -580,12 +439,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding Dossage}"
-                        FontFamily="Segoe UI Semi"
-                        Header="用量"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="100" Binding="{Binding Dossage}" FontFamily="Segoe UI Semi" Header="用量" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -593,12 +447,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Width="100"
-                        Binding="{Binding Amount}"
-                        FontFamily="Segoe UI Semi"
-                        Header="總量"
-                        IsReadOnly="True">
+                    <DataGridTextColumn Width="100"  Binding="{Binding Amount}"  FontFamily="Segoe UI Semi" Header="總量" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

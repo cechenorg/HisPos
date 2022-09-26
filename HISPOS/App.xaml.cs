@@ -1,4 +1,5 @@
-﻿using His_Pos.FunctionWindow;
+﻿using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace His_Pos
 {
@@ -59,6 +61,19 @@ namespace His_Pos
                 textBox.SelectAll();
         }*/
 
+        public bool DoHandle { get; set; }
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (DoHandle)
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                MessageWindow.ShowMessage(e.Exception.Message,MessageType.ERROR);
+                e.Handled = true;
+            }
+        }
         private void CheckAdministrator()
         {
             var wp = new WindowsPrincipal(WindowsIdentity.GetCurrent());

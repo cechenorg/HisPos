@@ -1,9 +1,11 @@
 ﻿using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Product.ProductManagement;
 using His_Pos.NewClass.Product.ProductManagement.ProductStockDetail;
 using His_Pos.NewClass.StockTaking.StockTaking;
 using His_Pos.NewClass.WareHouse;
+using System;
 using System.ComponentModel;
 using System.Windows;
 
@@ -25,6 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
         public int Min { get; set; } = 1;
         public string CHANGE { get; set; } = "轉讓";
         public string NewPrice { get; set; }
+        public double CurrentShelf { get; set; }
 
         public string NewInventory
         {
@@ -46,6 +49,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             }
         }
 
+        public Manufactories Manufacturers{ get; set; }
+
+        public Manufactory Manufacturer { get; set; }
         public bool IsOverage
         {
             get { return isOverage; }
@@ -67,16 +73,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             productID = proID;
             wareHouse = ware;
             stockDetail = stock;
+            CurrentShelf = stock.ShelfInventory;
             NewPrice = stock.LastPrice.ToString("0.##");
+            Manufacturers = new Manufactories(ManufactoryDB.GetAllManufactories());
         }
 
         #region ----- Define Functions -----
 
         private bool IsNewInventoryValid()
         {
-            if (NewInventory.Equals(""))
+            if (NewInventory != null && NewInventory != "0" && NewInventory.Equals(""))
             {
-                MessageWindow.ShowMessage("盤點架上量不得為空!", MessageType.ERROR);
+                MessageWindow.ShowMessage("轉受讓數量不得為空!", MessageType.ERROR);
                 return false;
             }
             else
@@ -99,7 +107,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
 
             if (NewPrice.Equals("") && IsOverage)
             {
-                MessageWindow.ShowMessage("盤點單價不得為空!", MessageType.ERROR);
+                MessageWindow.ShowMessage("轉受讓單價不得為空!", MessageType.ERROR);
                 return false;
             }
             else if (IsOverage)
@@ -114,6 +122,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
                 }
             }
 
+            if (CurrentShelf < Convert.ToDouble(NewInventory) && !isOverage)
+            {
+                MessageWindow.ShowMessage("轉受讓數量不得超過庫存!", MessageType.ERROR);
+                return false;
+            }
             return true;
         }
 
@@ -136,8 +149,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.Sha
             if (!(bool)confirmWindow.DialogResult) return;
 
             MainWindow.ServerConnection.OpenConnection();
+
             StockTaking stockTaking = new StockTaking();
-            stockTaking.SingleStockChange(productID, stockDetail.TotalInventory, stockDetail.TotalInventory + (finalInv * Min), double.Parse(NewPrice), wareHouse, Number);
+            stockTaking.InsertTransfer(Convert.ToInt32(!IsOverage), Convert.ToInt32(Manufacturer.ID), productID, Number, Convert.ToInt32(NewInventory),
+               Convert.ToDecimal(NewPrice), Convert.ToInt32(wareHouse.ID));
+            //stockTaking.SingleStockChange(productID, stockDetail.TotalInventory, stockDetail.TotalInventory + (finalInv * Min), double.Parse(NewPrice), wareHouse, Number);
             MainWindow.ServerConnection.CloseConnection();
 
             ProductDetailDB.UpdateProductLastPrice(productID, double.Parse(NewPrice), wareHouse.ID);

@@ -11,7 +11,18 @@ namespace His_Pos.Class
         StockTaking = 3
     }
      
-
+    public enum FeatureTab
+    {
+        處方作業,
+        銷售作業,
+        藥局管理,
+        庫存管理,
+        庫存報表,
+        會計作業,
+        會計報表,
+        出勤管理
+    }
+     
     public enum FeatureItem
     {
         處方登錄 = 0,
@@ -51,12 +62,13 @@ namespace His_Pos.Class
         損益報表 = 38,
         資產負債表 = 39,
         關班作業 = 40,
-        會計科目 = 41,
+        立帳作業 = 41,
         舊每日總帳報表 = 42,
         關班帳務查詢 = 43,
-        打卡記錄查詢 = 47, // add by SHANI
+        打卡記錄查詢 = 47,  
         沖帳作業 = 48,
         每日總帳報表 = 49,
+        OTC訂購網頁 = 50
     }
 
     public enum StoreOrderProductType
@@ -844,5 +856,13 @@ namespace His_Pos.Class
         CODE_05206B = 65,
         CODE_05223B = 54,
         CODE_05210B = 75
+    }
+
+    public enum PrintFormat
+    {
+        [Description("公版")]
+        PublicReport = 0,
+        [Description("藥健康版")]
+        PrivateReport = 1
     }
 }

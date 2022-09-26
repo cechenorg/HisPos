@@ -32,7 +32,7 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
                 StoreOrderDB.StoreOrderToWaiting(StoreOrderID);
             }
             else
-                MessageWindow.ShowMessage("傳送杏德失敗 請稍後至進退或管理傳送採購單", MessageType.ERROR);
+                MessageWindow.ShowMessage("傳送杏德失敗 請稍後至進退貨管理傳送採購單", MessageType.ERROR);
         }
 
         public void OTCToWaitingStatus(string note)
@@ -43,7 +43,7 @@ namespace His_Pos.NewClass.Medicine.NotEnoughMedicine
                 StoreOrderDB.StoreOrderToWaiting(StoreOrderID);
             }
             else
-                MessageWindow.ShowMessage("傳送杏德失敗 請稍後至進退或管理傳送採購單", MessageType.ERROR);
+                MessageWindow.ShowMessage("傳送杏德失敗 請稍後至進退貨管理傳送採購單", MessageType.ERROR);
         }
 
         private bool SendOTCOrderToSingde(string note)

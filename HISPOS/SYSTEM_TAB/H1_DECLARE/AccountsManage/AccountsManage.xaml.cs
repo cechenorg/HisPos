@@ -1,8 +1,12 @@
-﻿using His_Pos.Service;
+﻿using His_Pos.NewClass.Accounts;
+using His_Pos.NewClass.Report.Accounts;
+using His_Pos.Service;
 using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 
@@ -50,6 +54,37 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AccountsManage
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void ComboBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            ICollectionView itemsViewOriginal = CollectionViewSource.GetDefaultView(cmb.ItemsSource);
+            bool isFilter = itemsViewOriginal.CanFilter;
+            if (isFilter)
+            {
+                itemsViewOriginal.Filter = (o) =>
+                {
+                    AccountsAccount account = (AccountsAccount)o;
+                    if (string.IsNullOrEmpty(cmb.Text))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if (account.ID.StartsWith(cmb.Text) || account.AccountName.Contains(cmb.Text))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                };
+            }
+            cmb.IsDropDownOpen = true;
+            itemsViewOriginal.Refresh();
         }
     }
 }

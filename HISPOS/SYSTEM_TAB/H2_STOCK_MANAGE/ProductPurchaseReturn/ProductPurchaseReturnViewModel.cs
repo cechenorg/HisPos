@@ -7,6 +7,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using DomainModel.Enum;
+using System.Text.RegularExpressions;
+using System.Globalization;
+using System.Windows.Media;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -62,9 +65,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public ProductPurchaseReturnViewModel()
         {
-            TabName = MainWindow.HisFeatures[3].Functions[2];
-            Icon = MainWindow.HisFeatures[3].Icon;
-
             NormalViewModel = new NormalViewModel();
             SingdeTotalViewModel = new SingdeTotalViewModel();
 
@@ -111,60 +111,90 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 MainWindow.ServerConnection.OpenConnection();
                 MainWindow.SingdeConnection.OpenConnection();
 
-                DataTable dataTable;
-
-                // 關閉杏德代訂 2021.08.23
-                /*if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
-                {
-                    BusyContent = "取得杏德新訂單...";
-                    dataTable = StoreOrderDB.GetNewSingdeOrders();
-                    if (dataTable.Rows.Count > 0)
-                        StoreOrders.AddNewOrdersFromSingde(dataTable);
-
-                    dataTable = StoreOrderDB.GetNewSingdePrescriptionOrders();
-                    if (dataTable.Rows.Count > 0)
-                        StoreOrders.AddNewPrescriptionOrdersFromSingde(dataTable);
-                }*/
-
                 BusyContent = "取得訂單資料...";
                 storeOrderCollection = StoreOrders.GetOrdersNotDone();
 
                 if (MainWindow.SingdeConnection.ConnectionStatus() == ConnectionState.Open)
                 {
-                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING).OrderBy(s => s.CreateDateTime).ToList();
+                    List<StoreOrder> storeOrders = storeOrderCollection.Where(s => s.OrderStatus == OrderStatusEnum.WAITING || s.OrderStatus == OrderStatusEnum.SINGDE_PROCESSING || s.OrderStatus == OrderStatusEnum.SCRAP).OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1, 11)).ToList();
                     string dateTime = DateTime.Now.ToString("yyyyMMdd");
-
                     if (storeOrders.Count > 0)
-                        dateTime = storeOrders[0].CreateDateTime.ToString("yyyyMMdd");
+                        dateTime = storeOrders.Min(w=>w.CreateDateTime).ToString("yyyyMMdd");
 
                     BusyContent = "取得杏德訂單最新狀態...";
+                    #region 組合字串，取得杏德最新狀態
+                    string orderIDs = string.Empty;
                     for (int i = 0; i < storeOrders.Count; i++)
                     {
-                        if(string.IsNullOrEmpty(storeOrders[i].SourceID))
-                            dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].ID);
-                        else
-                            dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, storeOrders[i].SourceID);
-
-                        if (dataTable.Rows.Count > 0)
+                        if (storeOrders[i].OrderStatus != OrderStatusEnum.SCRAP)
                         {
-                            currentStoreOrder = storeOrders[i];
-                            DataRow[] dataRows = dataTable.Select();
-                            currentStoreOrder.UpdateOrderDataFromSingde(dataRows[0]);
-                            storeOrderCollection = new StoreOrders(storeOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP).ToList());
+                            string orderID = string.IsNullOrEmpty(storeOrders[i].SourceID) ? storeOrders[i].ID : storeOrders[i].SourceID;
+                            if (i == storeOrders.Count - 1)
+                            {
+                                orderIDs += string.Format("'{0}'", orderID);
+                            }
+                            else
+                            {
+                                orderIDs += string.Format("'{0}',", orderID);
+                            }
+                        }
+                    }
+                    DataTable dataTable = StoreOrderDB.GetSingdeOrderNewStatusByNo(dateTime, orderIDs);
+                    #endregion
+                    for (int i = 0; i < storeOrders.Count; i++)
+                    {
+                        if (storeOrders[i].OrderStatus != OrderStatusEnum.SCRAP)
+                        {
+                            DataRow[] drs = dataTable.Select(string.Format("ORDER_ID = '{0}'", string.IsNullOrEmpty(storeOrders[i].SourceID) ? storeOrders[i].ID : storeOrders[i].SourceID));
+                            if (drs != null && drs.Length > 0)
+                            {
+                                int flag = Convert.ToInt32(drs[0]["FLAG"]);
+                                string ReceiveID = Convert.ToString(drs[0]["PRESCRIPTION_RECEIVEID"]);
+                                if (flag == 2)
+                                {
+                                    string VoidReason = "5.其他:杏德訂單已作廢";
+                                    StoreOrderDB.RemoveStoreOrderByID(storeOrders[i].ID, VoidReason);
+                                    storeOrders[i].OrderStatus = OrderStatusEnum.SCRAP;
+                                    storeOrders[i].IsEnable = false;
+                                }
+                                else
+                                {
+                                    if(!string.IsNullOrEmpty(ReceiveID) && ReceiveID != null)
+                                    {
+                                        currentStoreOrder = storeOrders[i];
+                                        bool isUptSuccess = currentStoreOrder.UpdateOrderDataFromSingde(drs[0]);
+                                        if (!isUptSuccess && storeOrders[i].ID != storeOrders[i].ReceiveID)//尚未更新為杏德單號
+                                        {
+                                            if (storeOrders[i].OrderType != OrderTypeEnum.RETURN)
+                                            {
+                                                storeOrders[i].OrderType = OrderTypeEnum.PREPARE;//已出貨
+                                                storeOrders[i].IsWaitOrder = 0;
+                                            }
+                                        }
+                                        else if (storeOrders[i].ID != storeOrders[i].ReceiveID)//已更新為杏德單號
+                                        {
+                                            if (storeOrders[i].OrderType != OrderTypeEnum.RETURN)
+                                            {
+                                                storeOrders[i].OrderType = OrderTypeEnum.WAITPREPARE;//待入庫
+                                                storeOrders[i].IsWaitOrder = 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
-                    var orderedList = storeOrderCollection.OrderBy(_ => _.ReceiveID.StartsWith("1")).ToList();
+                    var orderedList = storeOrderCollection.OrderBy(_ => _.IsWaitOrder).ThenBy(_ => _.ID.Substring(1, 11)).ToList();
 
                     StoreOrders result = new StoreOrders();
-
-                    for (int i = orderedList.Count() - 1; i >= 0; i--)
+                    List<StoreOrder> tempOrder = new List<StoreOrder>();
+                    for (int i = 0; i < orderedList.Count(); i++)
                     {
                         result.Add(orderedList[i]);
                     }
 
                     storeOrderCollection = result;
-
                     //(20220324)
                     SingdeTotalViewModel.InitData();
                     NormalViewModel.InitData(storeOrderCollection);

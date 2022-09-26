@@ -58,6 +58,10 @@ namespace His_Pos.NewClass.Person
             set
             {
                 Set(() => IDNumber, ref idNumber, value);
+                if (string.IsNullOrEmpty(value) == false && value.Length==10)
+                    Gender = value.Substring(1, 1) == "1" ? "男" : "女";
+                if (string.IsNullOrEmpty(Gender) == true)
+                    Gender = "";
             }
         }//身分證字號
 
@@ -109,25 +113,7 @@ namespace His_Pos.NewClass.Person
             }
         }//手機2
 
-        [IgnoreFormat]
-        public virtual string FormattedPhoneNumber
-        {
-            get
-            {
-                if (CellPhone == null)
-                    return string.Empty;
-
-                switch (CellPhone.Length)
-                {
-                    case 10:
-                        return Regex.Replace(CellPhone, @"(\d{4})(\d{3})(\d{3})", "$1-$2-$3");
-
-                    default:
-                        return CellPhone;
-                }
-            }
-        }
-
+       
         [IgnoreFormat]
         public string Address { get; set; }//地址
 
@@ -146,12 +132,14 @@ namespace His_Pos.NewClass.Person
             switch (IDNumber[1])
             {
                 case '2':
+                case '9':
                 case 'B':
                 case 'D':
                     Gender = Properties.Resources.Female;
                     break;
 
                 case '1':
+                case '8':
                 case 'A':
                 case 'C':
                     Gender = Properties.Resources.Male;

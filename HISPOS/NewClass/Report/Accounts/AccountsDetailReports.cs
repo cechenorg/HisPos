@@ -11,6 +11,18 @@ namespace His_Pos.NewClass.Report.Accounts
             Value = r.Field<decimal>("Value");
             ID = r.Field<string>("ID");
             StrikeValue = r.Field<decimal>("StrikeValue");
+            if(r.Table.Columns.Contains("TransferID"))
+            {
+                TransferID = r.Field<string>("TransferID");
+            }
+            if (r.Table.Columns.Contains("OrderID"))
+            {
+                OrderID = r.Field<string>("OrderID");
+            }
+            else
+            {
+                OrderID = r.Field<string>("ID");
+            }
         }
 
         public AccountsDetailReports(string name, decimal value, string id)
@@ -65,6 +77,27 @@ namespace His_Pos.NewClass.Report.Accounts
             set
             {
                 Set(() => StrikeValue, ref strikeValue, value);
+            }
+        }
+
+        private string transferID;
+
+        public string TransferID
+        {
+            get => transferID;
+            set
+            {
+                Set(() => TransferID, ref transferID, value);
+            }
+        }
+        private string orderID;
+
+        public string OrderID
+        {
+            get => orderID;
+            set
+            {
+                Set(() => OrderID, ref orderID, value);
             }
         }
     }

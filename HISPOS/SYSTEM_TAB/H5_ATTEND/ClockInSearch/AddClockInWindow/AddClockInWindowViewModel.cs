@@ -6,6 +6,8 @@ using His_Pos.FunctionWindow;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
 using System.Data;
+using DomainModel;
+using DomainModel.Enum;
 
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
@@ -84,27 +86,17 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
             //Employee user = Employee.Login(EmployeeID, (sender as PasswordBox)?.Password);
             //EmployeePassWord
             Employee.Account = EmployeeID;
+             
+            Employee user = EmployeeService.Login(EmployeeID, EmployeePassWord);
 
-            MainWindow.ServerConnection.OpenConnection();
-            Employee user = Employee.Login(EmployeeID, EmployeePassWord);
-            MainWindow.ServerConnection.CloseConnection();
-
-            //1.如果全部都沒有,查無帳號,請確認帳號
-            if (Employee.CheckEmployeeAccountSame())
-            {
-                MessageWindow.ShowMessage("此帳號不存在!", Class.MessageType.ERROR);
-                return false;
-            }
+            
             //檢查帳密 密碼錯誤
-            else if (user == null)
+            if (user == null)
             {
                 MessageWindow.ShowMessage("密碼錯誤!", Class.MessageType.ERROR);
                 return false;
             }
-            else
-            {
-                Employee = Employee.Login(EmployeeID, EmployeePassWord);
-            }
+            Employee = user;
 
             return true;
         }

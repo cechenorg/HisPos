@@ -169,10 +169,17 @@ namespace His_Pos.NewClass.Prescription.ICCard.Upload
             }
             else
             {
-                IDNumber = p.Patient.IDNumber;
-                BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday);
-                MedicalNumber = e.ID;
-                PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
+                try 
+                {
+                    IDNumber = p.Patient.IDNumber;
+                    BirthDay = DateTimeEx.ConvertToTaiwanCalender((DateTime)p.Patient.Birthday);
+                    MedicalNumber = e.ID;
+                    PharmacyId = ViewModelMainWindow.CurrentPharmacy.ID;
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow.ShowMessage(Resources.生日空值, MessageType.ERROR);
+                }
             }
             if (makeUp || DateTime.Compare(((DateTime)p.AdjustDate).Date, DateTime.Now.Date) < 0)
                 MakeUpMark = "2";

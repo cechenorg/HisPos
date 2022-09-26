@@ -11,6 +11,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
 using System;
+using His_Pos.NewClass.Report.CashReport;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 {
@@ -251,14 +252,16 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             if (!(bool)cw.DialogResult) { return; }
 
             MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
-            parameters.Add(new SqlParameter("VALUE", double.Parse(StrikeValue)));
-            parameters.Add(new SqlParameter("TYPE", "0"));
-            parameters.Add(new SqlParameter("NOTE", SelectBank.Name));
-            parameters.Add(new SqlParameter("TARGET", SelectBank.ID));
-            parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
-            DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByBank]", parameters);
+            //List<SqlParameter> parameters = new List<SqlParameter>();
+            //parameters.Add(new SqlParameter("TARGET", SelectBank.ID));
+            //parameters.Add(new SqlParameter("TYPE", "0"));
+            //parameters.Add(new SqlParameter("VALUE", double.Parse(StrikeValue)));
+            //parameters.Add(new SqlParameter("SOURCE_ID", Selected.ID));
+            //parameters.Add(new SqlParameter("NOTE", SelectBank.Name));
+            //parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
+            //DataTable dataTable = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheetByBank]", parameters);
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectBank.ID, "0", Double.Parse(StrikeValue), Selected.ID, SelectBank.Name);
+
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))

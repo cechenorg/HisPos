@@ -32,6 +32,7 @@ namespace His_Pos.NewClass.Person.Employee.ClockIn
         {
             DataTable reDT = new DataTable();
             reDT.Columns.Add("Emp_ID", typeof(int));
+            reDT.Columns.Add("CurPha_Name", typeof(string));
             reDT.Columns.Add("Emp_Account", typeof(string));
             reDT.Columns.Add("Emp_Name", typeof(string));
             reDT.Columns.Add("WDate", typeof(string));
@@ -63,6 +64,7 @@ namespace His_Pos.NewClass.Person.Employee.ClockIn
                     DataRow r = reDT.NewRow();
                     r["Emp_ID"] = rowClock["Emp_ID"];
                     r["Emp_Account"] = rowClock["Emp_Account"];
+                    r["CurPha_Name"] = rowClock["CurPha_Name"];
                     r["Emp_Name"] = rowClock["Emp_Name"];
                     r["WDate"] = rowClock["WDate"];
                     r["WTime"] = rowClock["WTime"];

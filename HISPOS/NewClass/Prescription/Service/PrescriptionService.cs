@@ -22,6 +22,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using Employee = His_Pos.NewClass.Person.Employee.Employee;
 using HisAPI = His_Pos.HisApi.HisApiFunction;
@@ -34,6 +35,8 @@ namespace His_Pos.NewClass.Prescription.Service
         #region AbstractFunctions
 
         public abstract bool CheckPrescription(bool noCard, bool errorAdjust);
+
+        public abstract bool CheckPrescriptionBeforeOrder(bool noCard, bool errorAdjust);
 
         public abstract bool CheckEditPrescription(bool hasCard);
 
@@ -182,13 +185,22 @@ namespace His_Pos.NewClass.Prescription.Service
             //Current.SetPrescribeAdjustCase();
             if (!Current.Patient.CheckData() && !Current.Patient.IsAnonymous())
             {
-                var confirm = new ConfirmWindow("尚未選擇客戶.資料格式錯誤或資料不完整，是否以匿名取代?", "");
-                Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
-                if ((bool)confirm.DialogResult)
+                if (Current.AdjustCase.ID == "0")
                 {
                     Current.Patient = Customer.GetCustomerByCusId(0);
                     return true;
                 }
+                else
+                {
+                    var confirm = new ConfirmWindow("尚未選擇客戶，是否以匿名取代?", "資料格式錯誤或資料不完整");
+                    Debug.Assert(confirm.DialogResult != null, "confirm.DialogResult != null");
+                    if ((bool)confirm.DialogResult)
+                    {
+                        Current.Patient = Customer.GetCustomerByCusId(0);
+                        return true;
+                    }
+                }
+
                 return false;
             }
             return true;
@@ -297,7 +309,13 @@ namespace His_Pos.NewClass.Prescription.Service
 
         private bool CheckAdjustDatePast()
         {
-            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName=="負責藥師") return true;
+            if (Current.AdjustDate < Current.TreatDate)
+            {
+                MessageWindow.ShowMessage("調劑日不可小於就醫日", MessageType.WARNING);
+                return false;
+            }
+
+            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.Authority == DomainModel.Enum.Authority.MasterPharmacist) return true;
             MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
             return false;
         }
@@ -344,23 +362,26 @@ namespace His_Pos.NewClass.Prescription.Service
             return false;
         }
 
-        public bool PrintConfirm()
+        public bool PrintConfirm(bool manualPrint = false)
         {
             bool? focus = null;
+            bool isSend = false;
             if (vm?.PrescriptionSendData != null)
             {
                 var printSendData = vm.PrescriptionSendData;
                 var allSendCount = printSendData.Count(p => p.SendAmount == p.TreatAmount);//全傳送
                 var allPrepareCount = printSendData.Count(p => p.SendAmount == 0);
+                if (printSendData.Count > allPrepareCount)
+                    isSend=true;
                 if (printSendData.Count == allSendCount)
                     focus = false;
                 else if (printSendData.Count == allPrepareCount)
                     focus = true;
             }
-            PrintResult = NewFunction.CheckPrint(Current, focus);
-            var printMedBag = PrintResult[0];
-            var printSingle = PrintResult[1];
-            var printReceipt = PrintResult[2];
+            PrintResult = NewFunction.CheckPrint(Current, focus, isSend, manualPrint);
+            var printMedBag = PrintResult[0];//是否印藥袋
+            var printSingle = PrintResult[1];//是否多藥一袋
+            var printReceipt = PrintResult[2];//是否印收據
             if (printMedBag is null || printReceipt is null)
                 return false;
             if ((bool)printMedBag && printSingle is null)
@@ -393,6 +414,22 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
+        private static string BuildPatientTel(Prescription p)
+        {
+            string patientTel = string.Empty;
+            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
+            {
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(" + p.Patient.ContactNote + ")";
+                patientTel = string.IsNullOrEmpty(p.Patient.Line) ? patientTel : "@" + patientTel;
+            }
+            else
+            {
+                patientTel = string.IsNullOrEmpty(p.Patient.Tel) ? string.Empty : p.Patient.Tel;
+                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? patientTel : patientTel + "(" + p.Patient.ContactNote + ")";
+                patientTel = string.IsNullOrEmpty(p.Patient.Line) ? patientTel : "@" + patientTel;
+            }
+            return patientTel;
+        }
         public static IEnumerable<ReportParameter> CreateSingleMedBagParameter(MedBagMedicine m, Prescription p, string orderNumber, int medDays)
         {
             var adjustDate = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(p.AdjustDate, true);
@@ -409,16 +446,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 treatReturn = DateTimeExtensions.ConvertToTaiwanCalendarChineseFormat(treatReturnDate, true);
             }
             var cusGender = p.Patient.CheckGender();
-            string patientTel;
-            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
-            else
-            {
-                if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
-                else
-                    patientTel = p.Patient.ContactNote;
-            }
+            string patientTel = BuildPatientTel(p);
             return new List<ReportParameter>
                     {
                         new ReportParameter("OrderNumber",orderNumber),
@@ -474,16 +502,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 treatmentDateChi = $"{year}年{month}月{day}日";
             }
             var cusGender = p.Patient.CheckGender();
-            string patientTel;
-            if (!string.IsNullOrEmpty(p.Patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.CellPhone : p.Patient.CellPhone + "(註)";
-            else
-            {
-                if (!string.IsNullOrEmpty(p.Patient.Tel))
-                    patientTel = string.IsNullOrEmpty(p.Patient.ContactNote) ? p.Patient.Tel : p.Patient.Tel + "(註)";
-                else
-                    patientTel = p.Patient.ContactNote;
-            }
+            string patientTel = BuildPatientTel(p);
             return new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id",$"{VM.CurrentPharmacy.Name}({VM.CurrentPharmacy.ID})"),
@@ -613,13 +632,7 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public void Print(bool noCard)
         {
-            if (this.TempPre.PrescriptionStatus.IsPrint == true)
-            { 
-            }
-            else {
-                PrintMedBag();
-            }
-            
+            PrintMedBag();
             PrintReceipt(noCard);
         }
         public void PrintDir(bool noCard)
@@ -650,6 +663,7 @@ namespace His_Pos.NewClass.Prescription.Service
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void CheckMedBagPrintMode()
         {
+            var reportFormat = Properties.Settings.Default.ReportFormat;
             if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
             {
                 TempPrint.Division.Name = "";
@@ -659,8 +673,8 @@ namespace His_Pos.NewClass.Prescription.Service
                 else
                     TempPrint.PrintMedBagMultiMode();
             }
-            else if (VM.CurrentPharmacy.ID == "5931017216") {
-
+            else if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+            {
                 TempPre.PrintMedBagSingleModeByCE();
             }
             else
@@ -683,6 +697,14 @@ namespace His_Pos.NewClass.Prescription.Service
         public void SendOrder(MedicinesSendSingdeViewModel vm)
         {
             var printSendData = vm.PrescriptionSendData.DeepCloneViaJson();
+            var tempPrintSendData = new PrescriptionSendDatas();
+            tempPrintSendData.Clear();
+            foreach (var printData in printSendData)
+            {
+                if (printData.IsCommon == false)
+                    tempPrintSendData.Add(printData);
+            }
+
             var sendData = vm.PrescriptionSendData;
             if (sendData.Count(s => s.SendAmount == 0) != sendData.Count)
             {
@@ -716,7 +738,7 @@ namespace His_Pos.NewClass.Prescription.Service
             if (selfcoSendCount > 0 || (selfallSendCount < printSendData.Count && selfallSendCount > 0))
             {
                 var rptViewer = new ReportViewer();
-                SetReserveMedicinesSheetReportViewer(rptViewer, printSendData);
+                SetReserveMedicinesSheetReportViewer(rptViewer, tempPrintSendData);
                 MainWindow.Instance.Dispatcher.Invoke(() =>
                 {
                     ((VM)MainWindow.Instance.DataContext).StartPrintReserve(rptViewer);
@@ -834,10 +856,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public void CloneTempPre()
         {
             TempPre = (Prescription)Current.Clone();
-            if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
-            {
-                TempPrint = (Prescription)Current.PrintClone();
-            }
+            //if (TempPre.Institution != null && TempPre.Institution.ID == "3532082753")
+            //{
+            //    TempPrint = (Prescription)Current.PrintClone();
+            //}
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
@@ -862,7 +884,7 @@ namespace His_Pos.NewClass.Prescription.Service
         private static void CheckAdminLogin(Prescription selected)
         {
             if (selected is null) return;
-            if (VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師")|| VM.CurrentUser.WorkPosition.WorkPositionId==5)
+            if (VM.CurrentUser.Authority == DomainModel.Enum.Authority.Admin || VM.CurrentUser.IsPharmist() )
             {
                 var title = "處方修改 PreMasID:" + selected.ID;
                 var edit = new PrescriptionEditWindow(selected, title);
@@ -888,7 +910,7 @@ namespace His_Pos.NewClass.Prescription.Service
             DataTable table = PrescriptionDb.GetPrescriptionByID(preID);
             if (table == null || table.Rows.Count == 0)
                 return null;
-            var r = PrescriptionDb.GetPrescriptionByID(preID).Rows[0];
+            var r = table.Rows[0];
             var selected = new Prescription(r, type);
             selected.InsertTime = r.Field<DateTime?>("InsertTime");
             MainWindow.ServerConnection.CloseConnection();

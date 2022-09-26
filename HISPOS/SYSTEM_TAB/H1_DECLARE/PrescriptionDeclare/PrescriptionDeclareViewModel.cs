@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Extention;
 using His_Pos.FunctionWindow;
 using His_Pos.FunctionWindow.AddCustomerWindow;
 using His_Pos.FunctionWindow.AddProductWindow;
@@ -296,6 +297,80 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        private string _displayPatientCellPhone;
+
+        public string DisplayPatientCellPhone
+        {
+            get {
+                var cellphone = currentPrescription.Patient.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+               
+            }
+            set
+            {
+                string cellphone = value.Replace("-","");
+                currentPrescription.Patient.CellPhone = cellphone;
+                Set(() => DisplayPatientCellPhone, ref _displayPatientCellPhone, value);
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                var cellphone = currentPrescription.Patient.SecondPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                currentPrescription.Patient.SecondPhone = cellphone;
+            }
+        }
+
+        private string _displayPatientTel;
+
+        public string DisplayPatientTel
+        {
+            get
+            {
+                var tel = currentPrescription.Patient.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                currentPrescription.Patient.Tel = tel;
+                Set(() => DisplayPatientTel, ref _displayPatientTel, value);
+            }
+        }
+        private bool _isLineEnable = false;
+        public bool IsLineEnable
+        {
+            get
+            {
+                var line = CurrentPrescription.Patient.Line;
+                return line is null ? false : true;
+            }
+            set
+            {
+                Set(() => IsLineEnable, ref _isLineEnable, value);
+            }
+        }
+
+        public string DisplayPatientContactNote
+        {
+            get
+            {
+                var contactnote = currentPrescription.Patient.ContactNote;
+                return contactnote is null ? string.Empty : contactnote.ToPatientContactNote();
+            }
+            set
+            {
+                currentPrescription.Patient.ContactNote = value;
+            }
+        }
+
         private IcCard currentCard;
         private PrescriptionService currentService;
         private bool setBuckleAmount;
@@ -335,7 +410,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand CountPrescriptionPoint { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
+        public RelayCommand IsClosed { get; set; }
         public RelayCommand ResetBuckleAmount { get; set; }
+        public RelayCommand ClearBuckleAmount { get; set; }
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand CheckDeclareStatusCmd { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
@@ -385,9 +462,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void SetPharmacist()
         {
-            if (MedicalPersonnels.SingleOrDefault(e => e.ID.Equals(VM.CurrentUser.ID)) != null)
+            var currentMedicalPerson = MedicalPersonnels.SingleOrDefault(e => e.ID.Equals(VM.CurrentUser.ID));
+            if (currentMedicalPerson != null)
             {
-                SelectedPharmacist = MedicalPersonnels.SingleOrDefault(e => e.ID.Equals(VM.CurrentUser.ID));
+                SelectedPharmacist = currentMedicalPerson;
                 PrescriptionCount = UpdatePrescriptionCount();
             }
         }
@@ -444,7 +522,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction, SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
+            IsClosed = new RelayCommand(IsClosedAction);
             ResetBuckleAmount = new RelayCommand(ResetBuckleAmountAction);
+            ClearBuckleAmount = new RelayCommand(ClearBuckleAmountAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             CheckDeclareStatusCmd = new RelayCommand(CheckDeclareStatus);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
@@ -933,9 +1013,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        private void IsClosedAction()
+        {
+            switch (CurrentPrescription.SelectedMedicine.IsClosed)
+            {
+                case true:
+                    CurrentPrescription.SelectedMedicine.IsClosed = false;
+                    CurrentPrescription.SelectedMedicine.AdjustNoBuckle = false;
+                    break;
+
+                case false:
+                    CurrentPrescription.SelectedMedicine.IsClosed = true;
+                    if (CurrentPrescription.SelectedMedicine.BuckleAmount == 0)
+                        CurrentPrescription.SelectedMedicine.AdjustNoBuckle = true;
+                    break;
+            }
+        }
         private void ResetBuckleAmountAction()
         {
             CurrentPrescription.SelectedMedicine?.ResetBuckleAmount();
+        }
+        private void ClearBuckleAmountAction()
+        {
+            CurrentPrescription.SelectedMedicine?.ClearBuckleAmount();
         }
 
         private void CountMedicinePointAction()
@@ -1078,7 +1178,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
             isAdjusting = true;
 
-            if (!CheckMedicinesNegativeStock()) 
+            if (!CheckPrescriptionBeforeOrder(false, false))
+                return;
+
+            if (!CheckMedicinesNegativeStock())
                 return;
 
             CheckChronicCopayment();
@@ -1245,10 +1348,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 isCardReading = false;
                 if (CheckReadCardResult())
                     WriteCard();
-                else
-                {
-                    IsBusy = false;
-                }
+
+                IsBusy = false;
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -1326,20 +1427,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (!CheckIsGetMedicalNumber()) return;
             if (!CheckPatientMatch()) return;
-            worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = Resources.寫卡;
-                currentService.SetCard(currentCard);
-                currentService.CreateDailyUploadData(ErrorCode);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                StartNormalAdjust();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+
+            BusyContent = Resources.寫卡;
+            currentService.SetCard(currentCard);
+            currentService.CreateDailyUploadData(ErrorCode);
+            StartNormalAdjust();
+
         }
 
         private bool CheckPatientMatch()
@@ -1603,6 +1696,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             return checkPrescription;
         }
 
+        private bool CheckPrescriptionBeforeOrder(bool noCard, bool errorAdjust)
+        {
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            var setPharmacist = currentService.SetPharmacist(SelectedPharmacist, PrescriptionCount);
+            if (!setPharmacist)
+            {
+                isAdjusting = false;
+                return false;
+            }
+            MainWindow.ServerConnection.OpenConnection();
+            var checkPrescriptionBeforeOrder = currentService.CheckPrescriptionBeforeOrder(noCard, errorAdjust);
+            MainWindow.ServerConnection.CloseConnection();
+            if (!checkPrescriptionBeforeOrder)
+                isAdjusting = false;
+            return checkPrescriptionBeforeOrder;
+        }
         private bool CheckRegisterPrescription(bool noCard, bool errorAdjust)
         {
             currentService = PrescriptionService.CreateService(CurrentPrescription);

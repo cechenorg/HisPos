@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
         {
             ID = r.Field<string>("StoTakMas_ID");
             WareHouse = ChromeTabViewModel.ViewModelMainWindow.GetWareHouse(r.Field<int>("StoTakMas_WarehouseID").ToString());
-            Employee = Employee.GetDataByID(r.Field<int>("Emp_ID"));
+            Employee = EmployeeService.GetDataByID(r.Field<int>("Emp_ID"));
             Time = r.Field<DateTime>("StoTakMas_Time");
             TotalValueDiff = r.Field<double>("TotalValueDiff");
             StockTakingProductCollection = new StockTakingProducts();
@@ -55,6 +55,10 @@ namespace His_Pos.NewClass.StockTaking.StockTaking
         public void InsertStockChange(string typeName, string Number)
         {
             StockTakingDB.InsertStockChange(this, typeName, Number);
+        }
+        public void InsertTransfer(int type, int manID, string proID, string batchNum, decimal qty, decimal price, int warID)
+        {
+            StockTakingDB.InsertTransfer(type, manID, proID, batchNum, qty, price, warID);
         }
 
         public void SingleStockChange(string id, double inventory, double newInventory, double takingPrice, WareHouse.WareHouse wareHouse, string Number)

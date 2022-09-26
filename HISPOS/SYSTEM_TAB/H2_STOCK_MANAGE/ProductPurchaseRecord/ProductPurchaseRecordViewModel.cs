@@ -119,6 +119,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 value?.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
+                if(value is PurchaseOrder)
+                {
+                    CurrentStoreOrder.TotalPrice = Convert.ToInt32(((PurchaseOrder)value).OrderProducts.Sum(T => T.SubTotal));
+                }
+                else if(value is ReturnOrder)
+                {
+                    CurrentStoreOrder.TotalPrice = Convert.ToInt32(((ReturnOrder)value).ReturnProducts.Sum(T => T.SubTotal));
+                }
             }
         }
 
@@ -132,8 +140,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
 
         public ProductPurchaseRecordViewModel()
         {
-            TabName = MainWindow.HisFeatures[3].Functions[3];
-            Icon = MainWindow.HisFeatures[3].Icon;
             RegisterCommands();
             RegisterMessengers();
         }
@@ -155,7 +161,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
                 double purchaseSum = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP && s.OrderType == OrderTypeEnum.PURCHASE).Sum(s => s.TotalPrice);
                 double returnSum = StoreOrderCollection.Where(s => s.OrderStatus != OrderStatusEnum.SCRAP && s.OrderType == OrderTypeEnum.RETURN).Sum(s => s.TotalPrice);
 
-                TotalPrice = Math.Round((purchaseSum - returnSum),0, MidpointRounding.AwayFromZero);
+                TotalPrice = Math.Round(purchaseSum - returnSum, 0, MidpointRounding.AwayFromZero);
             }
             else
             {
@@ -286,6 +292,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             if (notificationMessage.Target == this)
             {
+                TabName = "進退貨紀錄";
                 MainWindow.Instance.AddNewTab(TabName);
                 ClearSearchConditionAction();
                 SearchOrderID = notificationMessage.Content;

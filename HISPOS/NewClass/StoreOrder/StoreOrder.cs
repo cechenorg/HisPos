@@ -9,6 +9,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Globalization;
 using His_Pos.ChromeTabViewModel;
+using System.Collections.Generic;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -83,17 +84,30 @@ namespace His_Pos.NewClass.StoreOrder
         public DateTime CreateDateTime { get; set; }
         public DateTime? DoneDateTime { get; set; }
         public string Note { get; set; }
+        public string ModifyUser { get; set; }
+        public DateTime ModifyTime { get; set; }
+        public string VoidReason { get; set; }
         public string TargetPreOrderCustomer { get; set; }
         public DateTime Day { get; set; }
         public int IsOTC { get; set; }
+        public bool IsEnable { get; set; }
+        public string IsEnableVoid { get; set; }
         public bool IsScrap { get; set; }
         public bool IsCanDelete { get; set; }
+        public bool IsCancel { get; set; }
+        public string Visibility { get; set; }
+        public int IsWaitOrder = 0;
         public double TotalPrice
         {
             get { return totalPrice; }
             set { Set(() => TotalPrice, ref totalPrice, value); }
         }
-
+        private string prescriptionID;
+        public string PrescriptionID
+        {
+            get { return prescriptionID; }
+            set { Set(() => PrescriptionID, ref prescriptionID, value); }
+        }
         #endregion ----- Define Variables -----
 
         protected StoreOrder()
@@ -134,31 +148,70 @@ namespace His_Pos.NewClass.StoreOrder
                     OrderStatus = OrderStatusEnum.ERROR;
                     break;
             }
+
             ID = row.Field<string>("StoOrd_ID");
             ReceiveID = string.IsNullOrEmpty(row.Field<string>("StoOrd_ReceiveID")) ? row.Field<string>("StoOrd_ID") : row.Field<string>("StoOrd_ReceiveID");
             SourceID = row.Field<string>("StoOrd_SourceID");
             CheckCode = row.Field<string>("StoOrd_CheckCode");
-            if (OrderStatus == OrderStatusEnum.SCRAP)
-                IsScrap = false;
-            else
-                IsScrap = true;
-
-            int AuthorityValue = ViewModelMainWindow.CurrentUser.AuthorityValue;
-            if ((AuthorityValue == 1) || (string.IsNullOrEmpty(CheckCode)))
+            var auth = ViewModelMainWindow.CurrentUser.Authority;
+            //if ((auth == Authority.Admin) || (string.IsNullOrEmpty(CheckCode)))
                 IsCanDelete = true;
+            //else
+            //    IsCanDelete = false;
+            List<Authority> IsScrapAuthority = new List<Authority>() {Authority.Admin, Authority.AccountingStaff};
+            if (OrderStatus != OrderStatusEnum.SCRAP && IsScrapAuthority.Contains(auth))
+                IsScrap = true;
             else
-                IsCanDelete = false;
+                IsScrap = false;
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("OrderEmp_Name");
             ReceiveEmployeeName = row.Field<string>("RecEmp_Name");
             Note = row.Field<string>("StoOrd_Note");
-            TotalPrice = (double)Math.Round(row.Field<decimal>("Total"),0);
+            TotalPrice = (double)Math.Round(row.Field<decimal>("Total"), 0, MidpointRounding.AwayFromZero);
             CreateDateTime = row.Field<DateTime>("StoOrd_CreateTime");
             DoneDateTime = row.Field<DateTime?>("StoOrd_ReceiveTime");
-
             initProductCount = row.Field<int>("ProductCount");
             OrderTypeIsOTC = row.Field<string>("StoOrd_IsOTCType");
             OrderIsPayCash = row.Field<bool>("StoOrd_IsPayCash") ? "下貨付現" : "一般收貨";
+            if(row.Table.Columns.Contains("StoOrd_ModifyUser"))
+            {
+                if(!DBNull.Value.Equals(row["StoOrd_ModifyUser"]))
+                    ModifyUser = row.Field<string>("StoOrd_ModifyUser");
+            }
+            if (row.Table.Columns.Contains("StoOrd_ModifyTime"))
+            {
+                if (!DBNull.Value.Equals(row["StoOrd_ModifyTime"]))
+                    ModifyTime = Convert.ToDateTime(row.Field<DateTime>("StoOrd_ModifyTime"));
+            }
+            if (row.Table.Columns.Contains("StoOrd_VoidReason"))
+            {
+                if(!DBNull.Value.Equals(row["StoOrd_VoidReason"]))
+                    VoidReason = row.Field<string>("StoOrd_VoidReason");
+            }
+            
+            if (row.Table.Columns.Contains("StoOrd_IsEnable"))
+            {
+                IsEnable = row.Field<bool>("StoOrd_IsEnable");
+                if (!IsEnable)
+                {
+                    OrderStatus = OrderStatusEnum.SCRAP;
+                    IsCanDelete = false;
+                    Visibility = "Hidden";
+                }
+                else
+                {
+                    IsEnableVoid = "Hidden";
+                }
+                if (ID.Substring(0, 1) == "R" && (OrderStatus== OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING))
+                {
+                    IsCanDelete = true;
+                    Visibility = "Visibility";
+                }
+            }
+            if (row.Table.Columns.Contains("StoOrd_PrescriptionID"))
+            {
+                PrescriptionID = Convert.ToString(row["StoOrd_PrescriptionID"]);
+            }
         }
 
         #region ----- Define Functions -----
@@ -193,39 +246,69 @@ namespace His_Pos.NewClass.StoreOrder
 
         #region ///// Status Function /////
 
+        /// <summary>
+        /// 傳送採購 & 確認收貨
+        /// </summary>
         public void MoveToNextStatus()
         {
+            if(OrderStatus == OrderStatusEnum.SINGDE_UNPROCESSING)
+            {
+                if(this is ReturnOrder)
+                {
+                    ReturnOrder returnOrder = (ReturnOrder)this;
+                    List<ReturnProduct> removeProducts = new List<ReturnProduct>();
+                    List<ReturnOTC> removeOTCProducts = new List<ReturnOTC>();
+                    foreach (var returnProduct in returnOrder.ReturnProducts)
+                    {
+                        if (returnProduct is ReturnOTC)
+                        {
+                            ReturnOTC productOTC = (ReturnOTC)returnProduct;
+                            if (!returnProduct.IsChecked)
+                            {
+                                removeOTCProducts.Add(productOTC);
+                            }
+                        }
+                        if (returnProduct is ReturnProduct)
+                        {
+                            ReturnProduct product = (ReturnProduct)returnProduct;
+                            if (!returnProduct.IsChecked)
+                            {
+                                removeProducts.Add(product);
+                            }
+                        }
+                    }
+                    foreach (ReturnProduct returnProduct in removeProducts)
+                    {
+                        ((ReturnOrder)this).ReturnProducts.Remove(returnProduct);
+                    }
+                    foreach (ReturnOTC returnProduct in removeOTCProducts)
+                    {
+                        ((ReturnOrder)this).ReturnProducts.Remove(returnProduct);
+                    }
+                }
+            }
             SaveOrder();
-
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
-                    SaveOrderCus();
                     ToNormalProcessingStatus();
                     break;
-
                 case OrderStatusEnum.SINGDE_UNPROCESSING:
-                    ToWaitingStatus();
+                    ToWaitingStatus();//傳送訂單至杏德
                     ToNormalProcessingStatus();
-                    // 直接結案
-                    if (OrderType == OrderTypeEnum.RETURN)
-                    {
-                        //SaveOrder();
-                        ToDoneStatus();
-                    }
                     break;
-
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
-                    ToDoneStatus();
+                    ToDoneStatus(1);
                     break;
-
                 default:
                     MessageWindow.ShowMessage("轉單錯誤!", MessageType.ERROR);
                     break;
             }
         }
-
+        /// <summary>
+        /// 手動入庫,不傳送杏德
+        /// </summary>
         public void MoveToNextStatusNoSingde()
         {
             SaveOrder();
@@ -233,7 +316,6 @@ namespace His_Pos.NewClass.StoreOrder
             switch (OrderStatus)
             {
                 case OrderStatusEnum.NORMAL_UNPROCESSING:
-                    SaveOrderCus();
                     ToNormalProcessingStatus();
                     break;
 
@@ -243,7 +325,7 @@ namespace His_Pos.NewClass.StoreOrder
 
                 case OrderStatusEnum.NORMAL_PROCESSING:
                 case OrderStatusEnum.SINGDE_PROCESSING:
-                    ToDoneStatus();
+                    ToDoneStatus(0);
                     break;
 
                 default:
@@ -281,6 +363,8 @@ namespace His_Pos.NewClass.StoreOrder
         {
             if (OrderType == OrderTypeEnum.RETURN && !OrderManufactory.ID.Equals("0"))
             {
+                if(OrderType == OrderTypeEnum.PURCHASE)
+                { }
                 DataTable dataTable = StoreOrderDB.ReturnOrderToProccessing(this as ReturnOrder);
                 if (dataTable.Rows.Count == 0 || dataTable.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                 {
@@ -306,10 +390,10 @@ namespace His_Pos.NewClass.StoreOrder
             StoreOrderDB.StoreOrderToNormalProcessing(ID);
         }
 
-        private void ToSingdeProcessingStatus()
-        {
-            OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
-        }
+        //private void ToSingdeProcessingStatus()
+        //{
+        //    OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
+        //}
 
         private void ToScrapStatus()
         {
@@ -317,19 +401,28 @@ namespace His_Pos.NewClass.StoreOrder
             StoreOrderDB.StoreOrderToScrap(ID);
         }
         public bool IsDoneOrder { get; set; }
-        private void ToDoneStatus()
+        public string LowOrderID { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type">0:手動入庫 1:一般入庫</param>
+        /// <returns></returns>
+        private bool ToDoneStatus(int type)
         {
             DataTable result = new DataTable();
 
             switch (OrderType)
             {
+                case OrderTypeEnum.WAITPREPARE:
+                case OrderTypeEnum.PREPARE:
                 case OrderTypeEnum.PURCHASE:
-                    string pay = IsPayCash ? "下貨付現" : "一般收貨";
-                    ConfirmWindow confirmWindow = new ConfirmWindow("訂單金額: " + TotalPrice + "\n選擇: " + pay + "\n是否確認收貨?", "關閉新增盤點確認");
+                    string pay = IsPayCash ? "下貨付現" : "";
+                    ConfirmWindow confirmWindow = new ConfirmWindow("訂單金額: " + TotalPrice + "\n" + pay + "\n是否確認收貨?", "確認收貨");
                     if (!(bool)confirmWindow.DialogResult)
                     {
                         IsDoneOrder = false;
-                        return;
+                        IsCancel = true;
+                        return false;
                     }
                     else
                     {
@@ -338,13 +431,24 @@ namespace His_Pos.NewClass.StoreOrder
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
                         IsDoneOrder = false;
-                        MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        MessageWindow.ShowMessage(((OrderType == OrderTypeEnum.PURCHASE || OrderType == OrderTypeEnum.PREPARE || OrderType == OrderTypeEnum.WAITPREPARE) ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        return false;
                     }
                     else
                     {
+                        if (type == 1)
+                            CheckStoreOrderLower();
+
+                        string id = LowOrderID;
                         IsDoneOrder = true;
                         OrderStatus = OrderStatusEnum.DONE;
-                        MessageWindow.ShowMessage("收貨成功!", MessageType.SUCCESS);
+                        string msg = string.Empty;
+                        if (!string.IsNullOrEmpty(id))
+                            msg = string.Format("收貨成功! \n 不足訂購單之品項已轉新進貨單({0})", id);
+                        else
+                            msg = "收貨成功!";
+                        MessageWindow.ShowMessage(msg, MessageType.SUCCESS);
+                        return true;
                     }
                     break;
 
@@ -353,14 +457,17 @@ namespace His_Pos.NewClass.StoreOrder
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
                     {
                         IsDoneOrder = false;
-                        MessageWindow.ShowMessage((OrderType == OrderTypeEnum.PURCHASE ? "進" : "退") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        MessageWindow.ShowMessage((OrderType == OrderTypeEnum.RETURN ? "退" : "進") + "貨錯誤，判斷為異常操作", MessageType.ERROR);
+                        return false;
                     }
                     else
                     {
                         IsDoneOrder = true;
+                        return true;
                     }
                     break;
             }
+            return false;
         }
 
         #endregion ///// Status Function /////
@@ -389,6 +496,7 @@ namespace His_Pos.NewClass.StoreOrder
         protected abstract bool CheckUnProcessingOrder();
 
         protected abstract bool CheckNormalProcessingOrder();
+        protected abstract bool CheckStoreOrderLower();
 
         protected abstract bool CheckSingdeProcessingOrder();
 
@@ -405,12 +513,31 @@ namespace His_Pos.NewClass.StoreOrder
             }
             else
             {
-                DataTable dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
+                DataTable dataTable;
+                ReturnOrder order = new ReturnOrder();
+                if (this is ReturnOrder)
+                {
+                    order = new ReturnOrder();
+                    order = (ReturnOrder)this;
+                    ReturnProducts products = new ReturnProducts();
+                    foreach (ReturnProduct product in ((ReturnOrder)this).ReturnProducts)
+                    {
+                        if(product.IsChecked)
+                        {
+                            products.Add(product);
+                        }
+                    }
+                    order.ReturnProducts = products;
+                    dataTable = StoreOrderDB.SendStoreOrderToSingde(order);
+                    return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
+                }
+
+                dataTable = StoreOrderDB.SendStoreOrderToSingde(this);
                 return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
             }
         }
 
-        public void UpdateOrderDataFromSingde(DataRow dataRow)
+        public bool UpdateOrderDataFromSingde(DataRow dataRow)
         {
             string orderID = dataRow.Field<string>("ORDER_ID");
             long orderFlag = dataRow.Field<long>("FLAG");
@@ -428,17 +555,19 @@ namespace His_Pos.NewClass.StoreOrder
                 ToScrapStatus();
             }
             else*/
-            if (isShipment)
+            bool isSuccess = false;
+            if (orderFlag != 2)
             {
                 SourceID = orderID;
                 ReceiveID = prescriptionReceiveID;
                 CheckCode = checkCode;
 
-                bool isSuccess = UpdateOrderProductsFromSingde();
+                isSuccess = UpdateOrderProductsFromSingde();
 
                 if (isSuccess)
-                    ToSingdeProcessingStatus();
+                    OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
             }
+            return isSuccess;
         }
 
         private bool UpdateOrderProductsFromSingde()
@@ -457,9 +586,9 @@ namespace His_Pos.NewClass.StoreOrder
         {
             DataTable dataTable;
             bool isCanModify = false;
-            string VoidReason = string.Empty;
+            string VoidReason = null;
             if (OrderStatus == OrderStatusEnum.WAITING || OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING)
-            { 
+            {
                 if (OrderManufactory.ID.Equals("0") && Note != "手動入庫")
                 {
                     //杏德訂單需先檢查是否杏德資料是否可以刪除                
@@ -471,7 +600,7 @@ namespace His_Pos.NewClass.StoreOrder
                     {
                         string dateTime = DateTime.Now.ToString("yyyyMMdd");
                         dateTime = CreateDateTime.ToString("yyyy/MM/dd");
-                        if (SourceID != null)
+                        if (SourceID != null && SourceID != "")
                         {
                             dateTime = CreateDateTime.AddMonths(-1).ToString("yyyy/MM/dd");
                             dataTable = StoreOrderDB.GetSingdeOrderCanModify(dateTime, SourceID);
@@ -487,19 +616,25 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     if (isCanModify == false)
                     {
-                        int AuthorityValue = ViewModelMainWindow.CurrentUser.AuthorityValue;
-                        if (AuthorityValue == 1)
-                        {
-                            ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
-                            if (!(bool)confirmWindow.DialogResult)
-                                return false;
-                        }
-                        else
-                        {
-                            MessageWindow.ShowMessage("訂單已備貨，不可刪除！", MessageType.ERROR);
+                        //var auth = ViewModelMainWindow.CurrentUser.Authority;
+                        //if (auth == Authority.Admin)
+                        //{
+                        ConfirmWindow confirmWindow = new ConfirmWindow("訂單已備貨，如需刪除需再通知杏德，是否確認刪除?", "確認");
+                        if (!(bool)confirmWindow.DialogResult)
                             return false;
-                        }
+                        //}
+                        //else
+                        //{
+                        //    MessageWindow.ShowMessage("訂單已備貨，不可刪除！", MessageType.ERROR);
+                        //    return false;
+                        //}
                     }
+                }
+                if (!string.IsNullOrEmpty(PrescriptionID))
+                {
+                    ConfirmWindow confirmWindow = new ConfirmWindow("此訂單有綁定處方，是否確定刪除?", "確認");
+                    if (!(bool)confirmWindow.DialogResult)
+                        return false;
                 }
                 //作廢原因                
                 ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow();
@@ -531,10 +666,64 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                 }
             }
-            dataTable = StoreOrderDB.RemoveStoreOrderByID(ID, VoidReason);          
+            dataTable = StoreOrderDB.RemoveStoreOrderByID(ID, VoidReason);
             return dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS");
         }
 
+        public bool DeleteReturnOrder(bool isUpdSingdeData)
+        {
+            if(!string.IsNullOrEmpty(PrescriptionID))
+            {
+                ConfirmWindow confirmWindow = new ConfirmWindow("此訂單有綁定處方，是否確定刪除?", "確認");
+                if (!(bool)confirmWindow.DialogResult)
+                    return false;
+            }
+            ScrapOrderWindow ScrapOrderWindow = new ScrapOrderWindow(1);
+            ScrapOrderWindowViewModel ScrapOrder = (ScrapOrderWindowViewModel)ScrapOrderWindow.DataContext;
+            if (!(bool)ScrapOrderWindow.DialogResult)
+                return false;
+
+            VoidReason = ScrapOrder.Content + ScrapOrder.Other;
+            DateTime dt;
+            string update = DateTime.Now.ToString("yyyy/MM/dd");
+            string uptime = DateTime.Now.ToString("HHmmss");
+            dt = DateTime.Parse(update);
+            CultureInfo culture = new CultureInfo("zh-TW");
+            culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+            update = dt.ToString("yyyMMdd", culture);
+            DataTable dataTable = StoreOrderDB.UpdateOrderToScrap(ID, update, uptime, VoidReason);//更新杏德訂單資料
+            if (dataTable != null && dataTable.Rows.Count > 0)
+            {
+                bool isSucces = Convert.ToBoolean(dataTable.Rows[0]["Result"]);//FALSE未更新 TRUE已更新
+                if (!isSucces)
+                {
+                    MessageWindow.ShowMessage("杏德訂單更新失敗，取消作廢", MessageType.ERROR);
+                    return false;
+                }
+                else
+                {
+                    //DataTable table = StoreOrderDB.RemoveStoreOrderByID(ID, VoidReason);
+                    MainWindow.ServerConnection.OpenConnection();
+                    DataTable table = StoreOrderDB.DeleteDoneOrder(ID, VoidReason);
+                    MainWindow.ServerConnection.CloseConnection();
+                }
+            }
+            return true;
+        }
+
+        public bool ReductOrder()
+        {
+            bool isSuccess = false;
+            if (!IsEnable)
+            {
+                DataTable table = StoreOrderDB.UpdateStoreOrderToOriginal(ID);
+                if(table != null && table.Rows.Count > 0)
+                {
+                    isSuccess = Convert.ToBoolean(table.Rows[0]["RESULT"]);
+                }
+            }
+            return isSuccess;
+        }
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID, int wareHouseID, string type)
         {
             DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID, wareHouseID, type);

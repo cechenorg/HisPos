@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:command="http://www.galasoft.ch/mvvmlight"
-    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
@@ -112,6 +111,27 @@
                 FontSize="16"
                 Foreground="IndianRed" />
         </DataTemplate>
+        <ControlTemplate x:Key="ScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition />
+                    <RowDefinition Height="0" />
+                </Grid.RowDefinitions>
+                <Border  Grid.RowSpan="3" Background="LightGray" CornerRadius="8" />
+                <Track  Name="PART_Track"  Grid.Row="1" IsDirectionReversed="true">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollBarPageButton}" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Width="8" Margin="1,0" Style="{StaticResource ScrollBarThumb}" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollBarPageButton}" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
         <newclass:BindingProxy x:Key="proxy" Data="{Binding}" />
     </UserControl.Resources>
     <xctk:BusyIndicator BusyContent="{Binding BusyContent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsBusy="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
@@ -142,6 +162,7 @@
                     KeyDown="StartDate_OnKeyDown"
                     Mask="000/00/00"
                     PromptChar="-"
+                    MouseDoubleClick="StartDate_MouseDoubleClick"
                     Style="{StaticResource MaterialDesignTextBox}"
                     ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
@@ -174,6 +195,7 @@
                     Mask="000/00/00"
                     PromptChar="-"
                     Style="{StaticResource MaterialDesignTextBox}"
+                    MouseDoubleClick="EndDate_MouseDoubleClick"
                     ValueDataType="xctk:DateTimeFormat">
                     <xctk:MaskedTextBox.Text>
                         <Binding
@@ -319,7 +341,26 @@
                         HorizontalScrollBarVisibility="Hidden"
                         ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        VerticalScrollBarVisibility="Hidden">
+                        VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="OverridesDefaultStyle" Value="True" />
+                                <Setter Property="Width" Value="50" />
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="10" />
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{DynamicResource ScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="260">
                                 <DataGridTemplateColumn.CellStyle>
@@ -356,7 +397,7 @@
                                             <StackPanel Grid.Row="0" Orientation="Horizontal">
                                                 <Label
                                                     Width="180"
-                                                    Content="{Binding ReceiveID}"
+                                                    Content="{Binding ID}"
                                                     FontFamily="Segoe UI Semibold"
                                                     FontSize="23"
                                                     Foreground="Black" />

@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="刪除進退貨單"
-    Width="300"
+    Width="350"
     Height="230"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"

@@ -1,12 +1,14 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Person.Employee.WorkPosition;
+using His_Pos.NewClass.Person.Employee; 
 using His_Pos.NewClass.Pharmacy;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using His_Pos.Extention;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
@@ -18,7 +20,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         }
 
         #region -----Define Command-----
-         
+
         public RelayCommand CancelCommand { get; set; }
         public RelayCommand SubmitCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
@@ -41,9 +43,53 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             set
             {
                 Set(() => SelectedEmployee, ref _selectedEmployee, value);
+                RaisePropertyChanged(nameof(DisplayEmployeeCellPhone));
+                RaisePropertyChanged(nameof(DisplayEmployeeTel));
+                if (ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
+                {
+                    SelectedEmployee.GroupPharmacyEmployeeList.Clear();
+                    var source = EmployeeService.GetGroupPharmacy(SelectedEmployee,
+                        ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList());
+                    foreach (var item in source)
+                    {
+                        SelectedEmployee.GroupPharmacyEmployeeList.Add(item);
+                    } 
+                }
+                    
+            }
+        }
 
-                if(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList != null && SelectedEmployee != null)
-                    SelectedEmployee.InitGroupPharmacyWorkPositionList(ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList.ToList(),WorkPositions);
+        public string DisplayEmployeeTel
+        {
+            get
+            {
+                if (_selectedEmployee is null)
+                    return string.Empty;
+
+
+                var tel = _selectedEmployee.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                _selectedEmployee.Tel = tel;
+            }
+        }
+
+        public string DisplayEmployeeCellPhone
+        {
+            get
+            {
+                if (_selectedEmployee is null)
+                    return string.Empty;
+                var cellphone = _selectedEmployee.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                _selectedEmployee.CellPhone = cellphone;
             }
         }
 
@@ -68,18 +114,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 Set(() => FilterEmployeeCollection, ref _filterEmployeeCollection, value);
             }
         }
-
-        public WorkPositions workPositions = new WorkPositions();
-
-        public WorkPositions WorkPositions
-        {
-            get { return workPositions; }
-            set
-            {
-                Set(() => WorkPositions, ref workPositions, value);
-            }
-        }
-
+         
         private bool localCheck;
 
         public bool LocalCheck
@@ -119,16 +154,34 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             }
         }
 
-        private bool _isGroupPharmacy = 
-            string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
-             ViewModelMainWindow.CurrentUser.AuthorityValue <= 2;//Admin or 店長
+        private bool _isVisibleGlobalEmployee = string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
+                                 (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin ||
+                                  ViewModelMainWindow.CurrentUser.Authority == Authority.PharmacyManager ||
+                                  ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff ||
+                                  ViewModelMainWindow.CurrentUser.Authority == Authority.StoreManager ||
+                                  ViewModelMainWindow.CurrentUser.Authority == Authority.MasterPharmacist);
 
-        public bool IsGroupPharmacy
+        public bool IsVisibleGlobalEmployee
         {
-            get { return _isGroupPharmacy; }
+            get { return _isVisibleGlobalEmployee; }
             set
             {
-                Set(() => IsGroupPharmacy, ref _isGroupPharmacy, value);
+                Set(() => IsVisibleGlobalEmployee, ref _isVisibleGlobalEmployee, value); 
+            }
+        }
+
+        private bool _isEnableEditAuthority =
+            string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false &&
+            (ViewModelMainWindow.CurrentUser.Authority == Authority.Admin || 
+             ViewModelMainWindow.CurrentUser.Authority == Authority.PharmacyManager ||
+             ViewModelMainWindow.CurrentUser.Authority == Authority.AccountingStaff);
+
+        public bool IsEnableEditAuthority
+        {
+            get { return _isEnableEditAuthority; }
+            set
+            {
+                Set(() => IsEnableEditAuthority, ref _isEnableEditAuthority, value);
 
                 FilterEmployee();
             }
@@ -151,20 +204,26 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         #region Action
 
         private void UpdateGroupPharmacyAuthorityAction()
-        {
-            SelectedEmployee.Update();
+        { 
+            EmployeeService.Update(SelectedEmployee);
             MessageWindow.ShowMessage("權限修改成功!",Class.MessageType.SUCCESS);
+            var tempID = SelectedEmployee.ID;
+            ReloadData();
+            SelectedEmployee = EmployeeCollection.SingleOrDefault(_ => _.ID == tempID);
         }
 
         private void CancelAction()
         {
-            SelectedEmployee = SelectedEmployee.GetDataByID(SelectedEmployee.ID);
+            SelectedEmployee = EmployeeService.GetDataByID(SelectedEmployee.ID);
         }
 
         private void SubmitAction()
         {
-            SelectedEmployee.Update();
+            EmployeeService.Update(SelectedEmployee); 
             MessageWindow.ShowMessage("修改成功", Class.MessageType.SUCCESS);
+            var tempID = SelectedEmployee.ID;
+            ReloadData();
+            SelectedEmployee = EmployeeCollection.SingleOrDefault(_ => _.ID == tempID);
         }
 
         private void DeleteAction()
@@ -172,7 +231,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除員工? 刪除後無法恢復 請慎重確認", "員工刪除");
             if ((bool)confirmWindow.DialogResult)
             {
-                SelectedEmployee.Delete();
+                EmployeeService.Delete(SelectedEmployee); 
                 MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
                 Init();
             }
@@ -195,23 +254,25 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private void Init()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            WorkPositions = new WorkPositions();
-            EmployeeCollection = new Employees();
-            EmployeeCollection.Init();
-            MainWindow.ServerConnection.CloseConnection();
-            FilterEmployeeCollection = new Employees();
-
-            foreach (var employeedata in EmployeeCollection)
-            {
-                FilterEmployeeCollection.Add(employeedata);
-            } 
-             
+            ReloadData();
             LocalCheck = true;
             FilterEmployee();
             ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList = PharmacyDBService.GetPharmacyListByGroupServerName();
             SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
              
+        }
+
+        private void ReloadData()
+        {
+            EmployeeCollection = new Employees();
+            EmployeeCollection.Init();
+
+            FilterEmployeeCollection = new Employees();
+
+            foreach (var employeedata in EmployeeCollection)
+            {
+                FilterEmployeeCollection.Add(employeedata);
+            }
         }
 
         private void FilterEmployee()
@@ -230,21 +291,26 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 }
             }
 
-            if (LocalCheck)
-            {
-                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
-                {
-                    FilterEmployeeCollection.Remove(quitEmployee);
-                }
-            }
 
-            if (GlobalCheck)
+            if (_isVisibleGlobalEmployee)
             {
-                foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal))
+                if (LocalCheck)
                 {
-                    FilterEmployeeCollection.Remove(quitEmployee);
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal == false))
+                    {
+                        FilterEmployeeCollection.Remove(quitEmployee);
+                    }
+                }
+
+                if (GlobalCheck)
+                {
+                    foreach (var quitEmployee in EmployeeCollection.Where(_ => _.IsLocal))
+                    {
+                        FilterEmployeeCollection.Remove(quitEmployee);
+                    }
                 }
             }
+           
             SelectedEmployee = FilterEmployeeCollection.FirstOrDefault();
         }
 

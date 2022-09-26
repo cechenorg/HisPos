@@ -29,6 +29,26 @@ namespace His_Pos.NewClass.Prescription.Service
             return PrintConfirm();
         }
 
+        public override bool CheckPrescriptionBeforeOrder(bool noCard, bool errorAdjust)
+        {
+            if (!CheckAnonymousPatient()) return false;
+            if (!CheckValidCustomer()) return false;
+            if (!CheckAdjustAndTreatDate()) return false;
+            if (Current.IsPrescribe)
+            {
+                if (!CheckPrescribeRules()) return false;
+            }
+            else
+            {
+                if (!CheckNhiRules(noCard)) return false;
+                if (!noCard)
+                    if (!CheckMedicalNumber()) return false;
+            }
+            if (!CheckMedicines()) return false;
+            if (!CheckSameDeclare()) return false;
+            if (!CheckSendOrder()) return false;
+            return true;
+        }
         public void CheckPrescriptionFromAutoRegister()
         {
             CheckSendOrderFromAutoRegister();

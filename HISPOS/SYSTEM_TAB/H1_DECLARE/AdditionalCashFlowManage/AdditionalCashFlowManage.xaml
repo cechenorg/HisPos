@@ -16,9 +16,7 @@
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <local:AdditionalCashFlowManageViewModel />
-    </UserControl.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -73,7 +71,7 @@
                 Content="來源"
                 FontSize="20" />
             <ComboBox
-                Width="210"
+                Width="180"
                 Margin="10,0,0,0"
                 DisplayMemberPath="Name"
                 FontSize="16"
@@ -93,7 +91,7 @@
                 TextAlignment="Center" />
             <Button
                 Width="80"
-                Margin="10,0,0,0"
+                Margin="200,0,0,0"
                 Background="IndianRed"
                 BorderThickness="0"
                 Command="{Binding SubmitCommand}"
@@ -369,13 +367,13 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <!--<DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button x:Name="EditCashFlowRecordButton" Content="編輯" Background="RoyalBlue" BorderBrush="Transparent" Command="{Binding DataContext.EditCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>-->
+                            <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="EditCashFlowRecordButton" Content="編輯" Background="RoyalBlue" BorderBrush="Transparent" Command="{Binding DataContext.EditCashFlowRecord,RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" IsEnabled="{Binding CanEdit,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -387,7 +385,7 @@
                                         BorderBrush="Transparent"
                                         Command="{Binding DataContext.DeleteCashFlowRecord, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         Content="刪除"
-                                        IsEnabled="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding CanDelete, UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

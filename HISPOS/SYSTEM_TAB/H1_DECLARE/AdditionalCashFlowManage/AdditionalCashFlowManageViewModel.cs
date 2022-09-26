@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using DomainModel.Enum;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
@@ -115,7 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             }
         }
 
-        private bool payCheck;
+        private bool payCheck = true;
 
         public bool PayCheck
         {
@@ -131,7 +132,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             }
         }
 
-        private bool gainCheck = true;
+        private bool gainCheck;
 
         public bool GainCheck
         {
@@ -217,7 +218,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             CashFlowAccountsSource.Add(new CashFlowAccount(CashFlowType.Income, "額外收入", 0));
             InitCommand();
 
-            CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Income).ToList();
+            CashFlowAccounts = CashFlowAccountsSource.Where(acc => acc.Type == CashFlowType.Expenses).ToList();
             SelectedCashFlowAccount = CashFlowAccounts[0];
             SelectedBank = SelectedType[0];
             CashFlowRecords = new CashFlowRecords();
@@ -282,6 +283,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
             ConfirmWindow cw = new ConfirmWindow("是否進行輸入額外收支", "確認");
             if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
+            //如果是系統管理員或是會計人員
             CashFlowDb.InsertCashFlowRecordDetail(SelectedCashFlowAccount, CashFlowNote, CashFlowValue, SelectedBank.ID);
             MainWindow.ServerConnection.CloseConnection();
             CashFlowValue = 0;
@@ -323,7 +325,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
         private void EditCashFlowRecordAction()
         {
             var selectedId = SelectedCashFlowRecord.SelectedDetail.ID;
-            var editWindow = new CashFlowRecordEditWindow.CashFlowRecordEditWindow(SelectedCashFlowRecord.SelectedDetail);
+            var editWindow = new CashFlowRecordEditWindow.CashFlowRecordEditWindow(SelectedCashFlowRecord.SelectedDetail, CashFlowAccountsSource);
             editWindow.ShowDialog();
             var result = editWindow.EditResult;
             if (!result)

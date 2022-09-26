@@ -59,7 +59,12 @@ namespace His_Pos.NewClass.Product.PurchaseReturn
         internal void SetToProcessing()
         {
             foreach (var product in Items)
-                product.IsProcessing = true;
+            {
+                if(product.IsChecked)
+                {
+                    product.IsProcessing = true;
+                }
+            }
         }
 
         internal void SetStartEditToPrice()

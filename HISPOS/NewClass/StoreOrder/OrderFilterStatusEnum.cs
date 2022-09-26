@@ -8,6 +8,7 @@
         PROCESSING = 3,
         ALL = 4,
         OTC=5,
-        MED=6
+        MED=6,
+        SCRAP = 7
     }
 }

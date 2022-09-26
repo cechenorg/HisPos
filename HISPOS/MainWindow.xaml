@@ -47,7 +47,6 @@
     xmlns:stockTakingPlan="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingPlan"
     xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
     xmlns:systemtutorial="clr-namespace:His_Pos.SYSTEM_TAB.H9_SYSTEMTUTORIAL.Tutorial"
-    xmlns:todaycashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.TodayCashStockEntryReport"
         xmlns:newtodaycashStockEntryReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport"
     xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -125,9 +124,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type cashStockEntryReport:CashStockEntryReportViewModel}">
             <cashStockEntryReport:CashStockEntryReport />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type todaycashStockEntryReport:TodayCashStockEntryReportViewModel}">
-            <todaycashStockEntryReport:TodayCashStockEntryReport />
         </DataTemplate>
         <DataTemplate DataType="{x:Type newtodaycashStockEntryReport:NewTodayCashStockEntryReportViewModel}">
             <newtodaycashStockEntryReport:NewTodayCashStockEntryReport />

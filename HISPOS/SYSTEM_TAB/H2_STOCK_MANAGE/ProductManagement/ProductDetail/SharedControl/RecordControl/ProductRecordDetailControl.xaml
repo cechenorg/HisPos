@@ -5,7 +5,6 @@
     xmlns:behaviors="clr-namespace:His_Pos.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.SharedControl"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:medicineControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement.ProductDetail.MedicineControl"
     xmlns:service="clr-namespace:His_Pos.Service"
@@ -276,7 +275,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
-                    Width="90"
+                    Width="100"
                     Binding="{Binding Time, Converter={StaticResource DateConverter}}"
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
@@ -290,7 +289,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="130"
+                    Width="Auto"
                     Binding="{Binding Name}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -298,13 +297,13 @@
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Left" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="150"
+                    Width="Auto"
                     Binding="{Binding Note}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -318,7 +317,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="70"
+                    Width="60"
                     Binding="{Binding Amount, StringFormat=0.##}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"
@@ -332,7 +331,21 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="100"
+                    Width="Auto"
+                    Binding="{Binding Price, StringFormat=0.00}"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="20"
+                    Header="金額"
+                    IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Width="90"
                     Binding="{Binding Stock, StringFormat=0.##}"
                     FontFamily="Segoe UI Semibold"
                     FontSize="20"

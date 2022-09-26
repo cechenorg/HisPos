@@ -60,7 +60,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
             ConfirmWindow cw = new ConfirmWindow("是否進行沖帳?", "確認");
             if (!(bool)cw.DialogResult) { return; }
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.SelectedType.ID, BalanceSheetTypeEnum.MedPoint, Double.Parse(SelectedData.StrikeValue), SelectedData.Name);
+            DataTable dataTable = CashReportDb.StrikeBalanceSheet(SelectedData.SelectedType.ID, "MedPoint", Double.Parse(SelectedData.StrikeValue), SelectedData.Name);
             MainWindow.ServerConnection.CloseConnection();
 
             if (dataTable.Rows.Count > 0 && dataTable.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))

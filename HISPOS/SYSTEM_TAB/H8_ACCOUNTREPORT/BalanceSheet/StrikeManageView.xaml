@@ -137,6 +137,7 @@
                     FontSize="22" />
                 <DatePicker
                     x:Name="dpSDate"
+                    Language="zh-cn"
                     Margin="5,0,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
@@ -151,6 +152,7 @@
                     FontSize="22" />
                 <DatePicker
                     x:Name="dpEDate"
+                    Language="zh-cn"
                     Margin="5,0,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
@@ -289,7 +291,21 @@
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="0,0,0,0" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            x:Name="OrderID"
+                            Width="200"
+                            Binding="{Binding Path=OrderID}"
+                            Header="單號"
+                            IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
                                     <Setter Property="VerticalAlignment" Value="Center" />
                                     <Setter Property="Margin" Value="0,0,0,0" />
                                 </Style>
@@ -415,11 +431,20 @@
                     Content="0"
                     FontFamily="Segoe UI Semibold"
                     FontSize="24" />
+                <Label Name="lbStrikeDate" Margin="260,0,0,0" VerticalAlignment="Center" Content="沖帳日期:" FontSize="24" FontWeight="Black"/>
+                <DatePicker
+                    x:Name="dpStrikeDate"
+                    Language="zh-cn"
+                    Width="120"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="18"/>
                 <Button
                     x:Name="btnBatchStrike"
                     Width="140"
                     Height="40"
-                    Margin="510,0,0,0"
+                    Margin="20,0,0,0"
                     VerticalAlignment="Center"
                     Background="RoyalBlue"
                     BorderThickness="0"

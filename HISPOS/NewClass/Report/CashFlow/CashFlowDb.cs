@@ -36,7 +36,7 @@ namespace His_Pos.NewClass.Report.CashFlow
             MainWindow.ServerConnection.ExecuteProc("[Set].[InsertCashFlowRecordDetail]", parameterList);
         }
 
-        public static void UpdateCashFlowRecordDetail(CashFlowAccount account, CashFlowRecordDetail editedDetail)
+        public static void UpdateCashFlowRecordDetail(CashFlowAccount account, CashFlowRecordDetail editedDetail, DateTime date)
         {
             decimal cashFlowValue;
             if (account.Type == CashFlowType.Expenses && editedDetail.CashFlowValue > 0)
@@ -49,6 +49,7 @@ namespace His_Pos.NewClass.Report.CashFlow
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowValue", cashFlowValue);
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowNote", editedDetail.Note);
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowEmpId", ViewModelMainWindow.CurrentUser.ID);
+            DataBaseFunction.AddSqlParameter(parameterList, "CashFlow_Time", date);
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateCashFlowRecord]", parameterList);
         }
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -47,6 +48,9 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             }
         }
 
+        /// <summary>
+        /// 壓縮合作XML，今日的不壓縮
+        /// </summary>
         public void FilePurge()
         {
             foreach (var c in this)
@@ -60,12 +64,21 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                     if (!Directory.Exists($"{c.FilePath}\\TxtFile"))
                         Directory.CreateDirectory($"{c.FilePath}\\TxtFile");
 
-
                     List<string> fileList = new List<string>();
                     DirectoryInfo di = new DirectoryInfo(c.FilePath);
+                    TaiwanCalendar tc = new TaiwanCalendar();
+                    DateTime now = DateTime.Now;
+                    string date = string.Format("{0}{1}{2}", tc.GetYear(now), tc.GetMonth(now).ToString().PadLeft(2,'0'), tc.GetDayOfMonth(now).ToString().PadLeft(2, '0'));
                     foreach (FileInfo f in di.GetFiles("*.xml", SearchOption.AllDirectories))
                     {
-                        fileList.Add(f.FullName);
+                        string[] file = f.FullName.Split('_');
+                        if(file != null && file.Length > 2)
+                        {
+                            if(date != file[1])//如果不是今日的處方
+                            {
+                                fileList.Add(f.FullName);
+                            }
+                        }
                     }
                     Function.ZipFiles(fileList, $"{c.FilePath}\\PurgeFile\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip");
                     foreach (string fs in fileList)
@@ -77,15 +90,20 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                     DirectoryInfo ditxt = new DirectoryInfo(c.FilePath);
                     foreach (FileInfo f in ditxt.GetFiles("*.txt", SearchOption.AllDirectories))
                     {
-                        fileListTxt.Add(f.FullName);
+                        string[] file = f.FullName.Split('_');
+                        if (file != null && file.Length > 2)
+                        {
+                            if (date != file[1])//如果不是今日的處方
+                            {
+                                fileListTxt.Add(f.FullName);
+                            }
+                        }
                     }
                     Function.ZipFiles(fileListTxt, $"{c.FilePath}\\TxtFile\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip");
                     foreach (string fs in fileListTxt)
                     {
                         File.Delete(fs);
                     }
-
-
                 }
                 catch (Exception)
                 {

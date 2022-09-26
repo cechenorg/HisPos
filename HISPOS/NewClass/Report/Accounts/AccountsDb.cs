@@ -39,15 +39,15 @@ namespace His_Pos.NewClass.Report.Accounts
 
         public static void UpdateCashFlowRecordDetail(AccountsAccount account, AccountsRecordDetail editedDetail)
         {
-            decimal cashFlowValue;
-            if (account.Type == CashFlowType.Expenses && editedDetail.CashFlowValue > 0)
-                cashFlowValue = editedDetail.CashFlowValue * -1;
-            else
-                cashFlowValue = editedDetail.CashFlowValue;
+            //decimal cashFlowValue;
+            //if (account.Type == CashFlowType.Expenses && editedDetail.CashFlowValue > 0)
+            //    cashFlowValue = editedDetail.CashFlowValue * -1;
+            //else
+            //    cashFlowValue = editedDetail.CashFlowValue;
             var parameterList = new List<SqlParameter>();
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowId", editedDetail.ID);
-            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowName", account.AccountName);
-            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowValue", cashFlowValue);
+            DataBaseFunction.AddSqlParameter(parameterList, "SubjectID", account.ID.Trim());
+            DataBaseFunction.AddSqlParameter(parameterList, "CashFlowValue", editedDetail.CashFlowValue);
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowNote", editedDetail.Note);
             DataBaseFunction.AddSqlParameter(parameterList, "CashFlowEmpId", ViewModelMainWindow.CurrentUser.ID);
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateAccountsRecord]", parameterList);

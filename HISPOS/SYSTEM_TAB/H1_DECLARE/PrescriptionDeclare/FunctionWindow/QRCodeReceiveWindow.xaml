@@ -7,18 +7,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="掃描處方條碼"
     Width="250"
-    Height="140"
+    Height="150"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Grid PreviewKeyDown="Grid_PreviewKeyDown">
         <Label
             x:Name="lblInfo"
-            Margin="0,5,0,0"
-            HorizontalAlignment="Center"
+            Margin="25,0,0,0"
+            HorizontalAlignment="Left"
             Content="等待掃描處方條碼中..."
             FontFamily="Segoe UI Semibold"
             FontSize="18" />
         <TextBox
+            Grid.Row="0"
             Name="QRCodeReceiver"
             Width="0"
             Height="0"
@@ -26,6 +27,13 @@
             InputScope="AlphanumericHalfWidth"
             PreviewKeyDown="QRCodeReceiver_OnPreviewKeyDown"
             Visibility="Visible" />
+        <Label
+            x:Name="ScanCount"
+            Margin="0,30,0,0"
+            HorizontalAlignment="Center"
+            Content="目前已掃描 0 個條碼"
+            FontFamily="Segoe UI Semibold"
+            FontSize="16" />
         <Button
             x:Name="btnFinish"
             Width="80"
@@ -40,6 +48,7 @@
             FontSize="16"
             IsEnabled="False" />
         <Button
+            Grid.Row="2"
             x:Name="btnCancel"
             Width="80"
             Height="35"

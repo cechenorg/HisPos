@@ -15,6 +15,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public double Stock { get; set; }
         public string Note { get; }
 
+        public decimal Price { get; }
         #endregion ----- Define Variables -----
 
         public ProductInventoryRecord(DataRow row)
@@ -58,6 +59,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             Amount = row.Field<double>("STOCK_DIFF");
             Stock = row.Field<double>("STOCK");
             Note = row.Field<string>("InvRec_Type");
+            Price = row.Field<decimal>("STOCK_Price");
         }
     }
 }

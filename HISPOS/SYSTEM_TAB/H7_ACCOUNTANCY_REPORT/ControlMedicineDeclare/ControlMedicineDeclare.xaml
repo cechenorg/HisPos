@@ -397,7 +397,7 @@
                             Width="100"
                             Binding="{Binding Date, Converter={StaticResource NullableDateConverter}}"
                             FontFamily="Segoe UI Semi"
-                            Header="處方調劑日"
+                            Header="日期"
                             IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">

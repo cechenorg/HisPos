@@ -8,21 +8,31 @@ namespace His_Pos.NewClass.Product
 {
     public class ProductDB
     {
-        internal static DataTable GetProductStructsBySearchString(string searchString, string wareID)
+        internal static DataTable GetProductStructsBySearchString(string searchString, string wareID,int noOTC)
         {
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
             parameters.Add(new SqlParameter("WAREID", wareID));
-
+            parameters.Add(new SqlParameter("noOTC", noOTC));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductStructBySearchString]", parameters);
         }
 
-        internal static DataTable GetPurchaseProductStructCountBySearchString(string searchString)
+        internal static DataTable GetPurchaseProductStructCountBySearchString(string searchString,string wareID)
         {
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
-
+            parameters.Add(new SqlParameter("WAREID", wareID));
             return MainWindow.ServerConnection.ExecuteProc("[Get].[PurchaseProductStructCountBySearchString]", parameters);
+        }
+
+        internal static DataTable GetProductStructCountBySearchString(string searchString, string wareID, int type, int noOTC)
+        {
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SEARCH_STRING", searchString));
+            parameters.Add(new SqlParameter("WAREID", wareID));
+            parameters.Add(new SqlParameter("TYPE", type));
+            parameters.Add(new SqlParameter("noOTC", noOTC));
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[ProductStructCountBySearchString]", parameters);
         }
 
         internal static DataTable GetProductUsageRecordByIDForExport(string proID, DateTime startDate, DateTime endDate, string wareID)

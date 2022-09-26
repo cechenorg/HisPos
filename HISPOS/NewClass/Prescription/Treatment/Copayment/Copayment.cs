@@ -8,7 +8,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Copayment
     [ZeroFormattable]
     public class Copayment : ObservableObject
     {
-        private readonly string[] freeIDList = { "006", "001", "002", "003", "004", "005", "007", "008", "009", "I22" };
+        private readonly string[] freeIDList = { "006", "001", "002", "003", "004", "005", "007", "008", "009", "914", "I22" };
         private readonly string[] idList = { "003", "004", "007", "009", "I22", "001", "002", "005", "006", "008", "902", "903", "906", "907" };
         private readonly string[] administrativeAssistanceIDList = { "003", "004", "005", "006", "901", "902", "903", "904", "905", "906" };
 

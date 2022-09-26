@@ -22,6 +22,7 @@
             Grid.Column="0"
             Fill="{StaticResource DarkShadow}" />
         <DataGrid
+            IsEnabled="{Binding CurrentStoreOrder.IsEnable}"
             EnableRowVirtualization="False"
             Grid.Row="0"
             Grid.Column="0"
@@ -29,6 +30,7 @@
             Background="{StaticResource GridDarkestBackGround}"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             GridLinesVisibility="Horizontal"
@@ -67,7 +69,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="170"
+                    Width="Auto"
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"
@@ -83,7 +85,8 @@
                     Width="210"
                     MaxWidth="210"
                     Header="商品名稱"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -115,7 +118,8 @@
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="退貨量"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    CanUserSort="False">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -126,6 +130,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid
+            Name="ProductDataGrid"
             EnableRowVirtualization="False"
             Grid.Row="0"
             Grid.Column="1"
@@ -172,7 +177,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="170"
+                    Width="Auto"
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"
@@ -359,6 +364,7 @@
                 Text="{Binding CurrentStoreOrder.ReturnDiff, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
             <!--<Button Width="150" Content="未退量補回" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" Command="{Binding ReturnOrderRePurchaseCommand}" />-->
             <Button
+                Visibility="{Binding CurrentStoreOrder.Visibility}"
                 Width="150"
                 Margin="155,0,0,0"
                 Background="RoyalBlue"

@@ -5,8 +5,12 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Person.Employee.ClockIn;
+using System;
 using System.Data;
 using System.Windows.Threading;
+using DomainModel;
+using DomainModel.Enum;
+using System.Windows.Controls;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 {
@@ -98,7 +102,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 
             Employee = new Employee();
             Employee.Account = Account;
-            Employee.Password = (sender as System.Windows.Controls.PasswordBox)?.Password;
+            Employee.Password = (sender as PasswordBox)?.Password;
 
             if (string.IsNullOrEmpty(Employee.Password) && !string.IsNullOrEmpty(Employee.Account))
             {
@@ -119,7 +123,11 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
 
             ////增加一筆打卡紀錄
             MainWindow.ServerConnection.OpenConnection();
-            ClockInLogs = new ClockInLog(EmployeeDb.AddClockIn(Employee.ID.ToString(), wtype));
+            EmployeeDb.AddClockIn(Employee.ID.ToString(), wtype);
+            string year = Convert.ToString(DateTime.Now.Year);
+            string month = Convert.ToString(DateTime.Now.Month);
+            string day = Convert.ToString(DateTime.Now.Day);
+            ClockInLogs = new ClockInLog(ClockInDb.EmployeeClockInLog(year,month,day, Employee.ID.ToString(), wtype));
             MainWindow.ServerConnection.CloseConnection();
 
 
@@ -138,18 +146,8 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
         }
         private bool CheckPassWord()
         {
-
-            //1.如果全部都沒有,查無帳號,請確認帳號
-            if (Employee.CheckEmployeeAccountSame())
-            {
-                MessageWindow.ShowMessage("此帳號不存在!", Class.MessageType.ERROR);
-                return false;
-            }
-
-            MainWindow.ServerConnection.OpenConnection();
-            Employee = Employee.Login(Employee.Account, Employee.Password);
-            MainWindow.ServerConnection.CloseConnection();
-
+            Employee = EmployeeService.Login(Employee.Account, Employee.Password);
+           
             //檢查帳密 密碼錯誤
             if (Employee == null)
             {
@@ -157,7 +155,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.AddClockIn
                 return false;
             }
             
-
             return true;
         }
         public void GetDate()

@@ -33,18 +33,20 @@ namespace His_Pos.NewClass.Manufactory
         {
             DataTable manufactoryPrincipalTable = ManufactoryPrincipalTable();
 
-            foreach (var principal in principals)
+            if (principals != null) 
             {
-                DataRow newRow = manufactoryPrincipalTable.NewRow();
-                DataBaseFunction.AddColumnValue(newRow, "ManPri_ID", principal.ID);
-                DataBaseFunction.AddColumnValue(newRow, "ManPri_Name", principal.Name);
-                DataBaseFunction.AddColumnValue(newRow, "ManPri_Telephone", principal.Telephone);
-                DataBaseFunction.AddColumnValue(newRow, "ManPri_Fax", principal.Fax);
-                DataBaseFunction.AddColumnValue(newRow, "ManPri_LINE", principal.Line);
-                DataBaseFunction.AddColumnValue(newRow, "ManPri_Email", principal.Email);
-                DataBaseFunction.AddColumnValue(newRow, "ManPri_Note", principal.Note);
-
-                manufactoryPrincipalTable.Rows.Add(newRow);
+                foreach (var principal in principals)
+                {
+                    DataRow newRow = manufactoryPrincipalTable.NewRow();
+                    DataBaseFunction.AddColumnValue(newRow, "ManPri_ID", principal.ID);
+                    DataBaseFunction.AddColumnValue(newRow, "ManPri_Name", principal.Name);
+                    DataBaseFunction.AddColumnValue(newRow, "ManPri_Telephone", principal.Telephone);
+                    DataBaseFunction.AddColumnValue(newRow, "ManPri_Fax", principal.Fax);
+                    DataBaseFunction.AddColumnValue(newRow, "ManPri_LINE", principal.Line);
+                    DataBaseFunction.AddColumnValue(newRow, "ManPri_Email", principal.Email);
+                    DataBaseFunction.AddColumnValue(newRow, "ManPri_Note", principal.Note);
+                    manufactoryPrincipalTable.Rows.Add(newRow);
+                }
             }
 
             return manufactoryPrincipalTable;

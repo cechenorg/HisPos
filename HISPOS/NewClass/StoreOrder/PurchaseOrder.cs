@@ -11,6 +11,9 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using DomainModel.Enum;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.NewClass.StoreOrder
 {
@@ -22,13 +25,12 @@ namespace His_Pos.NewClass.StoreOrder
 
         public string PreOrderCustomer { get; set; }
         public string TargetPreOrderCustomer { get; set; }
-
+        public string DemandDate { get; set; }
         public DateTime? PlanArriveDate { get; set; }
         public string PatientData { get; set; }
         public bool HasPatient => !string.IsNullOrEmpty(PatientData);
         public bool HasCustomer => !string.IsNullOrEmpty(PreOrderCustomer);
         public DateTime Day { get; set; }
-
         public PurchaseProducts OrderProducts
         {
             get { return orderProducts; }
@@ -39,8 +41,22 @@ namespace His_Pos.NewClass.StoreOrder
         {
             get
             {
-                if (OrderProducts is null) return initProductCount;
-                else return OrderProducts.Count;
+                if (OrderProducts is null)
+                {
+                    return initProductCount;
+                }
+                else if (OrderProducts != null && OrderProducts.Count > 0 && OrderProducts[0].OrderStatus == OrderStatusEnum.DONE)//進退貨紀錄
+                {
+                    return OrderProducts.Count;
+                }
+                else if (OrderProducts != null && OrderProducts.Count > 0 && OrderProducts[0].OrderStatus != OrderStatusEnum.DONE && OrderProducts[0].OrderStatus != OrderStatusEnum.SCRAP)//進退貨管理
+                {
+                    return OrderProducts.Where(_ => _.IsDone == 0).Count();
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 
@@ -57,6 +73,58 @@ namespace His_Pos.NewClass.StoreOrder
             PreOrderCustomer = row.Field<string>("StoOrd_CustomerName");
             TargetPreOrderCustomer = row.Field<string>("StoOrd_TargetCustomerName");
             PlanArriveDate = row.Field<DateTime?>("StoOrd_PlanArrivalDate");
+            if (row.Table.Columns.Contains("StoOrd_DemandDate"))
+            {
+                if (row["StoOrd_DemandDate"] != DBNull.Value)
+                {
+                    DateTime dt = (DateTime)row["StoOrd_DemandDate"];
+                    TaiwanCalendar tc = new TaiwanCalendar();
+                    string year = tc.GetYear(dt).ToString().PadLeft(3, '0');
+                    string month = tc.GetMonth(dt).ToString().PadLeft(2, '0');
+                    string day = tc.GetDayOfMonth(dt).ToString().PadLeft(2, '0');
+                    string today = string.Format("{0}/{1}/{2}", year, month, day);
+                    DemandDate = today;
+                }
+                else
+                {
+                    DemandDate = "---/--/--";
+                }
+            }
+            else
+            {
+                DemandDate = "---/--/--";
+            }
+            if (!string.IsNullOrEmpty(PatientData) && OrderStatus != OrderStatusEnum.DONE && OrderStatus != OrderStatusEnum.SCRAP && OrderStatus != OrderStatusEnum.WAITING)
+            {
+                string[] noteArray = PatientData.Split(new char[] { ' ' });
+                foreach (string text in noteArray)
+                {
+                    if (!Regex.IsMatch(text, @"[\u4e00-\u9fa5]") && !string.IsNullOrEmpty(text) && text.Length > 7)
+                    {
+                        try
+                        {
+                            CultureInfo culture = new CultureInfo("zh-TW");
+                            culture.DateTimeFormat.Calendar = new TaiwanCalendar();
+                            DateTime date = DateTime.Parse(text, culture);
+                            TimeSpan diffDate = new TimeSpan(date.Ticks - DateTime.Today.Ticks);
+                            int StoreOrderDays = ViewModelMainWindow.StoreOrderDays;
+                            if (diffDate.Days > StoreOrderDays && StoreOrderDays != 0)
+                            {
+                                IsWaitOrder = 1;
+                                OrderType = OrderTypeEnum.WAIT;
+                            }
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                }
+            }
+            if ((ReceiveID != "" && ReceiveID != null) && ID != ReceiveID && IsEnable)
+            {
+                OrderType = OrderTypeEnum.WAITPREPARE;
+            }
         }
 
         #region ----- Override Function -----
@@ -128,33 +196,37 @@ namespace His_Pos.NewClass.StoreOrder
                     return false;
                 }
             }
-
             return true;
         }
 
         protected override bool CheckNormalProcessingOrder()
         {
-            bool isLowerThenOrderAmount = false;
             bool hasControlMed = false;
-            bool hasNoBatch = false;
-            var products = OrderProducts.GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.First().OrderAmount, RealAmount = g.Sum(p => p.RealAmount) }).ToList();
-
+            bool IsRepBatch = false;
             foreach (var product in OrderProducts)
             {
+                if(product.IsDone == 1)
+                {
+                    break;
+                }
+
                 if (product.OrderAmount < 0 || product.FreeAmount < 0)
                 {
                     MessageWindow.ShowMessage(product.ID + " 商品數量不可小於0!", MessageType.ERROR);
                     return false;
                 }
 
+                if(!string.IsNullOrEmpty(product.BatchNumber))
+                {
+                    if (OrderProducts.Count(s => !string.IsNullOrEmpty(s.BatchNumber) && s.BatchNumber.ToString().Trim() == product.BatchNumber.ToString().Trim() && s.ID == product.ID && s.IsDone == 0) > 1)
+                    {
+                        IsRepBatch = true;
+                    }
+                }
+
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null)
                 {
                     hasControlMed = true;
-                }
-
-                if (OrderProducts.Where(s => s.ID == product.ID).Count() > 1 && product.RealAmount != 0 && (product.BatchNumber == "" || product.BatchNumber == null))
-                {
-                    hasNoBatch = true;
                 }
 
                 if (product is PurchaseMedicine && (product as PurchaseMedicine).IsControl != null && (product.BatchNumber == "" || product.BatchNumber == null) && product.RealAmount > 0)
@@ -164,9 +236,9 @@ namespace His_Pos.NewClass.StoreOrder
                 }
             }
 
-            if (hasNoBatch == true)
+            if (IsRepBatch)
             {
-                MessageWindow.ShowMessage("拆批不可沒有批號!", MessageType.ERROR);
+                MessageWindow.ShowMessage("批號重覆!", MessageType.ERROR);
                 return false;
             }
 
@@ -187,6 +259,12 @@ namespace His_Pos.NewClass.StoreOrder
                 return false;
             }
 
+            return true;
+        }
+        protected override bool CheckStoreOrderLower()
+        {
+            var products = OrderProducts.Where(w => w.IsDone == 0).GroupBy(p => p.ID).Select(g => new { ProductID = g.Key, OrderAmount = g.Sum(p => p.OrderAmount), RealAmount = g.Sum(p => p.RealAmount) }).ToList();
+            bool isLowerThenOrderAmount = false;
             foreach (var product in products)
             {
                 if (product.RealAmount < product.OrderAmount)
@@ -198,18 +276,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (isLowerThenOrderAmount)
             {
-                ConfirmWindow confirmWindow = new ConfirmWindow($"是否將不足訂購量之品項\r\n轉為新的收貨單?", "", false);
-
-                if ((bool)confirmWindow.DialogResult)
-                {
-                    bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
-
-                    if (!isSuccess) return false;
-                }
+                bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
             }
-            //ConfirmWindow confirmWindow1 = new ConfirmWindow($"是否確認完成進貨單?\n(資料內容將不能修改)", "", false);
-
-            //return (bool)confirmWindow1.DialogResult;
             return true;
         }
 
@@ -224,7 +292,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public override void CalculateTotalPrice()
         {
-            TotalPrice = Math.Round(OrderProducts.Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
+            TotalPrice = Math.Round(OrderProducts.Where(w=>w.IsDone == 0).Sum(p => Math.Round(p.SubTotal,0,MidpointRounding.AwayFromZero)));
         }
 
         public override void SetProductToProcessingStatus()
@@ -412,18 +480,35 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (dataTable.Rows.Count > 0)
             {
-                MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
-
-                Properties.Settings.Default.MinusID = (StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0]);
-                NormalViewModel nn = new NormalViewModel();
-                nn.storeOrderCollection = StoreOrders.GetOrdersNotDone();
-                nn.AddOrderByMinus();
-
+                StoreOrder order = StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0];
+                PurchaseProducts products = PurchaseProducts.GetProductsByStoreOrderID(order.ID, order.OrderStatus);
+                if (products != null && products.Count > 0)
+                {
+                    ((PurchaseOrder)order).OrderProducts = new PurchaseProducts();
+                    foreach (PurchaseProduct item in products)
+                    {
+                        if (item.IsDone == 0)
+                            ((PurchaseOrder)order).OrderProducts.Add(item);
+                    }
+                }
+                    
+                Properties.Settings.Default.MinusID = order;
+                LowOrderID = order.ID;
+                if(!string.IsNullOrEmpty(LowOrderID) && OrderManufactory.ID == "0")
+                {
+                    DataTable ReturnTable = StoreOrderDB.GetOrderByNo(LowOrderID, order.CreateDateTime.ToString("yyyy-MM-dd"));
+                    if(ReturnTable == null || ReturnTable.Rows.Count == 0)
+                    {
+                        if(order.OrderTypeIsOTC != "OTC")
+                            ReturnTable = StoreOrderDB.SendStoreOrderToSingde(order);
+                        else
+                            ReturnTable = StoreOrderDB.SendOTCStoreOrderToSingde(order);
+                    }
+                }
                 return true;
             }
             else
             {
-                MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
                 return false;
             }
         }
@@ -452,7 +537,10 @@ namespace His_Pos.NewClass.StoreOrder
 
         public static void UpdatePrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
         {
-            string stoordId = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.ID).Rows[0][0].ToString();
+            DataTable table = PrescriptionDb.GetStoreOrderIDByPrescriptionID(p.ID);
+            if (table == null || table.Rows.Count == 0) return;
+
+            string stoordId = table.Rows[0][0].ToString();
             try
             {
                 int result = PrescriptionDb.UpdateDeclareOrderToSingde(stoordId, p, pSendData);
@@ -492,6 +580,7 @@ namespace His_Pos.NewClass.StoreOrder
                 if (OrderProducts[x].ID.Equals(id))
                 {
                     OrderProducts[x].RealAmount = OrderProducts[x].OrderAmount;
+                    CalculateTotalPrice();
                     return;
                 }
             }

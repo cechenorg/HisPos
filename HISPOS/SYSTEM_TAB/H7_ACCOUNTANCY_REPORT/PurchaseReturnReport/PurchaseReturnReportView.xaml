@@ -25,6 +25,9 @@
         <DataTemplate x:Key="ManufactoryControl" DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
             <purchaseReturnReport:PurchaseReturnReportControl />
         </DataTemplate>
+        <DataTemplate x:Key="SingdeManufactoryControl" DataType="{x:Type purchaseReturnReport:PurchaseReturnReportViewModel}">
+            <purchaseReturnReport:PurchaseReturnSingdeReportControl />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid Margin="10,0,10,10">
         <Grid.RowDefinitions>
@@ -127,7 +130,17 @@
             <Button
                 Width="120"
                 Height="35"
-                Margin="390,0,0,0"
+                Margin="250,0,0,0"
+                Background="IndianRed"
+                BorderThickness="0"
+                Command="{Binding ExportCSVCommand}"
+                Content="匯出結果"
+                FontFamily="Segoe UI Semibold" 
+                FontSize="20"/>
+            <Button
+                Width="120"
+                Height="35"
+                Margin="10,0,0,0"
                 Background="RoyalBlue"
                 BorderThickness="0"
                 Command="{Binding SearchCommand}"
@@ -352,8 +365,11 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource NoManufactoryControl}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasManufactory, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <DataTrigger Binding="{Binding HasManufactory, UpdateSourceTrigger=PropertyChanged}" Value="1">
                             <Setter Property="ContentTemplate" Value="{StaticResource ManufactoryControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding HasManufactory, UpdateSourceTrigger=PropertyChanged}" Value="2">
+                            <Setter Property="ContentTemplate" Value="{StaticResource SingdeManufactoryControl}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

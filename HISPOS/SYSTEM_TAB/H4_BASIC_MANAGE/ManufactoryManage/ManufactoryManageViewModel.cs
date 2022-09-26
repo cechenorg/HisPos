@@ -7,6 +7,7 @@ using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Manufactory.ManufactoryManagement;
 using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage.AddManufactoryWindow;
 using System.Data;
+using His_Pos.Extention;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
@@ -49,6 +50,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             get { return currentManufactory; }
             set
             {
+                currentManufactoryBackUp = value?.Clone() as ManufactoryManageDetail;
+                Set(() => CurrentManufactory, ref currentManufactory, value);
+                RaisePropertyChanged(nameof(DisplayManufactoryTelephone));
+                RaisePropertyChanged(nameof(DisplayManufactoryResponsibleTelephone));
                 MainWindow.ServerConnection.OpenConnection();
              
                 if (value != null && CurrentManufactory != null)
@@ -60,9 +65,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                         CurrentManufactory.CurrentPrincipal = CurrentManufactory.Principals[0];
                 }
 
-                MainWindow.ServerConnection.CloseConnection();
-                currentManufactoryBackUp = value?.Clone() as ManufactoryManageDetail;
-                Set(() => CurrentManufactory, ref currentManufactory, value);
+                MainWindow.ServerConnection.CloseConnection();               
 
                 if (CurrentManufactory is null)
                     CurrentManufactoryType = CurrentManufactoryTypeEnum.NONE;
@@ -89,6 +92,43 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
         {
             get { return currentManufactoryType; }
             set { Set(() => CurrentManufactoryType, ref currentManufactoryType, value); }
+        }
+
+        public string DisplayManufactoryResponsibleTelephone
+        {
+            get
+            {
+                if (currentManufactory is null)
+                    return string.Empty;
+
+
+                var tel = currentManufactory.ResponsibleTelephone;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                currentManufactory.ResponsibleTelephone = tel;
+            }
+        }
+
+        
+        public string DisplayManufactoryTelephone
+        {
+            get
+            {
+                if (currentManufactory is null)
+                    return string.Empty;
+
+
+                var tel = currentManufactory.Telephone;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                currentManufactory.Telephone = tel;
+            }
         }
 
         #endregion ----- Define Variables -----
@@ -191,12 +231,15 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 return false;
             }
 
-            foreach (var principal in CurrentManufactory.Principals)
+            if (CurrentManufactory.Principals != null)
             {
-                if (principal.Name.Equals(""))
+                foreach (var principal in CurrentManufactory.Principals)
                 {
-                    MessageWindow.ShowMessage("聯絡人名稱不可為空!", MessageType.ERROR);
-                    return false;
+                    if (principal.Name.Equals(""))
+                    {
+                        MessageWindow.ShowMessage("聯絡人名稱不可為空!", MessageType.ERROR);
+                        return false;
+                    }
                 }
             }
 
@@ -226,17 +269,18 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
                 bool isSuccess = UpdateManufactoryDetail();
                 MainWindow.ServerConnection.CloseConnection();
                 if (isSuccess)
+                { 
                     MessageWindow.ShowMessage("更新成功!", MessageType.SUCCESS);
+                    CurrentManufactory.IsDataChanged = false;
+                    CancelChangeCommand.RaiseCanExecuteChanged();
+                    ConfirmChangeCommand.RaiseCanExecuteChanged();
+                }
                 else
                 {
                     MessageWindow.ShowMessage("更新失敗 請稍後重試!", MessageType.ERROR);
                     return;
                 }
             }
-
-            CurrentManufactory.IsDataChanged = false;
-            CancelChangeCommand.RaiseCanExecuteChanged();
-            ConfirmChangeCommand.RaiseCanExecuteChanged();
         }
 
         private void CancelChangeAction()

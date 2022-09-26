@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass;
 using His_Pos.NewClass.Person.Employee;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using System;
 using System.IO;
@@ -37,6 +39,7 @@ namespace His_Pos.FunctionWindow
 
         public LoginWindowViewModel()
         {
+            
             LoginCommand = new RelayCommand<object>(LoginAction);
             LeaveCommand = new RelayCommand(LeaveAction);
             CheckCsHis();
@@ -54,22 +57,25 @@ namespace His_Pos.FunctionWindow
 
         private void LoginAction(object sender)
         {
-            MainWindow.ServerConnection.OpenConnection();
-            Employee user = Employee.Login(Account, (sender as PasswordBox)?.Password);
-            MainWindow.ServerConnection.CloseConnection();
-
-            if (user != null)
+            bool isEnable = false;
+            Employee loginEmployee = EmployeeService.Login(Account, (sender as PasswordBox)?.Password);
+            if (loginEmployee != null) 
+            {
+                ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
+                isEnable = EmployeeDb.CheckEmployeeIsEnable(loginEmployee.ID);
+            }
+            if (isEnable)
             {
                 //LoadingWindow loadingWindow = new LoadingWindow();
                 //loadingWindow.GetNecessaryData(user);
-                NewFunction.ExceptionLog(user.Name + " Login");
-                MainWindow mainWindow = new MainWindow(user);
+                NewFunction.ExceptionLog(loginEmployee.Name + " Login");
+                MainWindow mainWindow = new MainWindow(loginEmployee);
                 mainWindow.Show();
                 Messenger.Default.Send(new NotificationMessage("CloseLogin"));
             }
             else
             {
-                IsAccountWrong = true;
+                IsAccountWrong = true; 
             }
         }
 
@@ -119,6 +125,7 @@ namespace His_Pos.FunctionWindow
                 var inumC = fileReader.ReadLine();
                 var inumE = fileReader.ReadLine();
                 var pP = fileReader.ReadLine();
+                var rpf = fileReader.ReadLine();
                 var match = medReg.Match(medBagPrinter);
                 Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
                 if (receiptPrinter.Contains("$"))
@@ -143,6 +150,7 @@ namespace His_Pos.FunctionWindow
                 Properties.Settings.Default.InvoiceNumberCount = string.IsNullOrEmpty(inumC) ? "" : inumC.Substring(6, inumC.Length - 6);
                 Properties.Settings.Default.InvoiceNumberEng = string.IsNullOrEmpty(inumE) ? "" : inumE.Substring(6, inumE.Length - 6);
                 Properties.Settings.Default.PrePrint = string.IsNullOrEmpty(pP) ? "" : pP.Substring(3, pP.Length - 3);
+                Properties.Settings.Default.ReportFormat = string.IsNullOrEmpty(rpf) ? "" : rpf.Substring(4);
                 Properties.Settings.Default.Save();
             }
         }

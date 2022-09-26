@@ -19,16 +19,26 @@ namespace His_Pos.NewClass.Medicine.Base
         {
             NHIPrice = (double)r.Field<decimal>("Med_Price");
             OnTheFrameAmount = r.Field<double?>("Inv_OntheFrame") is null ? 0 : r.Field<double>("Inv_OntheFrame");
+            if (NewFunction.CheckDataRowContainsColumn(r, "Singde_Inv"))
+                SingdeInv = r.Field<int>("Singde_Inv");
+            else
+                SingdeInv = 0;
             CostPrice = (double)(r.Field<decimal?>("Inv_LastPrice") is null ? 0 : r.Field<decimal>("Inv_LastPrice"));
             AveragePrice = r.Field<double?>("AveragePrice") is null ? 0 : r.Field<double>("AveragePrice");
             Price = r.Field<double>("Pro_SelfPayPrice");
             InventoryID = r.Field<int>("Inv_ID");
+            Ingredient = r.Field<string>("Med_Ingredient");
+            Indication = r.Field<string>("Med_Indication");
             if (NewFunction.CheckDataRowContainsColumn(r, "MedbagAmountLack"))
                 InventoryError = r.Field<int>("MedbagAmountLack") == 1;
             if (NewFunction.CheckDataRowContainsColumn(r, "AdjustNoBuckle") && r.Field<bool?>("AdjustNoBuckle") != null)
                 AdjustNoBuckle = r.Field<bool>("AdjustNoBuckle");
             else
                 AdjustNoBuckle = false;
+            if (NewFunction.CheckDataRowContainsColumn(r, "IsClosed") && r.Field<bool?>("IsClosed") != null)
+                IsClosed = r.Field<bool>("IsClosed");
+            else
+                IsClosed = false;
             SendAmount = -1;
         }
 
@@ -60,6 +70,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     break;
             }
             AdjustNoBuckle = false;
+            IsClosed = false;
         }
 
         public Medicine(OrthopedicsMedicine m)
@@ -95,6 +106,7 @@ namespace His_Pos.NewClass.Medicine.Base
                     break;
             }
             AdjustNoBuckle = false;
+            IsClosed = false;
         }
 
         #region Properties
@@ -232,6 +244,16 @@ namespace His_Pos.NewClass.Medicine.Base
             set
             {
                 Set(() => OnTheFrameAmount, ref onTheFrameAmount, value);
+            }
+        }
+
+        private int singdeInv; //杏德庫存
+        public int SingdeInv
+        {
+            get => singdeInv;
+            set
+            {
+                Set(() => SingdeInv, ref singdeInv, value);
             }
         }
 
@@ -387,8 +409,6 @@ namespace His_Pos.NewClass.Medicine.Base
             get => buckleAmount;
             set
             {
-                if (AdjustNoBuckle)
-                    value = 0;
                 Set(() => BuckleAmount, ref buckleAmount, value);
                 NotEnough = BuckleAmount < Amount;
             }
@@ -413,9 +433,20 @@ namespace His_Pos.NewClass.Medicine.Base
             set
             {
                 Set(() => NHIPrice, ref nhiPrice, value);
+                price0 = NHIPrice == 0 ? true : false;
             }
         }
 
+        private bool price0;
+
+        public bool Price0
+        {
+            get => price0;
+            set
+            {
+                Set(() => Price0, ref price0, value);
+            }
+        }
         private bool isSelected;
 
         public bool IsSelected
@@ -469,6 +500,20 @@ namespace His_Pos.NewClass.Medicine.Base
                 if (adjustNoBuckle != value)
                 {
                     Set(() => AdjustNoBuckle, ref adjustNoBuckle, value);
+                }
+            }
+        }
+
+        private bool isClosed; //結案
+
+        public bool IsClosed
+        {
+            get => isClosed;
+            set
+            {
+                if (IsClosed != value)
+                {
+                    Set(() => IsClosed, ref isClosed, value);
                 }
             }
         }
@@ -734,6 +779,10 @@ namespace His_Pos.NewClass.Medicine.Base
         public void ResetBuckleAmount()
         {
             BuckleAmount = Amount;
+        }
+        public void ClearBuckleAmount()
+        {
+            BuckleAmount = 0;
         }
     }
 }

@@ -178,12 +178,13 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
 
         private void ControlMedEditAction()
         {
+            if (SelectItem is null) return;
             ControlMedicineEditWindow.ControlMedicineEditWindow controlMedicineEditWindow = new ControlMedicineEditWindow.ControlMedicineEditWindow(SelectItem.ID, SelectedWareHouse.ID);
         }
 
         private void PrintDetailAction()
         {
-            if (ControlMedicineDetailsCollection is null) return;
+            if (ControlMedicineDetailsCollection is null || ControlMedicineDetailsCollection.Count == 0) return;
 
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "管制藥品收支結存簿冊";
@@ -263,7 +264,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         {
             Process myProcess = new Process();
             DataTable table = ControlMedicineDeclareDb.GetInventoryDataByDate(SDateTime, EDateTime, SelectedWareHouse.ID);
-            if (table is null) return;
+            if (table.DataSet is null) return;
             SaveFileDialog fdlg = new SaveFileDialog();
             fdlg.Title = "管藥庫存";
             fdlg.InitialDirectory = string.IsNullOrEmpty(Properties.Settings.Default.DeclareXmlPath) ? @"c:\" : Properties.Settings.Default.DeclareXmlPath;
@@ -337,11 +338,14 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.ControlMedicineDeclare
         private void SearchAction()
         {
             ControlMedicineDeclares.GetData(SDateTime, EDateTime);
-            SelectItem = ControlMedicineDeclares[0];
-            SelectionChangedAction();
-            ControlCollectionViewSource = new CollectionViewSource { Source = ControlMedicineDeclares };
-            ControlCollectionView = ControlCollectionViewSource.View;
-            ControlCollectionViewSource.Filter += Filter;
+            if (ControlMedicineDeclares.Count > 0)
+            {
+                SelectItem = ControlMedicineDeclares[0];
+                SelectionChangedAction();
+                ControlCollectionViewSource = new CollectionViewSource { Source = ControlMedicineDeclares };
+                ControlCollectionView = ControlCollectionViewSource.View;
+                ControlCollectionViewSource.Filter += Filter;
+            }
         }
 
         private void SelectionChangedAction()

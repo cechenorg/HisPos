@@ -152,17 +152,16 @@ namespace His_Pos.NewClass.Manufactory.ManufactoryManagement
             ControlMedicineID = currentManufactoryBackUp.ControlMedicineID;
             Note = currentManufactoryBackUp.Note;
 
-            Principals.ResetData(currentManufactoryBackUp.Principals);
-
-            if (Principals.Count > 0)
-                CurrentPrincipal = Principals.First();
-            else
-                CurrentPrincipal = null;
-        }
-
-      
-
-       
+            if (Principals != null) 
+            {
+                Principals.ResetData(currentManufactoryBackUp.Principals);
+                
+                if (Principals.Count > 0)
+                    CurrentPrincipal = Principals.First();
+                else
+                    CurrentPrincipal = null;
+            }
+        }       
 
         #region ///// Principal Functions /////
 

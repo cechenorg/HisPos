@@ -1,26 +1,17 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DomainModel;
+using DomainModel.Enum;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.FunctionWindow;
-using His_Pos.NewClass.Person.Employee;
-using His_Pos.NewClass.Person.Employee.WorkPosition;
+using His_Pos.NewClass.Person.Employee; 
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 {
     public class EmployeeInsertWindowViewModel : ViewModelBase
     {
-        public WorkPositions workPositions = new WorkPositions();
-
-        public WorkPositions WorkPositions
-        {
-            get { return workPositions; }
-            set
-            {
-                Set(() => WorkPositions, ref workPositions, value);
-            }
-        }
-
-        public Employee employee;
+         
+        public Employee employee = new Employee(){IsLocal = true};
 
         public Employee Employee
         {
@@ -47,8 +38,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 
         public EmployeeInsertWindowViewModel()
         {
-            Employee = new Employee();
-            string acc = Employee.GetEmployeeNewAccount();
+           
+            string acc = EmployeeService.GetEmployeeNewAccount();
             Employee.Account = acc;
             Employee.Password = acc;
             SubbmitCommand = new RelayCommand(SubbmitAction);
@@ -57,25 +48,39 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
 
         private void CheckIdNumberAction()
         {
-            if (Employee.CheckIdNumber())
-                MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
+            CheckIdNumber();
         }
 
         private void SubbmitAction()
         {
-            if (!Employee.CheckIdNumber())
-            {
+            if(CheckIdNumber() == false)
                 return;
-            }
-            if (!Employee.CheckEmployeeAccountSame())
-            {
-                MessageWindow.ShowMessage("此帳號已經存在!", Class.MessageType.ERROR);
-                return;
-            }
-            Employee.Insert();
-
+           
+            EmployeeService.Insert(Employee);
+             
             MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeInsertWindow"));
+        }
+
+        private bool CheckIdNumber()
+        {
+            var idcheck_ErrorMsg = EmployeeService.VerifyIDNumber(Employee);
+            var empExist_ErrorMsg = EmployeeService.CheckEmpIsExist(Employee);
+
+            if (idcheck_ErrorMsg == ErrorMessage.OK && empExist_ErrorMsg == ErrorMessage.OK)
+            {
+                MessageWindow.ShowMessage("檢查通過!", Class.MessageType.SUCCESS);
+                return true;
+            } 
+            else
+            {
+                if(idcheck_ErrorMsg != ErrorMessage.OK)
+                    MessageWindow.ShowMessage(idcheck_ErrorMsg.GetDescriptionText(), Class.MessageType.ERROR);
+
+                if (empExist_ErrorMsg != ErrorMessage.OK)
+                    MessageWindow.ShowMessage(empExist_ErrorMsg.GetDescriptionText(), Class.MessageType.ERROR);
+                return false;
+            }
         }
     }
 }

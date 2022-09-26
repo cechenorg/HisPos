@@ -10,6 +10,12 @@ using System.Windows.Threading;
 using System.Windows.Forms;
 using System.IO;
 using System.Text;
+using DomainModel.Enum;
+using System;
+using System.Collections.Generic;
+using System.Windows.Controls;
+using System.Collections.ObjectModel;
+using DomainModel;
 
 namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 {
@@ -25,6 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         public ClockInSearchViewModel()
         {
             RegisterCommands();
+            GetComYear();
             GetDate();
         }
 
@@ -34,15 +41,43 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             get { return account; }
             set { Set(() => Account, ref account, value); }
         }
-
-        public string searchMonth = System.DateTime.Now.Month.ToString();
+        public List<string> comYears;
+        public List<string> ComYears
+        {
+            get { return comYears; }
+            set
+            {
+                Set(() => ComYears, ref comYears, value);
+            }
+        }
+        public string searchYear = DateTime.Now.Year.ToString();
+        public string SearchYear
+        {
+            get { return searchYear; }
+            set
+            {
+                Set(() => SearchYear, ref searchYear, value);
+                GetDate();
+            }
+        }
+        public string searchMonth = DateTime.Now.Month.ToString();
         public string SearchMonth
         {
             get { return searchMonth; }
             set { Set(() => SearchMonth, ref searchMonth, value);
-
                 GetDate();
             }            
+        }
+
+        private void GetComYear()
+        {
+            ComYears = new List<string>();
+            int nowYear = DateTime.Now.Year;
+
+            for (int i = 2021; i <= nowYear; i++)
+            {
+                ComYears.Add(i.ToString());
+            }
         }
 
         public int hourCount;
@@ -72,7 +107,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             set
             {
                 Set(() => SingInEmployee, ref singinemployee, value);
-
             }
         }
 
@@ -134,17 +168,16 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                     SetEmployeeCollection();
             }
         }
-
-        public System.Collections.Generic.List<CommonBox> checkLines;
-        public System.Collections.Generic.List<CommonBox> CheckLines
+        public ObservableCollection<CommonBox> checkLines;
+        public ObservableCollection<CommonBox> CheckLines
         {
             get { return checkLines; }
             set
             {
                 Set(() => CheckLines, ref checkLines, value);
-           
             }
         }
+        
 
 
         #endregion ----- Define Variables -----
@@ -163,10 +196,11 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
 
         private void ConfirmEmpAction(object sender)
         {
-
-            SingInEmployee = new Employee();
-            SingInEmployee.Account = Account;
-            SingInEmployee.Password = (sender as System.Windows.Controls.PasswordBox)?.Password;
+            SingInEmployee = new Employee
+            {
+                Account = Account,
+                Password = (sender as PasswordBox)?.Password
+            };
 
             if (string.IsNullOrEmpty(SingInEmployee.Password) && !string.IsNullOrEmpty(SingInEmployee.Account))
             {
@@ -174,31 +208,29 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             }
             if (string.IsNullOrEmpty(SingInEmployee.Password) && string.IsNullOrEmpty(SingInEmployee.Account))
             {
-                MessageWindow.ShowMessage("請輸入帳號密碼!", Class.MessageType.ERROR);
+                MessageWindow.ShowMessage("請輸入帳號密碼!", MessageType.ERROR);
                 return;
             }
             else
-                if (!CheckPassWord()) return;  //檢查帳密
+            {
+                if (!CheckPassWord())
+                {
+                    return;  //檢查帳密
+                } 
+            }
 
             SetStore();
 
-            (sender as System.Windows.Controls.PasswordBox)?.Clear();
-            this.Account = "";
-
-
+            (sender as PasswordBox)?.Clear();
+            Account = "";
         }
         private void SearchAction(object sender)
         {
-
-
-
         }
+
         private void DataChangeAction(object sender)
         {
-            
             MessageWindow.ShowMessage(SearchMonth, Class.MessageType.ERROR);
-
-
         }
 
 
@@ -215,36 +247,23 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
         }
         private bool CheckPassWord()
         {
-
-            //1.如果全部都沒有,查無帳號,請確認帳號
-            if (SingInEmployee.CheckEmployeeAccountSame())
-            {
-                MessageWindow.ShowMessage("此帳號不存在!", Class.MessageType.ERROR);
-                return false;
-            }
-
-            MainWindow.ServerConnection.OpenConnection();
-            SingInEmployee = Employee.Login(SingInEmployee.Account, SingInEmployee.Password);
-            MainWindow.ServerConnection.CloseConnection();
-
+            SingInEmployee = EmployeeService.Login(SingInEmployee.Account, SingInEmployee.Password);
+            
             //檢查帳密 密碼錯誤
             if (SingInEmployee == null)
             {
                 MessageWindow.ShowMessage("密碼錯誤!", Class.MessageType.ERROR);
                 return false;
             }
-
-
             return true;
         }
         public void GetDate()
         {
-
             ClockInLogs = null;
             if (Employee != null)
             {
                 MainWindow.ServerConnection.OpenConnection();
-                ClockInLogs = new ClockInLog(ClockInDb.ClockInLogByDate(System.DateTime.Now.Year.ToString(), SearchMonth, Employee.ID.ToString()));
+                ClockInLogs = new ClockInLog(ClockInDb.ClockInLogByDate(SearchYear, SearchMonth, Employee.ID.ToString()));
                 MainWindow.ServerConnection.CloseConnection();
 
                 if (ClockInLogs is null) return;
@@ -255,126 +274,104 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                 }
                 HourCount = iMin / 60;
                 MinCount = iMin % 60;
-
             }
-
         }
         public void SetStore()
         {
-            this.CheckLines = null;
-            this.CheckLines = new System.Collections.Generic.List<CommonBox>();
-            DataTable dt;
+            CheckLines = new ObservableCollection<CommonBox>();
             MainWindow.ServerConnection.OpenConnection();
-            dt = MainWindow.ServerConnection.ExecuteProc("[Get].[Pharmacy]");
+            DataTable dt = MainWindow.ServerConnection.ExecuteProc("[Get].[Pharmacy]");
             MainWindow.ServerConnection.CloseConnection();
 
-
-
-            if (SingInEmployee.ID == 1)
-            {
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    this.CheckLines.Add(new CommonBox() { Namepath = dr["Namepath"].ToString(), Value = dr["Value"].ToString() });
-                }
-
-                #region OLD
-                //this.CheckLines.Add(new CommonBox() { Namepath = "測試", Value = "Develop" });
-                //this.CheckLines.Add(new CommonBox() { Namepath = "杏昌", Value = "XingChang" });
-                //this.CheckLines.Add(new CommonBox() { Namepath = "明昌", Value = "MingChang" });
-                //this.CheckLines.Add(new CommonBox() { Namepath = "宏昌", Value = "HongChang" });
-                //this.CheckLines.Add(new CommonBox() { Namepath = "佑昌", Value = "YoChang" });
-                //this.CheckLines.Add(new CommonBox() { Namepath = "佑東", Value = "YoDong" });
-                //this.CheckLines.Add(new CommonBox() { Namepath = "和昌", Value = "HeChang" });
-                #endregion
-
-                this.CheckLine = this.checkLines[0];
-
-
-            }
-            else if ( SingInEmployee.ID == 97 || SingInEmployee.ID == 45 || SingInEmployee.ID == 114) //需要看見各店的人
+            if (SingInEmployee.Authority == Authority.Admin || SingInEmployee.Authority == Authority.PharmacyManager || SingInEmployee.Authority == Authority.AccountingStaff) //需要看見各店的人(系統管理員、藥局經理、會計人員)
             {
 
                 foreach (DataRow dr in dt.Rows)
                 {
                     if(dr["Value"].ToString() != "Develop")
-                        this.CheckLines.Add(new CommonBox() { Namepath = dr["Namepath"].ToString(), Value = dr["Value"].ToString() });
+                    {
+                        CheckLines.Add(new CommonBox() { Namepath = dr["Namepath"].ToString(), Value = dr["Value"].ToString() });
+                    }
+                    else
+                    {
+                        if (SingInEmployee.Authority == Authority.Admin)
+                        {
+                            CheckLines.Add(new CommonBox() { Namepath = dr["Namepath"].ToString(), Value = dr["Value"].ToString() });
+                        }
+                    }
                 }
-
-                this.CheckLine = this.checkLines[0];
-
+                if (CheckLines.Count > 0)
+                {
+                    CheckLine = CheckLines[0];
+                }
             }
-            else if ((SingInEmployee.ID == 40 || SingInEmployee.ID == 48 || SingInEmployee.ID == 72 || SingInEmployee.ID == 47) && ViewModelMainWindow.CurrentPharmacy.Name != "和安藥局") //店長能看見其他員工SingInEmployee.WorkPosition.WorkPositionId == 2 || 
+            else if (SingInEmployee.Authority == Authority.StoreManager) //(4.店長)店長能看見其他員工 
             {
                 //不能選擇店
-                if (SingInEmployee.ID == 72)
-                    this.CheckLines.Add(new CommonBox() { Namepath = "和昌", Value = "HeChang" });
-                if (SingInEmployee.ID == 40)
-                    this.CheckLines.Add(new CommonBox() { Namepath = "明昌", Value = "MingChang" });
-                if (SingInEmployee.ID == 47)
-                    this.CheckLines.Add(new CommonBox() { Namepath = "佑昌", Value = "YoChang" });
-                if (SingInEmployee.ID == 48)
-                    this.CheckLines.Add(new CommonBox() { Namepath = "杏昌", Value = "XingChang" });
-
-                this.CheckLine = this.checkLines[0];
-
+                if (SingInEmployee.IsLocal)
+                {
+                    foreach(DataRow dr in dt.Rows)
+                    {
+                        string Ename = Convert.ToString(dr["Value"]);
+                        string Cname = Convert.ToString(dr["Namepath"]);
+                        if (Properties.Settings.Default.SystemSerialNumber.Contains(Ename))
+                        {
+                            CheckLines.Add(new CommonBox() { Namepath = Cname, Value = Ename });
+                        }
+                    }
+                }
+                if (CheckLines.Count > 0)
+                {
+                    CheckLine = CheckLines[0];
+                }
             }
-            else //一般員工
+            else //(5.店員 6.負責藥師 7.執業藥師 8.支援藥師)只能看自己的打卡紀錄
             {
-                //不能選擇店
-                this.CheckLines.Add(new CommonBox() { Namepath = "無選項", Value = "" });
-                this.CheckLine = this.checkLines[0];
-
+                if(dt != null && dt.Rows.Count > 0)
+                {
+                    string namepath = Convert.ToString(dt.Rows[0]["Namepath"]);
+                    string value = Convert.ToString(dt.Rows[0]["Value"]);
+                    CheckLines.Add(new CommonBox() { Namepath = namepath, Value = value });
+                    CheckLine = CheckLines[0];
+                }
             }
-
             SetEmployeeCollection();
-
-
         }
         public void SetEmployeeCollection()
         {
-
-            if (SingInEmployee.ID == 1)
+            if (SingInEmployee.Authority == Authority.Admin)
             {
                 MainWindow.ServerConnection.OpenConnection();
                 EmployeeCollection = new Employees();
-                EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), CheckLine.Value, "", 1);
+                EmployeeCollection.ClockInEmp(DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), CheckLine.Value, "", 1);
                 MainWindow.ServerConnection.CloseConnection();
-
             }
-            else if (SingInEmployee.ID == 97 || SingInEmployee.ID == 45 || SingInEmployee.ID == 114) //需要看見各店的人
+            else if (SingInEmployee.Authority == Authority.Admin || SingInEmployee.Authority == Authority.PharmacyManager || SingInEmployee.Authority == Authority.AccountingStaff) //需要看見各店的人
             {
-
                 MainWindow.ServerConnection.OpenConnection();
                 EmployeeCollection = new Employees();
-                EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), CheckLine.Value, "", 2);
+                EmployeeCollection.ClockInEmp(DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), CheckLine.Value, "", 2);
                 MainWindow.ServerConnection.CloseConnection();
-
             }
-            else if (SingInEmployee.ID == 40 || SingInEmployee.ID == 48 || SingInEmployee.ID == 72 || SingInEmployee.ID == 47) //店長能看見其他員工SingInEmployee.WorkPosition.WorkPositionId == 2 || 
+            else if (SingInEmployee.Authority == Authority.StoreManager) //店長能看見其他員工
             {
-
                 MainWindow.ServerConnection.OpenConnection();
                 EmployeeCollection = new Employees();
-                EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), CheckLine.Value, "", 2);
+                EmployeeCollection.ClockInEmp(DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), CheckLine.Value, "", 2);
                 MainWindow.ServerConnection.CloseConnection();
-
             }
             else //一般員工
             {
-
                 //只能看自己資料
                 MainWindow.ServerConnection.OpenConnection();
                 EmployeeCollection = new Employees();
-                EmployeeCollection.ClockInEmp(System.DateTime.Now.Year.ToString(), System.DateTime.Now.Month.ToString(), null, SingInEmployee.ID.ToString(), 3);
+                EmployeeCollection.ClockInEmp(DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), null, SingInEmployee.ID.ToString(), 3);
                 MainWindow.ServerConnection.CloseConnection();
-
             }
 
             //選第一位
             if (EmployeeCollection.Count > 0)
                 Employee = EmployeeCollection[0];
-
         }
         private void ExportCsv()
         {
@@ -394,38 +391,45 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 MainWindow.ServerConnection.OpenConnection();
-                ClockInLogsRpt = new ClockInLog(ClockInDb.ClockInLogFotReport(System.DateTime.Now.Year.ToString(), SearchMonth, CheckLine.Value));
+                ClockInLogsRpt = new ClockInLog(ClockInDb.ClockInLogFotReport(SearchYear, SearchMonth, CheckLine.Value));
                 MainWindow.ServerConnection.CloseConnection();
 
                 using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.CreateNew))
                 {
-                    
                     StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
                     var c = 0;int? cMin=0;
-                    sw.WriteLine("日期" + "\t" + "店別" + "\t" + "姓名" + "\t" + "上班" + "\t" + "下班" + "\t" + "時數" + "\t" + "小計");
+                    sw.WriteLine("日期" + "\t" + "店別" + "\t" + "員工編號" + "\t" + "姓名" + "\t" + "上班" + "\t" + "下班" + "\t" + "時數" + "\t" + "小計");
                     
                     foreach (var row in ClockInLogsRpt)
                     {
                         string _str = row.Date.Substring(row.Date.Length - 3, 3);
-                        string days = "/"+System.DateTime.DaysInMonth(System.DateTime.Now.Year, int.Parse(SearchMonth)).ToString();
+                        string days = "/" + DateTime.DaysInMonth(DateTime.Now.Year, int.Parse(SearchMonth)).ToString();
 
-                        sw.WriteLine(row.Date + "\t" + row.EmpAccount + "\t" + row.EmpName + "\t" + row.Time + "\t" + row.Time2 + "\t" + row.WMin/60 + "\t"+ row.Type);
+                        sw.WriteLine(row.Date + "\t" + row.CurPha_Name + "\t" + row.EmpAccount + "\t" + row.EmpName + "\t" + row.Time + "\t" + row.Time2 + "\t" + row.WMin/60 + "\t"+ row.Type);
                         cMin += row.WMin/60;
 
                         if (_str == days)
                         {
-
                             sw.WriteLine("----------\t----------\t---------\t---------\t 總計:  \t   " + cMin + " 小時 ");
-
                             cMin = 0;
                         }
                         c++;
                     }
                     sw.Close();
+                    try
+                    {
+                        ConfirmWindow cw = new ConfirmWindow("是否開啟檔案", "確認");
+                        if ((bool)cw.DialogResult)
+                        {
+                            System.Diagnostics.Process.Start(saveFileDialog1.FileName);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageWindow.ShowMessage(e.Message, MessageType.WARNING);
+                    }
                 }
             }
-
-
         }
 
 

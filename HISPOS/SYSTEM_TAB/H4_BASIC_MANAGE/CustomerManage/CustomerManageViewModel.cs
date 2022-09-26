@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using DocumentFormat.OpenXml.Presentation;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.FunctionWindow;
@@ -13,12 +14,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
+using His_Pos.Extention;
+
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 {
-    public class CustomerManageViewModel : TabBase, INotifyPropertyChanged
+    public class CustomerManageViewModel : TabBase
     {
         public override TabBase getTab()
         {
@@ -191,6 +193,96 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 PrescriptionDetailViewSource = new CollectionViewSource { Source = CustomerDetailPrescriptionCollection };
                 PrescriptionDetailView = PrescriptionDetailViewSource.View;
                 PrescriptionDetailViewSource.Filter += AdjustTypeFilter;
+
+                RaisePropertyChanged(nameof(DisplayPatientCellPhone));
+                RaisePropertyChanged(nameof(DisplayPatientSecondPhone));
+                RaisePropertyChanged(nameof(DisplayPatientTel));
+                RaisePropertyChanged(nameof(DisplayPatientContactNote));
+                RaisePropertyChanged(nameof(DisplayPatientNote));
+            }
+        }
+
+
+
+        public string DisplayPatientCellPhone
+        {
+            get
+            {
+                if (customer is null)
+                    return string.Empty;
+                var cellphone = customer.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                customer.CellPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                if (customer is null)
+                    return string.Empty;
+                var cellphone = customer.SecondPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                customer.SecondPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientTel
+        {
+            get
+            {
+                if (customer is null)
+                    return string.Empty;
+
+
+                var tel = customer.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                customer.Tel = tel;
+            }
+        }
+
+        public string DisplayPatientContactNote
+        {
+            get
+            {
+                if (customer is null)
+                    return string.Empty;
+                var contactNote = customer.ContactNote;
+                return contactNote is null ? string.Empty : contactNote.ToPatientContactNote();
+            }
+            set
+            {
+                customer.ContactNote = value;
+
+
+            }
+        }
+
+        public string DisplayPatientNote
+        {
+            get
+            {
+                if (customer is null)
+                    return string.Empty;
+                return customer.Note;
+            }
+            set
+            {
+                customer.Note = value;
+
             }
         }
 
@@ -264,8 +356,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         public CustomerManageViewModel()
         {
-            TabName = MainWindow.HisFeatures[5].Functions[4];
-            Icon = MainWindow.HisFeatures[5].Icon;
+            //TabName = MainWindow.HisFeatures[2].Functions[0];
+            //Icon = MainWindow.HisFeatures[2].Icon;
             Messenger.Default.Register<NotificationMessage<string>>(this, GetSelectedCustomer);
             DataChangeCommand = new RelayCommand(DataChangeAction);
             CancelCommand = new RelayCommand(CancelAction);
@@ -314,6 +406,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         {
             if (notificationMessage.Target == this)
             {
+                TabName = "顧客管理";
                 MainWindow.Instance.AddNewTab(TabName);
                 SearchOrderID = notificationMessage.Content;
                 SearchIDAction();
@@ -525,6 +618,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         {
             if (notificationMessage.Target == this)
             {
+                TabName = "顧客管理";
                 MainWindow.Instance.AddNewTab(TabName);
 
                 SearchOrderID = notificationMessage.Content;

@@ -24,8 +24,12 @@ namespace His_Pos.NewClass.StoreOrder.Report
 
         public int ManufactoryID { get; set; }
         public string ManufactoryName { get; set; }
+        public double PurchaseDrugPrice { get; set; }//採購藥品合計
+        public double PurchaseOTCPrice { get; set; }//採購OTC合計
         public int PurchaseCount { get; set; }
         public double PurchasePrice { get; set; }
+        public double ReturnDrugPrice { get; set; }//退貨藥品合計
+        public double ReturnOTCPrice { get; set; }//退貨OTC合計
         public int ReturnCount { get; set; }
         public double ReturnPrice { get; set; }
 
@@ -55,8 +59,12 @@ namespace His_Pos.NewClass.StoreOrder.Report
             ManufactoryName = dataRow.Field<string>("Man_Name");
             PurchaseCount = dataRow.Field<int>("PURCHASE_COUNT");
             PurchasePrice = (double)dataRow.Field<decimal>("PURCHASE_PRICE");
+            PurchaseDrugPrice = (double)dataRow.Field<decimal>("PURCHASE_Drug_PRICE");
+            PurchaseOTCPrice = (double)dataRow.Field<decimal>("PURCHASE_OTC_PRICE");
             ReturnCount = dataRow.Field<int>("RETURN_COUNT");
             ReturnPrice = (double)dataRow.Field<decimal>("RETURN_PRICE");
+            ReturnDrugPrice = (double)dataRow.Field<decimal>("RETURN_Drug_PRICE");
+            ReturnOTCPrice = (double)dataRow.Field<decimal>("RETURN_OTC_PRICE");
         }
 
         #region ----- Define Functions -----

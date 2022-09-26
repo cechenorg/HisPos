@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
     /// <summary>
     /// ClockInSearchView.xaml 的互動邏輯
     /// </summary>
-    public partial class ClockInSearchView : UserControl
+    public partial class ClockInSearchView : UserControl, INotifyPropertyChanged
     {
         public ClockInSearchView()
         {
@@ -21,6 +22,8 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             _ = Account.Focus();
 
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void Account_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -31,8 +34,6 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
                     case Key.Enter:
                         Password.Focus();
                         break;
-
-
                 }
             }
         }
@@ -49,6 +50,4 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockInSearch
             }
         }
     }
-
-
 }

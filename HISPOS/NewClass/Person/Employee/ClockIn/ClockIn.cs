@@ -12,6 +12,8 @@ namespace His_Pos.NewClass.Person.Employee.ClockIn
         {
             EmpNo = r.Field<int>("Emp_ID");
             EmpAccount = r.Field<string>("Emp_Account");
+            if(r.Table.Columns.Contains("CurPha_Name"))
+                CurPha_Name = r.Field<string>("CurPha_Name");
             EmpName = r.Field<string>("Emp_Name");
             Date = r.Field<string>("WDate");
             Time = r.Field<string>("WTime");
@@ -22,6 +24,7 @@ namespace His_Pos.NewClass.Person.Employee.ClockIn
 
         public int EmpNo { get; set; }
         public string EmpAccount { get; set; }
+        public string CurPha_Name { get; set; }
         public string EmpName { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }

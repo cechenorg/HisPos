@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
+using His_Pos.Extention;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription;
@@ -295,7 +296,82 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             set
             {
                 Set(() => CustomerData, ref customerData, value);
+                
+                RaisePropertyChanged(nameof(DisplayPatientCellPhone));
+                RaisePropertyChanged(nameof(DisplayPatientSecondPhone));
+                RaisePropertyChanged(nameof(DisplayPatientTel));
+                RaisePropertyChanged(nameof(DisplayPatientContactNote));
+                RaisePropertyChanged(nameof(DisplayPatientNote));
                 IsDataChanged = false;
+            }
+        }
+
+        public string DisplayPatientCellPhone
+        {
+            get
+            {
+                var cellphone = customerData.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                customerData.CellPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                var cellphone = customerData.SecondPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                customerData.SecondPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientTel
+        {
+            get
+            {
+                var tel = customerData.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                customerData.Tel = tel;
+            }
+        }
+
+        public string DisplayPatientContactNote
+        {
+            get
+            {
+                var contactNote = CustomerData.ContactNote;
+                return contactNote  is null ? string.Empty : contactNote.ToPatientContactNote();
+            }
+            set
+            {
+                customerData.ContactNote = value;
+
+               
+            }
+        }
+
+        public string DisplayPatientNote
+        {
+            get
+            {
+                return customerData.Note;
+            }
+            set
+            {
+                customerData.Note = value;
             }
         }
 
@@ -474,6 +550,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void CustomerDataSaveAction()
         {
             CustomerData.Save();
+            IsDataChanged = false;
         }
 
         private void SetPhoneCount()
@@ -515,57 +592,42 @@ namespace His_Pos.SYSTEM_TAB.INDEX
 
         private void CommonMedStoreOrderAction()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否將低於安全量之藥品傳送訂單至杏德?", "常備藥傳送");
-            if ((bool)confirmWindow.DialogResult)
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認傳送", "常備藥傳送");
+            if ((bool)confirmWindow.DialogResult)//(20220602改寫)
             {
+                DataTable table = new DataTable();
                 if (ProductTypeStatusSelectedItem == "藥品")
+                    table = StoreOrderDB.StoreOrderCommonMedicine();//新增常備採購單//成功回傳採購單號，失敗回傳空白
+                else if(ProductTypeStatusSelectedItem == "OTC")
+                    table = StoreOrderDB.StoreOrderOTCMedicine();//新增OTC採購單//成功回傳採購單號，失敗回傳空白
+                if (table != null && table.Rows.Count > 0)
                 {
-                    DataTable table = StoreOrderDB.StoreOrderCommonMedicine();
-
-                    if (table.Rows.Count > 0)
+                    string orderID = Convert.ToString(table.Rows[0]["StoOrdID"]);
+                    if (!string.IsNullOrEmpty(orderID))
                     {
-                        StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
-                        storeOrder.GetOrderProducts();
-
-                        table = StoreOrderDB.SendStoreOrderToSingde(storeOrder);
-
-                        if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                        table = StoreOrderDB.GetStoreOrderByID(orderID);//取得訂單資料
+                        if(table != null && table.Rows.Count > 0)
                         {
-                            StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
-                            MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
-                        }
-                        else
-                        {
-                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID,"");
-                            MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
-                        }
+                            StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
+                            storeOrder.GetOrderProducts();
+                            if(ProductTypeStatusSelectedItem == "藥品")
+                                table = StoreOrderDB.SendStoreOrderToSingde(storeOrder);//傳送藥品
+                            else if (ProductTypeStatusSelectedItem == "OTC")
+                                table = StoreOrderDB.SendOTCStoreOrderToSingde(storeOrder);//傳送OTC
 
-                        CommonProductGetDataAcion();
+                            if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
+                            {
+                                StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
+                                MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
+                            }
+                            else
+                            {
+                                StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID, "");
+                                MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
+                            }
+                        }
                     }
-                }
-                else if (ProductTypeStatusSelectedItem == "OTC")
-                {
-                    DataTable table = StoreOrderDB.StoreOrderOTCMedicine();
-
-                    if (table.Rows.Count > 0)
-                    {
-                        StoreOrder storeOrder = new PurchaseOrder(table.Rows[0]);
-                        storeOrder.GetOrderProducts();
-
-                        table = StoreOrderDB.SendOTCStoreOrderToSingde(storeOrder);
-
-                        if (table.Rows.Count > 0 && table.Rows[0].Field<string>("RESULT").Equals("SUCCESS"))
-                        {
-                            StoreOrderDB.StoreOrderToWaiting(storeOrder.ID);
-                            MessageWindow.ShowMessage("傳送成功!", MessageType.SUCCESS);
-                        }
-                        else
-                        {
-                            StoreOrderDB.RemoveStoreOrderByID(storeOrder.ID,"");
-                            MessageWindow.ShowMessage("傳送失敗!", MessageType.ERROR);
-                        }
-                        CommonProductGetDataAcion();
-                    }
+                    CommonProductGetDataAcion();
                 }
             }
         }

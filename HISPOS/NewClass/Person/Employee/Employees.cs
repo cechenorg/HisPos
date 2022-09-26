@@ -2,6 +2,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
+using DomainModel.Enum;
 
 namespace His_Pos.NewClass.Person.Employee
 {
@@ -14,79 +16,65 @@ namespace His_Pos.NewClass.Person.Employee
         public void Init()
         {
             Clear();
-            var table = EmployeeDb.GetData();
-            
-            foreach (DataRow row in table.Rows)
+
+            var employees = EmployeeDb.GetData();
+          
+            foreach (var emp in employees)
             {
-                Add(new Employee(row));
-            }
-            
+                if(emp.Authority != Authority.Admin)
+                    Add(emp);
+            } 
         }
 
         public void ClockIn(string WYear, string WMonth,int? EmpID)
         {
             Clear();
-            var table = EmployeeDb.EmployeeClockInList(WYear, WMonth, EmpID);
-            foreach (DataRow row in table.Rows)
+            var employees = EmployeeDb.EmployeeClockInList(WYear, WMonth, EmpID);
+            foreach (var emp in employees)
             {
-                Add(new Employee(row));
+                Add(emp);
             }
         }
 
         public void ClockInEmp(string WYear, string WMonth, string StoreNo, string EmpId, int Permit)
         {
             Clear();
-            var table = EmployeeDb.EmployeeClockInListTest(WYear, WMonth, StoreNo, EmpId, Permit);
-            if (table.Rows.Count > 0)
+            var employees = EmployeeDb.EmployeeClockInListTest(WYear, WMonth, StoreNo, EmpId, Permit);
+
+            foreach (var emp in employees)
             {
-                foreach (DataRow row in table.Rows)
-                {
-                    Add(new Employee(row));
-                }
-            }
-            else
-            { 
-            
-            }
+                Add(emp);
+            } 
         }
 
 
         public void GetEnablePharmacist(DateTime selectedDate)
-        {
-            var table = EmployeeDb.GetData();
-            var tempEmpList = new Employees();
-            foreach (DataRow r in table.Rows)
+        { 
+           
+            foreach (var emp in EmployeeDb.GetData())
             {
-                tempEmpList.Add(new Employee(r));
-            }
-            foreach (var emp in tempEmpList)
-            {
-                if (emp.CheckLeave(selectedDate) && emp.WorkPosition.WorkPositionName.Contains("藥師") && emp.IsLocal)
+                if (emp.CheckLeave(selectedDate) && emp.IsLocalPharmist() && emp.IsLocal)
                     Add(emp);
                 else
                 {
-                    if (emp.ID.Equals(ViewModelMainWindow.CurrentUser.ID) && emp.WorkPosition.WorkPositionName.Contains("藥師"))
+                    if (emp.ID.Equals(ViewModelMainWindow.CurrentUser.ID) && emp.IsLocalPharmist() )
                         Add(emp);
                 }
-            }
-            //var table = EmployeeDb.GetEnableMedicalPersonnels(selectedDate);
-            //foreach (DataRow r in table.Rows)
-            //{
-            //    Add(new Employee(r));
-            //}
+            } 
         }
 
         public void InitPharmacists()
         {
             Clear();
-            var table = EmployeeDb.GetData();
-            foreach (DataRow row in table.Rows)
+            var employees = EmployeeDb.GetData();
+             
+            foreach (var emp in employees.Where(_ => _.IsLocalPharmist()))
             {
-                var emp = new Employee(row);
-                if (emp.WorkPosition.WorkPositionName.Contains("藥師"))
-                    Add(emp);
+                Add(emp);
             }
         }
+
+     
 
         public Employees GetLocalPharmacist()
         {

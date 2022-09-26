@@ -28,7 +28,7 @@
                 Width="320"
                 Margin="20,0,0,0"
                 VerticalAlignment="Center"
-                Content="{Binding ReceiveID}"
+                Content="{Binding ID}"
                 FontFamily="Segoe UI Semibold"
                 FontSize="40"
                 FontWeight="Bold"
@@ -82,6 +82,7 @@
                 Foreground="Red"
                 Text="退貨" />
             <Label
+                Visibility="Hidden"
                 Margin="20,0,0,0"
                 Content="原"
                 Foreground="Black"
@@ -89,7 +90,7 @@
             <Label
                 Width="200"
                 VerticalAlignment="Center"
-                Content="{Binding ID}"
+                Content="{Binding ReceiveID}"
                 FontFamily="Segoe UI Semi"
                 FontSize="24"
                 Foreground="Black" />
@@ -331,7 +332,7 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="{StaticResource ForeGround}"
-                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N2}" />
+                Text="{Binding TotalPrice, UpdateSourceTrigger=PropertyChanged, FallbackValue=0, StringFormat=N0}" />
             <Label
                 Margin="10,0,0,0"
                 VerticalAlignment="Center"

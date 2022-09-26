@@ -32,6 +32,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
+using His_Pos.Extention;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
 using MedicineVirtual = His_Pos.NewClass.Medicine.Base.MedicineVirtual;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
@@ -166,7 +167,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             }
         }
 
-        public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust || EditedPrescription.InsertTime != null && EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師");
+        public bool CanEdit => !EditedPrescription.PrescriptionStatus.IsAdjust || 
+            EditedPrescription.InsertTime != null && 
+            EditedPrescription.InsertTime >= DateTime.Today || VM.CurrentUser.ID == 1 || 
+            VM.CurrentUser.IsPharmist();
         public bool PriceReadOnly => !CanEdit;
 
         #endregion UIProperties
@@ -183,6 +187,102 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             set
             {
                 Set(() => EditedPrescription, ref editedPrescription, value);
+            }
+        }
+
+
+
+        public string DisplayPatientCellPhone
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+                var cellphone = editedPrescription.Patient.CellPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                editedPrescription.Patient.CellPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientSecondPhone
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+                var cellphone = editedPrescription.Patient.SecondPhone;
+                return cellphone is null ? string.Empty : cellphone.ToPatientCellPhone();
+            }
+            set
+            {
+                string cellphone = value.Replace("-", "");
+                editedPrescription.Patient.SecondPhone = cellphone;
+            }
+        }
+
+        public string DisplayPatientTel
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+
+
+                var tel = editedPrescription.Patient.Tel;
+                return tel is null ? string.Empty : tel.ToPatientTel();
+            }
+            set
+            {
+                string tel = value.Replace("-", "");
+                editedPrescription.Patient.Tel = tel;
+            }
+        }
+        private bool _isLineEnable = false;
+        public bool IsLineEnable
+        {
+            get
+            {
+                var line = editedPrescription.Patient.Line;
+                return line is null ? false : true;
+            }
+            set
+            {
+                Set(() => IsLineEnable, ref _isLineEnable, value);
+            }
+        }
+        public string DisplayPatientContactNote
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+                var contactNote = editedPrescription.Patient.ContactNote;
+                return contactNote is null ? string.Empty : contactNote.ToPatientContactNote();
+            }
+            set
+            {
+                editedPrescription.Patient.ContactNote = value;
+
+
+            }
+        }
+
+        public string DisplayPatientNote
+        {
+            get
+            {
+                if (editedPrescription.Patient is null)
+                    return string.Empty;
+                return editedPrescription.Patient.Note;
+            }
+            set
+            {
+                editedPrescription.Patient.Note = value;
+
             }
         }
 
@@ -244,7 +344,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
         public RelayCommand Delete { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
+        public RelayCommand IsClosed { get; set; }
         public RelayCommand ResetBuckleAmount { get; set; }
+        public RelayCommand ClearBuckleAmount { get; set; }
         public RelayCommand CustomerDetailEdited { get; set; }
         public RelayCommand CustomerRedoEdited { get; set; }
         public RelayCommand SavePatientData { get; set; }
@@ -362,7 +464,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             MedicinePriceChanged = new RelayCommand(CountMedicinePoint);
             MedicineAmountChanged = new RelayCommand(SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
+            IsClosed = new RelayCommand(IsClosedAction);
             ResetBuckleAmount = new RelayCommand(ResetBuckleAmountAction);
+            ClearBuckleAmount = new RelayCommand(ClearBuckleAmountAction);
             CustomerDetailEdited = new RelayCommand(CustomerDetailEditedAction);
             CustomerRedoEdited = new RelayCommand(CustomerRedoEditedAction);
             SavePatientData = new RelayCommand(SavePatientDataAction);
@@ -428,6 +532,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             var printMedBag = printConfirmResult[0];
             var printSingle = printConfirmResult[1];
             var printReceipt = printConfirmResult[2];
+            var reportFormat = Properties.Settings.Default.ReportFormat;
             if (printMedBag is null || printReceipt is null)
                 return;
             if ((bool)printMedBag && printSingle is null)
@@ -435,79 +540,31 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                if (EditedPrescription.Institution.ID == "3532082753")
+                if ((bool)printMedBag)
                 {
-                    if ((bool)printMedBag)
+                    BusyContent = Resources.藥袋列印;
+                    switch (printSingle != null && (bool)printSingle)
                     {
-                        BusyContent = Resources.藥袋列印;
-                        switch (printSingle != null && (bool)printSingle)
-                        {
-                            case false:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
-                                {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else
-                                {
-                                    PrintEditedPrescription.PrintMedBagMultiMode();
-                                }
-                                break;
-
-                            case true:
-                                 if (VM.CurrentPharmacy.ID == "5931017216")
-                                {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else {
-                                    PrintEditedPrescription.PrintMedBagSingleMode();
-                                } break;
-                        }
-                          
-                    }
-                }
-              
-                else
-                {
-                    if ((bool)printMedBag)
-                    {
-
-                        BusyContent = Resources.藥袋列印;
-                        switch (printSingle != null && (bool)printSingle)
-                        {
-                            case false:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
-                                {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else
-                                {
-                                    EditedPrescription.PrintMedBagMultiMode();
-                                }
-                                break;
-
-                            case true:
-                                if (VM.CurrentPharmacy.ID == "5931017216")
-                                {
-
-                                    EditedPrescription.PrintMedBagSingleModeByCE();
-
-
-                                }
-                                else
-                                {
-                                    EditedPrescription.PrintMedBagSingleMode();
-                                }
-                                break;
-                        }
+                        case false:
+                            if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+                            {
+                                EditedPrescription.PrintMedBagSingleModeByCE();
+                            }
+                            else
+                            {
+                                EditedPrescription.PrintMedBagMultiMode();
+                            }
+                            break;
+                        case true:
+                            if (reportFormat == MainWindow.GetEnumDescription((PrintFormat)0))
+                            {
+                                EditedPrescription.PrintMedBagSingleModeByCE();
+                            }
+                            else
+                            {
+                                EditedPrescription.PrintMedBagSingleMode();
+                            }
+                            break;
                     }
                 }
                 if ((bool)printReceipt)
@@ -686,10 +743,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             DataChangedAction();
         }
 
+        private void IsClosedAction()
+        {
+            switch (EditedPrescription.SelectedMedicine.IsClosed)
+            {
+                case true:
+                    EditedPrescription.SelectedMedicine.IsClosed = false;
+                    break;
+
+                case false:
+                    EditedPrescription.SelectedMedicine.IsClosed = true;
+                    break;
+            }
+            DataChangedAction();
+        }
         private void ResetBuckleAmountAction()
         {
             EditedPrescription.SelectedMedicine?.ResetBuckleAmount();
             IsEdit = true;
+        }
+        private void ClearBuckleAmountAction()
+        {
+            EditedPrescription.SelectedMedicine?.ClearBuckleAmount();
         }
 
         private void CustomerDetailEditedAction()
@@ -761,7 +836,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
             currentService = PrescriptionService.CreateService(EditedPrescription);
             if (!currentService.CheckEditPrescription(EditedPrescription.PrescriptionStatus.IsGetCard)) return;
             EditedPrescription.SetDetail();
-            MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
             var result = EditedPrescription.Update();
             if (result && EditedPrescription.Type.Equals(PrescriptionType.ChronicRegister) && !EditedPrescription.PrescriptionStatus.OrderStatus.Equals("備藥狀態:已收貨"))
@@ -784,7 +858,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
                 var paySelfDiff = editedPaySelf - originPaySelf;
                 PrescriptionDb.InsertPrescriptionPointEditRecord(EditedPrescription.ID, medicalServiceDiff, medicineDiff, paySelfDiff);
             }
-            MainWindow.ServerConnection.CloseConnection();
             MainWindow.SingdeConnection.CloseConnection();
             if (result)
                 MessageWindow.ShowMessage("編輯成功", MessageType.SUCCESS);

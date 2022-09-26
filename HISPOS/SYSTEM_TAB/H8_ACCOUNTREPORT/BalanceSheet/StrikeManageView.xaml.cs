@@ -61,6 +61,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             string month = dt.Month.ToString();
             dpSDate.SelectedDate = Convert.ToDateTime(year + "-" + month + "-" + "1");
             dpEDate.SelectedDate = dt;
+            dpStrikeDate.SelectedDate = dt;
         }
 
         private void ReloadDetail()
@@ -220,8 +221,18 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 DataColumn cc = new DataColumn("CanClose", typeof(bool));
                 sn.DefaultValue = true;
                 dgDetails.Columns.Add(cc);
-
+                
                 dgStrikeDataGrid.ItemsSource = dgDetails.DefaultView;
+                if(!results.Columns.Contains("OrderID"))
+                {
+                    dgStrikeDataGrid.Columns[3].Visibility = Visibility.Visible;
+                    dgStrikeDataGrid.Columns[4].Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    dgStrikeDataGrid.Columns[3].Visibility = Visibility.Collapsed;
+                    dgStrikeDataGrid.Columns[4].Visibility = Visibility.Visible;
+                }
             }
             catch
             {
@@ -382,7 +393,8 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         private void btnHistory_Click(object sender, RoutedEventArgs e)
         {
             var historyWindow = new StrikeHistoryWindow();
-            _ = historyWindow.ShowDialog();
+            //_ = historyWindow.Show();
+            historyWindow.Show();
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
@@ -434,6 +446,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             _ = double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
             string note = dgDetails.Rows[index]["StrikeNote"].ToString();
             string sourceID = dgDetails.Rows[index]["ID"].ToString();
+
+            string TransferID = string.Empty;
+            if(dgDetails.Columns.Contains("TransferID"))
+            {
+                TransferID = dgDetails.Rows[index]["TransferID"].ToString();
+            }
             BalanceSheetTypeEnum enu = GetStrikeTypeEnum();
 
             var left = cbTargetAccount.SelectedValue;
@@ -455,6 +473,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 sourceID = left.ToString();
             }
 
+            if(!string.IsNullOrEmpty(TransferID))
+            {
+                sourceID = TransferID;
+            }
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", ViewModelMainWindow.CurrentUser.ID));
@@ -463,6 +485,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             parameters.Add(new SqlParameter("NOTE", note));
             parameters.Add(new SqlParameter("TARGET", right.ToString()));
             parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
+            parameters.Add(new SqlParameter("StrikeDate", (DateTime)dpStrikeDate.SelectedDate));
             DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
             MainWindow.ServerConnection.CloseConnection();
 
@@ -484,6 +507,12 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
         private void btnBatchStrike_Click(object sender, RoutedEventArgs e)
         {
+            DataRow[] drs = dgDetails.Select("IsSelected = 1");
+            if(drs == null || drs.Length == 0)
+            {
+                MessageWindow.ShowMessage("未選取需沖帳的項目!", MessageType.ERROR);
+                return;
+            }
             ConfirmWindow confirmWindow = new ConfirmWindow("是否進行批次沖帳?", "批次沖帳", true);
             if ((bool)confirmWindow.DialogResult)
             {
@@ -523,6 +552,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                         parameters.Add(new SqlParameter("NOTE", note));
                         parameters.Add(new SqlParameter("TARGET", right.ToString()));
                         parameters.Add(new SqlParameter("SOURCE_ID", left.ToString()));
+                        parameters.Add(new SqlParameter("StrikeDate", (DateTime)dpStrikeDate.SelectedDate));
                         DataTable result = MainWindow.ServerConnection.ExecuteProc("[Set].[StrikeBalanceSheet]", parameters);
                         if (result.Rows.Count > 0 && result.Rows[0].Field<string>("RESULT").Equals("SUCCESS")) { }
                         else
@@ -551,9 +581,22 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmWindow confirmWindow = new ConfirmWindow("確定是否結案?", "確認");
+            if (!(bool)confirmWindow.DialogResult)
+            {
+                return;
+            }
             int index = GetRowIndexRouted(e);
             _ = double.TryParse(dgDetails.Rows[index]["StrikeAmount"].ToString(), out double amount);
             string sourceID = dgDetails.Rows[index]["ID"].ToString();
+            if(dgDetails.Columns.Contains("TransferID"))
+            {
+                string TransferID = Convert.ToString(dgDetails.Rows[index]["TransferID"]);
+                if(TransferID.Substring(0,2) == "TR")
+                {
+                    sourceID = Convert.ToString(dgDetails.Rows[index]["TransferID"]);
+                }
+            }
             var left = cbTargetAccount.SelectedValue;
 
             if (amount != 0)

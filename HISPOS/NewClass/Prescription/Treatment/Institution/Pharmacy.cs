@@ -15,6 +15,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
     {
         public Pharmacy()
         {
+            MedicalPersonnels = new Employees();
         }
 
         public Pharmacy(DataRow r)
@@ -29,7 +30,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             GroupServerName = r.Field<string>("GroupServerName");
             TAXNUM = r.Field<string>("PHAMAS_TAXNUM");
             VerifyKey = r.Field<string>("PHAMAS_VerifyKey");
-             
+            MedicalPersonnels = new Employees();
+            AllEmployees = new Employees();
         }
 
         private string id;
@@ -97,6 +99,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         public Employees MedicalPersonnels { get; set; }
 
         [IgnoreFormat]
+        public Employees AllEmployees { get; set; }
+
+        [IgnoreFormat]
         public string GroupServerName { get; set; }
 
         [IgnoreFormat]
@@ -114,14 +119,16 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         {
             DataTable tableCurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             Pharmacy pharmacy = new Pharmacy(tableCurrentPharmacy.Rows[0]); 
-            pharmacy.MedicalPersonnels = new Employees();
             pharmacy.MedicalPersonnels.InitPharmacists();
+
+            pharmacy.AllEmployees.Init();
+
             return pharmacy;
         }
 
         public Employee GetPharmacist()
         {
-            if (ViewModelMainWindow.CurrentUser.WorkPosition.WorkPositionName.Contains("藥師"))
+            if (ViewModelMainWindow.CurrentUser.IsLocalPharmist())
                 return MedicalPersonnels.Single(m => m.ID.Equals(ViewModelMainWindow.CurrentUser.ID));
             var medicalPersonnels = MedicalPersonnels.GetLocalPharmacist();
             return medicalPersonnels[0];

@@ -1,36 +1,46 @@
-﻿using His_Pos.Database;
+﻿using Dapper;
+using His_Pos.Database;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using DomainModel;
+using DomainModel.Enum;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Service;
 
 namespace His_Pos.NewClass.Person.Employee
 {
     public static class EmployeeDb
     {
-        public static DataTable GetData()
+        public static IEnumerable<Employee> GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[Employee]");
-        }
+            List<Employee> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[Employee]", 
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
 
-        public static DataTable GetDataByID(int ID)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("@EmpID", ID));
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeByID]", parameterList);
+            return result; 
         }
-
+         
         public static List<Employee> GetGroupPharmacyDataByID(List<string> groupserverNameList,int ID)
         {
 
             List<Employee> result = new List<Employee>();
 
             foreach(var groupserverName in groupserverNameList)
-            {
-                List<SqlParameter> parameterList = new List<SqlParameter>();
-                parameterList.Add(new SqlParameter("@EmpID", ID));
-                var table = MainWindow.ServerConnection.ExecuteProcBySchema(groupserverName,"[Get].[EmployeeByID]", parameterList);
-                Employee employee = new Employee(table.Rows[0]);
+            { 
+                Employee employee = null;
+                 
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    employee = conn.Query<Employee>($"{groupserverName}.[Get].[Employee]", 
+                        commandType: CommandType.StoredProcedure).SingleOrDefault(_ => _.ID == ID);
+                });
+
                 result.Add(employee);
             }
 
@@ -46,7 +56,27 @@ namespace His_Pos.NewClass.Person.Employee
             else
             {
                 MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[InsertEmployee]", parameterList);
-                SyncData();
+
+                foreach (var pharmacyInfo in ViewModelMainWindow.CurrentPharmacy.GroupPharmacyinfoList)
+                {
+                    var tempEmployee = e.DeepCloneViaJson();
+
+                    if (pharmacyInfo.PHAMAS_VerifyKey != ViewModelMainWindow.CurrentPharmacy.VerifyKey)
+                    {
+                        //其他藥局都須為支援藥師
+                        if (tempEmployee.Authority == Authority.MasterPharmacist || tempEmployee.Authority == Authority.NormalPharmacist )
+                        {
+                            tempEmployee.Authority = Authority.SupportPharmacist;
+                        }
+
+                        tempEmployee.IsLocal = false;
+                    }
+                     
+                    parameterList = new List<SqlParameter>();
+                    parameterList.Add(new SqlParameter("Employee", SetCustomer(tempEmployee)));
+                    MainWindow.ServerConnection.ExecuteProcBySchema(pharmacyInfo.PHAMAS_VerifyKey, "[Set].[InsertEmployee]", parameterList);
+                }
+                 
                 UpdateIsLocal(e.IDNumber, true);
             }
         }
@@ -55,18 +85,21 @@ namespace His_Pos.NewClass.Person.Employee
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
-            if (string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName))
+            if (string.IsNullOrEmpty(ViewModelMainWindow.CurrentPharmacy.GroupServerName))
             {
                 MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList); 
             }
                 
             else
             {
-                MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateEmployee]", parameterList);
-                
-                foreach(var groupPharmactEmployee in e.GroupPharmacyEmployeeList)
+                 MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Set].[UpdateEmployee]", parameterList);
+                 parameterList = new List<SqlParameter>();
+                 parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
+                 MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateEmployee]", parameterList);
+
+                foreach (var groupPharmactEmployee in e.GroupPharmacyEmployeeList.Where(_ => _.IsDirty))
                 {
-                    e.WorkPosition = groupPharmactEmployee.EmployeeWorkPosition;
+                    e.Authority = groupPharmactEmployee.EmployeeAuthority;
                     parameterList = new List<SqlParameter>();
                     parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
                     MainWindow.ServerConnection.ExecuteProcBySchema(groupPharmactEmployee.PharmacyVerifyKey, "[Set].[UpdateEmployee]", parameterList);
@@ -95,13 +128,47 @@ namespace His_Pos.NewClass.Person.Employee
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeNewAccount]", parameterList);
         }
 
-        public static DataTable EmployeeLogin(string account, string password)
+        public static Employee EmployeeLogin(string inputAccount, string password)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("Account", account));
-            parameterList.Add(new SqlParameter("Password", password));
-            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeLogin]", parameterList);
-            return table;
+            Employee result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+               result = conn.Query<Employee>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[Login]",
+                    param: new { account = inputAccount, pw = password },
+                    commandType: CommandType.StoredProcedure).SingleOrDefault();
+            });
+            return result;
+        }
+
+        public static bool CheckEmployeeIsEnable(int empID)
+        {
+            bool result = false; 
+             
+            if(string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName) == false)
+            {
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    result = conn.QueryFirst<bool>($"{ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName}.[Get].[CheckEmployeeEnable]",
+                         param: new { EmpID = empID },
+                         commandType: CommandType.StoredProcedure);
+                     
+                });
+
+                //若sever的權限是false 則直接回傳false
+                if (result == false)
+                    return false;
+            }
+             
+            //query各自藥局
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.QueryFirst<bool>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[CheckEmployeeEnable]",
+                     param: new { EmpID = empID },
+                     commandType: CommandType.StoredProcedure);
+
+            });
+             
+            return result; 
         }
 
         public static DataTable CheckIdNumber(string idNumber)
@@ -126,7 +193,7 @@ namespace His_Pos.NewClass.Person.Employee
             parameterList.Add(new SqlParameter("AuthValue", AuthValue));
 
             var table = string.IsNullOrEmpty(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName)
-                 ? MainWindow.ServerConnection.ExecuteProcBySchema("HIS_POS_Server", "[Get].[TabAuth]", parameterList)
+                 ? MainWindow.ServerConnection.ExecuteProc("[Get].[TabAuth]", parameterList)
                  : MainWindow.ServerConnection.ExecuteProcBySchema(ChromeTabViewModel.ViewModelMainWindow.CurrentPharmacy.GroupServerName, "[Get].[TabAuth]", parameterList);
             return table;
         }
@@ -143,50 +210,7 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddSqlParameter(parameterList, "isLocal", isLocal);
             MainWindow.ServerConnection.ExecuteProc("[Set].[UpdateIsLocal]", parameterList);
         }
-
-        public static DataTable GetEnableMedicalPersonnels(DateTime selectedDate)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Date", selectedDate);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[EnablePharmacists]", parameterList);
-        }
-
-       
-
-        public static DataTable SetCustomers(Employees es)
-        {
-            DataTable employeeTable = EmployeeTable();
-
-            foreach (Employee e in es)
-            {
-                DataRow newRow = employeeTable.NewRow();
-                if (e.ID == 0)
-                    newRow["Emp_ID"] = DBNull.Value;
-                else
-                    newRow["Emp_ID"] = e.ID;
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Account", e.Account);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Password", e.Password);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", e.AuthorityValue);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Name", e.Name);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_NickName", e.NickName);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Gender", e.Gender);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_IDNumber", e.IDNumber);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_BirthDay", e.Birthday);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Address", e.Address);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Telephone", e.Tel);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Cellphone", e.CellPhone);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Email", e.Email);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_LINE", e.Line);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", e.WorkPosition.WorkPositionId);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_StartDate", e.StartDate);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_LeaveDate", e.LeaveDate);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_PurchaseLimit", e.PurchaseLimit);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_Note", e.Note);
-                DataBaseFunction.AddColumnValue(newRow, "Emp_IsEnable", e.IsEnable);
-                employeeTable.Rows.Add(newRow);
-            }
-            return employeeTable;
-        }
+         
 
         public static DataTable SetCustomer(Employee e)
         {
@@ -198,7 +222,7 @@ namespace His_Pos.NewClass.Person.Employee
                 newRow["Emp_ID"] = e.ID;
             DataBaseFunction.AddColumnValue(newRow, "Emp_Account", e.Account);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Password", e.Password);
-            DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", e.AuthorityValue);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_AuthorityLevel", (int)e.Authority);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Name", e.Name);
             DataBaseFunction.AddColumnValue(newRow, "Emp_NickName", e.NickName);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Gender", e.Gender);
@@ -209,12 +233,14 @@ namespace His_Pos.NewClass.Person.Employee
             DataBaseFunction.AddColumnValue(newRow, "Emp_Cellphone", e.CellPhone);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Email", e.Email);
             DataBaseFunction.AddColumnValue(newRow, "Emp_LINE", e.Line);
-            DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", e.WorkPosition.WorkPositionId);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_WorkPositionID", 0);
             DataBaseFunction.AddColumnValue(newRow, "Emp_StartDate", e.StartDate);
             DataBaseFunction.AddColumnValue(newRow, "Emp_LeaveDate", e.LeaveDate);
             DataBaseFunction.AddColumnValue(newRow, "Emp_PurchaseLimit", e.PurchaseLimit);
             DataBaseFunction.AddColumnValue(newRow, "Emp_Note", e.Note);
             DataBaseFunction.AddColumnValue(newRow, "Emp_IsEnable", e.IsEnable);
+            DataBaseFunction.AddColumnValue(newRow, "Emp_IsLocal", e.IsLocal);
+            
             employeeTable.Rows.Add(newRow);
             return employeeTable;
         }
@@ -242,6 +268,8 @@ namespace His_Pos.NewClass.Person.Employee
             employeeTable.Columns.Add("Emp_PurchaseLimit", typeof(int));
             employeeTable.Columns.Add("Emp_Note", typeof(String));
             employeeTable.Columns.Add("Emp_IsEnable", typeof(bool));
+            employeeTable.Columns.Add("Emp_IsLocal", typeof(bool));
+             
             return employeeTable;
         }
 
@@ -256,35 +284,47 @@ namespace His_Pos.NewClass.Person.Employee
             return MainWindow.ServerConnection.ExecuteProc("[Set].[InsertClockInLog]", parameters);
         }
 
-        public static DataTable EmployeeClockInList(string WYear, string WMonth, int? EmpId)
+        public static IEnumerable<Employee> EmployeeClockInList(string WYear, string WMonth, int? EmpId)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("WYear", WYear));
-            parameterList.Add(new SqlParameter("WMonth", WMonth));
-            var table = new DataTable();
+            
+            List<Employee> result = null;
             if (EmpId is null)
-            {
-                table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInLogEmp]", parameterList);
+            { 
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    result = conn.Query<Employee>(
+                        $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ClockInLogEmp]",
+                        param: new { WYear, WMonth  },
+                        commandType: CommandType.StoredProcedure).ToList();
+                });
+
             }
             else
             {
-                parameterList.Add(new SqlParameter("EmpId", EmpId));
-                table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInEmployee]", parameterList);
+                SQLServerConnection.DapperQuery((conn) =>
+                {
+                    result = conn.Query<Employee>(
+                        $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ClockInEmployee]",
+                        param: new { WYear, WMonth, EmpId },
+                        commandType: CommandType.StoredProcedure).ToList();
+                }); 
             }
-            return table;
+
+            return result;
         }
-        public static DataTable EmployeeClockInListTest(string WYear, string WMonth,string StoreNo, string EmpId, int Permit)
+        public static IEnumerable<Employee> EmployeeClockInListTest(string WYear, string WMonth,string StoreNo, string EmpId, int Permit)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            parameterList.Add(new SqlParameter("WYear", WYear));
-            parameterList.Add(new SqlParameter("WMonth", WMonth));
-            parameterList.Add(new SqlParameter("StoreNo", StoreNo));
-            parameterList.Add(new SqlParameter("Permit", Permit));
-            parameterList.Add(new SqlParameter("Emp_ID", EmpId));
-            var table = new DataTable();
-            table = MainWindow.ServerConnection.ExecuteProc("[Get].[ClockInLogEmployees]", parameterList);
-       
-            return table;
+            List<Employee> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Employee>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[ClockInLogEmployees]",
+                    param: new { WYear, WMonth, StoreNo, Permit, Emp_ID = EmpId },
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
+
+            return result;
+             
         }
 
 
