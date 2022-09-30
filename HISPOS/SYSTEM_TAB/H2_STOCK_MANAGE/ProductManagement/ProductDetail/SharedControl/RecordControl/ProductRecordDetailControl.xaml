@@ -244,7 +244,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="40" IsReadOnly="True">
+                <DataGridTemplateColumn Width="Auto" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ContentControl Content="{Binding}">
@@ -275,7 +275,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
-                    Width="100"
+                    Width="90"
                     Binding="{Binding Time, Converter={StaticResource DateConverter}}"
                     FontFamily="Segoe UI Semi"
                     FontSize="18"
@@ -289,10 +289,10 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="170"
                     Binding="{Binding Name}"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="20"
+                    FontSize="18"
                     Header="名稱"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
@@ -303,10 +303,10 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="80"
                     Binding="{Binding Note}"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="20"
+                    FontSize="18"
                     Header="備註"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
@@ -320,7 +320,7 @@
                     Width="60"
                     Binding="{Binding Amount, StringFormat=0.##}"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="20"
+                    FontSize="18"
                     Header="數量"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
@@ -331,10 +331,10 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="Auto"
+                    Width="65"
                     Binding="{Binding Price, StringFormat=0.00}"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="20"
+                    FontSize="18"
                     Header="金額"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
@@ -345,10 +345,10 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="90"
+                    Width="82"
                     Binding="{Binding Stock, StringFormat=0.##}"
                     FontFamily="Segoe UI Semibold"
-                    FontSize="20"
+                    FontSize="18"
                     Header="當下庫存"
                     IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
