@@ -150,7 +150,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                             {
                                 int flag = Convert.ToInt32(drs[0]["FLAG"]);
                                 string ReceiveID = Convert.ToString(drs[0]["PRESCRIPTION_RECEIVEID"]);
-                                if (flag == 2)
+                                if (flag == 2 && storeOrders[i].OrderType != OrderTypeEnum.RETURN)
                                 {
                                     string VoidReason = "5.其他:杏德訂單已作廢";
                                     StoreOrderDB.RemoveStoreOrderByID(storeOrders[i].ID, VoidReason);
