@@ -555,24 +555,21 @@ namespace His_Pos.NewClass.StoreOrder
                 ToScrapStatus();
             }
             else*/
-            bool isSuccess = false;
-            if (orderFlag != 2)
-            {
-                SourceID = orderID;
-                ReceiveID = prescriptionReceiveID;
-                CheckCode = checkCode;
 
-                isSuccess = UpdateOrderProductsFromSingde();
+            SourceID = orderID;
+            ReceiveID = prescriptionReceiveID;
+            CheckCode = checkCode;
 
-                if (isSuccess)
-                    OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
-            }
+            bool isSuccess = UpdateOrderProductsFromSingde();
+
+            if (isSuccess)
+                OrderStatus = OrderStatusEnum.SINGDE_PROCESSING;
             return isSuccess;
         }
 
         private bool UpdateOrderProductsFromSingde()
         {
-            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID, CheckCode, SourceID);
+            bool isSuccess = PurchaseProducts.UpdateSingdeProductsByStoreOrderID(ID, ReceiveID, CheckCode, SourceID, OrderType);
 
             if (isSuccess)
                 GetOrderProducts();
