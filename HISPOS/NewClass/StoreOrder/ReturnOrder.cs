@@ -230,8 +230,8 @@ namespace His_Pos.NewClass.StoreOrder
                             value = detail.ReturnStockValue;
                             avgPrice = detail.ReceiveAmount;
                         }
-                        returnProduct.Price = avgPrice;//(平均單價)
-                        returnProduct.SubTotal = Math.Round(Convert.ToDouble(avgPrice * returnProduct.RealAmount), MidpointRounding.AwayFromZero);
+                        returnProduct.Price = (OrderStatus== OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING) ? returnProduct.Price : avgPrice;//(平均單價)
+                        returnProduct.SubTotal = (OrderStatus == OrderStatusEnum.NORMAL_PROCESSING || OrderStatus == OrderStatusEnum.SINGDE_PROCESSING) ? returnProduct.SubTotal : Math.Round(Convert.ToDouble(avgPrice * returnProduct.RealAmount), MidpointRounding.AwayFromZero);
                         returnProduct.ReceiveAmount = Math.Round(avgPrice * returnProduct.ReturnAmount, MidpointRounding.AwayFromZero);
                     }
                 }
