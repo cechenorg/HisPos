@@ -167,7 +167,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                                 false,
                                 0,
                                 0,
-                                int.Parse(amount) - buckle));
+                                int.Parse(amount) - buckle,
+                                int.Parse(amount), 
+                                buckle,0));
                         }
                         else
                         {
@@ -179,7 +181,9 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                                 false,
                                 0,
                                 0,
-                                int.Parse(amount) - int.Parse(inventory)));
+                                int.Parse(amount) - int.Parse(inventory), 
+                                int.Parse(amount),
+                                int.Parse(inventory), 0));
                         }
                     }
                 }

@@ -410,7 +410,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public RelayCommand CountPrescriptionPoint { get; set; }
         public RelayCommand MedicineAmountChanged { get; set; }
         public RelayCommand AdjustNoBuckle { get; set; }
+        public RelayCommand IsClosed { get; set; }
         public RelayCommand ResetBuckleAmount { get; set; }
+        public RelayCommand ClearBuckleAmount { get; set; }
         public RelayCommand CopyPrescription { get; set; }
         public RelayCommand CheckDeclareStatusCmd { get; set; }
         public RelayCommand ShowPrescriptionEditWindow { get; set; }
@@ -520,7 +522,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CountPrescriptionPoint = new RelayCommand(CountMedicinePointAction);
             MedicineAmountChanged = new RelayCommand(MedicineAmountChangedAction, SetBuckleAmount);
             AdjustNoBuckle = new RelayCommand(AdjustNoBuckleAction);
+            IsClosed = new RelayCommand(IsClosedAction);
             ResetBuckleAmount = new RelayCommand(ResetBuckleAmountAction);
+            ClearBuckleAmount = new RelayCommand(ClearBuckleAmountAction);
             CopyPrescription = new RelayCommand(CopyPrescriptionAction);
             CheckDeclareStatusCmd = new RelayCommand(CheckDeclareStatus);
             ShowPrescriptionEditWindow = new RelayCommand(ShowPrescriptionEditWindowAction);
@@ -1009,9 +1013,29 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        private void IsClosedAction()
+        {
+            switch (CurrentPrescription.SelectedMedicine.IsClosed)
+            {
+                case true:
+                    CurrentPrescription.SelectedMedicine.IsClosed = false;
+                    CurrentPrescription.SelectedMedicine.AdjustNoBuckle = false;
+                    break;
+
+                case false:
+                    CurrentPrescription.SelectedMedicine.IsClosed = true;
+                    if (CurrentPrescription.SelectedMedicine.BuckleAmount == 0)
+                        CurrentPrescription.SelectedMedicine.AdjustNoBuckle = true;
+                    break;
+            }
+        }
         private void ResetBuckleAmountAction()
         {
             CurrentPrescription.SelectedMedicine?.ResetBuckleAmount();
+        }
+        private void ClearBuckleAmountAction()
+        {
+            CurrentPrescription.SelectedMedicine?.ClearBuckleAmount();
         }
 
         private void CountMedicinePointAction()
@@ -1111,76 +1135,67 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ErrorAdjustAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                currentService = PrescriptionService.CreateService(CurrentPrescription);
-                if (!currentService.CheckCustomerSelected())
-                    return;
-                CheckCustomerEdited();
-                if (!CheckAdjustDate()) return;
-                CheckWay();
-                if (!ErrorAdjustConfirm()) return;
-                isAdjusting = true;
-                if (!CheckMedicinesNegativeStock()) return;
-                CheckChronicCopayment();
-                if (!CheckPrescription(false, true)) return;
-                StartErrorAdjust();
-            });
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            if (!currentService.CheckCustomerSelected())
+                return;
+            CheckCustomerEdited();
+            if (!CheckAdjustDate()) return;
+            CheckWay();
+            if (!ErrorAdjustConfirm()) return;
+            isAdjusting = true;
+            if (!CheckMedicinesNegativeStock()) return;
+            CheckChronicCopayment();
+            if (!CheckPrescription(false, true)) return;
+            StartErrorAdjust();
         }
 
         private void DepositAdjustAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                CheckCustomerValid();
-                currentService = PrescriptionService.CreateService(CurrentPrescription);
-                if (!currentService.CheckCustomerSelected())
-                    return;
-                CheckCustomerEdited();
-                if (!CheckAdjustDate()) return;
-                CheckWay();
-                isAdjusting = true;
-                if (!CheckMedicinesNegativeStock()) return;
-                if (!CheckPrescription(true, false)) return;
-                StartDepositAdjust();
-            });
+            CheckCustomerValid();
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            if (!currentService.CheckCustomerSelected())
+                return;
+            CheckCustomerEdited();
+            if (!CheckAdjustDate()) return;
+            CheckWay();
+            isAdjusting = true;
+            if (!CheckMedicinesNegativeStock()) return;
+            if (!CheckPrescription(true, false)) return;
+            StartDepositAdjust();
         }
 
         private void AdjustAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
+            CheckCustomerValid();
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            if (!currentService.CheckCustomerSelected())
+                return;
+
+            CheckCustomerEdited();
+            if (!CheckAdjustDate()) 
+                return;
+            CheckWay();
+
+            isAdjusting = true;
+
+            if (!CheckPrescriptionBeforeOrder(false, false))
+                return;
+
+            if (!CheckMedicinesNegativeStock())
+                return;
+
+            CheckChronicCopayment();
+
+            if (!CheckPrescription(false, false)) 
+                return;
+
+            if (VM.CurrentPharmacy.NewInstitution)
             {
-                CheckCustomerValid();
-                currentService = PrescriptionService.CreateService(CurrentPrescription);
-                if (!currentService.CheckCustomerSelected())
-                    return;
-
-                CheckCustomerEdited();
-                if (!CheckAdjustDate())
-                    return;
-                CheckWay();
-
-                isAdjusting = true;
-
-                if (!CheckPrescriptionBeforeOrder(false, false))
-                    return;
-
-                if (!CheckMedicinesNegativeStock())
-                    return;
-
-                CheckChronicCopayment();
-
-                if (!CheckPrescription(false, false))
-                    return;
-
-                if (VM.CurrentPharmacy.NewInstitution)
-                {
-                    SetNewInstitutionUploadData();
-                    StartNormalAdjust();
-                }
-                else
-                    CheckIsReadCard();
-            });
+                SetNewInstitutionUploadData();
+                StartNormalAdjust();
+            }
+            else
+                CheckIsReadCard();
         }
 
         private void CheckCustomerValid()
@@ -1210,34 +1225,28 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void RegisterAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
+            CheckCustomerValid();
+            CheckCustomerEdited();
+            isAdjusting = true;
+            CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
+            if (!CheckRegisterPrescription(false, false))
             {
-                CheckCustomerValid();
-                CheckCustomerEdited();
-                isAdjusting = true;
-                CurrentPrescription.PrescriptionStatus.IsSendOrder = true;
-                if (!CheckRegisterPrescription(false, false))
-                {
-                    CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
-                    return;
-                }
-                StartRegister();
-            });
+                CurrentPrescription.PrescriptionStatus.IsSendOrder = false;
+                return;
+            }
+            StartRegister();
         }
 
         private void PrescribeAdjustAction()
         {
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate
-            {
-                currentService = PrescriptionService.CreateService(CurrentPrescription);
-                if (!currentService.CheckCustomerSelected())
-                    return;
-                CheckCustomerEdited();
-                isAdjusting = true;
-                if (!CheckMedicinesNegativeStock()) return;
-                if (!CheckPrescription(false, false)) return;
-                StartPrescribeAdjust();
-            });
+            currentService = PrescriptionService.CreateService(CurrentPrescription);
+            if (!currentService.CheckCustomerSelected())
+                return;
+            CheckCustomerEdited();
+            isAdjusting = true;
+            if (!CheckMedicinesNegativeStock()) return;
+            if (!CheckPrescription(false, false)) return;
+            StartPrescribeAdjust();
         }
 
         #endregion CommandAction
@@ -1339,10 +1348,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                 isCardReading = false;
                 if (CheckReadCardResult())
                     WriteCard();
-                else
-                {
-                    IsBusy = false;
-                }
+
+                IsBusy = false;
             };
             IsBusy = true;
             worker.RunWorkerAsync();
@@ -1420,20 +1427,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             if (!CheckIsGetMedicalNumber()) return;
             if (!CheckPatientMatch()) return;
-            worker = new BackgroundWorker();
-            worker.DoWork += (o, ea) =>
-            {
-                BusyContent = Resources.寫卡;
-                currentService.SetCard(currentCard);
-                currentService.CreateDailyUploadData(ErrorCode);
-            };
-            worker.RunWorkerCompleted += (o, ea) =>
-            {
-                IsBusy = false;
-                StartNormalAdjust();
-            };
-            IsBusy = true;
-            worker.RunWorkerAsync();
+
+            BusyContent = Resources.寫卡;
+            currentService.SetCard(currentCard);
+            currentService.CreateDailyUploadData(ErrorCode);
+            StartNormalAdjust();
+
         }
 
         private bool CheckPatientMatch()

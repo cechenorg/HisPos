@@ -1933,6 +1933,7 @@ namespace His_Pos.NewClass.Prescription
             foreach (var m in Medicines)
             {
                 m.AdjustNoBuckle = false;
+                m.IsClosed = false;
                 m.BuckleAmount = m.Amount;
                 m.SendAmount = -1;
             }
