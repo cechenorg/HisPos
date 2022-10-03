@@ -1750,7 +1750,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             PrescriptionCount = UpdatePrescriptionCount();
             MainWindow.ServerConnection.CloseConnection();
             ClearAction();
-            MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
+            //MessageWindow.ShowMessage(Resources.InsertPrescriptionSuccess, MessageType.SUCCESS);
             isAdjusting = false;
         }
 
