@@ -51,10 +51,10 @@ namespace His_Pos.NewClass.Person.Customer
 
         public void GetTodayEdited()
         {
-            var table = CustomerDb.GetTodayEdited();
-            foreach (DataRow r in table.Rows)
+            var cusList = CustomerDb.GetTodayEdited();
+            foreach (Customer r in cusList)
             {
-                Add(new Customer(r));
+                Add(r);
             }
         }
     }

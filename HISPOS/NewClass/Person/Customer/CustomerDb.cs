@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DocumentFormat.OpenXml.Wordprocessing;
 using His_Pos.Database;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using System;
@@ -234,9 +235,17 @@ namespace His_Pos.NewClass.Person.Customer
             return MainWindow.ServerConnection.ExecuteProc("[set].[UpdateCustomerByCard]", parameterList);
         }
 
-        public static DataTable GetTodayEdited()
+        public static IEnumerable<Customer> GetTodayEdited()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[TodayEditedCustomers]");
+            List<Customer> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Customer>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[TodayEditedCustomers]",
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
+
+            return result;
         }
     }
 }
