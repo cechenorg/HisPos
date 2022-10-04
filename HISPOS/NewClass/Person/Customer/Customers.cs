@@ -21,15 +21,6 @@ namespace His_Pos.NewClass.Person.Customer
             }
         }
 
-        public void Init()
-        {
-            var table = CustomerDb.GetData();
-            foreach (DataRow r in table.Rows)
-            {
-                Add(new Customer(r));
-            }
-        }
-
         public void GetDataByNameOrBirth(string name, DateTime? date, string idNumber, string phoneNumber)
         {
             Clear();
