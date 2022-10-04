@@ -157,6 +157,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="Auto"
+                    MinWidth="150"
                     Binding="{Binding ID}"
                     FontFamily="Segoe UI Semi"
                     Header="商品代碼"

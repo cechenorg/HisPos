@@ -134,6 +134,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Width="Auto"
+                    MinWidth="150"
                     Header="商品代碼"
                     CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
@@ -141,6 +142,7 @@
                             <TextBox
                                 x:Name="ProductIDTextbox"
                                 Width="Auto"
+                                MinWidth="150"
                                 Margin="10,0,0,2"
                                 HorizontalContentAlignment="Center"
                                 CharacterCasing="Upper"
