@@ -1264,10 +1264,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         {
             Customer checkedPatient;
             MainWindow.ServerConnection.OpenConnection();
-            var table = CustomerDb.CheckCustomerByCard(currentCard.IDNumber);
-            if (table.Rows.Count > 0)
+            var patientFromDB = CustomerDb.CheckCustomerByCard(currentCard.IDNumber);
+            if (patientFromDB != null)
             {
-                var patientFromDB = new Customer(table.Rows[0]);
                 patientFromDB.CheckPatientWithCard(patientFromCard);
                 checkedPatient = patientFromDB;
                 checkedPatient.Save();
