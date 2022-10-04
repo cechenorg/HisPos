@@ -454,9 +454,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void SearchIDAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            CustomerCollection.GetDataByNameOrBirth(SearchOrderID);
-            MainWindow.ServerConnection.CloseConnection();
+            CustomerCollection.GetCustomerByCusId(Convert.ToInt32(SearchOrderID));
             if (CustomerCollection.Count > 0)
                 Customer = NewFunction.DeepCloneViaJson(CustomerCollection[0]);
             InitDataChanged();

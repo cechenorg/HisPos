@@ -123,13 +123,7 @@ namespace His_Pos.NewClass.Person.Customer
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByNameOrBirth]", parameterList);
         }
 
-        public static DataTable GetDataByNameOrBirth(string ID)
-        {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Id", ID);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", parameterList);
-        }
-
+       
         public static DataTable CustomerTable()
         {
             DataTable customerTable = new DataTable();
