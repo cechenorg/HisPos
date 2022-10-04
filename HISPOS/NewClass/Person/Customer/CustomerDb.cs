@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using His_Pos.Database;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -33,15 +34,25 @@ namespace His_Pos.NewClass.Person.Customer
             return result;
         }
 
-        public static DataTable CheckCustomer(Customer customer)
+        public static IEnumerable<Customer> CheckCustomer(Customer customer)
         {
-            var parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber",
-                string.IsNullOrEmpty(customer.IDNumber) ? null : customer.IDNumber);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", customer.Name);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", customer.Birthday);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", customer.Tel);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomer]", parameterList);
+            List<Customer> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Customer>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[CheckCustomer]",
+                    param: new
+                    {
+                        Cus_IDNumber = string.IsNullOrEmpty(customer.IDNumber) ? null : customer.IDNumber,
+                        Cus_Name = customer.Name,
+                        Cus_Birthday = customer.Birthday,
+                        Cus_Telephone = customer.Tel
+                    },
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
+
+            return result;
+
         }
 
         public static void UpdateEditTime(int cusId)

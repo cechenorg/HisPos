@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using IcCard = His_Pos.NewClass.Prescription.ICCard.IcCard;
@@ -192,12 +193,13 @@ namespace His_Pos.NewClass.Person.Customer
 
         public Customers Check()
         {
-            var table = CustomerDb.CheckCustomer(this);
+            var customerList = CustomerDb.CheckCustomer(this);
             var customers = new Customers();
-            if (table.Rows.Count == 0) return customers;
-            foreach (DataRow r in table.Rows)
+            if (customerList == null || customerList.Count() == 0) 
+                return customers;
+            foreach (Customer cus in customerList)
             {
-                customers.Add(new Customer(r));
+                customers.Add(cus);
             }
             return customers;
         }
