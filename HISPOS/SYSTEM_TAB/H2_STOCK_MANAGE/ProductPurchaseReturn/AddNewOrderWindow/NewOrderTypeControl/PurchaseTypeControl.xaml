@@ -1,39 +1,15 @@
-﻿<UserControl
-    x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl.PurchaseTypeControl"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:addNewOrderWindow="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl.PurchaseTypeControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:addNewOrderWindow="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
     <Grid Background="{StaticResource GridDarkerBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <StackPanel
-            Grid.Row="0"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <Label
-                Margin="10,0,0,0"
-                Content="選擇廠商:"
-                Foreground="Black"
-                Style="{StaticResource BoldLabelHeader25}" />
-            <ComboBox
-                Width="200"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                DisplayMemberPath="GetName"
-                FontFamily="Segoe UI Semibold"
-                FontSize="20"
-                IsEditable="True"
-                IsTextSearchEnabled="True"
-                ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                ItemsSource="{Binding ManufactoryCollection}"
-                SelectedItem="{Binding PurchaseOrderManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                StaysOpenOnEdit="True"
-                TextSearch.TextPath="GetName" />
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Label Margin="10,0,0,0" Content="選擇廠商:" Foreground="Black" Style="{StaticResource BoldLabelHeader25}" />
+            <ComboBox Width="200" Margin="10,0,0,0" HorizontalContentAlignment="Center" DisplayMemberPath="GetName" FontFamily="Segoe UI Semibold" 
+                      FontSize="20" IsEditable="True" IsTextSearchEnabled="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                      ItemsSource="{Binding ManufactoryCollection}" 
+                      SelectedItem="{Binding PurchaseOrderManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      StaysOpenOnEdit="True" TextSearch.TextPath="GetName" />
         </StackPanel>
     </Grid>
 </UserControl>
