@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DocumentFormat.OpenXml.Wordprocessing;
 using His_Pos.Database;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using System;
@@ -16,11 +17,19 @@ namespace His_Pos.NewClass.Person.Customer
             return MainWindow.ServerConnection.ExecuteProc("[Get].[Customer]");
         }
 
-        public static DataTable GetCustomerByCusId(int cusId)
+        public static Customer GetCustomerByCusId(int cusId)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Id", cusId);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", parameterList);
+            Customer result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.QueryFirstOrDefault<Customer>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[CustomerByCusId]",
+                    param: new
+                    { Cus_Id = cusId, },
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result;
         }
 
         public static DataTable CheckCustomer(Customer customer)

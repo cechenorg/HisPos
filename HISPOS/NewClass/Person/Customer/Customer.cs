@@ -153,8 +153,8 @@ namespace His_Pos.NewClass.Person.Customer
 
         public static Customer GetCustomerByCusId(int cusId)
         {
-            DataTable table = CustomerDb.GetCustomerByCusId(cusId);
-            var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            Customer customer = CustomerDb.GetCustomerByCusId(cusId);
+            
             /* 格式化手機 */
             if (!string.IsNullOrEmpty(customer.CellPhone) && customer.CellPhone.Length == 10)
             {
@@ -295,10 +295,9 @@ namespace His_Pos.NewClass.Person.Customer
             if (table != null && table.Rows.Count > 0)
             {
                 int cus_id = Convert.ToInt32(table.Rows[0]["Person_Id"]);
-                table = CustomerDb.GetCustomerByCusId(cus_id);//查詢客戶資料
-                if(table != null && table.Rows.Count > 0)
+                Customer customer = CustomerDb.GetCustomerByCusId(cus_id);//查詢客戶資料
+                if(customer != null)
                 {
-                    Customer customer = new Customer(table.Rows[0]);
                     ID = customer.ID;
                     Name = customer.Name;
                     IDNumber = customer.IDNumber;
