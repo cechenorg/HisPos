@@ -113,14 +113,25 @@ namespace His_Pos.NewClass.Person.Customer
             return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomers]", parameterList);
         }
 
-        public static DataTable GetDataByNameOrBirth(string name, DateTime? date, string idNumber, string phoneNumber)
+        public static IEnumerable<Customer> GetDataByNameOrBirth(string name, DateTime? date, string idNumber, string phoneNumber)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "CusName", name);
-            DataBaseFunction.AddSqlParameter(parameterList, "CusBirth", date);
-            DataBaseFunction.AddSqlParameter(parameterList, "IdNumber", idNumber);
-            DataBaseFunction.AddSqlParameter(parameterList, "PhoneNumber", phoneNumber);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByNameOrBirth]", parameterList);
+            List<Customer> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Customer>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[CustomerByNameOrBirth]",
+                    param: new
+                    {
+                        CusName = name,
+                        CusBirth = date,
+                        IdNumber = idNumber,
+                        PhoneNumber = phoneNumber
+                    },
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
+
+            return result;
+
         }
 
        

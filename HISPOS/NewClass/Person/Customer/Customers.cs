@@ -24,12 +24,10 @@ namespace His_Pos.NewClass.Person.Customer
         public void GetDataByNameOrBirth(string name, DateTime? date, string idNumber, string phoneNumber)
         {
             Clear();
-            var table = CustomerDb.GetDataByNameOrBirth(name, date, idNumber, phoneNumber);
-            foreach (DataRow r in table.Rows)
+            var cusList = CustomerDb.GetDataByNameOrBirth(name, date, idNumber, phoneNumber);
+            foreach (Customer r in cusList)
             {
-                Customer customer = new Customer(r);
-                customer.IsEnable = r.Field<bool>("Cus_IsEnable");
-                Add(customer);
+                Add(r);
             }
         }
 
