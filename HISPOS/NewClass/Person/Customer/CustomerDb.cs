@@ -1,9 +1,11 @@
-﻿using His_Pos.Database;
+﻿using Dapper;
+using His_Pos.Database;
 using His_Pos.NewClass.Prescription.ImportDeclareXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace His_Pos.NewClass.Person.Customer
 {
@@ -154,15 +156,23 @@ namespace His_Pos.NewClass.Person.Customer
         }
 
 
-        public static DataTable SearchCustomers(string idNumber, string name, string cellPhone, string tel, DateTime? birth)
+        public static IEnumerable<Customer> SearchCustomers(string idNumber, string name, string cellPhone, string tel, DateTime? birth)
         {
-            var parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_IDNumber", idNumber);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Name", name);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Birthday", birth);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_CellPhone", cellPhone);
-            DataBaseFunction.AddSqlParameter(parameterList, "Cus_Telephone", tel);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[SearchCustomer]", parameterList);
+            List<Customer> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Customer>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[SearchCustomer]",
+                    param: new { Cus_IDNumber = idNumber,
+                        Cus_Name = name,
+                        Cus_Birthday = birth,
+                        Cus_CellPhone = cellPhone,
+                        Cus_Telephone = tel
+                    },
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
+
+            return result;
         }
 
         public static DataTable CheckCustomerByCard(string idNumber)
