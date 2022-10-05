@@ -9,7 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Xml.Linq;
-
+using DapperParameters;
 namespace His_Pos.NewClass.Person.Customer
 {
     public static class CustomerDb
@@ -105,7 +105,7 @@ namespace His_Pos.NewClass.Person.Customer
             return customerTable;
         }
 
-        public static DataTable SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> Ddatas)
+        public static List<Customer> SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> Ddatas)
         {
             DataTable table = CustomerTable();
             foreach (var d in Ddatas)
@@ -120,11 +120,18 @@ namespace His_Pos.NewClass.Person.Customer
                 table.Rows.Add(newRow);
             }
 
-            List<SqlParameter> parameterList = new List<SqlParameter>();
-            DataBaseFunction.AddSqlParameter(parameterList, "Customers", table);
-            return MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomers]", parameterList);
-        }
+            List<Customer> result = null;
+            SQLServerConnection.DapperQuery((conn) =>
+            {
+                result = conn.Query<Customer>(
+                    $"{Properties.Settings.Default.SystemSerialNumber}.[Get].[CheckCustomers]",
+                    param: new { Customers = table},
+                    commandType: CommandType.StoredProcedure).ToList();
+            });
 
+            return result;
+        }
+        
         public static IEnumerable<Customer> GetDataByNameOrBirth(string name, DateTime? date, string idNumber, string phoneNumber)
         {
             List<Customer> result = null;
@@ -146,7 +153,7 @@ namespace His_Pos.NewClass.Person.Customer
 
         }
 
-       
+
         public static DataTable CustomerTable()
         {
             DataTable customerTable = new DataTable();

@@ -40,11 +40,11 @@ namespace His_Pos.NewClass.Person.Customer
 
         public Customers SetCustomersByPrescriptions(List<ImportDeclareXml.Ddata> ddatas)
         {
-            DataTable table = CustomerDb.SetCustomersByPrescriptions(ddatas);
+            var cusList = CustomerDb.SetCustomersByPrescriptions(ddatas);
             Customers customers = new Customers();
-            foreach (DataRow r in table.Rows)
+            foreach (Customer cus in cusList)
             {
-                customers.Add(new Customer(r));
+                customers.Add(cus);
             }
             return customers;
         }
