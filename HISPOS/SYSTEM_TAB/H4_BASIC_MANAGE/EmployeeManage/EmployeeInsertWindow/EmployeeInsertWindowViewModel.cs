@@ -36,9 +36,11 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
         public RelayCommand SubbmitCommand { get; set; }
         public RelayCommand CheckIdNumberCommand { get; set; }
 
-        public EmployeeInsertWindowViewModel()
+        private readonly IEmployeeService _employeeService;
+        public EmployeeInsertWindowViewModel(IEmployeeService employeeService)
         {
-           
+
+            _employeeService = employeeService;
             string acc = EmployeeService.GetEmployeeNewAccount();
             Employee.Account = acc;
             Employee.Password = acc;
@@ -55,8 +57,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeInsertWindow
         {
             if(CheckIdNumber() == false)
                 return;
-           
-            EmployeeService.Insert(Employee);
+
+            _employeeService.Insert(Employee);
              
             MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseEmployeeInsertWindow"));

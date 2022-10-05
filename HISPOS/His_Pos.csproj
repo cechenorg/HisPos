@@ -353,6 +353,7 @@
     <Compile Include="NewClass\Location\Location.cs" />
     <Compile Include="NewClass\Location\LocationDb.cs" />
     <Compile Include="NewClass\Location\LocationDetail.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerService.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockIn.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInDb.cs" />
     <Compile Include="NewClass\Person\Employee\ClockIn\ClockInLog.cs" />

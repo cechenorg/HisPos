@@ -11,17 +11,28 @@ using His_Pos.Service;
 
 namespace His_Pos.NewClass.Person.Employee
 {
-    public class EmployeeService
+
+    public interface IEmployeeService
     {
+        void Insert(Employee emp);
+
+    }
+    public class EmployeeService : IEmployeeService
+    {
+        private IEmployeeDB _employeeDb;
+        public EmployeeService(IEmployeeDB employeeDb)
+        {
+            _employeeDb = employeeDb;
+        }
 
         public static Employee GetDataByID(int id)
         {
             return EmployeeDb.GetData().SingleOrDefault(_ => _.ID == id);
         }
 
-        public static void Insert(Employee emp)
+        public void Insert(Employee emp)
         {
-            EmployeeDb.Insert(emp);
+            _employeeDb.Insert(emp);
         }
 
         public static void Update(Employee emp)

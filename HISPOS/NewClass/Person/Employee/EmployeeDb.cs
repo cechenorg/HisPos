@@ -12,7 +12,12 @@ using His_Pos.Service;
 
 namespace His_Pos.NewClass.Person.Employee
 {
-    public static class EmployeeDb
+    public interface IEmployeeDB
+    {
+         void Insert(Employee e);
+    }
+
+    public  class EmployeeDb : IEmployeeDB
     {
         public static IEnumerable<Employee> GetData()
         {
@@ -47,7 +52,7 @@ namespace His_Pos.NewClass.Person.Employee
             return result;
         }
 
-        public static void Insert(Employee e)
+        public void Insert(Employee e)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
