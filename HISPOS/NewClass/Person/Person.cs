@@ -13,24 +13,7 @@ namespace His_Pos.NewClass.Person
         {
         }
 
-        public Person(DataRow r)
-        {
-            ID = r.Field<int>("Person_Id");
-            Name = r.Field<string>("Person_Name");
-            IDNumber = r.Field<string>("Person_IDNumber");
-            Gender = r.Field<string>("Person_Gender");
-            if (string.IsNullOrEmpty(Gender))
-                Gender = CheckGender();
-            Birthday = r.Field<DateTime?>("Person_BirthDay");
-            Tel = r.Field<string>("Person_Telephone");
-            CellPhone = r.Field<string>("Person_Cellphone");
-            Address = r.Field<string>("Person_Address");
-            Email = r.Field<string>("Person_Email");
-            Line = r.Field<string>("Person_LINE");
-            Note = r.Field<string>("Person_Note");
-            SecondPhone = r.Field<string>("Person_SecondPhone");
-        }
-
+       
         [Index(0)]
         public virtual int ID { get; set; }
 

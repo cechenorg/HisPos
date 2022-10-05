@@ -23,12 +23,7 @@ namespace His_Pos.NewClass.Person.Customer
             ID = -1;
         }
 
-        public Customer(DataRow r) : base(r)
-        {
-            ContactNote = r.Field<string>("Cus_UrgentNote");
-            LastEdit = r.Field<DateTime?>("Cus_EditTime");
-        }
-
+       
         public Customer(IcCard card)
         {
             Name = card.Name;
