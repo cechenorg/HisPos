@@ -15,11 +15,12 @@ namespace His_Pos.NewClass.Person.Employee
     public interface IEmployeeDB
     {
          void Insert(Employee e);
+         IEnumerable<Employee> GetData();
     }
 
     public  class EmployeeDb : IEmployeeDB
     {
-        public static IEnumerable<Employee> GetData()
+        public IEnumerable<Employee> GetData()
         {
             List<Employee> result = null;
             SQLServerConnection.DapperQuery((conn) =>

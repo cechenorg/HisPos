@@ -15,19 +15,28 @@ namespace His_Pos.NewClass.Person.Employee
     public interface IEmployeeService
     {
         void Insert(Employee emp);
+        Employee GetDataByID(int id);
+
+        IEnumerable<Employee> GetData();
 
     }
     public class EmployeeService : IEmployeeService
     {
-        private IEmployeeDB _employeeDb;
+        private readonly IEmployeeDB _employeeDb;
+
         public EmployeeService(IEmployeeDB employeeDb)
         {
             _employeeDb = employeeDb;
         }
 
-        public static Employee GetDataByID(int id)
+        public Employee GetDataByID(int id)
         {
-            return EmployeeDb.GetData().SingleOrDefault(_ => _.ID == id);
+            return _employeeDb.GetData().SingleOrDefault(_ => _.ID == id);
+        }
+
+        public IEnumerable<Employee> GetData()
+        {
+            return _employeeDb.GetData();
         }
 
         public void Insert(Employee emp)

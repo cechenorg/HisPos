@@ -424,8 +424,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.Closing
                 MessageWindow.ShowMessage("僅能關今天的班", MessageType.ERROR);
                 return;
             }
-             
-            var emp = EmployeeService.GetDataByID(ViewModelMainWindow.CurrentUser.ID);
+
+            EmployeeService employeeService = new EmployeeService(new EmployeeDb());
+            var emp = employeeService.GetDataByID(ViewModelMainWindow.CurrentUser.ID);
               
             ConfirmWindow cw = new ConfirmWindow("關班人員：" + emp.Name
                 + "\r\n" + "關班金額：" + CheckTotal + "\r\n\r\n資料送出後無法修改，\r\n是否進行關班作業？", "關班確認");

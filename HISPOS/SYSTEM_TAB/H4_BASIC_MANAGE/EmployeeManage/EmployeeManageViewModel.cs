@@ -214,7 +214,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private void CancelAction()
         {
-            SelectedEmployee = EmployeeService.GetDataByID(SelectedEmployee.ID);
+            EmployeeService employeeService = new EmployeeService(new EmployeeDb());
+            SelectedEmployee = employeeService.GetDataByID(SelectedEmployee.ID);
         }
 
         private void SubmitAction()
