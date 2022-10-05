@@ -158,12 +158,10 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
 
         private void DetailChangeAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable table = AccountsDb.GetBankByAccountsID();
             Bank = new ObservableCollection<AccountsReports>();
             Bank.Add(new AccountsReports("現金", 0, "001001"));
-            foreach (DataRow c in result.Rows)
+            foreach (DataRow c in table.Rows)
             {
                 if (Selected != null && Selected.ID != c["ID"].ToString())
                 {
@@ -184,25 +182,17 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         public void Init()
         {
             AccData = new AccountsReport();
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", IDClone));
-            parameters.Add(new SqlParameter("edate", EndDate));
-            DataTable Data = new DataTable();
-            Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
-            foreach (DataRow r in Data.Rows)
+            DataTable table = AccountsDb.GetAccountsDetail(IDClone, EndDate);
+            foreach (DataRow dr in table.Rows)
             {
-                AccData.Add(new AccountsReports(r));
+                AccData.Add(new AccountsReports(dr));
             }
-            SelectedIndex = -1;
             SelectedIndex = 0;
             if (AccData.Count > 1)
             {
                 Selected = AccData[0];
             }
-            SelectedIndex = 0;
             DetailChangeAction();
-            MainWindow.ServerConnection.CloseConnection();
         }
 
         public void DeleteAction()

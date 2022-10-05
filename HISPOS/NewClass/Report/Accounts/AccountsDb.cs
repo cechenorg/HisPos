@@ -66,5 +66,55 @@ namespace His_Pos.NewClass.Report.Accounts
             DataBaseFunction.AddSqlParameter(parameterList, "ID", selectedDetail.ID);
             return MainWindow.ServerConnection.ExecuteProc("[Get].[StrikeHistoriesById]", parameterList);
         }
+
+        public static DataTable GetAccountsDetail(string id, DateTime edate)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", id));
+            parameters.Add(new SqlParameter("edate", edate));
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
+        public static DataTable GetAccountsDetailDetailReport(string id)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", id));
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetailDetailReport]", parameters);
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
+        public static DataTable GetBankByAccountsID()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        }
+        public static DataSet GetIncomeData(int year)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            List<SqlParameter> paraCount = new List<SqlParameter>();
+            List<SqlParameter> paraIncome = new List<SqlParameter>();
+            List<SqlParameter> paraExpanse = new List<SqlParameter>();
+            List<SqlParameter> paraClosed = new List<SqlParameter>();
+            paraCount.Add(new SqlParameter("YEAR", year));
+            paraIncome.Add(new SqlParameter("YEAR", year));
+            paraExpanse.Add(new SqlParameter("YEAR", year));
+            paraClosed.Add(new SqlParameter("YEAR", year));
+            DataTable count = MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCountByYear]", paraCount);//處方張數
+            DataTable income = MainWindow.ServerConnection.ExecuteProc("[Get].[IncomeByYear]", paraIncome);//毛利
+            DataTable expanse = MainWindow.ServerConnection.ExecuteProc("[Get].[ExpanseByYear]", paraExpanse);//費用
+            DataTable closed = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsClosedByYear]", paraClosed);//結案差額
+            MainWindow.ServerConnection.CloseConnection();
+            DataSet ds = new DataSet();
+            ds.Tables.Add(count);
+            ds.Tables.Add(income);
+            ds.Tables.Add(expanse);
+            ds.Tables.Add(closed);
+            return ds;
+        }
     }
 }

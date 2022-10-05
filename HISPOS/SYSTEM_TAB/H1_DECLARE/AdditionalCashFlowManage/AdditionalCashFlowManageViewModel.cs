@@ -196,14 +196,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage
 
         public AdditionalCashFlowManageViewModel()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
-            MainWindow.ServerConnection.CloseConnection();
+            DataTable table = AccountsDb.GetBankByAccountsID();
             SelectedType = new List<AccountsReports>();
             SelectedType.Add(new AccountsReports("現金", 0, "001001"));
-            foreach (DataRow c in result.Rows)
+            foreach (DataRow dr in table.Rows)
             {
-                SelectedType.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+                SelectedType.Add(new AccountsReports(dr["Name"].ToString(), 0, dr["ID"].ToString()));
             }
             InitCommand();
 

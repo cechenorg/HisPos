@@ -3,6 +3,7 @@ using His_Pos.Class;
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Accounts;
 using His_Pos.NewClass.BalanceSheet;
+using His_Pos.NewClass.Report.Accounts;
 using His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl;
 using System;
 using System.Collections.Generic;
@@ -189,13 +190,14 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             try
             {
-                MainWindow.ServerConnection.OpenConnection();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("ID", AccID));
-                DataTable results = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetailDetailReport]", parameters);
-                MainWindow.ServerConnection.CloseConnection();
+                DataTable table = table = AccountsDb.GetAccountsDetailDetailReport(AccID);
+                if (AccID.Equals("203999"))
+                {
+                    NormalViewModel normal = new NormalViewModel(true);
+                    table = normal.GetProfit(table);
+                }
 
-                dgDetails = results.Copy();
+                dgDetails = table.Copy();
 
                 DataColumn iss = new DataColumn("IsSelected", typeof(bool));
                 iss.DefaultValue = false;
@@ -223,7 +225,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                 dgDetails.Columns.Add(cc);
                 
                 dgStrikeDataGrid.ItemsSource = dgDetails.DefaultView;
-                if(!results.Columns.Contains("OrderID"))
+                if(!table.Columns.Contains("OrderID"))
                 {
                     dgStrikeDataGrid.Columns[3].Visibility = Visibility.Visible;
                     dgStrikeDataGrid.Columns[4].Visibility = Visibility.Collapsed;
@@ -234,7 +236,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
                     dgStrikeDataGrid.Columns[4].Visibility = Visibility.Visible;
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 MessageWindow.ShowMessage("發生錯誤請再試一次", MessageType.SUCCESS);
                 return;

@@ -38,12 +38,10 @@ namespace His_Pos.NewClass.BalanceSheet
             Value = (double)row.Field<decimal>("VALUE");
             SelectedType = new AccountsReports();
             StrikeTypes.Add(new AccountsReports("現金", 0, "001001"));
-            MainWindow.ServerConnection.OpenConnection();
-            DataTable result = MainWindow.ServerConnection.ExecuteProc("[Get].[BankByAccountsID]");
-            MainWindow.ServerConnection.CloseConnection();
-            foreach (DataRow c in result.Rows)
+            DataTable table = AccountsDb.GetBankByAccountsID();
+            foreach (DataRow dr in table.Rows)
             {
-                StrikeTypes.Add(new AccountsReports(c["Name"].ToString(), 0, c["ID"].ToString()));
+                StrikeTypes.Add(new AccountsReports(dr["Name"].ToString(), 0, dr["ID"].ToString()));
             }
             //SelectedType.ID = StrikeTypes[0].ID.ToString();
         }

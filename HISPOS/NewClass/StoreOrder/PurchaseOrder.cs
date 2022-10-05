@@ -476,7 +476,7 @@ namespace His_Pos.NewClass.StoreOrder
 
         public bool AddNewStoreOrderLowerThenOrderAmount()
         {
-            DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, OrderManufactory.ID, OrderWarehouse.ID, OrderProducts);
+            DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ID, OrderManufactory.ID, OrderWarehouse.ID, OrderProducts);
 
             if (dataTable.Rows.Count > 0)
             {

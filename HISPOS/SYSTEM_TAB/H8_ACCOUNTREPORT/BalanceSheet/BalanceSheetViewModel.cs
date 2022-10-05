@@ -14,6 +14,8 @@ using System.Windows.Forms;
 using System;
 using System.Reflection;
 using System.ComponentModel;
+using His_Pos.NewClass.Report.Accounts;
+using His_Pos.NewClass.StockValue;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
@@ -490,23 +492,7 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         {
             _outputDataSet = new DataSet();
             DataSet ds = new DataSet();
-            DataTable leftTable = new DataTable();//正資產--DataSet1
-            DataColumn dcID = new DataColumn();
-            dcID.ColumnName = "ID";
-            dcID.DataType = typeof(string);
-            leftTable.Columns.Add(dcID);
-            DataColumn dcName = new DataColumn();
-            dcName.ColumnName = "Header";
-            dcName.DataType = typeof(string);
-            leftTable.Columns.Add(dcName);
-            DataColumn dcType = new DataColumn();
-            dcType.ColumnName = "Type";
-            dcType.DataType = typeof(string);
-            leftTable.Columns.Add(dcType);
-            DataColumn dcValue = new DataColumn();
-            dcValue.ColumnName = "Value";
-            dcValue.DataType = typeof(decimal);
-            leftTable.Columns.Add(dcValue);
+            DataTable leftTable = NormalViewModel.tableClone();//正資產--DataSet1
             DataTable rightTable = leftTable.Clone();//負資產--DataSet2
             DataTable leftTotal = new DataTable();//正資產總額--DataSet3
             DataColumn dcTotal = new DataColumn();
@@ -515,32 +501,38 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             leftTotal.Columns.Add(dcTotal);
             DataTable rightTotal = leftTotal.Clone();//正資產總額--DataSet4
 
-            Dictionary<string, string> leftAccount = new Dictionary<string, string>();
-            leftAccount.Add("001", "流動資產-現金");
-            leftAccount.Add("002", "流動資產-銀行");
-            leftAccount.Add("003", "流動資產-應收帳款");
-            leftAccount.Add("004", "流動資產-申報應收帳款");
-            leftAccount.Add("005", "流動資產-零用金");
-            leftAccount.Add("006", "存貨-商品");
-            leftAccount.Add("007", "預付款項-預付款項");
-            leftAccount.Add("008", "預付款項-其他預付款");
-            leftAccount.Add("009", "長期投資-長期投資");
-            leftAccount.Add("010", "固定資產-資產");
-            leftAccount.Add("011", "固定資產-累計折舊");
-            leftAccount.Add("012", "其他資產-存出保證金");
+            Dictionary<string, string> leftAccount = new Dictionary<string, string>
+            {
+                { "001", "流動資產-現金" },
+                { "002", "流動資產-銀行" },
+                { "003", "流動資產-應收帳款" },
+                { "004", "流動資產-申報應收帳款" },
+                { "005", "流動資產-零用金" },
+                { "006", "存貨-商品" },
+                { "007", "預付款項-預付款項" },
+                { "008", "預付款項-其他預付款" },
+                { "009", "長期投資-長期投資" },
+                { "010", "固定資產-資產" },
+                { "011", "固定資產-累計折舊" },
+                { "012", "其他資產-存出保證金" }
+            };
 
-            MainWindow.ServerConnection.OpenConnection();
             foreach (KeyValuePair<string,string> pair in leftAccount)
             {
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("ID", pair.Key));
-                parameters.Add(new SqlParameter("edate", _endDate));
-                DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
+                DataTable table;
+                if (pair.Key.Equals("006"))
+                {
+                    table = StockValueDb.GetStockVale(_endDate.AddDays(-7), _endDate);//直接取庫存現值報表
+                }
+                else
+                {
+                    table = AccountsDb.GetAccountsDetail(pair.Key, _endDate);
+                }
                 table.TableName = pair.Key;
                 DataRow newRow = leftTable.NewRow();
                 newRow["ID"] = pair.Key;
                 newRow["Header"] = pair.Value;
-                newRow["Type"] = pair.Key == "011"? "貸方" : "借方";
+                newRow["Type"] = pair.Key == "011" ? "貸方" : "借方";
                 if (table != null && table.Rows.Count > 0)
                 {
                     decimal totalAmt = Convert.ToDecimal(table.Compute("Sum(Value)",""));
@@ -577,23 +569,36 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             dvLeft.Sort = "ID";
             ds.Tables.Add(dvLeft.ToTable());
 
-            Dictionary<string, string> rightAccount = new Dictionary<string, string>();
-            rightAccount.Add("101", "流動負債-應付帳款");
-            rightAccount.Add("102", "流動負債-應付費用");
-            rightAccount.Add("103", "流動負債-應付稅捐");
-            rightAccount.Add("104", "預收款項-預收款");
-            rightAccount.Add("105", "代收-代付");
-            rightAccount.Add("201", "資本-股本(登記)");
-            rightAccount.Add("202", "公積及盈餘-本期損益");
-            rightAccount.Add("203", "公積及盈餘-未分配損益");
-            rightAccount.Add("204", "公積及盈餘-累積盈虧");
+            Dictionary<string, string> rightAccount = new Dictionary<string, string>
+            {
+                { "101", "流動負債-應付帳款" },
+                { "102", "流動負債-應付費用" },
+                { "103", "流動負債-應付稅捐" },
+                { "104", "預收款項-預收款" },
+                { "105", "代收-代付" },
+                { "201", "資本-股本(登記)" },
+                { "202", "公積及盈餘-本期損益" },
+                { "203", "公積及盈餘-未分配損益" },
+                { "204", "公積及盈餘-累積盈虧" }
+            };
 
             foreach (KeyValuePair<string, string> pair in rightAccount)
             {
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("ID", pair.Key));
-                parameters.Add(new SqlParameter("edate", _endDate));
-                DataTable table = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
+                DataTable table;
+                if (pair.Key == "202")
+                {
+                    table = NormalViewModel.tableClone();
+                    table = NormalViewModel.GetProfit(table, true);
+                }
+                else if (pair.Key == "203")
+                {
+                    table = AccountsDb.GetAccountsDetail(pair.Key, _endDate);
+                    table = NormalViewModel.GetProfit(table, false);
+                }
+                else
+                {
+                    table = AccountsDb.GetAccountsDetail(pair.Key, _endDate);
+                }
                 table.TableName = pair.Key;
                 DataRow newRow = rightTable.NewRow();
                 newRow["ID"] = pair.Key;

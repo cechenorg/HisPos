@@ -91,17 +91,11 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet.BalanceControl
         public void Init()
         {
             AccDataNoEdit = new AccountsReport();
-            MainWindow.ServerConnection.OpenConnection();
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("ID", IDClone));
-            parameters.Add(new SqlParameter("edate", EndDate));
-            DataTable Data = new DataTable();
-            Data = MainWindow.ServerConnection.ExecuteProc("[Get].[AccountsDetail]", parameters);
+            DataTable Data = AccountsDb.GetAccountsDetail(IDClone, EndDate);
             foreach (DataRow r in Data.Rows)
             {
                 AccDataNoEdit.Add(new AccountsReports(r));
             }
-            MainWindow.ServerConnection.CloseConnection();
         }
 
         public void DeleteAction()
