@@ -293,7 +293,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="50" IsReadOnly="True">
+                    <DataGridTemplateColumn Width="30" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsSelected, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -304,7 +304,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="20" Binding="{Binding Order, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" IsReadOnly="True">
+                    <DataGridTextColumn MinWidth="10" Binding="{Binding Order, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -312,10 +312,10 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn x:Name="MedicineId" Width="150" Header="健保代碼" IsReadOnly="True">
+                    <DataGridTemplateColumn x:Name="MedicineId" MinWidth="150" Width="auto" Header="健保代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Name="MedicineID" Width="150" Height="35" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Black" CharacterCasing="Upper" FontSize="17" InputScope="AlphanumericHalfWidth" KeyDown="MedicineID_OnKeyDown" MouseLeftButtonUp="MedicineID_OnGotFocus" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox Name="MedicineID" MinWidth="150" Width="auto" Height="35" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Black" CharacterCasing="Upper" FontSize="17" InputScope="AlphanumericHalfWidth" KeyDown="MedicineID_OnKeyDown" MouseLeftButtonUp="MedicineID_OnGotFocus" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" Text="{Binding ID, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

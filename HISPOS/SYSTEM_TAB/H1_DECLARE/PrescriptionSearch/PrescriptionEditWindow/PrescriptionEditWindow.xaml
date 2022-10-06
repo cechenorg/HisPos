@@ -1061,14 +1061,14 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="50" IsReadOnly="True">
+                        <DataGridTemplateColumn Width="30" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="Hidden"></Image>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn MinWidth="20" Binding="{Binding Order, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" IsReadOnly="True">
+                        <DataGridTextColumn MinWidth="10" Binding="{Binding Order, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -1076,12 +1076,13 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTemplateColumn x:Name="MedicineId" Width="150" Header="健保代碼" IsReadOnly="True">
+                        <DataGridTemplateColumn x:Name="MedicineId" MinWidth="150" Width="auto" Header="健保代碼" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox
                                         Name="MedicineID"
-                                        Width="150"
+                                        MinWidth="150"
+                                        Width="auto"
                                         Height="35"
                                         HorizontalAlignment="Center"
                                         HorizontalContentAlignment="Center"
