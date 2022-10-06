@@ -92,5 +92,55 @@ namespace InfraStructure.UnitTest.Service
             Assert.AreEqual(123, correctResult.ID);
         }
 
+        [TestMethod]
+        public void Insert()
+        {
+            Employee employee = new Employee(){ID = 111};
+            employeeService.Insert(employee);
+            employeeDb.Received(1).Insert(employee);
+        }
+
+        [TestMethod]
+        public void Update()
+        {
+            Employee employee = new Employee() { ID = 111 };
+            employeeService.Update(employee);
+            employeeDb.Received(1).Update(employee);
+        }
+
+
+        [TestMethod]
+        public void Delete()
+        {
+            Employee employee = new Employee(){ID = 11};
+            employeeService.Delete(employee);
+
+            employeeDb.Received(1).Delete(11);
+        }
+
+        [TestMethod]
+        public void Login()
+        {
+
+            string acc = "aaa";
+            string correctpwd = "1234";
+            string errorpwd = "5555";
+
+
+            Employee employee = new Employee() { ID = 111 };
+
+            employeeDb.EmployeeLogin(acc, correctpwd).Returns(employee);
+            
+            var wrongresult = employeeService.Login(acc,errorpwd);
+            Assert.AreEqual(null,wrongresult);
+
+
+            var correctResult = employeeService.Login(acc, correctpwd);
+
+            Assert.AreEqual(employee,correctResult);
+
+
+        }
+
     }
 }
