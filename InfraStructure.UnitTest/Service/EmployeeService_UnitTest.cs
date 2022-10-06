@@ -77,5 +77,20 @@ namespace InfraStructure.UnitTest.Service
             Assert.AreEqual(123, result.Single().ID);
             employeeDb.Received(1).GetData();
         }
+
+        [TestMethod]
+        public void GetDataByID()
+        {
+            List<Employee> empList = new List<Employee>();
+            empList.Add(new Employee() { ID = 123 });
+            employeeDb.GetData().Returns(empList);
+
+            var wrongResult = employeeService.GetDataByID(1);
+            var correctResult = employeeService.GetDataByID(123);
+
+            Assert.AreEqual(null,wrongResult);
+            Assert.AreEqual(123, correctResult.ID);
+        }
+
     }
 }
