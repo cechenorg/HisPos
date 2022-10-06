@@ -16,8 +16,8 @@ namespace His_Pos.NewClass.Person.Employee
     {
          void Insert(Employee e);
          IEnumerable<Employee> GetData();
-
          void Update(Employee e);
+         void Delete(int empId);
     }
 
     public class EmployeeDb : IEmployeeDB
@@ -117,7 +117,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        public static void Delete(int empId)
+        public void Delete(int empId)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("EmpId", empId));

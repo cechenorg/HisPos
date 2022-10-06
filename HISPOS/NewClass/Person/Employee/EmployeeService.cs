@@ -16,10 +16,9 @@ namespace His_Pos.NewClass.Person.Employee
     {
         void Insert(Employee emp);
         Employee GetDataByID(int id);
-
         IEnumerable<Employee> GetData();
-
         void Update(Employee emp);
+        void Delete(Employee emp);
 
     }
     public class EmployeeService : IEmployeeService
@@ -52,9 +51,9 @@ namespace His_Pos.NewClass.Person.Employee
             _employeeDb.Update(emp);
         }
    
-        public static void Delete(Employee emp)
+        public void Delete(Employee emp)
         {
-            EmployeeDb.Delete(emp.ID);
+            _employeeDb.Delete(emp.ID);
         }
 
         public static string GetEmployeeNewAccount()

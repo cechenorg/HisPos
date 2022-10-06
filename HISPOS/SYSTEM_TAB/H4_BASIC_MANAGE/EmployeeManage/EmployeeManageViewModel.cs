@@ -234,7 +234,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ConfirmWindow confirmWindow = new ConfirmWindow("是否刪除員工? 刪除後無法恢復 請慎重確認", "員工刪除");
             if ((bool)confirmWindow.DialogResult)
             {
-                EmployeeService.Delete(SelectedEmployee); 
+                _employeeService.Delete(SelectedEmployee); 
                 MessageWindow.ShowMessage("刪除成功!", Class.MessageType.SUCCESS);
                 Init();
             }
