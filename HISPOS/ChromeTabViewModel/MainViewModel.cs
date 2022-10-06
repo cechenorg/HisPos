@@ -404,12 +404,12 @@ namespace His_Pos.ChromeTabViewModel
 
                 //出勤管理
                 case nameof(FeatureItem.上下班打卡):   
-                    newTab = new AddClockInViewModel() {
+                    newTab = new AddClockInViewModel(employeeService) {
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.出勤管理)).Icon };
                     break;
 
                 case nameof(FeatureItem.打卡記錄查詢):
-                    newTab = new ClockInSearchViewModel() { 
+                    newTab = new ClockInSearchViewModel(employeeService) { 
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.出勤管理)).Icon };
                     break;
 

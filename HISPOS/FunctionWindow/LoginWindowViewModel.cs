@@ -37,9 +37,12 @@ namespace His_Pos.FunctionWindow
 
         #endregion ----- Define Variables -----
 
+        private readonly IEmployeeService _employeeService;
+
         public LoginWindowViewModel()
         {
-            
+            _employeeService = new EmployeeService(new EmployeeDb());
+
             LoginCommand = new RelayCommand<object>(LoginAction);
             LeaveCommand = new RelayCommand(LeaveAction);
             CheckCsHis();
@@ -58,7 +61,7 @@ namespace His_Pos.FunctionWindow
         private void LoginAction(object sender)
         {
             bool isEnable = false;
-            Employee loginEmployee = EmployeeService.Login(Account, (sender as PasswordBox)?.Password);
+            Employee loginEmployee = _employeeService.Login(Account, (sender as PasswordBox)?.Password);
             if (loginEmployee != null) 
             {
                 ViewModelMainWindow.CurrentPharmacy = Pharmacy.GetCurrentPharmacy();

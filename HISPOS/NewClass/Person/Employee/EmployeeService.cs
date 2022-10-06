@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Person.Employee
         IEnumerable<Employee> GetData();
         void Update(Employee emp);
         void Delete(Employee emp);
+        Employee Login(string Account, string Password);
 
     }
     public class EmployeeService : IEmployeeService
@@ -105,9 +106,9 @@ namespace His_Pos.NewClass.Person.Employee
             return ErrorMessage.OK;
         }
 
-        public static Employee Login(string Account, string Password)
+        public Employee Login(string Account, string Password)
         {
-            return EmployeeDb.EmployeeLogin(Account, Password);
+            return _employeeDb.EmployeeLogin(Account, Password);
         }
 
         public static IEnumerable<GroupAuthority> GetGroupPharmacy(Employee emp, List<PharmacyInfo> groupServerList)

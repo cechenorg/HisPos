@@ -15,14 +15,10 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
     public partial class AddClockInWindowViewModel : ViewModelBase
     {
 
-        #region ----- Define Commands -----
-
+      
         public RelayCommand ConfirmAddClockInCommand { get; set; }
 
 
-        #endregion ----- Define Commands -----
-
-        #region ----- Define Variables -----
         public string EmployeeID { get; set; }
         public string EmployeePassWord { get; set; }
 
@@ -38,10 +34,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
             }
         }
 
-
-
-        #endregion ----- Define Variables -----
-
+        private IEmployeeService _employeeService = new EmployeeService(new EmployeeDb());
         public AddClockInWindowViewModel()
         {
             Employee = new Employee();
@@ -87,7 +80,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.AddClockInWindow
             //EmployeePassWord
             Employee.Account = EmployeeID;
              
-            Employee user = EmployeeService.Login(EmployeeID, EmployeePassWord);
+            Employee user = _employeeService.Login(EmployeeID, EmployeePassWord);
 
             
             //檢查帳密 密碼錯誤

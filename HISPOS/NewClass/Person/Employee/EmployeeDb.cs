@@ -18,6 +18,7 @@ namespace His_Pos.NewClass.Person.Employee
          IEnumerable<Employee> GetData();
          void Update(Employee e);
          void Delete(int empId);
+         Employee EmployeeLogin(string inputAccount, string password);
     }
 
     public class EmployeeDb : IEmployeeDB
@@ -136,7 +137,7 @@ namespace His_Pos.NewClass.Person.Employee
             return MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeNewAccount]", parameterList);
         }
 
-        public static Employee EmployeeLogin(string inputAccount, string password)
+        public Employee EmployeeLogin(string inputAccount, string password)
         {
             Employee result = null;
             SQLServerConnection.DapperQuery((conn) =>
