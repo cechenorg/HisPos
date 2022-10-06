@@ -190,7 +190,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         #endregion ----- Define Variables -----
 
-        public EmployeeManageViewModel()
+        private readonly IEmployeeService _employeeService;
+
+        public EmployeeManageViewModel(IEmployeeService employeeService)
         {
             Init();
             CancelCommand = new RelayCommand(CancelAction);
@@ -199,13 +201,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             NewEmployeeCommand = new RelayCommand(NewEmployeeAction);
             ChangePassWordCommand = new RelayCommand(ChangePassWordAction);
             UpdateGroupPharmacyAuthorityCommand = new RelayCommand(UpdateGroupPharmacyAuthorityAction);
+            _employeeService = employeeService;
         }
 
         #region Action
 
         private void UpdateGroupPharmacyAuthorityAction()
-        { 
-            EmployeeService.Update(SelectedEmployee);
+        {
+            _employeeService.Update(SelectedEmployee);
             MessageWindow.ShowMessage("權限修改成功!",Class.MessageType.SUCCESS);
             var tempID = SelectedEmployee.ID;
             ReloadData();
@@ -214,13 +217,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private void CancelAction()
         {
-            EmployeeService employeeService = new EmployeeService(new EmployeeDb());
-            SelectedEmployee = employeeService.GetDataByID(SelectedEmployee.ID);
+            SelectedEmployee = _employeeService.GetDataByID(SelectedEmployee.ID);
         }
 
         private void SubmitAction()
         {
-            EmployeeService.Update(SelectedEmployee); 
+            _employeeService.Update(SelectedEmployee); 
             MessageWindow.ShowMessage("修改成功", Class.MessageType.SUCCESS);
             var tempID = SelectedEmployee.ID;
             ReloadData();

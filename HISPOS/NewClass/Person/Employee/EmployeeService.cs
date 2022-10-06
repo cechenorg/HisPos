@@ -19,6 +19,8 @@ namespace His_Pos.NewClass.Person.Employee
 
         IEnumerable<Employee> GetData();
 
+        void Update(Employee emp);
+
     }
     public class EmployeeService : IEmployeeService
     {
@@ -44,10 +46,10 @@ namespace His_Pos.NewClass.Person.Employee
             _employeeDb.Insert(emp);
         }
 
-        public static void Update(Employee emp)
+        public void Update(Employee emp)
         {
 
-            EmployeeDb.Update(emp);
+            _employeeDb.Update(emp);
         }
    
         public static void Delete(Employee emp)

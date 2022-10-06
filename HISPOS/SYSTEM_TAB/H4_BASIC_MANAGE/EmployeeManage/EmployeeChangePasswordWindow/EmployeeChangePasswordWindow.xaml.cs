@@ -12,7 +12,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage.EmployeeChangePasswo
         public EmployeeChangePasswordWindow(Employee e)
         {
             InitializeComponent();
-            EmployeeChangePasswordWindowViewModel employeeChangePasswordWindowViewModel = new EmployeeChangePasswordWindowViewModel(e);
+            EmployeeChangePasswordWindowViewModel employeeChangePasswordWindowViewModel = new EmployeeChangePasswordWindowViewModel(e,new EmployeeService(new EmployeeDb()));
             DataContext = employeeChangePasswordWindowViewModel;
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {

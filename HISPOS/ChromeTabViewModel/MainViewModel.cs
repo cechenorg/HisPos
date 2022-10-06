@@ -47,6 +47,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
+using His_Pos.NewClass.Person.Employee;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -235,6 +236,8 @@ namespace His_Pos.ChromeTabViewModel
 
             TabBase newTab;
 
+            IEmployeeService employeeService = new EmployeeService(new EmployeeDb());
+
             switch (featureItem.ToString())
             {
                 //每日作業
@@ -291,7 +294,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.員工管理):
-                    newTab = new EmployeeManageViewModel() { 
+                    newTab = new EmployeeManageViewModel(employeeService) { 
                         Icon = MainWindow.HisFeatures.Single(_ => _.Title == nameof(FeatureTab.藥局管理)).Icon };
                     break;
 

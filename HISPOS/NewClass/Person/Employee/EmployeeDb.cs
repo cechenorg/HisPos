@@ -16,9 +16,11 @@ namespace His_Pos.NewClass.Person.Employee
     {
          void Insert(Employee e);
          IEnumerable<Employee> GetData();
+
+         void Update(Employee e);
     }
 
-    public  class EmployeeDb : IEmployeeDB
+    public class EmployeeDb : IEmployeeDB
     {
         public IEnumerable<Employee> GetData()
         {
@@ -87,7 +89,7 @@ namespace His_Pos.NewClass.Person.Employee
             }
         }
 
-        public static void Update(Employee e)
+        public void Update(Employee e)
         {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Employee", SetCustomer(e)));
