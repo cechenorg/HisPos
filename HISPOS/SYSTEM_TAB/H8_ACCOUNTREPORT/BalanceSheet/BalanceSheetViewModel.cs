@@ -16,6 +16,7 @@ using System.Reflection;
 using System.ComponentModel;
 using His_Pos.NewClass.Report.Accounts;
 using His_Pos.NewClass.StockValue;
+using System.Windows.Threading;
 
 namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
 {
@@ -129,6 +130,24 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             {
                 _endDate = value;
                 RaisePropertyChanged(nameof(EndDate));
+            }
+        }
+        private string busyContent;
+        public string BusyContent
+        {
+            get => busyContent;
+            set
+            {
+                Set(() => BusyContent, ref busyContent, value);
+            }
+        }
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                Set(() => IsBusy, ref isBusy, value);
             }
         }
 
@@ -324,42 +343,47 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
         }
 
         #region ----- Define Actions -----
-
         private void ReloadAction()
         {
-            MainWindow.ServerConnection.OpenConnection();
-            DataSet dataSet = GetBalanceSheet();
-
-            if (dataSet.Tables.Count != 4)
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
             {
-                MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
-                return;
-            }
-            else
+                BusyContent = "報表查詢中...";
+                MainWindow.ServerConnection.OpenConnection();
+                DataSet dataSet = GetBalanceSheet();
+                if (dataSet.Tables.Count != 4)
+                {
+                    MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
+                    return;
+                }
+                else
+                {
+                    if (dataSet.Tables[0] != null)
+                    {
+                        LeftBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[0]);
+                    }
+                    if (dataSet.Tables[1] != null)
+                    {
+                        RightBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[1]);
+                    }
+                    if (dataSet.Tables[2] != null && dataSet.Tables[2].Rows.Count > 0)
+                    {
+                        LeftTotal = (double)dataSet.Tables[2].Rows[0].Field<decimal>("Value");
+                    }
+                    if (dataSet.Tables[3] != null && dataSet.Tables[3].Rows.Count > 0)
+                    {
+                        RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("Value");
+                    }
+                }
+                MainWindow.ServerConnection.CloseConnection();
+                
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
             {
-                if(dataSet.Tables[0] != null)
-                {
-                    LeftBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[0]);
-                }
-                if(dataSet.Tables[1] != null)
-                {
-                    RightBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[1]);
-                }
-                if (dataSet.Tables[2] != null && dataSet.Tables[2].Rows.Count > 0)
-                {
-                    LeftTotal = (double)dataSet.Tables[2].Rows[0].Field<decimal>("Value");
-                }
-                if (dataSet.Tables[3] != null && dataSet.Tables[3].Rows.Count > 0)
-                {
-                    RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("Value");
-                }
-                //if (dataSet.Tables[4] != null)
-                //{
-                //    MedPointViewModel.StrikeDatas = new StrikeDatas(dataSet.Tables[4]);
-                //}
-            }
-            MainWindow.ServerConnection.CloseConnection();
-            MessageWindow.ShowMessage("載入完成。", MessageType.SUCCESS);
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private void ShowHistoryAction()
