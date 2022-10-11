@@ -605,7 +605,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransaction
                         tbInvoiceNum.Content = Properties.Settings.Default.InvoiceNumberEng.ToString() + Properties.Settings.Default.InvoiceNumber.ToString();
                     }
                     ClearPage();
-                    MessageWindow.ShowMessage("資料傳送成功！", MessageType.SUCCESS);
+                    MessageWindow.ShowMessage("結帳完成！", MessageType.SUCCESS);
                 }
                 else { MessageWindow.ShowMessage(result.Rows[0].Field<string>("RESULT"), MessageType.ERROR); }
             }
