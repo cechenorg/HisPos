@@ -289,6 +289,13 @@
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                             </Trigger>
+                            <DataTrigger Binding="{Binding Path=Price0}" Value="true">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Opacity="0.5" Color="Pink" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </DataGrid.RowStyle>
