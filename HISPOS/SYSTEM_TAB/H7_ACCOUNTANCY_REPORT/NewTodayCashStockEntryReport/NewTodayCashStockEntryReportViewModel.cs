@@ -1542,6 +1542,8 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public DataSet Ds = new DataSet();
         DataTable PrescriptionAllDataTable = new DataTable();
 
+        private ReportDetailType _currentDetailType;
+
         #endregion Variables
 
         #region Command
@@ -1639,6 +1641,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         private void ViewReportDetailAction(ReportDetailType type)
         {
 
+            _currentDetailType = type;
             switch (type)
             {
 
@@ -1855,7 +1858,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 return;
             }
 
-            var data = ReportService.GetPrescriptionDetailMedicineReportById(SelectedDepositDetailReport.PremasID);
+            var data = ReportService.GetPrescriptionDetailMedicineReportById(SelectedDepositDetailReport.PremasID,null,null);
             PrescriptionDetailMedicineRepotCollection = new ObservableCollection<PrescriptionDetailMedicineRepot>(data);
         }
 
@@ -1967,7 +1970,15 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
                 return;
             }
 
-            var data = ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id);
+
+            bool isChangedTab = _currentDetailType == ReportDetailType.AllPrescription_Change ||
+                                _currentDetailType == ReportDetailType.Chironic_Change ||
+                                _currentDetailType == ReportDetailType.CoopPrescription_Change ||
+                                _currentDetailType == ReportDetailType.NormalPrescription_Change;
+
+            var data = isChangedTab
+                ? ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id, StartDate, EndDate)
+                : ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id, null, null);
             PrescriptionDetailMedicineRepotCollection = new ObservableCollection<PrescriptionDetailMedicineRepot>(data);
         }
 

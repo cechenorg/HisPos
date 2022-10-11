@@ -1935,7 +1935,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CashStockEntryReport
                 return;
             }
 
-            var data = ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id);
+            var data = ReportService.GetPrescriptionDetailMedicineReportById(PrescriptionDetailReportSelectItem.Id,StartDate,EndDate);
             PrescriptionDetailMedicineRepotCollection = new ObservableCollection<PrescriptionDetailMedicineRepot>(data);
         }
 

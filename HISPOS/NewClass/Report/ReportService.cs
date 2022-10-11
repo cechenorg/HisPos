@@ -80,13 +80,18 @@ namespace His_Pos.NewClass.Report
             return result;
         }
 
-        public static IEnumerable<PrescriptionDetailMedicineRepot> GetPrescriptionDetailMedicineReportById(int id )
+        public static IEnumerable<PrescriptionDetailMedicineRepot> GetPrescriptionDetailMedicineReportById(int id ,DateTime? startDate, DateTime? endDate)
         {
             IEnumerable<PrescriptionDetailMedicineRepot> result = default;
             SQLServerConnection.DapperQuery((conn) =>
             {
                 result = conn.Query<PrescriptionDetailMedicineRepot>($"{Properties.Settings.Default.SystemSerialNumber}.[Get].[PrescriptionDetailMedicineReportById]",
-                    param: new { Id = id },
+                    param: new
+                    {
+                        Id = id ,
+                        sDate = startDate,
+                        eDate = endDate
+                    },
                     commandType: CommandType.StoredProcedure);
 
             });
