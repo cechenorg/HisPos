@@ -17,6 +17,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
         public string Indication { get; set; }
         public string Warnings { get; set; }
         public string SideEffect { get; set; }
+        public string OTCMemo { get; set; }
         public string BarCode { get; set; }
         public int? SafeAmount { get; set; }
         public int? BasicAmount { get; set; }
@@ -95,6 +96,7 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SelfPayMultiplier = row.Field<double>("SysPar_Value");
             RewardPercent = row.Field<double>("Pro_RewardPercent").ToString();
             OTCFromSingde = row.Field<bool>("OTCFromSingde");
+            OTCMemo = row.Field<string>("OTC_InvMemo");
         }
 
         #region ----- Define Functions -----

@@ -359,12 +359,35 @@
                     <RowDefinition Height="90" />
                     <RowDefinition Height="90" />
                     <RowDefinition Height="90" />
+                    <RowDefinition Height="90" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <StackPanel
-                    Grid.Row="0"
-                    DataContext="{Binding ManageViewModel, UpdateSourceTrigger=PropertyChanged}"
-                    Orientation="Horizontal">
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock
+                        Width="47"
+                        Margin="17,0,17,0"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="20"
+                        Foreground="Black"
+                        Text="杏德說明"
+                        TextWrapping="Wrap" />
+                    <TextBox
+                        Width="400"
+                        Margin="0,10,0,10"
+                        VerticalContentAlignment="Top"
+                        AcceptsReturn="True"
+                        Background="{StaticResource GridBackGround}"
+                        BorderThickness="0"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="18"
+                        IsReadOnly="True"
+                        Text="{Binding OTCMemo, Mode=TwoWay}"
+                        TextWrapping="Wrap"
+                        VerticalScrollBarVisibility="Auto">
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Label
                         Width="80"
                         VerticalAlignment="Center"
@@ -392,7 +415,7 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Label
                         Width="80"
                         VerticalAlignment="Center"
@@ -420,7 +443,7 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
                     <TextBlock
                         Width="47"
                         Margin="17,0,17,0"
@@ -449,7 +472,7 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
-                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <StackPanel Grid.Row="4" Orientation="Horizontal">
                     <Label
                         Width="80"
                         VerticalAlignment="Center"
