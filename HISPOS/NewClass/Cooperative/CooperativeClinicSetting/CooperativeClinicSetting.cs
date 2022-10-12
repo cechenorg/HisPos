@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System.Data;
+using DomainModel.Enum;
 using VM = His_Pos.ChromeTabViewModel.ViewModelMainWindow;
 
 namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
@@ -54,6 +55,14 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
         {
             get { return isInstitutionEdit; }
             set { Set(() => IsInstitutionEdit, ref isInstitutionEdit, value); }
+        }
+
+        private bool isEnableDeleteIns = VM.CurrentUser.Authority == Authority.Admin;
+
+        public bool IsEnableDeleteIns
+        {
+            get { return isEnableDeleteIns; }
+            set { Set(() => IsEnableDeleteIns, ref isEnableDeleteIns, value); }
         }
 
 
