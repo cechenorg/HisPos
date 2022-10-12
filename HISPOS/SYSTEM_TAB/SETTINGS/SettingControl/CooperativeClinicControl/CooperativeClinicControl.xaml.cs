@@ -10,6 +10,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         public CooperativeClinicControl()
         {
             InitializeComponent();
+            DataContext = new CooperativeClinicControlViewModel();
         }
     }
 }

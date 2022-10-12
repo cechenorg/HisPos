@@ -1,8 +1,12 @@
-﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl.CooperativeClinicControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="500" d:DesignWidth="920" mc:Ignorable="d">
-    <UserControl.DataContext>
-        <local:CooperativeClinicControlViewModel />
-    </UserControl.DataContext>
-    <UserControl.Resources>
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl.CooperativeClinicControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="500" d:DesignWidth="920" mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=local:CooperativeClinicControlViewModel}"
+             >
+       <UserControl.Resources>
         <DataTemplate x:Key="EnableInstitution" DataType="{x:Type TextBox}">
             <TextBox x:Name="ReleaseHospital" Width="400" Height="35" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" CaretBrush="Black" FontSize="16" FontStretch="ExtraExpanded" Style="{StaticResource BoldTextBoxContent16}">
                 <TextBox.InputBindings>
