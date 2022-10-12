@@ -414,7 +414,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 HisAPI.CreatErrorDailyUploadData(Current, false, errorCode);
         }
 
-        private static string BuildPatientTel(Prescription p)
+        public static string BuildPatientTel(Prescription p)
         {
             string patientTel = string.Empty;
             if (!string.IsNullOrEmpty(p.Patient.CellPhone))

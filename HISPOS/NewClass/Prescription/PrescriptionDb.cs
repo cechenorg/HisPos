@@ -4,6 +4,7 @@ using His_Pos.NewClass.Medicine.Base;
 using His_Pos.NewClass.Person.Customer;
 using His_Pos.NewClass.Prescription.Declare.DeclareFile;
 using His_Pos.NewClass.Prescription.Declare.DeclarePrescription;
+using His_Pos.NewClass.Prescription.Service;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
@@ -392,22 +393,13 @@ namespace His_Pos.NewClass.Prescription
             p.Patient.CheckGender();
             var gender = p.Patient.Gender.Equals("男") ? "1" : "2";
             dtlData.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
-            AppendPatientTel(dtlData, p.Patient);
+            AppendPatientTel(dtlData, p.Patient, p);
             dtlData.AppendLine();
         }
 
-        private static void AppendPatientTel(StringBuilder dtlData, Customer patient)
+        private static void AppendPatientTel(StringBuilder dtlData, Customer patient, Prescription p)
         {
-            string patientTel = string.Empty;
-            if (!string.IsNullOrEmpty(patient.CellPhone))
-                patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.CellPhone : patient.CellPhone + "(註)";
-            else
-            {
-                if (!string.IsNullOrEmpty(patient.Tel))
-                    patientTel = string.IsNullOrEmpty(patient.ContactNote) ? patient.Tel : patient.Tel + "(註)";
-                else if (!string.IsNullOrEmpty(patient.ContactNote))
-                    patientTel = patient.ContactNote.Replace("\r\n", "/");
-            }
+            string patientTel = PrescriptionService.BuildPatientTel(p);
             dtlData.Append(string.IsNullOrEmpty(patientTel) ? string.Empty.PadRight(20, ' ') : patientTel.PadRight(20, ' ')); //電話
         }
 
