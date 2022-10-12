@@ -37,7 +37,8 @@ namespace His_Pos.NewClass.Product.PrescriptionSendData
                             selfPrepareAmount = 0;
                     }
                     else
-                        selfPrepareAmount = m.SendAmount < 0 ? 0 : m.Amount - m.SendAmount;
+                        selfPrepareAmount = m.SendAmount <= 0 ? 0 : m.Amount - m.SendAmount;
+
 
                     if (tempMeds.Count(t => t.ID == m.InventoryID) == 0)
                         tempMeds.Add(new MedicineInventoryStruct(m.InventoryID, selfPrepareAmount));
