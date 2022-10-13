@@ -389,22 +389,18 @@
                                 FontSize="18"
                                 Foreground="{StaticResource ForeGround}"
                                 InsertKeyMode="Overwrite"
-                                Mask="000/00/00"
+                                Mask="0000/00/00"
                                 PromptChar="-"
                                 PreviewKeyDown="Amount_PreviewKeyDown"
-                                Style="{StaticResource MaterialDesignTextBox}"
-                                ValueDataType="xctk:DateTimeFormat">
+                                Style="{StaticResource MaterialDesignTextBox}">
                                 <xctk:MaskedTextBox.Text>
                                     <Binding
-                                        Converter="{StaticResource NullableDateConverter}"
+                                        StringFormat= "yyyy/MM/dd"
                                         Mode="TwoWay"
                                         NotifyOnValidationError="True"
                                         Path="ValidDate"
                                         UpdateSourceTrigger="PropertyChanged"
                                         ValidatesOnDataErrors="True">
-                                        <Binding.ValidationRules>
-                                            <service:DateValidationRule />
-                                        </Binding.ValidationRules>
                                     </Binding>
                                 </xctk:MaskedTextBox.Text>
                                 <xctk:MaskedTextBox.InputScope>

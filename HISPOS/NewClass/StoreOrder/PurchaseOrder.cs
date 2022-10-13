@@ -22,6 +22,7 @@ namespace His_Pos.NewClass.StoreOrder
         #region ----- Define Variables -----
 
         private PurchaseProducts orderProducts;
+        private PurchaseProduct orderProduct;
 
         public string PreOrderCustomer { get; set; }
         public string TargetPreOrderCustomer { get; set; }
@@ -36,7 +37,11 @@ namespace His_Pos.NewClass.StoreOrder
             get { return orderProducts; }
             set { Set(() => OrderProducts, ref orderProducts, value); }
         }
-
+        public PurchaseProduct OrderProduct
+        {
+            get { return orderProduct; }
+            set { Set(() => OrderProduct, ref orderProduct, value); }
+        }
         public int ProductCount
         {
             get

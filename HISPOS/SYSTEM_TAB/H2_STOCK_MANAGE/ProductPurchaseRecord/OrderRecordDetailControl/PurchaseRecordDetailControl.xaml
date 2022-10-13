@@ -189,7 +189,8 @@
             CellStyle="{StaticResource DataGridCellStyle}"
             ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
             FrozenColumnCount="2"
-            ItemsSource="{Binding OrderProducts}">
+            ItemsSource="{Binding OrderProducts}"
+            SelectedItem="{Binding OrderProduct}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -326,7 +327,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                     Width="80"
-                    Binding="{Binding ValidDate, Converter={StaticResource DateConverter}}"
+                    Binding="{Binding ValidDate, StringFormat=yyyy/MM/dd}"
                     FontFamily="Segoe UI Semi"
                     Header="效期"
                     IsReadOnly="True">
