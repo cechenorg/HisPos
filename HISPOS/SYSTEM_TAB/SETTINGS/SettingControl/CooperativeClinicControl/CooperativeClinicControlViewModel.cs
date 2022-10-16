@@ -84,10 +84,31 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
             var dailyUploadConfirm = new ConfirmWindow("更新後會影響處方資料串接與扣庫 是否更新合作診所? ", "合作診所更新確認", false);
             if (dailyUploadConfirm.DialogResult == true)
             {
+                if(DataCheck() == false)
+                    return;
+                
+
                 CooperativeClinicSettingCollection.Update();
                 MessageWindow.ShowMessage("新增成功!", Class.MessageType.SUCCESS);
                 VM.CooperativeClinicSettings.Init();
             }
+        }
+
+        private bool DataCheck()
+        {
+            bool result = true;
+
+            foreach (var data in CooperativeClinicSettingCollection)
+            {
+                if (data.EndDate < data.StartDate)
+                {
+                    MessageWindow.ShowMessage($@"{data.CooperavieClinic.Name} 結束日期不可小於開始日期!", Class.MessageType.ERROR);
+                    result = false;
+                    break;
+                }
+
+            }
+            return result;
         }
 
         private void OpenFileAction()

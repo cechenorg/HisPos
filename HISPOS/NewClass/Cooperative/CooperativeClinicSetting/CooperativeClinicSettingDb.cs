@@ -40,7 +40,7 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_FolderPath", c.FilePath);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_AutoPrint", c.AutoPrint);
                 DataBaseFunction.AddColumnValue(newRow, "CooCli_StartDate", c.StartDate);
-                DataBaseFunction.AddColumnValue(newRow, "CooCli_EndDate", null);
+                DataBaseFunction.AddColumnValue(newRow, "CooCli_EndDate", c.EndDate);
                 cooperativeClinicTable.Rows.Add(newRow);
             }
             return cooperativeClinicTable;

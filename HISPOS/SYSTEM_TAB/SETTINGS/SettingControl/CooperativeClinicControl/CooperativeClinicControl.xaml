@@ -113,6 +113,21 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="100" Header="結束日期">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00" PreviewKeyDown="StartDate_OnPreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" ValueDataType="{x:Type xctk:DateTimeFormat}">
+                                    <Binding Converter="{StaticResource NullableDateConverter}" Mode="TwoWay" NotifyOnValidationError="True" Path="EndDate" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True">
+                                        <Binding.ValidationRules>
+                                            <service:DateValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="100" Header="庫別">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
