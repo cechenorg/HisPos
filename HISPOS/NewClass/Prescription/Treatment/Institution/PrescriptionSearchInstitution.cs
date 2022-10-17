@@ -4,6 +4,10 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {
     public class PrescriptionSearchInstitution : Institution
     {
+        public PrescriptionSearchInstitution()
+        {
+
+        }
         public PrescriptionSearchInstitution(DataRow r)
         {
             ID = r.Field<string>("Ins_ID");

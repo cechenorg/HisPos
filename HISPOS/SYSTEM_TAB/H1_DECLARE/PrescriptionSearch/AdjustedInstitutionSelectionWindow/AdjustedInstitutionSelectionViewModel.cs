@@ -3,7 +3,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
+using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSelectionWindow
 {
@@ -15,6 +17,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
         {
             get => institutions;
             set { Set(() => Institutions, ref institutions, value); }
+        }
+
+        private PrescriptionSearchInstitutions originInstitutions;
+
+        public PrescriptionSearchInstitutions OriginInstitutions
+        {
+            get => originInstitutions;
+            set { Set(() => OriginInstitutions, ref originInstitutions, value); }
         }
 
         private CollectionViewSource insCollectionViewSource;
@@ -70,21 +80,45 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
         {
             get => "已選 " + Institutions.Count(i => i.Selected) + " 間";
         }
-
+        private Window _window;
         public RelayCommand<string> FocusUpDownCommand { get; set; }
         public RelayCommand SelectAll { get; set; }
         public RelayCommand CancelSelectAll { get; set; }
         public RelayCommand SelectedChanged { get; set; }
 
-        public AdjustedInstitutionSelectionViewModel(PrescriptionSearchInstitutions adjustedInstitutions)
+        public RelayCommand CancelCommand { get; set; }
+        public RelayCommand SubmitCommand { get; set; }
+        public AdjustedInstitutionSelectionViewModel(PrescriptionSearchInstitutions adjustedInstitutions, Window window)
         {
-            Institutions = adjustedInstitutions;
+            _window = window;
+
+            OriginInstitutions = adjustedInstitutions;
+            Institutions = adjustedInstitutions.DeepCloneViaJson();
             InsCollectionViewSource = new CollectionViewSource { Source = Institutions };
             InsCollectionView = InsCollectionViewSource.View;
             FocusUpDownCommand = new RelayCommand<string>(FocusUpDownAction);
             SelectAll = new RelayCommand(SelectAllAction);
             CancelSelectAll = new RelayCommand(CancelSelectAllAction);
             SelectedChanged = new RelayCommand(SelectedCountChangedAction);
+
+            CancelCommand = new RelayCommand(CancelAction);
+            SubmitCommand = new RelayCommand(SubmitAction);
+        }
+
+        private void SubmitAction()
+        {
+          
+            for (int i = 0; i < OriginInstitutions.Count; i++)
+            {
+                OriginInstitutions[i].Selected = Institutions.Single(_ => _.ID == OriginInstitutions[i].ID).Selected;
+            }
+
+            _window.Close();
+        }
+
+        private void CancelAction()
+        {
+            _window.Close();
         }
 
         private void SelectedCountChangedAction()
@@ -98,6 +132,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             {
                 i.Selected = true;
             }
+
+            SelectedCountChangedAction();
         }
 
         private void CancelSelectAllAction()
@@ -106,6 +142,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             {
                 i.Selected = false;
             }
+
+            SelectedCountChangedAction();
         }
 
         private void FocusUpDownAction(string direction)
