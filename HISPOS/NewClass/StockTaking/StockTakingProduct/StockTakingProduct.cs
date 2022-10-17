@@ -32,6 +32,15 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
                 IsTakingPriceEditable = ValueDiff > 0;
             }
         }
+        private string batchNum;
+        public string BatchNum
+        {
+            get { return batchNum; }
+            set
+            {
+                Set(() => BatchNum, ref batchNum, value);
+            }
+        }
 
         private double valueDiff;
 

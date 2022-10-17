@@ -421,6 +421,15 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             {
                 if (s.ValueDiff != 0)
                     StockTakingReason.StockTakingProductCollection.Add(s);
+
+                if(s.IsControl != null)
+                {
+                    if(s.IsControl > 0 && string.IsNullOrEmpty(s.BatchNum))
+                    {
+                        MessageWindow.ShowMessage("管制藥品請填入批號", MessageType.ERROR);
+                        return;
+                    }
+                }
             }
             CurrentPlan.StockTakingProductCollection.Clear();
             StockTakingType = StockTakingType.Reason;
@@ -592,6 +601,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             SourceStockTakingProducts = SourceStockTakingProducts.GetControlMedincines(CurrentPlan.WareHouse.ID);
             RemoveSourceProInTarget();
             TypeChangedAction();
+            MessageWindow.ShowMessage("管藥如執行盤點，若有異動呈現於電子簿冊", MessageType.WARNING);
         }
 
         private void GetStockLessProductsAction()
