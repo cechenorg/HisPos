@@ -348,35 +348,35 @@ namespace His_Pos.SYSTEM_TAB.H8_ACCOUNTREPORT.BalanceSheet
             var worker = new BackgroundWorker();
             worker.DoWork += (o, ea) =>
             {
-                BusyContent = "報表查詢中...";
-                MainWindow.ServerConnection.OpenConnection();
-                DataSet dataSet = GetBalanceSheet();
-                if (dataSet.Tables.Count != 4)
+                Dispatcher.CurrentDispatcher.Invoke(delegate()
                 {
-                    MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
-                    return;
-                }
-                else
-                {
-                    if (dataSet.Tables[0] != null)
+                    BusyContent = "報表查詢中...";
+                    DataSet dataSet = GetBalanceSheet();
+                    if (dataSet.Tables.Count != 4)
                     {
-                        LeftBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[0]);
+                        MessageWindow.ShowMessage("連線錯誤 請稍後再試!", MessageType.ERROR);
+                        return;
                     }
-                    if (dataSet.Tables[1] != null)
+                    else
                     {
-                        RightBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[1]);
+                        if (dataSet.Tables[0] != null)
+                        {
+                            LeftBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[0]);
+                        }
+                        if (dataSet.Tables[1] != null)
+                        {
+                            RightBalanceSheetDatas = new BalanceSheetDatas(dataSet.Tables[1]);
+                        }
+                        if (dataSet.Tables[2] != null && dataSet.Tables[2].Rows.Count > 0)
+                        {
+                            LeftTotal = (double)dataSet.Tables[2].Rows[0].Field<decimal>("Value");
+                        }
+                        if (dataSet.Tables[3] != null && dataSet.Tables[3].Rows.Count > 0)
+                        {
+                            RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("Value");
+                        }
                     }
-                    if (dataSet.Tables[2] != null && dataSet.Tables[2].Rows.Count > 0)
-                    {
-                        LeftTotal = (double)dataSet.Tables[2].Rows[0].Field<decimal>("Value");
-                    }
-                    if (dataSet.Tables[3] != null && dataSet.Tables[3].Rows.Count > 0)
-                    {
-                        RightTotal = (double)dataSet.Tables[3].Rows[0].Field<decimal>("Value");
-                    }
-                }
-                MainWindow.ServerConnection.CloseConnection();
-                
+                });
             };
             worker.RunWorkerCompleted += (o, ea) =>
             {
