@@ -76,6 +76,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             }
         }
 
+        private bool _isSelectedAll;
+
+        public bool IsSelectedAll
+        {
+            get => _isSelectedAll;
+            set
+            {
+                Set(() => IsSelectedAll, ref _isSelectedAll, value);
+
+                if (value)
+                {
+                    SelectAllAction();
+                }
+                else
+                {
+                    CancelSelectAllAction();
+                }
+            }
+        }
+
         public string SelectedCount
         {
             get => "已選 " + Institutions.Count(i => i.Selected) + " 間";
