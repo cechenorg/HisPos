@@ -281,7 +281,8 @@ namespace His_Pos.NewClass.StoreOrder
 
             if (isLowerThenOrderAmount)
             {
-                bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
+                InsertLowerOrder(ID, ReceiveID, OrderStatus);
+                //bool isSuccess = AddNewStoreOrderLowerThenOrderAmount();
             }
             return true;
         }
@@ -479,45 +480,49 @@ namespace His_Pos.NewClass.StoreOrder
 
         #endregion ///// Batch Function /////
 
-        public bool AddNewStoreOrderLowerThenOrderAmount()
+        public static string InsertLowerOrder(string ID, string RecID, OrderStatusEnum Status)
         {
-            DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ID, OrderManufactory.ID, OrderWarehouse.ID, OrderProducts);
-
-            if (dataTable.Rows.Count > 0)
+            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(ID);
+            OrderStatusEnum orderStatus = Status;
+            PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
+            DataRow[] drs = OrderTable.Select("StoOrdDet_OrderAmount > StoOrdDet_RealAmount");//預訂量 > 實際量 
+            if (drs != null && drs.Length > 0)
             {
-                StoreOrder order = StoreOrders.GetOrdersMinus(dataTable.Rows[0]["NEW_ID"].ToString())[0];
-                PurchaseProducts products = PurchaseProducts.GetProductsByStoreOrderID(order.ID, order.OrderStatus);
-                if (products != null && products.Count > 0)
+                string newOrderID = string.Empty;
+                if (ID.Length == 12)//ex:P20220101-01
                 {
-                    ((PurchaseOrder)order).OrderProducts = new PurchaseProducts();
-                    foreach (PurchaseProduct item in products)
+                    newOrderID = string.Format("{0}+1", ID.Trim());
+                }
+                else//ex:P20220101-01+11
+                {
+                    int count = Convert.ToInt32(ID.Trim().Substring(12, ID.Trim().Length - 12));
+                    newOrderID = string.Format("{0}+{1}", ID.Trim().Substring(0, 12), count + 1);
+                }
+                DataTable tbSindgeData = StoreOrderDB.GetOrderByNo(newOrderID, "2021-01-01");
+                if (tbSindgeData != null && tbSindgeData.Rows.Count > 0)
+                {
+                    string ReceiveID = RecID;//杏德出貨單
+                    string ManID = Convert.ToString(drs[0]["StoOrd_ManufactoryID"]);//供應商
+                    string wareID = Convert.ToString(drs[0]["StoOrd_WarehouseID"]);//出貨倉庫
+                    tbSindgeData = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
+                    if (tbSindgeData.Rows.Count > 0)
                     {
-                        if (item.IsDone == 0)
-                            ((PurchaseOrder)order).OrderProducts.Add(item);
+                        Application.Current.Dispatcher.Invoke(() => {
+                            MessageWindow.ShowMessage($"已新增收貨單 {tbSindgeData.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+                        });
+                        return tbSindgeData.Rows[0].Field<string>("NEW_ID");
+                    }
+                    else
+                    {
+                        Application.Current.Dispatcher.Invoke(() => {
+                            MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
+                        });
+                        return string.Empty;
                     }
                 }
-                    
-                Properties.Settings.Default.MinusID = order;
-                LowOrderID = order.ID;
-                if(!string.IsNullOrEmpty(LowOrderID) && OrderManufactory.ID == "0")
-                {
-                    DataTable ReturnTable = StoreOrderDB.GetOrderByNo(LowOrderID, order.CreateDateTime.ToString("yyyy-MM-dd"));
-                    if(ReturnTable == null || ReturnTable.Rows.Count == 0)
-                    {
-                        if(order.OrderTypeIsOTC != "OTC")
-                            ReturnTable = StoreOrderDB.SendStoreOrderToSingde(order);
-                        else
-                            ReturnTable = StoreOrderDB.SendOTCStoreOrderToSingde(order);
-                    }
-                }
-                return true;
             }
-            else
-            {
-                return false;
-            }
+            return string.Empty;
         }
-
         public static bool InsertPrescriptionOrder(Prescription.Prescription p, PrescriptionSendDatas pSendData)
         {
             string newstoordId = StoreOrderDB.InsertPrescriptionOrder(pSendData, p).Rows[0].Field<string>("newStoordId");

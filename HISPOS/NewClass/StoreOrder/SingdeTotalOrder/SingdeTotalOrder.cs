@@ -102,13 +102,10 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                         return;
                     }
 
-                    bool IsSusses = true;
                     if (order.Type != OrderTypeEnum.RETURN)
                     {
-                        IsSusses = InsertLowerOrder(order);
+                        PurchaseOrder.InsertLowerOrder(order.ID, order.RecID, order.Status);
                     }
-                    if (!IsSusses)
-                        break;
 
                     DataTable result = new DataTable();
 
@@ -166,16 +163,11 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
                 {
                     if (listOrder.Contains(order.ID) && order.Type != OrderTypeEnum.RETURN)
                     {
-                        DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
-                        OrderStatusEnum orderStatus = order.Status;
-                        PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
-                        string ReceiveID = order.RecID;//杏德出貨單
-                        string ManID = Convert.ToString(OrderTable.Rows[0]["StoOrd_ManufactoryID"]); ;//供應商
-                        string wareID = Convert.ToString(OrderTable.Rows[0]["StoOrd_WarehouseID"]);//出貨倉庫
-                        DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
-                        if (dataTable != null && dataTable.Rows.Count > 0 && order.Type != OrderTypeEnum.RETURN)
+                        string newOrderID = PurchaseOrder.InsertLowerOrder(order.ID, order.RecID, order.Status);
+                        bool isSuccess = !string.IsNullOrEmpty(newOrderID);
+                        if(isSuccess)
                         {
-                            succesOrder.Add(dataTable.Rows[0].Field<string>("NEW_ID"));
+                            succesOrder.Add(newOrderID);
                         }
                     }
                 }
@@ -241,36 +233,6 @@ namespace His_Pos.NewClass.StoreOrder.SingdeTotalOrder
             });
             return confirm;
         }
-        private bool InsertLowerOrder(ProcessingStoreOrder order)
-        {
-            DataTable OrderTable = PurchaseReturnProductDB.GetProductsByStoreOrderID(order.ID);
-            OrderStatusEnum orderStatus = order.Status;
-            PurchaseProducts orderProducts = new PurchaseProducts(OrderTable, orderStatus);
-            DataRow[] drs = OrderTable.Select("StoOrdDet_OrderAmount > StoOrdDet_RealAmount");//預訂量 > 實際量 
-            if (drs != null && drs.Length > 0)
-            {
-                string ReceiveID = order.RecID;//杏德出貨單
-                string ManID = Convert.ToString(drs[0]["StoOrd_ManufactoryID"]); ;//供應商
-                string wareID = Convert.ToString(drs[0]["StoOrd_WarehouseID"]);//出貨倉庫
-                DataTable dataTable = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
-                if (dataTable.Rows.Count > 0)
-                {
-                    Application.Current.Dispatcher.Invoke(() => {
-                        MessageWindow.ShowMessage($"已新增收貨單 {dataTable.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
-                    });
-                    return true;
-                }
-                else
-                {
-                    Application.Current.Dispatcher.Invoke(() => {
-                        MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
-                    });
-                    return false;
-                }
-            }
-            return true;
-        }
-
         #endregion ----- Define Functions -----
     }
 }
