@@ -76,7 +76,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             }
         }
 
-        private bool _isSelectedAll;
+        private bool _isSelectedAll = true;
 
         public bool IsSelectedAll
         {

@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
             ID = r.Field<string>("Ins_ID");
             Name = r.Field<string>("Ins_Name");
             FullName = ID + " " + Name;
-            //Selected = true;
+            Selected = true;
         }
 
         private bool selected;
