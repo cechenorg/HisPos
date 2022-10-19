@@ -1,21 +1,4 @@
-﻿<UserControl
-    x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord.ProductTransactionRecordView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:command="http://www.galasoft.ch/mvvmlight"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:s="clr-namespace:System;assembly=mscorlib"
-    xmlns:service="clr-namespace:His_Pos.Service"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    VerticalAlignment="Center"
-    d:DesignHeight="839"
-    d:DesignWidth="1365"
-    FontFamily="Segoe UI Semibold"
-    mc:Ignorable="d">
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord.ProductTransactionRecordView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:command="http://www.galasoft.ch/mvvmlight" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" VerticalAlignment="Center" d:DesignHeight="839" d:DesignWidth="1365" FontFamily="Segoe UI Semibold" mc:Ignorable="d">
     <UserControl.Resources>
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:NumberConverter x:Key="NumberConverter" />
@@ -35,25 +18,9 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="700" />
                 </Grid.ColumnDefinitions>
-                <StackPanel
-                    Grid.Row="0"
-                    Grid.ColumnSpan="2"
-                    Orientation="Horizontal">
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                     <Label Margin="10,0,0,0" Content="銷售日期" Style="{StaticResource BoldLabelContent18}" />
-                    <xctk:MaskedTextBox
-                        x:Name="StartDate"
-                        Width="100" Height="35"
-                        HorizontalContentAlignment="Center"
-                        FontSize="20"
-                        Foreground="{StaticResource ForeGround}"
-                        InputMethod.IsInputMethodEnabled="False"
-                        InputScope="Number"
-                        InsertKeyMode="Overwrite"
-                        Mask="000/00/00"
-                        PreviewKeyDown="StartDate_OnPreviewKeyDown"
-                        PromptChar="-"
-                        Style="{StaticResource MaterialDesignTextBox}"
-                        ValueDataType="{x:Type s:String}">
+                    <xctk:MaskedTextBox x:Name="StartDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="20" Foreground="{StaticResource ForeGround}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00" PreviewKeyDown="StartDate_OnPreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" ValueDataType="{x:Type s:String}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
                                 <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=StartDate}" />
@@ -61,164 +28,41 @@
                         </i:Interaction.Triggers>
                     </xctk:MaskedTextBox>
                     <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}" />
-                    <xctk:MaskedTextBox
-                        x:Name="EndDate"
-                        Width="100"
-                        Height="35"
-                        HorizontalContentAlignment="Center"
-                        FontSize="20"
-                        Foreground="{StaticResource ForeGround}"
-                        InputMethod.IsInputMethodEnabled="False"
-                        InputScope="Number"
-                        InsertKeyMode="Overwrite"
-                        Mask="000/00/00"
-                        PreviewKeyDown="EndDate_OnPreviewKeyDown"
-                        PromptChar="-"
-                        Style="{StaticResource MaterialDesignTextBox}"
-                        ValueDataType="{x:Type s:String}">
+                    <xctk:MaskedTextBox x:Name="EndDate" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="20" Foreground="{StaticResource ForeGround}" InputMethod.IsInputMethodEnabled="False" InputScope="Number" InsertKeyMode="Overwrite" Mask="000/00/00" PreviewKeyDown="EndDate_OnPreviewKeyDown" PromptChar="-" Style="{StaticResource MaterialDesignTextBox}" ValueDataType="{x:Type s:String}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
                                 <command:EventToCommand Command="{Binding DateMouseDoubleClick}" CommandParameter="{Binding ElementName=EndDate}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </xctk:MaskedTextBox>
-                    <Label
-                        Margin="10,0,0,0"
-                        Content="發票起訖"
-                        Style="{StaticResource BoldLabelContent18}" />
-                    <TextBox
-                        x:Name="StartInvoice"
-                        Width="100"
-                        Height="35"
-                        HorizontalContentAlignment="Center"
-                        FontSize="16"
-                        Foreground="{StaticResource ForeGround}"
-                        InputMethod.IsInputMethodEnabled="False"
-                        Style="{StaticResource MaterialDesignTextBox}" />
+                    <Label Margin="10,0,0,0" Content="發票起訖" Style="{StaticResource BoldLabelContent18}" />
+                    <TextBox x:Name="StartInvoice" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Foreground="{StaticResource ForeGround}" InputMethod.IsInputMethodEnabled="False" Style="{StaticResource MaterialDesignTextBox}" />
                     <Label Content=" ~ " Style="{StaticResource BoldLabelContent16}" />
-                    <TextBox
-                        x:Name="EndInvoice"
-                        Width="100"
-                        Height="35"
-                        HorizontalContentAlignment="Center"
-                        FontSize="16"
-                        InputMethod.IsInputMethodEnabled="False"
-                        Style="{StaticResource MaterialDesignTextBox}" />
-                    <Label
-                        Margin="10,0,0,0"
-                        Content="結帳人員"
-                        Style="{StaticResource BoldLabelContent18}" />
-                    <ComboBox
-                        x:Name="cbCashier"
-                        Width="100"
-                        Margin="20,0,0,0"
-                        VerticalAlignment="Center"
-                        DisplayMemberPath="Emp_Name"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="18"
-                        Foreground="Black"
-                        SelectedValuePath="Emp_ID" />
-                    <CheckBox
-                        x:Name="chkIsIrregular"
-                        Margin="10,0,0,0"
-                        Background="RoyalBlue"
-                        Content="顯示非常規銷售"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="18"
-                        Foreground="{StaticResource ForeGround}"
-                        IsChecked="{Binding SearchIsIrregular, Mode=TwoWay}" />
-                    <CheckBox
-                        x:Name="chkIsReturn" Margin="10,0,0,0"
-                        Background="RoyalBlue" Content="顯示退貨"
-                        FontFamily="Segoe UI Semibold" FontSize="18"
-                        Foreground="{StaticResource ForeGround}"
-                        IsChecked="{Binding SearchIsReturn, Mode=TwoWay}" />
+                    <TextBox x:Name="EndInvoice" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" InputMethod.IsInputMethodEnabled="False" Style="{StaticResource MaterialDesignTextBox}" />
+                    <Label Margin="10,0,0,0" Content="結帳人員" Style="{StaticResource BoldLabelContent18}" />
+                    <ComboBox x:Name="cbCashier" Width="100" Margin="20,0,0,0" VerticalAlignment="Center" DisplayMemberPath="Emp_Name" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="Black" SelectedValuePath="Emp_ID" />
+                    <CheckBox x:Name="chkIsIrregular" Margin="10,0,0,0" Background="RoyalBlue" Content="顯示非常規銷售" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" IsChecked="{Binding SearchIsIrregular, Mode=TwoWay}" />
+                    <CheckBox x:Name="chkIsReturn" Margin="10,0,0,0" Background="RoyalBlue" Content="顯示退貨" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" IsChecked="{Binding SearchIsReturn, Mode=TwoWay}" />
 
-                    <Button x:Name="btnClear" Width="100"
-                        Margin="80,0,0,0" HorizontalAlignment="Right"
-                        Background="DimGray" BorderBrush="DimGray"
-                        Click="btnClear_Click" Content="清除" FontSize="16" />
+                    <Button x:Name="btnClear" Width="100" Margin="80,0,0,0" HorizontalAlignment="Right" Background="DimGray" BorderBrush="DimGray" Click="btnClear_Click" Content="清除" FontSize="16" />
 
-                    <Button x:Name="btnQuery"  Width="100" Margin="10,0,0,0"
-                        HorizontalAlignment="Right" Background="RoyalBlue"  BorderBrush="RoyalBlue"
-                        Click="btnQuery_Click" Content="查詢" FontSize="16" />
+                    <Button x:Name="btnQuery" Width="100" Margin="10,0,0,0" HorizontalAlignment="Right" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnQuery_Click" Content="查詢" FontSize="16" />
                 </StackPanel>
 
-                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1"
-                    Background="Transparent" Orientation="Horizontal">
-                    <Label Margin="10,0,0,0"
-                        Content="商品代碼" Style="{StaticResource BoldLabelContent18}" />
-                    <TextBox x:Name="ProId" Width="100"  Height="35" FontSize="16" InputMethod.IsInputMethodEnabled="False"
-                        Style="{StaticResource MaterialDesignTextBox}" />
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" Background="Transparent" Orientation="Horizontal">
+                    <Label Margin="10,0,0,0" Content="商品代碼" Style="{StaticResource BoldLabelContent18}" />
+                    <TextBox x:Name="ProId" Width="100" Height="35" FontSize="16" InputMethod.IsInputMethodEnabled="False" Style="{StaticResource MaterialDesignTextBox}" />
 
                     <Label Margin="10,0,0,0" Content="商品名稱" Style="{StaticResource BoldLabelContent18}" />
 
-                    <TextBox x:Name="ProName"  Width="100" Height="35"
-                        HorizontalContentAlignment="Center" FontSize="16" 
-                        Style="{StaticResource MaterialDesignTextBox}" />
+                    <TextBox x:Name="ProName" Width="100" Height="35" HorizontalContentAlignment="Center" FontSize="16" Style="{StaticResource MaterialDesignTextBox}" />
                 </StackPanel>
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="1"
-                    Background="Transparent"
-                    Orientation="Horizontal">
-                    <Button
-                        x:Name="btnTrade"
-                        Width="220"
-                        Height="25"
-                        Margin="10,10,5,5"
-                        Background="DimGray"
-                        BorderThickness="0"
-                        Command="{Binding DataContext.ChangeUiTypeCommand}"
-                        CommandParameter="P"
-                        Content="銷售紀錄"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="13"
-                        PreviewMouseDown="btnTrade_PreviewMouseDown" />
-                    <Button
-                        x:Name="btnTradeDetail"
-                        Width="220"
-                        Height="25"
-                        Margin="0,10,5,5"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Command="{Binding DataContext.ChangeUiTypeCommand}"
-                        CommandParameter="T"
-                        Content="銷售明細"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="13"
-                        Foreground="DimGray"
-                        PreviewMouseDown="btnTradeDetail_PreviewMouseDown" />
-                    <Button
-                        x:Name="btnTradeSum"
-                        Width="220"
-                        Height="25"
-                        Margin="0,10,5,5"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Command="{Binding DataContext.ChangeUiTypeCommand}"
-                        CommandParameter="S"
-                        Content="銷售彙總"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="13"
-                        Foreground="DimGray"
-                        PreviewMouseDown="btnTradeSum_PreviewMouseDown" />
+                <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Background="Transparent" Orientation="Horizontal">
+                    <Button x:Name="btnTrade" Width="220" Height="25" Margin="10,10,5,5" Background="DimGray" BorderThickness="0" Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="P" Content="銷售紀錄" FontFamily="Segoe UI Semibold" FontSize="13" PreviewMouseDown="btnTrade_PreviewMouseDown" />
+                    <Button x:Name="btnTradeDetail" Width="220" Height="25" Margin="0,10,5,5" Background="Transparent" BorderThickness="0" Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="T" Content="銷售明細" FontFamily="Segoe UI Semibold" FontSize="13" Foreground="DimGray" PreviewMouseDown="btnTradeDetail_PreviewMouseDown" />
+                    <Button x:Name="btnTradeSum" Width="220" Height="25" Margin="0,10,5,5" Background="Transparent" BorderThickness="0" Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="S" Content="銷售彙總" FontFamily="Segoe UI Semibold" FontSize="13" Foreground="DimGray" PreviewMouseDown="btnTradeSum_PreviewMouseDown" />
                 </StackPanel>
-                <DataGrid
-                    x:Name="RecordGrid"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="10,0,10,0"
-                    AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
-                    AutoGenerateColumns="False"
-                    Background="{StaticResource GridBackGround}"
-                    CanUserAddRows="False"
-                    CellStyle="{StaticResource DataGridCellStyle}"
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    EnableRowVirtualization="True"
-                    HorizontalScrollBarVisibility="Disabled">
+                <DataGrid x:Name="RecordGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="True" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -239,11 +83,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Width="60"
-                            Binding="{Binding Path=NO}"
-                            Header="序"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="60" Binding="{Binding Path=NO}" Header="序" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -252,11 +92,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="190"
-                            Binding="{Binding Path=TransTime_Format}"
-                            Header="結帳時間"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="190" Binding="{Binding Path=TransTime_Format}" Header="結帳時間" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -265,11 +101,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding Path=Cus_Name}"
-                            Header="顧客姓名"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="120" Binding="{Binding Path=Cus_Name}" Header="顧客姓名" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -278,11 +110,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="100"
-                            Binding="{Binding Path=TraMas_RealTotal}"
-                            Header="結帳金額"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="100" Binding="{Binding Path=TraMas_RealTotal}" Header="結帳金額" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -290,11 +118,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="180"
-                            Binding="{Binding Path=TraMas_PayMethod}"
-                            Header="付款方式"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="180" Binding="{Binding Path=TraMas_PayMethod}" Header="付款方式" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -302,11 +126,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="180"
-                            Binding="{Binding Path=TraMas_TaxNumber}"
-                            Header="統一編號"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="180" Binding="{Binding Path=TraMas_TaxNumber}" Header="統一編號" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -314,11 +134,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="180"
-                            Binding="{Binding Path=TraMas_InvoiceNumber}"
-                            Header="發票號碼"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="180" Binding="{Binding Path=TraMas_InvoiceNumber}" Header="發票號碼" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -326,11 +142,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding Path=Emp_Name}"
-                            Header="收銀員"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="120" Binding="{Binding Path=Emp_Name}" Header="收銀員" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -338,11 +150,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="220"
-                            Binding="{Binding Path=TraMas_UpdateTime}"
-                            Header="最後編輯時間"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="220" Binding="{Binding Path=TraMas_UpdateTime}" Header="最後編輯時間" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -353,21 +161,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <DataGrid
-                    x:Name="RecordDetailGrid"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="10,0,10,0"
-                    AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
-                    AutoGenerateColumns="False"
-                    Background="{StaticResource GridBackGround}"
-                    CanUserAddRows="False"
-                    CellStyle="{StaticResource DataGridCellStyle}"
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    EnableRowVirtualization="True"
-                    HorizontalScrollBarVisibility="Disabled"
-                    Visibility="Collapsed">
+                <DataGrid x:Name="RecordDetailGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="True" HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -396,11 +190,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Width="60"
-                            Binding="{Binding Path=NO}"
-                            Header="序"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="60" Binding="{Binding Path=NO}" Header="序" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -409,11 +199,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="190"
-                            Binding="{Binding Path=TransTime_Format}"
-                            Header="結帳時間"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="190" Binding="{Binding Path=TransTime_Format}" Header="結帳時間" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -422,11 +208,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding Path=Cus_Name}"
-                            Header="顧客姓名"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="120" Binding="{Binding Path=Cus_Name}" Header="顧客姓名" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -435,11 +217,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="200"
-                            Binding="{Binding Path=TraDet_ProductID}"
-                            Header="商品代碼"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="200" Binding="{Binding Path=TraDet_ProductID}" Header="商品代碼" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -447,11 +225,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="300"
-                            Binding="{Binding Path=TraDet_ProductName}"
-                            Header="商品名稱"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="300" Binding="{Binding Path=TraDet_ProductName}" Header="商品名稱" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -459,11 +233,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="100"
-                            Binding="{Binding Path=TraDet_Price}"
-                            Header="售價"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="100" Binding="{Binding Path=TraDet_Price}" Header="售價" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -476,11 +246,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="60"
-                            Binding="{Binding Path=TraDet_Amount}"
-                            Header="數量"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="60" Binding="{Binding Path=TraDet_Amount}" Header="數量" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -488,11 +254,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="100"
-                            Binding="{Binding Path=TraDet_PriceSum}"
-                            Header="小計"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="100" Binding="{Binding Path=TraDet_PriceSum}" Header="小計" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -500,11 +262,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding Path=TraDet_RewardPersonnelName}"
-                            Header="獎勵"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="120" Binding="{Binding Path=TraDet_RewardPersonnelName}" Header="獎勵" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -512,11 +270,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="120"
-                            Binding="{Binding Path=Emp_Name}"
-                            Header="收銀員"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="120" Binding="{Binding Path=Emp_Name}" Header="收銀員" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -527,21 +281,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <DataGrid
-                    x:Name="RecordSumGrid"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="10,0,10,0"
-                    AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
-                    AutoGenerateColumns="False"
-                    Background="{StaticResource GridBackGround}"
-                    CanUserAddRows="False"
-                    CellStyle="{StaticResource DataGridCellStyle}"
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    EnableRowVirtualization="True"
-                    HorizontalScrollBarVisibility="Disabled"
-                    Visibility="Collapsed">
+                <DataGrid x:Name="RecordSumGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="True" HorizontalScrollBarVisibility="Disabled" Visibility="Collapsed">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -569,11 +309,7 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Width="60"
-                            Binding="{Binding Path=NO}"
-                            Header="序"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="60" Binding="{Binding Path=NO}" Header="序" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -582,11 +318,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="190"
-                            Binding="{Binding Path=TraDet_ProductID}"
-                            Header="商品代碼"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="190" Binding="{Binding Path=TraDet_ProductID}" Header="商品代碼" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -595,11 +327,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="400"
-                            Binding="{Binding Path=Pro_ChineseName}"
-                            Header="商品名稱"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="400" Binding="{Binding Path=Pro_ChineseName}" Header="商品名稱" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -609,11 +337,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn
-                            Width="60"
-                            Binding="{Binding Path=TraDet_Amount}"
-                            Header="數量"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="60" Binding="{Binding Path=TraDet_Amount}" Header="數量" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -621,11 +345,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn
-                            Width="100"
-                            Binding="{Binding Path=TraDet_PriceSum}"
-                            Header="總售價"
-                            IsReadOnly="True">
+                        <DataGridTextColumn Width="100" Binding="{Binding Path=TraDet_PriceSum}" Header="總售價" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -640,43 +360,14 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel
-                    Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Margin="0,10,0,0"
-                    Background="{StaticResource GridBackGround}"
-                    Orientation="Horizontal">
-                    <Label Height="35"  Margin="10,0,0,0" Content="銷售筆數:" Style="{StaticResource BoldLabelContent18}" />
-                    <Label x:Name="lblCount" Width="150"  Height="35"
-                        Content="{Binding TotalCount, UpdateSourceTrigger=PropertyChanged}"  Style="{StaticResource BoldLabelContent18}" />
-                    <Label
-                        Height="35" Content="銷售總額" Style="{StaticResource BoldLabelContent18}" />
-                    <Label
-                        x:Name="lblTotal" Width="170" Height="35"  Style="{StaticResource BoldLabelContent18}" />
-                    <Button
-                        x:Name="btnPrint1"
-                        Width="100"
-                        Margin="800,0,0,0"
-                        Background="RoyalBlue"
-                        BorderBrush="RoyalBlue"
-                        Click="btnPrint1_Click"
-                        Content="匯出紀錄" />
-                    <Button
-                        x:Name="btnPrint2"
-                        Width="100"
-                        Margin="800,0,0,0"
-                        Background="RoyalBlue"
-                        BorderBrush="RoyalBlue"
-                        Click="btnPrint2_Click"
-                        Content="匯出紀錄"
-                        Visibility="Collapsed" />
-                    <Button
-                        x:Name="btnPrint3"
-                        Width="100"
-                        Margin="800,0,0,0"
-                        Background="RoyalBlue"
-                        BorderBrush="RoyalBlue"
-                        Click="btnPrint3_Click"
-                        Content="匯出紀錄"
-                        Visibility="Collapsed" />
+                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
+                    <Label Height="35" Margin="10,0,0,0" Content="銷售筆數:" Style="{StaticResource BoldLabelContent18}" />
+                    <Label x:Name="lblCount" Width="150" Height="35" Content="{Binding TotalCount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" />
+                    <Label Height="35" Content="銷售總額" Style="{StaticResource BoldLabelContent18}" />
+                    <Label x:Name="lblTotal" Width="170" Height="35" Style="{StaticResource BoldLabelContent18}" />
+                    <Button x:Name="btnPrint1" Width="100" Margin="800,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnPrint1_Click" Content="匯出紀錄" />
+                    <Button x:Name="btnPrint2" Width="100" Margin="800,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnPrint2_Click" Content="匯出紀錄" Visibility="Collapsed" />
+                    <Button x:Name="btnPrint3" Width="100" Margin="800,0,0,0" Background="RoyalBlue" BorderBrush="RoyalBlue" Click="btnPrint3_Click" Content="匯出紀錄" Visibility="Collapsed" />
                 </StackPanel>
             </Grid>
         </xctk:BusyIndicator>
