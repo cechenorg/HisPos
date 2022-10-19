@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using His_Pos.NewClass.Trade;
 using MaskedTextBox = Xceed.Wpf.Toolkit.MaskedTextBox;
 
 namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
@@ -31,6 +32,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
         public DataTable RecordDetailListPrint;
         private int queryTab = 1;
 
+        private TradeService _tradeService = new TradeService();
         public ProductTransactionRecordView()
         {
             InitializeComponent();
@@ -121,28 +123,28 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     return;
                 }
 
+                TradeQueryInfo queryInfo = new TradeQueryInfo()
+                {
+                    StartDate = sDate,
+                    EndDate = eDate,
+                    StartInvoice = sInvoice,
+                    EndInvoice = eInvoice,
+                    ShowIrregular = isIrregular,
+                    ShowReturn = isReturn,
+                    CashierID = Cashier,
+                    ProID = proID,
+                    ProName = proNAME,
+                    Flag = "0"
+                };
+
                 switch (querytype)
                 {
                     case 1: // 銷售紀錄
                     default:
                         queryTab = 1;
                         ClearDataGrids();
-                        MainWindow.ServerConnection.OpenConnection();
-                        List<SqlParameter> parameters = new List<SqlParameter>();
-                        parameters.Add(new SqlParameter("CustomerID", DBNull.Value));
-                        parameters.Add(new SqlParameter("MasterID", DBNull.Value));
-                        parameters.Add(new SqlParameter("sDate", sDate));
-                        parameters.Add(new SqlParameter("eDate", eDate));
-                        parameters.Add(new SqlParameter("sInvoice", sInvoice));
-                        parameters.Add(new SqlParameter("eInvoice", eInvoice));
-                        parameters.Add(new SqlParameter("flag", "0"));
-                        parameters.Add(new SqlParameter("ShowIrregular", isIrregular));
-                        parameters.Add(new SqlParameter("ShowReturn", isReturn));
-                        parameters.Add(new SqlParameter("Cashier", Cashier));
-                        parameters.Add(new SqlParameter("ProID", proID));
-                        parameters.Add(new SqlParameter("ProName", proNAME));
-                        DataTable result = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordQuery]", parameters);
-                        MainWindow.ServerConnection.CloseConnection();
+                       
+                        DataTable result = _tradeService.GetTradeRecord(queryInfo);
                         FormatData(result);
                         RecordList = result.Copy();
                         RecordList.Columns.Add("NO"); // 序
@@ -161,22 +163,7 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                     case 2: // 銷售明細
                         queryTab = 2;
                         ClearDataGrids();
-                        MainWindow.ServerConnection.OpenConnection();
-                        List<SqlParameter> parametersDetail = new List<SqlParameter>();
-                        parametersDetail.Add(new SqlParameter("CustomerID", DBNull.Value));
-                        parametersDetail.Add(new SqlParameter("MasterID", DBNull.Value));
-                        parametersDetail.Add(new SqlParameter("sDate", sDate));
-                        parametersDetail.Add(new SqlParameter("eDate", eDate));
-                        parametersDetail.Add(new SqlParameter("sInvoice", sInvoice));
-                        parametersDetail.Add(new SqlParameter("eInvoice", eInvoice));
-                        parametersDetail.Add(new SqlParameter("flag", "0"));
-                        parametersDetail.Add(new SqlParameter("ShowIrregular", isIrregular));
-                        parametersDetail.Add(new SqlParameter("ShowReturn", isReturn));
-                        parametersDetail.Add(new SqlParameter("Cashier", Cashier));
-                        parametersDetail.Add(new SqlParameter("ProID", proID));
-                        parametersDetail.Add(new SqlParameter("ProName", proNAME));
-                        DataTable resultDetail = MainWindow.ServerConnection.ExecuteProc("[POS].[TradeRecordDetailQuery]", parametersDetail);
-                        MainWindow.ServerConnection.CloseConnection();
+                        DataTable resultDetail = _tradeService.GetTradeRecord(queryInfo);                       
                         FormatData(resultDetail);
                         RecordDetailList = resultDetail.Copy();
 
@@ -305,6 +292,8 @@ namespace His_Pos.SYSTEM_TAB.P1_TRANSACTION.ProductTransactionRecord
                 masterRow = RecordDetailList.Rows[index];
                 TradeID = RecordDetailList.Rows[index]["TraMas_ID"].ToString();
             }
+
+
 
             MainWindow.ServerConnection.OpenConnection();
             List<SqlParameter> parameters = new List<SqlParameter>();

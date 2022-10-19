@@ -62,7 +62,10 @@
                     <Button x:Name="btnTradeDetail" Width="220" Height="25" Margin="0,10,5,5" Background="Transparent" BorderThickness="0" Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="T" Content="銷售明細" FontFamily="Segoe UI Semibold" FontSize="13" Foreground="DimGray" PreviewMouseDown="btnTradeDetail_PreviewMouseDown" />
                     <Button x:Name="btnTradeSum" Width="220" Height="25" Margin="0,10,5,5" Background="Transparent" BorderThickness="0" Command="{Binding DataContext.ChangeUiTypeCommand}" CommandParameter="S" Content="銷售彙總" FontFamily="Segoe UI Semibold" FontSize="13" Foreground="DimGray" PreviewMouseDown="btnTradeSum_PreviewMouseDown" />
                 </StackPanel>
-                <DataGrid x:Name="RecordGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="True" HorizontalScrollBarVisibility="Disabled">
+                <DataGrid x:Name="RecordGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" 
+                          AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}" AutoGenerateColumns="False"
+                          Background="{StaticResource GridBackGround}" CanUserAddRows="False" CellStyle="{StaticResource DataGridCellStyle}"
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="True" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="#FFA8A8A8" />
@@ -111,6 +114,30 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Width="100" Binding="{Binding Path=TraMas_RealTotal}" Header="結帳金額" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Binding="{Binding Path=TraMas_RealTotal}" Header="成本" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Binding="{Binding Path=TraMas_RealTotal}" Header="毛利" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="100" Binding="{Binding Path=TraMas_RealTotal}" Header="毛利率" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
