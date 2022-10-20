@@ -191,7 +191,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductManagement
         {
             InitData();
             RegisterCommand();
-            SearchAction();
+            //SearchAction();
+            SearchProductCollection = new ProductManageStructs(new DataTable());
+            ProductCollectionView = CollectionViewSource.GetDefaultView(SearchProductCollection);
             MEDDeposit = Visibility.Visible;
             OTCDeposit = Visibility.Collapsed;
         }
