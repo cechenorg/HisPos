@@ -1974,6 +1974,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
             bool isChangedTab = _currentDetailType == ReportDetailType.AllPrescription_Change ||
                                 _currentDetailType == ReportDetailType.Chironic_Change ||
                                 _currentDetailType == ReportDetailType.CoopPrescription_Change ||
+                                _currentDetailType == ReportDetailType.Prescribtion_Change ||
                                 _currentDetailType == ReportDetailType.NormalPrescription_Change;
 
             var data = isChangedTab
