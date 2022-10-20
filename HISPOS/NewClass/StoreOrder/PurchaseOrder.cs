@@ -501,23 +501,27 @@ namespace His_Pos.NewClass.StoreOrder
                 DataTable tbSindgeData = StoreOrderDB.GetOrderByNo(newOrderID, "2021-01-01");
                 if (tbSindgeData != null && tbSindgeData.Rows.Count > 0)
                 {
+                    int flag = Convert.ToInt32(tbSindgeData.Rows[0]["FLAG"]);
                     string ReceiveID = RecID;//杏德出貨單
                     string ManID = Convert.ToString(drs[0]["StoOrd_ManufactoryID"]);//供應商
                     string wareID = Convert.ToString(drs[0]["StoOrd_WarehouseID"]);//出貨倉庫
-                    tbSindgeData = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
-                    if (tbSindgeData.Rows.Count > 0)
+                    if(flag != 2)
                     {
-                        Application.Current.Dispatcher.Invoke(() => {
-                            MessageWindow.ShowMessage($"已新增收貨單 {tbSindgeData.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
-                        });
-                        return tbSindgeData.Rows[0].Field<string>("NEW_ID");
-                    }
-                    else
-                    {
-                        Application.Current.Dispatcher.Invoke(() => {
-                            MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
-                        });
-                        return string.Empty;
+                        tbSindgeData = StoreOrderDB.AddStoreOrderLowerThenOrderAmount(ReceiveID, ManID, wareID, orderProducts);//新增不足量訂單
+                        if (tbSindgeData.Rows.Count > 0)
+                        {
+                            Application.Current.Dispatcher.Invoke(() => {
+                                MessageWindow.ShowMessage($"已新增收貨單 {tbSindgeData.Rows[0].Field<string>("NEW_ID")} !", MessageType.SUCCESS);
+                            });
+                            return tbSindgeData.Rows[0].Field<string>("NEW_ID");
+                        }
+                        else
+                        {
+                            Application.Current.Dispatcher.Invoke(() => {
+                                MessageWindow.ShowMessage($"新增失敗 請稍後再試!", MessageType.ERROR);
+                            });
+                            return string.Empty;
+                        }
                     }
                 }
             }

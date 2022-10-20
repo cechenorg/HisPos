@@ -426,6 +426,8 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     else
                     {
+                        if (type == 1)
+                            CheckStoreOrderLower();
                         result = StoreOrderDB.PurchaseStoreOrderToDone(ID, IsPayCash);
                     }
                     if (result.Rows.Count == 0 || result.Rows[0].Field<string>("RESULT").Equals("FAIL"))
@@ -436,9 +438,6 @@ namespace His_Pos.NewClass.StoreOrder
                     }
                     else
                     {
-                        if (type == 1)
-                            CheckStoreOrderLower();
-
                         string id = LowOrderID;
                         IsDoneOrder = true;
                         OrderStatus = OrderStatusEnum.DONE;
