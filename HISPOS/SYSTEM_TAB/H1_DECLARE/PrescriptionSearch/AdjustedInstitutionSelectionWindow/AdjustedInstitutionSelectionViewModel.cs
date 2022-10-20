@@ -148,19 +148,40 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
 
         private void SelectAllAction()
         {
-            foreach (var i in Institutions)
+            if (string.IsNullOrEmpty(Search))
             {
-                i.Selected = true;
+                foreach (var i in Institutions)
+                {
+                    i.Selected = true;
+                }
             }
+            else
+            {
+                foreach (var i in Institutions.Where(_ => _.Name.Contains(Search)))
+                {
+                    i.Selected = true;
+                }
+            }
+           
 
             SelectedCountChangedAction();
         }
 
         private void CancelSelectAllAction()
         {
-            foreach (var i in Institutions)
+            if (string.IsNullOrEmpty(Search))
             {
-                i.Selected = false;
+                foreach (var i in Institutions)
+                {
+                    i.Selected = false;
+                }
+            }
+            else
+            {
+                foreach (var i in Institutions.Where(_ => _.Name.Contains(Search)))
+                {
+                    i.Selected = false;
+                }
             }
 
             SelectedCountChangedAction();
