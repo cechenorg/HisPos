@@ -1600,13 +1600,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             worker.DoWork += (o, ea) =>
             {
                 BusyContent = "處方登錄中...";
-                if (!currentService.StartRegister())
+                if (currentService.StartRegister())
                 {
-                    isAdjusting = false;
-                    result = false;
-                }
-                else
-                {
+
                     Application.Current.Dispatcher.Invoke(delegate
                     {
                         currentService.CloneTempPre();
@@ -1614,6 +1610,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
                     StartPrint(false);
                     BusyContent = "取得預約處方...";
                     CheckAutoRegister();
+                }
+                else
+                {
+                    isAdjusting = false;
+                    result = false;
                 }
             };
             worker.RunWorkerCompleted += (o, ea) =>

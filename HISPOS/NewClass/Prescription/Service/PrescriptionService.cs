@@ -59,6 +59,8 @@ namespace His_Pos.NewClass.Prescription.Service
         }
 
         protected MedicinesSendSingdeViewModel vm { get; set; } = null;
+
+        protected IEnumerable<Prescription> PrescriptionList { get; set; }
         protected Prescription Current { get; set; }
         protected Prescription TempPre { get; set; }
         protected Prescription TempPrint { get; set; }
@@ -114,11 +116,9 @@ namespace His_Pos.NewClass.Prescription.Service
 
         public bool StartRegister()
         {
-            MainWindow.ServerConnection.OpenConnection();
             MainWindow.SingdeConnection.OpenConnection();
             var result = Register();
             MainWindow.ServerConnection.CloseConnection();
-            MainWindow.SingdeConnection.CloseConnection();
             return result;
         }
 
