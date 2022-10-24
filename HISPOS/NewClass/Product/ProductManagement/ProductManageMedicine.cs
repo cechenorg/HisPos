@@ -96,6 +96,10 @@ namespace His_Pos.NewClass.Product.ProductManagement
             SelfPayMultiplier = row.Field<double>("SysPar_Value");
             RewardPercent = row.Field<double>("Pro_RewardPercent").ToString();
             OTCFromSingde = row.Field<bool>("OTCFromSingde");
+            if(IsCommon && !OTCFromSingde)
+            {
+                OTCFromSingde = true;
+            }
             OTCMemo = row.Field<string>("OTC_InvMemo");
         }
 
