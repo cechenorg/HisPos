@@ -170,12 +170,6 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             set
             {
                 Set(() => StockTakingPlanProductSelected, ref stockTakingPlanProductSelected, value);
-                for (int i = 0; i < CurrentPlan.StockTakingProductCollection.Count; i++)
-                {
-                    CurrentPlan.StockTakingProductCollection[i].IsSelected = false;
-                }
-                if (value is null) return;
-                value.IsSelected = true;
             }
         }
 
@@ -243,7 +237,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             set
             {
                 Set(() => ResultFinalTotalPrice, ref resultFinalTotalPrice, value);
-                ResultDiffTotalPrice = ResultFinalTotalPrice - ResultInitTotalPrice;
+                ResultDiffTotalPrice =  -(ResultInitTotalPrice - ResultFinalTotalPrice);
             }
         }
         /**7.27 盤點篩選 **/
