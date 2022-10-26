@@ -24,6 +24,10 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
         public int MonthlyProfit { get; set; } //月業績
 
         public int MonthlyTarget { get; set; } //月目標
+        public int PrescriptionCountTarget { get; set; } //慢箋張數
+        public int DrugProfitTarget { get; set; } //配藥+慢箋毛利
+        public int OtcProfitTarget { get; set; } //OTC毛利
+        public int OtcTurnoverTarget { get; set; } //OTC營業額
 
         public DateTime Month { get; set; } //加總
 

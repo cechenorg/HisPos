@@ -96,6 +96,17 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
+        private ClosingCashReportDataList closingCashReportDataList = new ClosingCashReportDataList();
+
+        public ClosingCashReportDataList ClosingCashReportDataList
+        {
+            get => closingCashReportDataList;
+            set
+            {
+                Set(() => ClosingCashReportDataList, ref closingCashReportDataList, value);
+            }
+        }
+
         private int monthlyNeedWorkingDayCount;
 
         public int MonthlyNeedWorkingDayCount
@@ -131,6 +142,13 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
             DailyAccountingSearchAction();
             MonthlyClosingAccountSearchAction();
+
+            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 1, Target = 200050});
+            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試", Actual = 100, Order = 2, Target = 200});
+            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 3, Target = 200050});
+            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 4, Target = 200050});
+            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 5, Target = 200050});
+            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 6, Target = 200050});
         }
 
         private void MonthlyTargetSettingAction()
@@ -318,5 +336,19 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             } 
             return result;
         }
+    }
+
+    public class ClosingCashReportDataList : ObservableCollection<ClosingCashReportData>
+    {
+
+    }
+
+    public class ClosingCashReportData
+    {
+        public int Order { get; set; }
+        public string Name { get; set; }
+        public int Target { get; set; }
+        public int Actual { get; set; }
+        public int Percent => Target == 0 ? 0 : Actual / Target;
     }
 }

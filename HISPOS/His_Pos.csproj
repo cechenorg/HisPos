@@ -824,6 +824,9 @@
     <Compile Include="SYSTEM_TAB\H11_CLOSING\Closing\ClosingHistoryWindow.xaml.cs">
       <DependentUpon>ClosingHistoryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingCashDataGrid.xaml.cs">
+      <DependentUpon>ClosingCashDataGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingCashSelect.xaml.cs">
       <DependentUpon>ClosingCashSelect.xaml</DependentUpon>
     </Compile>
@@ -1724,6 +1727,10 @@
     <Page Include="SYSTEM_TAB\H11_CLOSING\Closing\ClosingHistoryWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingCashDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H11_CLOSING\ClossingCashSelect\ClosingCashSelect.xaml">
       <SubType>Designer</SubType>
