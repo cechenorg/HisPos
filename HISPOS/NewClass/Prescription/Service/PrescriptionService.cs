@@ -315,7 +315,7 @@ namespace His_Pos.NewClass.Prescription.Service
                 return false;
             }
 
-            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.Authority == DomainModel.Enum.Authority.MasterPharmacist) return true;
+            if (Current.AdjustDate >= DateTime.Today || VM.CurrentUser.ID == 1 || VM.CurrentUser.Authority == DomainModel.Enum.Authority.MasterPharmacist || VM.CurrentUser.Authority == DomainModel.Enum.Authority.PharmacyManager) return true;
             MessageWindow.ShowMessage("調劑日不可小於今天", MessageType.WARNING);
             return false;
         }
