@@ -87,14 +87,14 @@
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="410" />
+                <ColumnDefinition Width="auto" MinWidth="420" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBox
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="0"
-                Margin="20,10,0,10"
+                Margin="10,10,0,10"
                 Padding="0"
                 VerticalAlignment="Center"
                 BorderThickness="0"
@@ -104,7 +104,7 @@
                 IsReadOnly="True"
                 Text="{Binding Medicine.ID}" />
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                <TextBox Width="1030" Margin="20,0,20,0" BorderBrush="Transparent" 
+                <TextBox Width="1030" Margin="10,0,10,0" BorderBrush="Transparent" 
                          FontFamily="Segoe UI Semibold" FontSize="35" Foreground="Black"
                         Text="{Binding Medicine.ChineseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
@@ -132,7 +132,7 @@
                 Orientation="Horizontal">
                 <TextBox
                     Width="950"
-                    Margin="20,0,0,0"
+                    Margin="10,0,0,0"
                     Padding="0"
                     BorderBrush="Transparent"
                     FontFamily="Segoe UI Semi"
