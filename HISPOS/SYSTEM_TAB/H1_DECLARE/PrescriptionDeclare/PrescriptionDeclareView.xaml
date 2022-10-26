@@ -604,9 +604,11 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
                         <Label Content="藥品點 : " Style="{StaticResource BoldLabelContent18}" />
-                        <Label Width="90" Content="{Binding CurrentPrescription.PrescriptionPoint.MedicinePoint, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" />
+                        <Label Width="90" ContentStringFormat="{}{0:N0}" 
+                               Content="{Binding CurrentPrescription.PrescriptionPoint.MedicinePoint, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" />
                         <Label Content="特材點 : " Style="{StaticResource BoldLabelContent18}" />
-                        <Label Width="90" Content="{Binding CurrentPrescription.PrescriptionPoint.SpecialMaterialPoint, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" />
+                        <Label Width="70" ContentStringFormat="{}{0:N0}"
+                               Content="{Binding CurrentPrescription.PrescriptionPoint.SpecialMaterialPoint, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="10,0,10,0" Orientation="Horizontal">
                         <Label Content="自費 $" Style="{StaticResource BoldLabelContent18}" />
@@ -618,13 +620,15 @@
                             </i:Interaction.Triggers>
                         </TextBox>
                         <Label Margin="20,0,0,0" Content="應收 $" Style="{StaticResource BoldLabelContent18}" />
-                        <Label x:Name="CustomPayText" Width="90" Height="35" HorizontalContentAlignment="Center" Content="{Binding CurrentPrescription.PrescriptionPoint.AmountsPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number" />
+                        <Label x:Name="CustomPayText" Width="90" Height="35" ContentStringFormat="{}{0:N0}"
+                               HorizontalContentAlignment="Center" Content="{Binding CurrentPrescription.PrescriptionPoint.AmountsPay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number" />
                     </StackPanel>
                     <StackPanel Grid.Row="2" Margin="10,0,10,0" Orientation="Horizontal">
                         <Label Content="已付 $" Style="{StaticResource BoldLabelContent18}" />
                         <TextBox x:Name="PaidText" Width="90" Height="35" HorizontalContentAlignment="Center" CaretBrush="Black" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number" PreviewMouseLeftButtonDown="TextBox_SelectAll" Text="{Binding CurrentPrescription.PrescriptionPoint.ActualReceive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableIntConverter}}" />
                         <Label Margin="20,0,0,0" Content="找零 $" Style="{StaticResource BoldLabelContent18}" />
-                        <Label Width="90" HorizontalContentAlignment="Center" Content="{Binding CurrentPrescription.PrescriptionPoint.Change, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" />
+                        <Label Width="90" HorizontalContentAlignment="Center" ContentStringFormat="{}{0:N0}"
+                               Content="{Binding CurrentPrescription.PrescriptionPoint.Change, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BoldLabelContent18}" />
                     </StackPanel>
                     <StackPanel Grid.Row="3" Margin="10,0,10,0" Orientation="Horizontal">
                         <Label Content="部分 $" Style="{StaticResource BoldLabelContent18}" />
