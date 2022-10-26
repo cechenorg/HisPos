@@ -326,7 +326,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn
-                    Width="80"
+                    Width="85"
                     Binding="{Binding ValidDate, StringFormat=yyyy/MM/dd}"
                     FontFamily="Segoe UI Semi"
                     Header="效期"
