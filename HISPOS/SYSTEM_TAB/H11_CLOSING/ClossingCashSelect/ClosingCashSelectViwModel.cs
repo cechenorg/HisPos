@@ -6,6 +6,7 @@ using His_Pos.NewClass.Prescription.Search;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,83 +53,49 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
-        private ObservableCollection<MonthlyAccountTarget> monthlyAccountTargetCollection = new ObservableCollection<MonthlyAccountTarget>();
+        private ClosingCashReportDataList _prescriptionCountList = new ClosingCashReportDataList();
 
-        public ObservableCollection<MonthlyAccountTarget> MonthlyAccountTargetCollection
+        public ClosingCashReportDataList PrescriptionCountList
         {
-            get => monthlyAccountTargetCollection;
+            get => _prescriptionCountList;
             set
             {
-                Set(() => MonthlyAccountTargetCollection, ref monthlyAccountTargetCollection, value);
+                Set(() => PrescriptionCountList, ref _prescriptionCountList, value);
             }
         }
 
-        private MonthlyAccountTarget monthlyNeedGetTarget;
+        private ClosingCashReportDataList _prescriptionProfitList = new ClosingCashReportDataList();
 
-        public MonthlyAccountTarget MonthlyNeedGetTarget
+        public ClosingCashReportDataList PrescriptionProfitList
         {
-            get => monthlyNeedGetTarget;
+            get => _prescriptionProfitList;
             set
             {
-                Set(() => MonthlyNeedGetTarget, ref monthlyNeedGetTarget, value);
+                Set(() => PrescriptionProfitList, ref _prescriptionProfitList, value);
             }
         }
 
-        private int monthlySearchMonth = DateTime.Today.Month;
+        private ClosingCashReportDataList _otcTurnoverList = new ClosingCashReportDataList();
 
-        public int MonthlySearchMonth
+        public ClosingCashReportDataList OtcTurnoverList
         {
-            get => monthlySearchMonth;
+            get => _otcTurnoverList;
             set
             {
-                Set(() => MonthlySearchMonth, ref monthlySearchMonth, value);
+                Set(() => OtcTurnoverList, ref _otcTurnoverList, value);
             }
         }
 
-        private int monthlySearchYear = DateTime.Today.Year - 1911;
+        private ClosingCashReportDataList _otcProfitList = new ClosingCashReportDataList();
 
-        public int MonthlySearchYear
+        public ClosingCashReportDataList OtcProfitList
         {
-            get => monthlySearchYear;
+            get => _otcProfitList;
             set
             {
-                Set(() => MonthlySearchYear, ref monthlySearchYear, value);
+                Set(() => OtcProfitList, ref _otcProfitList, value);
             }
         }
-
-        private ClosingCashReportDataList closingCashReportDataList = new ClosingCashReportDataList();
-
-        public ClosingCashReportDataList ClosingCashReportDataList
-        {
-            get => closingCashReportDataList;
-            set
-            {
-                Set(() => ClosingCashReportDataList, ref closingCashReportDataList, value);
-            }
-        }
-
-        private int monthlyNeedWorkingDayCount;
-
-        public int MonthlyNeedWorkingDayCount
-        {
-            get => monthlyNeedWorkingDayCount;
-            set
-            {
-                Set(() => MonthlyNeedWorkingDayCount, ref monthlyNeedWorkingDayCount, value);
-            }
-        }
-
-        private MonthlyAccountTarget monthlySelfAccount ;
-
-        public MonthlyAccountTarget MonthlySelfAccount
-        {
-            get => monthlySelfAccount;
-            set
-            {
-                Set(() => MonthlySelfAccount, ref monthlySelfAccount, value);
-            }
-        }
-        
 
         public RelayCommand DailyAccountingSearchCommand { get; set; }
         public RelayCommand MonthlyTargetSettingCommand { get; set; }
@@ -139,59 +106,87 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             MonthlyTargetSettingCommand = new RelayCommand(MonthlyTargetSettingAction);
 
             DailyAccountingSearchAction();
-
-            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 1, Target = 200050});
-            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試", Actual = 100, Order = 2, Target = 200});
-            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 3, Target = 200050});
-            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 4, Target = 200050});
-            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 5, Target = 200050});
-            closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 6, Target = 200050});
         }
 
         private void MonthlyTargetSettingAction()
         {
-            ClosingAccountTargetSettingWindow settingWin = new ClosingAccountTargetSettingWindow();
+            var settingWin = new ClosingAccountTargetSettingWindow();
             settingWin.ShowDialog();
         }
 
         private void DailyAccountingSearchAction()
         {
             SumDailyClosingAccount.Clear(); 
-            foreach(var data in GetSumRecordByDate(StartDate, EndDate))
+
+            _prescriptionProfitList.Clear();
+            _prescriptionCountList.Clear();
+            _otcProfitList.Clear();
+            _otcTurnoverList.Clear();
+
+            var tempPrescriptionProfitList = new List<ClosingCashReportData>();
+            var tempPrescriptionCountList = new List<ClosingCashReportData>();
+            var tempOtcProfitList = new List<ClosingCashReportData>();
+            var tempOtcTurnoverList = new List<ClosingCashReportData>();
+
+            foreach (var data in GetSumRecordByDate(StartDate, EndDate))
             {
+                tempPrescriptionProfitList.Add(new ClosingCashReportData()
+                {
+                    Name = data.PharmacyName,
+                    Actual = data.ChronicAndOtherProfit,
+                });
+
+                tempOtcProfitList.Add(new ClosingCashReportData()
+                {
+                    Name = data.PharmacyName,
+                    Actual = data.OTCSaleProfit,
+                });
+
+                tempOtcTurnoverList.Add(new ClosingCashReportData()
+                {
+                    Name = data.PharmacyName,
+                    Actual = data.OTCSaleProfit,
+                });
+
+                tempPrescriptionCountList.Add(new ClosingCashReportData()
+                {
+                    Name = data.PharmacyName,
+                    Actual = data.OTCSaleProfit,
+                });
+
                 SumDailyClosingAccount.Add(data);
+            }
+
+            OrderRecordListByPercent(_prescriptionProfitList, tempPrescriptionProfitList);
+            OrderRecordListByPercent(_prescriptionCountList, tempPrescriptionCountList);
+            OrderRecordListByPercent(_otcProfitList, tempOtcProfitList);
+            OrderRecordListByPercent(_otcTurnoverList, tempOtcTurnoverList);
+        }
+
+        private void OrderRecordListByPercent(ClosingCashReportDataList targetList, List<ClosingCashReportData> sourceList)
+        {
+            var temp = sourceList.OrderBy(_ => _.Percent).ThenBy(_ => _.Name).ToList();
+            for (var index = 0; index < temp.Count; index++)
+            {
+                temp[index].Order = index + 1;
+                targetList.Add(temp[index]);
             }
         }
 
         private List<DailyClosingAccount> GetSumRecordByDate(DateTime sDate, DateTime eDate)
         {
-            List<DailyClosingAccount> result = new List<DailyClosingAccount>();
-            ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
+            var result = new List<DailyClosingAccount>();
+            var repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
             var datalist = repo.GetGroupClosingAccountRecord();
             var pharmacyList = repo.GetPharmacyInfosByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName);
 
-            var workingSetting = repo.GetWorkingDaySetting();
-            if (workingSetting
-                .Count(_ => _.Date.Year == DateTime.Today.Year && _.Date.Month == DateTime.Today.Month) == 0)
-            {
-               var lastMonthData = workingSetting.FirstOrDefault(_ => _.Date.Year == DateTime.Today.AddMonths(-1).Year && _.Date.Month == DateTime.Today.AddMonths(-1).Month);
-               repo.UpdateWorkingDaySetting(DateTime.Today, lastMonthData.DayCount);
-
-               MonthlyNeedWorkingDayCount = lastMonthData.DayCount;
-            }
-            else
-            {
-                MonthlyNeedWorkingDayCount = workingSetting.FirstOrDefault(_ =>
-                    _.Date.Year == (MonthlySearchYear+1911) && _.Date.Month == MonthlySearchMonth).DayCount; 
-            }
-                
             MainWindow.ServerConnection.CloseConnection();
             
             foreach (var pharmacy in pharmacyList)
             {
-                DailyClosingAccount displayDailyClosingAccount = new DailyClosingAccount();
-                displayDailyClosingAccount.PharmacyName = pharmacy.Name;
+                var displayDailyClosingAccount = new DailyClosingAccount();
+                displayDailyClosingAccount.PharmacyName = pharmacy.Name.Replace("藥師藥局", string.Empty).Replace("藥局", string.Empty);
                 displayDailyClosingAccount.PharmacyVerifyKey = pharmacy.VerifyKey;
                 result.Add(displayDailyClosingAccount);
 
@@ -207,13 +202,10 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                     displayDailyClosingAccount.TotalProfit += pharmacyRecoird.TotalProfit;
                 }
 
-              
-                if (pharmacySearchData.Count() > 0)
+                if (pharmacySearchData.Any())
                 {
-                   
-                    int sumDailyAdjustAmount = 0; 
+                    var sumDailyAdjustAmount = 0; 
                     var orderData = pharmacySearchData.Where(_ => _.ClosingDate >= sDate && _.ClosingDate <= eDate).ToList();
-                   
                     
                     if (orderData.Count == 1) //只查一天
                     {
@@ -224,7 +216,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
                         sumDailyAdjustAmount = firstDay.DailyAdjustAmount;
 
-                        int idx = pharmacySearchData.ToList().IndexOf(firstDay);
+                        var idx = pharmacySearchData.ToList().IndexOf(firstDay);
 
                         if (idx > 0)
                         {
@@ -246,7 +238,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                         }
                         else //判斷第一筆是否為本月第一筆,若是的話則當作0,若否則往前一筆*-1
                         {
-                            int idx = pharmacySearchData.ToList().IndexOf(orderData.First());
+                            var idx = pharmacySearchData.ToList().IndexOf(orderData.First());
                             
                             var beforeFirstDay = pharmacySearchData.ToList()[idx - 1];
 
@@ -256,7 +248,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
                             } 
                         }
 
-                        for (int i = 1; i < orderData.Count() - 1; i++)
+                        for (var i = 1; i < orderData.Count() - 1; i++)
                         {
                             if (orderData[i].ClosingDate.AddMonths(1).Month == orderData[i + 1].ClosingDate.Month)
                             {
@@ -266,19 +258,15 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
                         sumDailyAdjustAmount += orderData.Last().DailyAdjustAmount;
                     }
-                        
                    
                     displayDailyClosingAccount.DailyAdjustAmount += sumDailyAdjustAmount;
                 }
-               
-
-               
             }
 
             if(result.Count > 0)
                 result = result.OrderByDescending(_ => _.SelfProfit).ToList();
 
-            for (int i = 0; i < result.Count; i++)
+            for (var i = 0; i < result.Count; i++)
             {
                 result[i].OrderNumber = i+1;
             } 
@@ -286,10 +274,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
         }
     }
 
-    public class ClosingCashReportDataList : ObservableCollection<ClosingCashReportData>
-    {
-
-    }
+    public class ClosingCashReportDataList : ObservableCollection<ClosingCashReportData> { }
 
     public class ClosingCashReportData
     {

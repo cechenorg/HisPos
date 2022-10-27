@@ -75,21 +75,11 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="達成率(%)" Binding="{Binding Percent, StringFormat=P1}" IsReadOnly="True">
-
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="實際" Binding="{Binding Actual, StringFormat={}{0:#\,#}}" IsReadOnly="True">
-
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="目標" Binding="{Binding Target, StringFormat={}{0:#\,#}}" IsReadOnly="True">
-
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="藥局名稱" Binding="{Binding Name}" IsReadOnly="True">
-
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="排名" Binding="{Binding Order}" IsReadOnly="True" Foreground="Red">
-
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="達成率(%)" Binding="{Binding Percent, StringFormat=P1}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="實際" Binding="{Binding Actual, StringFormat={}{0:#\,0}}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="目標" Binding="{Binding Target, StringFormat={}{0:#\,0}}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="藥局名稱" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="排名" Binding="{Binding Order}" IsReadOnly="True" Foreground="Red"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
