@@ -117,8 +117,10 @@ namespace His_Pos.NewClass.Prescription.Service
         public bool StartRegister()
         {
             MainWindow.SingdeConnection.OpenConnection();
+            MainWindow.ServerConnection.OpenConnection();
             var result = Register();
             MainWindow.ServerConnection.CloseConnection();
+            MainWindow.SingdeConnection.CloseConnection();
             return result;
         }
 
