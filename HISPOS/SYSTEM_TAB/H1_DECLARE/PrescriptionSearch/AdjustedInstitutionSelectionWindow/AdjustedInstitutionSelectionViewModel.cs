@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using Castle.Core;
 using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSelectionWindow
@@ -62,6 +63,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
             {
                 Set(() => Search, ref search, value);
                 InsCollectionViewSource.Filter += FilterBySearchText;
+                SelectAllAction();
             }
         }
 
@@ -148,6 +150,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.AdjustedInstitutionSe
 
         private void SelectAllAction()
         {
+
+            Institutions.ForEach(_ => _.Selected = false);
+
+
             if (string.IsNullOrEmpty(Search))
             {
                 foreach (var i in Institutions)
