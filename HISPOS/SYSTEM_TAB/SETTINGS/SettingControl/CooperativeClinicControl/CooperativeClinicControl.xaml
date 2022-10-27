@@ -25,7 +25,10 @@
             <RowDefinition />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" Margin="10,10,10,0" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="True" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding CooperativeClinicSettingCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VirtualizingPanel.IsVirtualizing="True">
+        <DataGrid Grid.Row="0" Margin="10,10,10,0" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}"
+                  CanUserAddRows="{Binding }" CellStyle="{StaticResource DataGridCellStyle}"
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                  ItemsSource="{Binding CooperativeClinicSettingCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VirtualizingPanel.IsVirtualizing="True">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -55,13 +58,16 @@
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="FontSize" Value="14" />
                     <Setter Property="Height" Value="40" />
+                    <Setter Property="IsEnabled" Value="{Binding  DataContext.IsEnableEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"></Setter>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="50" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" Visibility="{Binding IsEnableDeleteIns, FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Image Name="DeleteDot" Width="18" Source="/Images/DeleteDot.png" 
+                                   Visibility="{Binding DataContext.IsEnableEdit, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}},
+                                    FallbackValue=Collapsed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <Image.InputBindings>
                                     <MouseBinding Command="{Binding DataContext.DeleteInstitutionCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick" />
                                 </Image.InputBindings>
@@ -200,7 +206,9 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="5" HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button Width="150" Margin="0,0,10,0" Background="IndianRed" BorderThickness="0" Command="{Binding UpdateCommand}" Content="更新" FontFamily="Segoe UI Semibold" FontSize="16" />
+            <Button Width="150" Margin="0,0,10,0" Background="IndianRed"
+                    IsEnabled="{Binding IsEnableEdit}"
+                    BorderThickness="0" Command="{Binding UpdateCommand}" Content="更新" FontFamily="Segoe UI Semibold" FontSize="16" />
         </StackPanel>
     </Grid>
 </UserControl>
