@@ -131,17 +131,14 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
         
 
         public RelayCommand DailyAccountingSearchCommand { get; set; }
-        public RelayCommand MonthlyClosingAccountSearchCommand { get; set; }
         public RelayCommand MonthlyTargetSettingCommand { get; set; }
 
         public ClosingCashSelectViwModel()
         { 
             DailyAccountingSearchCommand = new RelayCommand(DailyAccountingSearchAction);
-            MonthlyClosingAccountSearchCommand = new RelayCommand(MonthlyClosingAccountSearchAction);
             MonthlyTargetSettingCommand = new RelayCommand(MonthlyTargetSettingAction);
 
             DailyAccountingSearchAction();
-            MonthlyClosingAccountSearchAction();
 
             closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試測試", Actual = 1000000, Order = 1, Target = 200050});
             closingCashReportDataList.Add(new ClosingCashReportData(){ Name = "測試", Actual = 100, Order = 2, Target = 200});
@@ -157,54 +154,6 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             settingWin.ShowDialog();
         }
 
-        private void MonthlyClosingAccountSearchAction()
-        {
-            var firstDayOfMonth = new DateTime(MonthlySearchYear + 1911, MonthlySearchMonth, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-
-            MonthlyAccountTargetCollection.Clear();
-
-            ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
-            MainWindow.ServerConnection.OpenConnection(); 
-            var pharmacyTargetList = repo.GetMonthTargetByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName)
-                .Where(_=>_.Month.Month == firstDayOfMonth.Month).ToList(); 
-            MainWindow.ServerConnection.CloseConnection();
-             
-            var sumRecord = GetSumRecordByDate(firstDayOfMonth, lastDayOfMonth);
-            
-            foreach (var pharmacy in pharmacyTargetList)
-            { 
-               
-                var sumData = sumRecord.First(_ => _.PharmacyVerifyKey.ToLower() == pharmacy.VerifyKey.ToLower());
-                pharmacy.PharmacyName = sumData.PharmacyName;
-                pharmacy.MonthlyProfit = sumData.SelfProfit;
-                pharmacy.TargetRatio = Math.Round( (double)pharmacy.MonthlyProfit / (double)pharmacy.MonthlyTarget * 100,2).ToString() + "%";
-            }
-
-            pharmacyTargetList =  pharmacyTargetList.OrderByDescending(_ => Math.Round((double)_.MonthlyProfit / (double)_.MonthlyTarget * 100, 2)).ToList();
-            foreach (var pharmacy in pharmacyTargetList)
-            {
-                MonthlyAccountTargetCollection.Add(pharmacy); 
-            }
-
-            MonthlyAccountTarget sum = new MonthlyAccountTarget() { PharmacyName = "小計"};
-            sum.MonthlyTarget = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyTarget);
-            sum.MonthlyProfit = MonthlyAccountTargetCollection.Sum(_ => _.MonthlyProfit);
-            sum.TargetRatio =  Math.Round((double)sum.MonthlyProfit / (double)sum.MonthlyTarget * 100,2).ToString() + "%";
-            //MonthlyAccountTargetCollection.Add(sum);
-            MonthlySelfAccount = sum;
-            var workedDay = repo.GetGroupClosingAccountRecord().Where(_ => _.ClosingDate >= firstDayOfMonth && _.ClosingDate <= lastDayOfMonth).Select(_ => _.ClosingDate).Distinct().Count();
-            var targetratio =  Math.Round((double)workedDay / (double) monthlyNeedWorkingDayCount*100,2);
-
-            MonthlyNeedGetTarget = new MonthlyAccountTarget() { PharmacyName = "應達標準"};
-
-            //MonthlyNeedGetTarget.TargetRatio = Math.Round((double)sum.MonthlyProfit / targetratio * 100, 2).ToString() + "%";
-            MonthlyNeedGetTarget.TargetRatio = targetratio.ToString() + "%";
-             
-            //MonthlyAccountTargetCollection.Add(todayNeedTarget);
-
-        }
-
         private void DailyAccountingSearchAction()
         {
             SumDailyClosingAccount.Clear(); 
@@ -212,7 +161,6 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             {
                 SumDailyClosingAccount.Add(data);
             }
-
         }
 
         private List<DailyClosingAccount> GetSumRecordByDate(DateTime sDate, DateTime eDate)

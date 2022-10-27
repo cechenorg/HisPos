@@ -61,17 +61,9 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
 
-            var originData = GetTargetData();
-
             foreach (var data in TargetDataCollection)
             {
-                var currentOriginData = originData.SingleOrDefault(_ => _.VerifyKey == data.VerifyKey);
-
-                if(currentOriginData == null)
-                    continue;
-                
-                if(currentOriginData.MonthlyTarget != data.MonthlyTarget) 
-                    repo.UpdateClosingAccountTarget(data); 
+                repo.UpdateClosingAccountTarget(data); 
             }
 
             repo.UpdateWorkingDaySetting(ClosingAccountMonth, CurrentMonthWorkingDayCount);
@@ -106,7 +98,7 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
             }
 
             var thisMonthWorkingSetting = repo.GetWorkingDaySetting().FirstOrDefault(_ => _.Date.Month == ClosingAccountMonth.Month && _.Date.Year == ClosingAccountMonth.Year);
-            CurrentMonthWorkingDayCount = thisMonthWorkingSetting.DayCount;
+            CurrentMonthWorkingDayCount = thisMonthWorkingSetting == null ? DateTime.DaysInMonth(ClosingAccountMonth.Year, ClosingAccountMonth.Month) : thisMonthWorkingSetting.DayCount;
 
             MainWindow.ServerConnection.CloseConnection();
 

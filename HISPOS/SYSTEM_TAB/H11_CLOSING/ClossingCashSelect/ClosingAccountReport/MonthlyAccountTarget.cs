@@ -11,11 +11,15 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport
     public class MonthlyAccountTarget:ObservableObject
     {
         public MonthlyAccountTarget() { }
-        public MonthlyAccountTarget(DataRow r )
+        public MonthlyAccountTarget(DataRow r)
         {
             VerifyKey = r.Field<string>("Pharmacy_VerifyKey");
             Month = r.Field<DateTime>("TargetMonth");
             MonthlyTarget = r.Field<int>("TargetValue"); 
+            PrescriptionCountTarget = r.Field<int>("PrescriptionCountTarget"); 
+            DrugProfitTarget = r.Field<int>("PrescriptionProfitTarget"); 
+            OtcProfitTarget = r.Field<int>("OtcProfitTarget"); 
+            OtcTurnoverTarget = r.Field<int>("OtcTurnoverTarget"); 
         }
 
         public string VerifyKey { get; set; }
