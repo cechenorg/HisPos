@@ -59,15 +59,6 @@ namespace His_Pos.NewClass.Cooperative.CooperativeClinicSetting
             get { return isInstitutionEdit; }
             set { Set(() => IsInstitutionEdit, ref isInstitutionEdit, value); }
         }
-
-        private bool isEnableDeleteIns = VM.CurrentUser.Authority == Authority.Admin;
-
-        public bool IsEnableDeleteIns
-        {
-            get { return isEnableDeleteIns; }
-            set { Set(() => IsEnableDeleteIns, ref isEnableDeleteIns, value); }
-        }
-
         private DateTime? startDate;
 
         public DateTime? StartDate

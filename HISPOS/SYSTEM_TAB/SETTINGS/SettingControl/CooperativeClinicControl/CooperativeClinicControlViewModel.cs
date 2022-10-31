@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using DomainModel.Enum;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -40,6 +41,14 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.CooperativeClinicControl
         {
             get { return cooperativeClinicSettingCollection; }
             set { Set(() => CooperativeClinicSettingCollection, ref cooperativeClinicSettingCollection, value); }
+        }
+
+        private bool isEnableEdit= VM.CurrentUser.Authority == Authority.Admin;
+
+        public bool IsEnableEdit
+        {
+            get { return isEnableEdit; }
+            set { Set(() => IsEnableEdit, ref isEnableEdit, value); }
         }
 
         #endregion Var

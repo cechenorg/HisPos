@@ -144,9 +144,9 @@ namespace His_Pos.NewClass.StockTaking.StockTakingProduct
             }
             else
             {
-                AveragePrice = Math.Round(TotalPrice / Inventory, 2, MidpointRounding.AwayFromZero);
+                AveragePrice = Math.Round(TotalPrice / Inventory, 4, MidpointRounding.AwayFromZero);
             }
-            TakingPrice = Math.Round(AveragePrice, 2, MidpointRounding.AwayFromZero);
+            TakingPrice = Math.Round(AveragePrice, 4, MidpointRounding.AwayFromZero);
             IsUpdate = false;
             NewInventoryTotalPrice = (OnTheFrame + MedBagAmount - Inventory) * AveragePrice;
         }
