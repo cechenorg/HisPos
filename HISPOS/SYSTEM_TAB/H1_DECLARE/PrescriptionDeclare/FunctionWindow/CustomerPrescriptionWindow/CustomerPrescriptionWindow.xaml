@@ -1,4 +1,16 @@
-﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow.CustomerPrescriptionWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:newClass="clr-namespace:His_Pos.NewClass" xmlns:service="clr-namespace:His_Pos.Service" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Title="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged}" Width="1000" Height="630" FontFamily="Segoe UI Semibold" WindowStartupLocation="CenterScreen" mc:Ignorable="d">
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow.CustomerPrescriptionWindow" 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.FunctionWindow.CustomerPrescriptionWindow"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:newClass="clr-namespace:His_Pos.NewClass"
+        xmlns:service="clr-namespace:His_Pos.Service" 
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+        Title="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged}" 
+        Width="1000" Height="630" FontFamily="Segoe UI Semibold" WindowStartupLocation="CenterScreen" mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:CustomerPrescriptionViewModel}">
     <Window.Background>
         <ImageBrush ImageSource="/Images/tabViewBackground.jpg" />
     </Window.Background>
@@ -7,7 +19,9 @@
         <service:DateConverter x:Key="DateConverter" />
         <service:EnumBooleanConverter x:Key="EnumBooleanConverter" />
         <DataTemplate x:Key="CooperativeGrid" DataType="{x:Type local:CustomerPrescriptionViewModel}">
-            <DataGrid Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" ItemsSource="{Binding CooperativePres, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Hidden">
+            <DataGrid Margin="0,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" 
+                      ItemsSource="{Binding CooperativePres, UpdateSourceTrigger=PropertyChanged}" 
+                      SelectedItem="{Binding SelectedPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Hidden">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding PrescriptionSelected}" />
@@ -325,7 +339,9 @@
                             <Label Content="未過卡處方" Style="{StaticResource BoldLabelContent18}" />
                             <Button Margin="475,0,0,0" VerticalAlignment="Center" Background="IndianRed" BorderThickness="0" Command="{Binding MakeUp}" Content="補卡" />
                         </StackPanel>
-                        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" EnableRowVirtualization="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding NoCardPres, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding MakeUpPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" 
+                                  EnableRowVirtualization="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding NoCardPres, UpdateSourceTrigger=PropertyChanged}" 
+                                  SelectedItem="{Binding MakeUpPrescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type ScrollBar}">
                                     <Setter Property="SnapsToDevicePixels" Value="True" />
