@@ -10,12 +10,14 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport;
 
 namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 {
     public class ClosingCashSelectViwModel : TabBase
     {
-        public override TabBase getTab()
+        #region ----- Variables -----
+       public override TabBase getTab()
         {
             return this;
         }
@@ -97,6 +99,9 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             }
         }
 
+        private List<NewTodayCashStockEntryReportViewModel> models = new List<NewTodayCashStockEntryReportViewModel>();
+        #endregion
+
         public RelayCommand DailyAccountingSearchCommand { get; set; }
         public RelayCommand MonthlyTargetSettingCommand { get; set; }
 
@@ -116,6 +121,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
         private void DailyAccountingSearchAction()
         {
+            models.Clear();
+
             SumDailyClosingAccount.Clear(); 
 
             _prescriptionProfitList.Clear();

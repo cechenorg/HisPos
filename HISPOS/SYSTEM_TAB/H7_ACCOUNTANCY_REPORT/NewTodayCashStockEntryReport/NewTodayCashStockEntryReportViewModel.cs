@@ -43,6 +43,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
     public class NewTodayCashStockEntryReportViewModel : TabBase
     {
         #region Variables
+        private readonly string schema;
 
         public override TabBase getTab()
         {
@@ -1587,8 +1588,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
         public RelayCommand<ReportDetailType> ViewReportDetailCommand { get; set; }
         #endregion Command
 
-        public NewTodayCashStockEntryReportViewModel()
+        public NewTodayCashStockEntryReportViewModel(string schema = "")
         {
+            if (schema == string.Empty)
+                this.schema = Properties.Settings.Default.SystemSerialNumber;
+
             SearchCommand = new RelayCommand(GetData);
 
             AllPrescriptionSelectionChangedCommand = new RelayCommand(SelfPrescriptionAction);
@@ -1640,7 +1644,6 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
         private void ViewReportDetailAction(ReportDetailType type)
         {
-
             _currentDetailType = type;
             switch (type)
             {
@@ -2410,7 +2413,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.NewTodayCashStockEntryReport
 
             BusyContent = "報表查詢中";
 
-            Ds = ReportService.TodayCashStockEntryReport(StartDate, EndDate);
+            Ds = ReportService.TodayCashStockEntryReport(schema, StartDate, EndDate);
 
             PrescriptionAllDataTable = new DataTable();
             PrescriptionAllDataTable.Merge(Ds.Tables[0]);

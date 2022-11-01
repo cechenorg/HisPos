@@ -77,7 +77,6 @@ namespace His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTarg
 
         private IEnumerable<MonthlyAccountTarget> GetTargetData()
         {
-
             List<MonthlyAccountTarget> result = new List<MonthlyAccountTarget>();
 
             ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
