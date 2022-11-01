@@ -711,6 +711,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch
             {
                 SelectedInstitutionCount = "已選 " + Institutions.Count(i => i.Selected) + " 間";
             }
+
+            SearchAction();
         }
 
         private void ShowPrescriptionEditAction()
