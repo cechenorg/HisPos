@@ -4,6 +4,7 @@ using His_Pos.NewClass.AccountReport.ClosingAccountReport;
 using His_Pos.NewClass.AccountReport.ClosingAccountReport.ClosingAccountTargetSettingWindow;
 using His_Pos.NewClass.Prescription.Search;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -100,6 +101,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
         }
 
         private List<NewTodayCashStockEntryReportViewModel> models = new List<NewTodayCashStockEntryReportViewModel>();
+        private List<ClosingAccountReportRepository.PharmacyInfo> pharmacyInfos = new List<ClosingAccountReportRepository.PharmacyInfo>();
         #endregion
 
         public RelayCommand DailyAccountingSearchCommand { get; set; }
@@ -110,6 +112,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             DailyAccountingSearchCommand = new RelayCommand(DailyAccountingSearchAction);
             MonthlyTargetSettingCommand = new RelayCommand(MonthlyTargetSettingAction);
 
+            GetPharmacyInfos();
             DailyAccountingSearchAction();
         }
 
@@ -121,7 +124,18 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
         private void DailyAccountingSearchAction()
         {
+            // For Future Improvement
+            //var tempBag = new ConcurrentBag<NewTodayCashStockEntryReportViewModel>();
+
+            //Parallel.ForEach(pharmacyInfos, info =>
+            //{
+            //    tempBag.Add(new NewTodayCashStockEntryReportViewModel(startDate, endDate, info.VerifyKey));
+            //});
+
             models.Clear();
+
+            foreach (var info in pharmacyInfos)
+                models.Add(new NewTodayCashStockEntryReportViewModel(startDate, endDate, info.VerifyKey));
 
             SumDailyClosingAccount.Clear(); 
 
@@ -130,6 +144,8 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             _otcProfitList.Clear();
             _otcTurnoverList.Clear();
 
+            var targetData = GetTargetData(StartDate);
+
             var tempPrescriptionProfitList = new List<ClosingCashReportData>();
             var tempPrescriptionCountList = new List<ClosingCashReportData>();
             var tempOtcProfitList = new List<ClosingCashReportData>();
@@ -137,28 +153,35 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
             foreach (var data in GetSumRecordByDate(StartDate, EndDate))
             {
+                var currentModel = models.Single(_ => _.schema == data.PharmacyVerifyKey);
+                var currentTarget = targetData.Single(_ => _.VerifyKey == data.PharmacyVerifyKey);
+
                 tempPrescriptionProfitList.Add(new ClosingCashReportData()
                 {
                     Name = data.PharmacyName,
-                    Actual = data.ChronicAndOtherProfit,
+                    Actual = currentModel.PrescriptionDetailReportSumMain.SlowProfit + currentModel.PrescriptionDetailReportSumMain.PaySelfProfit,
+                    Target = currentTarget.DrugProfitTarget
                 });
 
                 tempOtcProfitList.Add(new ClosingCashReportData()
                 {
                     Name = data.PharmacyName,
-                    Actual = data.OTCSaleProfit,
+                    Actual = currentModel.TradeDetailReportSum.TotalProfit,
+                    Target = currentTarget.OtcProfitTarget
                 });
 
                 tempOtcTurnoverList.Add(new ClosingCashReportData()
                 {
                     Name = data.PharmacyName,
-                    Actual = data.OTCSaleProfit,
+                    Actual = currentModel.TradeDetailReportSum.RealTotal,
+                    Target = currentTarget.OtcTurnoverTarget
                 });
 
                 tempPrescriptionCountList.Add(new ClosingCashReportData()
                 {
                     Name = data.PharmacyName,
-                    Actual = data.OTCSaleProfit,
+                    Actual = currentModel.PrescriptionDetailReportSumMain.SlowCount,
+                    Target = currentTarget.PrescriptionCountTarget
                 });
 
                 SumDailyClosingAccount.Add(data);
@@ -172,7 +195,7 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
 
         private void OrderRecordListByPercent(ClosingCashReportDataList targetList, List<ClosingCashReportData> sourceList)
         {
-            var temp = sourceList.OrderBy(_ => _.Percent).ThenBy(_ => _.Name).ToList();
+            var temp = sourceList.OrderByDescending(_ => _.Percent).ThenBy(_ => _.Name).ToList();
             for (var index = 0; index < temp.Count; index++)
             {
                 temp[index].Order = index + 1;
@@ -186,11 +209,10 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             var repo = new ClosingAccountReportRepository();
             MainWindow.ServerConnection.OpenConnection();
             var datalist = repo.GetGroupClosingAccountRecord();
-            var pharmacyList = repo.GetPharmacyInfosByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName);
 
             MainWindow.ServerConnection.CloseConnection();
-            
-            foreach (var pharmacy in pharmacyList)
+
+            foreach (var pharmacy in pharmacyInfos)
             {
                 var displayDailyClosingAccount = new DailyClosingAccount();
                 displayDailyClosingAccount.PharmacyName = pharmacy.Name.Replace("藥師藥局", string.Empty).Replace("藥局", string.Empty);
@@ -279,6 +301,48 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
             } 
             return result;
         }
+
+        private void GetPharmacyInfos()
+        {
+            var repo = new ClosingAccountReportRepository();
+            MainWindow.ServerConnection.OpenConnection();
+            pharmacyInfos = repo.GetPharmacyInfosByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName);
+            MainWindow.ServerConnection.CloseConnection();
+        }
+        
+        private IEnumerable<MonthlyAccountTarget> GetTargetData(DateTime closingStartDate)
+        {
+            List<MonthlyAccountTarget> result = new List<MonthlyAccountTarget>();
+
+            ClosingAccountReportRepository repo = new ClosingAccountReportRepository();
+            MainWindow.ServerConnection.OpenConnection();
+            var gtroupServerInfo = repo.GetPharmacyInfosByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName);
+            var pharmacyTargetList = repo.GetMonthTargetByGroupServerName(ViewModelMainWindow.CurrentPharmacy.GroupServerName)
+                .Where(_ => _.Month.Month == closingStartDate.Month && _.Month.Year == closingStartDate.Year).ToList();
+
+            foreach (var pharmacyInfo in gtroupServerInfo)
+            {
+                var target = new MonthlyAccountTarget();
+                var data = pharmacyTargetList.FirstOrDefault(_ => _.VerifyKey.ToLower() == pharmacyInfo.VerifyKey.ToLower());
+
+                if (data != null)
+                {
+                    target.MonthlyTarget = data.MonthlyTarget;
+                    target.PrescriptionCountTarget = data.PrescriptionCountTarget;
+                    target.OtcProfitTarget = data.OtcProfitTarget;
+                    target.OtcTurnoverTarget = data.OtcTurnoverTarget;
+                    target.DrugProfitTarget = data.DrugProfitTarget;
+                }
+
+                target.VerifyKey = pharmacyInfo.VerifyKey;
+                target.PharmacyName = pharmacyInfo.Name;
+                result.Add(target);
+            }
+
+            MainWindow.ServerConnection.CloseConnection();
+
+            return result;
+        }
     }
 
     public class ClosingCashReportDataList : ObservableCollection<ClosingCashReportData> { }
@@ -289,6 +353,6 @@ namespace His_Pos.SYSTEM_TAB.H11_CLOSING.ClossingCashSelect
         public string Name { get; set; }
         public int Target { get; set; }
         public int Actual { get; set; }
-        public int Percent => Target == 0 ? 0 : Actual / Target;
+        public double Percent => Target == 0 ? 0 : (double)Actual / (double)Target;
     }
 }
