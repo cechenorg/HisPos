@@ -145,7 +145,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Width="100"
-                    Binding="{Binding LastPrice}"
+                    Binding="{Binding LastPrice, StringFormat={}{0:0.##}}"
                     CellStyle="{StaticResource DataGridSpecialCellStyle}"
                     FontFamily="Segoe UI Semi"
                     Header="上次單價"

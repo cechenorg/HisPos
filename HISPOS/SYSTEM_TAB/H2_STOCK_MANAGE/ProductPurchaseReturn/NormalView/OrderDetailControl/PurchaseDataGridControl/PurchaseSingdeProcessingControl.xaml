@@ -212,8 +212,10 @@
                                 Margin="0,0,0,2"
                                 FontFamily="Segoe UI Semibold"
                                 FontSize="18"
-                                HorizontalContentAlignment="Center"
-                                Content="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat='{}{0:0.00;;#}' }">
+                                HorizontalContentAlignment="Center">
+                                <Label.Content>
+                                    <TextBlock Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus, StringFormat={}{0:0.##}}"/>
+                                </Label.Content>
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="LostFocus">
                                         <i:InvokeCommandAction Command="{Binding Path=DataContext.CalculateTotalPriceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />

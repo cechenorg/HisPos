@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.NewClass.Report.CashFlow;
 using His_Pos.NewClass.Report.CashFlow.CashFlowRecordDetails;
@@ -52,6 +53,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
         {
             get => recordDate;
             set { Set(() => RecordDate, ref recordDate, value); }
+        }
+
+        private DateTime? displayDateStart;
+
+        public DateTime? DisplayDateStart
+        {
+            get => displayDateStart;
+            set { Set(() => DisplayDateStart, ref displayDateStart, value); }
         }
 
         private bool expensesCheck;
@@ -147,6 +156,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.AdditionalCashFlowManage.CashFlowRecordE
             SelectedCashFlowAccount = CashFlowAccountsSource.Single(acc => acc.AccountName.Equals(selectedDetail.Name));
             CashFlowValue = Math.Abs(EditedCashFlowRecord.CashFlowValue);
             RecordDate = EditedCashFlowRecord.Date;
+            DisplayDateStart = ViewModelMainWindow.ClosingDate.AddDays(1);
         }
 
         private void InitCommands()

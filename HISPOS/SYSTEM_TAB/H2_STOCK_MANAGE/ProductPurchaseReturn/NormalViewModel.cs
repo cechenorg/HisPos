@@ -25,6 +25,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.Threading;
 using His_Pos.NewClass.Product.ProductGroupSetting;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -75,6 +76,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             get => isCanDelete;
             set { Set(() => IsCanDelete, ref isCanDelete, value); }
         }
+        private bool isClosed;
+        public bool IsClosed
+        {
+            get => isClosed;
+            set { Set(() => IsClosed, ref isClosed, value); }
+        }
         public bool IsBusy
         {
             get => isBusy;
@@ -117,6 +124,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
                 {
                     IsCanDelete = currentStoreOrder.IsCanDelete;
                     BtnScrapContent = (IsCanDelete == true) ? "作廢" : "取消作廢";
+                    IsClosed = DateTime.Compare(ViewModelMainWindow.ClosingDate.AddDays(1), currentStoreOrder.CreateDateTime) < 0 && currentStoreOrder.IsEnable;
                 }
                 return currentStoreOrder;
             }
