@@ -76,7 +76,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                     , r.Field<DateTime>("CooCli_InsertTime"), r.Field<int>("CooCli_ID").ToString(), r.Field<bool>("CooCli_IsRead")));
             }
 
-            foreach (var data in tempList.OrderByDescending(_ => _.AdjustDate))
+            foreach (var data in tempList.OrderBy(_ => _.AdjustDate))
             {
                 Add(data);
             }
@@ -95,7 +95,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 tempList.Add(new ChronicPreview(r, PrescriptionType.ChronicRegister));
             }
 
-            foreach (var data in tempList.OrderByDescending(_ => _.AdjustDate))
+            foreach (var data in tempList.OrderBy(_ => _.AdjustDate))
             {
                 Add(data);
             }
@@ -113,7 +113,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                 tempList.Add(new ChronicPreview(r, PrescriptionType.ChronicReserve));
             }
 
-            foreach (var data in tempList.OrderByDescending(_ => _.AdjustDate))
+            foreach (var data in tempList.OrderBy(_ => _.AdjustDate))
             {
                 Add(data);
             }
@@ -132,7 +132,7 @@ namespace His_Pos.NewClass.Prescription.CustomerPrescriptions
                     tempList.Add(new NoCardPreview(r));
             }
 
-            foreach (var data in tempList.OrderByDescending(_ => _.AdjustDate))
+            foreach (var data in tempList.OrderBy(_ => _.AdjustDate))
             {
                 Add(data);
             }
