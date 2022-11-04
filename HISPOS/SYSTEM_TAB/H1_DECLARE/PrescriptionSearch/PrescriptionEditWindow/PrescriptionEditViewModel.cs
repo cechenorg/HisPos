@@ -812,7 +812,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionSearch.PrescriptionEditWindo
 
         private void DeleteAction()
         {
-            if(DateTime.Compare(VM.ClosingDate.AddDays(1), (DateTime)EditedPrescription.AdjustDate) < 0)
+            if(DateTime.Compare((DateTime)EditedPrescription.AdjustDate, VM.ClosingDate.AddDays(1)) < 0)
             {
                 MessageWindow.ShowMessage(string.Format("關帳日:{0}，禁止刪除處方", VM.ClosingDate.ToString("yyyy/MM/dd")), MessageType.ERROR);
                 return;
